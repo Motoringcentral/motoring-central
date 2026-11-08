@@ -19,7 +19,7 @@ A real website for **The Motoring Central** (motoringcentral.co.uk). It is being
 
 ## Progress (the 10 phases)
 - [x] Setup: Next.js project created
-- [ ] Phase 1: Look and public pages
+- [x] Phase 1: Look and public pages
 - [ ] Phase 2: Logins (Supabase)
 - [ ] Phase 3: Join the network and admin review
 - [ ] Phase 4: Reg lookup
@@ -35,5 +35,22 @@ A real website for **The Motoring Central** (motoringcentral.co.uk). It is being
 
 - **2026-11-08:** Created the Next.js project (Next.js 16, React 19, Tailwind, TypeScript) and installed its packages. The test site runs at http://localhost:3000 (start it with `npm run dev`). npm reported 8 "moderate" warnings in the starter packages; we'll review them before launch.
 
+- **2026-11-08:** Phase 1 done. Built the homepage (`/`), Our services (`/services`), About us (`/about`) and Terms (`/terms`) in the brand colours, with the logo and a header and footer. Checked on desktop and phone, and a full production build passes.
+
+## Where things live (for reference)
+- Pages: `src/app/page.tsx` (home), `src/app/services`, `src/app/about`, `src/app/terms`
+- Wording for services and "why choose us": `src/lib/content.ts`
+- Terms wording: `src/lib/terms.ts`
+- Colours and styles: `src/app/globals.css`
+- Header, footer, logo, reg box, call-back form: `src/components/`
+
+## Placeholders still to replace before launch
+- Everything in [square brackets] on About us and Terms (company number, address, phone, email, ICO number)
+- Terms must be checked by a solicitor
+- The 3 reviews on the homepage are samples
+- The reg box checks the format only. The real lookup comes in Phase 4.
+- The call-back form doesn't send anything yet (needs emails, Phase 8)
+- The header only links to pages that exist. Add Breakdown cover, Cars, Vans and For partners as they're built.
+
 ## Next step
-Phase 1: build the public pages (homepage, services, About us, terms) from prototype.html.
+Phase 2: logins with Supabase. This needs a free Supabase account first (supabase.com).
