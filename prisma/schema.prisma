@@ -1,0 +1,618 @@
+// Motoring Central data model.
+// Money is stored as integer pence. Times are UTC.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Accounts (tables required by Better Auth, plus our own user fields)
+// ---------------------------------------------------------------------------
+
+enum Role {
+  CUSTOMER
+  PARTNER
+  DEALER
+  STAFF
+  ADMIN
+}
+
+model User {
+  id             String   @id
+  name           String
+  email          String   @unique
+  emailVerified  Boolean  @default(false)
+  image          String?
+  role           Role     @default(CUSTOMER)
+  phone          String?
+  postcode       String?
+  remindersOptIn Boolean  @default(false)
+  // Full vehicle checks left. Customers start with 2; each booking adds 2.
+  fullChecksLeft Int      @default(2)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  sessions        Session[]
+  accounts        Account[]
+  partner         Partner?
+  dealer          Dealer?
+  bookings        Booking[]         @relation("CustomerBookings")
+  termsAccepted   TermsAcceptance[]
+  enquiries       Enquiry[]
+  tradeListings   TradeListing[]
+  tradeOffers     TradeOffer[]
+  quoteRequests   QuoteRequest[]
+  documentReviews PartnerDocument[] @relation("DocumentReviewer")
+  auditEntries    AuditLog[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+// ---------------------------------------------------------------------------
+// Partners: independent businesses that take bookings
+// ---------------------------------------------------------------------------
+
+enum PartnerType {
+  MOBILE_MECHANIC
+  GARAGE
+  AUTO_ELECTRICIAN
+  RECOVERY
+  TYRE_FITTER
+  VALETER
+  // Body shops, mobile smart repairers and alloy wheel specialists
+  BODYWORK
+  MOBILE_EV_CHARGING
+}
+
+enum PartnerStatus {
+  PENDING
+  APPROVED
+  DECLINED
+  SUSPENDED
+}
+
+enum PartnerPlan {
+  PAY_AS_YOU_GO
+  PRO
+}
+
+enum WorkLocation {
+  MOBILE
+  WORKSHOP
+  BOTH
+}
+
+model Partner {
+  id                  String        @id @default(cuid())
+  userId              String        @unique
+  user                User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type                PartnerType
+  status              PartnerStatus @default(PENDING)
+  plan                PartnerPlan   @default(PAY_AS_YOU_GO)
+  businessName        String
+  addressLine1        String?
+  town                String?
+  postcode            String
+  workLocation        WorkLocation  @default(MOBILE)
+  travelRadiusMiles   Int?
+  labourRatePence     Int?
+  // Garages and MOT centres
+  workshopBays        Int?
+  isMotStation        Boolean       @default(false)
+  motBays             Int?
+  motFeePence         Int?
+  openingHours        Json?
+  skills              String[]
+  qualifications      String?
+  // Bodywork and alloys
+  bodyworkServices    Boolean       @default(false)
+  alloyServices       Boolean       @default(false)
+  insuranceApproved   Boolean       @default(false)
+  insurerPanels       String[]
+  warrantyMonths      Int?
+  alloyRefurbPence    Int?
+  diamondCutPence     Int?
+  // Mobile EV charging
+  callOutPence        Int?
+  perMileOutsidePence Int?
+  chargingVans        String?
+  availability        String?
+  connectors          String[]
+  stripeAccountId     String?       @unique
+  approvedAt          DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  documents     PartnerDocument[]
+  bookings      Booking[]
+  bays          DiaryBay[]
+  diaryEntries  DiaryEntry[]
+  quoteRequests QuoteRequestRecipient[]
+
+  @@index([type, status])
+  @@index([postcode])
+}
+
+enum DocumentKind {
+  TRADE_INSURANCE
+  PUBLIC_LIABILITY
+  PHOTO_ID
+  // Optional, depending on partner type
+  INSURER_APPROVAL
+  EQUIPMENT_TEST_CERTIFICATE
+  SPRAY_PERMIT
+  WORK_PHOTOS
+  COMPANY_REGISTRATION
+}
+
+enum DocumentStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+  EXPIRED
+}
+
+model PartnerDocument {
+  id           String         @id @default(cuid())
+  partnerId    String
+  partner      Partner        @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  kind         DocumentKind
+  fileKey      String
+  status       DocumentStatus @default(PENDING)
+  expiresAt    DateTime?
+  reviewedById String?
+  reviewedBy   User?          @relation("DocumentReviewer", fields: [reviewedById], references: [id])
+  reviewedAt   DateTime?
+  reviewNote   String?
+  createdAt    DateTime       @default(now())
+
+  @@index([partnerId, kind])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Vehicles and customer bookings
+// ---------------------------------------------------------------------------
+
+model Vehicle {
+  id            String    @id @default(cuid())
+  reg           String    @unique
+  make          String
+  model         String?
+  year          Int?
+  fuel          String?
+  engineCc      Int?
+  transmission  String?
+  colour        String?
+  tyreSize      String?
+  motExpiry     DateTime?
+  fullCheckData Json?
+  checkedAt     DateTime  @default(now())
+
+  bookings Booking[]
+}
+
+enum ServiceMode {
+  MOBILE_MECHANIC
+  GARAGE
+  AUTO_ELECTRICIAN
+  RECOVERY
+  MOBILE_TYRES
+  VALET
+  BODYWORK
+  ALLOY_WHEELS
+  EV_CHARGING
+}
+
+enum PartsQuality {
+  BUDGET
+  STANDARD
+  PREMIUM
+}
+
+enum BookingStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Booking {
+  id                    String        @id @default(cuid())
+  ref                   String        @unique
+  customerId            String
+  customer              User          @relation("CustomerBookings", fields: [customerId], references: [id])
+  partnerId             String
+  partner               Partner       @relation(fields: [partnerId], references: [id])
+  vehicleId             String
+  vehicle               Vehicle       @relation(fields: [vehicleId], references: [id])
+  mode                  ServiceMode
+  serviceCode           String
+  serviceName           String
+  partsQuality          PartsQuality?
+  status                BookingStatus @default(PENDING_PAYMENT)
+  scheduledStart        DateTime?
+  scheduledEnd          DateTime?
+  postcode              String?
+  partsPence            Int           @default(0)
+  labourPence           Int           @default(0)
+  bookingFeePence       Int
+  totalPence            Int
+  // Platform commission on the partner's price (0 on Pro).
+  commissionBps         Int
+  stripePaymentIntentId String?       @unique
+  paidAt                DateTime?
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @updatedAt
+
+  diaryEntry      DiaryEntry?
+  fromQuote       BodyworkQuote?
+  termsAcceptance TermsAcceptance?
+
+  @@index([customerId])
+  @@index([partnerId, scheduledStart])
+}
+
+// Record of the exact terms a user ticked, for disputes.
+model TermsAcceptance {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  document   String
+  version    String
+  bookingId  String?  @unique
+  booking    Booking? @relation(fields: [bookingId], references: [id])
+  acceptedAt DateTime @default(now())
+  ipAddress  String?
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Garage booking diary (free tool, also used for non-marketplace work)
+// ---------------------------------------------------------------------------
+
+enum BayKind {
+  WORKSHOP
+  MOT
+}
+
+model DiaryBay {
+  id        String       @id @default(cuid())
+  partnerId String
+  partner   Partner      @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  name      String
+  kind      BayKind      @default(WORKSHOP)
+  position  Int
+  archived  Boolean      @default(false)
+  entries   DiaryEntry[]
+
+  @@index([partnerId])
+}
+
+enum DiaryStatus {
+  BOOKED
+  ARRIVED
+  IN_PROGRESS
+  READY
+  COLLECTED
+}
+
+model DiaryEntry {
+  id            String      @id @default(cuid())
+  partnerId     String
+  partner       Partner     @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  bayId         String
+  bay           DiaryBay    @relation(fields: [bayId], references: [id], onDelete: Cascade)
+  start         DateTime
+  end           DateTime
+  // Blocked time has no job details.
+  isBlock       Boolean     @default(false)
+  reg           String?
+  vehicle       String?
+  customerName  String?
+  customerPhone String?
+  job           String?
+  pricePence    Int?
+  notes         String?
+  status        DiaryStatus @default(BOOKED)
+  paid          Boolean     @default(false)
+  bookingId     String?     @unique
+  booking       Booking?    @relation(fields: [bookingId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([bayId, start])
+  @@index([partnerId, start])
+}
+
+// ---------------------------------------------------------------------------
+// Dealers, retail listings and the trade section
+// ---------------------------------------------------------------------------
+
+enum DealerStatus {
+  PENDING
+  ACTIVE
+  SUSPENDED
+}
+
+enum DealerPlan {
+  STARTER
+  STANDARD
+  PLUS
+  PRO
+  PREMIER
+}
+
+model Dealer {
+  id                    String       @id @default(cuid())
+  userId                String       @unique
+  user                  User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name                  String
+  status                DealerStatus @default(PENDING)
+  plan                  DealerPlan   @default(STARTER)
+  // First 3 months are free on every plan.
+  trialEndsAt           DateTime?
+  cancelledAt           DateTime?
+  website               String?
+  freePremiumAdsUsed    Int          @default(0)
+  addressLine1          String?
+  town                  String?
+  postcode              String
+  phone                 String?
+  stripeCustomerId      String?      @unique
+  stripeSubscriptionId  String?      @unique
+  freeTradeListingsUsed Int          @default(0)
+  createdAt             DateTime     @default(now())
+  updatedAt             DateTime     @updatedAt
+
+  listings VehicleListing[]
+}
+
+enum ListingKind {
+  CAR
+  VAN
+}
+
+enum ListingStatus {
+  DRAFT
+  LIVE
+  RESERVED
+  SOLD
+  WITHDRAWN
+}
+
+model VehicleListing {
+  id           String        @id @default(cuid())
+  dealerId     String
+  dealer       Dealer        @relation(fields: [dealerId], references: [id], onDelete: Cascade)
+  kind         ListingKind
+  status       ListingStatus @default(DRAFT)
+  reg          String?
+  make         String
+  model        String
+  year         Int
+  mileage      Int
+  fuel         String?
+  transmission String?
+  colour       String?
+  pricePence   Int
+  description  String?
+  photos       String[]
+  // Stock management
+  costPence    Int?
+  prepCosts    Json?
+  soldPence    Int?
+  soldAt       DateTime?
+  // Front-page banner: runs 2 weeks or until sold.
+  premiumUntil DateTime?
+  // Paid Facebook and Instagram boost.
+  boostUntil   DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  enquiries Enquiry[]
+
+  @@index([kind, status])
+  @@index([dealerId])
+}
+
+model Enquiry {
+  id        String         @id @default(cuid())
+  listingId String
+  listing   VehicleListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?          @relation(fields: [userId], references: [id])
+  name      String
+  email     String
+  phone     String?
+  message   String
+  createdAt DateTime       @default(now())
+
+  @@index([listingId])
+}
+
+enum TradeStatus {
+  LIVE
+  SOLD
+  WITHDRAWN
+}
+
+model TradeListing {
+  id            String      @id @default(cuid())
+  sellerId      String
+  seller        User        @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  status        TradeStatus @default(LIVE)
+  kind          ListingKind
+  reg           String?
+  make          String
+  model         String
+  year          Int
+  mileage       Int
+  knownFaults   String
+  sellerNotes   String?
+  photos        String[]
+  // Either a buy-now price, or open to offers with a hidden minimum.
+  buyNowPence   Int?
+  minOfferPence Int?
+  soldAsSeenAt  DateTime
+  feePaidAt     DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  offers TradeOffer[]
+
+  @@index([status])
+}
+
+enum OfferStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  WITHDRAWN
+}
+
+model TradeOffer {
+  id           String       @id @default(cuid())
+  listingId    String
+  listing      TradeListing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  buyerId      String
+  buyer        User         @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  amountPence  Int
+  status       OfferStatus  @default(PENDING)
+  // Buyer confirms they are buying as a business.
+  asBusinessAt DateTime
+  createdAt    DateTime     @default(now())
+
+  @@index([listingId])
+  @@index([buyerId])
+}
+
+// ---------------------------------------------------------------------------
+// Support and audit
+// ---------------------------------------------------------------------------
+
+model CallbackRequest {
+  id        String    @id @default(cuid())
+  name      String
+  phone     String
+  reason    String?
+  handledAt DateTime?
+  createdAt DateTime  @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actorId   String?
+  actor     User?    @relation(fields: [actorId], references: [id])
+  action    String
+  subject   String
+  details   Json?
+  createdAt DateTime @default(now())
+
+  @@index([subject])
+}
+
+// ---------------------------------------------------------------------------
+// Bodywork photo quotes: a customer sends photos to up to 3 repairers,
+// each replies with a fixed price, and an accepted quote becomes a booking.
+// ---------------------------------------------------------------------------
+
+enum QuoteRequestStatus {
+  OPEN
+  ACCEPTED
+  EXPIRED
+  CANCELLED
+}
+
+model QuoteRequest {
+  id             String             @id @default(cuid())
+  customerId     String
+  customer       User               @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  reg            String
+  description    String
+  // 2 to 6 photo file keys
+  photos         String[]
+  postcode       String
+  insuranceClaim Boolean            @default(false)
+  status         QuoteRequestStatus @default(OPEN)
+  createdAt      DateTime           @default(now())
+
+  recipients QuoteRequestRecipient[]
+}
+
+model QuoteRequestRecipient {
+  id        String         @id @default(cuid())
+  requestId String
+  request   QuoteRequest   @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  partnerId String
+  partner   Partner        @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  quote     BodyworkQuote?
+
+  @@unique([requestId, partnerId])
+}
+
+model BodyworkQuote {
+  id          String                @id @default(cuid())
+  recipientId String                @unique
+  recipient   QuoteRequestRecipient @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  pricePence  Int
+  notes       String?
+  validUntil  DateTime
+  bookingId   String?               @unique
+  booking     Booking?              @relation(fields: [bookingId], references: [id])
+  createdAt   DateTime              @default(now())
+}

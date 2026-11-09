@@ -1,0 +1,152 @@
+@import "tailwindcss";
+
+/* Lets components opt into dark styles that follow the theme tokens below. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Design tokens, taken from the approved prototype. */
+:root {
+  --bg: #f2f5f6;
+  --surface: #ffffff;
+  --ink: #14212a;
+  --muted: #587080;
+  --line: #d2dbe0;
+  --brand: #0b1c35;
+  --brand-ink: #ffffff;
+  --accent: #38bdf8;
+  --accent-ink: #0b1c35;
+  --soft: #e0f4fe;
+  --err: #b3261e;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #11171b;
+    --surface: #1b242a;
+    --ink: #e8eef1;
+    --muted: #97a8b3;
+    --line: #32404a;
+    --brand: #38bdf8;
+    --brand-ink: #06202e;
+    --soft: #0f2a3d;
+    --err: #ff8a80;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #11171b;
+  --surface: #1b242a;
+  --ink: #e8eef1;
+  --muted: #97a8b3;
+  --line: #32404a;
+  --brand: #38bdf8;
+  --brand-ink: #06202e;
+  --soft: #0f2a3d;
+  --err: #ff8a80;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-ink: var(--brand-ink);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-soft: var(--soft);
+  --color-err: var(--err);
+
+  /* Fixed brand colours that don't change with the theme. */
+  --color-navy: #0b1c35;
+  --color-navy-2: #13294d;
+  --color-sky: #38bdf8;
+  --color-sun: #ffd43b;
+  --color-mist: #c9d1dc;
+  --color-plate: #ffcf3f;
+  --color-ok: #16a34a;
+
+  --font-sans: "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-outfit), "Segoe UI", system-ui, sans-serif;
+
+  --container-page: 680px;
+  --shadow-card: 0 2px 10px rgba(0, 0, 0, 0.05);
+  --shadow-lift: 0 8px 24px rgba(0, 0, 0, 0.14);
+}
+
+@layer base {
+  html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.45;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--brand);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: var(--shadow-card);
+  }
+
+  .btn {
+    display: inline-block;
+    cursor: pointer;
+    background: var(--brand);
+    color: var(--brand-ink);
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 12px 18px;
+    text-align: center;
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes drift {
+    to {
+      transform: translateX(14px);
+    }
+  }
+
+  @keyframes pulse-sun {
+    to {
+      transform: scale(1.15);
+    }
+  }
+
+  .anim-drift {
+    animation: drift 9s ease-in-out infinite alternate;
+  }
+
+  .anim-pulse {
+    animation: pulse-sun 3s ease-in-out infinite alternate;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
