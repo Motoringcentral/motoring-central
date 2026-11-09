@@ -12,7 +12,8 @@
     "db:studio": "prisma studio",
     "typecheck": "tsc --noEmit",
     "db:dev": "prisma dev --name motoring-central --detach -P 51214 --shadow-db-port 51215",
-    "db:seed": "prisma db seed"
+    "db:seed": "prisma db seed",
+    "vercel-build": "prisma migrate deploy && node scripts/seed-if-enabled.mjs && next build"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.10.1",

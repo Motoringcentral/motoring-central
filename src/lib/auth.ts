@@ -4,8 +4,14 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
 import { db } from "@/lib/db";
 
+// Vercel also serves each deploy on its own *.vercel.app address.
+const vercelOrigins = [process.env.VERCEL_URL, process.env.VERCEL_BRANCH_URL]
+  .filter(Boolean)
+  .map((host) => `https://${host}`);
+
 export const auth = betterAuth({
   database: prismaAdapter(db, { provider: "postgresql" }),
+  trustedOrigins: vercelOrigins,
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
