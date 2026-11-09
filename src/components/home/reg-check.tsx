@@ -33,7 +33,7 @@ export function RegCheck() {
   return (
     <div id="reg" className="card relative -mt-9 shadow-lift">
       <form ref={formRef} action={action}>
-        {picked && <input type="hidden" name="service" value={picked.service} />}
+        {picked && <input type="hidden" name="mode" value={picked.mode} />}
         <label htmlFor="reg-input" className="text-[.9rem] font-semibold">
           Registration
         </label>
@@ -46,7 +46,7 @@ export function RegCheck() {
             placeholder="AB12 CDE"
             autoComplete="off"
             // React resets the form after the action runs, so restore what was typed.
-            defaultValue={state.status === "idle" ? undefined : state.reg}
+            defaultValue={state.status === "error" ? state.reg : undefined}
             aria-invalid={state.status === "error"}
             aria-describedby="reg-error"
             className="min-w-0 flex-1 rounded-[10px] border-2 border-[#c9a21c] bg-plate p-2.5 text-center text-[1.3rem] font-extrabold tracking-[.12em] text-[#241b00] uppercase placeholder:text-[#241b00]/45"
@@ -71,7 +71,7 @@ export function RegCheck() {
         ))}
       </div>
 
-      {picked && state.status !== "found" && (
+      {picked && (
         <p role="status" className="mt-2 font-bold">
           Enter your reg to book {picked.label}.
         </p>
@@ -81,37 +81,9 @@ export function RegCheck() {
         {state.status === "error" ? state.message : ""}
       </p>
 
-      {state.status === "found" ? (
-        <VehicleSummary vehicle={state.vehicle} />
-      ) : (
-        <p className="mt-2 text-[.82rem] text-muted">
-          Free check, no sign-up needed. See prices from local partners, then register free for your exact price.
-        </p>
-      )}
-    </div>
-  );
-}
-
-function VehicleSummary({ vehicle }: { vehicle: Extract<RegCheckState, { status: "found" }>["vehicle"] }) {
-  const rows: [string, string][] = [
-    ["Year", String(vehicle.year)],
-    ["Fuel", vehicle.fuel],
-    ["Engine", vehicle.engineCc ? `${vehicle.engineCc} cc` : "Electric"],
-    ["Colour", vehicle.colour],
-    ["MOT", vehicle.mot],
-  ];
-
-  return (
-    <div className="mt-4 rounded-[10px] bg-soft p-3.5" aria-live="polite">
-      <p className="m-0 font-display text-lg font-bold text-brand">{vehicle.make}</p>
-      <dl className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-[.9rem] sm:grid-cols-3">
-        {rows.map(([label, value]) => (
-          <div key={label}>
-            <dt className="text-[.78rem] text-muted">{label}</dt>
-            <dd className="m-0 font-semibold">{value}</dd>
-          </div>
-        ))}
-      </dl>
+      <p className="mt-2 text-[.82rem] text-muted">
+        Free check, no sign-up needed. See prices from local partners, then register free for your exact price.
+      </p>
     </div>
   );
 }

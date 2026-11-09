@@ -63,6 +63,46 @@ export async function lookupVehicle(reg: string): Promise<BasicVehicle | null> {
   };
 }
 
+// Full check: confirms exact model, gearbox, tyre size and what the parts
+// lookup needs. Registered customers only, limited per account.
+export type FullVehicle = BasicVehicle & {
+  model: string;
+  transmission: string;
+  tyreSize: string;
+  oilSpec: string | null;
+  oilLitres: number;
+  // Rough size, used to scale some prices.
+  sizeFactor: number;
+  valetSize: 0 | 1 | 2 | 3;
+};
+
+const FULL_SAMPLES: Record<string, Omit<FullVehicle, keyof BasicVehicle>> = {
+  LM19XYZ: { model: "Focus Zetec 1.0 EcoBoost", transmission: "Manual", tyreSize: "205/55 R16", oilSpec: "5W-20", oilLitres: 4.1, sizeFactor: 1.1, valetSize: 1 },
+  BD66TTR: { model: "Golf SE 2.0 TDI", transmission: "Manual", tyreSize: "205/55 R16", oilSpec: "5W-30 LL", oilLitres: 4.5, sizeFactor: 1.15, valetSize: 1 },
+  KS21EVO: { model: "Model 3 Long Range", transmission: "Automatic", tyreSize: "235/45 R18", oilSpec: null, oilLitres: 0, sizeFactor: 1.2, valetSize: 2 },
+};
+
+/**
+ * Runs the paid full vehicle check. Until a vehicle data provider is
+ * connected, the prototype's sample cars are returned.
+ */
+export async function fullVehicleCheck(reg: string): Promise<FullVehicle | null> {
+  const basic = await lookupVehicle(reg);
+  if (!basic) return null;
+  const full = FULL_SAMPLES[reg];
+  if (full) return { ...basic, ...full };
+  return {
+    ...basic,
+    model: "",
+    transmission: "Unknown",
+    tyreSize: "Unknown",
+    oilSpec: basic.fuel === "Electric" ? null : "5W-30",
+    oilLitres: basic.fuel === "Electric" ? 0 : 4.5,
+    sizeFactor: 1.1,
+    valetSize: 1,
+  };
+}
+
 function titleCase(s: string) {
   return s.toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase());
 }

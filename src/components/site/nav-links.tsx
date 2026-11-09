@@ -5,13 +5,16 @@ import { usePathname } from "next/navigation";
 
 type Item = { href: string; label: string };
 
+/** Highlights the current page. Render inside <Suspense> with <NavList> as the fallback. */
 export function NavLinks({ items }: { items: Item[] }) {
-  const pathname = usePathname();
+  return <NavList items={items} pathname={usePathname()} />;
+}
 
+export function NavList({ items, pathname }: { items: Item[]; pathname: string | null }) {
   return (
     <nav aria-label="Browse" className="flex max-w-full flex-wrap gap-1 rounded-[10px] bg-black/20 p-[3px]">
       {items.map((item) => {
-        const current = item.href === "/" ? pathname === "/" : pathname.startsWith(item.href);
+        const current = pathname != null && (item.href === "/" ? pathname === "/" : pathname.startsWith(item.href));
         return (
           <Link
             key={item.href}

@@ -1,6 +1,7 @@
-import Link from "next/link";
+import { Suspense } from "react";
+import { AccountLinks, LoggedOutLinks } from "./account-links";
 import { Logo } from "./logo";
-import { NavLinks } from "./nav-links";
+import { NavLinks, NavList } from "./nav-links";
 
 const PUBLIC_NAV = [
   { href: "/", label: "Book a service" },
@@ -16,11 +17,13 @@ export function Header() {
     <header className="border-b-[3px] border-navy bg-sky px-4 py-3 text-navy">
       <div className="mx-auto flex max-w-page flex-wrap items-center justify-between gap-2.5">
         <Logo />
-        <NavLinks items={PUBLIC_NAV} />
+        <Suspense fallback={<NavList items={PUBLIC_NAV} pathname={null} />}>
+          <NavLinks items={PUBLIC_NAV} />
+        </Suspense>
         <div className="flex w-full flex-wrap items-center justify-end gap-3.5 text-[.8rem] font-semibold">
-          <Link href="/login" className="underline">
-            Log in
-          </Link>
+          <Suspense fallback={<LoggedOutLinks />}>
+            <AccountLinks />
+          </Suspense>
         </div>
       </div>
     </header>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { PICK_SERVICE_EVENT, type PickServiceDetail, type ServiceKey } from "@/lib/services";
+import { PICK_SERVICE_EVENT, type ModeSlug, type PickServiceDetail } from "@/lib/services";
 
 type Offer = {
   title: string;
@@ -10,7 +10,7 @@ type Offer = {
   cta: string;
   icon: ReactNode;
   // Bookable tiles choose a service; the rest link to another page.
-  target: { service: ServiceKey; label: string } | { href: string };
+  target: { mode: ModeSlug; label: string } | { href: string };
 };
 
 const OFFERS: Offer[] = [
@@ -18,7 +18,7 @@ const OFFERS: Offer[] = [
     title: "Mobile mechanic",
     body: "A mechanic comes to your home or work and fixes the car there. Servicing, brakes, battery and diagnostics.",
     cta: "Book a mechanic",
-    target: { service: "MOBILE_MECHANIC", label: "a mobile mechanic" },
+    target: { mode: "mobile", label: "a mobile mechanic" },
     icon: <path d="M14.5 6.5a4 4 0 0 0-5 5L3 18l3 3 6.5-6.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z" />,
   },
   {
@@ -32,14 +32,14 @@ const OFFERS: Offer[] = [
     title: "Garage",
     body: "Drive to a partner garage near you. Compare price and distance, then pick a time.",
     cta: "Find a garage",
-    target: { service: "GARAGE", label: "a garage" },
+    target: { mode: "garage", label: "a garage" },
     icon: <path d="M3 21V9l9-6 9 6v12M7 21v-7h10v7M7 17h10" />,
   },
   {
     title: "MOT",
     body: "Done at a partner garage that is an approved test station. Choose Garage, then MOT test.",
     cta: "Book an MOT",
-    target: { service: "GARAGE", label: "an MOT" },
+    target: { mode: "garage", label: "an MOT" },
     icon: (
       <>
         <rect x="6" y="4" width="12" height="17" rx="2" />
@@ -51,14 +51,14 @@ const OFFERS: Offer[] = [
     title: "Auto electrician",
     body: "Electrical faults, batteries, starters, alternators, central locking and dash cams, at your home or work.",
     cta: "Book an electrician",
-    target: { service: "AUTO_ELECTRICIAN", label: "an auto electrician" },
+    target: { mode: "autoelec", label: "an auto electrician" },
     icon: <path d="M13 2L5 14h6l-1 8 8-12h-6z" />,
   },
   {
     title: "Mobile tyres",
     body: "A fitter brings new tyres to you, or repairs a puncture on the spot. We know your tyre size from your reg.",
     cta: "Book tyre fitting",
-    target: { service: "MOBILE_TYRES", label: "tyre fitting" },
+    target: { mode: "tyres", label: "tyre fitting" },
     icon: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -71,7 +71,7 @@ const OFFERS: Offer[] = [
     title: "Alloy wheel refurbishment",
     body: "Kerb damage, painted refurbs, diamond cut and colour changes. Fixed price per wheel, mobile or at a wheel centre.",
     cta: "Book an alloy refurb",
-    target: { service: "ALLOY_WHEELS", label: "an alloy wheel refurb" },
+    target: { mode: "body", label: "an alloy wheel refurb" },
     icon: (
       <>
         <circle cx="12" cy="12" r="9" />
@@ -84,7 +84,7 @@ const OFFERS: Offer[] = [
     title: "Bodywork",
     body: "Dents, scratches, bumper scuffs, resprays and accident repairs. Mobile smart repair or a body shop, with insurance-approved repairers for claims. Send photos, get fixed quotes.",
     cta: "Get quotes",
-    target: { service: "BODYWORK", label: "bodywork" },
+    target: { mode: "body", label: "bodywork" },
     icon: (
       <>
         <path d="M3 15l2-6h14l2 6v3H3z" />
@@ -98,14 +98,14 @@ const OFFERS: Offer[] = [
     title: "Valeting",
     body: "A full valet at your home, at work or at the valeter’s premises. Priced by vehicle size.",
     cta: "Book a valet",
-    target: { service: "VALET", label: "a valet" },
+    target: { mode: "valet", label: "a valet" },
     icon: <path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z" />,
   },
   {
     title: "Recovery",
     body: "Broken down? A recovery truck takes your car home or to a garage. See the price and arrival time first.",
     cta: "Book recovery",
-    target: { service: "RECOVERY", label: "recovery" },
+    target: { mode: "recovery", label: "recovery" },
     icon: (
       <>
         <path d="M2 16V8h11v8M13 11h5l3 3v2H2" />
@@ -118,7 +118,7 @@ const OFFERS: Offer[] = [
     title: "Mobile EV charging",
     body: "Out of charge, or need a top-up at home or work? A charging van comes to you with enough charge to get you moving.",
     cta: "Book EV charging",
-    target: { service: "EV_CHARGING", label: "EV charging" },
+    target: { mode: "evcharge", label: "EV charging" },
     icon: <path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0zM12 17v5" />,
   },
   {
@@ -175,7 +175,7 @@ export function EverythingWeOffer() {
               key={offer.title}
               type="button"
               className={TILE}
-              onClick={() => "service" in offer.target && pickService(offer.target)}
+              onClick={() => "mode" in offer.target && pickService(offer.target)}
             >
               <TileBody offer={offer} />
             </button>

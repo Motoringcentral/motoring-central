@@ -47,6 +47,7 @@ model User {
   tradeListings   TradeListing[]
   tradeOffers     TradeOffer[]
   quoteRequests   QuoteRequest[]
+  vehicleChecks   VehicleCheck[]
   documentReviews PartnerDocument[] @relation("DocumentReviewer")
   auditEntries    AuditLog[]
 
@@ -170,6 +171,11 @@ model Partner {
   chargingVans        String?
   availability        String?
   connectors          String[]
+  // Location of the base, workshop or depot, for distance.
+  latitude            Float?
+  longitude           Float?
+  ratingAvg           Float?
+  jobsCompleted       Int           @default(0)
   stripeAccountId     String?       @unique
   approvedAt          DateTime?
   createdAt           DateTime      @default(now())
@@ -225,6 +231,18 @@ model PartnerDocument {
 // ---------------------------------------------------------------------------
 // Vehicles and customer bookings
 // ---------------------------------------------------------------------------
+
+// A full vehicle check a customer has run. Each customer gets 2, and each
+// booking adds 2 more (see User.fullChecksLeft).
+model VehicleCheck {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reg       String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, reg])
+}
 
 model Vehicle {
   id            String    @id @default(cuid())
