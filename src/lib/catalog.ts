@@ -153,3 +153,27 @@ export const SIDE_FROM: Record<string, string> = {
   valet: "Full valet from £79 for a small car.",
   body: "Alloy wheel refurbishment from £59 a wheel. Bodywork is priced from your photos, with smart repairs from £70.",
 };
+
+// Sample tyre prices per tyre for budget, mid-range and premium, scaled by
+// vehicle size, until a tyre supplier feed is connected.
+export const TYRE_TIER_PENCE = [4800, 7200, 11000] as const;
+export const VALVE_AND_DISPOSAL_PENCE = 350;
+
+// Charge delivered by a mobile EV charger, on top of the call-out.
+export const EV_CHARGE = {
+  rescue: { label: "Out of charge: reach a charge point", pence: 1500 },
+  home: { label: "Out of charge: get home (about 20%)", pence: 2500 },
+  booked: { label: "Booked top-up at home or work", pence: 3500 },
+} as const;
+
+export const VALET_SIZES = ["Small (e.g. Fiesta, Polo)", "Medium (e.g. Focus, Golf)", "Large (e.g. estate, SUV)", "Extra large or van"];
+
+export const ALLOY_FINISHES = [
+  { name: "Standard refurb", label: "Standard refurb (painted, colour of your choice)" },
+  { name: "Diamond cut refurb", label: "Diamond cut (two-tone, machined face)" },
+  { name: "Colour change", label: "Colour change or custom colour" },
+  { name: "Kerb damage repair", label: "Kerb damage repair only (smart repair)" },
+];
+
+// Straight-line miles under-count road miles; this is a typical UK factor.
+export const ROAD_FACTOR = 1.25;

@@ -171,15 +171,30 @@ model Partner {
   chargingVans        String?
   availability        String?
   connectors          String[]
+  // Recovery and EV charging
+  perMilePence        Int?
+  equipment           String?
+  // Tyre fitters
+  fitPerTyrePence     Int?
+  puncturePence       Int?
+  // Valeters: price for small, medium, large, extra large or van
+  valetPricesPence    Int[]
+  // Alloy wheels, per wheel (refurb and diamond cut are above)
+  colourChangePence   Int?
+  kerbRepairPence     Int?
+  // Bodywork guide price; real prices come from photo quotes
+  bodyworkFromPence   Int?
+  accreditation       String?
+
   // Location of the base, workshop or depot, for distance.
-  latitude            Float?
-  longitude           Float?
-  ratingAvg           Float?
-  jobsCompleted       Int           @default(0)
-  stripeAccountId     String?       @unique
-  approvedAt          DateTime?
-  createdAt           DateTime      @default(now())
-  updatedAt           DateTime      @updatedAt
+  latitude        Float?
+  longitude       Float?
+  ratingAvg       Float?
+  jobsCompleted   Int       @default(0)
+  stripeAccountId String?   @unique
+  approvedAt      DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   documents     PartnerDocument[]
   bookings      Booking[]

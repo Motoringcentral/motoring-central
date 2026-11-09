@@ -67,19 +67,37 @@ export function PriceTable({
   );
 }
 
-export function TermsAndBook({ who, cta }: { who: string; cta: string }) {
+export function TermsAndBook({
+  who,
+  cta,
+  responsibility = "They carry out the work and are responsible for it, including the warranty on the work and parts.",
+  validate,
+  notice: doneNotice = "Card payment is the next step to be built. Your choices are ready to book.",
+}: {
+  who: string;
+  cta: string;
+  responsibility?: string;
+  // Return an error message to stop the booking, or null to continue.
+  validate?: () => string | null;
+  notice?: string;
+}) {
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
 
   function book() {
+    const problem = validate?.() ?? null;
+    if (problem) {
+      setError(problem);
+      return;
+    }
     if (!agreed) {
       setError("Tick the box to confirm you understand who carries out the work.");
       return;
     }
     setError(null);
     // TODO: create the booking and take card payment with Stripe.
-    setNotice("Card payment is the next step to be built. Your choices are ready to book.");
+    setNotice(doneNotice);
   }
 
   return (
@@ -92,8 +110,7 @@ export function TermsAndBook({ who, cta }: { who: string; cta: string }) {
           className="mt-1 size-[18px] flex-none accent-brand"
         />
         <span>
-          I understand my booking is with the {who} I have chosen. They carry out the work and are responsible for it,
-          including the warranty on the work and parts.{" "}
+          I understand my booking is with the {who} I have chosen. {responsibility}{" "}
           <Link href="/terms" className="underline">
             Read the terms
           </Link>

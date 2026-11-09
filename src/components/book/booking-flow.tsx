@@ -6,6 +6,12 @@ import { formatPence } from "@/lib/pricing";
 import { MODES, modeBySlug, type ModeSlug } from "@/lib/services";
 import { GarageQuote } from "./garage-quote";
 import { MechanicQuote } from "./mechanic-quote";
+import { BodyForm } from "./services/body-form";
+import { EvChargeForm } from "./services/ev-charge-form";
+import { RecoveryForm } from "./services/recovery-form";
+import type { ServiceFormProps } from "./services/shared";
+import { TyresForm } from "./services/tyres-form";
+import { ValetForm } from "./services/valet-form";
 import type { BookingProps } from "./types";
 import { UnlockCard } from "./unlock-card";
 import { VehicleCard } from "./vehicle-card";
@@ -129,17 +135,35 @@ export function BookingFlow(props: BookingProps) {
         />
       )}
 
-      {fullCheck && !isJobMode(mode) && (
-        <section className="card">
-          <h2 className="mt-0 mb-2 text-[1.1rem] font-bold">{modeBySlug(mode).name}</h2>
-          {mode === "evcharge" && vehicle.fuel !== "Electric" && (
-            <p className="mb-2 font-semibold text-err">
-              This vehicle is not shown as electric. For a flat 12V battery, choose Mobile mechanic or Recovery instead.
-            </p>
-          )}
-          <p className="text-muted">{SIDE_FROM[mode]} Booking for this service is the next part to be built.</p>
-        </section>
+      {fullCheck && "model" in vehicle && !isJobMode(mode) && (
+        <SideServiceForm
+          key={mode}
+          mode={mode}
+          vehicle={vehicle}
+          partners={partners}
+          postcode={viewer.signedIn ? viewer.postcode : null}
+          origin={origin}
+          bookingFeePence={props.bookingFeePence}
+          usualBookingFeePence={props.usualBookingFeePence}
+        />
       )}
     </>
   );
+}
+
+function SideServiceForm({ mode, ...props }: ServiceFormProps & { mode: ModeSlug }) {
+  switch (mode) {
+    case "recovery":
+      return <RecoveryForm {...props} />;
+    case "evcharge":
+      return <EvChargeForm {...props} />;
+    case "tyres":
+      return <TyresForm {...props} />;
+    case "valet":
+      return <ValetForm {...props} />;
+    case "body":
+      return <BodyForm {...props} />;
+    default:
+      return null;
+  }
 }

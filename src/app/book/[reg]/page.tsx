@@ -67,13 +67,13 @@ async function Booking({ params, searchParams }: PageProps<"/book/[reg]">) {
 
 async function loadPartners(): Promise<PartnerOption[]> {
   const rows = await db.partner.findMany({
-    where: { status: "APPROVED", type: { in: ["MOBILE_MECHANIC", "AUTO_ELECTRICIAN", "GARAGE"] } },
+    where: { status: "APPROVED" },
     orderBy: { businessName: "asc" },
   });
   return rows.map((p) => ({
     id: p.id,
     name: p.businessName,
-    type: p.type as PartnerOption["type"],
+    type: p.type,
     ratePence: p.labourRatePence ?? 0,
     motFeePence: p.isMotStation ? p.motFeePence : null,
     rating: p.ratingAvg,
@@ -81,6 +81,22 @@ async function loadPartners(): Promise<PartnerOption[]> {
     address: p.addressLine1,
     workLocation: p.workLocation,
     location: p.latitude != null && p.longitude != null ? { lat: p.latitude, lng: p.longitude } : null,
+    travelRadiusMiles: p.travelRadiusMiles,
+    callOutPence: p.callOutPence,
+    perMilePence: p.perMilePence,
+    perMileOutsidePence: p.perMileOutsidePence,
+    equipment: p.equipment,
+    connectors: p.connectors,
+    fitPerTyrePence: p.fitPerTyrePence,
+    puncturePence: p.puncturePence,
+    valetPricesPence: p.valetPricesPence,
+    bodywork: p.bodyworkServices,
+    alloy: p.alloyServices,
+    alloyPricesPence: [p.alloyRefurbPence, p.diamondCutPence, p.colourChangePence, p.kerbRepairPence],
+    bodyworkFromPence: p.bodyworkFromPence,
+    insuranceApproved: p.insuranceApproved,
+    accreditation: p.accreditation,
+    skills: p.skills,
   }));
 }
 
