@@ -37,7 +37,21 @@ A real website for **The Motoring Central** (motoringcentral.co.uk). It is being
 
 - **2026-11-08:** Phase 1 done. Built the homepage (`/`), Our services (`/services`), About us (`/about`) and Terms (`/terms`) in the brand colours, with the logo and a header and footer. Checked on desktop and phone, and a full production build passes.
 
+- **2026-11-16:** Update **TMC-UPD-20261115-A** (vehicle inspection + PDI) applied as far as the site allows. The update pack is `E:\MOTORING CENTRAL\TMC-UPD-20261115-A.zip`. Built two working forms. Both forms are checked on desktop and phone, and the build passes:
+  - `/inspection`: the partner's pre-work vehicle inspection. It has a booking picker that fills in and locks the details. Mileage is typed by hand. It also has the fuel slider, the tap-on car damage diagram, quick checks, camera photos, notes, both signatures (or "customer not present"), the agreement box and the warranty wording. "Finish & save PDF" makes the PDF and marks the job "Inspected at HH:MM". Open a job directly with `/inspection?job=TMC-10482`.
+  - `/pdi`: the dealer's pre-delivery inspection. It has a stock picker that fills in and locks the advert details. It also has sale, buyer and vehicle details, the OK/Fixed/Advise/N/A checklist (plus van extras for vans), tyres, the damage diagram, photos, work and advisories, both signatures, buyer acceptance and the dealer-responsibility wording. The PDF marks the vehicle "PDI ✓ date". Open one directly with `/pdi?vehicle=demo:1`.
+  - For now both forms use **sample** bookings and stock (`src/lib/inspections.ts`). Drafts and finished records are kept only in the browser on that device.
+
+## Update TMC-UPD-20261115-A: still to do in later phases
+- **Phase 2 (logins):** put `/inspection` behind partner logins and `/pdi` behind dealer logins. Fill in the partner, technician and dealer from the account, not the sample data.
+- **Phase 3 (dashboards):** add a "Your booked jobs" card at the top of every partner dashboard (all partner types, not dealers), with that partner's own bookings in time order. Show time, customer, service, job number, address (mobile jobs), reg and car, and status. Each job gets a large "Start vehicle inspection" button linking to `/inspection?job=<job number>`, plus "Inspected at HH:MM" once it's done.
+- **Phase 4/5 (reg lookup, bookings):** when a customer books, store their vehicle (registration and the looked-up make, model, colour, year, fuel and gearbox) on the booking. Replace `SAMPLE_BOOKINGS` with the partner's real bookings.
+- **Phase 6 (cars and vans):** add a PDI button on every vehicle in the dealer's stock list, a "Pre-delivery inspection" button on the dealer's own adverts, and a Quick actions tile. Each links to `/pdi?vehicle=<id>` and shows "PDI ✓ date" when done. Replace `SAMPLE_STOCK` with the dealer's real stock.
+- **Database (with Phase 5/6):** save every inspection and PDI in Supabase against its booking or vehicle: form data, photos, signatures and the PDF. Only the partner or dealer who owns the job or vehicle can create or view it, and admins can view all, for disputes. This replaces `saveRecord()` in `src/lib/inspections.ts`.
+
 ## Where things live (for reference)
+- Inspection and PDI forms: `src/app/inspection`, `src/app/pdi`, `src/components/inspections/` (forms, shared parts, PDF, styles), lists and wording in `src/lib/inspections.ts`
+- Form styles use a `tmcf-` prefix (`src/components/inspections/forms.css`). CSS modules (`*.module.css`) don't work in this project because the Tailwind rule in `next.config.ts` loads every `.css` file as a plain stylesheet.
 - Pages: `src/app/page.tsx` (home), `src/app/services`, `src/app/about`, `src/app/terms`
 - Wording for services and "why choose us": `src/lib/content.ts`
 - Terms wording: `src/lib/terms.ts`
