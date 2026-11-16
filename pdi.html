@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Motoring Central – Pre-Delivery Inspection</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--sky:#38BDF8;--navy:#0B1C35;--yellow:#FFD43B;--bg:#F1F6FB;--line:#D6E2EE;--muted:#5A6B82;--red:#E5484D;--green:#1F9D55}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Inter,Arial,sans-serif;color:var(--navy);font-size:16px;-webkit-text-size-adjust:100%}
+header{background:var(--sky);padding:14px 16px 0;position:relative}
+.brand{display:flex;align-items:center;gap:12px;max-width:760px;margin:0 auto}
+.brand svg{flex:none}
+.wm .t1{font:700 10px Sora,Inter;letter-spacing:.55em}
+.wm .t2{font:800 26px/0.95 Sora,Inter;letter-spacing:-.03em}
+.wm .t3{display:inline-block;font:700 12px Sora,Inter;letter-spacing:.42em;background:var(--navy);color:#fff;padding:3px 2px 3px 8px;border-radius:5px;margin-top:3px}
+.title{max-width:760px;margin:12px auto 0;padding-bottom:14px}
+.title h1{font:800 22px Sora,Inter;margin:0}
+.title h1 span{background:var(--yellow);padding:0 6px;border-radius:5px}
+.title p{margin:6px 0 0;font-size:14px;font-weight:500}
+header .bar{height:6px;background:var(--navy);position:relative}
+header .bar i{position:absolute;left:0;top:0;height:6px;width:30%;background:var(--yellow)}
+main{max-width:760px;margin:0 auto;padding:14px 12px 120px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{font:700 17px Sora,Inter;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.card h2 .n{width:26px;height:26px;border-radius:8px;background:var(--navy);color:#fff;display:grid;place-items:center;font-size:13px;flex:none}
+.hint{font-size:13px;color:var(--muted);margin:-4px 0 12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}}
+label.f{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+input[type=text],input[type=tel],input[type=number],input[type=datetime-local],textarea,select{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--navy)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(56,189,248,.25)}
+textarea{min-height:80px;resize:vertical}
+.vrm{font:800 22px Sora,Inter!important;letter-spacing:.08em;text-transform:uppercase;background:var(--yellow)!important;border-color:#E6BC20!important;text-align:center}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button,.chip{font:600 14px Inter;padding:10px 14px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);cursor:pointer}
+.seg button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.seg.warn button.on.bad{background:var(--red);border-color:var(--red)}
+.seg.warn button.on.ok{background:var(--green);border-color:var(--green)}
+.row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.row:first-of-type{border-top:0}
+.row .lbl{font-weight:600;font-size:15px}
+.diagram-wrap{display:flex;flex-direction:column;align-items:center}
+#car{width:100%;max-width:330px;touch-action:manipulation;cursor:crosshair;user-select:none}
+.legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:10px 0 4px}
+.legend span{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600}
+.legend i{width:14px;height:14px;border-radius:50%;display:inline-block}
+.dmg{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.dmg .item{border:1.5px solid var(--line);border-radius:12px;padding:12px}
+.dmg .top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.dmg .pin{width:28px;height:28px;border-radius:50%;color:#fff;font:700 13px Inter;display:grid;place-items:center;flex:none}
+.dmg .where{font-weight:700;flex:1}
+.dmg .del{border:0;background:none;color:var(--red);font:600 14px Inter;cursor:pointer;padding:6px}
+.dmg .types{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.dmg .types button{font:600 13px Inter;padding:7px 11px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy)}
+.dmg .types button.on{color:#fff;border-color:transparent}
+.empty{font-size:14px;color:var(--muted);text-align:center;padding:10px;border:1.5px dashed var(--line);border-radius:12px}
+.photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px;margin-top:10px}
+.photos figure{margin:0;position:relative;border-radius:10px;overflow:hidden;aspect-ratio:1;background:#eee}
+.photos img{width:100%;height:100%;object-fit:cover;display:block}
+.photos button{position:absolute;top:4px;right:4px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(11,28,53,.8);color:#fff;font-size:15px;line-height:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 15px Inter;padding:13px 18px;border-radius:12px;border:0;cursor:pointer;background:var(--navy);color:#fff}
+.btn.sky{background:var(--sky);color:var(--navy)}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn.yellow{background:var(--yellow);color:var(--navy)}
+.upload{display:block;text-align:center;padding:16px;border:2px dashed var(--sky);border-radius:12px;background:#F0FAFF;font-weight:700;cursor:pointer}
+.upload input{display:none}
+.sig{border:1.5px solid var(--line);border-radius:12px;background:#FBFDFF;position:relative}
+.sig canvas{width:100%;height:150px;display:block;touch-action:none;border-radius:12px}
+.sig .clr{position:absolute;top:6px;right:6px;font:600 12px Inter;border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 9px}
+.sig .base{position:absolute;left:14px;right:14px;bottom:30px;border-bottom:1px dashed #9FB3C8;pointer-events:none}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.4;margin-top:10px}
+.check input{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--navy)}
+.legal{font-size:12.5px;color:var(--muted);line-height:1.5;background:var(--bg);border-radius:10px;padding:12px;margin-top:4px}
+.actions{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 12px calc(10px + env(safe-area-inset-bottom));z-index:5}
+.actions .in{max-width:760px;margin:0 auto;display:flex;gap:8px}
+.actions .btn{flex:1}
+.progress{font-size:12px;font-weight:600;color:var(--muted);max-width:760px;margin:0 auto 6px;display:flex;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:11px 16px;border-radius:10px;font-size:14px;font-weight:600;opacity:0;transition:.25s;pointer-events:none;z-index:9;max-width:90%;text-align:center}
+.toast.show{opacity:1}
+.modal{position:fixed;inset:0;background:rgba(11,28,53,.55);display:none;align-items:center;justify-content:center;padding:16px;z-index:10}
+.modal.show{display:flex}
+.modal .box{background:#fff;border-radius:16px;padding:20px;max-width:440px;width:100%;max-height:85vh;overflow:auto}
+.modal h3{font:700 18px Sora,Inter;margin:0 0 8px}
+.modal ul{padding-left:18px;margin:8px 0 14px;font-size:14px}
+.modal .acts{display:flex;gap:8px;flex-wrap:wrap}
+.modal textarea{min-height:200px;font-size:13px}
+.small{font-size:12px;color:var(--muted)}
+.bk{display:flex;flex-direction:column;gap:8px}
+.bk button.b{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px;font:inherit;color:var(--navy);cursor:pointer}
+.bk button.b:hover{border-color:var(--sky)}
+.bk .plate{font:800 14px Sora,Inter;letter-spacing:.06em;background:var(--yellow);border:1px solid #E6BC20;border-radius:6px;padding:6px 8px;flex:none;min-width:92px;text-align:center}
+.bk .meta{flex:1;font-size:13px;color:var(--muted);line-height:1.4}
+.bk .meta b{color:var(--navy);font-size:15px;display:block}
+.bk .time{font:700 13px Inter;flex:none}
+.sel{display:flex;gap:12px;align-items:center;background:#F0FAFF;border:1.5px solid var(--sky);border-radius:12px;padding:12px}
+.sel .meta{flex:1;font-size:13px;color:var(--muted);line-height:1.45}
+.sel .meta b{color:var(--navy);font-size:15px}
+input.locked{background:#F4F8FC!important;color:var(--navy);border-style:dashed}
+.vrm.locked{background:var(--yellow)!important}
+.lockrow{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12.5px;color:var(--muted);gap:8px;flex-wrap:wrap}
+.linkbtn{border:0;background:none;color:#0369A1;font:600 13px Inter;padding:6px 0;cursor:pointer;text-decoration:underline}
+.seg.locked button:not(.on){opacity:.4;pointer-events:none}
+.seg.locked button.on{pointer-events:none}
+.fuel{padding:4px 2px 0}
+.gauge{position:relative;height:26px;border-radius:13px;background:linear-gradient(90deg,#FDE2E2,#FFF4C2 30%,#E3F6EA);border:1.5px solid var(--line);overflow:hidden}
+.gauge .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,#E5484D,#FFD43B 35%,#1F9D55);transition:width .15s}
+.gauge .ticks{position:absolute;inset:0;display:flex;justify-content:space-evenly}
+.gauge .ticks i{width:2px;background:rgba(11,28,53,.35)}
+.fuelrow{display:flex;justify-content:space-between;font:700 12px Inter;color:var(--muted);margin:4px 2px 2px}
+#fuelR{width:100%;height:34px;accent-color:var(--navy);margin:0}
+.fuelval{display:flex;justify-content:space-between;align-items:center;font-size:15px}
+.fuel.unset .fill{width:0!important}
+.backlink{display:inline-block;font:700 13px Inter;color:#0B1C35;text-decoration:none;background:rgba(255,255,255,.55);padding:6px 10px;border-radius:8px;margin-bottom:10px}
+.csec{margin-top:14px}.csec:first-child{margin-top:4px}
+.csec h3{font:700 14px Sora,Inter;margin:0 0 4px;padding:8px 10px;background:var(--bg);border-radius:8px}
+.seg.pdi button{padding:8px 12px;font-size:13px}
+.seg.pdi button.on.ok{background:var(--green);border-color:var(--green)}
+.seg.pdi button.on.fix{background:var(--sky);border-color:var(--sky);color:var(--navy)}
+.seg.pdi button.on.adv{background:#F59E0B;border-color:#F59E0B}
+.seg.pdi button.on.na{background:var(--muted);border-color:var(--muted)}
+.allok{margin:-2px 0 6px}.allok .btn{font-size:13px;padding:10px 14px}
+.trow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;align-items:center;margin-bottom:8px}
+.trow.th span{font-size:12px;font-weight:700;color:var(--muted)}
+.trow .lbl{font-weight:600;font-size:14px}
+.trow input.low{border-color:var(--red);background:#FFF1F1}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <svg width="52" height="52" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="6" stroke-linecap="round"/><g stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity=".55"><line x1="60" y1="24" x2="60" y2="30"/><line x1="34.5" y1="34.5" x2="38.8" y2="38.8"/><line x1="85.5" y1="34.5" x2="81.2" y2="38.8"/></g><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="7.5" fill="#FFD43B"/></svg>
+    <div class="wm"><div class="t1">THE</div><div class="t2">MOTORING</div><div class="t3">CENTRAL</div></div>
+  </div>
+  <div class="title"><a href="index.html#dashboard" id="backDash" class="backlink">← Back to my stock</a>
+    <h1>Pre-delivery <span>Inspection</span></h1>
+    <p>Complete before the vehicle is handed over or delivered to the buyer.</p>
+  </div>
+  <div class="bar"><i id="pbar"></i></div>
+</header>
+
+<main>
+<!-- 0 Vehicle picker -->
+<section class="card" id="pickCard">
+  <h2><span class="n">✓</span>Vehicle</h2>
+  <div id="pickArea"></div>
+</section>
+
+<!-- 1 Sale -->
+<section class="card">
+  <h2><span class="n">1</span>Sale &amp; handover</h2>
+  <div class="grid">
+    <div><label class="f" for="dealer">Dealer</label><input type="text" id="dealer" data-k="dealer" data-b="dealer"></div>
+    <div><label class="f" for="staff">Prepared by</label><input type="text" id="staff" data-k="staff" placeholder="Name of person doing the PDI"></div>
+    <div><label class="f" for="stockno">Stock number</label><input type="text" id="stockno" data-k="stockno" data-b="stockno"></div>
+    <div><label class="f" for="when">Date &amp; time of handover</label><input type="datetime-local" id="when" data-k="when"></div>
+    <div><label class="f" for="price">Sale price (£)</label><input type="number" inputmode="decimal" id="price" data-k="price" data-b="price"></div>
+    <div><label class="f" for="sold">Date sold</label><input type="date" id="sold" data-k="sold" data-b="sold"></div>
+  </div>
+  <div style="margin-top:12px"><label class="f">Handover method</label>
+    <div class="seg" data-seg="method"><button>Buyer collecting</button><button>Delivered by us</button><button>Delivered by recovery partner</button></div></div>
+  <div style="margin-top:12px"><label class="f">Dealer warranty</label>
+    <div class="seg" data-seg="warranty"><button>None (trade / sold as seen)</button><button>3 months</button><button>6 months</button><button>12 months</button><button>Other</button></div></div>
+</section>
+
+<!-- 2 Buyer -->
+<section class="card">
+  <h2><span class="n">2</span>Buyer</h2>
+  <div class="grid">
+    <div><label class="f" for="bname">Buyer name</label><input type="text" id="bname" data-k="bname"></div>
+    <div><label class="f" for="bphone">Phone</label><input type="tel" id="bphone" data-k="bphone"></div>
+    <div><label class="f" for="bemail">Email</label><input type="text" inputmode="email" id="bemail" data-k="bemail"></div>
+    <div><label class="f" for="baddr">Address and postcode</label><input type="text" id="baddr" data-k="baddr"></div>
+  </div>
+  <div style="margin-top:12px"><label class="f">Payment</label>
+    <div class="seg" data-seg="pay"><button>Paid in full</button><button>Finance</button><button>Part exchange + balance</button><button>Deposit only</button></div></div>
+</section>
+
+<!-- 3 Vehicle -->
+<section class="card">
+  <h2><span class="n">3</span>Vehicle details</h2>
+  <div class="grid">
+    <div><label class="f" for="vrm">Registration</label><input type="text" id="vrm" data-k="vrm" data-b="reg" class="vrm" placeholder="AB12 CDE" autocapitalize="characters"></div>
+    <div><label class="f" for="vin">VIN / chassis number</label><input type="text" id="vin" data-k="vin" placeholder="17 characters" autocapitalize="characters" maxlength="17"></div>
+    <div><label class="f" for="make">Make &amp; model</label><input type="text" id="make" data-k="make" data-b="make"></div>
+    <div><label class="f" for="variant">Engine / trim</label><input type="text" id="variant" data-k="variant" data-b="variant"></div>
+    <div><label class="f" for="year">Year</label><input type="text" inputmode="numeric" id="year" data-k="year" data-b="year"></div>
+    <div><label class="f" for="colour">Colour</label><input type="text" id="colour" data-k="colour" data-b="col"></div>
+    <div><label class="f" for="fuelT">Fuel type</label><input type="text" id="fuelT" data-k="fuelT" data-b="fuel"></div>
+    <div><label class="f" for="gear">Gearbox</label><input type="text" id="gear" data-k="gear" data-b="gear"></div>
+    <div><label class="f" for="mileage">Mileage at handover</label><input type="number" inputmode="numeric" id="mileage" data-k="mileage" placeholder="Read from the dashboard"></div>
+    <div><label class="f" for="mot">MOT expiry</label><input type="date" id="mot" data-k="mot"></div>
+    <div><label class="f" for="svc">Last service (date or mileage)</label><input type="text" id="svc" data-k="svc"></div>
+  </div>
+  <div style="margin-top:12px"><label class="f">Keys handed over</label>
+    <div class="seg" data-seg="keys"><button>1</button><button>2</button><button>3</button><button>Keyless + fob</button></div></div>
+  <div style="margin-top:12px"><label class="f">Fuel / charge level at handover</label>
+    <div class="fuel">
+      <div class="gauge"><div class="fill" id="fuelFill"></div><div class="ticks"><i></i><i></i><i></i></div></div>
+      <div class="fuelrow"><span>E</span><span>¼</span><span>½</span><span>¾</span><span>F</span></div>
+      <input type="range" id="fuelR" min="0" max="100" step="5" value="50" aria-label="Fuel or charge level">
+      <div class="fuelval"><b id="fuelTxt">Slide to set level</b><button class="linkbtn" id="fuelClr" type="button">Clear</button></div>
+    </div></div>
+</section>
+
+<!-- 4 Checklist -->
+<section class="card">
+  <h2><span class="n">4</span>Inspection checklist</h2>
+  <p class="hint">Mark each item. <b>OK</b> = checked and fine · <b>Fixed</b> = put right before handover · <b>Advise</b> = buyer told · <b>N/A</b> = not fitted.</p>
+  <div class="allok"><button class="btn ghost" id="allOk" type="button">Mark everything not yet answered as OK</button></div>
+  <div id="checks"></div>
+</section>
+
+<!-- 5 Tyres -->
+<section class="card">
+  <h2><span class="n">5</span>Tyre tread &amp; pressures</h2>
+  <p class="hint">UK legal minimum is 1.6 mm. Most dealers supply at least 3 mm.</p>
+  <div class="tyres" id="tyres"></div>
+</section>
+
+<!-- 6 Damage -->
+<section class="card">
+  <h2><span class="n">6</span>Bodywork condition at handover</h2>
+  <p class="hint">Tap the car to mark any marks the buyer has seen and accepted. Then choose the type below.</p>
+  <div class="diagram-wrap">
+    <svg id="car" viewBox="0 0 300 540" xmlns="http://www.w3.org/2000/svg">
+      <g id="carbody">
+        <rect width="300" height="540" fill="#fff"/>
+        <text x="150" y="16" text-anchor="middle" font-family="Inter,Arial" font-size="12" font-weight="700" fill="#5A6B82">FRONT</text>
+        <text x="150" y="532" text-anchor="middle" font-family="Inter,Arial" font-size="12" font-weight="700" fill="#5A6B82">REAR</text>
+        <text x="16" y="270" text-anchor="middle" font-family="Inter,Arial" font-size="11" font-weight="700" fill="#5A6B82" transform="rotate(-90 16 270)">PASSENGER SIDE (N/S)</text>
+        <text x="284" y="270" text-anchor="middle" font-family="Inter,Arial" font-size="11" font-weight="700" fill="#5A6B82" transform="rotate(90 284 270)">DRIVER SIDE (O/S)</text>
+        <!-- wheels -->
+        <g fill="#0B1C35"><rect x="52" y="92" width="22" height="62" rx="7"/><rect x="226" y="92" width="22" height="62" rx="7"/><rect x="52" y="390" width="22" height="62" rx="7"/><rect x="226" y="390" width="22" height="62" rx="7"/></g>
+        <!-- body -->
+        <path d="M95 28 Q150 18 205 28 Q232 34 236 70 L238 470 Q236 505 205 512 Q150 520 95 512 Q64 505 62 470 L64 70 Q68 34 95 28 Z" fill="#EAF6FD" stroke="#0B1C35" stroke-width="3"/>
+        <!-- mirrors -->
+        <path d="M64 178 L42 172 L42 190 L64 192 Z M236 178 L258 172 L258 190 L236 192 Z" fill="#EAF6FD" stroke="#0B1C35" stroke-width="2.5"/>
+        <!-- bumpers -->
+        <path d="M80 50 Q150 38 220 50" fill="none" stroke="#0B1C35" stroke-width="2" opacity=".5"/>
+        <path d="M80 492 Q150 504 220 492" fill="none" stroke="#0B1C35" stroke-width="2" opacity=".5"/>
+        <!-- bonnet -->
+        <path d="M82 60 Q150 50 218 60 L214 160 Q150 152 86 160 Z" fill="none" stroke="#0B1C35" stroke-width="2"/>
+        <!-- windscreen -->
+        <path d="M86 168 Q150 158 214 168 L206 208 Q150 200 94 208 Z" fill="#BFE6FA" stroke="#0B1C35" stroke-width="2"/>
+        <!-- roof -->
+        <rect x="96" y="214" width="108" height="140" rx="10" fill="none" stroke="#0B1C35" stroke-width="2"/>
+        <!-- rear screen -->
+        <path d="M94 360 Q150 368 206 360 L212 396 Q150 404 88 396 Z" fill="#BFE6FA" stroke="#0B1C35" stroke-width="2"/>
+        <!-- boot -->
+        <path d="M86 404 Q150 412 214 404 L218 480 Q150 490 82 480 Z" fill="none" stroke="#0B1C35" stroke-width="2"/>
+        <!-- door lines -->
+        <g stroke="#0B1C35" stroke-width="2"><line x1="64" y1="196" x2="86" y2="196"/><line x1="236" y1="196" x2="214" y2="196"/><line x1="64" y1="284" x2="94" y2="284"/><line x1="236" y1="284" x2="206" y2="284"/><line x1="64" y1="372" x2="90" y2="372"/><line x1="236" y1="372" x2="210" y2="372"/></g>
+        <!-- lights -->
+        <g fill="#FFD43B" stroke="#0B1C35" stroke-width="1.5"><path d="M74 40 L100 34 L98 46 L72 52 Z"/><path d="M226 40 L200 34 L202 46 L228 52 Z"/></g>
+        <g fill="#E5484D" stroke="#0B1C35" stroke-width="1.5"><path d="M72 488 L98 494 L98 504 L76 500 Z"/><path d="M228 488 L202 494 L202 504 L224 500 Z"/></g>
+      </g>
+      <g id="pins"></g>
+    </svg>
+    <div class="legend" id="legend"></div>
+  </div>
+  <div class="dmg" id="dmgList"></div>
+  <label class="check"><input type="checkbox" id="nodamage" data-k="nodamage"> No visible damage on the bodywork.</label>
+</section>
+
+<!-- 7 Photos -->
+<section class="card">
+  <h2><span class="n">7</span>Photos</h2>
+  <p class="hint">Take at least 4: front, back, both sides, plus the dashboard showing mileage and no warning lights.</p>
+  <label class="upload">📷 Take or add photos<input type="file" id="photoIn" accept="image/*" capture="environment" multiple></label>
+  <div class="photos" id="photos"></div>
+</section>
+
+<!-- 8 Work & advisories -->
+<section class="card">
+  <h2><span class="n">8</span>Work done &amp; advisories</h2>
+  <label class="f" for="work">Work carried out before sale</label>
+  <textarea id="work" data-k="work" placeholder="e.g. Oil and filter service, 2 new front tyres, MOT, wiper blades, full valet"></textarea>
+  <label class="f" for="advice" style="margin-top:12px">Advisories given to the buyer</label>
+  <textarea id="advice" data-k="advice" placeholder="e.g. Rear brake pads around 4 mm – replace within 6 months"></textarea>
+</section>
+
+<!-- 9 Sign -->
+<section class="card">
+  <h2><span class="n">9</span>Handover &amp; signatures</h2>
+  <label class="f">Dealer signature</label>
+  <div class="sig"><canvas id="sigTech"></canvas><div class="base"></div><button class="clr" data-clear="sigTech">Clear</button></div>
+  <label class="f" style="margin-top:14px">Buyer signature</label>
+  <div class="sig"><canvas id="sigCust"></canvas><div class="base"></div><button class="clr" data-clear="sigCust">Clear</button></div>
+  <label class="check"><input type="checkbox" id="absent" data-k="absent"> Buyer not present (delivered). Photos taken at delivery instead of a signature.</label>
+  <label class="check"><input type="checkbox" id="agree" data-k="agree"> The buyer has seen the vehicle, received the documents and keys listed, and accepts its condition as recorded.</label>
+  <div class="legal">This pre-delivery inspection records the condition of the vehicle at handover. The vehicle is sold by the dealer named above, who is responsible for the sale, its description and any warranty. The Motoring Central Ltd advertises vehicles and is not a party to the sale. This record does not affect the buyer's statutory rights.</div>
+</section>
+</main>
+
+<div class="actions">
+  <div class="progress"><span id="ptext">0% complete</span><span id="saved">Draft saved on this device</span></div>
+  <div class="in">
+    <button class="btn ghost" id="newBtn">New</button>
+    <button class="btn ghost" id="copyBtn">Copy text</button>
+    <button class="btn yellow" id="pdfBtn">Finish &amp; save PDF</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal"><div class="box" id="mbox"></div></div>
+
+<script>
+(function(){
+const COLORS={Scratch:'#E5484D',Dent:'#F59E0B',Chip:'#8B5CF6',Crack:'#0EA5E9',Scuff:'#64748B',Rust:'#A16207',Missing:'#111827'};
+const TYPES=Object.keys(COLORS);
+const OPTS=['OK','Fixed','Advise','N/A'];
+const SECTIONS=[
+ ['Documents & checks',['V5C logbook present / keeper change done','Service history handed over','MOT certificate valid','Vehicle history check clear (finance, stolen, write-off)','Outstanding recalls checked','Owner\'s handbook','Spare key','Locking wheel nut key','Previous owner\'s data cleared (sat nav, phone pairing)']],
+ ['Exterior',['Paintwork and panels','Windscreen and glass','All lights working','Wipers and washers','Mirrors','Number plates legal','Wheels / alloys','Spare wheel or repair kit']],
+ ['Interior',['Seats and trim','Seatbelts','No warning lights on','Heater and air conditioning','Electric windows and central locking','Infotainment, Bluetooth and sat nav','Horn','Clock and date set','Floor mats','Parcel shelf / load cover']],
+ ['Under the bonnet',['Engine oil level','Coolant level','Brake fluid','Screenwash topped up','Power steering fluid','Battery health tested','No fluid leaks','Service indicator reset']],
+ ['Underside, brakes & suspension',['Brake pads and discs','Brake pipes and hoses','Exhaust and mountings','Shock absorbers and springs','Drive shafts and CV boots','Underbody corrosion']],
+ ['Road test',['Starts and idles correctly','Clutch and gearbox','Brakes and handbrake','Steering pulls straight','No knocks or abnormal noises','Cruise control, sensors and camera']],
+ ['Van extras',['Load area and bulkhead','Side and rear doors and locks','Load lashing points','Tow bar and electrics','Racking or ply lining'],'van'],
+ ['Final preparation',['Full valet completed','Tyre pressures set','Road tax explained to buyer','Warranty documents handed over','Delivery paperwork signed']]
+];
+const TYRES=['Front left','Front right','Rear left','Rear right','Spare'];
+let S=blank();function blank(){return{f:{},seg:{},checks:{},tyres:{},dmg:[],photos:[],sig:{},veh:null}}
+const $=s=>document.querySelector(s);
+const KEY='tmc-pdi-draft';
+let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function isVan(){return !!(S.veh&&/van/i.test(S.veh.kind||''))||S.seg.vtype==='Van'}
+
+// ---------- handoff from the website ----------
+let HAND=null;try{HAND=JSON.parse(localStorage.getItem('tmc-pdi-handoff')||'null')}catch(_){}
+const DEALER=HAND&&HAND.dealer?HAND.dealer:{name:'Albion Autos',phone:'0114 000 0104',town:'Sheffield'};
+function getStock(){if(HAND&&HAND.stock)return HAND.stock;return[
+ {key:'demo:1',kind:'Car',reg:'AB12 CDE',make:'Ford',model:'Focus',variant:'1.0 EcoBoost Zetec',year:2018,miles:41200,fuel:'Petrol',gear:'Manual',col:'Blue',price:8995,stockno:'ST-1042'},
+ {key:'demo:2',kind:'Car',reg:'YX19 KLM',make:'Nissan',model:'Qashqai',variant:'1.3 DIG-T N-Connecta',year:2020,miles:27600,fuel:'Petrol',gear:'Manual',col:'Red',price:15250,stockno:'ST-1051'},
+ {key:'demo:3',kind:'Van',reg:'LD68 PQR',make:'Volkswagen',model:'Transporter',variant:'T6.1 2.0 TDI Highline',year:2021,miles:52800,fuel:'Diesel',gear:'Manual',col:'White',price:24995,stockno:'ST-1060'}
+]}
+document.getElementById('backDash').addEventListener('click',()=>{if(HAND){HAND.back=Date.now();try{localStorage.setItem('tmc-pdi-handoff',JSON.stringify(HAND))}catch(_){}}});
+
+function renderPick(){
+ const A=$('#pickArea'),v=S.veh;
+ if(v){A.innerHTML=`<div class="sel"><span class="bk"><span class="plate">${esc(v.reg||'No reg')}</span></span><div class="meta"><b>${esc([v.year,v.make,v.model].filter(Boolean).join(' '))}</b><br>${esc(v.variant||'')}${v.price?' · £'+Number(v.price).toLocaleString('en-GB'):''}${v.stockno?' · '+esc(v.stockno):''}</div></div>
+  <div class="lockrow"><span>🔒 Vehicle details filled from your advert</span><span><button class="linkbtn" id="unlock">${S.unlocked?'Lock details':'Correct details'}</button> · <button class="linkbtn" id="changeV">Change vehicle</button></span></div>`}
+ else{const L=getStock();A.innerHTML=L.length?`<p class="hint">Choose the vehicle you are handing over. Its details fill in for you.</p><input type="text" id="vSearch" placeholder="Search registration, make or model" style="margin-bottom:10px"><div class="bk" id="vList">${L.map((x,i)=>`<button class="b" data-v="${i}" data-s="${esc(((x.reg||'')+' '+x.make+' '+x.model).toLowerCase())}"><span class="plate">${esc(x.reg||'No reg')}</span><span class="meta"><b>${esc([x.year,x.make,x.model].filter(Boolean).join(' '))}</b>${esc(x.variant||'')}${x.status==='sold'?' · <b style="display:inline;font-size:13px;color:#1F9D55">Sold</b>':''}</span><span class="time">${x.price?'£'+Number(x.price).toLocaleString('en-GB'):''}</span></button>`).join('')}</div><div class="lockrow"><span>Vehicle not listed?</span><button class="linkbtn" id="manual">Fill in by hand</button></div>`:`<p class="hint">No vehicles found.</p><button class="linkbtn" id="manual">Fill in by hand</button>`}
+ lockFields();paintVan();
+}
+function lockFields(){const lock=!!S.veh&&!S.unlocked;document.querySelectorAll('[data-b]').forEach(el=>{const k=el.dataset.b,src=k==='dealer'?DEALER.name:S.veh&&S.veh[k];const has=!!S.veh&&src!=null&&src!=='';el.readOnly=lock&&has;el.classList.toggle('locked',lock&&has)})}
+function applyVeh(v){S.veh=v;S.unlocked=false;const put=(k,x)=>{if(x!=null&&x!=='')S.f[k]=String(x)};
+ put('dealer',DEALER.name);put('stockno',v.stockno);put('price',v.soldPrice||v.price);put('sold',v.soldDate);put('vrm',v.reg);put('make',[v.make,v.model].filter(Boolean).join(' '));put('variant',v.variant);put('year',v.year);put('colour',v.col);put('fuelT',v.fuel);put('gear',v.gear);
+ $('#mileage').placeholder=v.miles?'Advertised at '+Number(v.miles).toLocaleString('en-GB')+' – read the dashboard':'Read from the dashboard';
+ paintFields();renderPick();renderChecks();save();toast('Vehicle details filled in')}
+$('#pickArea').addEventListener('click',e=>{const b=e.target.closest('[data-v]');if(b){applyVeh(getStock()[+b.dataset.v]);return}
+ if(e.target.id==='changeV'){S.veh=null;renderPick();renderChecks();save();return}
+ if(e.target.id==='unlock'){S.unlocked=!S.unlocked;renderPick();save();return}
+ if(e.target.id==='manual'){S.manual=true;$('#pickCard').style.display='none';save();$('#dealer').focus()}});
+$('#pickArea').addEventListener('input',e=>{if(e.target.id!=='vSearch')return;const q=e.target.value.toLowerCase().trim();document.querySelectorAll('#vList [data-v]').forEach(b=>b.style.display=b.dataset.s.includes(q)?'':'none')});
+
+// ---------- segments & fields ----------
+document.querySelectorAll('[data-seg]').forEach(g=>g.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const k=g.dataset.seg;S.seg[k]=S.seg[k]===b.textContent?null:b.textContent;paintSeg();save()}));
+function paintSeg(){document.querySelectorAll('[data-seg]').forEach(g=>g.querySelectorAll('button').forEach(b=>b.classList.toggle('on',S.seg[g.dataset.seg]===b.textContent)))}
+document.querySelectorAll('[data-k]').forEach(el=>el.addEventListener(el.type==='checkbox'?'change':'input',()=>{S.f[el.dataset.k]=el.type==='checkbox'?el.checked:el.value;if(el.id==='nodamage'&&el.checked&&S.dmg.length){toast('Remove the damage pins first');el.checked=false;S.f.nodamage=false}save()}));
+function paintFields(){document.querySelectorAll('[data-k]').forEach(el=>{const v=S.f[el.dataset.k];if(el.type==='checkbox')el.checked=!!v;else el.value=v||''})}
+
+// ---------- checklist ----------
+function activeSections(){return SECTIONS.filter(s=>s[2]!=='van'||isVan())}
+function renderChecks(){
+ $('#checks').innerHTML=activeSections().map(([title,items])=>`<div class="csec"><h3>${esc(title)}</h3>${items.map(it=>{const k=title+'|'+it,v=S.checks[k];return `<div class="row"><span class="lbl">${esc(it)}</span><div class="seg pdi" data-ck="${esc(k)}">${OPTS.map(o=>`<button class="${o==='Advise'?'adv':o==='Fixed'?'fix':o==='OK'?'ok':'na'}${v===o?' on':''}">${o}</button>`).join('')}</div></div>`}).join('')}</div>`).join('');
+}
+function paintVan(){renderChecks()}
+$('#checks').addEventListener('click',e=>{const b=e.target.closest('button');const g=e.target.closest('[data-ck]');if(!b||!g)return;const k=g.dataset.ck;S.checks[k]=S.checks[k]===b.textContent?null:b.textContent;g.querySelectorAll('button').forEach(x=>x.classList.toggle('on',S.checks[k]===x.textContent));save()});
+$('#allOk').addEventListener('click',()=>{let n=0;activeSections().forEach(([t,items])=>items.forEach(it=>{const k=t+'|'+it;if(!S.checks[k]){S.checks[k]='OK';n++}}));renderChecks();save();toast(n?n+' items marked OK – check any that are not':'Everything is already answered')});
+
+// ---------- tyres ----------
+function renderTyres(){$('#tyres').innerHTML=`<div class="trow th"><span></span><span>Tread (mm)</span><span>Pressure (psi)</span></div>`+TYRES.map(t=>{const v=S.tyres[t]||{};return `<div class="trow"><span class="lbl">${t}</span><input type="number" inputmode="decimal" step="0.1" data-ty="${t}" data-tf="mm" value="${esc(v.mm||'')}" placeholder="mm"><input type="number" inputmode="numeric" data-ty="${t}" data-tf="psi" value="${esc(v.psi||'')}" placeholder="psi"></div>`}).join('')}
+$('#tyres').addEventListener('input',e=>{const el=e.target;if(!el.dataset.ty)return;S.tyres[el.dataset.ty]=S.tyres[el.dataset.ty]||{};S.tyres[el.dataset.ty][el.dataset.tf]=el.value;el.classList.toggle('low',el.dataset.tf==='mm'&&el.value!==''&&+el.value<1.6);save()});
+
+// ---------- fuel ----------
+const EIGHTHS=['Empty','⅛','¼','⅜','½','⅝','¾','⅞','Full'];
+function fuelLabel(p){if(p<=2)return'Empty (0%)';if(p>=98)return'Full (100%)';const e=Math.round(p/12.5);return(Math.abs(p-e*12.5)<2.6?'':'About ')+EIGHTHS[e]+' ('+p+'%)'}
+function paintFuel(){const w=$('.fuel'),p=S.f.fuelPct;if(p==null){w.classList.add('unset');$('#fuelTxt').textContent='Slide to set level';$('#fuelR').value=50;S.seg.fuel=null}else{w.classList.remove('unset');$('#fuelR').value=p;$('#fuelFill').style.width=p+'%';$('#fuelTxt').textContent=fuelLabel(p);S.seg.fuel=fuelLabel(p)}}
+$('#fuelR').addEventListener('input',e=>{S.f.fuelPct=+e.target.value;paintFuel();save()});
+$('#fuelClr').addEventListener('click',()=>{S.f.fuelPct=null;paintFuel();save()});
+
+// ---------- damage diagram ----------
+$('#legend').innerHTML=TYPES.map(t=>`<span><i style="background:${COLORS[t]}"></i>${t}</span>`).join('');
+function zone(x,y){const side=x<86?'N/S ':x>214?'O/S ':'';
+ if(y<52)return side+'Front bumper';if((x<76||x>224)&&((y>90&&y<156)||(y>388&&y<454)))return side+(y<300?'front':'rear')+' wheel';
+ if((x<64||x>236)&&y>165&&y<200)return side+'mirror';if(y<162)return side?side+'front wing':'Bonnet';if(y<210)return side?side+'front wing / A-pillar':'Windscreen';
+ if(y<358)return side?side+(y<284?'front door':'rear door'):'Roof';if(y<400)return side?side+'rear quarter':'Rear screen';if(y<486)return side?side+'rear quarter':'Boot / tailgate';return side+'Rear bumper'}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const car=$('#car');
+car.addEventListener('click',e=>{const pt=car.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform(car.getScreenCTM().inverse());if(p.x<30||p.x>270||p.y<20||p.y>520)return;
+ S.dmg.push({x:Math.round(p.x),y:Math.round(p.y),where:cap(zone(p.x,p.y)),type:'Scratch',size:'',note:''});if(S.f.nodamage){S.f.nodamage=false;paintFields()}renderDmg();save()});
+function renderDmg(){$('#pins').innerHTML=S.dmg.map((d,i)=>`<g><circle cx="${d.x}" cy="${d.y}" r="11" fill="${COLORS[d.type]}" stroke="#fff" stroke-width="2.5"/><text x="${d.x}" y="${d.y+4.5}" text-anchor="middle" font-family="Inter,Arial" font-size="12" font-weight="700" fill="#fff">${i+1}</text></g>`).join('');
+ const L=$('#dmgList');if(!S.dmg.length){L.innerHTML='<div class="empty">No marks recorded. Tap the car above to add one.</div>';return}
+ L.innerHTML=S.dmg.map((d,i)=>`<div class="item" data-i="${i}"><div class="top"><span class="pin" style="background:${COLORS[d.type]}">${i+1}</span><input type="text" class="where" value="${esc(d.where)}" data-f="where" style="padding:8px 10px;font-weight:700"><button class="del" data-del>Remove</button></div>
+  <div class="types">${TYPES.map(t=>`<button data-t="${t}" class="${d.type===t?'on':''}" style="${d.type===t?'background:'+COLORS[t]:''}">${t}</button>`).join('')}</div>
+  <div class="grid"><select data-f="size"><option value="">Size…</option>${['Small (under 2cm)','Medium (2–10cm)','Large (over 10cm)'].map(s=>`<option ${d.size===s?'selected':''}>${s}</option>`).join('')}</select><input type="text" data-f="note" placeholder="Note (optional)" value="${esc(d.note)}"></div></div>`).join('')}
+$('#dmgList').addEventListener('click',e=>{const it=e.target.closest('.item');if(!it)return;const i=+it.dataset.i;if(e.target.matches('[data-del]')){S.dmg.splice(i,1);renderDmg();save();return}const t=e.target.closest('[data-t]');if(t){S.dmg[i].type=t.dataset.t;renderDmg();save()}});
+['input','change'].forEach(ev=>$('#dmgList').addEventListener(ev,e=>{const it=e.target.closest('.item');if(!it||!e.target.dataset.f)return;S.dmg[+it.dataset.i][e.target.dataset.f]=e.target.value;save()}));
+
+// ---------- photos ----------
+$('#photoIn').addEventListener('change',async e=>{const files=[...e.target.files];e.target.value='';for(const f of files){try{S.photos.push({src:await shrink(f,1200),t:new Date().toLocaleString('en-GB')})}catch(_){toast('Could not read one photo')}}renderPhotos();save()});
+function shrink(file,max){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,max/Math.max(im.width,im.height));const c=document.createElement('canvas');c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.78))};im.onerror=rej;im.src=r.result};r.onerror=rej;r.readAsDataURL(file)})}
+function renderPhotos(){$('#photos').innerHTML=S.photos.map((p,i)=>`<figure><img src="${p.src}" alt="Photo ${i+1}"><button data-rm="${i}" aria-label="Remove photo">×</button></figure>`).join('')}
+$('#photos').addEventListener('click',e=>{const b=e.target.closest('[data-rm]');if(b){S.photos.splice(+b.dataset.rm,1);renderPhotos();save()}});
+
+// ---------- signatures ----------
+function pad(id){const c=document.getElementById(id),ctx=c.getContext('2d');let draw=false,last=null;
+ function size(){const r=c.getBoundingClientRect(),d=window.devicePixelRatio||1;c.width=r.width*d;c.height=r.height*d;ctx.setTransform(d,0,0,d,0,0);ctx.lineWidth=2.4;ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle='#0B1C35';const old=S.sig[id];if(old){const im=new Image();im.onload=()=>ctx.drawImage(im,0,0,r.width,r.height);im.src=old}}
+ const pos=e=>{const r=c.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}};
+ c.addEventListener('pointerdown',e=>{draw=true;last=pos(e);c.setPointerCapture(e.pointerId)});
+ c.addEventListener('pointermove',e=>{if(!draw)return;const p=pos(e);ctx.beginPath();ctx.moveTo(last.x,last.y);ctx.lineTo(p.x,p.y);ctx.stroke();last=p});
+ const end=()=>{if(!draw)return;draw=false;S.sig[id]=c.toDataURL('image/png');save()};c.addEventListener('pointerup',end);c.addEventListener('pointercancel',end);
+ size();window.addEventListener('resize',size);return{clear(){ctx.clearRect(0,0,c.width,c.height);delete S.sig[id];save()},redraw:size}}
+const pads={sigTech:pad('sigTech'),sigCust:pad('sigCust')};
+document.querySelectorAll('[data-clear]').forEach(b=>b.addEventListener('click',()=>pads[b.dataset.clear].clear()));
+
+// ---------- progress & draft ----------
+function allChecked(){return activeSections().every(([t,items])=>items.every(it=>S.checks[t+'|'+it]))}
+function tyresDone(){return TYRES.slice(0,4).every(t=>S.tyres[t]&&S.tyres[t].mm)}
+const NAMES=['Dealer','Prepared by','Buyer name','Registration','VIN','Mileage at handover','Handover method','Keys handed over','Fuel level','Every checklist item','Tyre tread for all 4 tyres','Bodywork marked (or "no damage" ticked)','At least 4 photos','Dealer signature','Buyer signature (or "not present")','Buyer acceptance box'];
+function progress(){const req=[S.f.dealer,S.f.staff,S.f.bname,S.f.vrm,S.f.vin,S.f.mileage,S.seg.method,S.seg.keys,S.seg.fuel,allChecked(),tyresDone(),(S.dmg.length||S.f.nodamage),S.photos.length>=4,S.sig.sigTech,(S.sig.sigCust||S.f.absent),S.f.agree];
+ const p=Math.round(req.filter(Boolean).length/req.length*100);$('#pbar').style.width=p+'%';$('#ptext').textContent=p+'% complete';return req}
+let st;function save(){progress();clearTimeout(st);st=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(S));$('#saved').textContent='Draft saved on this device'}catch(_){try{localStorage.setItem(KEY,JSON.stringify({...S,photos:[]}));$('#saved').textContent='Draft saved (photos not kept)'}catch(__){$('#saved').textContent='Draft not saved'}}},400)}
+function load(){try{const d=JSON.parse(localStorage.getItem(KEY)||'null');if(d)S=Object.assign(blank(),d)}catch(_){} if(!S.f.when){const n=new Date();n.setMinutes(n.getMinutes()-n.getTimezoneOffset());S.f.when=n.toISOString().slice(0,16)} if(!S.f.dealer)S.f.dealer=DEALER.name}
+function paintAll(){paintFields();paintSeg();paintFuel();renderPick();renderTyres();renderDmg();renderPhotos();pads.sigTech.redraw();pads.sigCust.redraw();if(S.manual)$('#pickCard').style.display='none';else $('#pickCard').style.display='';progress()}
+load();
+if(HAND&&HAND.selected&&!HAND.used){HAND.used=1;try{localStorage.setItem('tmc-pdi-handoff',JSON.stringify(HAND))}catch(_){}const v=getStock().find(x=>x.key===HAND.selected);if(v&&(!S.veh||S.veh.key!==v.key)){S=blank();load();S.manual=false;paintAll();applyVeh(v)}else paintAll()}else paintAll();
+
+// ---------- modal ----------
+function modal(html){$('#mbox').innerHTML=html;$('#modal').classList.add('show')}
+function closeModal(){$('#modal').classList.remove('show')}
+$('#modal').addEventListener('click',e=>{if(e.target.id==='modal'||e.target.matches('[data-close]'))closeModal()});
+$('#newBtn').addEventListener('click',()=>modal(`<h3>Start a new PDI?</h3><p>This clears the form on this device. Save the PDF first if you need it.</p><div class="acts"><button class="btn ghost" data-close>Cancel</button><button class="btn" id="doNew">Clear form</button></div>`));
+document.addEventListener('click',e=>{if(e.target.id==='doNew'){try{localStorage.removeItem(KEY)}catch(_){}S=blank();load();pads.sigTech.clear();pads.sigCust.clear();paintAll();closeModal();window.scrollTo(0,0);toast('New PDI started')}});
+
+// ---------- summary ----------
+function fmtWhen(){return S.f.when?new Date(S.f.when).toLocaleString('en-GB',{dateStyle:'medium',timeStyle:'short'}):''}
+function summary(){const L=['THE MOTORING CENTRAL – PRE-DELIVERY INSPECTION'];
+ L.push(`Dealer: ${S.f.dealer||'-'}   Prepared by: ${S.f.staff||'-'}   Stock no: ${S.f.stockno||'-'}`);
+ L.push(`Handover: ${fmtWhen()}   Method: ${S.seg.method||'-'}   Warranty: ${S.seg.warranty||'-'}   Sale price: ${S.f.price?'£'+S.f.price:'-'}`);
+ L.push(`Buyer: ${S.f.bname||'-'} ${S.f.bphone||''} ${S.f.bemail||''} ${S.f.baddr||''}   Payment: ${S.seg.pay||'-'}`);
+ L.push(`Vehicle: ${(S.f.vrm||'-').toUpperCase()} ${S.f.make||''} ${S.f.variant||''} ${S.f.year||''} ${S.f.colour||''} ${S.f.fuelT||''} ${S.f.gear||''}`);
+ L.push(`VIN: ${S.f.vin||'-'}   Mileage: ${S.f.mileage||'-'}   MOT expiry: ${S.f.mot||'-'}   Last service: ${S.f.svc||'-'}   Keys: ${S.seg.keys||'-'}   Fuel: ${S.seg.fuel||'-'}`);
+ activeSections().forEach(([t,items])=>{L.push('');L.push(t.toUpperCase()+':');items.forEach(it=>L.push(`${it}: ${S.checks[t+'|'+it]||'-'}`))});
+ L.push('');L.push('TYRES: '+TYRES.map(t=>`${t} ${(S.tyres[t]||{}).mm||'-'}mm ${(S.tyres[t]||{}).psi||'-'}psi`).join('; '));
+ L.push('');L.push('BODYWORK:');if(S.dmg.length)S.dmg.forEach((d,i)=>L.push(`${i+1}. ${d.where} – ${d.type}${d.size?' – '+d.size:''}${d.note?' – '+d.note:''}`));else L.push(S.f.nodamage?'No visible damage.':'None recorded.');
+ if(S.f.work)L.push('','WORK CARRIED OUT: '+S.f.work);if(S.f.advice)L.push('','ADVISORIES: '+S.f.advice);
+ L.push('',`Photos: ${S.photos.length}   Dealer signed: ${S.sig.sigTech?'Yes':'No'}   Buyer signed: ${S.sig.sigCust?'Yes':(S.f.absent?'Buyer not present':'No')}`);return L.join('\n')}
+$('#copyBtn').addEventListener('click',async()=>{const t=summary();try{await navigator.clipboard.writeText(t);toast('Summary copied')}catch(_){modal(`<h3>PDI summary</h3><textarea readonly>${esc(t)}</textarea><div class="acts" style="margin-top:10px"><button class="btn" data-close>Close</button></div>`)}});
+
+// ---------- PDF ----------
+$('#pdfBtn').addEventListener('click',()=>{const req=progress(),miss=NAMES.filter((_,i)=>!req[i]);if(miss.length)modal(`<h3>Still missing</h3><ul>${miss.map(m=>`<li>${m}</li>`).join('')}</ul><div class="acts"><button class="btn ghost" data-close>Go back</button><button class="btn yellow" id="doPdf">Save anyway</button></div>`);else makePdf()});
+document.addEventListener('click',e=>{if(e.target.id==='doPdf'){closeModal();makePdf()}});
+function svgPng(){return new Promise((res,rej)=>{const cl=car.cloneNode(true);cl.setAttribute('width','600');cl.setAttribute('height','1080');const s=new XMLSerializer().serializeToString(cl);const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=600;c.height=1080;const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,600,1080);x.drawImage(im,0,0,600,1080);res(c.toDataURL('image/png'))};im.onerror=rej;im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s)})}
+function logoPng(){return new Promise(res=>{const s=document.querySelector('.brand svg').outerHTML.replace('<svg','<svg xmlns="http://www.w3.org/2000/svg"');const im=new Image();im.onload=()=>{const c=document.createElement('canvas');c.width=c.height=240;c.getContext('2d').drawImage(im,0,0,240,240);res(c.toDataURL('image/png'))};im.onerror=()=>res(null);im.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(s)})}
+const hex=h=>[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+function imgSize(src){return new Promise(r=>{const i=new Image();i.onload=()=>r([i.width,i.height]);i.onerror=()=>r([4,3]);i.src=src})}
+function doneModal(){modal(`<h3>PDI saved ✓</h3><p>The PDF is saved and this vehicle is marked as PDI complete in your stock.</p><div class="acts"><a class="btn yellow" href="index.html#dashboard" id="doneBack" style="text-decoration:none">Back to my stock</a><button class="btn ghost" data-close>Stay here</button></div>`);const b=document.getElementById('doneBack');if(b)b.addEventListener('click',()=>{if(HAND){HAND.back=Date.now();try{localStorage.setItem('tmc-pdi-handoff',JSON.stringify(HAND))}catch(_){}}})}
+async function makePdf(){
+ if(!window.jspdf){toast('PDF tool did not load – use Copy text instead');return}
+ toast('Building PDF…');const {jsPDF}=window.jspdf;const doc=new jsPDF({unit:'mm',format:'a4'});
+ const W=210,M=14;let y=0;const NAVY=hex('#0B1C35'),SKY=hex('#38BDF8'),YEL=hex('#FFD43B'),MUT=hex('#5A6B82'),RED=hex('#E5484D'),AMB=hex('#B45309'),GRN=hex('#1F9D55');
+ const need=h=>{if(y+h>282){doc.addPage();y=16}};
+ doc.setFillColor(...SKY);doc.rect(0,0,W,34,'F');doc.setFillColor(...NAVY);doc.rect(0,34,W,2.5,'F');doc.setFillColor(...YEL);doc.rect(0,34,50,2.5,'F');
+ const logo=await logoPng();if(logo)doc.addImage(logo,'PNG',M,6,22,22);
+ doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.text('T H E',M+26,11);doc.setFontSize(17);doc.text('MOTORING',M+26,18);doc.setFillColor(...NAVY);doc.roundedRect(M+26,20.5,30,6.5,1.2,1.2,'F');doc.setTextColor(255,255,255);doc.setFontSize(8.5);doc.text('C E N T R A L',M+28.5,25.1);
+ doc.setTextColor(...NAVY);doc.setFontSize(15);doc.text('Pre-delivery Inspection',W-M,16,{align:'right'});doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.text((S.f.dealer||'')+' · vehicle handover record',W-M,22,{align:'right'});doc.text('motoringcentral.co.uk',W-M,27,{align:'right'});
+ y=44;
+ const H=(t,ex=0)=>{need(12+ex);doc.setFont('helvetica','bold');doc.setFontSize(11);doc.setTextColor(...NAVY);doc.text(t,M,y);doc.setDrawColor(...SKY);doc.setLineWidth(.6);doc.line(M,y+1.8,W-M,y+1.8);y+=7};
+ const kv=pairs=>{doc.setFontSize(9);for(let i=0;i<pairs.length;i+=2){need(7);[pairs[i],pairs[i+1]].forEach((p,j)=>{if(!p)return;const x=M+j*91;doc.setFont('helvetica','normal');doc.setTextColor(...MUT);doc.text(p[0],x,y);doc.setFont('helvetica','bold');doc.setTextColor(...NAVY);doc.text(String(p[1]||'-').slice(0,46),x+32,y)});y+=6}y+=2};
+ H('Sale & handover');kv([['Dealer',S.f.dealer],['Prepared by',S.f.staff],['Stock number',S.f.stockno],['Handover',fmtWhen()],['Sale price',S.f.price?'£'+Number(S.f.price).toLocaleString('en-GB'):''],['Date sold',S.f.sold?new Date(S.f.sold).toLocaleDateString('en-GB'):''],['Handover method',S.seg.method],['Warranty',S.seg.warranty]]);
+ H('Buyer');kv([['Name',S.f.bname],['Phone',S.f.bphone],['Email',S.f.bemail],['Payment',S.seg.pay],['Address',S.f.baddr]]);
+ H('Vehicle');kv([['Registration',(S.f.vrm||'').toUpperCase()],['VIN',(S.f.vin||'').toUpperCase()],['Make & model',S.f.make],['Engine / trim',S.f.variant],['Year',S.f.year],['Colour',S.f.colour],['Fuel type',S.f.fuelT],['Gearbox',S.f.gear],['Mileage',S.f.mileage?Number(S.f.mileage).toLocaleString('en-GB'):''],['MOT expiry',S.f.mot?new Date(S.f.mot).toLocaleDateString('en-GB'):''],['Last service',S.f.svc],['Keys',S.seg.keys],['Fuel / charge',S.seg.fuel]]);
+ H('Inspection checklist',20);
+ activeSections().forEach(([t,items])=>{need(12);doc.setFont('helvetica','bold');doc.setFontSize(9.5);doc.setTextColor(...NAVY);doc.text(t,M,y);y+=5;doc.setFontSize(8.5);
+  items.forEach((it,i)=>{const col=i%2,x=M+col*91;if(col===0){need(5)}const v=S.checks[t+'|'+it]||'-';doc.setFont('helvetica','normal');doc.setTextColor(...MUT);doc.text(doc.splitTextToSize(it,62)[0],x,y);doc.setFont('helvetica','bold');doc.setTextColor(...(v==='Advise'?AMB:v==='Fixed'?SKY:v==='OK'?GRN:NAVY));doc.text(v,x+66,y);if(col===1||i===items.length-1)y+=4.8});y+=2.5});
+ H('Tyres',30);doc.setFontSize(9);TYRES.forEach((t,i)=>{const v=S.tyres[t]||{},x=M+(i%3)*61;if(i%3===0&&i>0)y+=6;doc.setFont('helvetica','normal');doc.setTextColor(...MUT);doc.text(t,x,y);doc.setFont('helvetica','bold');doc.setTextColor(...((v.mm&&+v.mm<1.6)?RED:NAVY));doc.text(`${v.mm||'-'} mm · ${v.psi||'-'} psi`,x+22,y)});y+=10;
+ H('Bodywork condition at handover',60);const dimg=await svgPng();need(92);const top=y;doc.addImage(dimg,'PNG',M,y,50,90);let ly=y+3;const lx=M+56;doc.setFontSize(9);
+ if(!S.dmg.length){doc.setFont('helvetica','bold');doc.setTextColor(...NAVY);doc.text(S.f.nodamage?'No visible damage on the bodywork.':'No marks recorded.',lx,ly)}
+ S.dmg.forEach((d,i)=>{doc.setFillColor(...hex(COLORS[d.type]));doc.circle(lx+2.5,ly-1.2,2.6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.text(String(i+1),lx+2.5,ly,{align:'center'});doc.setTextColor(...NAVY);doc.setFontSize(9);doc.text(`${d.where} – ${d.type}${d.size?' – '+d.size:''}`,lx+7,ly);if(d.note){doc.setFont('helvetica','normal');doc.setTextColor(...MUT);const nl=doc.splitTextToSize(d.note,W-M-lx-7);doc.text(nl,lx+7,ly+4.5);ly+=4.5*nl.length}ly+=7});
+ y=Math.max(top+94,ly+2);
+ const para=(t,txt)=>{if(!txt)return;H(t);doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...NAVY);doc.splitTextToSize(txt,W-2*M).forEach(l=>{need(5);doc.text(l,M,y);y+=4.6});y+=3};
+ para('Work carried out before sale',S.f.work);para('Advisories given to the buyer',S.f.advice);
+ H('Handover & signatures',40);const sw=(W-2*M-8)/2;
+ [['Dealer',S.sig.sigTech,S.f.staff],['Buyer',S.sig.sigCust,S.f.bname]].forEach(([lab,img,nm],j)=>{const x=M+j*(sw+8);doc.setDrawColor(...hex('#D6E2EE'));doc.setLineWidth(.3);doc.roundedRect(x,y,sw,26,2,2);if(img)doc.addImage(img,'PNG',x+2,y+1,sw-4,24);else if(j===1&&S.f.absent){doc.setFontSize(9);doc.setTextColor(...MUT);doc.text('Buyer not present – delivery photos taken',x+4,y+14)}doc.setFontSize(8.5);doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');doc.text(`${lab}: ${nm||''}`,x,y+31)});
+ y+=37;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...MUT);
+ const leg=doc.splitTextToSize((S.f.agree?'The buyer has seen the vehicle, received the documents and keys listed, and accepts its condition as recorded. ':'')+'The vehicle is sold by the dealer named above, who is responsible for the sale, its description and any warranty. The Motoring Central Ltd advertises vehicles and is not a party to the sale. This record does not affect the buyer\'s statutory rights.',W-2*M);need(leg.length*4);doc.text(leg,M,y);y+=leg.length*4;
+ if(S.photos.length){doc.addPage();y=16;H(`Photos (${S.photos.length})`);const pw=(W-2*M-6)/2;let col=0,rowH=0;
+  for(const [i,p] of S.photos.entries()){const [iw,ih]=await imgSize(p.src);const ph=Math.min(pw*ih/iw,110);if(col===0){need(119);rowH=0}const x=M+col*(pw+6);doc.addImage(p.src,'JPEG',x,y,pw,ph);doc.setFontSize(7.5);doc.setTextColor(...MUT);doc.text(`Photo ${i+1} · ${p.t}`,x,y+ph+4);rowH=Math.max(rowH,ph);if(col===1||i===S.photos.length-1){y+=rowH+9;col=0}else col=1}}
+ const pages=doc.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFontSize(7.5);doc.setTextColor(...MUT);doc.text(`The Motoring Central Ltd · PDI · ${S.f.dealer||''} · ${(S.f.vrm||'').toUpperCase()} · Page ${i} of ${pages}`,W/2,291,{align:'center'})}
+ const fname=`PDI_${(S.f.vrm||'vehicle').replace(/\s+/g,'').toUpperCase()}_${(S.f.when||'').slice(0,10)}.pdf`;
+ try{const R=JSON.parse(localStorage.getItem('tmc-pdis')||'{}')||{};const k=S.veh&&S.veh.key||('reg:'+(S.f.vrm||'').toUpperCase().replace(/\s/g,''));R[k]={date:new Date().toLocaleDateString('en-GB'),buyer:S.f.bname||'',at:Date.now()};localStorage.setItem('tmc-pdis',JSON.stringify(R))}catch(_){}
+ const blob=doc.output('blob');let dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(_){}
+ if(dl){try{await dl.save({filename:fname,data:blob});doneModal();return}catch(err){try{await dl.save({filename:fname,data:new Uint8Array(await blob.arrayBuffer())});doneModal();return}catch(e2){if(e2&&/declin|cancel|reject/i.test(String(e2.code||e2.message))){toast('Save cancelled');return}}}}
+ try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();doneModal()}catch(_){toast('Could not save PDF here – use Copy text')}
+}
+})();
+
+</script>
+</body>
+</html>
