@@ -49,6 +49,12 @@ A real website for **The Motoring Central** (motoringcentral.co.uk). It is being
 - **Phase 6 (cars and vans):** add a PDI button on every vehicle in the dealer's stock list, a "Pre-delivery inspection" button on the dealer's own adverts, and a Quick actions tile. Each links to `/pdi?vehicle=<id>` and shows "PDI ✓ date" when done. Replace `SAMPLE_STOCK` with the dealer's real stock.
 - **Database (with Phase 5/6):** save every inspection and PDI in Supabase against its booking or vehicle: form data, photos, signatures and the PDF. Only the partner or dealer who owns the job or vehicle can create or view it, and admins can view all, for disputes. This replaces `saveRecord()` in `src/lib/inspections.ts`.
 
+- **2026-11-16:** The preview is now live and updates by itself. **Every push to `main` on GitHub goes live on https://preview.motoringcentral.co.uk within about a minute.**
+  - GitHub: `Motoringcentral/motoring-central` (**public**: make it private before any keys are added). Our laptop history was joined onto its `main`, so nothing was overwritten. The old static prototype is still in `main`'s history, and the earlier Next.js build (bookings, accounts, Stripe) is on the `nextjs-app-archive` branch.
+  - Vercel: team `motoringcentral`, project `motoring-central-gum8` (owns the preview address, now set to Next.js). A second project, `motoring-central`, also builds every push but has no address. It can be disconnected.
+  - Search engines are told not to index any address except the real `motoringcentral.co.uk` (see `headers()` in `next.config.ts`).
+  - To publish: commit, then `git push`. Work from Claude Code is pushed when you say so.
+
 ## Where things live (for reference)
 - Inspection and PDI forms: `src/app/inspection`, `src/app/pdi`, `src/components/inspections/` (forms, shared parts, PDF, styles), lists and wording in `src/lib/inspections.ts`
 - Form styles use a `tmcf-` prefix (`src/components/inspections/forms.css`). CSS modules (`*.module.css`) don't work in this project because the Tailwind rule in `next.config.ts` loads every `.css` file as a plain stylesheet.
