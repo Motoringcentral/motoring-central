@@ -5661,6 +5661,119 @@ window.MCpdi=function(key){var u=window.GGuser;if(!u||u.role!=='dealer')return;v
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-pdi]');if(b){e.preventDefault();e.stopPropagation();window.MCpdi(b.getAttribute('data-pdi'))}},true);
 })();
 </script>
+<style>
+/* customers: browse and search every repair (MCSVC list) */
+#mc-aj{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}
+#mc-aj h3{font-size:1.02rem;margin:0 0 4px}
+#mc-aj .ajsub{font-size:.85rem;color:var(--muted);margin:0 0 10px}
+.ajq{position:relative}
+.ajq input{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:12px;padding:12px 14px 12px 40px}
+.ajq input:focus{outline:none;border-color:var(--brand)}
+.ajq svg{position:absolute;left:12px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2}
+.ajchips{display:flex;gap:6px;overflow-x:auto;padding:10px 0 4px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.ajchips button{all:unset;box-sizing:border-box;cursor:pointer;flex:none;font-size:.82rem;font-weight:700;border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;color:var(--ink);background:var(--bg);white-space:nowrap}
+.ajchips button[aria-pressed="true"]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.ajchips button:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.ajlist{display:grid;gap:6px;margin-top:8px}
+.ajlist h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:10px 0 2px}
+.ajrow{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:10px;border:1.5px solid var(--line);border-radius:12px;padding:11px 12px;background:var(--bg)}
+.ajrow:hover,.ajrow[aria-pressed="true"]{border-color:var(--brand)}
+.ajrow:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.ajrow span{flex:1;min-width:0;font-weight:600;font-size:.92rem}
+.ajrow small{display:block;font-weight:500;color:var(--muted);font-size:.78rem;margin-top:1px}
+.ajrow em{font-style:normal;font-size:.75rem;font-weight:700;color:var(--brand);white-space:nowrap}
+.ajrow:after{content:"\203A";font-size:1.3rem;color:var(--muted)}
+.ajmore{all:unset;cursor:pointer;font-weight:700;color:var(--brand);font-size:.9rem;padding:8px 0;text-decoration:underline}
+.ajempty{font-size:.9rem;color:var(--muted);padding:10px 0}
+#mc-ajreq{margin-top:12px;border:2px solid var(--brand);border-radius:14px;padding:14px;background:var(--bg)}
+#mc-ajreq h3{margin:0 0 4px}
+#mc-ajreq textarea,#mc-ajreq select{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:4px}
+#mc-ajreq label{display:block;font-weight:600;font-size:.88rem;margin:10px 0 0}
+#mc-ajreq .ajok{background:var(--soft);color:var(--brand);border-radius:10px;padding:12px;font-weight:700;margin:12px 0 0}
+/* front page search */
+.qksearch{margin:14px 0 0;position:relative}
+.qksearch .ajq input{background:var(--surface)}
+.qkres{position:absolute;left:0;right:0;top:100%;z-index:30;margin-top:4px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.18);max-height:340px;overflow:auto;padding:6px}
+.qkres button{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;padding:10px 10px;border-radius:8px;font-size:.92rem;font-weight:600;color:var(--ink)}
+.qkres button small{display:block;font-weight:500;color:var(--muted);font-size:.76rem}
+.qkres button:hover,.qkres button:focus-visible{background:var(--soft);outline:none}
+</style>
+<script>
+/* Customers see every job that mobile mechanics and garages offer.
+   The 4 priced jobs keep their instant prices; every other job is a quote request
+   that goes to local partners who ticked that job. */
+(function(){
+if(!window.MCSVC)return;
+function $(i){return document.getElementById(i)}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+var SKIP={'Vehicles you work on':1};
+var PRICED={'Full service':'svc','Brake discs and pads':'brk','Front brake pads':'brk','Battery test and replacement':'bat','Engine warning light diagnosis':'diag','Full fault code scan (all systems)':'diag'};
+var ICO='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';
+function mode(){return window.GGmode==='garage'?'garage':'mobile'}
+function groups(k){return window.MCSVC.list(k).filter(function(g){return !SKIP[g[0]]})}
+function all(k){var a=[];groups(k).forEach(function(g){g[1].forEach(function(x){a.push({n:x.n,h:x.h,w:x.w,g:g[0]})})});return a}
+/* how many approved partners of this type offer the job (preview: the demo partners) */
+function partners(n,k){return (window.GGusers||[]).filter(function(u){if(u.role!=='mechanic'||u.status==='pending'||u.motOnly||u.sub==='autoelec')return false;
+  if((u.sub==='garage'?'garage':'mobile')!==k)return false;var s=window.MCSVC.saved(u)||[];return s.indexOf(n)>-1}).length}
+function badge(n,k){if(PRICED[n])return 'Instant price';var c=partners(n,k);return c?c+' local partner'+(c>1?'s':''):'Get quotes'}
+var cur=null,open=false;
+function rowHtml(x,k){return '<button type="button" class="ajrow" data-aj="'+esc(x.n)+'"><span>'+esc(x.n)+(x.h?'<small>'+esc(x.h)+'</small>':'')+'</span><em>'+badge(x.n,k)+'</em></button>'}
+function draw(){var box=$('mc-aj');if(!box)return;var k=mode(),q=(box.querySelector('.ajq input').value||'').trim().toLowerCase(),L=box.querySelector('.ajlist'),h='';
+ [].forEach.call(box.querySelectorAll('.ajchips button'),function(b){b.setAttribute('aria-pressed',!q&&b.getAttribute('data-g')===cur?'true':'false')});
+ if(q){var m=all(k).filter(function(x){return (x.n+' '+x.g+' '+(x.h||'')).toLowerCase().indexOf(q)>-1});
+  h=m.length?m.slice(0,30).map(function(x){return rowHtml(x,k)}).join(''):'<p class="ajempty">No job matches &ldquo;'+esc(q)+'&rdquo;. Tap <b>Something else</b> to describe it and get quotes.</p>'+rowHtml({n:'Something else',h:'Describe the problem in your own words'},k)}
+ else if(cur){var g=groups(k).filter(function(g){return g[0]===cur})[0];h=g?g[1].map(function(x){return rowHtml(x,k)}).join(''):''}
+ else h='<p class="ajempty" style="padding:4px 0 0">Choose a group above, or search.</p>';
+ L.innerHTML=h}
+function chips(k){return groups(k).map(function(g){return '<button type="button" data-g="'+esc(g[0])+'">'+esc(g[0])+'</button>'}).join('')}
+function mount(){var card=$('svc-card'),svc=$('svc');if(!card||!svc)return;var m=window.GGmode,want=(m==='mobile'||m==='garage')&&!card.hidden,box=$('mc-aj');
+ if(!want){if(box)box.hidden=true;return}
+ if(!box){box=document.createElement('div');box.id='mc-aj';svc.parentNode.insertBefore(box,svc.nextSibling)}
+ var k=mode();if(box.getAttribute('data-k')!==k){var keep=box.querySelector('.ajq input');keep=keep?keep.value:'';
+  box.setAttribute('data-k',k);cur=cur||groups(k)[0][0];
+  box.innerHTML='<h3>Need something else?</h3><p class="ajsub">Search every job our '+(k==='garage'?'garages':'mobile mechanics')+' do, or browse by group.</p>'+
+   '<div class="ajq">'+ICO+'<input type="search" placeholder="Search, e.g. clutch, timing belt, air con" aria-label="Search all jobs" value="'+esc(keep)+'"></div>'+
+   '<div class="ajchips" role="group" aria-label="Job groups">'+chips(k)+'</div><div class="ajlist" aria-live="polite"></div><div id="mc-ajreq" hidden></div>';
+  if(window.MCpendJob){box.querySelector('.ajq input').value=window.MCpendJob;var pj=window.MCpendJob;window.MCpendJob=null;draw();setTimeout(function(){choose(pj)},60)}else draw()}
+ box.hidden=false}
+function choose(n){var k=mode(),id=PRICED[n],box=$('mc-aj'),R=$('mc-ajreq');
+ if(id){var t=[].filter.call($('svc').children,function(x){return x.getAttribute('data-sid')===id})[0];if(t){R.hidden=true;t.click();t.scrollIntoView({behavior:'smooth',block:'center'});return}}
+ [].forEach.call(box.querySelectorAll('.ajrow'),function(b){b.setAttribute('aria-pressed',b.getAttribute('data-aj')===n?'true':'false')});
+ var c=partners(n,k),u=window.GGuser,cust=u&&u.role==='customer';
+ R.innerHTML='<h3>'+esc(n)+'</h3><p class="ajsub" style="margin:0">'+(c?c+' local '+(k==='garage'?'garage':'mobile mechanic')+(c>1?'s do':' does')+' this job.':'We will find a local '+(k==='garage'?'garage':'mobile mechanic')+' who does this job.')+' Each partner sets their own price, and you choose who to book.</p>'+
+  '<label for="ajd">Tell us more (optional)</label><textarea id="ajd" rows="3" placeholder="For example: grinding noise when braking, started last week"></textarea>'+
+  '<label for="ajw">When do you need it?</label><select id="ajw"><option>As soon as possible</option><option>This week</option><option>Next week</option><option>I am flexible</option></select>'+
+  '<button type="button" class="btn block" id="ajgo">'+(cust?'Get quotes from local partners':'Register free to get quotes')+'</button>'+
+  '<p class="sample">Your registration is added when you send the request, so partners can price the right parts.</p><div id="ajok"></div>';
+ R.hidden=false;R.scrollIntoView({behavior:'smooth',block:'nearest'})}
+function send(){var u=window.GGuser,n=$('mc-ajreq').querySelector('h3').textContent;
+ if(!u||u.role!=='customer'){if(window.GGcustOpen)window.GGcustOpen('Register free to get quotes for '+n+'.','new',function(){choose(n)});return}
+ try{var L=JSON.parse(localStorage.getItem('mc-quote-req')||'[]');L.push({job:n,mode:mode(),note:$('ajd').value,when:$('ajw').value,email:u.email,t:Date.now()});localStorage.setItem('mc-quote-req',JSON.stringify(L))}catch(e){}
+ $('ajok').innerHTML='<p class="ajok">✓ Request sent for '+esc(n)+'. Local partners will reply with fixed prices, usually within a few hours. You will see their quotes in your account.</p><p class="sample">Preview only. No request was sent.</p>';
+ $('ajgo').hidden=true}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ var c=t.closest('#mc-aj .ajchips button');if(c){cur=c.getAttribute('data-g');$('mc-aj').querySelector('.ajq input').value='';draw();return}
+ var r=t.closest('#mc-aj .ajrow');if(r){choose(r.getAttribute('data-aj'));return}
+ if(t.id==='ajgo'){send();return}
+ var s=t.closest('.qkres button');if(s){e.preventDefault();var n=s.getAttribute('data-j'),w=s.getAttribute('data-w')==='1';window.MCpendJob=n;closeRes();
+  var tile=document.querySelector('.qk[data-svc="'+(w?'garage':'mobile')+'"]');if(tile)tile.click();setTimeout(function(){var b=$('mc-aj');if(b){b.removeAttribute('data-k');mount()}},200);return}
+ if(!t.closest('.qksearch'))closeRes()});
+document.addEventListener('input',function(e){if(e.target.closest&&e.target.closest('#mc-aj .ajq')){$('mc-ajreq').hidden=true;draw()}
+ if(e.target.id==='qk-q')res(e.target.value)});
+document.addEventListener('keydown',function(e){if(e.target.id==='qk-q'&&e.key==='Enter'){e.preventDefault();var f=document.querySelector('.qkres button');if(f)f.click()}if(e.key==='Escape')closeRes()});
+/* front page: "Search any repair" under the tiles */
+function closeRes(){var r=$('qk-res');if(r)r.hidden=true}
+function res(v){var r=$('qk-res'),q=String(v||'').trim().toLowerCase();if(!q){r.hidden=true;return}
+ var m=all('garage').filter(function(x){return (x.n+' '+x.g).toLowerCase().indexOf(q)>-1}).slice(0,12);
+ r.innerHTML=m.length?m.map(function(x){return '<button type="button" data-j="'+esc(x.n)+'" data-w="'+(x.w?1:0)+'">'+esc(x.n)+'<small>'+esc(x.g)+(x.w?' · at a garage':' · mobile mechanic or garage')+'</small></button>'}).join(''):'<p class="ajempty" style="padding:8px">No match. Try another word, or pick Mobile mechanic or Garage repair above.</p>';r.hidden=false}
+(function(){var nav=document.querySelector('.qkwrap');if(!nav||$('qk-q'))return;var d=document.createElement('div');d.className='qksearch';
+ d.innerHTML='<div class="ajq">'+ICO+'<input type="search" id="qk-q" placeholder="Or search any repair, e.g. clutch or air con" aria-label="Search any repair" autocomplete="off"></div><div class="qkres" id="qk-res" hidden></div>';
+ var g=nav.querySelector('.qkgrid');g.parentNode.insertBefore(d,g.nextSibling)})();
+var obs=new MutationObserver(function(){mount()});
+function watch(){var s=$('svc'),c=$('svc-card');if(s)obs.observe(s,{childList:true});if(c)obs.observe(c,{attributes:true,attributeFilter:['hidden']})}
+watch();mount();
+})();
+</script>
 </body>
 
 
