@@ -28,6 +28,9 @@ This belongs in the real site rebuild (branch `nextjs-rebuild`).
 - Show the customer's progress through booking (choose job, see prices, choose partner, pay) as numbered steps.
 
 ## Done
+- 17 Nov 2026: 1-minute intro video for customers (female voiceover, captions) in video/. It plays once, muted with
+  captions, for new visitors on the front page ("Tap for sound"), and any time from "Watch how it works (1 min)".
+  If the site changes a lot, the video needs remaking so it still matches the screens.
 - 17 Nov 2026: front page now has one "Type what you need" search instead of the service tiles. It matches everyday
   problems, services and jobs as people type, with quick chips (Car service, MOT, Warning light and more), and always
   offers "Let a garage or mechanic decide", which sends the customer's own words to local garages and mobile mechanics.

@@ -5947,6 +5947,54 @@ R.addEventListener('click',function(e){var b=e.target.closest('[data-qi]');if(!b
 var BR=box.querySelector('#qbrowse');BR.addEventListener('click',function(){grid.hidden=!grid.hidden;BR.setAttribute('aria-expanded',grid.hidden?'false':'true');BR.textContent=grid.hidden?'Browse all services':'Hide the list of services';if(!grid.hidden)grid.scrollIntoView({behavior:'smooth',block:'nearest'})});
 })();
 </script>
+<style>
+#mc-intro{border:0;padding:0;border-radius:18px;background:#0B1C35;color:#fff;width:min(420px,94vw);max-height:94vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+#mc-intro::backdrop{background:rgba(5,12,24,.72)}
+#mc-intro .ih{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px}
+#mc-intro .ih b{font-size:1.02rem}
+#mc-intro .ix{all:unset;cursor:pointer;font-weight:700;font-size:.9rem;padding:6px 10px;border-radius:8px;background:rgba(255,255,255,.12)}
+#mc-intro .vw{position:relative;background:#000}
+#mc-intro video{display:block;width:100%;height:auto;max-height:74vh;aspect-ratio:9/16;background:#0B1C35}
+#mc-intro .snd{all:unset;cursor:pointer;position:absolute;left:50%;top:14px;transform:translateX(-50%);background:#FFD43B;color:#0B1C35;font-weight:800;padding:10px 16px;border-radius:999px;box-shadow:0 6px 16px rgba(0,0,0,.35)}
+#mc-intro .if{display:flex;gap:8px;padding:12px 14px}
+#mc-intro .if button{all:unset;box-sizing:border-box;cursor:pointer;flex:1;text-align:center;font-weight:800;padding:12px;border-radius:10px}
+#mc-intro .if .go{background:#38BDF8;color:#0B1C35}
+#mc-intro .if .later{background:rgba(255,255,255,.12);color:#fff}
+#mc-intro button:focus-visible{outline:3px solid #FFD43B;outline-offset:2px}
+.qvid{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;margin:0 auto 10px;font-weight:700;font-size:.9rem;color:#0369A1;text-decoration:underline}
+.qvid:before{content:"\25B6";font-size:.75rem;text-decoration:none;display:inline-block;background:#FFD43B;color:#0B1C35;border-radius:50%;width:22px;height:22px;line-height:22px;text-align:center}
+.qvidw{text-align:center}
+</style>
+<dialog id="mc-intro" aria-labelledby="mc-intro-t">
+<div class="ih"><b id="mc-intro-t">New here? A 1-minute guide</b><button type="button" class="ix" data-intro="close" aria-label="Close the guide">Skip</button></div>
+<div class="vw"><video id="mc-intro-v" playsinline muted preload="none" poster="video/intro-poster.jpg" controls><source src="video/intro.mp4" type="video/mp4"><track kind="captions" src="video/intro.vtt" srclang="en" label="English" default></video>
+<button type="button" class="snd" id="mc-intro-snd">🔊 Tap for sound</button></div>
+<div class="if"><button type="button" class="go" data-intro="close">Start: type what you need</button></div>
+</dialog>
+<script>
+/* Intro guide video: shown once to new visitors on the customer pages, and from "Watch how it works" */
+(function(){
+var D=document.getElementById('mc-intro'),V=document.getElementById('mc-intro-v'),S=document.getElementById('mc-intro-snd');if(!D||!V)return;
+var KEY='mc-intro-seen';
+function seen(){try{return localStorage.getItem(KEY)==='1'}catch(e){return true}}
+function mark(){try{localStorage.setItem(KEY,'1')}catch(e){}}
+function open(withSound){if(D.open)return;try{D.showModal()}catch(e){D.setAttribute('open','')}V.currentTime=0;V.muted=!withSound;S.hidden=!!withSound;
+ var p=V.play();if(p&&p.catch)p.catch(function(){V.muted=true;S.hidden=false;V.play().catch(function(){})});mark()}
+function close(){V.pause();if(D.open)D.close();var q=document.getElementById('qneed');if(q)setTimeout(function(){q.scrollIntoView({behavior:'smooth',block:'center'});q.focus({preventScroll:true})},150)}
+S.addEventListener('click',function(){V.muted=false;S.hidden=true;if(V.currentTime>2)V.currentTime=0;V.play().catch(function(){})});
+V.addEventListener('volumechange',function(){if(!V.muted)S.hidden=true});
+V.addEventListener('ended',function(){var b=D.querySelector('.go');if(b)b.focus()});
+D.addEventListener('click',function(e){var b=e.target.closest('[data-intro]');if(b)close();else if(e.target===D)close()});
+D.addEventListener('cancel',function(e){e.preventDefault();close()});
+window.MCintro=open;
+/* "Watch how it works" link under the search */
+var w=document.querySelector('.qkwrap .qksub');if(w){var d=document.createElement('div');d.className='qvidw';d.innerHTML='<button type="button" class="qvid">Watch how it works (1 min)</button>';w.parentNode.insertBefore(d,w.nextSibling);d.firstChild.addEventListener('click',function(){open(true)})}
+/* first visit: customer pages only, not partners, staff or deep links */
+var PUB={'':1,'#':1,'#drivers':1};
+function maybe(){if(seen()||!PUB[location.hash||'']||window.GGuser||/[?&]nointro\b/.test(location.search))return;setTimeout(function(){if(!seen()&&PUB[location.hash||'']&&!document.querySelector('dialog[open]'))open(false)},1800)}
+if(document.readyState==='complete')maybe();else window.addEventListener('load',maybe);
+})();
+</script>
 </body>
 
 
