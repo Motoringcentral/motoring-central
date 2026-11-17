@@ -28,3 +28,17 @@ Every push to `main` goes live on https://preview.motoringcentral.co.uk (Vercel 
 
 The Next.js rebuild that is being made on the laptop (`E:\Motoring Central laptop`) is on the `nextjs-rebuild` branch.
 It is not published.
+
+## Live registration look-up (Vehicle Data Global)
+
+`api/vrm.js` is a small Vercel function that looks registrations up with Vehicle Data Global.
+The API key is never in these files (this repository is public). It is set in Vercel:
+
+Vercel → project `motoring-central-gum8` → Settings → Environment Variables
+
+- `VDG_API_KEY`: the Vehicle Data Global API key (tick Production and Preview)
+- `VDG_PACKAGE`: optional, the data package name on the account (default `VehicleData`)
+
+Then redeploy. Until the key is set, the site uses its sample vehicles, exactly as before.
+Each look-up costs a credit, so the function only answers this site's own pages, limits each visitor to
+20 look-ups per 10 minutes, and caches each registration for a day.
