@@ -28,6 +28,10 @@ This belongs in the real site rebuild (branch `nextjs-rebuild`).
 - Show the customer's progress through booking (choose job, see prices, choose partner, pay) as numbered steps.
 
 ## Done
+- 17 Nov 2026: front page now has one "Type what you need" search instead of the service tiles. It matches everyday
+  problems, services and jobs as people type, with quick chips (Car service, MOT, Warning light and more), and always
+  offers "Let a garage or mechanic decide", which sends the customer's own words to local garages and mobile mechanics.
+  The tiles are still there behind "Browse all services". Bookings also say the partner checks first and asks before extra work.
 - 17 Nov 2026: ease-of-use review. Added "Not sure what you need?" (15 everyday problems that open the right service),
   plain-English subtitles on every front-page tile with services first, plain-English explanations on 64 technical jobs,
   cars first on the MOT list ("Most cars are Class 4"), an explanation of Budget, Standard and Premium parts,
