@@ -56,19 +56,19 @@ module.exports = async (req, res) => {
     const text = await r.text();
     let j; try { j = JSON.parse(text); } catch (e) { j = null; }
     if (!r.ok || !j) return res.status(502).json({ ok: false, error: 'upstream_' + r.status });
-    const make = find(j, ['make', 'vehicleMake']);
+    const make = find(j, ['make', 'dvlaMake', 'vehicleMake']);
     if (!make) return res.status(404).json({ ok: false, error: 'not_found' });
     const body = find(j, ['bodyStyle', 'bodyType', 'body']);
     const out = {
       reg,
       make: title(make),
-      model: title(find(j, ['model', 'vehicleModel'])) || '',
+      model: title(find(j, ['model', 'dvlaModel', 'vehicleModel'])) || '',
       variant: find(j, ['modelVariant', 'variant', 'trim', 'series']) || '',
       year: +(find(j, ['yearOfManufacture', 'manufactureYear', 'yearOfRegistration', 'year']) || 0) || null,
-      fuel: normFuel(find(j, ['fuelType', 'fuel'])),
+      fuel: normFuel(find(j, ['fuelType', 'dvlaFuelType', 'fuel'])),
       gear: normGear(find(j, ['transmissionType', 'transmission', 'gearbox'])),
       body: title(body),
-      col: title(find(j, ['colour', 'color'])),
+      col: title(find(j, ['colour', 'color', 'primaryColour'])),
       mot: String(find(j, ['motDueDate', 'motExpiryDate', 'motDue']) || '').slice(0, 10) || null,
       cc: +(find(j, ['engineCapacity', 'engineCapacityCc', 'cylinderCapacity']) || 0) || null
     };
