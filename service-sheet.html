@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The Motoring Central – Vehicle Service Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B1C35; --navy2:#16305C; --sky:#38BDF8; --soft:#E0F4FE; --yellow:#FFD43B; --ink:#0B1C35; --muted:#5A6B82; --line:#D6E2EE; --bg:#F1F6FB; --card:#fff;
+  --accent:#38BDF8; --ok:#1f9d55; --okbg:#e6f6ec; --adv:#d98a00; --advbg:#fff4dc; --urg:#d23b3b; --urgbg:#fde8e8; --na:#8a96a3; --nabg:#eef1f4;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.45}
+header{background:var(--sky);color:var(--navy);padding:14px 0 0}
+.wrap{max-width:1000px;margin:0 auto;padding:0 14px}
+.back{display:inline-block;font:700 13px Inter;color:#0B1C35;text-decoration:none;background:rgba(255,255,255,.55);padding:6px 10px;border-radius:8px;margin-bottom:10px}
+.brandrow{display:flex;align-items:center;gap:12px}
+.wm .t1{font:700 10px Sora,Inter;letter-spacing:.55em}
+.wm .t2{font:800 26px/0.95 Sora,Inter;letter-spacing:-.03em}
+.wm .t3{display:inline-block;font:700 12px Sora,Inter;letter-spacing:.42em;background:var(--navy);color:#fff;padding:3px 2px 3px 8px;border-radius:5px;margin-top:3px}
+header h1{margin:14px 0 6px;font:800 24px Sora,Inter;letter-spacing:-.01em}
+header h1 span{background:var(--yellow);padding:0 6px;border-radius:5px}
+header p{margin:0 0 14px;font-size:14px;font-weight:500;max-width:680px}
+header .bar{height:6px;background:var(--navy);position:relative}
+header .bar i{position:absolute;left:0;top:0;height:6px;width:30%;background:var(--yellow)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin:14px 0}
+.card h2{margin:0 0 12px;font:700 17px Sora,Inter;display:flex;align-items:center;gap:8px}
+.card h2 .num{background:var(--navy);color:#fff;border-radius:8px;font-size:13px;width:26px;height:26px;display:grid;place-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+label.f{display:flex;flex-direction:column;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;gap:4px}
+input,select,textarea{font:inherit;font-size:14px;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 9px;background:#fff;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(56,189,248,.25)}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{font:inherit;font-size:13px;font-weight:600;border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.seg button.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.cfg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.cfg .lbl{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.hint{font-size:12px;color:var(--muted);margin-top:6px}
+.levels{width:100%;border-collapse:collapse;font-size:13px}
+.levels th,.levels td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+.levels th{font-size:11px;text-transform:uppercase;color:var(--muted);letter-spacing:.04em}
+.levels td.c{text-align:center;font-weight:700}
+.y{color:var(--ok)} .n{color:#c2cad3}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;margin-top:4px}
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:999px;padding:3px 9px;font-weight:600;font-size:12px}
+.p-ok{background:var(--okbg);color:var(--ok)} .p-adv{background:var(--advbg);color:var(--adv)} .p-urg{background:var(--urgbg);color:var(--urg)} .p-na{background:var(--nabg);color:var(--na)}
+.sec{margin-top:6px}
+.sec h3{font:700 13px Sora,Inter;text-transform:uppercase;letter-spacing:.06em;color:var(--navy);margin:20px 0 6px;padding:7px 10px;background:var(--soft);border-left:4px solid var(--sky);border-radius:6px}
+.item{display:grid;grid-template-columns:1fr auto;gap:8px 12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:start}
+.item:last-child{border-bottom:0}
+.item .t{font-weight:600}
+.item .g{font-size:12px;color:var(--muted);margin-top:2px}
+.tag{display:inline-block;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:1px}
+.tag.rep{background:var(--soft);color:#0369A1} .tag.mea{background:#efe7fb;color:#7a3fc7} .tag.die{background:#222;color:#fff} .tag.pet{background:#1f9d55;color:#fff} .tag.tb{background:var(--yellow);color:var(--navy)}
+.st{display:flex;gap:4px}
+.st button{font:inherit;font-size:12px;font-weight:700;border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 8px;cursor:pointer;color:var(--muted);min-width:44px}
+.st button.ok.on{background:var(--ok);border-color:var(--ok);color:#fff}
+.st button.adv.on{background:var(--adv);border-color:var(--adv);color:#fff}
+.st button.urg.on{background:var(--urg);border-color:var(--urg);color:#fff}
+.st button.na.on{background:var(--na);border-color:var(--na);color:#fff}
+.item .extra{grid-column:1/-1}
+.note{font-size:13px;padding:6px 8px;border-radius:7px;margin-top:4px}
+.meas{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-top:6px}
+.meas label{font-size:11px;color:var(--muted);font-weight:600;display:flex;flex-direction:column;gap:3px}
+.meas input{padding:6px 8px}
+.auto{font-size:12px;font-weight:600;margin-top:6px}
+.tbox{background:#FFF9DB;border:1px solid #F5D964;border-radius:10px;padding:12px;margin-top:8px}
+.sum{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.sum div{border-radius:10px;padding:10px;text-align:center}
+.sum b{display:block;font-size:22px}
+.sum span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.wl{margin:0;padding-left:18px}
+.wl li{margin:4px 0}
+.btn{font:inherit;font-weight:700;border:0;background:var(--navy);color:#fff;border-radius:9px;padding:10px 14px;cursor:pointer}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--navy)}
+.btn:not(.ghost){background:var(--navy);box-shadow:inset 0 -3px 0 var(--sky)}
+.btn.yellow{background:var(--yellow);color:var(--navy);box-shadow:inset 0 -3px 0 #E6BC20}
+#reg{font:800 20px Sora,Inter;letter-spacing:.08em;background:var(--yellow);border-color:#E6BC20;text-align:center}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sig{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:12px}
+.sig div{border-bottom:1px solid var(--ink);padding-top:28px;font-size:11px;color:var(--muted)}
+.disc{font-size:11.5px;color:var(--muted);margin-top:10px}
+footer{text-align:center;font-size:12px;color:#C9D1DC;background:var(--navy);padding:18px;margin-top:20px}footer b{color:#fff;font-family:Sora,Inter}footer span{color:var(--yellow)}
+.hide{display:none!important}
+@media (max-width:620px){
+  .item{grid-template-columns:1fr}
+  .sum{grid-template-columns:repeat(2,1fr)}
+  header h1{font-size:20px}
+}
+@media print{
+  #bookingCard,.back{display:none!important}
+  .toast{display:none}
+  body{background:#fff;font-size:11px}
+  header{-webkit-print-color-adjust:exact;print-color-adjust:exact;padding:8px 0 0}
+  header p{display:none}
+  .card{border:0;padding:4px 0;margin:6px 0;break-inside:auto}
+  .noprint{display:none!important}
+  .item{break-inside:avoid;padding:5px 0}
+  .st button:not(.on){display:none}
+  input,select,textarea{border:0;border-bottom:1px solid #999;border-radius:0;padding:2px}
+}
+
+.wmark{position:fixed;inset:0;pointer-events:none;z-index:50;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%22360%22%20height%3D%22240%22%20viewBox%3D%220%200%20360%20240%22%3E%3Cg%20transform%3D%22rotate%28-30%20180%20120%29%22%20fill%3D%22%230B1C35%22%20font-family%3D%22Sora%2CInter%2CArial%2Csans-serif%22%20text-anchor%3D%22middle%22%3E%3Cg%20transform%3D%22translate%28110%2092%29%20scale%28.28%29%22%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2230%22/%3E%3Cpolyline%20points%3D%2238%2C82%2038%2C46%2060%2C68%2082%2C46%2082%2C82%22%20fill%3D%22none%22%20stroke%3D%22%23fff%22%20stroke-width%3D%229%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/g%3E%3Ctext%20x%3D%22215%22%20y%3D%22112%22%20font-size%3D%2215%22%20font-weight%3D%22800%22%20letter-spacing%3D%221%22%3ETHE%20MOTORING%3C/text%3E%3Ctext%20x%3D%22215%22%20y%3D%22130%22%20font-size%3D%2211%22%20font-weight%3D%22700%22%20letter-spacing%3D%224%22%3ECENTRAL%3C/text%3E%3Ctext%20x%3D%22180%22%20y%3D%22160%22%20font-size%3D%228%22%20font-weight%3D%22600%22%20letter-spacing%3D%221%22%3E%C2%A9%20motoringcentral.co.uk%3C/text%3E%3C/g%3E%3C/svg%3E");background-repeat:repeat;background-size:360px 240px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wmark2{position:fixed;inset:0;pointer-events:none;z-index:51;opacity:.06;background-repeat:repeat;background-size:360px 240px;background-position:180px 120px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.copy{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}
+@media print{.wmark{opacity:.09}.wmark2{opacity:.08}}
+.bk{display:flex;flex-direction:column;gap:8px}
+.bk button.b{display:flex;gap:12px;align-items:center;text-align:left;width:100%;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:12px;font:inherit;color:var(--navy);cursor:pointer}
+.bk button.b:hover{border-color:var(--sky)}
+.plate{font:800 14px Sora,Inter;letter-spacing:.06em;background:var(--yellow);border:1px solid #E6BC20;border-radius:6px;padding:6px 8px;flex:none;min-width:92px;text-align:center;color:var(--navy)}
+.bk .meta,.sel .meta{flex:1;font-size:13px;color:var(--muted);line-height:1.4}
+.bk .meta b,.sel .meta b{color:var(--navy);font-size:15px;display:block}
+.bk .time{font:700 13px Inter;flex:none}
+.sel{display:flex;gap:12px;align-items:center;background:#F0FAFF;border:1.5px solid var(--sky);border-radius:12px;padding:12px}
+.lockrow{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:10px}
+.linkbtn{background:none;border:0;padding:0;font:700 13px Inter;color:#0369A1;text-decoration:underline;cursor:pointer}
+input.locked{background:var(--soft);border-color:#B9E3F8;color:var(--navy);font-weight:600}
+.subh{font:700 12px Sora,Inter;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:16px 0 8px;grid-column:1/-1}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--navy);color:#fff;font-weight:600;padding:10px 16px;border-radius:10px;z-index:60;box-shadow:0 6px 18px rgba(0,0,0,.2);opacity:0;transition:opacity .25s;pointer-events:none}
+.toast.on{opacity:1}
+.savedbox{background:var(--okbg);color:#14532D;border-radius:10px;padding:12px;margin-top:12px;font-weight:600}
+.savedbox a{color:#14532D}
+</style>
+</head>
+<body>
+<div class="wmark" aria-hidden="true"></div>
+<div class="wmark2" id="wmark2" aria-hidden="true"></div>
+<header>
+  <div class="wrap">
+    <a href="index.html#dashboard" class="back" id="backDash">← Back to my jobs</a>
+    <div class="brandrow"><svg width="52" height="52" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="6" stroke-linecap="round"/><g stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity=".55"><line x1="60" y1="24" x2="60" y2="30"/><line x1="34.5" y1="34.5" x2="38.8" y2="38.8"/><line x1="85.5" y1="34.5" x2="81.2" y2="38.8"/></g><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="7.5" fill="#FFD43B"/></svg><div class="wm"><div class="t1">THE</div><div class="t2">MOTORING</div><div class="t3">CENTRAL</div></div></div>
+    <h1>Vehicle <span>Service Sheet</span></h1>
+    <p>Choose the service level and vehicle type, and the checklist adjusts to show only what applies. Rate each item <b>OK</b>, <b>Advise</b>, <b>Urgent</b> or <b>N/A</b>. A summary of recommended work is built at the bottom.</p>
+  </div>
+  <div class="bar"><i id="pbar"></i></div>
+</header>
+
+<main class="wrap">
+
+<!-- 0. Booking -->
+<section class="card noprint-pick" id="bookingCard">
+  <h2><span class="num">✓</span>Booking</h2>
+  <div id="bkArea"></div>
+</section>
+
+<!-- 1. Job details -->
+<section class="card">
+  <h2><span class="num">1</span>Job, customer &amp; partner details</h2>
+  <div class="grid">
+    <div class="subh">Job</div>
+    <label class="f">Booking / job no.<input id="job" data-b="job" placeholder="e.g. TMC-10482"></label>
+    <label class="f">Date<input id="date" type="date" data-b="date"></label>
+    <label class="f">Service booked<input id="svc" data-b="service"></label>
+    <label class="f">Where<input id="where" data-b="address" placeholder="Address / garage"></label>
+    <div class="subh">Customer</div>
+    <label class="f">Customer name<input id="cust" data-b="cname"></label>
+    <label class="f">Customer phone<input id="cphone" type="tel" data-b="cphone"></label>
+    <label class="f">Customer email<input id="cemail" type="email" data-b="cemail"></label>
+    <div class="subh">Vehicle</div>
+    <label class="f">Registration<input id="reg" data-b="vrm" style="text-transform:uppercase"></label>
+    <label class="f">Make &amp; model<input id="mm" data-b="make"></label>
+    <label class="f">Engine size / code<input id="eng" data-b="engine" placeholder="e.g. 1.6 TDCi"></label>
+    <label class="f">Year of registration<input id="year" data-b="year" type="number" min="1980" max="2030"></label>
+    <label class="f">Colour<input id="colour" data-b="colour"></label>
+    <label class="f">VIN (last 6)<input id="vin" data-b="vin" maxlength="6"></label>
+    <label class="f">Mileage (read from dashboard)<input id="miles" type="number" min="0"></label>
+    <div class="subh">Partner</div>
+    <label class="f">Partner business<input id="partner" data-b="partner"></label>
+    <label class="f">Partner type<input id="ptype" data-b="ptype"></label>
+    <label class="f">Technician<input id="tech" data-b="tech"></label>
+    <label class="f">Partner phone<input id="pphone" type="tel" data-b="pphone"></label>
+  </div>
+</section>
+
+<!-- 2. Configuration -->
+<section class="card">
+  <h2><span class="num">2</span>Service level &amp; vehicle type</h2>
+  <div class="cfg">
+    <div>
+      <div class="lbl">Service level</div>
+      <div class="seg" data-key="level">
+        <button data-v="1">Interim</button><button data-v="2" class="on">Full</button><button data-v="3">Major</button>
+      </div>
+      <div class="hint" id="levelHint"></div>
+    </div>
+    <div>
+      <div class="lbl">Fuel</div>
+      <div class="seg" data-key="fuel">
+        <button data-v="petrol" class="on">Petrol</button><button data-v="diesel">Diesel</button>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Timing drive (cam drive)</div>
+      <div class="seg" data-key="drive">
+        <button data-v="belt" class="on">Timing belt</button><button data-v="wet">Wet belt (in oil)</button><button data-v="chain">Timing chain</button>
+      </div>
+    </div>
+    <div>
+      <div class="lbl">Gearbox</div>
+      <div class="seg" data-key="trans">
+        <button data-v="manual" class="on">Manual</button><button data-v="auto">Automatic / DSG</button>
+      </div>
+    </div>
+  </div>
+  <div class="hint" id="countHint" style="margin-top:12px;font-weight:600;color:var(--navy)"></div>
+</section>
+
+<!-- 3. Levels at a glance -->
+<section class="card">
+  <h2><span class="num">3</span>What each service includes</h2>
+  <table class="levels">
+    <thead><tr><th></th><th style="text-align:center">Interim</th><th style="text-align:center">Full</th><th style="text-align:center">Major</th></tr></thead>
+    <tbody>
+      <tr><td>Recommended interval</td><td class="c" style="font-weight:500">6 months / 6,000 mi</td><td class="c" style="font-weight:500">12 months / 12,000 mi</td><td class="c" style="font-weight:500">24 months / 24,000 mi</td></tr>
+      <tr><td>Engine oil &amp; filter change</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Fluid levels, lights, tyres, wipers, visual safety checks</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Diagnostic fault-code scan &amp; road test</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Timing belt / chain status report</td><td class="c y">✓</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Air filter replaced</td><td class="c n">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Wheels off: brake pads &amp; discs measured</td><td class="c n">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Full suspension, steering, drive shaft &amp; underbody inspection</td><td class="c n">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Coolant antifreeze strength &amp; brake fluid tested</td><td class="c n">—</td><td class="c y">✓</td><td class="c y">✓</td></tr>
+      <tr><td>Pollen / cabin filter replaced</td><td class="c n">—</td><td class="c n">—</td><td class="c y">✓</td></tr>
+      <tr><td>Brake fluid replaced</td><td class="c n">—</td><td class="c n">—</td><td class="c y">✓</td></tr>
+      <tr><td>Spark plugs replaced (petrol)</td><td class="c n">—</td><td class="c n">—</td><td class="c y">✓</td></tr>
+      <tr><td>Fuel filter replaced (diesel)</td><td class="c n">—</td><td class="c n">—</td><td class="c y">✓</td></tr>
+    </tbody>
+  </table>
+  <div class="hint">Manufacturer schedules always take priority. If the handbook says a part is due sooner, replace it sooner.</div>
+</section>
+
+<!-- 4. Checklist -->
+<section class="card">
+  <h2><span class="num">4</span>Inspection checklist</h2>
+  <div class="legend">
+    <span class="pill p-ok">OK: no action</span>
+    <span class="pill p-adv">Advise: needs attention soon</span>
+    <span class="pill p-urg">Urgent: unsafe, illegal or MOT fail</span>
+    <span class="pill p-na">N/A: not fitted or not applicable</span>
+  </div>
+  <div id="list" class="sec"></div>
+</section>
+
+<!-- 5. Summary -->
+<section class="card">
+  <h2><span class="num">5</span>Summary &amp; recommended work</h2>
+  <div class="sum">
+    <div class="p-ok"><b id="cOk">0</b><span>OK</span></div>
+    <div class="p-adv"><b id="cAdv">0</b><span>Advise</span></div>
+    <div class="p-urg"><b id="cUrg">0</b><span>Urgent</span></div>
+    <div class="p-na"><b id="cTodo">0</b><span>Not yet checked</span></div>
+  </div>
+  <div id="verdict" class="note" style="font-weight:700"></div>
+  <h3 style="font-size:13px;margin:14px 0 6px">Urgent work (do before driving further or before MOT)</h3>
+  <ul class="wl" id="urgList"></ul>
+  <h3 style="font-size:13px;margin:14px 0 6px">Advisories (plan within the next few months)</h3>
+  <ul class="wl" id="advList"></ul>
+  <h3 style="font-size:13px;margin:14px 0 6px">Next service</h3>
+  <div id="nextSvc" class="note" style="background:var(--bg)"></div>
+  <label class="f" style="margin-top:12px">Technician comments<textarea id="comments" rows="3"></textarea></label>
+  <div class="row noprint" style="margin-top:12px">
+    <button class="btn yellow" id="saveBtn">Save service sheet</button>
+    <button class="btn" id="printBtn">Print / save as PDF</button>
+    <button class="btn ghost" id="copyBtn">Copy summary</button>
+    <button class="btn ghost" id="resetBtn">Clear sheet</button>
+    <span id="copyMsg" class="hint"></span>
+  </div>
+  <div id="savedBox" class="savedbox noprint hide"></div>
+  <div class="sig">
+    <div>Technician signature</div>
+    <div>Customer signature</div>
+    <div>Date</div>
+  </div>
+  <p class="disc">This sheet records the condition of the vehicle at the time of inspection. It is not an MOT certificate. Items marked Advise or Urgent were reported to the customer. Work done follows the vehicle manufacturer's specifications. Where those differ from the general guidance on this sheet, the manufacturer's figures apply.</p>
+  <p class="disc noprint"><b>Preview:</b> this is sample data. Saved sheets are kept on this device only.</p>
+</section>
+
+</main>
+<div class="toast" id="toast"></div>
+<footer><b>The Motoring Central Ltd</b> · <span>Everything your car needs, in one place</span> · motoringcentral.co.uk<br><span style="color:#C9D1DC;font-size:11px">© 2026 The Motoring Central Ltd. All rights reserved. This service sheet and its content may not be copied, reproduced or used without written permission.</span></footer>
+
+<script>
+/* ---------- Checklist data ----------
+ lv  : minimum service level (1 Interim, 2 Full, 3 Major)
+ max : maximum level (item hidden above it), default 3
+ fuel: 'petrol' | 'diesel' (omit = both)
+ drive: 'belt' | 'wet' | 'chain' | 'anybelt' (omit = all)
+ trans: 'manual' | 'auto'
+ a   : 'rep' replace, 'mea' measure (omit = check)
+ m   : special measurement widget
+*/
+const ITEMS = [
+ // ENGINE BAY
+ ['Engine bay & fluids','Drain engine oil, replace oil filter & sump plug washer','Use oil to manufacturer spec (check approval code, e.g. VW 504 00 / Ford WSS). Record oil grade & litres in notes.',{lv:1,a:'rep'}],
+ ['Engine bay & fluids','Check for oil, coolant & fuel leaks','Rocker cover, sump, oil cooler, turbo lines, water pump weep hole.',{lv:1}],
+ ['Engine bay & fluids','Check & top up coolant level','Check with engine cold. Report if level keeps dropping.',{lv:1,max:1}],
+ ['Engine bay & fluids','Test antifreeze strength & top up coolant','Record freeze protection. Below −25 °C protection = Advise.',{lv:2,a:'mea',m:'coolant'}],
+ ['Engine bay & fluids','Inspect radiator, cap, expansion tank & coolant hoses','Look for cracking, swelling, soft hoses, crusty deposits.',{lv:2}],
+ ['Engine bay & fluids','Check brake fluid level & condition','Low level can mean worn pads or a leak.',{lv:1,max:1}],
+ ['Engine bay & fluids','Check power steering fluid level (if hydraulic)','N/A on electric power steering.',{lv:1}],
+ ['Engine bay & fluids','Top up screenwash','Use screenwash with antifreeze in winter.',{lv:1}],
+ ['Engine bay & fluids','Inspect air filter','Report if dirty. It is replaced at Full service.',{lv:1,max:1}],
+ ['Engine bay & fluids','Replace air filter','',{lv:2,a:'rep'}],
+ ['Engine bay & fluids','Check engine mounts','Excess movement or split rubber.',{lv:2}],
+ ['Engine bay & fluids','Check auxiliary (drive/fan) belt condition & tension','Cracks across ribs, glazing, fraying, squeal. Spin tensioner and idler pulleys and listen for bearing noise.',{lv:1}],
+
+ // TIMING
+ ['Timing drive','Timing belt: replacement history & status','',{lv:1,drive:'anybelt',m:'timing'}],
+ ['Timing drive','Visual check of timing belt (where access allows)','Cracks, missing teeth, fraying edges, oil or coolant contamination. A belt that looks good can still be past its age limit.',{lv:2,drive:'belt'}],
+ ['Timing drive','Wet belt: confirm exact oil specification used','Belt-in-oil engines are very sensitive to the wrong oil grade. Check for belt debris in oil or on the filter, and for low brake vacuum / oil pressure warnings.',{lv:1,drive:'wet'}],
+ ['Timing drive','Timing chain: cold-start rattle check','A rattle lasting more than a few seconds on cold start points to chain stretch or a weak tensioner.',{lv:1,drive:'chain'}],
+ ['Timing drive','Timing chain: scan for cam/crank correlation codes','Codes such as P0016–P0019 can mean chain stretch. Check correlation values in live data if the scan tool supports it.',{lv:2,drive:'chain'}],
+ ['Timing drive','Timing chain: oil condition & change interval','Chains rely on clean oil. Overdue oil changes speed up chain stretch, so advise shorter intervals if the oil is sludgy.',{lv:1,drive:'chain'}],
+
+ // IGNITION / FUEL — PETROL
+ ['Ignition & fuel (petrol)','Spark plugs: check replacement schedule','Report if due. Common intervals are 30,000–60,000 mi or 4 years, so check the handbook.',{lv:1,max:2,fuel:'petrol'}],
+ ['Ignition & fuel (petrol)','Replace spark plugs (if due per schedule)','Gap to spec and torque correctly. Inspect the old plugs for oil or fuel fouling.',{lv:3,a:'rep',fuel:'petrol'}],
+ ['Ignition & fuel (petrol)','Inspect ignition coils / HT leads','Cracks, tracking, misfire codes.',{lv:2,fuel:'petrol'}],
+ ['Ignition & fuel (petrol)','Check fuel filter schedule (external filter)','Many modern petrols have a lifetime in-tank filter, so mark N/A.',{lv:2,fuel:'petrol'}],
+
+ // DIESEL
+ ['Diesel system','Drain water from fuel filter / water separator (if fitted)','Water damages injectors and the high-pressure pump.',{lv:1,fuel:'diesel'}],
+ ['Diesel system','Check fuel filter replacement schedule','Report if due before the next service.',{lv:2,max:2,fuel:'diesel'}],
+ ['Diesel system','Replace fuel filter & bleed system','Prime fully and check for air or leaks after starting.',{lv:3,a:'rep',fuel:'diesel'}],
+ ['Diesel system','Glow plugs & glow plug warning light','Test resistance or current draw at Major. Check for hard or smoky cold starts.',{lv:1,fuel:'diesel'}],
+ ['Diesel system','DPF: soot load, ash load & regen history (diagnostics)','Record soot % from live data. High soot or a DPF warning light = Advise or Urgent. Ask about the customer\'s usual journeys, because short trips stop the DPF regenerating.',{lv:1,fuel:'diesel',a:'mea'}],
+ ['Diesel system','AdBlue level & SCR warnings (if fitted)','The engine will not restart if the AdBlue tank runs empty. Check for NOx / SCR fault codes.',{lv:1,fuel:'diesel'}],
+ ['Diesel system','EGR valve & intake: fault codes / sooting','',{lv:2,fuel:'diesel'}],
+ ['Diesel system','Turbo, intercooler & boost hoses','Oil in the intercooler pipes, split hoses, boost leaks, whistling.',{lv:2,fuel:'diesel'}],
+ ['Diesel system','Exhaust smoke check (road test)','Black = fuelling or boost problem. Blue = burning oil. White = coolant or poor combustion.',{lv:1,fuel:'diesel'}],
+
+ // ELECTRICAL
+ ['Electrical & lights','Battery: test voltage & health, check terminals','Record rest voltage and state of health. Below 12.4 V, or a weak test result = Advise.',{lv:1,a:'mea',m:'battery'}],
+ ['Electrical & lights','Diagnostic scan: all modules, record fault codes','Write the codes in notes.',{lv:1}],
+ ['Electrical & lights','Dashboard warning lights (engine, ABS, airbag, EPS, TPMS)','Any airbag light, or any other warning light that stays on = MOT fail.',{lv:1}],
+ ['Electrical & lights','All exterior lights incl. brake, reverse, fog, number plate','',{lv:1}],
+ ['Electrical & lights','Headlight aim','',{lv:2}],
+ ['Electrical & lights','Horn operation','',{lv:1}],
+ ['Electrical & lights','Interior lights & electric windows','',{lv:2}],
+
+ // BRAKES
+ ['Brakes','Visual brake check through wheels','Pads look thin, disc lip, signs of leaks. Wheels come off at Full service.',{lv:1,max:1}],
+ ['Brakes','Brake pads: measure friction material (wheels off)','',{lv:2,m:'pads'}],
+ ['Brakes','Brake discs: measure vs MIN TH stamped on disc','Measure at 4+ points and use the lowest reading. Below MIN TH = replace, always in axle pairs. Also check for scoring, lip, corrosion and cracks.',{lv:2,m:'discs'}],
+ ['Brakes','Rear drums & shoes (if fitted): lining, cylinders, adjustment','Look for wheel cylinder leaks and contaminated linings.',{lv:2}],
+ ['Brakes','Calipers: sliders, pistons, seals, security','Sticking caliper = uneven pad wear or a hot wheel.',{lv:2}],
+ ['Brakes','Brake pipes & flexible hoses','Corroded pipes, chafed or bulging hoses.',{lv:2}],
+ ['Brakes','Test brake fluid (boiling point / water content)','Replace if the boiling point is low or the fluid is over 2 years old.',{lv:2,max:2,a:'mea'}],
+ ['Brakes','Replace brake fluid & bleed system','Use the correct fluid (DOT 4 / DOT 4 LV / DOT 5.1).',{lv:3,a:'rep'}],
+ ['Brakes','Handbrake / electronic parking brake operation','Check clicks or travel. EPB: check service mode and fault codes.',{lv:1}],
+ ['Brakes','ABS warning light & sensors','',{lv:2}],
+
+ // TYRES & WHEELS
+ ['Tyres & wheels','Tyre tread depth (all four)','',{lv:1,m:'tyres'}],
+ ['Tyres & wheels','Tyre pressures: set to placard (record before/after)','',{lv:1,m:'press'}],
+ ['Tyres & wheels','Tyre condition: cuts, bulges, cracking, uneven wear','Inner or outer edge wear means alignment needs checking. Centre wear = over-inflation.',{lv:1}],
+ ['Tyres & wheels','Tyre age (DOT date code)','Record the oldest tyre\'s date code. Look for cracks in older tyres.',{lv:2}],
+ ['Tyres & wheels','Spare wheel / repair kit','',{lv:2}],
+ ['Tyres & wheels','Wheel nuts torqued to spec & locking wheel nut present','Make sure the locking nut key is returned to the vehicle.',{lv:1}],
+ ['Tyres & wheels','TPMS sensors & valves (if fitted)','',{lv:2}],
+
+ // STEERING & SUSPENSION
+ ['Steering & suspension','Steering: rack, track rod ends, ball joints for play','Any free play in ball joints or track rod ends = MOT fail.',{lv:2}],
+ ['Steering & suspension','Steering rack gaiters','',{lv:2}],
+ ['Steering & suspension','Shock absorbers: leaks, mountings, bounce test','',{lv:2}],
+ ['Steering & suspension','Coil springs (broken / corroded) & top mounts','Broken springs are common in the UK and cause an MOT fail.',{lv:2}],
+ ['Steering & suspension','Wishbones, bushes & anti-roll bar links','',{lv:2}],
+ ['Steering & suspension','Wheel bearings (play & noise)','',{lv:2}],
+ ['Steering & suspension','Visual check of suspension & steering','Detailed check at Full service.',{lv:1,max:1}],
+
+ // DRIVETRAIN
+ ['Drivetrain','Drive shafts, CV joints & CV boots','A split boot lets grease out and dirt in, and will fail the MOT.',{lv:2}],
+ ['Drivetrain','Clutch operation & bite point','Slipping, judder, heavy pedal, noisy release bearing.',{lv:2,trans:'manual'}],
+ ['Drivetrain','Manual gearbox oil level & leaks','',{lv:2,trans:'manual'}],
+ ['Drivetrain','Automatic / DSG: fluid level, leaks & change schedule','Report if the gearbox oil change is due (DSG is often 40,000 mi). Check shift quality on the road test.',{lv:2,trans:'auto'}],
+ ['Drivetrain','Dual-mass flywheel (rattle at idle / switch-off)','',{lv:2,trans:'manual'}],
+
+ // UNDERBODY & EXHAUST
+ ['Underbody & exhaust','Exhaust: leaks, mountings, corrosion, catalyst / DPF','',{lv:1}],
+ ['Underbody & exhaust','Underbody corrosion: sills, subframes, jacking points','Structural rust within 30 cm of a suspension or steering mount = MOT fail.',{lv:2}],
+ ['Underbody & exhaust','Fuel lines & fuel tank cap','',{lv:2}],
+
+ // BODY & INTERIOR
+ ['Body, glass & interior','Windscreen chips & cracks','Damage over 10 mm in the driver\'s view (zone A), or over 40 mm elsewhere in the wiper area, = MOT fail.',{lv:1}],
+ ['Body, glass & interior','Wiper blades & washer jets','',{lv:1}],
+ ['Body, glass & interior','Mirrors (interior & door)','',{lv:1}],
+ ['Body, glass & interior','Seatbelts: webbing, locking, retraction','',{lv:1}],
+ ['Body, glass & interior','Number plates: legal, secure, readable','',{lv:1}],
+ ['Body, glass & interior','Pollen / cabin filter: check schedule','',{lv:2,max:2}],
+ ['Body, glass & interior','Replace pollen / cabin filter','',{lv:3,a:'rep'}],
+ ['Body, glass & interior','Lubricate door hinges, locks & bonnet catch','',{lv:2}],
+ ['Body, glass & interior','Air conditioning: blows cold, no odour','',{lv:2}],
+
+ // FINAL
+ ['Final checks','Road test: brakes, steering pull, noises, gearbox, engine performance','',{lv:1}],
+ ['Final checks','Recheck oil level & leaks after road test','',{lv:1}],
+ ['Final checks','Reset service indicator','',{lv:1}],
+ ['Final checks','Stamp service book / update digital service record','',{lv:1}],
+];
+
+const LEVELS = {1:'Interim',2:'Full',3:'Major'};
+const LEVEL_HINT = {1:'About 25–30 checks. Suits high-mileage drivers between annual services. Every 6 months / 6,000 miles.',2:'The standard annual service. Every 12 months / 12,000 miles.',3:'The most thorough service, with extra parts replaced. Every 24 months / 24,000 miles.'};
+const cfg = {level:2,fuel:'petrol',drive:'belt',trans:'manual'};
+let state = {}; // id -> {s:'ok'|'adv'|'urg'|'na', note, auto, vals:{}}
+
+function applies(o){
+  const lv=o.lv||1, max=o.max||3;
+  if(cfg.level<lv||cfg.level>max) return false;
+  if(o.fuel && o.fuel!==cfg.fuel) return false;
+  if(o.trans && o.trans!==cfg.trans) return false;
+  if(o.drive){
+    if(o.drive==='anybelt'){ if(cfg.drive==='chain') return false; }
+    else if(o.drive!==cfg.drive) return false;
+  }
+  return true;
+}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function measHTML(id,m){
+  const v=(state[id]&&state[id].vals)||{};
+  const inp=(k,l,ph,type='number',step='0.1')=>`<label>${l}<input data-id="${id}" data-k="${k}" type="${type}" step="${step}" placeholder="${ph||''}" value="${v[k]!=null?esc(v[k]):''}"></label>`;
+  if(m==='tyres') return `<div class="meas">${inp('fl','Front left (mm)')}${inp('fr','Front right (mm)')}${inp('rl','Rear left (mm)')}${inp('rr','Rear right (mm)')}</div><div class="auto" id="auto-${id}"></div><div class="g">UK legal minimum 1.6 mm across the central ¾ of the tread, all the way round. Advise replacement at 3 mm.</div>`;
+  if(m==='press') return `<div class="meas">${inp('fl','FL psi','', 'number','1')}${inp('fr','FR psi','','number','1')}${inp('rl','RL psi','','number','1')}${inp('rr','RR psi','','number','1')}</div>`;
+  if(m==='pads') return `<div class="meas">${inp('f','Front pads (mm, thinnest)')}${inp('r','Rear pads (mm, thinnest)')}</div><div class="auto" id="auto-${id}"></div><div class="g">New pads are about 10–12 mm. Advise at 4 mm or less. Urgent below 3 mm (UK legal minimum 1.5 mm). Uneven wear inner/outer = check caliper sliders.</div>`;
+  if(m==='discs') return `<div class="meas">${inp('fmin','Front MIN TH')}${inp('fmeas','Front measured')}${inp('rmin','Rear MIN TH')}${inp('rmeas','Rear measured')}</div><div class="auto" id="auto-${id}"></div>`;
+  if(m==='coolant') return `<div class="meas">${inp('fp','Protection to (°C)','e.g. -35','number','1')}</div><div class="auto" id="auto-${id}"></div>`;
+  if(m==='battery') return `<div class="meas">${inp('v','Rest voltage (V)','12.6','number','0.01')}${inp('soh','Health / CCA %','','number','1')}</div><div class="auto" id="auto-${id}"></div>`;
+  if(m==='timing') return `<div class="tbox">
+    <div class="meas">
+      ${inp('lastMi','Last changed at (miles)','blank if unknown','number','1')}
+      ${inp('lastYr','Last changed (year)','e.g. 2021','number','1')}
+      ${inp('intMi','Maker interval (miles)','e.g. 100000','number','1000')}
+      ${inp('intYr','Maker interval (years)','e.g. 6','number','1')}
+    </div>
+    <div class="auto" id="auto-${id}"></div>
+    <div class="g" style="margin-top:6px">Belt intervals are usually 60,000–100,000+ miles <b>or</b> 5–10 years, whichever comes first, because rubber ages even when the car isn't driven. No record of a change = assume it's the original belt. Always quote a full kit: belt, tensioner, idlers and, if it's belt-driven, the water pump. On an interference engine a snapped belt usually wrecks the engine.</div>
+  </div>`;
+  return '';
+}
+
+function render(){
+  const list=document.getElementById('list');
+  let html='', cur='', n=0;
+  ITEMS.forEach((it,i)=>{
+    const [sec,t,g,o]=it; const id='i'+i;
+    if(!applies(o)) return;
+    n++;
+    if(sec!==cur){cur=sec; html+=`<h3>${sec}</h3>`;}
+    const st=(state[id]&&state[id].s)||'';
+    let tags='';
+    if(o.a==='rep') tags+='<span class="tag rep">Replace</span>';
+    if(o.a==='mea'||o.m&&o.m!=='press') tags+='<span class="tag mea">Measure</span>';
+    if(o.fuel==='diesel') tags+='<span class="tag die">Diesel</span>';
+    if(o.fuel==='petrol') tags+='<span class="tag pet">Petrol</span>';
+    if(o.drive) tags+=`<span class="tag tb">${o.drive==='chain'?'Chain':o.drive==='wet'?'Wet belt':'Belt'}</span>`;
+    const opts = o.a==='rep' ? [['ok','Done'],['adv','Advise'],['urg','Urgent'],['na','N/A']] : [['ok','OK'],['adv','Advise'],['urg','Urgent'],['na','N/A']];
+    html+=`<div class="item" data-row="${id}">
+      <div><div class="t">${t}${tags}</div>${g?`<div class="g">${g}</div>`:''}</div>
+      <div class="st">${opts.map(([k,l])=>`<button class="${k}${st===k?' on':''}" data-id="${id}" data-s="${k}">${l}</button>`).join('')}</div>
+      <div class="extra">${o.m?measHTML(id,o.m):''}
+        <input class="noteIn" data-id="${id}" placeholder="Notes / part no. / reading" value="${esc((state[id]&&state[id].note)||'')}" style="margin-top:6px;font-size:13px;padding:6px 8px">
+      </div>
+    </div>`;
+  });
+  list.innerHTML=html;
+  document.getElementById('levelHint').textContent=LEVEL_HINT[cfg.level];
+  document.getElementById('countHint').textContent=`${n} checks on this ${LEVELS[cfg.level]} service · ${cfg.fuel==='diesel'?'Diesel':'Petrol'} · ${cfg.drive==='chain'?'Timing chain':cfg.drive==='wet'?'Wet timing belt':'Timing belt'} · ${cfg.trans==='auto'?'Automatic':'Manual'}`;
+  ITEMS.forEach((it,i)=>{ if(applies(it[3])&&it[3].m) evalMeas('i'+i,it[3].m,false); });
+  summary();
+}
+
+function num(v){const x=parseFloat(v);return isNaN(x)?null:x;}
+function setAuto(id,txt,s,apply){
+  const el=document.getElementById('auto-'+id); if(el){el.innerHTML=txt||''; el.style.color=s==='urg'?'var(--urg)':s==='adv'?'var(--adv)':s==='ok'?'var(--ok)':'var(--muted)';}
+  if(apply&&s){ state[id]=state[id]||{}; state[id].s=s; state[id].auto=txt.replace(/<[^>]+>/g,'');
+    document.querySelectorAll(`.st button[data-id="${id}"]`).forEach(b=>b.classList.toggle('on',b.dataset.s===s)); }
+}
+function evalMeas(id,m,apply){
+  const v=(state[id]&&state[id].vals)||{};
+  if(m==='tyres'){
+    const c={fl:'FL',fr:'FR',rl:'RL',rr:'RR'}; let worst=null, bad=[], adv=[];
+    for(const k in c){const x=num(v[k]); if(x==null) continue; if(worst==null||x<worst) worst=x; if(x<1.6) bad.push(`${c[k]} ${x}mm`); else if(x<=3) adv.push(`${c[k]} ${x}mm`);}
+    if(worst==null) return setAuto(id,'',null,false);
+    if(bad.length) return setAuto(id,`Illegal tread: ${bad.join(', ')}. Replace before driving.`,'urg',apply);
+    if(adv.length) return setAuto(id,`Low tread: ${adv.join(', ')}. Advise replacement.`,'adv',apply);
+    return setAuto(id,`All tyres above 3 mm (lowest ${worst} mm).`,'ok',apply);
+  }
+  if(m==='pads'){
+    const f=num(v.f), r=num(v.r); if(f==null&&r==null) return setAuto(id,'',null,false);
+    const parts=[]; let s='ok';
+    [['Front',f],['Rear',r]].forEach(([n,x])=>{ if(x==null) return; if(x<3){parts.push(`${n} ${x}mm: replace now`); s='urg';} else if(x<=4){parts.push(`${n} ${x}mm: advise soon`); if(s!=='urg') s='adv';} else parts.push(`${n} ${x}mm OK`); });
+    return setAuto(id,parts.join(' · '),s,apply);
+  }
+  if(m==='discs'){
+    const parts=[]; let s=null;
+    [['Front',num(v.fmin),num(v.fmeas)],['Rear',num(v.rmin),num(v.rmeas)]].forEach(([n,mn,ms])=>{
+      if(mn==null||ms==null) return; const d=+(ms-mn).toFixed(2);
+      if(d<0){parts.push(`${n} ${d} mm below MIN TH: replace pair`); s='urg';}
+      else if(d<=0.5){parts.push(`${n} ${d} mm above MIN: advise with next pads`); if(s!=='urg') s='adv';}
+      else {parts.push(`${n} ${d} mm above MIN`); if(!s) s='ok';}
+    });
+    return setAuto(id,parts.join(' · '),s,apply);
+  }
+  if(m==='coolant'){
+    const fp=num(v.fp); if(fp==null) return setAuto(id,'',null,false);
+    if(fp>-15) return setAuto(id,`Protection only ${fp} °C: weak mix, risk of freezing. Flush/refill.`,'urg',apply);
+    if(fp>-25) return setAuto(id,`Protection ${fp} °C: advise topping up to the correct antifreeze strength.`,'adv',apply);
+    return setAuto(id,`Protection ${fp} °C: OK.`,'ok',apply);
+  }
+  if(m==='battery'){
+    const bv=num(v.v), soh=num(v.soh); if(bv==null&&soh==null) return setAuto(id,'',null,false);
+    let s='ok', t=[];
+    if(bv!=null){ if(bv<12.2){s='urg';t.push(`${bv} V: heavily discharged / failing`);} else if(bv<12.4){s='adv';t.push(`${bv} V: low charge`);} else t.push(`${bv} V OK`); }
+    if(soh!=null){ if(soh<50){s='urg';t.push(`health ${soh}%: replace`);} else if(soh<75){if(s!=='urg')s='adv';t.push(`health ${soh}%: advise`);} else t.push(`health ${soh}% OK`); }
+    return setAuto(id,t.join(' · '),s,apply);
+  }
+  if(m==='timing'){
+    const cur=num(document.getElementById('miles').value), nowY=new Date().getFullYear();
+    const lm=num(v.lastMi), ly=num(v.lastYr), im=num(v.intMi), iy=num(v.intYr);
+    const regY=num(document.getElementById('year').value);
+    const baseMi = lm!=null?lm:(ly==null?0:null), baseY = ly!=null?ly:(lm==null?regY:null);
+    if(im==null&&iy==null) return setAuto(id,'Enter the manufacturer\'s interval to work out when it\'s due.',null,false);
+    let pct=0, due=[], unknown=(lm==null&&ly==null);
+    if(im!=null&&baseMi!=null){ due.push(`${(baseMi+im).toLocaleString('en-GB')} mi`); if(cur!=null) pct=Math.max(pct,(cur-baseMi)/im); }
+    if(iy!=null&&baseY!=null){ due.push(`${baseY+iy}`); pct=Math.max(pct,(nowY-baseY)/iy); }
+    const when = due.length?`Due at ${due.join(' or in ')}, whichever comes first.`:'';
+    const pre = unknown?'No record of a change, so worked out from new. ':'';
+    if(pct>=1) return setAuto(id,`<b>OVERDUE.</b> ${pre}${when} Recommend a timing belt kit (+ water pump) now.`,'urg',apply);
+    if(pct>=0.85) return setAuto(id,`<b>Due soon.</b> ${pre}${when} Quote the timing belt kit now.`,'adv',apply);
+    if(pct>0||due.length) return setAuto(id,`${pre}${when} Currently ${Math.round(pct*100)}% of the interval used.`,'ok',apply);
+    return setAuto(id,'Enter the mileage and/or year to work this out.',null,false);
+  }
+}
+
+let COUNTS={ok:0,adv:0,urg:0,todo:0};
+function summary(){
+  let ok=0,adv=0,urg=0,todo=0; const ul=[],al=[];
+  ITEMS.forEach((it,i)=>{ if(!applies(it[3])) return; const id='i'+i, s=state[id]&&state[id].s;
+    if(!s){todo++;return;}
+    const extra=[state[id].auto,state[id].note].filter(Boolean).join(' | ');
+    const line=`<b>${esc(it[1])}</b>${extra?` <span style="color:var(--muted)">${esc(extra)}</span>`:''}`;
+    if(s==='ok')ok++; else if(s==='adv'){adv++;al.push(line);} else if(s==='urg'){urg++;ul.push(line);} });
+  COUNTS={ok,adv,urg,todo};
+  const tot=ok+adv+urg+todo; const done=tot?((tot-todo)/tot*100):0; const pb=document.getElementById('pbar'); if(pb) pb.style.width=done+'%';
+  cOk.textContent=ok; cAdv.textContent=adv; cUrg.textContent=urg; cTodo.textContent=todo;
+  urgList.innerHTML=ul.length?ul.map(x=>`<li>${x}</li>`).join(''):'<li style="color:var(--muted);list-style:none;margin-left:-18px">None</li>';
+  advList.innerHTML=al.length?al.map(x=>`<li>${x}</li>`).join(''):'<li style="color:var(--muted);list-style:none;margin-left:-18px">None</li>';
+  const v=document.getElementById('verdict');
+  if(todo>0){v.className='note p-na';v.textContent=`${todo} check${todo>1?'s':''} still to complete.`;}
+  else if(urg){v.className='note p-urg';v.textContent='NOT ROADWORTHY: urgent items must be fixed before the vehicle is used.';}
+  else if(adv){v.className='note p-adv';v.textContent='Roadworthy, with advisories to plan for.';}
+  else {v.className='note p-ok';v.textContent='Roadworthy: no faults found.';}
+  // next service
+  const mi=num(document.getElementById('miles').value), d=document.getElementById('date').value;
+  const mo = cfg.level===1?6:12, add = cfg.level===1?6000:12000;
+  const next = cfg.level===1?'Full service':cfg.level===2?'Interim (at 6 months) or Major (at 24 months, if the last Major was a year ago)':'Interim (at 6 months) or Full (at 12 months)';
+  let dd='';
+  if(d){const x=new Date(d); x.setMonth(x.getMonth()+mo); dd=x.toLocaleDateString('en-GB',{month:'long',year:'numeric'});}
+  nextSvc.innerHTML=`Next due: <b>${dd||`in ${mo} months`}</b>${mi!=null?` or at <b>${(mi+add).toLocaleString('en-GB')} miles</b>`:''}, whichever comes first. Suggested next service: <b>${next}</b>.`;
+}
+
+/* events */
+document.querySelectorAll('.seg').forEach(seg=>seg.addEventListener('click',e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  seg.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+  const k=seg.dataset.key; cfg[k]= k==='level'?+b.dataset.v:b.dataset.v; render();
+}));
+document.getElementById('list').addEventListener('click',e=>{
+  const b=e.target.closest('.st button'); if(!b) return;
+  const id=b.dataset.id; state[id]=state[id]||{};
+  state[id].s = state[id].s===b.dataset.s?'':b.dataset.s;
+  b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x.dataset.s===state[id].s));
+  summary();
+});
+document.getElementById('list').addEventListener('input',e=>{
+  const t=e.target, id=t.dataset.id; if(!id) return; state[id]=state[id]||{};
+  if(t.classList.contains('noteIn')) state[id].note=t.value;
+  else { state[id].vals=state[id].vals||{}; state[id].vals[t.dataset.k]=t.value;
+    const i=+id.slice(1); evalMeas(id,ITEMS[i][3].m,true); }
+  summary();
+});
+['miles','date','year'].forEach(k=>document.getElementById(k).addEventListener('input',()=>{
+  ITEMS.forEach((it,i)=>{ if(it[3].m==='timing'&&applies(it[3])) evalMeas('i'+i,'timing',true); }); summary(); }));
+
+function summaryText(){
+  const g=k=>document.getElementById(k).value;
+  const lines=[`THE MOTORING CENTRAL | ${LEVELS[cfg.level].toUpperCase()} SERVICE REPORT`,
+    `Job: ${g('job')}  |  Customer: ${g('cust')}  |  Partner: ${g('partner')} (${g('tech')})`,
+    `Reg: ${g('reg').toUpperCase()}  |  ${g('mm')} ${g('eng')}  |  ${g('miles')} miles  |  ${g('date')}`,
+    `${cfg.fuel} · ${cfg.drive==='chain'?'timing chain':cfg.drive==='wet'?'wet timing belt':'timing belt'} · ${cfg.trans}`,
+    `Result: ${document.getElementById('verdict').textContent}`,'','URGENT:'];
+  const urg=[],adv=[];
+  ITEMS.forEach((it,i)=>{const id='i'+i; if(!applies(it[3])||!state[id]) return; const ex=[state[id].auto,state[id].note].filter(Boolean).join(' | ');
+    if(state[id].s==='urg') urg.push(`- ${it[1]}${ex?' ('+ex+')':''}`); if(state[id].s==='adv') adv.push(`- ${it[1]}${ex?' ('+ex+')':''}`);});
+  lines.push(...(urg.length?urg:['- None']),'','ADVISORIES:',...(adv.length?adv:['- None']),'',nextSvc.textContent);
+  if(g('comments')) lines.push('','Comments: '+g('comments'));
+  return lines.join('\n');
+}
+document.getElementById('copyBtn').addEventListener('click',async()=>{
+  try{ await navigator.clipboard.writeText(summaryText()); copyMsg.textContent='Copied. Paste it into an email or text to the customer.'; }
+  catch(err){ copyMsg.textContent='Copy was blocked by the browser. Select the summary text manually.'; }
+});
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+let resetArmed=false;
+document.getElementById('resetBtn').addEventListener('click',e=>{
+  if(!resetArmed){resetArmed=true;e.target.textContent='Tap again to clear';setTimeout(()=>{resetArmed=false;e.target.textContent='Clear sheet';},3000);return;}
+  state={}; document.querySelectorAll('main input, main textarea').forEach(x=>x.value=''); BK=null; unlocked=false; manual=false; renderBooking(); lockFields(); paintMark(); savedBox.classList.add('hide'); resetArmed=false; e.target.textContent='Clear sheet'; render();
+});
+
+/* ---------- Save (preview: kept on this device) ----------
+ On the live site, send this record to the server and store it against the booking,
+ so the customer sees it as their service record and the next due date drives reminders. */
+document.getElementById('saveBtn').addEventListener('click',()=>{
+  const g=k=>document.getElementById(k).value.trim();
+  if(!g('job')){toast('Choose a booking or enter the job number first');document.getElementById('job').focus();return}
+  if(!g('miles')){toast('Enter the mileage from the dashboard');document.getElementById('miles').focus();return}
+  if(COUNTS.todo>0){toast(COUNTS.todo+' check'+(COUNTS.todo>1?'s':'')+' still to complete');return}
+  const rec={job:g('job'),vrm:g('reg').toUpperCase(),level:LEVELS[cfg.level],fuel:cfg.fuel,drive:cfg.drive,trans:cfg.trans,miles:+g('miles'),
+    ok:COUNTS.ok,adv:COUNTS.adv,urg:COUNTS.urg,comments:g('comments'),next:nextSvc.textContent,summary:summaryText(),items:state,
+    partner:g('partner'),time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),at:Date.now()};
+  try{const R=JSON.parse(localStorage.getItem('tmc-service-sheets')||'{}')||{};R[rec.job]=rec;localStorage.setItem('tmc-service-sheets',JSON.stringify(R))}catch(_){toast('Could not save on this device');return}
+  savedBox.innerHTML=`✓ ${esc(rec.level)} service sheet saved for ${esc(rec.job)} at ${esc(rec.time)}. ${rec.urg?rec.urg+' urgent item'+(rec.urg>1?'s':'')+', ':''}${rec.adv} advisor${rec.adv===1?'y':'ies'}. <a href="index.html#dashboard" id="savedBack">Back to my jobs</a>`;
+  savedBox.classList.remove('hide');
+  document.getElementById('savedBack').addEventListener('click',markBack);
+  toast('Service sheet saved');
+});
+
+/* ---------- Bookings ----------
+ Where the details come from, in this order:
+ 1. window.TMC_BOOKING (+ window.TMC_PARTNER) set by the live site before this script runs.
+ 2. ?job=TMC-10482 in the address, matched against the partner's bookings.
+ 3. The hand-off the partner dashboard saves in this browser ('tmc-service-handoff'):
+    {partner, bookings, selected}. index.html writes it from "Start service sheet".
+ 4. Demo bookings (preview only, when opened directly).
+*/
+function readHand(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}}
+const HAND=readHand('tmc-service-handoff');
+function markBack(){if(HAND){HAND.back=Date.now();try{localStorage.setItem('tmc-service-handoff',JSON.stringify(HAND))}catch(_){}}}
+document.getElementById('backDash').addEventListener('click',markBack);
+const PARTNER=window.TMC_PARTNER||(HAND&&HAND.partner)||{partner:'Fix It Mobile Mechanics',ptype:'Mobile mechanic',tech:'Sam Patel',pphone:'07700 900555'};
+const today=new Date().toISOString().slice(0,10);
+function getBookings(){
+  if(HAND&&HAND.bookings&&HAND.bookings.length) return HAND.bookings;
+  return [
+  {job:'TMC-10482',date:today,time:'09:00',service:'Full service',address:'14 Elm Road, Leeds LS6',cname:'Sarah Jones',cphone:'07700 900123',cemail:'sarah.jones@example.com',vrm:'AB12 CDE',make:'Ford Focus',engine:'1.0 EcoBoost',year:2017,colour:'Blue',vin:'K41523',mileage:'48210',fuel:'petrol',drive:'wet',trans:'manual'},
+  {job:'TMC-10495',date:today,time:'11:30',service:'Major service',address:'Unit 3, Kirkstall Trade Park, Leeds LS5',cname:'Mark Thompson',cphone:'07700 900456',cemail:'mark.t@example.com',vrm:'YX19 KLM',make:'Volkswagen Golf',engine:'2.0 TDI',year:2019,colour:'Grey',vin:'W08812',mileage:'61877',fuel:'diesel',drive:'belt',trans:'manual'},
+  {job:'TMC-10501',date:today,time:'14:00',service:'Interim service',address:'7 Moor Lane, Headingley LS6',cname:'Priya Shah',cphone:'07700 900789',cemail:'priya.shah@example.com',vrm:'LD68 PQR',make:'Vauxhall Corsa',engine:'1.4',year:2018,colour:'White',vin:'J60341',mileage:'33104',fuel:'petrol',drive:'chain',trans:'manual'},
+  {job:'TMC-10512',date:today,time:'16:15',service:'Full service',address:'22 Station Road, Horsforth LS18',cname:'Daniel Hughes',cphone:'07700 900321',cemail:'d.hughes@example.com',vrm:'SK21 TUV',make:'Nissan Qashqai',engine:'1.3 DIG-T',year:2021,colour:'Black',vin:'N77190',mileage:'22560',fuel:'petrol',drive:'chain',trans:'auto'}
+  ];
+}
+let BK=null, unlocked=false, manual=false;
+const FIELD={job:'job',date:'date',service:'svc',address:'where',cname:'cust',cphone:'cphone',cemail:'cemail',vrm:'reg',make:'mm',engine:'eng',year:'year',colour:'colour',vin:'vin',partner:'partner',ptype:'ptype',tech:'tech',pphone:'pphone'};
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2200)}
+/* second watermark: partner business and job number, so a leaked copy shows where it came from */
+function paintMark(){
+  const p=document.getElementById('partner').value.trim(), j=document.getElementById('job').value.trim(), el=document.getElementById('wmark2');
+  if(!p&&!j){el.style.backgroundImage='';return}
+  const x=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="360" height="240" viewBox="0 0 360 240"><g transform="rotate(-30 180 120)" fill="#0B1C35" font-family="Inter,Arial,sans-serif" font-weight="700" text-anchor="middle"><text x="180" y="116" font-size="13">${x(p)}</text><text x="180" y="134" font-size="11" letter-spacing="2">${x(j)}</text></g></svg>`;
+  el.style.backgroundImage=`url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+}
+['partner','job'].forEach(k=>document.getElementById(k).addEventListener('input',paintMark));
+function lockFields(){
+  const lock=!!BK&&!unlocked;
+  document.querySelectorAll('[data-b]').forEach(el=>{const has=el.value!=='';el.readOnly=lock&&has;el.classList.toggle('locked',lock&&has)});
+}
+function paintCfg(){
+  document.querySelectorAll('.seg').forEach(seg=>{const k=seg.dataset.key;seg.querySelectorAll('button').forEach(b=>b.classList.toggle('on',String(cfg[k])===b.dataset.v))});
+}
+/* the dashboard sends fuel as 'Petrol'/'Diesel' and gearbox as gear:'Manual'/'Automatic' */
+function normFuel(f){f=String(f||'').toLowerCase();return /diesel/.test(f)?'diesel':/petrol/.test(f)?'petrol':''}
+function normTrans(b){const t=String(b.trans||b.gear||'').toLowerCase();return /auto|dsg|cvt/.test(t)?'auto':/man/.test(t)?'manual':''}
+function applyBooking(b){
+  BK=b; unlocked=false;
+  const src=Object.assign({},b,PARTNER,{vin:b.vin,tech:PARTNER.tech});
+  for(const k in FIELD){const v=src[k]; if(v!=null&&v!=='') document.getElementById(FIELD[k]).value=v;}
+  const m=document.getElementById('miles'); m.value=''; m.placeholder=b.mileage?('Booked as '+Number(b.mileage).toLocaleString('en-GB')+' – read the dashboard'):'Read from the dashboard';
+  const sv=(b.service||'').toLowerCase();
+  cfg.level = /interim|minor/.test(sv)?1:/major/.test(sv)?3:2;
+  const f=normFuel(b.fuel), tr=normTrans(b);
+  if(f) cfg.fuel=f; if(b.drive) cfg.drive=b.drive; if(tr) cfg.trans=tr;
+  paintCfg(); render(); renderBooking(); lockFields(); paintMark();
+  toast('Booking details filled in');
+}
+function renderBooking(){
+  const A=document.getElementById('bkArea');
+  if(manual){A.innerHTML='<div class="lockrow" style="margin:0"><span>Filling in by hand.</span><button class="linkbtn" id="changeBk">Choose a booking instead</button></div>';return}
+  if(BK){
+    A.innerHTML=`<div class="sel"><span class="plate">${esc(BK.vrm||'No reg')}</span><div class="meta"><b>${esc(BK.job)} · ${esc(BK.service||'')}</b>${esc(BK.cname||'')}${BK.time?' · '+esc(BK.time):''}${BK.address?' · '+esc(BK.address):''}</div></div>
+    <div class="lockrow"><span>🔒 Details below are filled in from the booking</span><span><button class="linkbtn" id="unlock">${unlocked?'Lock details':'Correct details'}</button> · <button class="linkbtn" id="changeBk">Change booking</button></span></div>`;
+    return;
+  }
+  const list=getBookings();
+  if(!list.length){A.innerHTML='<p class="hint">You have no open bookings right now.</p><div class="lockrow"><span>Servicing a vehicle anyway?</span><button class="linkbtn" id="manual">Fill in by hand</button></div>';return}
+  A.innerHTML=`<p class="hint" style="margin:0 0 10px">Choose the booking you're working on. The job, customer, vehicle and partner details fill in for you, and the service level, fuel, timing drive and gearbox are set automatically.</p>
+  <input id="bkSearch" placeholder="Search job number, registration or name" style="margin-bottom:10px">
+  <div class="bk" id="bkList">${list.map((x,i)=>`<button class="b" data-bk="${i}" data-s="${esc((x.job+' '+(x.vrm||'')+' '+(x.cname||'')).toLowerCase())}"><span class="plate">${esc(x.vrm||'No reg')}</span><span class="meta"><b>${esc(x.cname||'')}</b>${esc(x.job)} · ${esc(x.service||'')}${x.make?'<br>'+esc(x.make+' '+(x.engine||'')):''}</span><span class="time">${esc(x.time||'')}</span></button>`).join('')}</div>
+  <div class="lockrow"><span>Booking not listed?</span><button class="linkbtn" id="manual">Fill in by hand</button></div>`;
+}
+document.getElementById('bkArea').addEventListener('click',e=>{
+  const bt=e.target.closest('[data-bk]'); if(bt){applyBooking(getBookings()[+bt.dataset.bk]);return}
+  const id=e.target.id;
+  if(id==='changeBk'){BK=null;unlocked=false;manual=false;renderBooking();lockFields();return}
+  if(id==='unlock'){unlocked=!unlocked;renderBooking();lockFields();if(unlocked)toast('You can now correct the details');return}
+  if(id==='manual'){manual=true;BK=null;renderBooking();lockFields();document.getElementById('job').focus()}
+});
+document.getElementById('bkArea').addEventListener('input',e=>{
+  if(e.target.id!=='bkSearch') return; const q=e.target.value.trim().toLowerCase();
+  document.querySelectorAll('#bkList .b').forEach(b=>b.style.display=b.dataset.s.includes(q)?'':'none');
+});
+function initBooking(){
+  let pick=null;
+  if(window.TMC_BOOKING) pick=window.TMC_BOOKING;
+  if(!pick){let j=null;try{j=new URLSearchParams(location.search).get('job')}catch(_){}
+    if(!j&&HAND&&HAND.selected&&!HAND.usedService) j=HAND.selected;
+    if(j) pick=getBookings().find(x=>x.job===j)||null;
+    if(pick&&HAND&&HAND.selected===j){HAND.usedService=1;try{localStorage.setItem('tmc-service-handoff',JSON.stringify(HAND))}catch(_){}}}
+  if(pick) applyBooking(pick); else {renderBooking(); paintMark();}
+}
+
+document.getElementById('date').valueAsDate=new Date();
+render();
+initBooking();
+</script>
+</body>
+</html>

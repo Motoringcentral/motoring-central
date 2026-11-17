@@ -4463,6 +4463,7 @@ if(u.role==='dealer'){h+=tile('pdi','doc','Pre-delivery inspection','Hand over a
 else if(u.role==='mechanic'){h+=tile('tab:diary','cal','Booking diary','Today’s jobs and bays');h+=tile('tab:jobs','pound','Jobs and rates','Your prices and work');h+=tile('tab:docs','doc','My documents','Insurance and ID')}
 else{h+=tile('sec:rate','pound','My rates','Set your own prices');h+=tile('sec:job','cal','My jobs','Booked and completed work');h+=tile('sec:document','doc','My documents','Insurance and ID')}
 if(u.role!=='dealer')h+=tile('inspect','car','Vehicle inspection','Record damage before you start work');
+if(u.role==='mechanic'&&u.sub!=='autoelec')h+=tile('service','doc','Vehicle service sheet','Interim, Full or Major service checklist');
 h+=tile('jobs','search','See all vacancies','The motor trade jobs board');
 h+=tile('help','help','Get help','Talk to our UK team');
 return '<div class="card qa"><h2>Quick actions</h2><p class="note">Everything you can do as a partner, one click away.</p><div class="qagrid">'+h+'</div></div>'};
@@ -4470,6 +4471,7 @@ function later(f){setTimeout(f,260)}
 function scrollTo(el){if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-qa]');if(!t)return;var a=t.getAttribute('data-qa'),u=window.GGuser;
 if(a==='inspect'){if(window.MCinspect)window.MCinspect()}
+else if(a==='service'){if(window.MCservice)window.MCservice()}
 else if(a==='pdi'){if(window.MCpdi)window.MCpdi()}
 else if(a==='job'){location.hash='jobs';later(function(){scrollTo($('jb-post-h'));var f=$('jp-t');if(f)f.focus({preventScroll:true})})}
 else if(a==='jobs'){location.hash='jobs';later(function(){window.scrollTo(0,0)})}
@@ -5419,11 +5421,20 @@ window.MCinspect=function(t){var u=window.GGuser;if(!u||u.role==='customer'||u.r
  if(t&&S.B[t])h.selected='TMC-'+String(t).slice(-6);
  try{localStorage.setItem('tmc-inspection-handoff',JSON.stringify(h))}catch(e){}
  location.href='inspection.html'};
+/* vehicle service sheet: same hand-off as the inspection, for mobile mechanics and garages */
+window.MCservice=function(t){var u=window.GGuser;if(!u||u.role!=='mechanic'||u.sub==='autoelec')return;
+ var S=window.MChub&&window.MChub.state?window.MChub.state():{B:{}},G=garage(),me=String(u.name||'').toLowerCase();
+ var L=Object.keys(S.B||{}).map(function(k){return S.B[k]}).filter(function(b){return String(b.partner||'').toLowerCase()===me&&b.kind==='Mechanic'&&(b.status!=='done'||b.t===t)}).sort(function(a,b){return a.t-b.t});
+ var h={partner:{partner:u.name||'',tech:u.contact||u.owner||'',ptype:ptype(u),pphone:u.phone||''},bookings:L.map(function(b){var o=toBk(b,G);o.service=String(o.service||'').replace(/\.$/,'');o.date=new Date(b.t).toISOString().slice(0,10);return o}),at:Date.now(),ret:{email:u.email||'',name:u.name||''}};
+ if(t&&S.B[t])h.selected='TMC-'+String(t).slice(-6);
+ try{localStorage.setItem('tmc-service-handoff',JSON.stringify(h))}catch(e){}
+ location.href='service-sheet.html'};
 /* coming back from the inspection page: sign the partner back in */
-(function(){if(window.GGuser)return;var h=null,key='';['tmc-inspection-handoff','tmc-pdi-handoff'].forEach(function(k){var x=null;try{x=JSON.parse(localStorage.getItem(k)||'null')}catch(e){}if(x&&x.ret&&x.back&&Date.now()-x.back<6e4&&(!h||x.back>h.back)){h=x;key=k}});
+(function(){if(window.GGuser)return;var h=null,key='';['tmc-inspection-handoff','tmc-pdi-handoff','tmc-service-handoff'].forEach(function(k){var x=null;try{x=JSON.parse(localStorage.getItem(k)||'null')}catch(e){}if(x&&x.ret&&x.back&&Date.now()-x.back<6e4&&(!h||x.back>h.back)){h=x;key=k}});
  if(!h)return;h.back=0;try{localStorage.setItem(key,JSON.stringify(h))}catch(e){}var all=[].concat(window.GGusers||[]);var u=all.filter(function(x){return x&&x.email&&String(x.email).toLowerCase()===String(h.ret.email).toLowerCase()})[0];
  if(u&&window.GGsetUser){window.GGsetUser(u);if(key==='tmc-pdi-handoff')u.dtab='stock';setTimeout(function(){location.hash='dashboard';if(window.GGdash)window.GGdash()},50)}})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-hubinsp]');if(b){e.preventDefault();window.MCinspect(+b.getAttribute('data-hubinsp'))}});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-hubsvc]');if(b){e.preventDefault();window.MCservice(+b.getAttribute('data-hubsvc'))}});
 })();
 </script>
 <style>
@@ -5460,6 +5471,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function jobNo(t){return 'TMC-'+String(t).slice(-6)}
 function done(){try{return JSON.parse(localStorage.getItem('tmc-inspections')||'{}')||{}}catch(e){return {}}}
+function sheets(){try{return JSON.parse(localStorage.getItem('tmc-service-sheets')||'{}')||{}}catch(e){return {}}}
 function hash(s){var h=0;s=String(s||'');for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%100003;return h}
 var MOB={Mechanic:1,Tyres:1,Valet:1,Recovery:1,'EV charging':1,'Alloy wheels':1};
 var PEOPLE=[['Sarah Jones','07700 900123','14 Elm Road, Leeds LS6'],['Mark Thompson','07700 900456','Kirkstall Trade Park, Leeds LS5'],['Priya Shah','07700 900789','7 Moor Lane, Headingley LS6'],['Daniel Hughes','07700 900321','22 Station Road, Horsforth LS18'],['Emma Clarke','07700 900654','3 Park View, Roundhay LS8']];
@@ -5484,7 +5496,7 @@ function seedDemo(u,S){if(!S||!S.B)return;var me=String(u.name||'').toLowerCase(
  try{localStorage.setItem('mc-hub',JSON.stringify(S))}catch(e){}}
 var STL={confirmed:'Booked',onway:'On the way',started:'In progress',done:'Completed'};
 window.MCjobs=function(u){if(!u||u.role==='customer'||u.role==='admin'||u.role==='dealer'||!window.MChub)return '';
- var S=window.MChub.state();seedDemo(u,S);var me=String(u.name||'').toLowerCase(),D=done();
+ var S=window.MChub.state();seedDemo(u,S);var me=String(u.name||'').toLowerCase(),D=done(),SV=sheets(),canSvc=u.role==='mechanic'&&u.sub!=='autoelec';
  var L=Object.keys(S.B).map(function(k){return S.B[k]}).filter(function(b){return String(b.partner||'').toLowerCase()===me}).sort(function(a,b){return a.t-b.t});
  var open=L.filter(function(b){return b.status!=='done'}),fin=L.filter(function(b){return b.status==='done'}).reverse().slice(0,8);
  function row(b){var j=jobNo(b.t),ins=D[j],v=b.veh||{},dt=new Date(b.t),today=new Date().toDateString()===dt.toDateString();
@@ -5493,6 +5505,7 @@ window.MCjobs=function(u){if(!u||u.role==='customer'||u.role==='admin'||u.role==
   '<div class="jinfo"><b>'+esc(b.cust)+'</b><div class="js">'+esc(String(b.text||b.kind).replace(/^Booked:\s*/,'').replace(/\.\s*Total.*$/,'').replace(/\.$/,''))+' · '+esc(j)+(b.addr?'<br>'+esc(b.addr):'')+'</div>'+
   '<div class="jcar">'+(v.reg?'<span class="jplate">'+esc(v.reg)+'</span>':'<span class="jplate">No reg</span>')+esc([v.make,v.model].filter(Boolean).join(' '))+(v.col?', '+esc(v.col):'')+'</div></div><span class="jst '+b.status+'">'+STL[b.status]+'</span></div>'+
   '<div class="jact">'+(ins?'<button type="button" class="jbig ok" data-hubinsp="'+b.t+'">✓ Inspected at '+esc(ins.time)+' · '+(ins.dmg?ins.dmg+' damage marked':'no damage')+' · open again</button>':(b.status==='done'?'':'<button type="button" class="jbig" data-hubinsp="'+b.t+'">📋 Start vehicle inspection</button>'))+
+  (canSvc&&b.kind==='Mechanic'&&/service/i.test(String(b.text||''))?(SV[j]?'<button type="button" class="jbig ok" data-hubsvc="'+b.t+'">✓ '+esc(SV[j].level)+' service sheet saved at '+esc(SV[j].time)+(SV[j].urg?' · '+SV[j].urg+' urgent':'')+' · open again</button>':(b.status==='done'?'':'<button type="button" class="jbig" data-hubsvc="'+b.t+'">🔧 Start service sheet</button>')):'')+
   (nx?'<button type="button" class="btn sm" data-hubst="'+b.t+':'+nx[0]+'">'+nx[1]+'</button>':'')+(b.demo?'':'<button type="button" class="btn sm ghost" data-hubchat="'+b.t+'">Message</button>')+'</div></div>'}
  var h='<div class="card" id="mc-jobs"><div class="jh"><h2>Your booked jobs</h2><span class="jcount">'+open.length+' to do</span></div><p class="note" style="margin:6px 0 0">Tap <b>Start vehicle inspection</b> when you arrive. The job, customer and car details fill in for you.</p><div class="jl">';
  h+=open.length?open.map(row).join(''):'<div class="jempty">No booked jobs right now. New bookings appear here straight away.</div>';
