@@ -2588,7 +2588,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
     services(car).forEach(function(s){if(s.mk&&window.MCMOT&&window.MCMOT.group(s.mk)){var gh=document.createElement('h3');gh.className='motgh';gh.textContent=window.MCMOT.group(s.mk);box.appendChild(gh)}
       var b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed','false');b.setAttribute('data-sid',s.id);
       b.innerHTML=s.mk&&window.MCMOT?window.MCMOT.tile(s.mk,D?null:fromPrice(s)):window.MCJOB?window.MCJOB.tile(s,D?null:fromPrice(s)):'<span>'+s.n+'<small>'+s.d+(D?'':'. <b class="fromp">From £'+fromPrice(s)+'</b>')+'</small></span>';
-      b.addEventListener('click',function(){svc=s;[].forEach.call(box.querySelectorAll('.opt'),function(c){c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');
+      b.addEventListener('click',function(){svc=s;window.GGsvc=s;[].forEach.call(box.querySelectorAll('.opt'),function(c){c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');
         if(D){quote();$('quote').scrollIntoView({behavior:'smooth',block:'nearest'})}
         else{pendSvc=s.id;U.innerHTML=unlockHtml(r,s.mot?s.n+': MOT from £'+fromPrice(s)+'. Each test station sets its own price, up to the legal maximum.':s.n+' from £'+fromPrice(s)+'. The exact price depends on your engine and the parts it needs.');U.hidden=false;U.scrollIntoView({behavior:'smooth',block:'nearest'})}});
       box.appendChild(b)});
@@ -4116,7 +4116,7 @@ var v=x.stockId?stById(u,x.stockId):null;if(v){u.sedit=JSON.parse(JSON.stringify
 u.sedit={kind:x.kind,reg:x.reg||'',make:x.make,model:x.model,variant:x.variant||'',year:x.year,miles:x.miles,fuel:x.fuel,gear:x.gear,body:x.body,col:x.col,cost:'',inDate:iso(0),prep:[],price:'',status:'sale',loc:'Forecourt',mot:x.mot||'',notes:'Moved from trade. Faults listed at the time: '+(x.faults||'none'),photos:(x.photos||[]).slice(0,30),fromTrade:x.id};return{go:true}};
 window.GGdash=function(){var u=window.GGuser;if(!u)return;var tb=dtabs(u),t=u.dtab,body;var res=window.MCmyResults?window.MCmyResults(u):'',brand=window.MCbrand?window.MCbrand.card(u):'',top='';
 if(u.role==='dealer')body=t==='stock'?stockHtml(u):t==='docs'?docsHtml(u):dealerHtml(u);
-else if(u.role==='mechanic')body=t==='diary'?diaryHtml(u)+res:t==='docs'?brand+docsHtml(u):jobsHtml(u)+res+ratesHtml(u)+(window.MCSVC?window.MCSVC.card(u):'');
+else if(u.role==='mechanic')body=t==='diary'?diaryHtml(u)+res:t==='docs'?brand+docsHtml(u):jobsHtml(u)+res+ratesHtml(u)+(window.MCqreqCard?window.MCqreqCard(u):'')+(window.MCSVC?window.MCSVC.card(u):'');
 else body=jobsHtml(u)+res+ratesHtml(u)+brand+docsHtml(u);
 if(u.role==='dealer'){top=res;if(t==='docs')body=brand+body}
 $('dash-body').innerHTML=head(u)+pendingHtml(u)+(window.GGquick?window.GGquick(u):'')+(window.MCjobs?window.MCjobs(u):(window.MChub?window.MChub.partnerCard(u):''))+top+tb+body;if(window.MCbrand)window.MCbrand.bind(u);bind(u)};
@@ -4175,8 +4175,8 @@ document.addEventListener('submit',function(e){var f=e.target;if((f.id==='cd-enq
 var DONE={mgo:['MOT','mdone'],tgo:['Tyres','tdone'],vgo:['Valet','vdone'],rgo:['Recovery','rdone'],ego:['EV charging','evc-done'],bgo:['Alloy wheels','bdone'],bqgo:['Bodywork quotes','bqdone']};
 function rec(list,item){var last=list[0];if(last&&last.text===item.text&&Date.now()-last.t<3000)return;if(window.GGuser&&list===window.GGuser.bookings&&!item.veh&&window.MCbookingVeh){var vh=window.MCbookingVeh();if(vh)item.veh=vh}list.unshift(item);var u=window.GGuser;if(window.MCsave&&u)window.MCsave(list===u.bookings?'booking':'enquiry',item.text||item.about,Object.assign({acct:u.email,customer:u.name,phone:u.phone},item));if(u&&list===u.bookings){u.det=u.det||{regs:[],left:2};u.det.left=2}}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b||!isCust())return;var u=window.GGuser;
-if(b.id==='book')setTimeout(function(){if($('job').hidden)return;var r=($('reg')||{}).value||'';rec(u.bookings,{kind:'Mechanic',text:'Booked with '+$('jobname').textContent+(r?' for '+r.toUpperCase():'')+'.',t:Date.now(),tc:true})},120);
-else if(DONE[b.id])setTimeout(function(){var d=$(DONE[b.id][1]);if(d&&!d.hidden&&d.textContent)rec(u.bookings,{kind:DONE[b.id][0],text:d.textContent,t:Date.now(),tc:true})},120)});
+if(b.id==='book')setTimeout(function(){if($('job').hidden)return;var r=($('reg')||{}).value||'',sv=window.GGsvc&&window.GGsvc.n||'';rec(u.bookings,{kind:'Mechanic',svc:sv,text:(sv?sv+' booked':'Booked')+' with '+$('jobname').textContent+(r?' for '+r.toUpperCase():'')+'.',t:Date.now(),tc:true})},120);
+else if(DONE[b.id])setTimeout(function(){var d=$(DONE[b.id][1]);if(d&&!d.hidden&&d.textContent){var it={kind:DONE[b.id][0],text:d.textContent,t:Date.now(),tc:true};if(b.id==='mgo'&&window.GGsvc)it.svc=window.GGsvc.mot?'MOT test':window.GGsvc.n;rec(u.bookings,it)}},120)});
 document.addEventListener('submit',function(e){var f=e.target;if(!isCust()||(f.id!=='cd-enq'&&f.id!=='vd-enq'))return;var u=window.GGuser,k=f.id==='cd-enq'?'en':'ven';
 setTimeout(function(){var ok=$(k+'-ok');if(ok&&!ok.hidden){var t=(document.querySelector('#'+(k==='en'?'v-cars':'v-vans')+' h1, #'+(k==='en'?'v-cars':'v-vans')+' .dtitle')||{}).textContent||'';rec(u.enquiries,{text:($(k+'-m').value||'').trim(),about:ok.textContent,t:Date.now()})}},120)});
 function d(t){return new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
@@ -5040,7 +5040,7 @@ document.addEventListener('input',function(e){if(e.target.id!=='cu-find')return;
 function deals(){var out=[],seen={};
  function push(type,kind,text,t,extra){var k=type+'|'+t+'|'+text;if(seen[k])return;seen[k]=1;var d={type:type,t:t,text:text,partners:[],service:kind,value:0},m;
   if(type==='booking'){m=/Total £([\d,]+(?:\.\d\d)?)/.exec(text);if(m)d.value=parseFloat(m[1].replace(/,/g,''));
-   if(kind==='Mechanic'){m=/^Booked with (.+?)(?: for [A-Z0-9 ]+)?\.$/.exec(text);if(m)d.partners=[m[1]];d.service='Mobile mechanic or electrician'}
+   if(kind==='Mechanic'){m=/^(?:.+? booked|Booked) with (.+?)(?: for [A-Z0-9 ]+)?\.$/.exec(text);if(m)d.partners=[m[1]];d.service='Mobile mechanic or electrician'}
    else if(kind==='MOT'){m=/^Booked: (.+) at (.+?), /.exec(text);if(m){d.partners=[m[2]];d.service=/MOT/.test(m[1])?'MOT':'Garage repair'}}
    else if(kind==='Tyres'){m=/^Booked: (.+?), /.exec(text);if(m)d.partners=[m[1]]}
    else if(kind==='Valet'){m=/\), (.+?)(?: \(their premises\)| at your address)/.exec(text);if(m)d.partners=[m[1]]}
@@ -5199,7 +5199,7 @@ function hash(s){var h=7;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%997
 function dateOnly(t){return new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
 function stars(n){n=Math.round(n);return '<span class="stars" role="img" aria-label="'+n+' out of 5 stars">'+'★★★★★'.slice(0,n)+'<span style="opacity:.3">'+'★★★★★'.slice(n)+'</span></span>'}
 function partnersOf(kind,text){var m;text=String(text||'');
- if(kind==='Mechanic'){m=/^Booked with (.+?)(?: for [A-Z0-9 ]+)?\.$/.exec(text);return m?[m[1]]:[]}
+ if(kind==='Mechanic'){m=/^(?:.+? booked|Booked) with (.+?)(?: for [A-Z0-9 ]+)?\.$/.exec(text);return m?[m[1]]:[]}
  if(kind==='MOT'){m=/^Booked: (.+) at (.+?), /.exec(text);return m?[m[2]]:[]}
  if(kind==='Tyres'){m=/^Booked: (.+?), /.exec(text);return m?[m[1]]:[]}
  if(kind==='Valet'){m=/\), (.+?)(?: \(their premises\)| at your address)/.exec(text);return m?[m[1]]:[]}
@@ -5329,8 +5329,8 @@ function partnerOf(kind,text){var f=window.MCreview&&window.MCreview.partnersOf;
 var MOBILE={Mechanic:1,Tyres:1,Valet:1,Recovery:1,'EV charging':1,'Alloy wheels':1};
 /* ----- bookings ----- */
 function note(b,to,ch,title,body,extra){b.notes.unshift(Object.assign({to:to,ch:ch,title:title,body:body,t:Date.now()},extra||{}))}
-function addBooking(d,quiet){if(!d||!d.t||S.B[d.t])return S.B[d.t];var p=partnerOf(d.kind,d.text),first=String(d.customer||'there').split(' ')[0];
- var b=S.B[d.t]={t:d.t,acct:low(d.acct),cust:d.customer||'Customer',phone:d.phone||'',kind:d.kind||'Booking',text:d.text||'',partner:p,status:(Date.now()-d.t>2*864e5)?'done':'confirmed',notes:[]};if(d.veh)b.veh=d.veh;
+function addBooking(d,quiet){if(!d||!d.t||S.B[d.t])return S.B[d.t];var p=d.partner||partnerOf(d.kind,d.text),first=String(d.customer||'there').split(' ')[0];
+ var b=S.B[d.t]={t:d.t,acct:low(d.acct),cust:d.customer||'Customer',phone:d.phone||'',kind:d.kind||'Booking',text:d.text||'',partner:p,status:(Date.now()-d.t>2*864e5)?'done':'confirmed',notes:[]};if(d.veh)b.veh=d.veh;if(d.svc)b.svc=d.svc;if(d.quote)b.quote=d.quote;
  if(!quiet){
   note(b,'customer','email','Booking confirmed: '+b.kind+(p?' with '+p:''),'Hi '+first+', your booking is confirmed. '+b.text+' You can message '+(p||'us')+' or change your booking from My account. '+(p?p+' is responsible for the work and its warranty.':''));
   note(b,'customer','text','Booking confirmed','Motoring Central: booking confirmed'+(p?' with '+p.replace(/\.$/,''):'')+'. '+b.kind+'. We will remind you the day before. Manage it in My account.');
@@ -5530,7 +5530,8 @@ function garage(){try{return JSON.parse(localStorage.getItem('mc-garage')||'{}')
 function toBk(b,G){var c=(window.GGcustomers||[]).filter(function(x){return String(x.email).toLowerCase()===String(b.acct||'').toLowerCase()})[0]||{};
  var v=((G[String(b.acct||'').toLowerCase()]||{}).v||[])[0]||{};var MOB={Mechanic:1,Tyres:1,Valet:1,Recovery:1,'EV charging':1,'Alloy wheels':1};
  var o={job:'TMC-'+String(b.t).slice(-6),time:new Date(b.t).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}),service:(b.text||b.kind||'').replace(/^Booked:\s*/,'').replace(/\.\s*Total.*$/,''),cname:b.cust||c.name||'',cphone:b.phone||c.phone||'',where:MOB[b.kind]?'Customer home':'At workshop',address:b.addr||c.post||''};
- var bv=b.veh||{};if(bv.reg){o.vrm=bv.reg;o.make=[bv.make,bv.model,bv.variant].filter(Boolean).join(' ');if(bv.col)o.colour=bv.col;if(bv.year)o.year=String(bv.year);if(bv.fuel)o.fuel=bv.fuel;if(bv.gear)o.gear=bv.gear}
+ if(b.svc)o.service=b.svc;else{var mm=/^(.+?) (?:booked )?(?:at|with) /i.exec(o.service);if(mm)o.service=mm[1]}
+ var bv=b.veh||{};if(bv.reg){o.vrm=bv.reg;o.make=[bv.make,bv.model,bv.variant].filter(Boolean).join(' ');if(bv.col)o.colour=bv.col;if(bv.year)o.year=String(bv.year);if(bv.fuel)o.fuel=bv.fuel;if(bv.gear)o.gear=bv.gear;if(bv.cc)o.engine=(bv.cc/1000).toFixed(1)+' litre ('+bv.cc+' cc)'}
  else if(v.reg){o.vrm=v.reg;o.make=((v.make||'')+' '+(v.model||'')).trim();if(v.col)o.colour=v.col;if(v.year)o.year=String(v.year);if(v.fuel)o.fuel=v.fuel}return o}
 /* remember the registration the customer is booking for */
 var curReg='';function normReg(v){return String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
@@ -5541,7 +5542,7 @@ window.MCbookingVeh=function(){var u=window.GGuser,r=curReg;
  if(!r&&u&&u.det&&u.det.regs&&u.det.regs.length)r=normReg(u.det.regs[u.det.regs.length-1]);
  if(!r){var G=garage(),k=u?String(u.email||'').toLowerCase():'',v=((G[k]||{}).v||[])[0];if(v&&v.reg)return {reg:v.reg,make:v.make||'',model:v.model||'',fuel:v.fuel||'',col:v.col||'',year:v.year||''};return null}
  var d=window.MCvrm&&window.MCvrm.lookup?window.MCvrm.lookup(r):null,p=r.length>4?r.slice(0,-3)+' '+r.slice(-3):r;
- return d?{reg:p,make:d.make,model:d.model,variant:d.variant,fuel:d.fuel,gear:d.gear,col:d.col,year:d.year}:{reg:p}};
+ return d?{reg:p,make:d.make,model:d.model,variant:d.variant,fuel:d.fuel,gear:d.gear,col:d.col,year:d.year,cc:d.cc||null}:{reg:p}};
 window.MCinspect=function(t){var u=window.GGuser;if(!u||u.role==='customer'||u.role==='admin')return;
  var S=window.MChub&&window.MChub.state?window.MChub.state():{B:{}},G=garage(),me=String(u.name||'').toLowerCase();
  var L=Object.keys(S.B||{}).map(function(k){return S.B[k]}).filter(function(b){return String(b.partner||'').toLowerCase()===me&&(b.status!=='done'||b.t===t)}).sort(function(a,b){return a.t-b.t});
@@ -5552,7 +5553,7 @@ window.MCinspect=function(t){var u=window.GGuser;if(!u||u.role==='customer'||u.r
 /* vehicle service sheet: same hand-off as the inspection, for mobile mechanics and garages */
 window.MCservice=function(t){var u=window.GGuser;if(!u||u.role!=='mechanic'||u.sub==='autoelec')return;
  var S=window.MChub&&window.MChub.state?window.MChub.state():{B:{}},G=garage(),me=String(u.name||'').toLowerCase();
- var L=Object.keys(S.B||{}).map(function(k){return S.B[k]}).filter(function(b){return String(b.partner||'').toLowerCase()===me&&b.kind==='Mechanic'&&(b.status!=='done'||b.t===t)}).sort(function(a,b){return a.t-b.t});
+ var L=Object.keys(S.B||{}).map(function(k){return S.B[k]}).filter(function(b){return String(b.partner||'').toLowerCase()===me&&(b.kind==='Mechanic'||b.kind==='MOT')&&(b.status!=='done'||b.t===t)}).sort(function(a,b){return a.t-b.t});
  var h={partner:{partner:u.name||'',tech:u.contact||u.owner||'',ptype:ptype(u),pphone:u.phone||''},bookings:L.map(function(b){var o=toBk(b,G);o.service=String(o.service||'').replace(/\.$/,'');o.date=new Date(b.t).toISOString().slice(0,10);return o}),at:Date.now(),ret:{email:u.email||'',name:u.name||''}};
  if(t&&S.B[t])h.selected='TMC-'+String(t).slice(-6);
  try{localStorage.setItem('tmc-service-handoff',JSON.stringify(h))}catch(e){}
@@ -5633,7 +5634,7 @@ window.MCjobs=function(u){if(!u||u.role==='customer'||u.role==='admin'||u.role==
   '<div class="jinfo"><b>'+esc(b.cust)+'</b><div class="js">'+esc(String(b.text||b.kind).replace(/^Booked:\s*/,'').replace(/\.\s*Total.*$/,'').replace(/\.$/,''))+' · '+esc(j)+(b.addr?'<br>'+esc(b.addr):'')+'</div>'+
   '<div class="jcar">'+(v.reg?'<span class="jplate">'+esc(v.reg)+'</span>':'<span class="jplate">No reg</span>')+esc([v.make,v.model].filter(Boolean).join(' '))+(v.col?', '+esc(v.col):'')+'</div></div><span class="jst '+b.status+'">'+STL[b.status]+'</span></div>'+
   '<div class="jact">'+(ins?'<button type="button" class="jbig ok" data-hubinsp="'+b.t+'">✓ Inspected at '+esc(ins.time)+' · '+(ins.dmg?ins.dmg+' damage marked':'no damage')+' · open again</button>':(b.status==='done'?'':'<button type="button" class="jbig" data-hubinsp="'+b.t+'">📋 Start vehicle inspection</button>'))+
-  (canSvc&&b.kind==='Mechanic'&&/service/i.test(String(b.text||''))?(SV[j]?'<button type="button" class="jbig ok" data-hubsvc="'+b.t+'">✓ '+esc(SV[j].level)+' service sheet saved at '+esc(SV[j].time)+(SV[j].urg?' · '+SV[j].urg+' urgent':'')+' · open again</button>':(b.status==='done'?'':'<button type="button" class="jbig" data-hubsvc="'+b.t+'">🔧 Start service sheet</button>')):'')+
+  (canSvc&&(b.kind==='Mechanic'||b.kind==='MOT')&&/service/i.test(String(b.svc||b.text||''))&&!/^MOT/.test(String(b.svc||''))?(SV[j]?'<button type="button" class="jbig ok" data-hubsvc="'+b.t+'">✓ '+esc(SV[j].level)+' service sheet saved at '+esc(SV[j].time)+(SV[j].urg?' · '+SV[j].urg+' urgent':'')+' · open again</button>':(b.status==='done'?'':'<button type="button" class="jbig" data-hubsvc="'+b.t+'">🔧 Start service sheet</button>')):'')+
   (nx?'<button type="button" class="btn sm" data-hubst="'+b.t+':'+nx[0]+'">'+nx[1]+'</button>':'')+(b.demo?'':'<button type="button" class="btn sm ghost" data-hubchat="'+b.t+'">Message</button>')+'</div></div>'}
  var h='<div class="card" id="mc-jobs"><div class="jh"><h2>Your booked jobs</h2><span class="jcount">'+open.length+' to do</span></div><p class="note" style="margin:6px 0 0">Tap <b>Start vehicle inspection</b> when you arrive. The job, customer and car details fill in for you.</p><div class="jl">';
  h+=open.length?open.map(row).join(''):'<div class="jempty">No booked jobs right now. New bookings appear here straight away.</div>';
@@ -5748,8 +5749,8 @@ function choose(n){var k=mode(),id=PRICED[n],box=$('mc-aj'),R=$('mc-ajreq');
  R.hidden=false;R.scrollIntoView({behavior:'smooth',block:'nearest'})}
 function send(){var u=window.GGuser,n=$('mc-ajreq').querySelector('h3').textContent;
  if(!u||u.role!=='customer'){if(window.GGcustOpen)window.GGcustOpen('Register free to get quotes for '+n+'.','new',function(){choose(n)});return}
- try{var L=JSON.parse(localStorage.getItem('mc-quote-req')||'[]');L.push({job:n,mode:mode(),note:$('ajd').value,when:$('ajw').value,email:u.email,t:Date.now()});localStorage.setItem('mc-quote-req',JSON.stringify(L))}catch(e){}
- $('ajok').innerHTML='<p class="ajok">✓ Request sent for '+esc(n)+'. Local partners will reply with fixed prices, usually within a few hours. You will see their quotes in your account.</p><p class="sample">Preview only. No request was sent.</p>';
+ if(window.MCquoteAdd)window.MCquoteAdd({job:n,mode:mode(),note:$('ajd').value,when:$('ajw').value,email:u.email,t:Date.now()});
+ $('ajok').innerHTML='<p class="ajok">✓ Request sent for '+esc(n)+'. Local partners will reply with fixed prices, usually within a few hours. You will see their quotes in <a href="#account">My account</a>.</p><p class="sample">Preview: requests and quotes are kept in this browser until the shared database is connected.</p>';
  $('ajgo').hidden=true}
 document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
  var c=t.closest('#mc-aj .ajchips button');if(c){cur=c.getAttribute('data-g');$('mc-aj').querySelector('.ajq input').value='';draw();return}
@@ -5772,6 +5773,72 @@ function res(v){var r=$('qk-res'),q=String(v||'').trim().toLowerCase();if(!q){r.
 var obs=new MutationObserver(function(){mount()});
 function watch(){var s=$('svc'),c=$('svc-card');if(s)obs.observe(s,{childList:true});if(c)obs.observe(c,{attributes:true,attributeFilter:['hidden']})}
 watch();mount();
+})();
+</script>
+<style>
+.qr-card .qr{border:1.5px solid var(--line);border-radius:12px;padding:12px;margin-top:10px;background:var(--bg)}
+.qr-card .qr b{display:block;font-size:1rem}
+.qr-card .qr small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.qr-card .qr p{margin:6px 0 0;font-size:.9rem}
+.qr-card .qrf{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.qr-card .qrf input{flex:1 1 120px;min-width:0;font:inherit;color:var(--ink);background:var(--surface);border:2px solid var(--line);border-radius:10px;padding:9px 10px}
+.qr-card .qrdone{color:var(--brand);font-weight:700;font-size:.9rem;margin-top:8px}
+.qr-card .qq{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid var(--line);padding-top:8px;margin-top:8px;flex-wrap:wrap}
+.qr-card .qq span{font-weight:600}
+.qr-card .qq em{font-style:normal;font-weight:800;font-size:1.05rem}
+.qr-card .plate{display:inline-block;font-weight:800;letter-spacing:.06em;background:#FFD43B;color:#0B1C35;border-radius:5px;padding:1px 6px;font-size:.8rem;margin-right:4px}
+</style>
+<script>
+/* Quote requests: customers ask for a job without an instant price, partners who
+   offer that job see it on their dashboard and send a price, the customer books one.
+   Preview: kept in this browser (mc-quote-req). The live site needs the shared database. */
+(function(){
+var LS='mc-quote-req';
+function $(i){return document.getElementById(i)}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function all(){try{return JSON.parse(localStorage.getItem(LS)||'[]')||[]}catch(e){return []}}
+function put(L){try{localStorage.setItem(LS,JSON.stringify(L))}catch(e){}}
+function low(s){return String(s||'').trim().toLowerCase()}
+function money(n){return '£'+(+n).toFixed(2)}
+function ago(t){var m=Math.round((Date.now()-t)/6e4);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':new Date(t).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
+function vehTxt(v){return v?(v.reg?'<span class="plate">'+esc(v.reg)+'</span>':'')+esc([v.make,v.model].filter(Boolean).join(' ')):''}
+/* add the customer's details and car to each new request */
+window.MCquoteAdd=function(r){var u=window.GGuser||{};r.id='Q'+Date.now().toString(36).toUpperCase();r.name=u.name||'';r.phone=u.phone||'';r.veh=window.MCbookingVeh?window.MCbookingVeh():null;r.quotes=[];r.status='open';var L=all();L.push(r);put(L);return r};
+/* partner dashboard card */
+function forPartner(u){if(!u||u.role!=='mechanic'||u.sub==='autoelec'||u.motOnly)return [];var k=u.sub==='garage'?'garage':'mobile',mine=window.MCSVC?window.MCSVC.saved(u)||[]:[];
+ return all().filter(function(r){return r.status==='open'&&r.mode===k&&(r.job==='Something else'||mine.indexOf(r.job)>-1)}).reverse()}
+window.MCqreqCard=function(u){if(!u||u.role!=='mechanic'||u.sub==='autoelec'||u.motOnly)return '';var L=forPartner(u),me=low(u.name);
+ var h='<div class="card qr-card" id="mc-qr-partner"><h2>Quote requests <span class="note">'+(L.length?L.length+' open':'')+'</span></h2><p class="note" style="margin-top:0">Customers near you asking for a price on jobs you offer. Send your fixed price, including parts and labour.</p>';
+ if(!L.length)return h+'<p class="note">No open requests right now. New ones appear here as soon as a customer asks.</p></div>';
+ L.forEach(function(r){var my=(r.quotes||[]).filter(function(q){return low(q.partner)===me})[0];
+  h+='<div class="qr"><b>'+esc(r.job)+'</b><small>'+esc(r.when||'')+' · '+ago(r.t)+(r.name?' · '+esc(r.name.split(' ')[0]):'')+'</small>'+(r.veh?'<p>'+vehTxt(r.veh)+'</p>':'')+(r.note?'<p>&ldquo;'+esc(r.note)+'&rdquo;</p>':'')+
+   (my?'<p class="qrdone">✓ You quoted '+money(my.price)+'. We will tell you if the customer books.</p>':
+   '<div class="qrf"><input type="number" min="1" step="0.01" inputmode="decimal" placeholder="Your price £" data-qp="'+r.id+'"><input type="text" placeholder="Note, e.g. parts included, 2 hours" data-qn="'+r.id+'" style="flex-basis:200px"><button type="button" class="btn sm" data-qsend="'+r.id+'">Send quote</button></div>')+'</div>'});
+ return h+'</div>'};
+/* customer account card */
+function forCust(u){return all().filter(function(r){return low(r.email)===low(u.email)}).reverse()}
+function custCard(u){var L=forCust(u);if(!L.length)return '';
+ var h='<div class="card qr-card" id="mc-qr-cust"><h2>Your quote requests</h2><p class="note" style="margin-top:0">Prices from local partners. Each partner is responsible for their work and its warranty.</p>';
+ L.forEach(function(r){h+='<div class="qr"><b>'+esc(r.job)+'</b><small>Asked '+ago(r.t)+' · '+esc(r.when||'')+'</small>'+(r.veh?'<p>'+vehTxt(r.veh)+'</p>':'');
+  if(r.status==='booked')h+='<p class="qrdone">✓ Booked with '+esc(r.booked.partner)+' for '+money(r.booked.price)+'. It is in your bookings.</p>';
+  else if(!(r.quotes||[]).length)h+='<p class="note">Waiting for quotes. Local partners usually reply within a few hours.</p>';
+  else (r.quotes||[]).slice().sort(function(a,b){return a.price-b.price}).forEach(function(q,i){h+='<div class="qq"><span>'+esc(q.partner)+(q.note?'<small>'+esc(q.note)+'</small>':'')+'</span><em>'+money(q.price)+'</em><button type="button" class="btn sm" data-qbook="'+r.id+':'+i+'">Book</button></div>'});
+  h+='</div>'});
+ return h+'</div>'}
+function mountCust(){var b=$('acc-body'),u=window.GGuser;if(!b||!u||u.role!=='customer')return;var old=$('mc-qr-cust'),html=custCard(u);
+ if(old){if(old.getAttribute('data-v')===html.length+'')return;old.remove()}if(!html)return;
+ var d=document.createElement('div');d.innerHTML=html;var c=d.firstChild;c.setAttribute('data-v',html.length+'');b.insertBefore(c,b.firstChild)}
+new MutationObserver(function(){if(location.hash==='#account')mountCust()}).observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ var s=t.closest('[data-qsend]');if(s){var id=s.getAttribute('data-qsend'),u=window.GGuser,pi=document.querySelector('[data-qp="'+id+'"]'),ni=document.querySelector('[data-qn="'+id+'"]'),pr=+pi.value;
+  if(!(pr>0)){pi.focus();pi.style.borderColor='#d23b3b';return}
+  var L=all(),r=L.filter(function(x){return x.id===id})[0];if(!r)return;r.quotes=r.quotes||[];r.quotes.push({partner:u.name,email:u.email,price:Math.round(pr*100)/100,note:ni.value.trim(),t:Date.now()});put(L);
+  var card=$('mc-qr-partner');if(card){var d=document.createElement('div');d.innerHTML=window.MCqreqCard(u);card.parentNode.replaceChild(d.firstChild,card)}return}
+ var bk=t.closest('[data-qbook]');if(bk){var a=bk.getAttribute('data-qbook').split(':'),u2=window.GGuser,L2=all(),r2=L2.filter(function(x){return x.id===a[0]})[0];if(!r2||!u2)return;
+  var q=r2.quotes.slice().sort(function(x,y){return x.price-y.price})[+a[1]];r2.status='booked';r2.booked={partner:q.partner,price:q.price,t:Date.now()};put(L2);
+  var item={kind:r2.mode==='garage'?'MOT':'Mechanic',svc:r2.job,partner:q.partner,quote:q.price,text:r2.job+' booked with '+q.partner+(r2.veh&&r2.veh.reg?' for '+r2.veh.reg:'')+'. Total '+money(q.price)+'.',t:Date.now(),tc:true,veh:r2.veh||undefined};
+  u2.bookings=u2.bookings||[];u2.bookings.unshift(item);if(window.MCsave)window.MCsave('booking',item.text,Object.assign({acct:u2.email,customer:u2.name,phone:u2.phone},item));
+  var c=$('mc-qr-cust');if(c)c.remove();mountCust()}});
 })();
 </script>
 </body>
