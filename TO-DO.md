@@ -22,12 +22,8 @@ monthly cost, and data protection (privacy notice, ICO registration, who can see
 because it will hold real customers' names, phone numbers, addresses and registrations.
 This belongs in the real site rebuild (branch `nextjs-rebuild`).
 
-### 2. Live registration look-up
-The code is ready. It switches on once `VDG_API_KEY` (the Vehicle Data Global API key) is added in
-Vercel under motoring-central-gum8 → Settings → Environment Variables, and the site is redeployed.
-Check: https://preview.motoringcentral.co.uk/api/vrm?probe=1 shows `"live":true`.
-
 ## Done
+- 17 Nov 2026: live registration look-up switched on (Vehicle Data Global key added in Vercel) and tested by the owner.
 - 17 Nov 2026: real bookings now carry the job booked (for example Full service), the fuel, the
   gearbox and the engine size from the registration look-up, so the service sheet and inspection
   fill in properly.
