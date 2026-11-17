@@ -4662,7 +4662,7 @@ function finish(raw,f){var d=lookup(raw);
  f.value=raw.replace(/^(.{4})(.{3})$/,'$1 $2');
  var k=$('st-kind');if(k&&k.value!==d.kind){k.value=d.kind;k.dispatchEvent(new Event('change',{bubbles:true}))}
  setVal('st-make',d.make);setVal('st-model',d.model);setVal('st-variant',d.variant);setVal('st-year',d.year);setVal('st-fuel',d.fuel);setVal('st-gear',d.gear);setVal('st-body',d.body);setVal('st-col',d.col);setVal('st-mot',d.mot);
- say('Found: '+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+[d.col,d.fuel,d.gear].filter(Boolean).map(function(x){return ', '+x.toLowerCase()}).join('')+'. '+(again?'No charge: you already looked this one up this month.':'10p + VAT added to your monthly bill.')+' Check the details, then add the mileage and prices.','ok');var bl=$('st-bill');if(bl)bl.textContent=bill();
+ say('Found: '+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+[d.col,d.fuel,d.gear].filter(Boolean).map(function(x){return ', '+x.toLowerCase()}).join('')+'. '+(d.live?'':'SAMPLE DATA, NOT THE REAL VEHICLE: the live look-up did not answer, so check every detail. ')+(again?'No charge: you already looked this one up this month.':'10p + VAT added to your monthly bill.')+' Check the details, then add the mileage and prices.','ok');var bl=$('st-bill');if(bl)bl.textContent=bill();
  var m=$('st-miles');if(m&&!m.value)m.focus();else{var b=document.querySelector('#st-card [data-slook]');if(b)b.focus()}}
 document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-slook]'))run()});
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='st-reg'){e.preventDefault();run()}});
