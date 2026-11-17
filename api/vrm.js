@@ -1,8 +1,43 @@
 // Vercel serverless function: live registration look-up via Vehicle Data Global.
 // The API key lives only in the Vercel environment variable VDG_API_KEY, never in the page.
-// Optional: VDG_ENDPOINT (default below), VDG_PACKAGE (default VehicleDetails).
+// Optional: VDG_ENDPOINT (default below), VDG_PACKAGE (default VehicleDetails), VDG_DEBUG=1 (raw answer view).
+//
+// Safeguards, because every look-up costs a credit:
+// - only this site's own pages may use it (requests from other websites are refused)
+// - each visitor may make 20 look-ups per 10 minutes
+// - each registration's answer is kept in Vercel's cache for a day, so asking again is free
 const ENDPOINT = process.env.VDG_ENDPOINT || 'https://uk.api.vehicledataglobal.com/r2/lookup';
 const PACKAGE = process.env.VDG_PACKAGE || 'VehicleDetails';
+
+const hits = new Map();
+const LIMIT = 20;
+const WINDOW = 10 * 60 * 1000;
+function limited(ip) {
+  const now = Date.now();
+  const h = (hits.get(ip) || []).filter(t => now - t < WINDOW);
+  h.push(now);
+  hits.set(ip, h);
+  if (hits.size > 5000) hits.clear();
+  return h.length > LIMIT;
+}
+
+function send(res, status, body, cache) {
+  res.statusCode = status;
+  res.setHeader('Content-Type', 'application/json; charset=utf-8');
+  res.setHeader('X-Robots-Tag', 'noindex');
+  res.setHeader('Cache-Control', cache || 'no-store');
+  res.end(JSON.stringify(body));
+}
+
+// Browsers say where a request comes from; only our own pages are allowed.
+function sameSite(req) {
+  const site = req.headers['sec-fetch-site'];
+  if (site) return site === 'same-origin';
+  const host = String(req.headers['x-forwarded-host'] || req.headers.host || '');
+  const from = String(req.headers.origin || req.headers.referer || '');
+  if (!from) return false;
+  try { return new URL(from).host === host; } catch (e) { return false; }
+}
 
 // Walk the response and find the first non-empty value whose key matches one of the names.
 function find(obj, names) {
@@ -20,7 +55,14 @@ function find(obj, names) {
   }
   return null;
 }
-const title = s => s == null ? null : String(s).toLowerCase().replace(/\b[a-z]/g, c => c.toUpperCase());
+// strip anything that could break the page, then tidy the capitals
+const clean = s => s == null ? '' : String(s).replace(/[<>&"'`\\]/g, '').replace(/\s+/g, ' ').trim().slice(0, 80);
+const UPPER = new Set(['BMW', 'MG', 'VW', 'DS', 'GTI', 'TDI', 'TSI', 'TFSI', 'AMG', 'SE', 'GT', 'ST', 'RS', 'HDI', 'CDI', 'DCI', 'TDCI', 'LWB', 'SWB', 'MWB', 'EV', 'PHEV', 'XL', 'LE', 'SR', 'AWD', '4WD', '4X4', 'DSG', 'CVT']);
+const title = s => {
+  const c = clean(s);
+  if (!c) return null;
+  return c.split(' ').map(w => UPPER.has(w.toUpperCase()) ? w.toUpperCase() : w.toLowerCase().replace(/\b[a-z]/g, ch => ch.toUpperCase())).join(' ');
+};
 
 function normFuel(f) {
   if (!f) return null;
@@ -38,14 +80,29 @@ function normGear(g) {
   if (s.includes('man')) return 'Manual';
   return title(g);
 }
+function isoDate(v) {
+  if (!v) return null;
+  const s = String(v).trim();
+  let m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s);
+  if (m) return m[1] + '-' + m[2] + '-' + m[3];
+  m = /^(\d{2})\/(\d{2})\/(\d{4})/.exec(s);
+  if (m) return m[3] + '-' + m[2] + '-' + m[1];
+  return null;
+}
 
 module.exports = async (req, res) => {
-  res.setHeader('Cache-Control', 'no-store');
-  res.setHeader('X-Robots-Tag', 'noindex');
-  const reg = String((req.query && req.query.reg) || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
-  if (reg.length < 2 || reg.length > 8) return res.status(400).json({ ok: false, error: 'bad_reg' });
+  if (req.method !== 'GET') return send(res, 405, { ok: false, error: 'method' });
+  const q = new URL(req.url, 'http://x').searchParams;
   const key = process.env.VDG_API_KEY;
-  if (!key) return res.status(503).json({ ok: false, error: 'not_configured' });
+  // the page asks once whether live look-ups are switched on (free: no call to Vehicle Data Global)
+  if (q.has('probe')) return send(res, 200, { ok: true, live: !!key });
+  const reg = String(q.get('reg') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (reg.length < 2 || reg.length > 8) return send(res, 400, { ok: false, error: 'bad_reg' });
+  if (!key) return send(res, 503, { ok: false, error: 'not_configured' });
+  if (!sameSite(req)) return send(res, 403, { ok: false, error: 'forbidden' });
+  const ip = String(req.headers['x-forwarded-for'] || (req.socket && req.socket.remoteAddress) || '').split(',')[0].trim();
+  if (limited(ip)) return send(res, 429, { ok: false, error: 'too_many' });
+  const debug = q.get('debug') === '1' && process.env.VDG_DEBUG === '1';
   try {
     const url = ENDPOINT + '?packageName=' + encodeURIComponent(PACKAGE) +
       '&apiKey=' + encodeURIComponent(key) + '&vrm=' + encodeURIComponent(reg);
@@ -55,26 +112,42 @@ module.exports = async (req, res) => {
     clearTimeout(t);
     const text = await r.text();
     let j; try { j = JSON.parse(text); } catch (e) { j = null; }
-    if (!r.ok || !j) return res.status(502).json({ ok: false, error: 'upstream_' + r.status });
-    if (req.query.debug === '1' && process.env.VDG_DEBUG === '1') return res.status(200).json({ ok: true, raw: j });
+    if (!r.ok || !j) return send(res, 502, { ok: false, error: 'upstream_' + r.status });
+    if (debug) return send(res, 200, { ok: true, raw: j });
     const make = find(j, ['make', 'dvlaMake', 'vehicleMake']);
-    if (!make) return res.status(404).json({ ok: false, error: 'not_found' });
+    if (!make) return send(res, 404, { ok: false, error: 'not_found' }, 'public, s-maxage=3600');
     const body = find(j, ['bodyStyle', 'bodyType', 'body']);
+    const cls = String(find(j, ['vehicleClass', 'vehicleType', 'taxationClass']) || '');
+    const firstReg = isoDate(find(j, ['dateFirstRegistered', 'dateFirstRegisteredUk', 'firstRegistrationDate']));
+    let mot = isoDate(find(j, ['motDueDate', 'motExpiryDate', 'motDue', 'nextMotDueDate']));
+    let firstMot = false;
+    if (!mot && firstReg) {
+      // a new vehicle's first MOT is due on the third anniversary of its first registration
+      const due = new Date(firstReg);
+      due.setFullYear(due.getFullYear() + 3);
+      if (due > new Date()) { mot = due.toISOString().slice(0, 10); firstMot = true; }
+    }
+    const model = title(find(j, ['model', 'dvlaModel', 'vehicleModel'])) || '';
+    let variant = title(find(j, ['modelVariant', 'variant', 'trim', 'series'])) || '';
+    // some answers already include the trim in the model name: don't repeat it
+    if (variant && model.toLowerCase().includes(variant.toLowerCase())) variant = '';
     const out = {
       reg,
+      kind: /van|pick|lcv|goods|commercial|chassis|tipper|luton/i.test((body || '') + ' ' + cls) ? 'Van' : 'Car',
       make: title(make),
-      model: title(find(j, ['model', 'dvlaModel', 'vehicleModel'])) || '',
-      variant: find(j, ['modelVariant', 'variant', 'trim', 'series']) || '',
-      year: +(find(j, ['yearOfManufacture', 'manufactureYear', 'yearOfRegistration', 'year']) || 0) || null,
+      model,
+      variant,
+      year: +(find(j, ['yearOfManufacture', 'manufactureYear', 'yearOfRegistration', 'year']) || String(firstReg || '').slice(0, 4) || 0) || null,
       fuel: normFuel(find(j, ['fuelType', 'dvlaFuelType', 'fuel'])),
       gear: normGear(find(j, ['transmissionType', 'transmission', 'gearbox'])),
       body: title(body),
       col: title(find(j, ['colour', 'color', 'primaryColour'])),
-      mot: String(find(j, ['motDueDate', 'motExpiryDate', 'motDue']) || '').slice(0, 10) || null,
+      mot,
+      firstMot,
       cc: +(find(j, ['engineCapacity', 'engineCapacityCc', 'cylinderCapacity']) || 0) || null
     };
-    return res.status(200).json({ ok: true, data: out });
+    return send(res, 200, { ok: true, data: out }, 'public, s-maxage=86400');
   } catch (e) {
-    return res.status(504).json({ ok: false, error: 'timeout' });
+    return send(res, 504, { ok: false, error: 'timeout' });
   }
 };
