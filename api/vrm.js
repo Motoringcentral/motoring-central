@@ -56,6 +56,7 @@ module.exports = async (req, res) => {
     const text = await r.text();
     let j; try { j = JSON.parse(text); } catch (e) { j = null; }
     if (!r.ok || !j) return res.status(502).json({ ok: false, error: 'upstream_' + r.status });
+    if (req.query.debug === '1' && process.env.VDG_DEBUG === '1') return res.status(200).json({ ok: true, raw: j });
     const make = find(j, ['make', 'dvlaMake', 'vehicleMake']);
     if (!make) return res.status(404).json({ ok: false, error: 'not_found' });
     const body = find(j, ['bodyStyle', 'bodyType', 'body']);
