@@ -22,7 +22,16 @@ monthly cost, and data protection (privacy notice, ICO registration, who can see
 because it will hold real customers' names, phone numbers, addresses and registrations.
 This belongs in the real site rebuild (branch `nextjs-rebuild`).
 
+### 2. Ease-of-use ideas from the 17 Nov review (smaller, not done yet)
+- The postcode box at the top of the front page only scrolls to the services. It could show partners near that postcode.
+- The front page is very long on a phone. Some "why choose us" sections repeat and could be merged.
+- Show the customer's progress through booking (choose job, see prices, choose partner, pay) as numbered steps.
+
 ## Done
+- 17 Nov 2026: ease-of-use review. Added "Not sure what you need?" (15 everyday problems that open the right service),
+  plain-English subtitles on every front-page tile with services first, plain-English explanations on 64 technical jobs,
+  cars first on the MOT list ("Most cars are Class 4"), an explanation of Budget, Standard and Premium parts,
+  and a shorter job list when booking.
 - 17 Nov 2026: live registration look-up switched on (Vehicle Data Global key added in Vercel) and tested by the owner.
 - 17 Nov 2026: real bookings now carry the job booked (for example Full service), the fuel, the
   gearbox and the engine size from the registration look-up, so the service sheet and inspection
