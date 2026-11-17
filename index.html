@@ -4640,7 +4640,10 @@ var POOL=[
  {kind:'Van',make:'Renault',model:'Master',variant:'LM35 dCi 135 Business',fuel:'Diesel',gear:'Manual',body:'Large van',col:'White'}];
 /* the age identifier in a current-format UK plate gives the registration year: a real rule, not sample data */
 function plateYear(r){var m=/^[A-Z]{2}(\d{2})[A-Z]{3}$/.exec(r);if(!m)return null;var n=+m[1];if(n===0||n===50)return null;var y=n>50?2000+n-50:2000+n,now=new Date().getFullYear();return y>=2001&&y<=now+1?{year:y,late:n>50}:null}
-function lookup(r){var py=plateYear(r);if(!py)return null;var h=0;for(var i=0;i<r.length;i++)h=(h*31+r.charCodeAt(i))%9973;
+var LIVE={};
+function live(r){if(LIVE[r])return Promise.resolve(LIVE[r]);if(!window.fetch)return Promise.resolve(null);
+ return fetch('/api/vrm?reg='+encodeURIComponent(r)).then(function(x){return x.json()}).then(function(j){if(j&&j.ok&&j.data){LIVE[r]=j.data;return j.data}return null}).catch(function(){return null})}
+function lookup(r){var py=plateYear(r);if(LIVE[r]){var L=LIVE[r],q={kind:/van|pickup|panel|lcv/i.test(L.body||'')?'Van':'Car'};Object.keys(L).forEach(function(k){q[k]=L[k]});if(!q.year&&py)q.year=py.year;q.sample=false;q.live=true;return q}var py=plateYear(r);if(!py)return null;var h=0;for(var i=0;i<r.length;i++)h=(h*31+r.charCodeAt(i))%9973;
  var base=KNOWN[r]||POOL[h%POOL.length],o={};Object.keys(base).forEach(function(k){o[k]=base[k]});o.year=py.year;
  var due=new Date(py.year+3,py.late?8:2,1),now=new Date();while(due<now)due.setFullYear(due.getFullYear()+1);due.setDate(1+h%27);
  o.mot=due.toISOString().slice(0,10);o.firstMot=new Date(py.year+3,0,1)>now;o.sample=!KNOWN[r];return o}
@@ -4652,13 +4655,14 @@ function acct(u){u=u||window.GGuser;if(!u)return null;var mk=new Date().toISOStr
 function bill(u){var a=acct(u);if(!a)return '';return a.n?'Look-ups this month: '+a.n+' ('+(a.n*PRICE<1?Math.round(a.n*PRICE*100)+'p':'\u00A3'+(a.n*PRICE).toFixed(2))+' + VAT). Added to your monthly bill.':'No look-ups charged this month.'}
 function run(){var f=$('st-reg');if(!f)return;var raw=f.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
  if(raw.length<2){say('Enter the registration first.','bad');f.focus();return}
- var d=lookup(raw);
+ say('Looking up the registration…');live(raw).then(function(){finish(raw,f)})}
+function finish(raw,f){var d=lookup(raw);
  if(!d){say('We could not match that registration, so you have not been charged. It may be a private or older plate: please enter the details by hand.','bad');f.focus();return}
  var a=acct(),again=!!(a&&a.regs[raw]);if(a&&!again){a.n++;a.regs[raw]=1}
  f.value=raw.replace(/^(.{4})(.{3})$/,'$1 $2');
  var k=$('st-kind');if(k&&k.value!==d.kind){k.value=d.kind;k.dispatchEvent(new Event('change',{bubbles:true}))}
  setVal('st-make',d.make);setVal('st-model',d.model);setVal('st-variant',d.variant);setVal('st-year',d.year);setVal('st-fuel',d.fuel);setVal('st-gear',d.gear);setVal('st-body',d.body);setVal('st-col',d.col);setVal('st-mot',d.mot);
- say('Found: '+d.year+' '+d.make+' '+d.model+' '+d.variant+', '+d.col.toLowerCase()+', '+d.fuel.toLowerCase()+', '+d.gear.toLowerCase()+'. '+(again?'No charge: you already looked this one up this month.':'10p + VAT added to your monthly bill.')+' Check the details, then add the mileage and prices.','ok');var bl=$('st-bill');if(bl)bl.textContent=bill();
+ say('Found: '+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+[d.col,d.fuel,d.gear].filter(Boolean).map(function(x){return ', '+x.toLowerCase()}).join('')+'. '+(again?'No charge: you already looked this one up this month.':'10p + VAT added to your monthly bill.')+' Check the details, then add the mileage and prices.','ok');var bl=$('st-bill');if(bl)bl.textContent=bill();
  var m=$('st-miles');if(m&&!m.value)m.focus();else{var b=document.querySelector('#st-card [data-slook]');if(b)b.focus()}}
 document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-slook]'))run()});
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='st-reg'){e.preventDefault();run()}});
