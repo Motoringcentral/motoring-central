@@ -2631,11 +2631,138 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
   $('book').addEventListener('click',function(){$('jobav').textContent=mech.i;$('jobname').textContent=mech.n;$('job').hidden=false;$('job').scrollIntoView({behavior:'smooth',block:'nearest'})});
 })();
 </script>
+<style>
+.svp{display:block}
+.svp .svp-top{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:2px 0 10px}
+.svp .svp-q{flex:1 1 220px;min-width:0;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px}
+.svp .svp-b{all:unset;box-sizing:border-box;cursor:pointer;font-weight:700;font-size:.85rem;border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;color:var(--ink);background:var(--bg)}
+.svp .svp-b:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+.svp .svp-n{font-weight:700;font-size:.9rem;color:var(--brand)}
+.svp .svp-note{font-size:.82rem;color:var(--muted);margin:0 0 10px}
+.svp details{border:1.5px solid var(--line);border-radius:12px;margin:0 0 8px;background:var(--bg)}
+.svp summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 12px;font-weight:700}
+.svp summary::-webkit-details-marker{display:none}
+.svp summary:after{content:"+";font-size:1.2rem;color:var(--muted)}
+.svp details[open] summary:after{content:"\2212"}
+.svp summary .c{margin-left:auto;white-space:nowrap;flex:none;font-size:.78rem;font-weight:700;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:2px 8px}
+.svp summary .c.on{color:var(--brand-ink);background:var(--brand);border-color:var(--brand)}
+.svp .svp-body{padding:0 12px 10px}
+.svp .svp-all{display:flex;gap:8px;align-items:center;font-size:.85rem;font-weight:700;color:var(--brand);padding:4px 0 8px;border-bottom:1px solid var(--line);margin-bottom:6px;cursor:pointer}
+.svp .svp-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:2px 12px}
+.svp label.svp-i{display:flex;gap:8px;align-items:flex-start;font-size:.9rem;font-weight:500;padding:6px 0;cursor:pointer;margin:0}
+.svp input[type=checkbox]{width:19px;height:19px;flex:0 0 auto;margin:1px 0 0;accent-color:var(--brand)}
+.svp .svp-i small{display:block;color:var(--muted);font-size:.75rem}
+.svp .hidden{display:none!important}
+#v-dash .svc-card .svp-save{margin-top:10px}
+#v-dash .svc-card .svp-ok{color:var(--brand);font-weight:700;font-size:.9rem;margin:8px 0 0}
+</style>
+<script>
+/* Services that mobile mechanics and garages can tick (TMC services list).
+   w:1 = needs a workshop, so it is only offered to garages.
+   c:1 = a common job, ticked by "Tick the common jobs". */
+(function(){
+var C=[
+['Servicing and maintenance',[
+ ['Interim service',{c:1}],['Full service',{c:1}],['Major service',{c:1}],['Manufacturer schedule service','Keeps the warranty and service history'],
+ ['Oil and filter change',{c:1}],['Vehicle health check',{c:1}],['Pre-MOT check',{c:1}],['Winter check'],
+ ['Air filter replacement',{c:1}],['Cabin (pollen) filter replacement',{c:1}],['Fuel filter replacement'],['Spark plug replacement',{c:1}],
+ ['Brake fluid change',{c:1}],['Coolant change'],['Manual gearbox oil change'],['Automatic or DSG gearbox fluid service'],['Service light reset',{c:1}]]],
+['Diagnostics and inspections',[
+ ['Engine warning light diagnosis',{c:1}],['Full fault code scan (all systems)',{c:1}],['Car won’t start',{c:1}],['Noise or vibration investigation'],
+ ['Leak investigation'],['Pre-purchase inspection'],['Electrical fault finding'],['Airbag (SRS) warning light diagnosis'],['ABS or traction control light diagnosis']]],
+['Brakes',[
+ ['Front brake pads',{c:1}],['Rear brake pads',{c:1}],['Brake discs and pads',{c:1}],['Brake shoes and drums'],['Brake calipers'],
+ ['Brake hoses and pipes'],['Brake master cylinder'],['Brake servo'],['Handbrake cable or adjustment'],['Electronic parking brake service'],['ABS sensor replacement']]],
+['Clutch and gearbox',[
+ ['Clutch replacement'],['Clutch and dual-mass flywheel'],['Clutch master or slave cylinder'],['Clutch fluid change'],['Gear linkage or cable'],
+ ['Manual gearbox repair or rebuild',{w:1}],['Gearbox replacement',{w:1}],['Automatic gearbox repair',{w:1}]]],
+['Engine and timing',[
+ ['Timing belt (cambelt) and water pump'],['Timing chain replacement',{w:1}],['Auxiliary (drive) belt',{c:1}],['Engine mounts'],['Head gasket replacement'],
+ ['Rocker or valve cover gasket'],['Sump or sump gasket'],['Oil leak repair'],['Turbocharger replacement'],['Engine rebuild',{w:1}],['Engine replacement',{w:1}]]],
+['Cooling system',[
+ ['Radiator replacement'],['Water pump replacement'],['Thermostat replacement'],['Coolant hoses'],['Expansion tank'],['Cooling fan']]],
+['Fuel and ignition',[
+ ['Glow plugs'],['Ignition coils'],['Fuel injectors'],['Fuel pump'],['Throttle body clean or replacement'],['Mass air flow (MAF) sensor'],['Wrong fuel drain']]],
+['Exhaust and emissions',[
+ ['Exhaust repair or replacement'],['Catalytic converter'],['DPF clean and forced regeneration'],['DPF replacement'],['EGR valve'],
+ ['Lambda (oxygen) sensor'],['AdBlue system repair'],['Exhaust welding or fabrication',{w:1}]]],
+['Steering and suspension',[
+ ['Shock absorbers'],['Coil springs'],['Track rod ends'],['Ball joints'],['Wishbones or control arms'],['Suspension bushes'],
+ ['Anti-roll bar links'],['Power steering pump or rack'],['Steering rack gaiters'],['Wheel alignment (tracking)',{w:1}]]],
+['Drive shafts and axles',[
+ ['Wheel bearings'],['CV joints and boots'],['Drive shafts'],['Differential oil change'],['Propshaft repair',{w:1}]]],
+['Electrics and batteries',[
+ ['Battery test and replacement',{c:1}],['Alternator'],['Starter motor'],['Bulbs and lighting',{c:1}],['Headlight unit replacement'],
+ ['Central locking'],['Electric window motor or regulator'],['Wiper motor or linkage'],['Sensor replacement (parking, temperature, speed)'],
+ ['Tyre pressure (TPMS) sensors'],['Horn'],['ECU coding and programming'],['ADAS camera and radar calibration',{w:1}]]],
+['Air conditioning and heating',[
+ ['Air con regas'],['Air con diagnosis and leak test'],['Air con compressor or condenser'],['Air con antibacterial clean'],['Heater blower motor or resistor'],['Heater matrix']]],
+['Tyres and wheels',[
+ ['Tyre fitting'],['Puncture repair'],['Wheel balancing'],['Locking wheel nut removal'],['Wheel stud replacement']]],
+['Body, fittings and other work',[
+ ['Wing mirror replacement'],['Door lock or handle'],['Bonnet or boot struts'],['Tow bar fitting'],['Dash cam fitting'],
+ ['MOT failure repairs'],['Welding and structural repairs',{w:1}]]],
+['Vehicles you work on',[
+ ['Cars',{c:1}],['Vans and light commercials'],['Hybrid vehicles','Needs hybrid or EV training'],['Electric vehicles','Needs EV high-voltage training'],
+ ['4x4 and SUVs'],['Motorhomes and campervans'],['Classic cars']]]
+];
+/* normalise: [name, hint?, flags?] */
+C.forEach(function(g){g[1]=g[1].map(function(x){var o={n:x[0],h:'',w:0,c:0};for(var i=1;i<x.length;i++){if(typeof x[i]==='string')o.h=x[i];else{o.w=x[i].w?1:0;o.c=x[i].c?1:0}}return o})});
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function list(kind){var out=[];C.forEach(function(g){var it=g[1].filter(function(x){return kind==='garage'||!x.w});if(it.length)out.push([g[0],it])});return out}
+function names(kind){var a=[];list(kind).forEach(function(g){g[1].forEach(function(x){a.push(x.n)})});return a}
+function common(kind){var a=[];list(kind).forEach(function(g){g[1].forEach(function(x){if(x.c)a.push(x.n)})});return a}
+var uid=0;
+/* draw the tick list into box. kind: 'mobile' | 'garage'. sel: array or map of names already ticked */
+function render(box,kind,sel){
+ if(!box)return;var on={};(Array.isArray(sel)?sel:Object.keys(sel||{})).forEach(function(n){on[n]=1});
+ var G=list(kind),id='svp'+(++uid),total=0;G.forEach(function(g){total+=g[1].length});
+ var h='<div class="svp" data-kind="'+kind+'"><div class="svp-top"><input type="search" class="svp-q" placeholder="Search jobs, e.g. clutch or air con" aria-label="Search jobs">'+
+  '<button type="button" class="svp-b" data-svp="common">Tick the common jobs</button><button type="button" class="svp-b" data-svp="all">Tick all</button><button type="button" class="svp-b" data-svp="none">Clear</button></div>'+
+  '<p class="svp-note"><span class="svp-n"></span> of '+total+' jobs ticked. Customers only see you for the jobs you tick. You can change this any time from your dashboard.'+
+  (kind==='garage'?'':' Jobs that need a workshop, such as wheel alignment, gearbox rebuilds and welding, are only offered to garages.')+'</p>';
+ G.forEach(function(g,gi){h+='<details'+(gi===0?' open':'')+'><summary>'+esc(g[0])+'<span class="c"></span></summary><div class="svp-body">'+
+  '<label class="svp-all"><input type="checkbox" class="svp-cat"> Tick all in this group</label><div class="svp-list">'+
+  g[1].map(function(x){return '<label class="svp-i" data-s="'+esc(x.n.toLowerCase())+'"><input type="checkbox" value="'+esc(x.n)+'"'+(on[x.n]?' checked':'')+'><span>'+esc(x.n)+(x.h?'<small>'+esc(x.h)+'</small>':'')+'</span></label>'}).join('')+
+  '</div></div></details>'});
+ box.innerHTML=h+'</div>';count(box)}
+function items(box){return [].slice.call(box.querySelectorAll('.svp-i input'))}
+function count(box){var n=0;[].forEach.call(box.querySelectorAll('.svp details'),function(d){var ins=[].slice.call(d.querySelectorAll('.svp-i input')),k=ins.filter(function(i){return i.checked}).length;n+=k;
+  var c=d.querySelector('summary .c');c.textContent=k+' / '+ins.length;c.classList.toggle('on',k>0);var all=d.querySelector('.svp-cat');all.checked=k===ins.length;all.indeterminate=k>0&&k<ins.length});
+ var s=box.querySelector('.svp-n');if(s)s.textContent=n}
+function read(box){return box?items(box).filter(function(i){return i.checked}).map(function(i){return i.value}):[]}
+document.addEventListener('change',function(e){var t=e.target,box=t.closest&&t.closest('.svp');if(!box)return;
+ if(t.classList.contains('svp-cat')){[].forEach.call(t.closest('details').querySelectorAll('.svp-i input'),function(i){if(!i.closest('.svp-i').classList.contains('hidden'))i.checked=t.checked})}
+ count(box.parentNode)});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-svp]');if(!b)return;e.preventDefault();var box=b.closest('.svp'),a=b.getAttribute('data-svp'),cm={};
+ if(a==='common')common(box.getAttribute('data-kind')).forEach(function(n){cm[n]=1});
+ items(box).forEach(function(i){if(a==='all')i.checked=true;else if(a==='none')i.checked=false;else if(cm[i.value])i.checked=true});
+ if(a==='common')[].forEach.call(box.querySelectorAll('details'),function(d,i){if(i<2||d.querySelector('.svp-i input:checked'))d.open=true});
+ count(box.parentNode)});
+document.addEventListener('input',function(e){var t=e.target;if(!t.classList||!t.classList.contains('svp-q'))return;var box=t.closest('.svp'),q=t.value.trim().toLowerCase();
+ [].forEach.call(box.querySelectorAll('details'),function(d){var any=0;[].forEach.call(d.querySelectorAll('.svp-i'),function(l){var m=!q||l.getAttribute('data-s').indexOf(q)>-1;l.classList.toggle('hidden',!m);if(m)any=1});d.classList.toggle('hidden',!any);if(q)d.open=any})});
+/* saved choices in this browser (preview only) */
+var LS='mc-svcs';
+function store(){try{return JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){return {}}}
+function saved(u){if(!u)return null;var s=store()[String(u.email||'').toLowerCase()];if(s)return s;if(u.svcs)return u.svcs;
+ return common(u.sub==='garage'?'garage':'mobile').concat(u.sub==='garage'?['Clutch replacement','Timing belt (cambelt) and water pump','Air con regas','Wheel alignment (tracking)','MOT failure repairs','Vans and light commercials']:['Clutch replacement','Timing belt (cambelt) and water pump'])}
+function save(u,arr){u.svcs=arr;try{var s=store();s[String(u.email||'').toLowerCase()]=arr;localStorage.setItem(LS,JSON.stringify(s))}catch(e){}}
+/* dashboard card for mobile mechanics and garages */
+function card(u){if(!u||u.role!=='mechanic'||u.sub==='autoelec'||u.motOnly)return '';var k=u.sub==='garage'?'garage':'mobile';
+ return '<div class="card svc-card" id="mc-svc-card"><h2>Services you offer</h2><p class="note" style="margin-top:0">Tick every job you do. Customers searching for a job only see partners who offer it.</p><div id="mc-svc-box" data-kind="'+k+'"></div>'+
+  '<button type="button" class="btn svp-save" id="mc-svc-save">Save my services</button><p class="svp-ok" id="mc-svc-ok" hidden></p></div>'}
+function mount(){var box=document.getElementById('mc-svc-box'),u=window.GGuser;if(!box||box.firstChild||!u)return;render(box,box.getAttribute('data-kind'),saved(u))}
+new MutationObserver(function(){mount()}).observe(document.documentElement,{childList:true,subtree:true});
+document.addEventListener('click',function(e){if(!e.target.closest||!e.target.closest('#mc-svc-save'))return;var u=window.GGuser,box=document.getElementById('mc-svc-box'),ok=document.getElementById('mc-svc-ok'),a=read(box);
+ if(!a.length){ok.hidden=false;ok.textContent='Tick at least one job you do.';return}
+ save(u,a);ok.hidden=false;ok.textContent='✓ Saved. You offer '+a.length+' job'+(a.length>1?'s':'')+'.'});
+window.MCSVC={cats:C,list:list,names:names,common:common,render:render,read:read,saved:saved,save:save,card:card};
+})();
+</script>
 <script>
 (function(){
   function $(i){return document.getElementById(i)}
-  var S=['Servicing','Brakes','Battery','Diagnostics','Pre-MOT checks','Tyres','Clutch','Suspension','Timing belt'];
-  S.forEach(function(s){var l=document.createElement('label');l.className='chk';l.innerHTML='<input type="checkbox" value="'+s+'"><span>'+s+'</span>';$('svcs').appendChild(l)});
+  window.MCSVC.render($('svcs'),'mobile',[]);
 
   function calc(){
     var j=+$('jobs').value,a=+$('avg').value;
@@ -2700,6 +2827,7 @@ var k=kind(),g=k==='garage'||k==='mot',ae=k==='autoelec';
 $('g-fields').hidden=!g;$('ae-fields').hidden=!ae;$('m-rad').hidden=g;$('m-veh').hidden=g;
 document.querySelector('label[for=post]').textContent=g?'Garage postcode':ae?'Base or workshop postcode':'Home postcode';
 var box=$('svcs'),old={};[].forEach.call(box.querySelectorAll('input:checked'),function(i){old[i.value]=1});
+if(k==='mobile'||k==='garage'){window.MCSVC.render(box,k,old);return}
 box.innerHTML='';
 (L[k]||[]).forEach(function(s){var l=document.createElement('label');l.className='chk';l.innerHTML='<input type="checkbox" value="'+s+'"'+(old[s]?' checked':'')+'><span>'+s+'</span>';box.appendChild(l)})}
 [].forEach.call(document.querySelectorAll('input[name=kind]'),function(r){r.addEventListener('change',apply)});
@@ -3459,7 +3587,7 @@ USERS.filter(function(u){return u.role!=='admin'&&USERS.indexOf(u)<7}).forEach(f
 
 /* sign-up on each join form creates an account */
 var FORMS=[
-{form:'form',ok:'ok',err:'merr',pass:'m-pass',mail:'mail',role:'mechanic',p:'m',get:function(){var kk=document.querySelector('input[name=kind]:checked').value,mo=kk==='mot',g=kk==='garage'||mo,ae=kk==='autoelec';if(mo)kk='garage';return{name:g?$('gname').value.trim():(ae&&$('ae-biz').value.trim()?$('ae-biz').value.trim():$('name').value.trim()),phone:$('tel').value.trim(),town:$('post').value.trim(),sub:kk,motOnly:mo,aeWhere:ae?$('ae-where').value:null,bays:g?(mo?0:Math.min(12,Math.max(1,Math.round(+$('gbays').value)||1))):0,motBays:g&&$('gmot').checked?Math.min(6,Math.max(1,Math.round(+$('gmotbays').value)||1)):0,rates:{hour:+$('m-rate').value,mot:g?+$('g-motfee').value:null,motc:g&&$('gmot').checked&&window.MCMOT?window.MCMOT.read('gm'):null}}}},
+{form:'form',ok:'ok',err:'merr',pass:'m-pass',mail:'mail',role:'mechanic',p:'m',get:function(){var kk=document.querySelector('input[name=kind]:checked').value,mo=kk==='mot',g=kk==='garage'||mo,ae=kk==='autoelec';if(mo)kk='garage';return{svcs:mo||ae?null:window.MCSVC.read($('svcs')),name:g?$('gname').value.trim():(ae&&$('ae-biz').value.trim()?$('ae-biz').value.trim():$('name').value.trim()),phone:$('tel').value.trim(),town:$('post').value.trim(),sub:kk,motOnly:mo,aeWhere:ae?$('ae-where').value:null,bays:g?(mo?0:Math.min(12,Math.max(1,Math.round(+$('gbays').value)||1))):0,motBays:g&&$('gmot').checked?Math.min(6,Math.max(1,Math.round(+$('gmotbays').value)||1)):0,rates:{hour:+$('m-rate').value,mot:g?+$('g-motfee').value:null,motc:g&&$('gmot').checked&&window.MCMOT?window.MCMOT.read('gm'):null}}}},
 {form:'r-form',ok:'r-ok',err:'r-err',pass:'r-pass',mail:'r-mail',role:'recovery',p:'r',get:function(){return{name:$('r-co').value.trim(),phone:$('r-tel').value.trim(),town:$('r-post').value.trim(),rates:{call:+$('r-call').value,mile:+$('r-mile').value}}}},
 {form:'ev-form',ok:'ev-ok',err:'ev-err',pass:'ev-pass',mail:'ev-mail',role:'evcharge',p:'ev',get:function(){return{name:$('ev-co').value.trim(),phone:$('ev-tel').value.trim(),town:$('ev-post').value.trim(),rates:{call:+$('ev-call').value,mile:+$('ev-mile').value}}}},
 {form:'bs-form',ok:'bs-ok',err:'bs-err',pass:'bs-pass',mail:'bs-mail',role:'body',p:'bs',get:function(){var k=document.querySelector('input[name=bs-kind]:checked').value,ap=document.querySelector('input[name=bs-appr]:checked').value==='yes',b=$('bs-dobody').checked,a=$('bs-doalloy').checked;return{name:$('bs-co').value.trim(),phone:$('bs-tel').value.trim(),town:$('bs-post').value.trim(),sub:({mobile:'mobile',shop:'workshop',both:'mobile and workshop'}[k])+(b&&a?', bodywork and alloys':b?', bodywork':', alloys')+(ap?', insurance approved':''),approved:ap,insurers:ap?$('bs-insurers').value.trim():'',rates:{hour:b?+$('bs-hour').value:0,wheel:a?+$('bs-wheel').value:0,dcut:a&&k!=='mobile'?+$('bs-dcut').value:0}}}},
@@ -3988,7 +4116,7 @@ var v=x.stockId?stById(u,x.stockId):null;if(v){u.sedit=JSON.parse(JSON.stringify
 u.sedit={kind:x.kind,reg:x.reg||'',make:x.make,model:x.model,variant:x.variant||'',year:x.year,miles:x.miles,fuel:x.fuel,gear:x.gear,body:x.body,col:x.col,cost:'',inDate:iso(0),prep:[],price:'',status:'sale',loc:'Forecourt',mot:x.mot||'',notes:'Moved from trade. Faults listed at the time: '+(x.faults||'none'),photos:(x.photos||[]).slice(0,30),fromTrade:x.id};return{go:true}};
 window.GGdash=function(){var u=window.GGuser;if(!u)return;var tb=dtabs(u),t=u.dtab,body;var res=window.MCmyResults?window.MCmyResults(u):'',brand=window.MCbrand?window.MCbrand.card(u):'',top='';
 if(u.role==='dealer')body=t==='stock'?stockHtml(u):t==='docs'?docsHtml(u):dealerHtml(u);
-else if(u.role==='mechanic')body=t==='diary'?diaryHtml(u)+res:t==='docs'?brand+docsHtml(u):jobsHtml(u)+res+ratesHtml(u);
+else if(u.role==='mechanic')body=t==='diary'?diaryHtml(u)+res:t==='docs'?brand+docsHtml(u):jobsHtml(u)+res+ratesHtml(u)+(window.MCSVC?window.MCSVC.card(u):'');
 else body=jobsHtml(u)+res+ratesHtml(u)+brand+docsHtml(u);
 if(u.role==='dealer'){top=res;if(t==='docs')body=brand+body}
 $('dash-body').innerHTML=head(u)+pendingHtml(u)+(window.GGquick?window.GGquick(u):'')+(window.MCjobs?window.MCjobs(u):(window.MChub?window.MChub.partnerCard(u):''))+top+tb+body;if(window.MCbrand)window.MCbrand.bind(u);bind(u)};
