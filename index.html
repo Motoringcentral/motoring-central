@@ -1066,7 +1066,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <script>document.documentElement.classList.add("mcnight")</script>
 <canvas id="bg" aria-hidden="true"></canvas>
 <a href="#drivers" class="skip" id="skip">Skip to main content</a>
-<div class="banner">Preview site with sample data. No real bookings, payments, emails or texts are made.</div>
+<div class="banner">Preview site with sample data. Customer accounts are real and are saved. No real payments or texts are made.</div>
 <header><div class="in2"><a href="#drivers" class="logo" aria-label="The Motoring Central, home" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><svg width="42" height="42" viewBox="0 0 120 120" aria-hidden="true" style="flex:none"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="7" stroke-linecap="round"/><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="8" fill="#FFD43B"/></svg><span style="display:flex;flex-direction:column;line-height:1;gap:3px;color:#0B1C35" aria-hidden="true"><span style="font-size:.55rem;font-weight:700;letter-spacing:.5em">THE</span><span style="font-size:1.2rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap">MOTORING</span><span style="align-self:flex-start;font-size:.6rem;font-weight:700;letter-spacing:.38em;padding:3px 3px 3px 7px;border-radius:5px;background:#0B1C35;color:#fff;white-space:nowrap">CENTRAL</span><small style="color:#0B1C35;font-weight:500;opacity:.9;font-size:.64rem;letter-spacing:.04em">Buy. Fix. Clean. Rescue.</small></span></a><button type="button" class="menubtn" id="menubtn" aria-expanded="false" aria-controls="tabs-public tabs-net acct"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button><nav class="tabs" id="tabs-public" aria-label="Browse"><a href="#drivers">Home</a><a href="#cars">Cars for sale</a><a href="#vans">Vans for sale</a><a href="#about">About us</a><a href="#network">For partners</a><a href="#breakdown">Breakdown cover</a><a href="#jobs">Jobs</a></nav><nav class="tabs" id="tabs-net" aria-label="Partner area" hidden><a href="#network">Join the network</a><a href="#trade">Trade</a><a href="#jobs">Jobs</a><a href="#login" id="t-login">Log in</a><a href="#dashboard" id="t-dash" hidden>My dashboard</a><a href="#drivers">Back to customer site</a></nav><div class="acct" id="acct"></div></div></header>
 <div class="launch" id="launch">&#127881; Launch offer: 50% off our booking fee. Just &pound;3.00 per booking including VAT, usually &pound;5.99.</div>
 <div class="sidemap" aria-hidden="true"></div>
@@ -2358,6 +2358,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <p><b>The dealer you contact.</b> When you send an enquiry about a car or van, we pass your name, contact details and message to that dealer.</p>
 <p><b>Suppliers who help us run the service</b>, under contract and only for that purpose: [payment provider], [vehicle data provider], [parts supplier], [email and text message provider], [website hosting provider] and [analytics provider].</p>
 <p><b>The RAC.</b> If you follow a link to buy breakdown cover, you buy direct from the RAC and their privacy policy applies to what you give them.</p>
+<p><b>Where your account is kept.</b> Your account details, bookings and messages are stored in a secure database run for us by Supabase, on servers in London. Your password is stored in a scrambled form that we cannot read.</p>
 <p><b>Postcode look-up.</b> When you type a postcode to see how far away a car or van is, that postcode is sent to Postcodes.io, a look-up service run by Ideal Postcodes, to find where it is. Nothing else about you is sent with it.</p>
 <p><b>Voice search.</b> If you tap the microphone in the search box, your own browser (for example Google Chrome or Apple Safari) turns your speech into text using its speech service. We do not record or keep the sound of your voice.</p>
 <p><b>Authorities and advisers</b>, where the law requires it or to protect our legal rights.</p>
@@ -4178,9 +4179,17 @@ $('cu-new').addEventListener('submit',function(e){e.preventDefault();
 var n=$('cu-name').value.trim(),m=$('cu-mail').value.trim().toLowerCase(),t=$('cu-tel').value.trim(),pc=$('cu-post').value.trim().toUpperCase(),pw=$('cu-pass').value,err='';
 if(!n)err='Enter your full name.';else if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(m))err='Enter a valid email address.';else if(t.replace(/\D/g,'').length<10)err='Enter a mobile number so partners can reach you.';else if(!/^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/.test(pc))err='Enter a full UK postcode, like LS1 4AP.';else if(pw.length<8)err='Create a password of at least 8 characters.';else if(!$('cu-terms').checked)err='Tick the box to accept the customer terms.';else if(CUST.some(function(c){return c.email===m}))err='That email already has an account. Log in instead.';
 if(err){$('cu-err').textContent=err;return}
+if(window.MCdb&&window.MCdb.on){var sbtn=$('cu-new').querySelector('[type=submit]');sbtn.disabled=true;sbtn.textContent='Creating your account…';$('cu-err').textContent='';
+window.MCdb.signUp({email:m,name:n,phone:t,post:pc,news:$('cu-news').checked},pw).then(function(r){sbtn.disabled=false;sbtn.textContent='Create account';$('cu-new').reset();
+if(r.user){done(r.user);return}
+mode('in');$('ci-mail').value=m;var w=$('cu-why');w.hidden=false;w.textContent='Nearly done. We have sent an email to '+m+'. Tap the link in it to finish, then log in here.'},
+function(e){sbtn.disabled=false;sbtn.textContent='Create account';$('cu-err').textContent=e.message});return}
 var u={email:m,pass:pw,role:'customer',name:n,phone:t,post:pc,joined:Date.now(),tcAt:Date.now(),news:$('cu-news').checked,bookings:[],enquiries:[]};CUST.push(u);$('cu-new').reset();done(u)});
 $('cu-in').addEventListener('submit',function(e){e.preventDefault();var m=$('ci-mail').value.trim().toLowerCase(),pw=$('ci-pass').value;
-var u=CUST.filter(function(c){return c.email===m&&c.pass===pw})[0];if(!u){$('ci-err').textContent='Email or password not recognised.';return}$('cu-in').reset();done(u)});
+var u=CUST.filter(function(c){return c.pass&&c.email===m&&c.pass===pw})[0];
+if(!u&&m&&pw&&window.MCdb&&window.MCdb.on){var ibtn=$('cu-in').querySelector('[type=submit]');ibtn.disabled=true;ibtn.textContent='Logging in…';$('ci-err').textContent='';
+window.MCdb.signIn(m,pw).then(function(x){ibtn.disabled=false;ibtn.textContent='Log in';$('cu-in').reset();done(x)},function(e){ibtn.disabled=false;ibtn.textContent='Log in';$('ci-err').textContent=e.message});return}
+if(!u){$('ci-err').textContent='Email or password not recognised.';return}$('cu-in').reset();done(u)});
 /* gate: booking needs a customer account (runs after the terms check) */
 var BK={book:'Create a free account or log in to book this mechanic.',mgo:'Create a free account or log in to book your MOT.',tgo:'Create a free account or log in to book a tyre fitter.',vgo:'Create a free account or log in to book a valet.',rgo:'Create a free account or log in to book recovery.',ego:'Create a free account or log in to book EV charging.',bgo:'Create a free account or log in to book your alloy refurb.',bqgo:'Create a free account or log in to send your photos to repairers.'};
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;
@@ -4670,7 +4679,7 @@ function mineBody(){var b={items:mineDoc.items,decisions:mineDoc.decisions||{},u
 window.MCstatsSave=function(){if(db&&uid&&loaded&&!failed)write('subs/'+uid,mineBody()).catch(function(){})};
 window.MCinbox=function(){return inbox};
 function fail(e){failed=true;var c=e&&e.code;toast(c==='invalid_argument'?'Not saved: this account can view the site but cannot save to it.':c==='quota_exceeded'?'Not saved: the site’s storage is full.':'Not saved: the site’s storage could not be reached.',true);status()}
-function status(){var b=document.querySelector('.banner');if(!b)return;b.textContent=(db&&uid&&loaded&&!failed)?'Preview with sample data. Forms you submit here are saved to this site’s inbox.':'Preview site with sample data. No real bookings, payments, emails or texts are made.'}
+function status(){var b=document.querySelector('.banner');if(!b)return;b.textContent=(db&&uid&&loaded&&!failed)?'Preview with sample data. Forms you submit here are saved to this site’s inbox.':'Preview site with sample data. Customer accounts are real and are saved. No real payments or texts are made.'}
 function flush(){if(!db||!uid||!loaded)return;var q=queue;queue=[];if(!q.length)return;
  q.forEach(function(it){mineDoc.items.unshift(it)});mineDoc.items=mineDoc.items.slice(0,250);
  write('subs/'+uid,mineBody()).then(function(){toast(q.length>1?q.length+' entries saved to the site inbox.':'Saved to the site inbox.')},fail)}
@@ -6866,6 +6875,70 @@ new MutationObserver(soon).observe(F,{attributes:true,attributeFilter:['hidden',
 document.addEventListener('click',function(){setTimeout(update,200)});
 var pd=$('paydlg');if(pd)new MutationObserver(soon).observe(pd,{attributes:true,attributeFilter:['open']});
 update();
+})();
+</script>
+<script>
+/* Shared database (Supabase, London): real customer accounts, with bookings and messages kept
+   against the account so they are there on any phone or computer. The key below is the public
+   ("publishable") key and is safe to be in the page: the database's own rules only let a
+   signed-in person see and add their own rows. Never put a secret key in this file. */
+(function(){function $(i){return document.getElementById(i)}
+var SB_URL='https://hctboldpuyztugpwexdy.supabase.co',SB_KEY='sb_publishable_RbxYYgru3tOZZuwC5w6OcA_4alE1zBf';
+var sb=null,land=location.hash||'';
+function toast(m,bad){var t=$('mctoast');if(!t)return;t.textContent=m;t.className='mctoast'+(bad?' bad':'');t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},bad?8000:5000)}
+var ready=new Promise(function(res,rej){var s=document.createElement('script');s.src='vendor/supabase.js';
+ s.onload=function(){try{sb=window.supabase.createClient(SB_URL,SB_KEY);res(sb)}catch(e){rej(e)}};
+ s.onerror=function(){rej(new Error('offline'))};document.head.appendChild(s)});
+ready.catch(function(){});
+var MSG={invalid_credentials:'Email or password not recognised.',
+ email_not_confirmed:'Please tap the link in the email we sent you, then log in.',
+ user_already_exists:'That email already has an account. Log in instead.',
+ email_exists:'That email already has an account. Log in instead.',
+ weak_password:'Please choose a stronger password of at least 8 characters.',
+ over_email_send_rate_limit:'Too many new accounts in the last hour. Please try again later.',
+ over_request_rate_limit:'Too many tries. Please wait a minute and try again.',
+ email_address_not_authorized:'New accounts cannot be confirmed yet, because sign-up emails are not switched on for this preview.',
+ email_address_invalid:'Enter a valid email address.',
+ signup_disabled:'New accounts are switched off at the moment.'};
+function fail(e){var m=(e&&MSG[e.code])||'';if(!m&&e&&/fetch|network|offline/i.test(String(e.message||'')))m='We could not reach our system. Check your connection and try again.';return new Error(m||'Something went wrong. Please try again.')}
+function ms(s){var t=Date.parse(s);return isFinite(t)?t:Date.now()}
+/* build the site's own customer object from the database */
+function load(au){return Promise.all([
+  sb.from('profiles').select('name,phone,postcode,news,terms_at,created_at').eq('id',au.id).maybeSingle(),
+  sb.from('bookings').select('kind,service,summary,vehicle,made_at').order('made_at',{ascending:false}).limit(200),
+  sb.from('enquiries').select('about,message,made_at').order('made_at',{ascending:false}).limit(200)]).then(function(r){
+  if(r[0].error)throw r[0].error;var p=r[0].data||{},md=au.user_metadata||{},C=window.GGcustomers||[];
+  var u=C.filter(function(x){return x.sbid===au.id})[0];if(!u){u={role:'customer',sbid:au.id};C.push(u)}
+  u.email=au.email;u.name=p.name||md.name||String(au.email).split('@')[0];u.phone=p.phone||md.phone||'';u.post=p.postcode||md.postcode||'';
+  u.news=!!p.news;u.joined=ms(p.created_at||au.created_at);u.tcAt=ms(p.terms_at||au.created_at);
+  u.bookings=(r[1].data||[]).map(function(b){var o={kind:b.kind,text:b.summary,t:ms(b.made_at),tc:true};if(b.service)o.svc=b.service;if(b.vehicle)o.veh=b.vehicle;return o});
+  u.enquiries=(r[2].data||[]).map(function(q){return{text:q.message,about:q.about,t:ms(q.made_at)}});
+  return u})}
+function signUp(d,pw){return ready.then(function(){return sb.auth.signUp({email:d.email,password:pw,options:{emailRedirectTo:location.origin+'/',data:{name:d.name,phone:d.phone,postcode:d.post,news:!!d.news}}})}).then(function(r){
+  if(r.error)throw r.error;var au=r.data&&r.data.user;
+  if(au&&au.identities&&!au.identities.length)throw{code:'user_already_exists'};
+  if(r.data.session&&au)return load(au).then(function(u){return{user:u}});
+  return{user:null}}).catch(function(e){throw fail(e)})}
+function signIn(em,pw){return ready.then(function(){return sb.auth.signInWithPassword({email:em,password:pw})}).then(function(r){
+  if(r.error)throw r.error;return load(r.data.user)}).catch(function(e){throw fail(e)})}
+window.MCdb={on:true,signUp:signUp,signIn:signIn};
+/* stay logged in when the page is opened again, and finish the "confirm your email" link */
+ready.then(function(){return sb.auth.getSession()}).then(function(r){
+  var bad=/error_code=|error=/.test(land),conf=/type=signup/.test(land);
+  if(bad){toast(/otp_expired/.test(land)?'That email link has run out or was already used. Log in, or create your account again.':'That email link did not work. Please try again.',true);if(/error/.test(location.hash))history.replaceState(null,'',location.pathname+location.search)}
+  var s=r&&r.data&&r.data.session;if(!s||window.GGuser)return;
+  return load(s.user).then(function(u){if(window.GGuser||!window.GGsetUser)return;window.GGsetUser(u);
+   if(conf)toast('Your email is confirmed and you are logged in.');
+   if(location.hash==='#account'&&window.GGaccount)window.GGaccount();if(window.GGrerender)window.GGrerender()})}).catch(function(){});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#logout');if(b&&sb&&window.GGuser&&window.GGuser.sbid)sb.auth.signOut().catch(function(){})},true);
+/* bookings and messages are written to the account as they are made */
+function keep(type,d){var row,tb;
+ if(type==='booking'){tb='bookings';row={kind:String(d.kind||'').slice(0,60),service:d.svc?String(d.svc).slice(0,200):null,summary:String(d.text||'Booking').slice(0,2000),vehicle:d.veh||null,made_at:new Date(d.t||Date.now()).toISOString()}}
+ else{tb='enquiries';row={about:String(d.about||'').slice(0,500),message:String(d.text||'').slice(0,2000),made_at:new Date(d.t||Date.now()).toISOString()}}
+ sb.from(tb).insert(row).then(function(r){if(r.error)toast('This was not saved to your account. Check your connection, then try again.',true)},function(){toast('This was not saved to your account. Check your connection, then try again.',true)})}
+var o=window.MCsave;window.MCsave=function(type,summary,data){var u=window.GGuser;
+ if(sb&&u&&u.sbid&&data&&(type==='booking'||type==='enquiry')){try{keep(type,data)}catch(e){}}
+ return o?o.apply(this,arguments):false};
 })();
 </script>
 </body>

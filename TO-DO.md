@@ -7,20 +7,30 @@ Preview site: https://preview.motoringcentral.co.uk
 
 ## To do
 
-### 1. Shared database for live bookings (needed before launch)
-At the moment the preview saves everything in each person's own browser, so a customer
-who books on their phone is not seen by a partner on another phone. A shared database
-is needed so that, across all devices:
-- customer bookings reach the right partner straight away
-- quote requests reach every partner who offers that job, and their quotes reach the customer
-- completed service sheets, vehicle inspections and PDIs are saved against the booking, so
-  the customer sees their service history and admins can view them in a dispute
-- partners' chosen services, rates, diary and documents are kept
+### 1. Shared database (started 18 Nov 2026: Supabase, London)
+Chosen: Supabase (project "The Motoring Central", London region, free plan while building; Pro before launch).
+The site talks to it from the script that starts "Shared database (Supabase" in index.html. Only the public
+("publishable") key is in the page. Never put a secret key or the database password in the site or in chat.
 
-Decisions needed first: which database (for example Supabase, or Vercel's own storage), the
-monthly cost, and data protection (privacy notice, ICO registration, who can see what),
-because it will hold real customers' names, phone numbers, addresses and registrations.
-This belongs in the real site rebuild (branch `nextjs-rebuild`).
+Done so far: real customer accounts (sign up, log in, stay logged in, log out); customers' bookings and
+their messages to dealers are saved to their account and are there on any device.
+
+Owner to do in the Supabase dashboard (Authentication > URL Configuration): set "Site URL" to
+https://preview.motoringcentral.co.uk (change to the live address at launch). Without this, the link in the
+"confirm your email" message goes nowhere.
+
+Still to do, in this order:
+- Forgotten password (reset by email) and changing account details
+- A proper email service (custom SMTP). Until then Supabase's built-in email only sends to the owner's own
+  email address and only a few an hour, so nobody else can finish creating an account
+- Partner and dealer accounts in the database (applications, approval by staff, documents kept in secure storage);
+  staff logins. The demo, partner and staff logins are still inside the page code
+- Bookings reach the right partner on their own device; job status updates reach the customer
+- Quote requests reach every partner who offers that job, and their quotes reach the customer
+- Service sheets, vehicle inspections and PDIs saved against the booking
+- Car and van adverts (dealer stock and private adverts) and their photos kept in the database
+- Chat messages, saved searches and the failed-search list
+- Data protection: privacy notice says where data is kept (done); ICO fee; who can see what
 
 ### 2. Smaller ideas, not done yet
 - Which partners cover a postcode: waits for real partners. The sample partners have no real locations (their distances are
