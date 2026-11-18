@@ -118,6 +118,11 @@ Owner (business and legal):
 - Private adverts: solicitor to check the draft private-seller terms and both buyer notices (private sale and business sale); decide the refund rule (the draft
   says no refund if the car sells early); decide how reported adverts are handled and who checks them; consider checking the
   registration against DVLA records and limiting adverts per person, so traders cannot pose as private sellers.
+- VAT (accountant, 18 Nov 2026): every fee we charge carries VAT; MOT test fees are outside VAT, but our booking fee
+  on an MOT carries VAT. Customer prices are shown INCLUDING VAT (the law for consumer prices) with the VAT amount
+  shown; partner and dealer prices are shown + VAT. Partner per-job fee is now 5% + VAT (6% in total during launch).
+  Ask the accountant: the per-job fee and booking fee when we collect the job price on the partner's behalf (we only
+  charge VAT on our own fee, not on the partner's price), and VAT on refunds less the £9.99 admin fee.
 - Solicitor to check the refund and history check rules (agreed 18 Nov 2026; terms section "Selling your own car or van"):
   - Private sellers pay before entering the registration; one payment covers one vehicle and the registration cannot be changed.
   - Refund less a £9.99 admin fee (to cover the history check) if the check blocks the vehicle (stolen, scrapped, Category A
