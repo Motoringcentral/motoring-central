@@ -16,6 +16,11 @@ This is the running list of work still to do before launch. When the owner asks
    - That car now waits for approval: on the admin page, "Adverts waiting for approval", approve it (and try
      declining one with a reason; the seller fixes it and sends it back).
    - As a customer: message the car and request a test drive. Back as the dealer: reply and confirm.
+   - New on 18 Nov night, try these too: "+ Compare" on two cars; "Similar cars" and "Recently viewed" at the
+     bottom of an advert; "Running costs" (road tax) on an advert; as the customer, "Review this dealer" in
+     Messages after the dealer replies; as the dealer, "How your adverts are doing" on the dashboard, "Add a video
+     tour" on your own advert (it goes back for approval), "Show your stock on your own website" (copy the code) and
+     "Automatic stock feed" (needs a CSV file at a web address; the spreadsheet template works if it is online).
    - Tell Claude anything that looks wrong.
 3. When real stock is listed: admin page > "Sample cars and vans" > Hide.
 4. Apply for the free DVSA MOT history API in the company name (Claude can draft the answers). When DVSA emails the
@@ -26,7 +31,22 @@ This is the running list of work still to do before launch. When the owner asks
 6. Ask the accountant: VAT when we collect the partner's price on their behalf (we charge VAT only on our own fee),
    and VAT on refunds less the £9.99 admin fee.
 7. Choose an email service so sign-up, enquiry and booking emails can be sent (Claude to set out options and costs).
-8. Optional: ask Claude for a one-page dealer pitch (prices, what is included, 3 months free) to send to dealers.
+8. Decide the next car-sales features (Claude can build each one; the ones with a cost need your OK first):
+   - Needs the email service (item 7): email alerts for saved searches ("3 new cars match"), price-drop alerts on
+     saved cars, and emails to sellers when an advert is approved or declined, a buyer messages, or a viewing is
+     booked. Saved cars ("favourites") to be kept in the account rather than on one device.
+   - "Sell to local dealers" (like Motorway / Auto Trader Instant Offer): a private seller enters reg, mileage and
+     photos and our dealers bid; we charge the dealer a fee per car bought. Big build, biggest pull for sellers and
+     stock for dealers. Decide the fee, and solicitor to check the terms.
+   - Needs paid data: "Great / good / fair price" labels and "Value my car" (ask Vehicle Data Global for a valuation
+     price per look-up), and full equipment lists. Both can wait until there are enough adverts.
+   - Needs FCA permission or taking payments: finance quotes on adverts, reserving a car online with a deposit.
+   - Stock feeds that update overnight on their own (now they update when the dealer opens the dashboard).
+   - A staff screen to remove an unfair dealer review (for now, delete it in Supabase > Table editor >
+     dealer_reviews).
+   - When the real registration look-up is on: check that CO2 and fuel economy come through (needed for road tax on
+     cars registered before April 2017); Claude can check with VDG_DEBUG.
+9. Optional: ask Claude for a one-page dealer pitch (prices, what is included, 3 months free) to send to dealers.
 
 Preview site: https://preview.motoringcentral.co.uk
 
