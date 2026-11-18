@@ -146,7 +146,10 @@ module.exports = async (req, res) => {
       col: title(find(j, ['colour', 'color', 'primaryColour'])),
       mot,
       firstMot,
-      cc: +(find(j, ['engineCapacity', 'engineCapacityCc', 'cylinderCapacity']) || 0) || null
+      cc: +(find(j, ['engineCapacity', 'engineCapacityCc', 'cylinderCapacity']) || 0) || null,
+      co2: (function (v) { v = parseFloat(v); return isFinite(v) && v >= 0 && v < 1000 ? Math.round(v) : null; })(find(j, ['co2Emissions', 'co2', 'co2Emission', 'co2EmissionsGkm', 'co2gkm'])),
+      firstReg: firstReg || null,
+      mpg: (function (v) { v = parseFloat(v); return isFinite(v) && v > 5 && v < 300 ? Math.round(v * 10) / 10 : null; })(find(j, ['combinedMpg', 'mpgCombined', 'fuelConsumptionCombinedMpg']))
     };
     return send(res, 200, { ok: true, data: out }, 'public, s-maxage=86400');
   } catch (e) {
