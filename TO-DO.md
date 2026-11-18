@@ -44,7 +44,7 @@ Building:
 - Privacy notice and company details; let search engines index the live site
 - Point motoringcentral.co.uk (123-reg) at the site, then test everything on a phone
 
-Option agreed for later: a soft launch taking quote requests only, before full booking and payments.
+Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
 - 17 Nov 2026: 1-minute intro video for customers (female voiceover, captions) in video/. It plays once, muted with
