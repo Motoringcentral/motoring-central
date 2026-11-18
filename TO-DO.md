@@ -27,6 +27,25 @@ This belongs in the real site rebuild (branch `nextjs-rebuild`).
 - The front page is very long on a phone. Some "why choose us" sections repeat and could be merged.
 - Show the customer's progress through booking (choose job, see prices, choose partner, pay) as numbered steps.
 
+### 3. Go-live checklist (for later, when the site is ready)
+Owner (business and legal):
+- Register The Motoring Central Ltd at Companies House (until then, do not say "Ltd" on the site)
+- Pay the ICO data protection fee
+- RAC conflict of interest form approved in writing, and an agreement with the RAC before selling their breakdown cover
+- Sign up 3 to 5 real local partners for launch day
+- Business email; business bank account and Stripe (needs the company); solicitor to check terms and privacy; business insurance
+
+Building:
+- Remove all sample partners, ratings, reviews, cars and demo logins, and the "Preview" banner (invented reviews must not be shown to real customers)
+- Shared database and real, secure logins (the demo and admin logins are currently inside the page code)
+- Secure upload and storage for partners' insurance and ID documents
+- Real emails and texts for bookings, quotes and reminders
+- Real card payments and paying partners (Stripe)
+- Privacy notice and company details; let search engines index the live site
+- Point motoringcentral.co.uk (123-reg) at the site, then test everything on a phone
+
+Option agreed for later: a soft launch taking quote requests only, before full booking and payments.
+
 ## Done
 - 17 Nov 2026: 1-minute intro video for customers (female voiceover, captions) in video/. It plays once, muted with
   captions, for new visitors on the front page ("Tap for sound"), and any time from "Watch how it works (1 min)".
