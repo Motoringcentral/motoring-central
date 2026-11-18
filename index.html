@@ -1125,15 +1125,15 @@ function gate(o){var err=o.err,priv=o.role==='private',reg=String(o.reg||'').toU
   if(r&&r.need==='payment'){if(priv&&o.paid&&!payment)return go('demo');
    say(r.why==='trial'?'History checks are not included in your free months. Each check is £3.50 + VAT.':'You have used the history checks in your plan this month. Extra checks are £3.50 + VAT.');
    return new Promise(function(res){if(!window.GGpay){res(null);return}window.GGpay({vat:1,amount:EXTRA,desc:'Vehicle history check: '+reg,sub:'Finance, insurance write-off and stolen check for this listing.',onPaid:function(){res(go('demo'))}})})}
-  if(!r||!r.ok||!r.check){say((r&&ERR[r.error])||'The history check did not work, so the advert was not created. Please try again.'+(priv?' You will not be charged twice.':''));return null}
+  if(!r||!r.ok||!r.check){G.last='error';say((r&&ERR[r.error])||'The history check did not work, so the advert was not created. Please try again.'+(priv?' You will not be charged twice.':''));return null}
   var c=r.check,s=c.summary||{};
-  if(s.stolen&&s.stolen.found){say('We cannot list this vehicle: our history check shows it has been reported stolen. If you think this is wrong, contact us.'+refund);return null}
-  if(s.scrapped){say('We cannot list this vehicle: it is recorded as scrapped. If you think this is wrong, contact us.'+refund);return null}
-  if(s.writeoff&&s.writeoff.found&&/^(A|B)$/.test(s.writeoff.cat)){say('We cannot list this vehicle: it is recorded as a Category '+s.writeoff.cat+' write-off, which must not go back on the road.'+refund);return null}
-  if(priv&&s.finance&&s.finance.found){say('We cannot list this vehicle yet: our history check shows outstanding finance on it, and it belongs to the finance company until that is paid off. Once it is settled, contact us with the settlement letter and we will publish your advert or refund you.');return null}
-  say('');return c})}
- return go(o.paid?'demo':undefined)}
-window.MChist={woField:woField,woErr:woErr,isWO:isWO,pill:pill,box:function(c){return box(c,'hc')},woBox:woBox,gate:gate,EXTRA:EXTRA};
+  if(s.stolen&&s.stolen.found){G.last='blocked';say('We cannot list this vehicle: our history check shows it has been reported stolen. If you think this is wrong, contact us.'+refund);return null}
+  if(s.scrapped){G.last='blocked';say('We cannot list this vehicle: it is recorded as scrapped. If you think this is wrong, contact us.'+refund);return null}
+  if(s.writeoff&&s.writeoff.found&&/^(A|B)$/.test(s.writeoff.cat)){G.last='blocked';say('We cannot list this vehicle: it is recorded as a Category '+s.writeoff.cat+' write-off, which must not go back on the road.'+refund);return null}
+  if(priv&&s.finance&&s.finance.found){G.last='blocked';say('We cannot list this vehicle yet: our history check shows outstanding finance on it, and it belongs to the finance company until that is paid off. Once it is settled, contact us with the settlement letter and we will publish your advert or refund you.');return null}
+  G.last='ok';say('');return c})}
+ G.last='';return go(o.paid?'demo':undefined)}
+var G=window.MChist={woField:woField,woErr:woErr,isWO:isWO,pill:pill,box:function(c){return box(c,'hc')},woBox:woBox,gate:gate,EXTRA:EXTRA};
 function fill(){['cd','vd'].forEach(function(p){var b=document.getElementById(p+'-wobox');if(b&&!b.innerHTML)b.innerHTML=woField(p)})}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill);else fill();
 })();
@@ -6106,6 +6106,8 @@ window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(funct
 </script>
 <style>
 .badge.pv,.mcnight .badge.pv{background:#FFD43B!important;color:#0B1C35!important;font-weight:800;border:0}
+#ps-sum small{display:block}
+.ps-steps{display:flex;gap:4px;list-style:none;padding:0;margin:0 0 12px;counter-reset:st}.ps-steps li{flex:1;font-size:.75rem;text-align:center;padding:6px 2px;border-radius:8px;background:var(--soft);color:var(--muted);counter-increment:st}.ps-steps li::before{content:counter(st) ". "}.ps-steps li.on{background:#FFD43B;color:#0B1C35;font-weight:800}.ps-steps li.done{background:#1F7A4D;color:#fff}.pv-paid{background:var(--soft);border-radius:10px;padding:8px 10px;margin:0 0 8px;font-size:.9rem}
 .dg-open{margin-top:6px}.dg{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px}.dg-f{border:0;padding:0;margin:10px 0 0}.dg-f legend{font-weight:700;font-size:.9rem;margin-bottom:6px}.dg-chips{display:flex;flex-wrap:wrap;gap:6px}.linkbtn{background:none;border:0;padding:0;color:inherit;text-decoration:underline;font:inherit;cursor:pointer}
 .regfind{display:flex;gap:8px;align-items:stretch}.regfind input{flex:1;min-width:0}.regfind .btn{flex:none;min-width:74px}
 .badge.wo,.mcnight .badge.wo{background:#C62828!important;color:#fff!important;font-weight:800;border:0}.badge.hc,.mcnight .badge.hc{background:#1F7A4D!important;color:#fff!important;border:0}.badge.fn,.mcnight .badge.fn{background:#B26A00!important;color:#fff!important;border:0}
@@ -6150,11 +6152,30 @@ function m2(n){return '£'+n.toFixed(2)}
 function notice(w,biz){w=w||'car';if(biz)return ('<div class="pv-note"><b>Sold by a business that is not a motor dealer</b><p>This car is being sold by a business that owns it, not by one of our checked dealers. VAT at 20% is added on top of the price shown. Because the seller is a business, consumer law gives you more protection than a sale by a private person, but there is no dealer warranty unless the seller offers one.</p><p><b>Before you pay:</b> see the car in person, check the V5C log book is in the business’s name, ask for a VAT invoice, check the MOT history free on GOV.UK, and consider a vehicle history check and <button type="button" class="pv-link" data-pvinsp="1">a mechanic’s inspection</button>. Never send money before you have seen the car.</p></div>').replace(/\bcar\b/g,w);return ('<div class="pv-note"><b>This is a private sale</b><p>You are buying from a private person, not a dealer, so your rights are different. The car must be as described and the seller must have the right to sell it, but there is no dealer warranty and you cannot return it just because a fault appears later.</p><p><b>Before you pay:</b> see the car in person, check the V5C log book matches the seller and the address, check the MOT history free on GOV.UK, and consider a vehicle history check and <button type="button" class="pv-link" data-pvinsp="1">a mechanic’s inspection</button>. Never send money before you have seen the car.</p></div>').replace(/\bcar\b/g,w).replace('The '+w+' must','The '+w+' must')}
 /* ---------- the form ---------- */
 var card=$('ps-card');
+/* Paid first: 1 choose the advert and see the price, 2 pay, 3 enter the registration (look-up and history check),
+   4 details, description and photos, then publish. Nothing that costs money runs before payment. */
+var CKEY='mc-ps-credit';
+function credits(){try{return JSON.parse(localStorage.getItem(CKEY)||'{}')||{}}catch(e){return{}}}
+function getC(){var u=window.GGuser;if(!u)return null;var c=credits()[String(u.email||'').toLowerCase()];if(!c||Date.now()-c.t>6*DAY)return null;return c}
+function setC(c){var u=window.GGuser;if(!u)return;var a=credits();var k=String(u.email||'').toLowerCase();if(c)a[k]=c;else delete a[k];try{localStorage.setItem(CKEY,JSON.stringify(a))}catch(e){}}
 function build(){if(!card||card.firstChild)return;
- card.innerHTML='<h2 style="margin-top:0">Sell your car or van</h2><p class="note" style="margin:0 0 10px"><b>'+m2(FEE)+'</b> for a '+DAYS+'-day advert, including VAT. No commission when it sells. Your advert is marked <span class="badge pv" style="position:static">Private sale</span>.</p>'+
+ card.innerHTML='<h2 style="margin-top:0">Sell your car or van</h2>'+
+ '<ol class="ps-steps" aria-label="Steps"><li data-st="A">Choose</li><li data-st="P">Pay</li><li data-st="B">Your vehicle</li><li data-st="C">Details</li></ol>'+
  '<form id="ps-form" novalidate>'+
+ '<div id="ps-A">'+
+ '<p class="note" style="margin:0 0 10px"><b>'+m2(FEE)+'</b> for a '+DAYS+'-day advert, including VAT. No commission when it sells. Your advert is marked <span class="badge pv" style="position:static">Private sale</span>. Every advert includes a vehicle history check (finance, write-off and stolen) and a free description writer.</p>'+
  '<fieldset style="border:0;padding:0;margin:0 0 6px"><legend class="f" style="padding:0">What are you selling?</legend><div class="pv-seg"><label><input type="radio" name="ps-type" value="cars" checked> A car</label><label><input type="radio" name="ps-type" value="vans"> A van or pickup</label></div></fieldset>'+
+ '<div class="tc pv-up"><input type="checkbox" id="ps-prem"><label for="ps-prem"><b>Make it a premium advert: + '+m2(PREM)+'</b><br>Shown on the front-page banner and marked Featured for 2 weeks, or until sold.</label></div>'+
+ '<div class="tc"><input type="checkbox" id="ps-ok"><label for="ps-ok">This vehicle is mine, or I have the owner’s permission to sell it. I am not a motor trader. My description will be honest. <a href="#terms" data-tsec="tc-private">Read the private seller terms</a></label></div>'+
+ '<table class="ft" id="ps-sum"></table>'+
+ '<p class="err" id="ps-errA" role="alert"></p><button class="btn block" type="button" id="ps-pay"></button><button type="button" class="pv-cancel" data-pscancel="1">Cancel</button></div>'+
+ '<div id="ps-B" hidden>'+
+ '<p class="pv-paid" id="ps-paidnote"></p>'+
  '<label class="f" for="ps-reg">Registration</label><input type="text" id="ps-reg" maxlength="8" autocomplete="off" style="text-transform:uppercase" placeholder="AB12 CDE">'+
+ '<p class="note" style="margin:4px 0 0">Tap Find to fill in your vehicle’s details. Then check it is the right vehicle and continue: we run the history check on that registration, and it cannot be changed afterwards.</p>'+
+ '<p class="err" id="ps-errB" role="alert"></p><button class="btn block" type="button" id="ps-chk">This is my vehicle: continue</button><button type="button" class="pv-cancel" data-pscancel="1">Finish later</button></div>'+
+ '<div id="ps-C" hidden>'+
+ '<p class="pv-paid" id="ps-regnoteC"></p>'+
  '<div class="two"><div><label class="f" for="ps-make">Make</label><input type="text" id="ps-make" placeholder="Ford"></div><div><label class="f" for="ps-model">Model</label><input type="text" id="ps-model" placeholder="Fiesta"></div></div>'+
  '<label class="f" for="ps-variant">Version (optional)</label><input type="text" id="ps-variant" placeholder="For example 1.0 EcoBoost Zetec. It is on your V5C log book">'+
  '<div class="two"><div><label class="f" for="ps-year">Year</label><input type="number" id="ps-year" inputmode="numeric" placeholder="2019"></div><div><label class="f" for="ps-miles">Mileage</label><input type="number" id="ps-miles" inputmode="numeric"></div></div>'+
@@ -6162,59 +6183,80 @@ function build(){if(!card||card.firstChild)return;
  (window.MChist?window.MChist.woField('ps'):'')+'<label class="f" for="ps-vat">Is VAT added to this price?</label><select id="ps-vat"><option value="0">No. This is the full price to pay (most sellers)</option><option value="1">Yes, + VAT. I am a VAT-registered business selling my own vehicle</option></select><p class="note" id="ps-vatn" style="margin:4px 0 0" hidden>Your advert will show the price + VAT with the price including VAT underneath, and will be marked as a business sale, not a private sale.</p>'+
  '<div class="two"><div><label class="f" for="ps-fuel">Fuel</label><select id="ps-fuel"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div><div><label class="f" for="ps-gear">Gearbox</label><select id="ps-gear"><option>Manual</option><option>Automatic</option></select></div></div>'+
  '<label class="f" for="ps-body" id="ps-bodyl">Body type</label><select id="ps-body"></select>'+
- '<div id="ps-payw" hidden><label class="f" for="ps-pay">Payload in kg (optional)</label><input type="number" id="ps-pay" inputmode="numeric" placeholder="The weight it can carry. It is in the handbook"></div>'+
+ '<div id="ps-payw" hidden><label class="f" for="ps-pay2">Payload in kg (optional)</label><input type="number" id="ps-pay2" inputmode="numeric" placeholder="The weight it can carry. It is in the handbook"></div>'+
  '<div class="two"><div><label class="f" for="ps-town">Town or city</label><input type="text" id="ps-town"></div><div><label class="f" for="ps-pc">Postcode (optional)</label><input type="text" id="ps-pc" maxlength="8" autocomplete="postal-code" style="text-transform:uppercase"></div></div><p class="note" style="margin:4px 0 0">Buyers see the town and how far away the car is. Your postcode and address are never shown.</p>'+
  '<label class="f" for="ps-desc" id="ps-descl">Describe your car</label><textarea id="ps-desc" rows="4" placeholder="Service history, number of owners, MOT until, anything a buyer should know. Be honest about any faults."></textarea>'+
  '<label class="f" for="ps-photos">Photos (up to 20)</label><input type="file" id="ps-photos" accept="image/*" multiple><p class="note" id="ps-phnote" style="margin:4px 0 0">Adverts with photos get far more replies. The first photo is the main one.</p><div class="prev" id="ps-prev"></div>'+
  '<div class="tc"><input type="checkbox" id="ps-showtel"><label for="ps-showtel">Show my phone number on the advert. If you leave this off, buyers message you through the site.</label></div>'+
- '<div class="tc pv-up"><input type="checkbox" id="ps-prem"><label for="ps-prem"><b>Make it a premium advert: + '+m2(PREM)+'</b><br>Shown on the front-page banner and marked Featured for 2 weeks, or until sold.</label></div>'+
- '<div class="tc"><input type="checkbox" id="ps-ok"><label for="ps-ok">This vehicle is mine, or I have the owner’s permission to sell it. I am not a motor trader. My description is honest. <a href="#terms" data-tsec="tc-private">Read the private seller terms</a></label></div>'+
- '<p class="pv-total">Total to pay: <b id="ps-total"></b> <small>including VAT</small></p>'+
- '<p class="err" id="ps-err" role="alert"></p><button class="btn block" type="submit" id="ps-go"></button><button type="button" class="pv-cancel" id="ps-cancel">Cancel</button></form>'+
- '<p class="sample" style="margin-top:10px">Preview only. No real payment is taken and adverts last until you close this page.</p>';
+ '<p class="err" id="ps-err" role="alert"></p><button class="btn block" type="submit" id="ps-go">Publish my advert</button><button type="button" class="pv-cancel" data-pscancel="1">Finish later</button></div>'+
+ '</form>'+
+ '<p class="sample" style="margin-top:10px">Preview only. No real payment is taken.</p>';
  var F=$('ps-form');
- function total(){var t=FEE+($('ps-prem').checked?PREM:0);$('ps-total').textContent=m2(t);$('ps-go').textContent='Pay '+m2(t)+' and publish';return t}
+ function total(){var t=FEE+($('ps-prem').checked?PREM:0),pr=$('ps-prem').checked;
+  $('ps-sum').innerHTML='<tr><td>'+DAYS+'-day advert<small>Includes a vehicle history check</small></td><td>'+m2(FEE)+'</td></tr>'+(pr?'<tr><td>Premium advert<small>Front-page banner and Featured for 2 weeks, or until sold</small></td><td>'+m2(PREM)+'</td></tr>':'')+'<tr class="k"><td>Total to pay, including VAT</td><td>'+m2(t)+'</td></tr>';
+  $('ps-pay').textContent='Pay '+m2(t)+' and start my advert';return t}
  function kind(){return (F.querySelector('[name="ps-type"]:checked')||{}).value==='vans'?'vans':'cars'}
- function typed(){var van=kind()==='vans';$('ps-body').innerHTML=(van?['Small van','Medium van','Large van','Crew van','Pickup']:['Hatchback','Saloon','Estate','SUV','MPV','Coupe','Convertible']).map(function(x){return '<option>'+x+'</option>'}).join('');$('ps-bodyl').textContent=van?'Type of van':'Body type';$('ps-payw').hidden=!van;$('ps-descl').textContent=van?'Describe your van':'Describe your car';$('ps-make').placeholder=van?'Ford':'Ford';$('ps-model').placeholder=van?'Transit Custom':'Fiesta'}
+ function typed(){var van=kind()==='vans';$('ps-body').innerHTML=(van?['Small van','Medium van','Large van','Crew van','Pickup']:['Hatchback','Saloon','Estate','SUV','MPV','Coupe','Convertible']).map(function(x){return '<option>'+x+'</option>'}).join('');$('ps-bodyl').textContent=van?'Type of van':'Body type';$('ps-payw').hidden=!van;$('ps-descl').textContent=van?'Describe your van':'Describe your car';$('ps-model').placeholder=van?'Transit Custom':'Fiesta'}
+ function stage(s){var c=getC();['A','B','C'].forEach(function(x){$('ps-'+x).hidden=x!==s});
+  [].forEach.call(card.querySelectorAll('.ps-steps li'),function(li){var o='APBC'.indexOf(li.getAttribute('data-st')),n='APBC'.indexOf(s==='A'?'A':s);li.className=o<n?'done':o===n?'on':''});
+  [].forEach.call(F.querySelectorAll('[name="ps-type"]'),function(r){r.disabled=s!=='A'&&!!(c&&c.chk)});
+  if(c){$('ps-paidnote').innerHTML='&#10003; Paid '+m2(c.amt)+(c.prem?' (premium advert)':'')+'. Now tell us which '+(kind()==='vans'?'van':'car')+' you are selling.';
+   if(c.chk){$('ps-regnoteC').innerHTML='&#10003; Paid. Vehicle history checked for <b>'+c.reg+'</b>. Now add the details and photos.';$('ps-reg').value=c.reg}}
+  card._cur=s}
+ card._stage=stage;
  F.addEventListener('change',function(e){if(e.target.name==='ps-type')typed()});typed();card._typed=typed;
  $('ps-vat').addEventListener('change',function(){$('ps-vatn').hidden=this.value!=='1'});
  $('ps-prem').addEventListener('change',total);total();
- $('ps-cancel').addEventListener('click',function(){card.hidden=true});
+ card.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-pscancel]'))card.hidden=true});
  $('ps-photos').addEventListener('change',function(){var n=this.files.length;window.MCphotos.read(this.files,20).then(function(a){$('ps-prev').innerHTML=a.map(function(s){return '<img src="'+s+'" alt="">'}).join('');$('ps-phnote').textContent=a.length+' of 20 photos added.'+(n>a.length?' '+(n-a.length)+' left out: over the limit, or not an image.':'')+' The first photo is the main one.'})});
- F.addEventListener('submit',function(e){e.preventDefault();var u=user();if(!u)return;
+ /* step 1 and 2: choose, see the price, pay */
+ $('ps-pay').addEventListener('click',function(){var u=user();if(!u)return;var er=$('ps-errA');
+  if(mine().filter(function(x){return live(x.c)}).length>=MAXLIVE){er.textContent='You already have '+MAXLIVE+' private adverts running. Dealers and traders need a dealer account.';return}
+  if(!$('ps-ok').checked){er.textContent='Tick the box to confirm this is a private sale of your own vehicle.';$('ps-ok').focus();return}
+  er.textContent='';var prem=$('ps-prem').checked,amt=total(),K=kind();
+  function paid(){setC({kind:K,prem:prem,amt:amt,t:Date.now()});stage('B');var r=$('ps-reg');if(r)r.focus()}
+  if(window.GGpay)window.GGpay({amount:amt,desc:'Private '+(K==='vans'?'van':'car')+' advert'+(prem?' + premium advert':''),sub:DAYS+'-day advert with a vehicle history check'+(prem?', premium for 2 weeks or until sold':'')+'. Paid to The Motoring Central Ltd. Price includes VAT.',onPaid:paid});else paid()});
+ /* step 3: the registration. The look-up and the history check only run after payment. */
+ $('ps-chk').addEventListener('click',function(){var c=getC(),er=$('ps-errB'),b=this;if(!c){stage('A');return}
+  var reg=$('ps-reg').value.toUpperCase().replace(/[^A-Z0-9]/g,'');if(reg.length<2||reg.length>7){er.textContent='Enter the registration, for example AB12 CDE.';$('ps-reg').focus();return}
+  if(c.used&&c.used!==reg){er.textContent='The history check for this advert has already been used on '+c.used+'. Contact us and we will sort it out.';return}
+  if(!window.MChist){c.reg=reg;c.chk={};setC(c);stage('C');return}
+  b.disabled=true;window.MChist.gate({kind:kind(),reg:reg,role:'private',paid:true,err:er}).then(function(k){b.disabled=false;var c2=getC()||c;
+   if(!k){if(window.MChist.last==='blocked'){c2.used=reg;setC(c2)}return}
+   c2.reg=reg;c2.kind=kind();c2.chk=k;c2.used=reg;setC(c2);$('ps-reg').readOnly=true;stage('C');
+   var t=$('ps-town'),u=window.GGuser;if(t&&!t.value&&u&&u.town)t.value=u.town;$('ps-C').scrollIntoView({behavior:'smooth',block:'start'})})});
+ /* step 4: details, description and photos, then publish. Already paid, so no payment here. */
+ F.addEventListener('submit',function(e){e.preventDefault();var u=user();if(!u)return;var c=getC();if(!c||!c.chk){stage(c?'B':'A');return}
   function v(i){return $(i).value.trim()}
-  function bad(id,msg){$('ps-err').textContent=msg;var c=$(id);if(c){c.scrollIntoView({behavior:'smooth',block:'center'});try{c.focus({preventScroll:true})}catch(x){}}}
-  var yr=+v('ps-year'),pr=+v('ps-price'),mi=+v('ps-miles'),now=new Date().getFullYear(),reg=v('ps-reg').toUpperCase().replace(/[^A-Z0-9]/g,'');
-  var K=kind(),W=K==='vans'?'van':'car';
-  if(reg.length<2||reg.length>7)return bad('ps-reg','Enter the registration.');
+  function bad(id,msg){$('ps-err').textContent=msg;var x=$(id);if(x){x.scrollIntoView({behavior:'smooth',block:'center'});try{x.focus({preventScroll:true})}catch(z){}}}
+  var yr=+v('ps-year'),pr=+v('ps-price'),mi=+v('ps-miles'),now=new Date().getFullYear(),reg=c.reg;
+  var K=c.kind||kind(),W=K==='vans'?'van':'car';
   if(!v('ps-make'))return bad('ps-make','Enter the make, for example Ford.');
   if(!v('ps-model'))return bad('ps-model','Enter the model, for example Fiesta.');
   if(!(yr>=1960&&yr<=now+1))return bad('ps-year','Enter the year it was first registered.');
   if(v('ps-miles')===''||!(mi>=0))return bad('ps-miles','Enter the mileage.');
   if(!(pr>=100))return bad('ps-price','Enter the price you are asking.');
   if(!v('ps-col'))return bad('ps-col','Enter the colour.');
-  if(!v('ps-town'))return bad('ps-town','Enter your town or city.');
-  if(v('ps-desc').length<20)return bad('ps-desc','Describe your '+W+' in a sentence or two.');
-  if(!$('ps-ok').checked)return bad('ps-ok','Tick the box to confirm this is a private sale of your own vehicle.');
-  if(mine().filter(function(x){return live(x.c)}).length>=MAXLIVE)return bad('ps-go','You already have '+MAXLIVE+' private adverts running. Dealers and traders need a dealer account.');
   if(window.MChist){var we=window.MChist.woErr($('ps-wo').value);if(we)return bad('ps-wo',we)}
-   $('ps-err').textContent='';var prem=$('ps-prem').checked,amt=total(),name=v('ps-make')+' '+v('ps-model');
-  window.MCphotos.read($('ps-photos').files,20).then(function(photos){
-   function checked(){if(!window.MChist){publish();return}window.MChist.gate({kind:K,reg:reg,role:'private',paid:true,err:$('ps-err')}).then(function(c){if(c)publish(c)})}
-    function publish(chk){var t=Date.now(),A=api(K),ids=A.list().map(function(c){return c.id}),id=Math.max.apply(null,ids.concat([1000]))+1;
-    var biz=$('ps-vat').value==='1';
-    A.add({id:id,chk:chk||undefined,wo:$('ps-wo')?$('ps-wo').value:undefined,private:true,business:biz,vat:biz,van:K==='vans'||undefined,pay:K==='vans'?(+v('ps-pay')||0):undefined,owner:u.email,reg:reg,make:v('ps-make'),model:v('ps-model'),variant:v('ps-variant'),year:yr,price:pr,miles:mi,fuel:$('ps-fuel').value,gear:$('ps-gear').value,body:$('ps-body').value,col:v('ps-col'),town:v('ps-town'),pc:v('ps-pc').toUpperCase(),dealer:biz?'Business seller (not a dealer)':'Private seller',phone:$('ps-showtel').checked?(u.phone||u.tel||''):'',desc:v('ps-desc'),photos:photos,badge:'New',listed:t,exp:t+DAYS*DAY,featured:prem,fexp:prem?t+PDAYS*DAY:0,paid:amt});
-    F.reset();$('ps-prev').innerHTML='';$('ps-vatn').hidden=true;typed();total();card.hidden=true;if(window.MCflt)window.MCflt.clear(K);if(window.GGbanner)window.GGbanner();
-    if((location.hash||'')!=='#'+K)location.hash=K;
-    var ok=$(K+'-ok');if(ok){ok.innerHTML='<b>Your advert is live.</b> It runs for '+DAYS+' days, until '+day(t+DAYS*DAY)+(prem?', and is a premium advert on the front-page banner for 2 weeks':'')+'. Manage it under My account.';ok.hidden=false;ok.scrollIntoView({behavior:'smooth',block:'center'})}
-    account()}
-   if(window.GGpay)window.GGpay({amount:amt,desc:'Private advert: '+yr+' '+name+(prem?' + premium advert':''),sub:DAYS+'-day advert'+(prem?', premium for 2 weeks or until sold':'')+'. Paid to The Motoring Central Ltd. Price includes VAT.',onPaid:checked});else checked()})})}
+  if(!v('ps-town'))return bad('ps-town','Enter your town or city.');
+  if(v('ps-desc').length<20)return bad('ps-desc','Describe your '+W+' in a sentence or two. Tap “Write it for me” if you would like help.');
+  $('ps-err').textContent='';var prem=c.prem,amt=c.amt,chk=c.chk&&c.chk.status?c.chk:undefined;
+  window.MCphotos.read($('ps-photos').files,20).then(function(photos){var t=Date.now(),A=api(K),ids=A.list().map(function(x){return x.id}),id=Math.max.apply(null,ids.concat([1000]))+1;
+   var biz=$('ps-vat').value==='1';
+   A.add({id:id,chk:chk,wo:$('ps-wo')?$('ps-wo').value:undefined,private:true,business:biz,vat:biz,van:K==='vans'||undefined,pay:K==='vans'?(+v('ps-pay2')||0):undefined,owner:u.email,reg:reg,make:v('ps-make'),model:v('ps-model'),variant:v('ps-variant'),year:yr,price:pr,miles:mi,fuel:$('ps-fuel').value,gear:$('ps-gear').value,body:$('ps-body').value,col:v('ps-col'),town:v('ps-town'),pc:v('ps-pc').toUpperCase(),dealer:biz?'Business seller (not a dealer)':'Private seller',phone:$('ps-showtel').checked?(u.phone||u.tel||''):'',desc:v('ps-desc'),photos:photos,badge:'New',listed:t,exp:t+DAYS*DAY,featured:prem,fexp:prem?t+PDAYS*DAY:0,paid:amt});
+   setC(null);F.reset();$('ps-reg').readOnly=false;$('ps-prev').innerHTML='';$('ps-vatn').hidden=true;typed();total();stage('A');card.hidden=true;if(window.MCflt)window.MCflt.clear(K);if(window.GGbanner)window.GGbanner();
+   if((location.hash||'')!=='#'+K)location.hash=K;
+   var ok=$(K+'-ok');if(ok){ok.innerHTML='<b>Your advert is live.</b> It runs for '+DAYS+' days, until '+day(t+DAYS*DAY)+(prem?', and is a premium advert on the front-page banner for 2 weeks':'')+'. Manage it under My account.';ok.hidden=false;ok.scrollIntoView({behavior:'smooth',block:'center'})}
+   account()})});
+ stage('A')}
+
 var want='cars';
 function place(k){var ok=$(k+'-ok');if(ok&&card.previousElementSibling!==ok)ok.parentNode.insertBefore(card,ok.nextSibling)}
 function open(){var u=window.GGuser,k=want;build();
  if(u&&u.role!=='customer'){var ok=$(k+'-ok');if(ok){ok.textContent=u.role==='dealer'?'You are logged in as a dealer. Use the List button to add your stock.':'Private adverts are for private sellers. Log out of your partner account and use a customer account to sell your own vehicle.';ok.hidden=false}return}
  if(!u){pend=true;if(window.GGcustOpen)window.GGcustOpen('Create a free account to sell your car or van. It takes a minute.','new');return}
  place(k);var r=card.querySelector('[name="ps-type"][value="'+k+'"]');if(r&&!r.checked){r.checked=true;card._typed()}
+ var cr=getC();if(cr){var rr=card.querySelector('[name="ps-type"][value="'+cr.kind+'"]');if(rr&&!rr.checked){rr.checked=true;card._typed()}card._stage(cr.chk?'C':'B');if(cr.chk&&$('ps-make')&&!$('ps-make').value){var fb=$('ps-regfind');if(fb)setTimeout(function(){fb.click()},50)}}else card._stage('A');
  card.hidden=false;var t=$('ps-town');if(t&&!t.value&&u.town)t.value=u.town;card.scrollIntoView({behavior:'smooth',block:'start'})}
 function start(k){want=k==='van'||k==='vans'?'vans':'cars';if((location.hash||'')!=='#'+want){location.hash=want;setTimeout(open,200)}else open()}
 document.addEventListener('click',function(e){if(!e.target.closest)return;
@@ -7492,7 +7534,7 @@ function find(p){var inp=$(p+'-reg'),M=window.MCvrm,n=note(p),b=$(p+'-regfind');
   if(p==='ps'&&d.kind){var want=d.kind==='Van'?'vans':'cars',rad=document.querySelector('[name=ps-type][value="'+want+'"]');if(rad&&!rad.checked){rad.checked=true;rad.dispatchEvent(new Event('change',{bubbles:true}))}}
   var f=F[p];['make','model','variant','year','fuel','gear','body','col'].forEach(function(k){put(f[k],d[k])});
   var live=M.isLive&&M.isLive();
-  n.textContent=(live?'Found: ':'Sample details for the preview: ')+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+'. Check everything below and add the mileage and price.'},
+  n.textContent=(live?'Found: ':'Sample details for the preview: ')+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+(p==='ps'?'. If this is your vehicle, tap Continue.':'. Check everything below and add the mileage and price.')},
  function(){b.disabled=false;n.textContent='Our registration look-up is not working right now. Please fill in the details yourself.'})}
 function add(){['ps','cd','vd'].forEach(function(p){var inp=$(p+'-reg');if(!inp||$(p+'-regfind'))return;
  var w=document.createElement('div');w.className='regfind';inp.parentNode.insertBefore(w,inp);w.appendChild(inp);
