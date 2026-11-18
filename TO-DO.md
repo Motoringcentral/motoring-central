@@ -65,13 +65,17 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: the first menu item is now "Home" (was "Book a service"). The home page has a yellow "Sell a car or van"
+  button under the search. Private selling now covers vans and pickups as well as cars: the form asks which, vans get their
+  own types and an optional payload, private vans show no VAT, and the vans page has its own "Sell your van" button, Private
+  sale label, buyer notice and Seller filter. "My adverts" in the account lists both.
 - 18 Nov 2026: private sellers can advertise their own car. £29.99 including VAT for a 30-day advert, no commission; £14.99 more
   makes it a premium advert (front-page banner and Featured label for 2 weeks or until sold). Needs a free customer account.
   Every private advert carries a yellow "Private sale" label, shows "Private seller" and the town only, and has a notice for
   buyers explaining their rights and what to check. Buyers message through the site unless the seller chooses to show a phone
   number. No finance examples on private adverts. Sellers manage adverts under My account (messages from buyers, make premium,
   add 30 days, mark as sold, remove). Prices are set on one line: FEE and PREM in the script that starts "Private sellers". There is a "Seller" filter (dealers or private), a "Report this advert" link, a limit of
-  3 live private adverts per account, FAQs, and draft private-seller terms. Cars only for now, not vans.
+  3 live private adverts per account, FAQs, and draft private-seller terms.
 - 18 Nov 2026: saved searches for cars and vans. "Save this search" appears once a filter is set; saved searches are listed
   under the filters with how many match now and a "new" badge when more have been listed since. Kept on the visitor's own
   device for now.
