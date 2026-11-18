@@ -1944,7 +1944,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="card" id="cars-form-card" hidden>
 <h2 style="margin:0 0 4px">List a car for sale</h2>
 <p class="note" id="cd-mem" style="margin:0 0 6px"></p>
-<p class="note" style="margin:0 0 6px">For dealers. Every listing gets a vehicle history check (finance, insurance write-off and stolen) when you publish it, taken from your monthly allowance. Any write-off is shown clearly on the advert.</p>
+<p class="note" style="margin:0 0 6px">For dealers. Type the registration and tap Find to fill in the details. Every listing gets a vehicle history check (finance, insurance write-off and stolen) when you publish it, taken from your monthly allowance. Any write-off is shown clearly on the advert.</p>
 <form id="cars-form" novalidate>
 <div class="two"><div><label class="f" for="cd-dealer">Dealer name</label><input type="text" id="cd-dealer"></div><div><label class="f" for="cd-phone">Phone</label><input type="tel" id="cd-phone"></div></div>
 <div class="two"><div><label class="f" for="cd-reg">Registration</label><input type="text" id="cd-reg" maxlength="8" style="text-transform:uppercase"></div><div><label class="f" for="cd-town">Town or city</label><input type="text" id="cd-town"></div></div>
@@ -6106,6 +6106,7 @@ window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(funct
 </script>
 <style>
 .badge.pv,.mcnight .badge.pv{background:#FFD43B!important;color:#0B1C35!important;font-weight:800;border:0}
+.regfind{display:flex;gap:8px;align-items:stretch}.regfind input{flex:1;min-width:0}.regfind .btn{flex:none;min-width:74px}
 .badge.wo,.mcnight .badge.wo{background:#C62828!important;color:#fff!important;font-weight:800;border:0}.badge.hc,.mcnight .badge.hc{background:#1F7A4D!important;color:#fff!important;border:0}.badge.fn,.mcnight .badge.fn{background:#B26A00!important;color:#fff!important;border:0}
 .wo-box{border:2px solid #C62828;background:#FDECEA;color:#5F1212;border-radius:12px;padding:12px 14px;margin:0 0 12px}.wo-box b{font-size:1.05rem;color:#B71C1C}.wo-box p{margin:6px 0 0}.mcnight .wo-box{background:#3A1515;color:#FFDCDC}.mcnight .wo-box b{color:#FF8A80}
 .hc-box{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}.hc-box.ok{border-color:#1F7A4D}.hc-box ul{list-style:none;margin:8px 0;padding:0}.hc-box li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--line)}.hc-box li.ok b{color:#1F7A4D}.hc-box li.x b{color:#C62828}.hc-box li.u b{color:var(--muted)}.mcnight .hc-box li.ok b{color:#6FD39B}.mcnight .hc-box li.x b{color:#FF8A80}
@@ -7466,6 +7467,39 @@ function keep(type,d){var row,tb;
 var o=window.MCsave;window.MCsave=function(type,summary,data){var u=window.GGuser;
  if(sb&&u&&u.sbid&&data&&(type==='booking'||type==='enquiry')){try{keep(type,data)}catch(e){}}
  return o?o.apply(this,arguments):false};
+})();
+</script>
+<script>
+/* Selling a car or van: type the registration, tap Find, and the make, model, year, fuel, gearbox, body and colour
+   are filled in from the live registration look-up (the same free look-up used for repairs, not the paid history check). */
+(function(){
+function $(i){return document.getElementById(i)}
+var F={ps:{make:'ps-make',model:'ps-model',variant:'ps-variant',year:'ps-year',fuel:'ps-fuel',gear:'ps-gear',body:'ps-body',col:'ps-col'},
+ cd:{make:'cd-make',model:'cd-model',variant:'cd-variant',year:'cd-year',fuel:'cd-fuel',gear:'cd-gear',body:'cd-body',col:'cd-col'},
+ vd:{make:'vd-make',model:'vd-model',variant:'vd-variant',year:'vd-year',fuel:'vd-fuel',gear:'vd-gear',body:'vd-body',col:'vd-col'}};
+function put(id,v){var e=$(id);if(!e||v==null||v==='')return false;v=String(v);
+ if(e.tagName==='SELECT'){var o=[].filter.call(e.options,function(x){return x.value.toLowerCase()===v.toLowerCase()||x.textContent.trim().toLowerCase()===v.toLowerCase()})[0];if(!o)return false;e.value=o.value}else e.value=v;
+ e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));return true}
+function note(p){var n=$(p+'-regnote');if(!n){var b=$(p+'-regfind');if(!b)return null;n=document.createElement('p');n.id=p+'-regnote';n.className='note';n.setAttribute('role','status');n.style.margin='4px 0 0';b.parentNode.parentNode.insertBefore(n,b.parentNode.nextSibling)}return n}
+function find(p){var inp=$(p+'-reg'),M=window.MCvrm,n=note(p),b=$(p+'-regfind');if(!inp||!M)return;var r=inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+ if(r.length<2){n.textContent='Enter the registration first, for example AB12 CDE.';inp.focus();return}
+ n.textContent='Looking up '+r+'…';b.disabled=true;
+ (M.checkLive?M.checkLive():Promise.resolve(false)).then(function(){return M.ready?M.ready(r):'off'}).then(function(st){b.disabled=false;
+  if(st==='error'){n.textContent='Our registration look-up is not working right now. Please fill in the details yourself.';return}
+  if(st==='none'){n.textContent='We could not find that registration. Check it, or fill in the details yourself.';return}
+  var d=M.lookup(r);if(!d){n.textContent='We could not find that registration. Check it, or fill in the details yourself.';return}
+  if(p==='ps'&&d.kind){var want=d.kind==='Van'?'vans':'cars',rad=document.querySelector('[name=ps-type][value="'+want+'"]');if(rad&&!rad.checked){rad.checked=true;rad.dispatchEvent(new Event('change',{bubbles:true}))}}
+  var f=F[p];['make','model','variant','year','fuel','gear','body','col'].forEach(function(k){put(f[k],d[k])});
+  var live=M.isLive&&M.isLive();
+  n.textContent=(live?'Found: ':'Sample details for the preview: ')+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+'. Check everything below and add the mileage and price.'},
+ function(){b.disabled=false;n.textContent='Our registration look-up is not working right now. Please fill in the details yourself.'})}
+function add(){['ps','cd','vd'].forEach(function(p){var inp=$(p+'-reg');if(!inp||$(p+'-regfind'))return;
+ var w=document.createElement('div');w.className='regfind';inp.parentNode.insertBefore(w,inp);w.appendChild(inp);
+ var b=document.createElement('button');b.type='button';b.id=p+'-regfind';b.className='btn sm';b.textContent='Find';b.setAttribute('aria-label','Find my vehicle from the registration');w.appendChild(b);
+ b.addEventListener('click',function(){find(p)});
+ inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();find(p)}});
+ inp.addEventListener('change',function(){var mk=$(F[p].make);if(inp.value.replace(/\s/g,'').length>=5&&mk&&!mk.value)find(p)})})}
+setInterval(add,700);if(document.readyState!=='loading')add();else document.addEventListener('DOMContentLoaded',add);
 })();
 </script>
 </body>
