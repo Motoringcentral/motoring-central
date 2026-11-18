@@ -41,7 +41,7 @@ Owner (business and legal):
 - FCA: get full permission for credit broking BEFORE finance is shown on the live site. Until it is granted, finance must be
   switched off on the live site (in index.html, in the script that starts "Car finance", set on:false). Showing finance prices
   to the public without authorisation is against the law.
-- Private adverts: solicitor to check the draft private-seller terms and the buyer notice; decide the refund rule (the draft
+- Private adverts: solicitor to check the draft private-seller terms and both buyer notices (private sale and business sale); decide the refund rule (the draft
   says no refund if the car sells early); decide how reported adverts are handled and who checks them; consider checking the
   registration against DVLA records and limiting adverts per person, so traders cannot pose as private sellers.
 - Finance wording: replace the sample 11.9% APR with the real representative APR, fill in the FCA firm reference number and the
@@ -65,6 +65,11 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: every listing form now asks "Is VAT added to this price?" (dealer cars, dealer vans, and the private-seller
+  form). "+ VAT" adverts show the price + VAT with the price including VAT underneath, on cars as well as vans. On the private
+  form, "+ VAT" is for a VAT-registered business selling its own vehicle: that advert is marked "Business sale" (not "Private
+  sale"), shows "Business seller (not a dealer)" and has its own buyer notice. Car price filters and sorting use the price
+  including VAT; van filters stay before VAT. No finance examples on + VAT cars.
 - 18 Nov 2026: the first menu item is now "Home" (was "Book a service"). The home page has a yellow "Sell a car or van"
   button under the search. Private selling now covers vans and pickups as well as cars: the form asks which, vans get their
   own types and an optional payload, private vans show no VAT, and the vans page has its own "Sell your van" button, Private
