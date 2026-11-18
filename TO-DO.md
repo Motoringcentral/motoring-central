@@ -35,6 +35,8 @@ Done so far:
 
 Owner to do in the Supabase dashboard:
 - Authentication > URL Configuration: set "Site URL" to https://preview.motoringcentral.co.uk (the live address at launch).
+  NOT DONE YET (checked 18 Nov 2026): it is still the default, localhost:3000, so the "confirm your email" link creates
+  the account but then lands on a dead page. Owner chose to leave it while testing; it MUST be done before launch (see the go-live checklist).
 - Authentication > Sign In / Providers > Email: turn "Confirm email" OFF while testing (there is no email service yet).
   Turn it back ON before launch, once the email service is set up.
 
@@ -93,6 +95,9 @@ Building:
 - Real emails and texts for bookings, quotes and reminders
 - Real card payments and paying partners (Stripe)
 - Privacy notice and company details; let search engines index the live site
+- Supabase dashboard, Authentication > URL Configuration: set "Site URL" to the live address (https://motoringcentral.co.uk)
+  and add https://motoringcentral.co.uk/** under "Redirect URLs". Until this is done, every customer who taps the
+  "confirm your email" link is sent to localhost:3000 (a dead page). Then test a fresh sign-up from start to finish.
 - Point motoringcentral.co.uk (123-reg) at the site, then test everything on a phone
 
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
