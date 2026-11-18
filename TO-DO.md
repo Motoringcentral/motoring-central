@@ -25,8 +25,13 @@ This belongs in the real site rebuild (branch `nextjs-rebuild`).
 ### 2. Smaller ideas, not done yet
 - Postcode: the box at the top of the front page is hidden (the search comes first). Later it could show which partners cover an area.
 - Search, next steps: keep a list of searches that found nothing (needs the shared database) so new words can be added.
-- Cars and vans, later: save a search and get an email when a matching car is listed; monthly finance figures; insurance group;
-  ULEZ and tax band filters (these need extra vehicle data from the registration look-up).
+- Cars and vans, later: save a search and get an email when a matching car is listed; insurance group; ULEZ and tax band
+  filters (these need extra vehicle data from the registration look-up).
+- Car finance. Decided 18 Nov 2026: for launch, finance is left to the dealers. No monthly prices or finance quotes on adverts;
+  buyers ask the dealer. Later, once the business is running and making money, the plan is for The Motoring Central to get its own
+  FCA permission (or become an appointed representative of an authorised firm) so finance can be shown and commission earned.
+  Until then, do not add monthly prices, "finance available" claims or finance calculators to the site. To tidy: the forecourt
+  pictures at the top of the cars and vans pages have "Finance Available" written in the image.
 
 ### 3. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
