@@ -5874,6 +5874,13 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
 .qlinks{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:10px;font-size:.88rem}
 .qlinks a{color:#0B1C35;font-weight:700;border:1.5px solid #D6E2EE;border-radius:999px;padding:6px 12px;text-decoration:none;background:#fff}
 .qkwrap .qkgrid[hidden]{display:none!important}
+.qbox.hasmic input{padding-right:96px}.qbox.hasmic .qx{right:56px}
+.qbox .qmic{all:unset;box-sizing:border-box;cursor:pointer;position:absolute;right:9px;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;background:#0B1C35;display:flex;align-items:center;justify-content:center}
+.qbox .qmic svg{position:static;transform:none;width:21px;height:21px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round}
+.qbox .qmic:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
+.qbox .qmic.on{background:#D92D20;animation:qmic 1.2s ease-in-out infinite}
+@keyframes qmic{0%,100%{box-shadow:0 0 0 0 rgba(217,45,32,.45)}50%{box-shadow:0 0 0 9px rgba(217,45,32,0)}}
+@media (prefers-reduced-motion:reduce){.qbox .qmic.on{animation:none}}
 .qrow em.c{background:#C8F7D4}.qrow em.f{background:#fff}.qrow em.v{background:#E9D8FD}.qrow em.reg{background:#FFD43B}
 .qres .qtip,.qres .qnote{font-size:.84rem;color:#34506e;margin:4px 2px 0;line-height:1.4}
 .qres .qnote.plain{background:#EEF3F8;color:#34506e;font-weight:500}
@@ -6072,7 +6079,7 @@ function make(host,opts){
    if(me.note)h+='<p class="qnote">'+esc(me.note)+'</p>';
    h+='<p class="qh">Common problems</p>';[0,1,3,6,7,9].forEach(function(k){var x=P[k];h+=row(i++,x[0],x[1],'Problem','p',{t:'p',x:x})});
    h+=row(i++,'Not sure? Let a garage or mechanic decide','Describe it in your own words. They check your car and tell you what it needs and the price.','Ask','decide',{t:'d'});
-   h+='<p class="qtip">You can also type a car to buy (“Ford Fiesta”, “automatic under £10,000”), a question (“can I cancel?”) or “my booking”.</p>';
+   h+='<p class="qtip">You can also type or say a car to buy (“Ford Fiesta”, “automatic under £10,000”), a question (“can I cancel?”) or “my booking”.</p>';
    R.innerHTML=h;return}
   if(reg){h+=row(i++,'Is '+reg+' your registration?','Tap here, then tell us what the car needs. We use it to find the right parts and price.','Use','reg',{t:'r',reg:reg})}
   var X2=index(),hits=[],trade=tradey(raw);
@@ -6113,6 +6120,21 @@ function make(host,opts){
  box.querySelector('.qchips').addEventListener('click',function(e){var c=e.target.closest('[data-qc]');if(!c)return;I.value=c.getAttribute('data-qc');draw();R.scrollIntoView({behavior:'smooth',block:'nearest'})});
  I.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();var f=R.querySelector('.qrow');if(f)f.click()}});
  X.addEventListener('click',function(){I.value='';draw();I.focus()});
+ /* microphone: say what you need. Only shown where the browser can listen */
+ var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+ if(SR){var qb=box.querySelector('.qbox'),M=document.createElement('button'),rec=null,on=false,heard=false;qb.classList.add('hasmic');
+  M.type='button';M.className='qmic';M.setAttribute('aria-label','Say what you need');M.title='Say what you need';
+  M.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>';qb.appendChild(M);
+  function say(t){var o=R.querySelector('.qmsg');if(o)o.remove();if(t)R.insertAdjacentHTML('afterbegin','<p class="qnote plain qmsg" role="status">'+esc(t)+'</p>')}
+  function off(){on=false;M.classList.remove('on');M.setAttribute('aria-label','Say what you need');I.placeholder='Type what you need…'}
+  M.addEventListener('click',function(){if(on){try{rec.stop()}catch(e){}off();return}
+   try{rec=new SR();rec.lang='en-GB';rec.interimResults=true;rec.maxAlternatives=1;heard=false;
+    rec.onresult=function(e){var t='';for(var k=0;k<e.results.length;k++)t+=e.results[k][0].transcript;t=t.trim().replace(/[.?!]+$/,'');if(!t)return;heard=true;I.value=t;me.note='';draw(true)};
+    rec.onerror=function(e){off();var c=e&&e.error;if(c==='aborted')return;
+     say(c==='not-allowed'||c==='service-not-allowed'?'The microphone is switched off for this site. Allow it in your browser settings, or type what you need instead.':c==='no-speech'?'We did not hear anything. Tap the microphone and try again, or type instead.':'The microphone did not work this time. Please type what you need instead.')};
+    rec.onend=function(){var was=on;off();if(heard)R.scrollIntoView({behavior:'smooth',block:'nearest'});else if(was&&!R.querySelector('.qmsg'))say('We did not hear anything. Tap the microphone and try again, or type instead.')};
+    I.value='';me.note='';draw(true);rec.start();on=true;M.classList.add('on');M.setAttribute('aria-label','Listening. Tap to stop');I.placeholder='Listening…';say('Listening… say it in your own words, like “my brakes are squeaking”.')
+   }catch(err){off();say('The microphone did not work this time. Please type what you need instead.')}})}
  R.addEventListener('click',function(e){var b=e.target.closest('[data-qi]');if(!b)return;var it=ITEMS[+b.getAttribute('data-qi')],raw=I.value.trim();if(!it)return;
   if(opts.picked)opts.picked();
   if(it.t==='p')doProblem(it.x,raw);
@@ -6134,7 +6156,7 @@ document.addEventListener('click',function(e){if(!e.target.closest)return;if(!e.
 var BR=$('qbrowse');BR.addEventListener('click',function(){grid.hidden=!grid.hidden;BR.setAttribute('aria-expanded',grid.hidden?'false':'true');BR.textContent=grid.hidden?'Browse all services':'Hide the list of services';if(!grid.hidden)grid.scrollIntoView({behavior:'smooth',block:'nearest'})});
 /* examples in the box, so people see how much it can find */
 var EX=['brakes squeaking','MOT','my car won’t start','Ford Fiesta','automatic under £10,000','can I cancel a booking?','flat tyre','my booking'],exi=0;
-setInterval(function(){if(document.activeElement===H.I||H.I.value||document.hidden)return;exi=(exi+1)%EX.length;H.I.placeholder='Try “'+EX[exi]+'”'},3200);
+setInterval(function(){if(document.activeElement===H.I||H.I.value||document.hidden||document.querySelector('.qmic.on'))return;exi=(exi+1)%EX.length;H.I.placeholder='Try “'+EX[exi]+'”'},3200);
 H.I.addEventListener('focus',function(){H.I.placeholder='Type what you need…'});
 
 /* Search button at the top of every page */

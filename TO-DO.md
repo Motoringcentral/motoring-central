@@ -23,7 +23,7 @@ because it will hold real customers' names, phone numbers, addresses and registr
 This belongs in the real site rebuild (branch `nextjs-rebuild`).
 
 ### 2. Ease-of-use ideas from the 17 Nov review (smaller, not done yet)
-- Search, next steps: a microphone button so people can say what they need; keep a list of searches that found nothing (needs the shared database) so new words can be added; filters for gearbox and seats on the cars page so the search can open them.
+- Search, next steps: keep a list of searches that found nothing (needs the shared database) so new words can be added; filters for gearbox and seats on the cars page so the search can open them.
 - Postcode: the box at the top is now hidden (the search comes first). Later it could show which partners cover an area.
 - Plain-English review of the other services (tyres, MOT, recovery, valeting, bodywork, car sales).
 - Check partner sign-up and dashboards are as easy for mechanics and garages.
@@ -48,6 +48,10 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: microphone button in the search (front page and the Search button's pop-up). Tap it and say what you need;
+  the words appear in the box and the results follow. It only shows on phones and browsers that can listen (Chrome, Safari, Edge),
+  and asks the visitor's permission the first time. The speech is turned into text by the visitor's own browser (Google or Apple),
+  so add a line about this to the privacy policy before launch.
 - 18 Nov 2026: the search now reaches the whole website. One box understands everyday words and finds problems (34 of them,
   from "brakes squeaking" to "put the wrong fuel in"), services, every repair job, cars and vans for sale ("Ford Fiesta",
   "automatic under £20,000", "electric car"), questions and answers ("can I cancel?"), motor trade vacancies, the customer's
