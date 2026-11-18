@@ -50,7 +50,10 @@ Still to do, in this order:
 - Cars and vans, later: email alerts for saved searches (needs the shared database and an email service), and showing saved
   searches in the customer's account; insurance group; ULEZ and tax band filters (these need extra vehicle data from the
   registration look-up).
-- Car finance. Decided 18 Nov 2026: The Motoring Central will apply for FCA full permission for credit broking, and the site is
+- Car finance is SWITCHED OFF (18 Nov 2026, to save cash at launch; dealers handle their own finance). It is built and
+  kept in the page. To switch it back on once FCA permission is granted: in index.html, in the script that starts
+  "Car finance", set on:true, and put the finance FAQ back ("Car adverts show an example monthly price...").
+- Car finance, background. Decided 18 Nov 2026: The Motoring Central will apply for FCA full permission for credit broking, and the site is
   being built on that basis. The preview now shows finance examples on car adverts (see Done). Still to do for finance:
   connect real lenders and their rates (a finance technology provider such as Codeweavers or iVendi does this); PCP as well as
   hire purchase (needs lenders' figures); an online application or eligibility check; van finance (business and VAT rules differ);
