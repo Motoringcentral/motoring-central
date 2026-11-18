@@ -118,6 +118,16 @@ Owner (business and legal):
 - Private adverts: solicitor to check the draft private-seller terms and both buyer notices (private sale and business sale); decide the refund rule (the draft
   says no refund if the car sells early); decide how reported adverts are handled and who checks them; consider checking the
   registration against DVLA records and limiting adverts per person, so traders cannot pose as private sellers.
+- Solicitor to check the refund and history check rules (agreed 18 Nov 2026; terms section "Selling your own car or van"):
+  - Private sellers pay before entering the registration; one payment covers one vehicle and the registration cannot be changed.
+  - Refund less a £9.99 admin fee (to cover the history check) if the check blocks the vehicle (stolen, scrapped, Category A
+    or B), or if it shows finance and the seller wants a refund. No fee if the finance is paid off and the advert is published.
+  - Paid but not finished: can finish within 6 days; refund within 14 days of paying, in full if the check has not run, or
+    less £9.99 if it has. Fees not refunded if the car sells early or the advert is removed.
+  - Confirm the £9.99 is fair against the real cost of the check (Vehicle Data Global price) under the Consumer Rights Act 2015.
+  - Check the wording about write-offs (sellers must answer honestly; write-offs shown on the advert) and that the history
+    check result cannot be changed by the seller, and the disclaimer that third-party data is not guaranteed.
+  - Dealer plan terms: history checks included per plan, extra checks and checks in the free months at £3.50 + VAT.
 - Finance wording: replace the sample 11.9% APR with the real representative APR, fill in the FCA firm reference number and the
   commission wording (in [square brackets] on the site), and have all finance wording approved. Solicitor to update the terms,
   which still say finance is agreed between the buyer and the dealer.
