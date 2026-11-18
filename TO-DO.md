@@ -3,6 +3,29 @@
 This is the running list of work still to do before launch. When the owner asks
 "what is left to do?", answer from this file, and tick items off here as they are finished.
 
+## FIRST THING ON 19 NOV 2026 (owner, with Claude)
+
+1. Supabase settings (5 minutes):
+   - Authentication > Sign In / Providers > Email: "Confirm email" OFF (until the email service is set up).
+   - Authentication > URL Configuration: Site URL = https://preview.motoringcentral.co.uk
+   - Authentication > Passwords: turn on "Leaked password protection" (blocks passwords known to be stolen).
+2. One full test run on the preview, with a second email address:
+   - Sign up as a dealer, then approve it on the Staff page (/#staff) with the owner account (vimen.mudalli@gmail.com).
+   - As that dealer: list a car (a reg containing WO shows a write-off label), try "Upload stock from a spreadsheet",
+     open "Your showroom".
+   - As a customer: message the car and request a test drive. Back as the dealer: reply and confirm.
+   - Tell Claude anything that looks wrong.
+3. When real stock is listed: admin page > "Sample cars and vans" > Hide.
+4. Apply for the free DVSA MOT history API in the company name (Claude can draft the answers). When DVSA emails the
+   credentials, add DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY, DVSA_TOKEN_URL in Supabase > Edge Functions >
+   Secrets. Never paste them in chat.
+5. Email Vehicle Data Global: the package name for the VDI Check; whether VAT is added to £2.34 to £3.00; written OK
+   to show a history check summary on an advert for its whole life.
+6. Ask the accountant: VAT when we collect the partner's price on their behalf (we charge VAT only on our own fee),
+   and VAT on refunds less the £9.99 admin fee.
+7. Choose an email service so sign-up, enquiry and booking emails can be sent (Claude to set out options and costs).
+8. Optional: ask Claude for a one-page dealer pitch (prices, what is included, 3 months free) to send to dealers.
+
 Preview site: https://preview.motoringcentral.co.uk
 
 ## To do
