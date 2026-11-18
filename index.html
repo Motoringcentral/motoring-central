@@ -6106,6 +6106,7 @@ window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(funct
 </script>
 <style>
 .badge.pv,.mcnight .badge.pv{background:#FFD43B!important;color:#0B1C35!important;font-weight:800;border:0}
+.dg-open{margin-top:6px}.dg{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px}.dg-f{border:0;padding:0;margin:10px 0 0}.dg-f legend{font-weight:700;font-size:.9rem;margin-bottom:6px}.dg-chips{display:flex;flex-wrap:wrap;gap:6px}.linkbtn{background:none;border:0;padding:0;color:inherit;text-decoration:underline;font:inherit;cursor:pointer}
 .regfind{display:flex;gap:8px;align-items:stretch}.regfind input{flex:1;min-width:0}.regfind .btn{flex:none;min-width:74px}
 .badge.wo,.mcnight .badge.wo{background:#C62828!important;color:#fff!important;font-weight:800;border:0}.badge.hc,.mcnight .badge.hc{background:#1F7A4D!important;color:#fff!important;border:0}.badge.fn,.mcnight .badge.fn{background:#B26A00!important;color:#fff!important;border:0}
 .wo-box{border:2px solid #C62828;background:#FDECEA;color:#5F1212;border-radius:12px;padding:12px 14px;margin:0 0 12px}.wo-box b{font-size:1.05rem;color:#B71C1C}.wo-box p{margin:6px 0 0}.mcnight .wo-box{background:#3A1515;color:#FFDCDC}.mcnight .wo-box b{color:#FF8A80}
@@ -7500,6 +7501,72 @@ function add(){['ps','cd','vd'].forEach(function(p){var inp=$(p+'-reg');if(!inp|
  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();find(p)}});
  inp.addEventListener('change',function(){var mk=$(F[p].make);if(inp.value.replace(/\s/g,'').length>=5&&mk&&!mk.value)find(p)})})}
 setInterval(add,700);if(document.readyState!=='loading')add();else document.addEventListener('DOMContentLoaded',add);
+})();
+</script>
+<script>
+/* "Write it for me": a free description writer for car and van adverts. It uses only what the seller has entered
+   (the registration look-up fills most of it) plus a few taps, so it never claims anything the seller did not say. */
+(function(){
+function $(i){return document.getElementById(i)}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+var CAR=['Sat nav','Bluetooth','Air conditioning','Parking sensors','Reversing camera','Cruise control','Heated seats','Alloy wheels','Apple CarPlay or Android Auto','Panoramic roof','Leather seats','Tow bar'];
+var VAN=['Ply lined','Racking','Roof rack or bars','Tow bar','Bulkhead','Side loading door','Twin side doors','Air conditioning','Bluetooth','Parking sensors','Reversing camera','Cruise control'];
+var COND=[['ex','Excellent'],['good','Good'],['marks','Good, with a few marks'],['work','Needs some work']];
+var HIST=[['full','Full service history'],['part','Part service history'],['none','No service history'],['unknown','Not sure']];
+function val(p,k){var e=$(p+'-'+k);return e?String(e.value||'').trim():''}
+function isVan(p){if(p==='vd')return true;if(p==='cd')return false;var r=document.querySelector('[name=ps-type]:checked');return !!(r&&r.value==='vans')}
+function pick(a,seed){return a[Math.abs(seed)%a.length]}
+function list(a){return a.length<2?a.join(''):a.slice(0,-1).join(', ')+' and '+a[a.length-1]}
+function lower(s){return s.charAt(0).toLowerCase()+s.slice(1)}
+function write(p,o){var van=isVan(p),mk=val(p,'make'),md=val(p,'model'),vr=val(p,'variant'),yr=+val(p,'year')||0,mi=+val(p,'miles')||0,
+  fuel=val(p,'fuel'),gear=val(p,'gear'),body=val(p,'body'),col=val(p,'col'),reg=val(p,'reg').toUpperCase().replace(/[^A-Z0-9]/g,''),priv=p==='ps',seed=(mi+yr+mk.length*7+md.length*13)|0;
+ if(!mk||!md)return {err:'Add the make and model first (tap Find next to the registration).'};
+ var name=[yr||'',mk,md,vr].filter(Boolean).join(' '),S=[],age=yr?Math.max(1,new Date().getFullYear()-yr):0;
+ var kind=[col&&col.toLowerCase(),van?'van':(body?lower(body):'')].filter(Boolean).join(' ');
+ var intro=o.cond==='work'?'For sale: '+(priv?'my ':'this '):priv?pick(['For sale: my ','Here is my '],seed):pick(['For sale: this ','In stock: this '],seed);
+ S.push(intro+name+(kind?', '+(/^[aeiou]/.test(kind)?'an ':'a ')+kind:'')+'.');
+ var gb=gear?(/^[aeiou]/i.test(gear)?'an ':'a ')+lower(gear)+' gearbox':'';
+ if(fuel==='Electric')S.push('It is fully electric'+(gb?' with '+gb:'')+'.');
+ else if(fuel||gb)S.push('It has '+[fuel?'a '+lower(fuel)+' engine':'',gb].filter(Boolean).join(' and ')+'.');
+ if(mi){var per=age?mi/age:0,m=mi.toLocaleString('en-GB')+' miles';
+  if(age&&per<6000)S.push('It has covered '+m+', which is low for its age.');
+
+  else S.push('It has covered '+m+'.')}
+ var V=window.MCvrm&&window.MCvrm.lookup&&reg.length>=5?window.MCvrm.lookup(reg):null;
+ if(V&&V.mot&&window.MCvrm.isLive&&window.MCvrm.isLive()){var d=new Date(V.mot);if(!isNaN(d)&&d>new Date())S.push('MOT until '+d.toLocaleDateString('en-GB',{month:'long',year:'numeric'})+'.')}
+ if(o.hist==='full')S.push('It comes with a full service history.');else if(o.hist==='part')S.push('It comes with part service history.');else if(o.hist==='none')S.push('There is no service history.');
+ if(o.keys)S.push('Two keys included.');
+ if(o.feat.length)S.push((van?'Extras include ':'Features include ')+list(o.feat.map(function(f){return /^(Apple|Android|Bluetooth)/.test(f)?f:lower(f)}))+'.');
+ if(o.cond==='ex')S.push(pick(['It is in excellent condition inside and out.','Inside and out, it is in excellent condition.'],seed));
+ else if(o.cond==='good')S.push('It is in good condition for its age.');
+ else if(o.cond==='marks')S.push('It is in good condition, with a few marks you would expect for its age. Happy to show you them when you view it.');
+ else if(o.cond==='work')S.push('It needs some work, which is reflected in the price. Please ask for details before you view it.');
+ if(o.extra){var x=o.extra.replace(/\s+/g,' ').trim().replace(/([^.!?])$/,'$1.');S.push(x.charAt(0).toUpperCase()+x.slice(1))}
+ S.push(priv?pick(['Viewing welcome. Send me a message through the site to arrange a time.','Happy to answer any questions. Send me a message to arrange a viewing.'],seed):'Viewing by appointment. Get in touch to arrange a viewing or ask any questions.');
+ return {text:S.join(' ').replace(/\s+/g,' ').replace(/ ,/g,',').trim()}}
+function panel(p){var van=isVan(p),F=van?VAN:CAR;
+ return '<div class="dg" id="'+p+'-dg"><b>Write my description</b><p class="note" style="margin:2px 0 8px">Tap what applies. We only use what you choose here and the details above.</p>'+
+ '<label class="f" for="'+p+'-dg-cond">Condition</label><select id="'+p+'-dg-cond">'+COND.map(function(c,i){return '<option value="'+c[0]+'"'+(i===1?' selected':'')+'>'+c[1]+'</option>'}).join('')+'</select>'+
+ '<label class="f" for="'+p+'-dg-hist">Service history</label><select id="'+p+'-dg-hist">'+HIST.map(function(c){return '<option value="'+c[0]+'"'+(c[0]==='unknown'?' selected':'')+'>'+c[1]+'</option>'}).join('')+'</select>'+
+ '<label style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" id="'+p+'-dg-keys" style="width:20px;height:20px"> Two keys</label>'+
+ '<fieldset class="dg-f"><legend>'+(van?'Extras':'Features')+'</legend><div class="dg-chips">'+F.map(function(f){return '<button type="button" class="fchip" data-dgf="'+esc(f)+'" aria-pressed="false">'+esc(f)+'</button>'}).join('')+'</div></fieldset>'+
+ '<label class="f" for="'+p+'-dg-extra">Anything else? (optional)</label><input type="text" id="'+p+'-dg-extra" maxlength="200" placeholder="'+(van?'For example: new tyres, cambelt done at 60,000':'For example: new tyres, one lady owner')+'">'+
+ '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap"><button type="button" class="btn sm" data-dggo="'+p+'">Write it</button><button type="button" class="btn sm ghost" data-dgx="'+p+'">Close</button></div><p class="err" id="'+p+'-dg-err" role="alert"></p></div>'}
+function add(){['ps','cd','vd'].forEach(function(p){var t=$(p+'-desc');if(!t||$(p+'-dgbtn'))return;
+ var b=document.createElement('button');b.type='button';b.id=p+'-dgbtn';b.className='btn sm ghost dg-open';b.innerHTML='&#10024; Write it for me (free)';t.parentNode.insertBefore(b,t.nextSibling);
+ b.addEventListener('click',function(){var old=$(p+'-dg');if(old){old.remove();return}var d=document.createElement('div');d.innerHTML=panel(p);b.parentNode.insertBefore(d.firstChild,b.nextSibling)})})}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ var c=t.closest('[data-dgf]');if(c){c.setAttribute('aria-pressed',c.getAttribute('aria-pressed')==='true'?'false':'true');return}
+ var x=t.closest('[data-dgx]');if(x){var q=$(x.getAttribute('data-dgx')+'-dg');if(q)q.remove();return}
+ var g=t.closest('[data-dggo]');if(!g)return;var p=g.getAttribute('data-dggo'),P=$(p+'-dg');
+ var o={cond:$(p+'-dg-cond').value,hist:$(p+'-dg-hist').value,keys:$(p+'-dg-keys').checked,extra:$(p+'-dg-extra').value.trim(),feat:[].map.call(P.querySelectorAll('[data-dgf][aria-pressed="true"]'),function(x){return x.getAttribute('data-dgf')})};
+ var r=write(p,o),err=$(p+'-dg-err');if(r.err){err.textContent=r.err;return}err.textContent='';
+ var ta=$(p+'-desc'),before=ta.value;ta.value=r.text.slice(0,2000);ta.dispatchEvent(new Event('input',{bubbles:true}));P.remove();
+ var n=$(p+'-dgdone');if(!n){n=document.createElement('p');n.id=p+'-dgdone';n.className='note';n.style.margin='4px 0 0';ta.parentNode.insertBefore(n,ta.nextSibling)}
+ n.innerHTML='Written for you. Read it through and change anything that is not right.'+(before.trim()?' <button type="button" class="linkbtn" data-dgundo="'+p+'">Undo</button>':'');n._before=before;ta.focus()});
+document.addEventListener('click',function(e){var u=e.target.closest&&e.target.closest('[data-dgundo]');if(!u)return;var p=u.getAttribute('data-dgundo'),n=$(p+'-dgdone');$(p+'-desc').value=n._before||'';n.textContent='Your own description is back.'});
+setInterval(add,700);if(document.readyState!=='loading')add();else document.addEventListener('DOMContentLoaded',add);
+window.MCdesc={write:write};
 })();
 </script>
 </body>
