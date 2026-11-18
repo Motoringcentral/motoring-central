@@ -52,6 +52,9 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: intro video remade as a full tour for customers (1 min 46 s, female voiceover, captions): search and microphone,
+  "Let a garage or mechanic decide", the four booking steps, all services, cars and vans search, breakdown cover, My account and help.
+  The files to remake it are not in the repo; if the site changes a lot, ask for the video to be remade.
 - 18 Nov 2026: full search filters for cars and vans, in the style of the big car sites. Postcode and distance, make and model,
   price from and to, year from and to, mileage, gearbox, fuel, body type, colour, doors, seats, engine size (vans: type and payload),
   keyword, and sort (including nearest first). Every choice shows how many vehicles match, choices with none are greyed out,
