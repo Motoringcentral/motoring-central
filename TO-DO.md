@@ -13,6 +13,8 @@ This is the running list of work still to do before launch. When the owner asks
    - Sign up as a dealer, then approve it on the Staff page (/#staff) with the owner account (vimen.mudalli@gmail.com).
    - As that dealer: list a car (a reg containing WO shows a write-off label), try "Upload stock from a spreadsheet",
      open "Your showroom".
+   - That car now waits for approval: on the admin page, "Adverts waiting for approval", approve it (and try
+     declining one with a reason; the seller fixes it and sends it back).
    - As a customer: message the car and request a test drive. Back as the dealer: reply and confirm.
    - Tell Claude anything that looks wrong.
 3. When real stock is listed: admin page > "Sample cars and vans" > Hide.
@@ -166,6 +168,9 @@ Owner (business and legal):
     or B), or if it shows finance and the seller wants a refund. No fee if the finance is paid off and the advert is published.
   - Paid but not finished: can finish within 6 days; refund within 14 days of paying, in full if the check has not run, or
     less £9.99 if it has. Fees not refunded if the car sells early or the advert is removed.
+  - Advert approval (added 18 Nov 2026): every advert is checked before it goes live; the 30 days start when it goes
+    live; a declined advert that cannot be fixed is refunded less £9.99 within 14 days; no refund if declined as a scam
+    or deliberately misleading. Dealer terms: declined or waiting adverts count towards the plan limit.
   - Confirm the £9.99 is fair against the real cost of the check (Vehicle Data Global price) under the Consumer Rights Act 2015.
   - Check the wording about write-offs (sellers must answer honestly; write-offs shown on the advert) and that the history
     check result cannot be changed by the seller, and the disclaimer that third-party data is not guaranteed.
