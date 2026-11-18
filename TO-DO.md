@@ -54,7 +54,22 @@ Still to do, in this order:
 - Remove the demo logins and sample partners (they still show next to real ones on the preview)
 - Data protection: privacy notice says where data is kept (done); ICO fee; who can see what
 
-### 2. Smaller ideas, not done yet
+### 2. Guided check: keeping the repair on the site (next steps)
+The guided check is live in the search (see Done, 18 Nov 2026). Two parts are still to build, so a booking that starts
+as "find the fault" still earns a fee on the repair:
+- Paid diagnostic as the main fallback everywhere: where a customer still picks "let a garage or mechanic decide", offer
+  the fixed-price diagnostic first.
+- The repair stays on the site: after a diagnostic, the partner sends the repair price from the job screen, the customer
+  approves and pays on the site, and the diagnostic fee comes off the repair if it is booked through the site. Partner
+  terms to say work found through a Motoring Central booking is booked through it (solicitor to check the wording).
+- More fixed prices: only 6 jobs have a fixed price today (full service, front brake pads, discs and pads, battery,
+  engine light diagnosis, fault code scan). Every other result in the guided check asks partners for prices. Adding
+  fixed prices for the most common results (alternator, starter motor, clutch, wheel bearings, air con regas) would let
+  more customers book in one step.
+- Have a working mechanic read through the questions and results (the script that starts "Guided check" in index.html)
+  before launch, and adjust the wording from real customer feedback.
+
+### 3. Smaller ideas, not done yet
 - Which partners cover a postcode: waits for real partners. The sample partners have no real locations (their distances are
   made up), so showing "5 mechanics cover LS6" now would be invented. Build it with the shared database, storing each
   partner's postcode and how far they travel; the postcode look-up it needs is already in place.
@@ -71,7 +86,7 @@ Still to do, in this order:
   hire purchase (needs lenders' figures); an online application or eligibility check; van finance (business and VAT rules differ);
   and the forecourt picture on the cars page has "Finance Available" written in the image.
 
-### 3. Go-live checklist (for later, when the site is ready)
+### 4. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
 - FCA: get full permission for credit broking BEFORE finance is shown on the live site. Until it is granted, finance must be
   switched off on the live site (in index.html, in the script that starts "Car finance", set on:false). Showing finance prices
@@ -103,6 +118,14 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: guided check in the search ("Help me work out what's wrong"). Picking a problem such as "Brakes squeal",
+  "A warning light is on" or "My car won't start" now asks 1 to 3 plain questions, then shows the most likely job, why,
+  other things it could be, and a fixed-price diagnostic if the customer is still unsure. 28 questions lead to 95 results
+  across warning lights, not starting, flat battery, brakes, noises, leaks, smoke, overheating, loss of power, clutch and
+  gears, steering, air con and heater. Dangerous answers (soft brake pedal, red oil or temperature light, fuel leak, fumes)
+  show "Do not drive the car" and a recovery button. The customer's answers are sent to the partner with the request.
+  Every result says it is a guide, not a diagnosis. "Let a garage or mechanic decide" is still there, as the second option.
+  Also fixed: choosing a repair from the search on a fresh visit now opens that job's request form every time.
 - 18 Nov 2026: every listing form now asks "Is VAT added to this price?" (dealer cars, dealer vans, and the private-seller
   form). "+ VAT" adverts show the price + VAT with the price including VAT underneath, on cars as well as vans. On the private
   form, "+ VAT" is for a VAT-registered business selling its own vehicle: that advert is marked "Business sale" (not "Private
