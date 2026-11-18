@@ -33,6 +33,30 @@ Done so far:
 - Car and van adverts (dealer and private) are saved with their photos and shown to everyone. Removing and
   premium upgrades are saved. Buyers' messages on private adverts are still kept in the browser only.
 
+- Vehicle history check for cars and vans for sale (18 Nov 2026), kept separate from the free repair look-up.
+  Runs on the server in London (Supabase function "vehicle-history", code in supabase/functions/vehicle-history).
+  Private sellers pay the £29.99 first, then the check runs, then the advert is created. Dealers' checks come
+  from their plan allowance; extra checks and checks in the free 3 months are £3.50 + VAT. The result is stored
+  by the server and every new advert must carry its own check, so sellers cannot fake or remove it.
+  Rules: stolen, scrapped and Category A/B are not listed; private sellers cannot list with outstanding finance;
+  dealers can, shown as "Finance to clear". Write-offs (S, N, C, D) are shown in red on the card and at the top
+  of the advert, whether declared by the seller or found by the check; a declared write-off cannot be removed.
+  Buyers can hide write-offs with a filter. NOW RUNNING ON SAMPLE RESULTS (try regs with WO, CATN, FIN, STO).
+- Dealer plans now include history checks: Starter £169 (5 checks), Standard £229 (10), Plus £299 (15),
+  Pro £379 (25), Premier £549 (50), all + VAT. Change in index.html (DPLANS) AND in the vehicle-history
+  function (ALLOW) together. Terms text updated.
+
+To switch real history checks on (needs real card payments first, or private sellers cannot be charged):
+- Ask Vehicle Data Global: the exact package name for the VDI Check, whether VAT is added to £2.34 to £3.00,
+  and written confirmation that showing a summary on an advert for its whole life is allowed under their
+  Provenance Data Reseller Terms (24-hour caching rule; keeping data as part of a memorialised record).
+- Supabase > Edge Functions > Secrets: VDG_API_KEY, VDG_HISTORY_PACKAGE, then HISTORY_LIVE=1. Run a few real
+  checks with VDG_DEBUG=1 first so Claude can tune how the answer is read before buyers see results.
+- Connect Stripe payments in the vehicle-history function (verifyPayment) so a check is only run once paid.
+- Delete checks that never became an advert after 30 days, and checks for removed adverts after 6 months.
+- Admin page: list of checks that blocked a listing (stolen, finance, Cat A/B), and refunds.
+- The repair look-up (/api/vrm on Vercel) may run outside the UK; set the Vercel function region to London.
+
 Owner to do in the Supabase dashboard:
 - Authentication > URL Configuration: set "Site URL" to https://preview.motoringcentral.co.uk (the live address at launch).
   NOT DONE YET (checked 18 Nov 2026): it is still the default, localhost:3000, so the "confirm your email" link creates
