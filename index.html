@@ -1111,14 +1111,14 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
     <h2>How do you want it done?</h2>
     <div class="opts" id="modes">
       <button type="button" class="opt" data-m="mobile" aria-pressed="true"><span>Mobile mechanic<small>Comes to your home or work</small></span></button>
-      <button type="button" class="opt" data-m="mot" aria-pressed="false"><span>MOT<small>Every class of MOT at an approved test station</small></span></button>
+      <button type="button" class="opt" data-m="mot" aria-pressed="false"><span>MOT<small>The yearly safety test, at an approved test centre near you</small></span></button>
       <button type="button" class="opt" data-m="garage" aria-pressed="false"><span>Garage<small>Drive to a partner garage near you. MOT available.</small></span></button>
       <button type="button" class="opt" data-m="autoelec" aria-pressed="false"><span>Auto electrician and locksmith<small>Electrical faults, starting and charging, dash cams, car keys and lockouts. Mobile or workshop.</small></span></button>
       <button type="button" class="opt" data-m="recovery" aria-pressed="false"><span>Recovery<small>Tow or transport your car, any time</small></span></button>
       <button type="button" class="opt" data-m="evcharge" aria-pressed="false"><span>Mobile EV charging<small>Out of charge or need a top-up? A charging van comes to you</small></span></button>
       <button type="button" class="opt" data-m="tyres" aria-pressed="false"><span>Mobile tyres<small>A fitter brings new tyres to you</small></span></button>
       <button type="button" class="opt" data-m="valet" aria-pressed="false"><span>Full valet<small>Inside and out, at your door or at a garage</small></span></button>
-      <button type="button" class="opt" data-m="body" aria-pressed="false"><span>Bodywork and alloy wheels<small>Dents, scratches, accident repairs and alloy refurbs. Mobile or body shop, insurance approved options</small></span></button>
+      <button type="button" class="opt" data-m="body" aria-pressed="false"><span>Bodywork and alloy wheels<small>Dents, scratches, accident damage and scuffed alloy wheels. At your door or at a body shop</small></span></button>
     </div>
   </div>
 
@@ -1166,16 +1166,16 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
   <div class="card" id="bdy" hidden>
 <h2>Bodywork and alloy wheels</h2>
 <p style="margin:0;color:var(--muted)">Mobile repairers come to you. Body shops and wheel centres do the work at their premises. Every repairer is checked, and you can choose insurance-approved repairers.</p>
-<div class="seg" role="group" aria-label="Type of job" id="bjob" style="margin-top:12px"><button type="button" data-b="body" aria-pressed="true">Bodywork repair</button><button type="button" data-b="alloy" aria-pressed="false">Alloy wheel refurb</button></div>
+<div class="seg" role="group" aria-label="Type of job" id="bjob" style="margin-top:12px"><button type="button" data-b="body" aria-pressed="true">Bodywork repair</button><button type="button" data-b="alloy" aria-pressed="false">Alloy wheel repair</button></div>
 <div id="b-body">
 <label class="f2" for="bwhat">What needs repairing?</label>
-<select id="bwhat"><option>Scratches or scuffs (smart repair)</option><option>Small dent, paint not damaged (paintless dent removal)</option><option>Dent with paint damage</option><option>Bumper scuff, crack or split</option><option>Stone chips</option><option>Panel respray</option><option>Rust or corrosion repair</option><option>Accident damage (more than one panel)</option></select>
-<label class="f2" for="bpanels">Panels affected</label><select id="bpanels"><option>1 panel</option><option>2 panels</option><option>3 or more panels</option><option>Not sure</option></select>
+<select id="bwhat"><option>Scratches or scuffs</option><option>Small dent, paint not damaged</option><option>Dent with paint damage</option><option>Bumper scuff, crack or split</option><option>Stone chips</option><option>A whole panel repainted</option><option>Rust repair</option><option>Accident damage (more than one part of the car)</option></select>
+<label class="f2" for="bpanels">How many parts of the car are damaged?</label><select id="bpanels"><option>1 part (for example one door)</option><option>2 parts</option><option>3 or more parts</option><option>Not sure</option></select><p class="sample" style="margin:6px 0 0">Each door, wing, bumper, the bonnet and the boot counts as one part. Repairers call these panels.</p>
 <label class="f2">How are you paying?</label>
 <div class="opts" id="bpay"><button type="button" class="opt" data-p="self" aria-pressed="true"><span>Paying myself<small>See approved and independent repairers</small></span></button><button type="button" class="opt" data-p="ins" aria-pressed="false"><span>Insurance claim<small>Only insurance-approved repairers are shown</small></span></button></div>
-<div id="bins" hidden><label class="f2" for="binsr">Your insurer</label><input id="binsr" class="mp" style="width:100%;text-transform:none" placeholder="e.g. Admiral"><label class="f2" for="bclaim">Claim reference (if you have one)</label><input id="bclaim" class="mp" style="width:100%;text-transform:none"><p class="sample" style="margin:8px 0 0">Check with your insurer before the repair. Most insurers have their own approved repairers, and you usually pay your excess to the repairer when you collect the car.</p></div>
+<div id="bins" hidden><label class="f2" for="binsr">Your insurer</label><input id="binsr" class="mp" style="width:100%;text-transform:none" placeholder="e.g. Admiral"><label class="f2" for="bclaim">Claim reference (if you have one)</label><input id="bclaim" class="mp" style="width:100%;text-transform:none"><p class="sample" style="margin:8px 0 0">Check with your insurer before the repair. Most insurers have their own approved repairers, and you usually pay your excess (the part of any claim you pay yourself) to the repairer when you collect the car.</p></div>
 <label class="f2" for="bwhere">Where should it be done?</label>
-<select id="bwhere"><option value="any">Show me both</option><option value="mobile">At my home or work (mobile smart repair)</option><option value="shop">At a body shop</option></select>
+<select id="bwhere"><option value="any">Show me both</option><option value="mobile">At my home or work (small repairs only)</option><option value="shop">At a body shop</option></select>
 <p class="sample" id="bwnote" style="margin:6px 0 0"></p>
 <label class="f2" for="bpost">Postcode</label><input id="bpost" class="mp" maxlength="9" placeholder="e.g. LS1 4AP" style="width:100%">
 <label class="f2" for="bph">Photos of the damage (2 to 6)</label><input type="file" id="bph" accept="image/*" multiple><div class="bph" id="bphp"></div>
@@ -1189,9 +1189,9 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <p class="okmsg" id="bqdone" hidden></p>
 </div>
 <div id="b-alloy" hidden>
-<label class="f2" for="bwn">Wheels to refurbish</label><select id="bwn"><option value="1">1 wheel</option><option value="2">2 wheels</option><option value="3">3 wheels</option><option value="4" selected>4 wheels</option></select>
+<label class="f2" for="bwn">How many wheels?</label><select id="bwn"><option value="1">1 wheel</option><option value="2">2 wheels</option><option value="3">3 wheels</option><option value="4" selected>4 wheels</option></select>
 <label class="f2" for="bfin">Finish</label>
-<select id="bfin"><option value="0">Standard refurb (painted, colour of your choice)</option><option value="1">Diamond cut (two-tone, machined face)</option><option value="2">Colour change or custom colour</option><option value="3">Kerb damage repair only (smart repair)</option></select>
+<select id="bfin"><option value="0">Repaired and repainted (most wheels)</option><option value="1">Diamond cut (shiny bare-metal face)</option><option value="2">Change the colour</option><option value="3">Kerb scuff repair only</option></select><p class="sample" style="margin:6px 0 0">Not sure? Most wheels are painted one colour all over. Diamond-cut wheels have a bright metal face with fine lines, like the back of a CD.</p>
 <p class="sample" id="bwsize" style="margin:6px 0 0"></p>
 <label class="f2" for="bawhere">Where should it be done?</label>
 <select id="bawhere"><option value="mobile">At my home or work (mobile)</option><option value="shop">At a wheel centre</option></select>
@@ -1202,7 +1202,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <table id="btbl" style="margin-top:12px"></table>
 <p class="sample" id="bainc"></p>
 <p class="err" id="ba-err" role="alert"></p>
-<div class="tc"><input type="checkbox" id="tc-bgo"><label for="tc-bgo">I understand my booking is with the wheel specialist I have chosen. They are responsible for the work, the finish and its warranty. <a href="#terms" data-tsec="tc-body">Read the terms</a></label></div><p class="tcerr" id="tc-bgo-err" role="alert"></p><button class="btn block" id="bgo" type="button">Book alloy refurb</button>
+<div class="tc"><input type="checkbox" id="tc-bgo"><label for="tc-bgo">I understand my booking is with the wheel specialist I have chosen. They are responsible for the work, the finish and its warranty. <a href="#terms" data-tsec="tc-body">Read the terms</a></label></div><p class="tcerr" id="tc-bgo-err" role="alert"></p><button class="btn block" id="bgo" type="button">Book wheel repair</button>
 <p class="okmsg" id="bdone" hidden></p>
 </div>
 </div>
@@ -1215,15 +1215,15 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <select id="tfit"></select>
 <label class="f2" for="tkind">What do you need?</label>
 <select id="tkind"><option value="new">New tyres</option><option value="punc">Puncture repair</option></select>
-<div id="tnew"><div class="two"><div><label class="f2" for="tqty">How many</label><select id="tqty"><option>1</option><option>2</option><option selected>4</option></select></div><div><label class="f2" for="ttier">Quality</label><select id="ttier"><option value="0">Budget</option><option value="1" selected>Mid-range</option><option value="2">Premium</option></select></div></div></div>
+<div id="tnew"><div class="two"><div><label class="f2" for="tqty">How many</label><select id="tqty"><option>1</option><option>2</option><option selected>4</option></select></div><div><label class="f2" for="ttier">Which tyres?</label><select id="ttier"><option value="0">Budget</option><option value="1" selected>Mid-range</option><option value="2">Premium</option></select></div></div><p class="sample" style="margin:6px 0 0">Budget: the lowest price. Mid-range: well-known makes, the choice most people make. Premium: the top makes, with the best grip in the wet and the longest life. Your fitter brings the right size for your car.</p></div>
 <table id="ttbl" style="margin-top:12px"></table>
-<div class="two" style="margin-top:8px"><div><label class="f2" for="tday">Day</label><select id="tday"></select></div><div><label class="f2" for="tslot">Time window</label><select id="tslot"><option>8am to 11am</option><option selected>11am to 2pm</option><option>2pm to 5pm</option><option>5pm to 8pm</option></select></div></div>
+<div class="two" style="margin-top:8px"><div><label class="f2" for="tday">Day</label><select id="tday"></select></div><div><label class="f2" for="tslot">Arrival time</label><select id="tslot"><option>8am to 11am</option><option selected>11am to 2pm</option><option>2pm to 5pm</option><option>5pm to 8pm</option></select></div></div>
 <label class="f2" for="tpost">Postcode where the car is</label>
 <input id="tpost" class="mp" maxlength="9" placeholder="e.g. LS1 4AP" style="width:100%">
 <p class="err" id="tyr-err" role="alert"></p>
 <div class="tc"><input type="checkbox" id="tc-tgo"><label for="tc-tgo">I understand my booking is with the tyre fitter I have chosen. They are responsible for the tyres and fitting, including the warranty. <a href="#terms" data-tsec="tc-tyres">Read the terms</a></label></div><p class="tcerr" id="tc-tgo-err" role="alert"></p><button class="btn block" id="tgo" type="button">Book tyre fitter</button>
 <p class="okmsg" id="tdone" hidden></p>
-<p class="sample">Sample prices. Real tyre prices and stock come from your supplier.</p>
+<p class="sample">Sample prices shown for the preview.</p>
 </div>
 
 <div class="card" id="rec" hidden>
@@ -1241,18 +1241,18 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <div class="opts" id="rprov"></div>
 <div id="rbook" hidden><p id="rtot" style="font-size:1.25rem;font-weight:800;margin:14px 0 0"></p><p class="sample">Price includes the journey, plus our booking fee.</p><div class="tc"><input type="checkbox" id="tc-rgo"><label for="tc-rgo">I understand my booking is with the recovery company I have chosen. They are responsible for my vehicle while it is in their care. <a href="#terms" data-tsec="tc-recovery">Read the terms</a></label></div><p class="tcerr" id="tc-rgo-err" role="alert"></p><button class="btn block" id="rgo" type="button">Book recovery</button></div>
 <p class="okmsg" id="rdone" hidden></p>
-<p class="sample">Sample companies shown. Your own recovery partners load here.</p>
+<p class="sample">Sample companies shown for the preview.</p>
 </div>
 <div class="card" id="evc" hidden>
 <h2>Mobile EV charging</h2>
 <p style="margin:0;color:var(--muted)">A charging van comes to you with enough charge to get you moving. On a motorway, get to a safe place first. In immediate danger, call 999.</p>
-<p class="note" id="evc-ice" hidden>This vehicle is not shown as electric. For a flat 12V battery, choose Mobile mechanic or Recovery instead.</p>
+<p class="note" id="evc-ice" hidden>This vehicle is not shown as electric. If the car will not start because of a flat battery, choose Mobile mechanic or Recovery instead.</p>
 <label class="f2" for="evc-post">Where is the car? (postcode)</label>
 <input id="evc-post" class="mp" maxlength="9" placeholder="e.g. LS1 4AP">
 <label class="f2" for="evc-need">What do you need?</label>
-<select id="evc-need"><option value="rescue">Out of charge: reach a charge point</option><option value="home">Out of charge: get home (about 20%)</option><option value="booked">Booked top-up at home or work</option></select>
-<label class="f2" for="evc-plug">Charging connector</label>
-<select id="evc-plug"><option>Type 2</option><option>CCS</option><option>CHAdeMO</option><option>Not sure</option></select>
+<select id="evc-need"><option value="rescue">Out of charge: reach a charge point</option><option value="home">Out of charge: enough charge to get home</option><option value="booked">Booked top-up at home or work</option></select>
+<label class="f2" for="evc-plug">Which charging plug does your car use?</label>
+<select id="evc-plug"><option>Not sure</option><option>Type 2</option><option>CCS</option><option>CHAdeMO</option></select><p class="sample" style="margin:6px 0 0">Most electric cars in the UK use Type 2 or CCS. Some older Nissan and Mitsubishi models use CHAdeMO. If you are not sure, leave it and the charging company will check from your registration.</p>
 <label class="f2" for="evc-when">When?</label>
 <select id="evc-when"><option value="now">Now</option><option value="today">Later today</option><option value="tomorrow">Tomorrow</option></select>
 <button class="btn block" id="evc-find" type="button" style="margin-top:14px">Get charging prices</button>
@@ -1260,7 +1260,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <div class="opts" id="evc-prov"></div>
 <div id="evc-book" hidden><p id="evc-tot" style="font-size:1.25rem;font-weight:800;margin:14px 0 0"></p><p class="sample">Price includes the call-out and the charge, plus our booking fee.</p><div class="tc"><input type="checkbox" id="tc-ego"><label for="tc-ego">I understand my booking is with the charging company I have chosen. They are responsible for charging my vehicle safely. <a href="#terms" data-tsec="tc-recovery">Read the terms</a></label></div><p class="tcerr" id="tc-ego-err" role="alert"></p><button class="btn block" id="ego" type="button">Book EV charging</button></div>
 <p class="okmsg" id="evc-done" hidden></p>
-<p class="sample">Sample companies shown. Your own EV charging partners load here.</p>
+<p class="sample">Sample companies shown for the preview.</p>
 </div>
 
 <div class="card" id="mot" hidden>
@@ -1313,7 +1313,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <button type="button" class="ptile" data-svc="autoelec"><img data-src="img/auto-electrician-locksmith.webp" data-srcset="img/auto-electrician-locksmith-800.webp 800w, img/auto-electrician-locksmith.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Motoring Central auto electrician and locksmith vans outside a workshop" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Auto electrician and locksmith</b><small>Electrical faults, car keys, fobs and lockouts</small></span><span class="pgo">Book this</span></span></button>
 <button type="button" class="ptile" data-svc="tyres"><img data-src="img/tyre.webp" data-srcset="img/tyre-800.webp 800w, img/tyre.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="A mobile tyre fitter changing a tyre at the roadside" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Mobile tyres</b><small>New tyres fitted where you are</small></span><span class="pgo">Book this</span></span></button>
 <button type="button" class="ptile" data-svc="valet"><img data-src="img/valet.webp" data-srcset="img/valet-800.webp 800w, img/valet.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="A mobile valeter washing a car beside a Motoring Central van and valeting centre" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Full valet</b><small>A full valet at your door or at a valeting centre</small></span><span class="pgo">Book this</span></span></button>
-<button type="button" class="ptile" data-svc="body"><img data-src="img/bodyshop.webp" data-srcset="img/bodyshop-800.webp 800w, img/bodyshop.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="A Motoring Central bodyshop and alloy refurb centre with a car being sprayed and alloy wheels on display" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Bodywork and alloy wheels</b><small>Dents, scratches, accident repairs and alloy refurbs</small></span><span class="pgo">Book this</span></span></button>
+<button type="button" class="ptile" data-svc="body"><img data-src="img/bodyshop.webp" data-srcset="img/bodyshop-800.webp 800w, img/bodyshop.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="A Motoring Central bodyshop and alloy refurb centre with a car being sprayed and alloy wheels on display" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Bodywork and alloy wheels</b><small>Dents, scratches, accident damage and scuffed alloy wheels</small></span><span class="pgo">Book this</span></span></button>
 <button type="button" class="ptile" data-svc="evcharge"><img data-src="img/ev-charging.webp" data-srcset="img/ev-charging-800.webp 800w, img/ev-charging.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Mobile EV charging vans charging electric cars" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Mobile EV charging</b><small>A charging van comes to you</small></span><span class="pgo">Book this</span></span></button>
 <button type="button" class="ptile" data-svc="recovery"><img data-src="img/vehicle-transport.webp" data-srcset="img/vehicle-transport-800.webp 800w, img/vehicle-transport.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Vehicle transport trucks and a recovery van" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Recovery and transport</b><small>Tow or move your car, any time</small></span><span class="pgo">Book this</span></span></button>
 <a class="ptile" href="#cars"><img src="img/car-sales.webp" srcset="img/car-sales-800.webp 800w, img/car-sales.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Car sales forecourts with new and used cars" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Cars for sale</b><small>Browse checked dealers near you</small></span><span class="pgo">Browse vehicles</span></span></a>
@@ -1449,7 +1449,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <label class="f" for="mail">Email</label><input type="email" id="mail" autocomplete="email">
 <label class="f" for="m-pass">Create a password (8+ characters)</label><input type="password" id="m-pass" autocomplete="new-password">
 <div class="two"><div><label class="f" for="post">Home postcode</label><input type="text" id="post" autocomplete="postal-code"></div>
-<div id="m-rad"><label class="f" for="rad">Travel radius</label><select id="rad"><option>10 miles</option><option selected>20 miles</option><option>30 miles</option><option>50 miles</option></select></div></div>
+<div id="m-rad"><label class="f" for="rad">How far will you travel for jobs?</label><select id="rad"><option>10 miles</option><option selected>20 miles</option><option>30 miles</option><option>50 miles</option></select></div></div>
 <div class="two"><div><label class="f" for="exp">Years as a mechanic</label><select id="exp"><option>Under 2</option><option>2 to 5</option><option selected>5 to 10</option><option>10+</option></select></div>
 <div id="m-veh"><label class="f" for="veh">Your vehicle</label><select id="veh"><option>Van with tools</option><option>Car with tools</option><option>No vehicle yet</option></select></div></div>
 
@@ -1762,7 +1762,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <div class="two"><div><label class="f" for="t-name">Contact name</label><input type="text" id="t-name" autocomplete="name"></div><div><label class="f" for="t-tel">Mobile</label><input type="tel" id="t-tel" autocomplete="tel"></div></div>
 <label class="f" for="t-mail">Email</label><input type="email" id="t-mail" autocomplete="email">
 <label class="f" for="t-pass">Create a password (8+ characters)</label><input type="password" id="t-pass" autocomplete="new-password">
-<div class="two"><div><label class="f" for="t-post">Base postcode</label><input type="text" id="t-post" autocomplete="postal-code"></div><div><label class="f" for="t-rad">Travel radius</label><select id="t-rad"><option>10 miles</option><option selected>20 miles</option><option>30 miles</option><option>50 miles</option></select></div></div>
+<div class="two"><div><label class="f" for="t-post">Base postcode</label><input type="text" id="t-post" autocomplete="postal-code"></div><div><label class="f" for="t-rad">How far will you travel for jobs?</label><select id="t-rad"><option>10 miles</option><option selected>20 miles</option><option>30 miles</option><option>50 miles</option></select></div></div>
 <div class="two"><div><label class="f" for="t-vans">Fitting vans</label><select id="t-vans"><option selected>1</option><option>2 to 3</option><option>4+</option></select></div><div><label class="f" for="t-supply">Tyre supply</label><select id="t-supply"><option>Stock on my van</option><option selected>I order from a wholesaler</option><option>Both</option></select></div></div>
 <fieldset><legend>Your rates</legend><div class="two"><div><label class="f" for="t-fit" style="margin-top:0">Fitting and balancing per tyre (£)</label><input type="number" id="t-fit" min="1" step="0.5" value="12"></div><div><label class="f" for="t-punc" style="margin-top:0">Puncture repair (£)</label><input type="number" id="t-punc" min="1" step="0.5" value="30"></div></div><p class="note" id="t-ex"></p></fieldset>
 <fieldset><legend>Your equipment</legend><div class="checks" id="t-equip"></div></fieldset>
@@ -1827,7 +1827,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <div class="two"><div><label class="f" for="va-name">Contact name</label><input type="text" id="va-name" autocomplete="name"></div><div><label class="f" for="va-tel">Mobile</label><input type="tel" id="va-tel" autocomplete="tel"></div></div>
 <label class="f" for="va-mail">Email</label><input type="email" id="va-mail" autocomplete="email">
 <label class="f" for="va-pass">Create a password (8+ characters)</label><input type="password" id="va-pass" autocomplete="new-password">
-<div class="two"><div><label class="f" for="va-post">Base postcode</label><input type="text" id="va-post" autocomplete="postal-code"></div><div><label class="f" for="va-rad">Travel radius</label><select id="va-rad"><option>5 miles</option><option selected>10 miles</option><option>20 miles</option><option>30 miles</option></select></div></div>
+<div class="two"><div><label class="f" for="va-post">Base postcode</label><input type="text" id="va-post" autocomplete="postal-code"></div><div><label class="f" for="va-rad">How far will you travel for jobs?</label><select id="va-rad"><option>5 miles</option><option selected>10 miles</option><option>20 miles</option><option>30 miles</option></select></div></div>
 <fieldset><legend>Your prices for a full valet</legend><div class="two"><div><label class="f" for="va-p0" style="margin-top:0">Small (£)</label><input type="number" id="va-p0" min="1" value="79"></div><div><label class="f" for="va-p1" style="margin-top:0">Medium (£)</label><input type="number" id="va-p1" min="1" value="99"></div><div><label class="f" for="va-p2">Large (£)</label><input type="number" id="va-p2" min="1" value="129"></div><div><label class="f" for="va-p3">Extra large or van (£)</label><input type="number" id="va-p3" min="1" value="149"></div></div><p class="note" id="va-ex"></p></fieldset>
 <fieldset><legend>How do you work?</legend><div class="checks" id="va-modes"></div></fieldset>
 <fieldset><legend>Vehicle sizes you can valet</legend><div class="checks" id="va-sizes"></div></fieldset>
@@ -1861,12 +1861,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <img class="heroimg" src="img/car-sales.webp" alt="Motoring Central car sales forecourts with new and used cars for sale" width="1400" height="788" loading="lazy">
 </div></section>
 <main>
-<div class="card cf" id="cars-filters">
-<div class="two"><div><label class="f" for="cf-make">Make</label><select id="cf-make"></select></div><div><label class="f" for="cf-body">Body type</label><select id="cf-body"></select></div></div>
-<div class="two"><div><label class="f" for="cf-fuel">Fuel</label><select id="cf-fuel"></select></div><div><label class="f" for="cf-sort">Sort by</label><select id="cf-sort"><option value="rec">Recently listed</option><option value="yr">Newest year</option><option value="pl">Price: low to high</option><option value="ph">Price: high to low</option><option value="mi">Lowest mileage</option></select></div></div>
-<label class="f" for="cf-price" style="display:flex;justify-content:space-between">Max price <span id="cf-pv">&pound;50,000</span></label>
-<input type="range" id="cf-price" min="2000" max="50000" step="500" value="50000" style="width:100%;accent-color:var(--brand)">
-</div>
+<div class="card cf" id="cars-filters"></div>
 <div class="bar2"><b id="cars-count"></b><button class="btn sm" id="cars-add-btn" type="button" hidden>List a car</button></div>
 <div class="card" id="cars-join" hidden><b>Dealers: join the network to list cars.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;149 + VAT a month. Bigger plans include free premium ads on the front-page banner.</p><button class="btn sm" id="cars-join-btn" type="button">Join the dealer network</button></div>
 <p class="okmsg" id="cars-ok" hidden></p>
@@ -1884,7 +1879,8 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <div class="two"><div><label class="f" for="cd-year">Year</label><input type="number" id="cd-year" min="1990" max="2027" value="2020"></div><div><label class="f" for="cd-price">Price (&pound;)</label><input type="number" id="cd-price" min="1" step="1"></div></div>
 <div class="two"><div><label class="f" for="cd-miles">Mileage</label><input type="number" id="cd-miles" min="0" step="1"></div><div><label class="f" for="cd-col">Colour</label><select id="cd-col"></select></div></div>
 <div class="two"><div><label class="f" for="cd-fuel">Fuel</label><select id="cd-fuel"><option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option></select></div><div><label class="f" for="cd-gear">Gearbox</label><select id="cd-gear"><option>Manual</option><option>Automatic</option></select></div></div>
-<label class="f" for="cd-body">Body type</label><select id="cd-body"><option>Hatchback</option><option>Saloon</option><option>SUV</option><option>Estate</option></select>
+<label class="f" for="cd-body">Body type</label><select id="cd-body"><option>Hatchback</option><option>Saloon</option><option>Estate</option><option>SUV</option><option>MPV</option><option>Coupe</option><option>Convertible</option></select>
+<div class="two"><div><label class="f" for="cd-doors">Doors</label><select id="cd-doors"><option value="">Not sure</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div><div><label class="f" for="cd-seats">Seats</label><select id="cd-seats"><option value="">Not sure</option><option>2</option><option>4</option><option>5</option><option>7</option></select></div></div>
 <label class="f" for="cd-desc">Description</label><textarea id="cd-desc" placeholder="Service history, owners, extras, warranty"></textarea>
 <label class="f" for="cd-photos">Photos (up to 30)</label><input type="file" id="cd-photos" accept="image/*" multiple><p class="note" id="cd-phnote" role="status">The first photo is the main one shown in search results.</p>
 <div class="prev" id="cd-prev"></div>
@@ -1955,17 +1951,12 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 </main></div>
 <div id="v-vans" hidden>
 <section class="hero"><div class="in">
-<h1>Light commercials for sale.</h1>
-<p>Vans and pickups from dealers near you. Prices are shown excluding VAT, with the VAT-inclusive price underneath.</p>
+<h1>Vans and pickups for sale.</h1>
+<p>Vans and pickups from dealers near you. Prices are shown before VAT, with the price including VAT underneath.</p>
 <img class="heroimg" src="img/van-sales.webp" alt="Motoring Central van forecourts with new and used vans for sale" width="1400" height="788" loading="lazy">
 </div></section>
 <main>
-<div class="card cf" id="vans-filters">
-<div class="two"><div><label class="f" for="vf-make">Make</label><select id="vf-make"></select></div><div><label class="f" for="vf-body">Type</label><select id="vf-body"></select></div></div>
-<div class="two"><div><label class="f" for="vf-fuel">Fuel</label><select id="vf-fuel"></select></div><div><label class="f" for="vf-sort">Sort by</label><select id="vf-sort"><option value="rec">Recently listed</option><option value="pl">Price: low to high</option><option value="ph">Price: high to low</option><option value="mi">Lowest mileage</option><option value="pay">Highest payload</option></select></div></div>
-<label class="f" for="vf-price" style="display:flex;justify-content:space-between">Max price (ex VAT) <span id="vf-pv">&pound;40,000</span></label>
-<input type="range" id="vf-price" min="3000" max="40000" step="500" value="40000" style="width:100%;accent-color:var(--brand)">
-</div>
+<div class="card cf" id="vans-filters"></div>
 <div class="bar2"><b id="vans-count"></b><button class="btn sm" id="vans-add-btn" type="button" hidden>List a van</button></div>
 <div class="card" id="vans-join" hidden><b>Dealers: join the network to list vans.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;149 + VAT a month.</p><button class="btn sm" id="vans-join-btn" type="button">Join the dealer network</button></div>
 <p class="okmsg" id="vans-ok" hidden></p>
@@ -2543,12 +2534,12 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
   function cu(){var u=window.GGuser;if(!u||u.role!=='customer')return null;u.det=u.det||{regs:[],left:2};return u}
   function det(r){var u=cu();return !!(u&&u.det.regs.indexOf(r)>-1)}
   function fromPrice(s){if(s.mot)return s.from||25;var p=0;s.parts(car).forEach(function(x){p+=x[2][0]*x[3]});return Math.floor(p+s.hrs*38)}
-  var FROM={recovery:'Recovery from £65 call-out plus mileage.',evcharge:'Mobile EV charging from £55 call-out, plus the charge.',tyres:'Mobile tyre fitting from £12 a tyre, plus the tyres.',valet:'Full valet from £79 for a small car.',body:'Alloy wheel refurbishment from £59 a wheel. Bodywork is priced from your photos, with smart repairs from £70.'},pendSvc=null;
+  var FROM={recovery:'Recovery from £65 call-out plus mileage.',evcharge:'Mobile EV charging from £55 call-out, plus the charge.',tyres:'Mobile tyre fitting from £12 a tyre, plus the tyres.',valet:'Full valet from £79 for a small car.',body:'Alloy wheel repair from £59 a wheel. Bodywork is priced from your photos, with small scratch and scuff repairs from £70.'},pendSvc=null;
   function fmt(r){return String(r||'').replace(/^(.+)(.{3})$/,'$1 $2')}
   function regBox(r,left){return '<label class="f2" for="unl-vrm" style="margin-top:0">Your registration</label><div class="row" style="margin-top:4px"><input id="unl-vrm" class="plate" maxlength="8" placeholder="AB12 CDE" autocomplete="off" value="'+H(fmt(r))+'"><button class="btn" type="button" id="unl-go">Get exact prices</button></div>'
     +(window.MCvrm&&window.MCvrm.isLive&&window.MCvrm.isLive()?'<p class="err" id="unl-err" role="alert"></p>':'<div class="chips">Try: <button class="chip" type="button" data-ur="LM19 XYZ">LM19 XYZ</button><button class="chip" type="button" data-ur="BD66 TTR">BD66 TTR</button><button class="chip" type="button" data-ur="KS21 EVO">KS21 EVO</button></div><p class="err" id="unl-err" role="alert"></p>')}
   function unlockHtml(r,what){var u=cu(),s='<h2>Get your exact price</h2><p class="from">'+what+'</p>';
-    if(!u)s+='<ol class="unlsteps"><li><b>Register free.</b> It takes a minute.</li><li><b>Enter your registration.</b> We run a full vehicle check to confirm the exact model, engine and parts.</li><li><b>See fixed prices</b> from local partners and book.</li></ol><button class="btn block" type="button" id="unl-reg">Register free for exact prices</button><p class="note" style="margin:10px 0 0">Already registered? <button type="button" class="lnkb" id="unl-in">Log in</button></p>';
+    if(!u)s+='<ol class="unlsteps"><li><b>Register free.</b> It takes a minute.</li><li><b>Enter your registration.</b> '+({tyres:'We check your vehicle so the fitter brings the right size tyres.',valet:'We check your vehicle so you get the right price for its size.',recovery:'We check your vehicle so the right recovery truck is sent.',evcharge:'We check your vehicle and the charging plug it uses.',body:'We check the exact model and colour, so repairers can quote properly.'}[window.GGmode]||'We run a full vehicle check to confirm the exact model, engine and parts.')+'</li><li><b>See fixed prices</b> from local partners and book.</li></ol><button class="btn block" type="button" id="unl-reg">Register free for exact prices</button><p class="note" style="margin:10px 0 0">Already registered? <button type="button" class="lnkb" id="unl-in">Log in</button></p>';
     else if(u.det.left>0)s+='<p style="margin:0 0 12px">Enter your registration and we run a full vehicle check to confirm the exact model, engine and parts.</p>'+regBox(r,u.det.left)+'<p class="note" style="margin:6px 0 0">Uses 1 of your '+u.det.left+' full check'+(u.det.left===1?'':'s')+'. Each booking gives you 2 more.'+(u.det.regs.length?' Already checked, free to view again: '+u.det.regs.map(fmt).map(H).join(', ')+'.':'')+'</p>';
     else s+='<p style="margin:0 0 8px"><b>You have used your 2 full vehicle checks.</b> Book a job on a car you have already checked to get 2 more.</p>'+(u.det.regs.length?regBox('',0)+'<p class="note" style="margin:6px 0 0">Already checked: '+u.det.regs.map(fmt).map(H).join(', ')+'. Enter one of these to see its prices again.</p>':'');
     return s}
@@ -3126,7 +3117,7 @@ function money(n){return '£'+n.toFixed(2)}
 function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
 function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%97;return h}
 var BOOKING=3,total=0,car=null,pay='self',picked=[];
-var REP=[{n:'Smart Fix Mobile',mob:1,ins:0,rt:'4.9',from:95,acc:'Mobile smart repair'},{n:'Dent Doctor PDR',mob:1,ins:0,rt:'4.8',from:70,acc:'Paintless dent removal'},{n:'Kirkstall Body Centre',mob:0,ins:1,rt:'4.8',from:180,acc:'BS 10125 Kitemark'},{n:'Northside Accident Repair',mob:0,ins:1,rt:'4.7',from:220,acc:'Manufacturer approved'},{n:'Park Lane Paint and Panel',mob:0,ins:0,rt:'4.9',from:150,acc:'Independent body shop'}];
+var REP=[{n:'Smart Fix Mobile',mob:1,ins:0,rt:'4.9',from:95,acc:'Mobile scratch and scuff repair'},{n:'Dent Doctor PDR',mob:1,ins:0,rt:'4.8',from:70,acc:'Dents removed without repainting'},{n:'Kirkstall Body Centre',mob:0,ins:1,rt:'4.8',from:180,acc:'BS 10125 Kitemark (the UK body repair standard)'},{n:'Northside Accident Repair',mob:0,ins:1,rt:'4.7',from:220,acc:'Manufacturer approved'},{n:'Park Lane Paint and Panel',mob:0,ins:0,rt:'4.9',from:150,acc:'Independent body shop'}];
 var WHL=[{n:'Alloy Angels Mobile',mob:1,p:[65,null,85,45],rt:'4.9'},{n:'Rim Rescue Mobile',mob:1,p:[59,null,79,39],rt:'4.7'},{n:'Leeds Wheel Centre',mob:0,k:1.4,p:[75,110,95,50],rt:'4.8'},{n:'Diamond Cut Co.',mob:0,k:3.2,p:[80,99,100,55],rt:'4.9'}];
 var FIN=['Standard refurb','Diamond cut refurb','Colour change','Kerb damage repair'];
 var days=$('baday');for(var n=1;n<=10;n++){var x=new Date();x.setDate(x.getDate()+n);if(x.getDay()===0)continue;var o=document.createElement('option');o.textContent=x.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'});days.appendChild(o)}
@@ -3269,7 +3260,17 @@ var CARS=[
 {id:7,make:'Toyota',model:'Yaris',variant:'1.5 Hybrid Icon',year:2020,price:13495,miles:22000,fuel:'Hybrid',gear:'Automatic',body:'Hatchback',col:'White',town:'Leicester',dealer:'Midlands Hybrid Centre',phone:'0116 000 0107',badge:'Good price',desc:'Superb fuel economy. Toyota warranty remaining. Reversing camera and touchscreen.'},
 {id:8,make:'Kia',model:'Sportage',variant:'1.6 CRDi 2',year:2017,price:11995,miles:61000,fuel:'Diesel',gear:'Manual',body:'SUV',col:'Green',town:'Liverpool',dealer:'Mersey Motors',phone:'0151 000 0108',badge:'',desc:'Spacious and reliable. Towbar fitted. New tyres and a recent service.'},
 {id:9,make:'Mercedes-Benz',model:'C-Class',variant:'C220d AMG Line',year:2018,price:17495,miles:52000,fuel:'Diesel',gear:'Automatic',body:'Saloon',col:'Grey',town:'London',dealer:'Capital Prestige',phone:'020 0000 0109',badge:'Fair price',desc:'AMG styling, sat nav, heated seats and keyless entry. Full service history.'},
-{id:10,make:'Hyundai',model:'Kona',variant:'Electric Premium',year:2021,price:19250,miles:24000,fuel:'Electric',gear:'Automatic',body:'SUV',col:'Blue',town:'Cardiff',dealer:'Greenway EV',phone:'029 0000 0110',badge:'Good price',desc:'Long range battery with a charging cable. Head-up display, heated steering wheel and wireless charging.'}
+{id:10,make:'Hyundai',model:'Kona',variant:'Electric Premium',year:2021,price:19250,miles:24000,fuel:'Electric',gear:'Automatic',body:'SUV',col:'Blue',town:'Cardiff',dealer:'Greenway EV',phone:'029 0000 0110',badge:'Good price',desc:'Long range battery with a charging cable. Head-up display, heated steering wheel and wireless charging.'},
+{id:11,make:'Vauxhall',model:'Corsa',variant:'1.2 SE',year:2017,price:6495,miles:51200,fuel:'Petrol',gear:'Manual',body:'Hatchback',doors:3,seats:5,col:'Red',town:'Halifax',dealer:'Calder Valley Cars',phone:'01422 000 0111',badge:'Great price',desc:'Ideal first car. Low insurance group. Full service history, two keys and a new MOT.'},
+{id:12,make:'Ford',model:'Focus',variant:'1.5 EcoBlue Titanium',year:2019,price:11250,miles:44800,fuel:'Diesel',gear:'Manual',body:'Estate',col:'Grey',town:'Nottingham',dealer:'Trentside Motors',phone:'0115 000 0112',desc:'Big boot, sat nav, heated seats and parking sensors. One owner with full service history.'},
+{id:13,make:'Volkswagen',model:'Touran',variant:'1.5 TSI SE Family',year:2020,price:18995,miles:36500,fuel:'Petrol',gear:'Automatic',body:'MPV',seats:7,col:'Blue',town:'Liverpool',dealer:'Mersey Car Sales',phone:'0151 000 0113',badge:'7 seats',desc:'Seven seats, DSG automatic, panoramic roof and sat nav. Three sets of Isofix child seat mounts.'},
+{id:14,make:'BMW',model:'2 Series',variant:'2.0 220i M Sport',year:2018,price:16750,miles:39900,fuel:'Petrol',gear:'Automatic',body:'Coupe',col:'White',town:'Bristol',dealer:'Harbourside Cars',phone:'0117 000 0114',desc:'Leather seats, sat nav, cruise control and parking sensors. Full BMW service history.'},
+{id:15,make:'Toyota',model:'Aygo',variant:'1.0 VVT-i x-play',year:2019,price:7495,miles:22300,fuel:'Petrol',gear:'Manual',body:'Hatchback',col:'White',town:'London',dealer:'Capital Car Centre',phone:'020 0000 0115',badge:'Low mileage',desc:'Cheap to run and insure. Bluetooth, air conditioning and a reversing camera. One owner.'},
+{id:16,make:'Kia',model:'Niro',variant:'1.6 GDi Hybrid 2',year:2021,price:17495,miles:28700,fuel:'Hybrid',gear:'Automatic',body:'SUV',col:'Silver',town:'Leicester',dealer:'Midshire Motors',phone:'0116 000 0116',desc:'Self-charging hybrid. Kia warranty until 2028. Apple CarPlay, reversing camera and cruise control.'},
+{id:17,make:'Nissan',model:'Leaf',variant:'40kWh N-Connecta',year:2020,price:11995,miles:31400,fuel:'Electric',gear:'Automatic',body:'Hatchback',col:'Black',town:'Bradford',dealer:'Dales Family Cars',phone:'01274 000 0117',desc:'About 160 miles on a full charge. Heated seats and steering wheel, sat nav and 360 degree camera.'},
+{id:18,make:'Mazda',model:'MX-5',variant:'1.5 SE-L Nav',year:2018,price:14495,miles:27800,fuel:'Petrol',gear:'Manual',body:'Convertible',seats:2,col:'Red',town:'Leeds',dealer:'Roundhay Motor Co',phone:'0113 000 0118',desc:'Two-seat convertible. Sat nav, heated seats and cruise control. Full Mazda service history.'},
+{id:19,make:'Skoda',model:'Octavia',variant:'2.0 TDI SE L',year:2019,price:13495,miles:58200,fuel:'Diesel',gear:'Automatic',body:'Saloon',doors:5,col:'Grey',town:'Wakefield',dealer:'Calder Valley Cars',phone:'01924 000 0119',desc:'Huge boot, DSG automatic, sat nav and adaptive cruise control. Motorway miles with full history.'},
+{id:20,make:'Ford',model:'Fiesta',variant:'1.1 Zetec',year:2018,price:8250,miles:38600,fuel:'Petrol',gear:'Manual',body:'Hatchback',col:'Silver',town:'Doncaster',dealer:'Trentside Motors',phone:'01302 000 0120',desc:'Popular small hatchback. Heated windscreen, Apple CarPlay and alloy wheels. Two owners.'}
 ];
 var nextId=100,cur=null,ph=0;
 [1,3,4,5,7,10].forEach(function(id,k){var c=byId(id);c.featured=true;c.fexp=Date.now()+(14-k*2)*864e5});
@@ -3282,17 +3283,14 @@ a.innerHTML='<svg viewBox="0 0 360 120" style="width:100%;height:auto;display:bl
 /* filters */
 function fillSel(id,label,vals){var s=$(id),prev=s.value;s.innerHTML='<option value="">'+label+'</option>';vals.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;s.appendChild(o)});if(vals.indexOf(prev)>-1)s.value=prev}
 function uniq(k){var r=[];CARS.forEach(function(c){if(r.indexOf(c[k])<0)r.push(c[k])});return r.sort()}
-function refreshFilters(){fillSel('cf-make','All makes',uniq('make'));fillSel('cf-body','All body types',uniq('body'));fillSel('cf-fuel','All fuel types',uniq('fuel'));promote();drawBanner()}
-function filtered(){var mk=$('cf-make').value,bd=$('cf-body').value,fu=$('cf-fuel').value,mx=+$('cf-price').value,s=$('cf-sort').value;
-var l=CARS.filter(function(c){return(!mk||c.make===mk)&&(!bd||c.body===bd)&&(!fu||c.fuel===fu)&&c.price<=mx});
-l.sort(function(a,b){return s==='pl'?a.price-b.price:s==='ph'?b.price-a.price:s==='mi'?a.miles-b.miles:s==='yr'?(b.year-a.year)||(b.id-a.id):b.id-a.id});return l}
+function refreshFilters(){if(window.MCflt)window.MCflt.refresh('cars');promote();drawBanner()}
+function filtered(){return window.MCflt?window.MCflt.run('cars',CARS):CARS.slice().sort(function(a,b){return b.id-a.id})}
 function render(){
-$('cf-pv').textContent=gbp(+$('cf-price').value);
 var l=filtered(),box=$('cars-list');
 $('cars-count').textContent=l.length+(l.length===1?' car found':' cars found');
-box.innerHTML=l.length?'':'<div class="card">No cars match. Try widening your search.</div>';
+box.innerHTML=l.length?'':'<div class="card"><b>No cars match those filters.</b><p class="note" style="margin:6px 0 10px">Try a higher price, a wider distance or fewer filters. New cars are added all the time.</p><button type="button" class="btn sm" data-fltclear="cars">Clear all filters</button></div>';
 l.forEach(function(c){var a=document.createElement('article');a.className='lcard';a.setAttribute('data-id',c.id);
-a.innerHTML='<div class="limg">'+pic(c)+pills(c)+(c.photos&&c.photos.length>1?'<span class="pcount">'+c.photos.length+' photos</span>':'')+'<button type="button" class="heart" data-fav="'+c.id+'" aria-pressed="'+(c.fav?'true':'false')+'" aria-label="Save this car">'+(c.fav?'&#9829;':'&#9825;')+'</button></div><div class="lbody"><div class="lprice">'+gbp(c.price)+'</div><div class="ltitle">'+esc(c.make+' '+c.model)+'</div><div class="lvar">'+esc(c.variant)+'</div><div class="lspecs"><span>'+c.year+'</span><span>'+Number(c.miles).toLocaleString('en-GB')+' miles</span><span>'+esc(c.fuel)+'</span><span>'+esc(c.gear)+'</span><span>'+esc(c.body)+'</span></div><div class="lmeta"><span><b>'+esc(c.dealer)+'</b>, '+esc(c.town)+'</span><button type="button" class="btn sm" data-view="'+c.id+'">View details</button></div></div>';
+a.innerHTML='<div class="limg">'+pic(c)+pills(c)+(c.photos&&c.photos.length>1?'<span class="pcount">'+c.photos.length+' photos</span>':'')+'<button type="button" class="heart" data-fav="'+c.id+'" aria-pressed="'+(c.fav?'true':'false')+'" aria-label="Save this car">'+(c.fav?'&#9829;':'&#9825;')+'</button></div><div class="lbody"><div class="lprice">'+gbp(c.price)+'</div><div class="ltitle">'+esc(c.make+' '+c.model)+'</div><div class="lvar">'+esc(c.variant)+'</div><div class="lspecs"><span>'+c.year+'</span><span>'+Number(c.miles).toLocaleString('en-GB')+' miles</span><span>'+esc(c.fuel)+'</span><span>'+esc(c.gear)+'</span><span>'+esc(c.body)+'</span></div><div class="lmeta"><span><b>'+esc(c.dealer)+'</b>, '+esc(c.town)+(window.MCflt&&MCflt.away('cars',c)?'<small class="laway">'+MCflt.away('cars',c)+'</small>':'')+'</span><button type="button" class="btn sm" data-view="'+c.id+'">View details</button></div></div>';
 box.appendChild(a)})}
 function byId(id){for(var i=0;i<CARS.length;i++)if(CARS[i].id===id)return CARS[i]}
 function pills(c){var a='';if(c.featured&&c.fexp>Date.now())a+='<span class="badge fb">&#9733; Featured</span>';if(owns(c)&&c.waiting)a+='<span class="badge" style="background:#587080">Banner queue #'+(waitList().indexOf(c)+1)+'</span>';if(c.badge)a+='<span class="badge">'+esc(c.badge)+'</span>';return a?'<div class="pills">'+a+'</div>':''}
@@ -3301,7 +3299,6 @@ $('cars-list').addEventListener('click',function(e){
 var f=e.target.closest('[data-fav]');
 if(f){var c=byId(+f.getAttribute('data-fav'));c.fav=!c.fav;render();return}
 var card=e.target.closest('.lcard');if(card)openCar(+card.getAttribute('data-id'))});
-['cf-make','cf-body','cf-fuel','cf-sort','cf-price'].forEach(function(id){$(id).addEventListener('input',render)});
 
 /* detail */
 function showList(on){$('cars-filters').hidden=!on;$('cars-list').hidden=!on;document.querySelector('#v-cars .bar2').hidden=!on;$('cars-detail').hidden=on}
@@ -3359,9 +3356,9 @@ else if($('cd-feat').checked&&actF().length>=CAP)msg='The banner is full right n
 $('cd-err').textContent=msg;if(msg)return;
 var feat=$('cd-feat').checked,wait=$('cd-wait').checked&&actF().length>=CAP;
 readFiles($('cd-photos').files).then(function(photos){
-CARS.unshift({id:nextId++,make:v('cd-make'),model:v('cd-model'),variant:v('cd-variant'),year:yr,price:pr,miles:mi,fuel:$('cd-fuel').value,gear:$('cd-gear').value,body:$('cd-body').value,col:$('cd-col').value,town:v('cd-town'),dealer:v('cd-dealer'),phone:v('cd-phone'),desc:v('cd-desc'),photos:photos,badge:'New',mine:true,featured:feat,fexp:feat?Date.now()+14*864e5:0,waiting:wait,wq:wait?Date.now():0});
+CARS.unshift({id:nextId++,make:v('cd-make'),model:v('cd-model'),variant:v('cd-variant'),year:yr,price:pr,miles:mi,fuel:$('cd-fuel').value,gear:$('cd-gear').value,body:$('cd-body').value,doors:+$('cd-doors').value||0,seats:+$('cd-seats').value||0,col:$('cd-col').value,town:v('cd-town'),dealer:v('cd-dealer'),phone:v('cd-phone'),desc:v('cd-desc'),photos:photos,badge:'New',mine:true,featured:feat,fexp:feat?Date.now()+14*864e5:0,waiting:wait,wq:wait?Date.now():0});
 $('cars-form').reset();$('cd-prev').innerHTML='';$('cars-form-card').hidden=true;
-['cf-make','cf-body','cf-fuel'].forEach(function(i){$(i).value=''});$('cf-price').value=50000;$('cf-sort').value='rec';
+if(window.MCflt)window.MCflt.clear('cars');
 refreshFilters();showList(true);render();var ok=$('cars-ok');ok.textContent=feat?'Listed as a premium ad on the front-page banner for 2 weeks or until sold.':wait?'Listed. You are number '+waitList().length+' on the banner waiting list. Any charge is taken only when your car goes live.':'Listed. Included in your monthly plan.';ok.hidden=false;$('cars-list').scrollIntoView({behavior:'smooth',block:'start'})})});
 
 var CAP=Infinity;
@@ -3464,25 +3461,21 @@ a.innerHTML='<svg viewBox="0 0 360 120" style="width:100%;height:auto;display:bl
 
 function fillSel(id,label,vals){var s=$(id),prev=s.value;s.innerHTML='<option value="">'+label+'</option>';vals.forEach(function(v){var o=document.createElement('option');o.value=v;o.textContent=v;s.appendChild(o)});if(vals.indexOf(prev)>-1)s.value=prev}
 function uniq(k){var r=[];VANS.forEach(function(c){if(r.indexOf(c[k])<0)r.push(c[k])});return r.sort()}
-function refreshFilters(){fillSel('vf-make','All makes',uniq('make'));fillSel('vf-body','All types',uniq('body'));fillSel('vf-fuel','All fuel types',uniq('fuel'))}
-function filtered(){var mk=$('vf-make').value,bd=$('vf-body').value,fu=$('vf-fuel').value,mx=+$('vf-price').value,s=$('vf-sort').value;
-var l=VANS.filter(function(c){return(!mk||c.make===mk)&&(!bd||c.body===bd)&&(!fu||c.fuel===fu)&&c.price<=mx});
-l.sort(function(a,b){return s==='pl'?a.price-b.price:s==='ph'?b.price-a.price:s==='mi'?a.miles-b.miles:s==='pay'?b.pay-a.pay:b.id-a.id});return l}
+function refreshFilters(){if(window.MCflt)window.MCflt.refresh('vans')}
+function filtered(){return window.MCflt?window.MCflt.run('vans',VANS):VANS.slice().sort(function(a,b){return b.id-a.id})}
 function byId(id){for(var i=0;i<VANS.length;i++)if(VANS[i].id===id)return VANS[i]}
 function pills(c){var a='';if(c.featured&&c.fexp>Date.now())a+='<span class="badge fb">&#9733; Featured</span>';if(c.badge)a+='<span class="badge">'+esc(c.badge)+'</span>';return a?'<div class="pills">'+a+'</div>':''}
 function render(){
-$('vf-pv').textContent=gbp(+$('vf-price').value);
 var l=filtered(),box=$('vans-list');
 $('vans-count').textContent=l.length+(l.length===1?' van found':' vans found');
-box.innerHTML=l.length?'':'<div class="card">No vans match. Try widening your search.</div>';
+box.innerHTML=l.length?'':'<div class="card"><b>No vans match those filters.</b><p class="note" style="margin:6px 0 10px">Try a higher price, a wider distance or fewer filters. New vans are added all the time.</p><button type="button" class="btn sm" data-fltclear="vans">Clear all filters</button></div>';
 l.forEach(function(c){var a=document.createElement('article');a.className='lcard';a.setAttribute('data-id',c.id);
-a.innerHTML='<div class="limg">'+pic(c)+pills(c)+(c.photos&&c.photos.length>1?'<span class="pcount">'+c.photos.length+' photos</span>':'')+'<button type="button" class="heart" data-fav="'+c.id+'" aria-pressed="'+(c.fav?'true':'false')+'" aria-label="Save this van">'+(c.fav?'&#9829;':'&#9825;')+'</button></div><div class="lbody"><div class="lprice">'+price(c)+'</div>'+incv(c)+'<div class="ltitle">'+esc(c.make+' '+c.model)+'</div><div class="lvar">'+esc(c.variant)+'</div><div class="lspecs"><span>'+c.year+'</span><span>'+Number(c.miles).toLocaleString('en-GB')+' miles</span><span>'+esc(c.fuel)+'</span><span>'+esc(c.gear)+'</span><span>'+esc(c.body)+'</span><span>'+Number(c.pay).toLocaleString('en-GB')+' kg payload</span></div><div class="lmeta"><span><b>'+esc(c.dealer)+'</b>, '+esc(c.town)+'</span><button type="button" class="btn sm" data-view="'+c.id+'">View details</button></div></div>';
+a.innerHTML='<div class="limg">'+pic(c)+pills(c)+(c.photos&&c.photos.length>1?'<span class="pcount">'+c.photos.length+' photos</span>':'')+'<button type="button" class="heart" data-fav="'+c.id+'" aria-pressed="'+(c.fav?'true':'false')+'" aria-label="Save this van">'+(c.fav?'&#9829;':'&#9825;')+'</button></div><div class="lbody"><div class="lprice">'+price(c)+'</div>'+incv(c)+'<div class="ltitle">'+esc(c.make+' '+c.model)+'</div><div class="lvar">'+esc(c.variant)+'</div><div class="lspecs"><span>'+c.year+'</span><span>'+Number(c.miles).toLocaleString('en-GB')+' miles</span><span>'+esc(c.fuel)+'</span><span>'+esc(c.gear)+'</span><span>'+esc(c.body)+'</span><span>'+Number(c.pay).toLocaleString('en-GB')+' kg payload</span></div><div class="lmeta"><span><b>'+esc(c.dealer)+'</b>, '+esc(c.town)+(window.MCflt&&MCflt.away('vans',c)?'<small class="laway">'+MCflt.away('vans',c)+'</small>':'')+'</span><button type="button" class="btn sm" data-view="'+c.id+'">View details</button></div></div>';
 box.appendChild(a)})}
 $('vans-list').addEventListener('click',function(e){
 var f=e.target.closest('[data-fav]');
 if(f){var c=byId(+f.getAttribute('data-fav'));c.fav=!c.fav;render();return}
 var card=e.target.closest('.lcard');if(card)openVan(+card.getAttribute('data-id'))});
-['vf-make','vf-body','vf-fuel','vf-sort','vf-price'].forEach(function(id){$(id).addEventListener('input',render)});
 
 function showList(on){$('vans-filters').hidden=!on;$('vans-list').hidden=!on;document.querySelector('#v-vans .bar2').hidden=!on;$('vans-detail').hidden=on}
 function openVan(id){cur=byId(id);ph=0;showList(false);drawDetail();scrollTo(0,0)}
@@ -3541,7 +3534,7 @@ var feat=$('vd-feat').checked;
 readFiles($('vd-photos').files).then(function(photos){
 VANS.unshift({id:nextId++,make:v('vd-make'),model:v('vd-model'),variant:v('vd-variant'),year:yr,price:pr,miles:mi,pay:pay,fuel:$('vd-fuel').value,gear:$('vd-gear').value,body:$('vd-body').value,col:$('vd-col').value,town:v('vd-town'),dealer:v('vd-dealer'),phone:v('vd-phone'),desc:v('vd-desc'),photos:photos,badge:'New',vat:$('vd-vat').checked,mine:true,van:true,featured:feat,fexp:feat?Date.now()+14*864e5:0});
 $('vans-form').reset();$('vd-prev').innerHTML='';$('vans-form-card').hidden=true;
-['vf-make','vf-body','vf-fuel'].forEach(function(i){$(i).value=''});$('vf-price').value=40000;$('vf-sort').value='rec';
+if(window.MCflt)window.MCflt.clear('vans');
 refreshFilters();showList(true);render();if(window.GGbanner)window.GGbanner();var ok=$('vans-ok');ok.textContent=feat?'Listed as a premium ad on the front-page banner for 2 weeks or until sold.':'Listed. Included in your monthly plan.';ok.hidden=false;$('vans-list').scrollIntoView({behavior:'smooth',block:'start'})})});
 window.GGvans={list:function(){return VANS},add:function(c){VANS.push(c);refreshFilters();render()},open:function(id){openVan(id)},pic:function(c){return pic(c)},act:function(id,a){var c=byId(id);if(!c)return;if(a==='feature'){c.featured=true;c.fexp=Date.now()+14*864e5}else{VANS=VANS.filter(function(x){return x!==c})}refreshFilters();render();if(window.GGbanner)window.GGbanner()},reset:function(){showList(true);render()}};
 refreshFilters();render();
@@ -4842,14 +4835,14 @@ var T=[
  {k:'1-side',c:'1',n:'Motorcycle up to 200cc with sidecar',max:37.80},
  {k:'2',c:'2',n:'Motorcycle over 200cc',max:29.65},
  {k:'2-side',c:'2',n:'Motorcycle over 200cc with sidecar',max:37.80},
- {k:'3',c:'3',g:'Class 3: light three-wheelers',n:'3-wheeled vehicle up to 450kg unladen',max:37.80},
+ {k:'3',c:'3',g:'Class 3: light three-wheelers',n:'3-wheeled vehicle up to 450kg (empty weight)',max:37.80},
  {k:'4-car',c:'4',g:'Class 4: cars, light vans and similar',n:'Car, up to 8 passenger seats',max:54.85},
  {k:'4-goods',c:'4',n:'Van or goods vehicle up to 3,000kg',h:'Design gross weight',max:54.85},
  {k:'4-camper',c:'4',n:'Motor caravan or motorhome',max:54.85},
  {k:'4-taxi',c:'4',n:'Taxi, private hire or ambulance, up to 8 seats',max:54.85},
  {k:'4-dual',c:'4',n:'Dual purpose vehicle',h:'For example a 4x4 pickup',max:54.85},
- {k:'4-trike',c:'4',n:'3-wheeled vehicle over 450kg unladen',max:54.85},
- {k:'4-quad',c:'4',n:'Quad',h:'Up to 400kg unladen, 550kg for goods',max:54.85},
+ {k:'4-trike',c:'4',n:'3-wheeled vehicle over 450kg (empty weight)',max:54.85},
+ {k:'4-quad',c:'4',n:'Quad',h:'Up to 400kg empty weight, 550kg if built to carry goods',max:54.85},
  {k:'4-9',c:'4',n:'Passenger vehicle or ambulance, 9 to 12 seats',max:57.30},
  {k:'4a',c:'4a',g:'Class 4a: with seat belt installation check',n:'9 to 12 seats, with seat belt installation check',max:64.00},
  {k:'5-13',c:'5',g:'Class 5: minibuses and larger passenger vehicles',n:'Passenger vehicle or ambulance, 13 to 16 seats',max:59.55},
@@ -5902,6 +5895,230 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
 #mc-find .qchips{justify-content:flex-start}
 @media (prefers-color-scheme:dark){.qres .qh{color:#97a8b3}}
 </style>
+<style>
+.pf-ready{background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:.92rem;line-height:1.45;color:var(--ink)}
+.pf-ready b{display:block;margin-bottom:4px}.pf-ready ul{margin:6px 0 0;padding-left:18px}.pf-ready li{margin:2px 0}
+.fld-bad{outline:3px solid #D92D20!important;outline-offset:2px}
+.fld-msg{color:#B3261E;font-weight:700;font-size:.88rem;margin:6px 0 0}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .fld-msg{color:#FFB4AB}}
+.mcnight .fld-msg{color:#FFB4AB}
+</style>
+<script>
+/* Partner and dealer sign-up forms: say what to have ready, and take people straight to the box that needs fixing */
+(function(){
+var FORMS={form:1,'t-form':1,'va-form':1,'r-form':1,'bs-form':1,'ev-form':1,'dl-form':1};
+Object.keys(FORMS).forEach(function(id){var f=document.getElementById(id);if(!f||f.querySelector('.pf-ready'))return;var d=document.createElement('div');d.className='pf-ready';
+ d.innerHTML='<b>Before you start: this takes about 5 minutes</b>Have these ready. You can take the photos with your phone as you go.<ul><li>Your trade insurance certificate</li><li>Your public liability insurance certificate</li><li>Photo ID: a passport, driving licence or national ID card</li></ul>'+(id==='dl-form'?'Nothing is charged during your free 3 months.':'Nothing is charged until we have checked your documents.');
+ f.insertBefore(d,f.firstChild)});
+function clean(f){[].forEach.call(f.querySelectorAll('.fld-bad'),function(e){e.classList.remove('fld-bad')});[].forEach.call(f.querySelectorAll('.fld-msg'),function(e){e.remove()})}
+function seen(e){return !!(e&&e.offsetParent!==null)}
+function find(f,msg){var m=msg.toLowerCase(),best=null,bl=0;
+ [].forEach.call(f.querySelectorAll('label[for]'),function(l){if(!seen(l))return;var t=l.textContent.replace(/\(.*?\)/g,'').replace(/[^a-z0-9 ]/gi,' ').replace(/\s+/g,' ').trim().toLowerCase();if(t.length<3)return;
+  var c=document.getElementById(l.getAttribute('for'));if(!c||!seen(c))return;
+  var words=t.split(' ').filter(function(w){return w.length>2&&w!=='your'&&w!=='the'}),hit=words.filter(function(w){return m.indexOf(w)>-1}).length;
+  if(words.length&&hit===words.length&&t.length>bl){best=c;bl=t.length}});
+ if(best)return best;
+ if(/agree|confirm|tick|terms/.test(m)){var cb=[].filter.call(f.querySelectorAll('input[type=checkbox]'),function(c){return seen(c)&&!c.checked&&/agree|confirm|terms/i.test((c.closest('label,.tc,.chk')||c.parentNode).textContent)})[0];if(cb)return cb}
+ if(/upload|certificate|photo id|document/.test(m)){var fi=[].filter.call(f.querySelectorAll('input[type=file]'),function(c){return seen(c)&&!c.files.length})[0];if(fi)return fi}
+ return null}
+function check(f){var e=[].filter.call(f.querySelectorAll('.err,[role=alert]'),function(x){return seen(x)&&x.textContent.trim()})[0];clean(f);if(!e)return;
+ var c=find(f,e.textContent);if(!c)return;c.classList.add('fld-bad');var p=document.createElement('p');p.className='fld-msg';p.textContent=e.textContent.trim();
+ var host=c.type==='checkbox'?(c.closest('.tc,.chk,label')||c):c;host.parentNode.insertBefore(p,host.nextSibling);
+ c.scrollIntoView({behavior:'smooth',block:'center'});try{c.focus({preventScroll:true})}catch(x){}}
+document.addEventListener('submit',function(e){var f=e.target;if(f&&FORMS[f.id])setTimeout(function(){check(f)},30)},true);
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;var f=b.closest('form');if(f&&FORMS[f.id]&&(b.type==='submit'||/submit|start my|apply|join/i.test(b.textContent)))setTimeout(function(){check(f)},40)});
+document.addEventListener('input',function(e){var c=e.target;if(c.classList&&c.classList.contains('fld-bad')){c.classList.remove('fld-bad');var n=(c.type==='checkbox'?(c.closest('.tc,.chk,label')||c):c).nextSibling;if(n&&n.classList&&n.classList.contains('fld-msg'))n.remove()}});
+document.addEventListener('change',function(e){var c=e.target;if(c.classList&&c.classList.contains('fld-bad'))c.dispatchEvent(new Event('input',{bubbles:true}))});
+})();
+</script>
+<style>
+.flt .f{margin-top:10px}
+.flt-loc,.flt-g{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.flt-g .wide{grid-column:1/-1}
+.flt select,.flt input[type=text]{width:100%;box-sizing:border-box}
+.flt select:disabled{opacity:.55}
+.flt-msg{margin:4px 0 0;font-size:.82rem;color:var(--muted);min-height:0}.flt-msg:empty{display:none}
+.flt-more{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;margin-top:14px;padding:11px 14px;border-radius:12px;border:2px solid var(--line);font-weight:800;color:var(--ink);background:var(--soft)}
+.flt-more small{display:block;font-weight:500;font-size:.8rem;color:var(--muted);margin-top:2px}.flt-more small:empty{display:none}
+.flt-more i{font-style:normal;font-size:.74rem;font-weight:800;background:#FFD43B;color:#0B1C35;border-radius:999px;padding:2px 8px;margin-left:6px}
+.flt-more:focus-visible,.fchip:focus-visible,.fact:focus-visible,.flt-clear:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
+.flt-adv{border-top:1px solid var(--line);margin-top:12px;padding-top:2px}
+.flt-fs{border:0;padding:0;margin:12px 0 0;min-width:0}.flt-fs legend{font-weight:700;font-size:.9rem;padding:0;margin-bottom:6px;color:var(--ink)}
+.fchips{display:flex;flex-wrap:wrap;gap:6px}
+.fchip{all:unset;box-sizing:border-box;cursor:pointer;font-size:.86rem;font-weight:700;padding:7px 11px;border-radius:999px;border:2px solid var(--line);color:var(--ink);background:var(--surface)}
+.fchip i{font-style:normal;font-weight:500;color:var(--muted);font-size:.78rem}
+.fchip[aria-pressed="true"]{background:#0B1C35;border-color:#0B1C35;color:#fff}.fchip[aria-pressed="true"] i{color:#A9BCD6}
+.fnone{font-size:.84rem;color:var(--muted)}
+.flt-help{margin-top:14px;font-size:.88rem}.flt-help summary{cursor:pointer;font-weight:700;color:var(--ink)}.flt-help p{margin:8px 0 0;color:var(--muted);line-height:1.45}.flt-help b{color:var(--ink)}
+.flt-foot{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end;margin-top:6px}
+.flt-clear{all:unset;cursor:pointer;font-weight:700;font-size:.88rem;text-decoration:underline;color:var(--ink);padding:10px 2px}.flt-clear[hidden]{display:none}
+.flt-act{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.flt-act:empty{display:none}
+.fact{all:unset;box-sizing:border-box;cursor:pointer;font-size:.82rem;font-weight:700;background:#E0F4FE;color:#0B1C35;border-radius:999px;padding:6px 10px}
+.fact b{font-size:1rem;line-height:1;margin-left:2px}
+.flt-go{margin-top:12px}.flt-go[hidden]{display:none}
+#v-cars .heroimg,#v-vans .heroimg{max-height:150px;object-fit:cover;object-position:center 35%}
+@media (min-width:760px){#v-cars .heroimg,#v-vans .heroimg{max-height:220px}}
+.laway{display:block;font-size:.8rem;color:var(--muted);margin-top:1px}
+@media (min-width:760px){.flt-g{grid-template-columns:repeat(4,1fr)}.flt-g .wide{grid-column:span 2}}
+</style>
+<script>
+/* Cars and vans for sale: the search filters (make, model, price, year, mileage, gearbox, fuel, body type,
+   colour, doors, seats, engine size, payload, keyword, postcode and distance, sort).
+   One set of code serves both pages. The cars and vans code asks MCflt.run() for the list to show.
+   Distance uses the postcode area (the letters at the start), so it is approximate in this preview. */
+(function(){
+function $(i){return document.getElementById(i)}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
+/* postcode areas: [latitude, longitude, main town] */
+var AREA={AB:[57.15,-2.10,'Aberdeen'],AL:[51.75,-0.34,'St Albans'],B:[52.48,-1.90,'Birmingham'],BA:[51.38,-2.36,'Bath'],BB:[53.75,-2.48,'Blackburn'],BD:[53.79,-1.75,'Bradford'],BH:[50.72,-1.88,'Bournemouth'],BL:[53.58,-2.43,'Bolton'],BN:[50.83,-0.14,'Brighton'],BR:[51.40,0.02,'Bromley'],BS:[51.45,-2.59,'Bristol'],BT:[54.60,-5.93,'Belfast'],CA:[54.89,-2.94,'Carlisle'],CB:[52.20,0.12,'Cambridge'],CF:[51.48,-3.18,'Cardiff'],CH:[53.19,-2.89,'Chester'],CM:[51.73,0.47,'Chelmsford'],CO:[51.89,0.90,'Colchester'],CR:[51.37,-0.10,'Croydon'],CT:[51.28,1.08,'Canterbury'],CV:[52.41,-1.51,'Coventry'],CW:[53.10,-2.44,'Crewe'],DA:[51.44,0.22,'Dartford'],DD:[56.46,-2.97,'Dundee'],DE:[52.92,-1.48,'Derby'],DG:[55.07,-3.61,'Dumfries'],DH:[54.78,-1.58,'Durham'],DL:[54.52,-1.55,'Darlington'],DN:[53.52,-1.13,'Doncaster'],DT:[50.71,-2.44,'Dorchester'],DY:[52.51,-2.08,'Dudley'],E:[51.54,-0.03,'East London'],EC:[51.52,-0.09,'London'],EH:[55.95,-3.19,'Edinburgh'],EN:[51.65,-0.08,'Enfield'],EX:[50.72,-3.53,'Exeter'],FK:[56.00,-3.78,'Falkirk'],FY:[53.82,-3.05,'Blackpool'],G:[55.86,-4.25,'Glasgow'],GL:[51.86,-2.24,'Gloucester'],GU:[51.24,-0.57,'Guildford'],HA:[51.58,-0.34,'Harrow'],HD:[53.65,-1.78,'Huddersfield'],HG:[53.99,-1.54,'Harrogate'],HP:[51.75,-0.47,'Hemel Hempstead'],HR:[52.06,-2.72,'Hereford'],HS:[58.21,-6.39,'Stornoway'],HU:[53.74,-0.34,'Hull'],HX:[53.72,-1.86,'Halifax'],IG:[51.56,0.07,'Ilford'],IP:[52.06,1.16,'Ipswich'],IV:[57.48,-4.22,'Inverness'],KA:[55.61,-4.50,'Kilmarnock'],KT:[51.41,-0.30,'Kingston upon Thames'],KW:[58.98,-2.96,'Kirkwall'],KY:[56.11,-3.16,'Kirkcaldy'],L:[53.41,-2.98,'Liverpool'],LA:[54.05,-2.80,'Lancaster'],LD:[52.24,-3.38,'Llandrindod Wells'],LE:[52.63,-1.13,'Leicester'],LL:[53.32,-3.83,'Llandudno'],LN:[53.23,-0.54,'Lincoln'],LS:[53.80,-1.55,'Leeds'],LU:[51.88,-0.42,'Luton'],M:[53.48,-2.24,'Manchester'],ME:[51.39,0.54,'Medway'],MK:[52.04,-0.76,'Milton Keynes'],ML:[55.79,-3.99,'Motherwell'],N:[51.57,-0.10,'North London'],NE:[54.98,-1.61,'Newcastle'],NG:[52.95,-1.15,'Nottingham'],NN:[52.24,-0.90,'Northampton'],NP:[51.58,-3.00,'Newport'],NR:[52.63,1.30,'Norwich'],NW:[51.55,-0.19,'North West London'],OL:[53.54,-2.11,'Oldham'],OX:[51.75,-1.26,'Oxford'],PA:[55.85,-4.42,'Paisley'],PE:[52.57,-0.24,'Peterborough'],PH:[56.40,-3.43,'Perth'],PL:[50.38,-4.14,'Plymouth'],PO:[50.82,-1.09,'Portsmouth'],PR:[53.76,-2.70,'Preston'],RG:[51.45,-0.97,'Reading'],RH:[51.24,-0.17,'Redhill'],RM:[51.58,0.18,'Romford'],S:[53.38,-1.47,'Sheffield'],SA:[51.62,-3.94,'Swansea'],SE:[51.47,-0.06,'South East London'],SG:[51.90,-0.20,'Stevenage'],SK:[53.41,-2.16,'Stockport'],SL:[51.51,-0.59,'Slough'],SM:[51.36,-0.19,'Sutton'],SN:[51.56,-1.78,'Swindon'],SO:[50.90,-1.40,'Southampton'],SP:[51.07,-1.79,'Salisbury'],SR:[54.91,-1.38,'Sunderland'],SS:[51.54,0.71,'Southend'],ST:[53.00,-2.18,'Stoke-on-Trent'],SW:[51.47,-0.17,'South West London'],SY:[52.71,-2.75,'Shrewsbury'],TA:[51.02,-3.10,'Taunton'],TD:[55.62,-2.81,'Galashiels'],TF:[52.68,-2.45,'Telford'],TN:[51.19,0.27,'Tonbridge'],TQ:[50.46,-3.53,'Torquay'],TR:[50.26,-5.05,'Truro'],TS:[54.57,-1.23,'Middlesbrough'],TW:[51.45,-0.34,'Twickenham'],UB:[51.51,-0.38,'Southall'],W:[51.51,-0.19,'West London'],WA:[53.39,-2.60,'Warrington'],WC:[51.52,-0.12,'Central London'],WD:[51.66,-0.40,'Watford'],WF:[53.68,-1.50,'Wakefield'],WN:[53.55,-2.63,'Wigan'],WR:[52.19,-2.22,'Worcester'],WS:[52.59,-1.98,'Walsall'],WV:[52.59,-2.13,'Wolverhampton'],YO:[53.96,-1.08,'York'],ZE:[60.15,-1.14,'Lerwick']};
+var TOWN={};Object.keys(AREA).forEach(function(k){TOWN[AREA[k][2].toLowerCase()]=k});
+[['stoke','ST'],['newcastle upon tyne','NE'],['kingston','KT'],['hull','HU'],['kingston upon hull','HU'],['brighton and hove','BN'],['salford','M'],['rotherham','S'],['barnsley','S'],['solihull','B'],['gateshead','NE'],['birkenhead','CH'],['st helens','WA'],['dewsbury','WF'],['pontefract','WF'],['keighley','BD'],['rochdale','OL'],['bury','BL'],['burnley','BB'],['chesterfield','S'],['mansfield','NG'],['scunthorpe','DN'],['grimsby','DN'],['basingstoke','RG'],['maidstone','ME'],['poole','BH'],['cheltenham','GL'],['wrexham','LL'],['bangor','LL'],['southend-on-sea','SS'],['crawley','RH'],['woking','GU'],['high wycombe','HP'],['bedford','MK'],['warwick','CV'],['rugby','CV'],['lichfield','WS'],['kidderminster','DY'],['barnstaple','EX'],['penzance','TR'],['scarborough','YO'],['harlow','CM'],['basildon','SS'],['watford','WD'],['west bromwich','B']].forEach(function(x){TOWN[x[0]]=x[1]});
+function area(pc){var m=String(pc||'').toUpperCase().replace(/\s/g,'').match(/^([A-Z]{1,2})\d[A-Z\d]?(\d[A-Z]{2})?$/);return m&&AREA[m[1]]?m[1]:''}
+function townPt(t){var a=TOWN[String(t||'').toLowerCase().trim()];return a?AREA[a]:null}
+function milesBetween(a,b){var R=3959,r=Math.PI/180,dl=(b[0]-a[0])*r,dn=(b[1]-a[1])*r,x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dn/2)*Math.sin(dn/2);return 2*R*Math.asin(Math.sqrt(x))}
+
+var PRICES=[500,1000,1500,2000,2500,3000,3500,4000,4500,5000,5500,6000,6500,7000,7500,8000,8500,9000,9500,10000,11000,12000,13000,14000,15000,16000,17000,18000,19000,20000,22500,25000,27500,30000,35000,40000,45000,50000,60000,75000,100000];
+var MILES=[5000,10000,15000,20000,25000,30000,40000,50000,60000,70000,80000,100000,125000,150000];
+var DIST=[10,20,30,40,50,75,100,150,200];
+var PAY=[500,750,1000,1250,1500];
+var ENG=[['1.0','Up to 1.0 litre'],['1.4','1.1 to 1.4 litres'],['1.9','1.5 to 1.9 litres'],['2.0','2.0 litres and over']];
+var DOORS={Hatchback:5,Saloon:4,SUV:5,Estate:5,Coupe:2,Convertible:2,MPV:5},SEATS={Coupe:4,Convertible:4,MPV:7};
+var K={cars:{root:'cars-filters',one:'car',many:'cars',api:function(){return window.GGcars},bodyLabel:'Body type'},
+       vans:{root:'vans-filters',one:'van',many:'vans',api:function(){return window.GGvans},bodyLabel:'Type of van'}};
+function blank(){return {pc:'',dist:0,make:'',model:'',pmin:0,pmax:0,ymin:0,ymax:0,miles:0,gear:'',fuel:[],body:[],col:[],doors:0,seats:0,eng:'',pay:0,kw:'',sort:'rec',more:false}}
+var ST={cars:blank(),vans:blank()};
+try{var sv=JSON.parse(sessionStorage.getItem('mc-flt')||'null');if(sv)['cars','vans'].forEach(function(k){if(sv[k]){var b=blank();Object.keys(b).forEach(function(f){if(sv[k][f]!=null&&typeof sv[k][f]===typeof b[f]&&Array.isArray(sv[k][f])===Array.isArray(b[f]))b[f]=sv[k][f]});ST[k]=b}})}catch(e){}
+function save(){try{sessionStorage.setItem('mc-flt',JSON.stringify(ST))}catch(e){}}
+
+function engOf(c){if(c.engine)return +c.engine;var m=String(c.variant||'').match(/(?:^|\s)(\d\.\d)(?=\s|$|[A-Za-z])/);return m?+m[1]:0}
+function doorsOf(c){return +c.doors||DOORS[c.body]||0}
+function seatsOf(c){return +c.seats||SEATS[c.body]||(DOORS[c.body]?5:0)}
+function away(kind,c){var a=area(ST[kind].pc);if(!a)return null;var p=townPt(c.town);return p?milesBetween(AREA[a],p):null}
+function engBucket(e){return !e?'':e<=1.0?'1.0':e<=1.4?'1.4':e<=1.9?'1.9':'2.0'}
+/* does this vehicle pass every filter, apart from the one named in skip? */
+function ok(kind,c,skip){var s=ST[kind];
+ if(skip!=='make'&&skip!=='model'&&s.make&&c.make!==s.make)return false;
+ if(skip!=='model'&&s.model&&c.model!==s.model)return false;
+ if(skip!=='price'&&((s.pmin&&c.price<s.pmin)||(s.pmax&&c.price>s.pmax)))return false;
+ if(skip!=='year'&&((s.ymin&&c.year<s.ymin)||(s.ymax&&c.year>s.ymax)))return false;
+ if(skip!=='miles'&&s.miles&&c.miles>s.miles)return false;
+ if(skip!=='gear'&&s.gear&&c.gear!==s.gear)return false;
+ if(skip!=='fuel'&&s.fuel.length&&s.fuel.indexOf(c.fuel)<0)return false;
+ if(skip!=='body'&&s.body.length&&s.body.indexOf(c.body)<0)return false;
+ if(skip!=='col'&&s.col.length&&s.col.indexOf(c.col)<0)return false;
+ if(kind==='cars'){if(skip!=='doors'&&s.doors&&doorsOf(c)!==s.doors)return false;
+  if(skip!=='seats'&&s.seats&&seatsOf(c)<s.seats)return false;
+  if(skip!=='eng'&&s.eng&&engBucket(engOf(c))!==s.eng)return false}
+ else if(skip!=='pay'&&s.pay&&!(c.pay>=s.pay))return false;
+ if(skip!=='kw'&&s.kw.trim()){var h=[c.make,c.model,c.variant,c.desc,c.dealer,c.town,c.col,c.fuel,c.gear,c.body,c.year].join(' ').toLowerCase();
+  if(!s.kw.toLowerCase().split(/\s+/).filter(Boolean).every(function(w){return h.indexOf(w)>-1}))return false}
+ if(skip!=='dist'&&s.dist&&area(s.pc)){var d=away(kind,c);if(d==null||d>s.dist)return false}
+ return true}
+function all(kind){var a=K[kind].api();return a?a.list():[]}
+function run(kind,list){var s=ST[kind],l=(list||all(kind)).filter(function(c){return ok(kind,c)}),near=area(s.pc);
+ l.sort(function(a,b){return s.sort==='pl'?a.price-b.price:s.sort==='ph'?b.price-a.price:s.sort==='mi'?a.miles-b.miles:s.sort==='yr'?(b.year-a.year)||(b.id-a.id):s.sort==='pay'?(b.pay||0)-(a.pay||0):s.sort==='near'&&near?((away(kind,a)==null?1e9:away(kind,a))-(away(kind,b)==null?1e9:away(kind,b)))||(b.id-a.id):b.id-a.id});return l}
+function tally(kind,field,skip){var n={};all(kind).forEach(function(c){if(!ok(kind,c,skip))return;var v=typeof field==='function'?field(c):c[field];if(v===''||v==null||v===0)return;n[v]=(n[v]||0)+1});return n}
+
+/* ---------- drawing ---------- */
+function opts(sel,first,items,val){var h='<option value="">'+esc(first)+'</option>',seen=false;items.forEach(function(x){var v=String(x[0]);if(v===String(val))seen=true;h+='<option value="'+esc(v)+'"'+(v===String(val)?' selected':'')+(x[2]?' disabled':'')+'>'+esc(x[1])+'</option>'});
+ if(val&&!seen)h+='<option value="'+esc(val)+'" selected>'+esc(val)+'</option>';sel.innerHTML=h}
+function chips(box,field,counts,picked,order){var keys=Object.keys(counts);picked.forEach(function(p){if(keys.indexOf(p)<0)keys.push(p)});keys.sort(function(a,b){return order?(order.indexOf(a)<0?99:order.indexOf(a))-(order.indexOf(b)<0?99:order.indexOf(b)):a<b?-1:1});
+ box.innerHTML=keys.map(function(v){var on=picked.indexOf(v)>-1;return '<button type="button" class="fchip" data-fc="'+field+'" data-v="'+esc(v)+'" aria-pressed="'+(on?'true':'false')+'">'+esc(v)+' <i>'+(counts[v]||0)+'</i></button>'}).join('')||'<span class="fnone">None listed right now</span>'}
+function mount(kind){var k=K[kind],root=$(k.root);if(!root||root.querySelector('.flt'))return;var p=kind,car=kind==='cars';
+ root.innerHTML='<form class="flt" data-kind="'+kind+'" novalidate onsubmit="return false">'+
+ '<div class="flt-loc"><div><label class="f" for="'+p+'-f-pc">Your postcode</label><input type="text" id="'+p+'-f-pc" data-f="pc" autocomplete="postal-code" placeholder="LS1 4AP" maxlength="8" style="text-transform:uppercase"></div>'+
+ '<div><label class="f" for="'+p+'-f-dist">Distance</label><select id="'+p+'-f-dist" data-f="dist"></select></div></div><p class="flt-msg" data-r="pcmsg" role="status"></p>'+
+ '<div class="flt-g"><div><label class="f" for="'+p+'-f-make">Make</label><select id="'+p+'-f-make" data-f="make"></select></div>'+
+ '<div><label class="f" for="'+p+'-f-model">Model</label><select id="'+p+'-f-model" data-f="model"></select></div>'+
+ '<div><label class="f" for="'+p+'-f-pmin">Min price</label><select id="'+p+'-f-pmin" data-f="pmin"></select></div>'+
+ '<div><label class="f" for="'+p+'-f-pmax">Max price</label><select id="'+p+'-f-pmax" data-f="pmax"></select></div></div>'+
+ (car?'':'<p class="flt-msg" style="display:block">Van prices are shown before VAT.</p>')+
+ '<button type="button" class="flt-more" data-r="more" aria-expanded="false" aria-controls="'+p+'-f-adv"></button>'+
+ '<div class="flt-adv" id="'+p+'-f-adv" hidden>'+
+ '<div class="flt-g"><div><label class="f" for="'+p+'-f-ymin">Year from</label><select id="'+p+'-f-ymin" data-f="ymin"></select></div>'+
+ '<div><label class="f" for="'+p+'-f-ymax">Year to</label><select id="'+p+'-f-ymax" data-f="ymax"></select></div>'+
+ '<div><label class="f" for="'+p+'-f-miles">Mileage</label><select id="'+p+'-f-miles" data-f="miles"></select></div>'+
+ '<div><label class="f" for="'+p+'-f-gear">Gearbox</label><select id="'+p+'-f-gear" data-f="gear"></select></div></div>'+
+ '<fieldset class="flt-fs"><legend>Fuel type</legend><div class="fchips" data-r="fuel"></div></fieldset>'+
+ '<fieldset class="flt-fs"><legend>'+k.bodyLabel+'</legend><div class="fchips" data-r="body"></div></fieldset>'+
+ '<fieldset class="flt-fs"><legend>Colour</legend><div class="fchips" data-r="col"></div></fieldset>'+
+ (car?'<div class="flt-g"><div><label class="f" for="'+p+'-f-doors">Doors</label><select id="'+p+'-f-doors" data-f="doors"></select></div>'+
+  '<div><label class="f" for="'+p+'-f-seats">Seats</label><select id="'+p+'-f-seats" data-f="seats"></select></div>'+
+  '<div class="wide"><label class="f" for="'+p+'-f-eng">Engine size</label><select id="'+p+'-f-eng" data-f="eng"></select></div></div>'
+  :'<div class="flt-g"><div class="wide"><label class="f" for="'+p+'-f-pay">Payload (the weight it can carry)</label><select id="'+p+'-f-pay" data-f="pay"></select></div></div>')+
+ '<label class="f" for="'+p+'-f-kw">Keyword</label><input type="text" id="'+p+'-f-kw" data-f="kw" autocomplete="off" placeholder="'+(car?'e.g. sat nav, one owner, parking sensors':'e.g. ply lined, tow bar, racking')+'">'+
+ '<details class="flt-help"><summary>Not sure what these mean?</summary><div>'+
+ (car?'<p><b>Gearbox.</b> Automatic changes gear for you and has no clutch pedal. Manual has a clutch pedal and a gear stick. If your licence is automatic only, choose Automatic.</p><p><b>Fuel.</b> Petrol suits short local trips. Diesel suits long motorway miles. A hybrid is petrol with electric help, so it uses less fuel. Electric has no engine and is charged from a plug.</p><p><b>Body type.</b> Hatchback: the boot lid and back window lift together, the most common shape. Saloon: a separate boot. Estate: a longer boot for more luggage. SUV: taller, with a higher seat.</p><p><b>Engine size.</b> Smaller engines (up to 1.4 litres) are usually cheaper to insure and run, which suits new drivers.</p>'
+  :'<p><b>Payload.</b> The most weight the van can legally carry, including the driver and passengers.</p><p><b>Prices before VAT.</b> Van prices are shown before VAT. Unless the advert says no VAT, add 20% if you are not VAT registered. The price including VAT is shown under each van.</p><p><b>Type of van.</b> Small vans are car-sized. Medium vans are the most common builder’s van. Large vans suit removals and deliveries. A crew van has a second row of seats. A pickup has an open load bed.</p><p><b>Gearbox.</b> Automatic changes gear for you and has no clutch pedal.</p>')+
+ '</div></details></div>'+
+ '<div class="flt-foot"><div><label class="f" for="'+p+'-f-sort">Sort by</label><select id="'+p+'-f-sort" data-f="sort"></select></div><button type="button" class="flt-clear" data-r="clear">Clear all filters</button></div>'+
+ '<div class="flt-act" data-r="act"></div><button type="button" class="btn block flt-go" data-r="go"></button></form>';
+ var F=root.querySelector('.flt');
+ F.addEventListener('change',function(e){var f=e.target.getAttribute('data-f');if(!f||f==='pc'||f==='kw')return;var s=ST[kind],v=e.target.value;
+  if(f==='make'){s.make=v;s.model=''}else if(f==='model'||f==='gear'||f==='eng'||f==='sort')s[f]=v;else s[f]=+v||0;
+  if(f==='pmin'&&s.pmax&&s.pmin>s.pmax)s.pmax=0;if(f==='pmax'&&s.pmin&&s.pmax<s.pmin)s.pmin=0;
+  if(f==='ymin'&&s.ymax&&s.ymin>s.ymax)s.ymax=0;if(f==='ymax'&&s.ymin&&s.ymax<s.ymin)s.ymin=0;
+  if(f==='dist'&&s.dist&&!area(s.pc)){var pc=$(p+'-f-pc');if(pc)pc.focus()}
+  changed(kind)});
+ var t=null;F.addEventListener('input',function(e){var f=e.target.getAttribute('data-f');if(f!=='pc'&&f!=='kw')return;ST[kind][f]=e.target.value;clearTimeout(t);t=setTimeout(function(){if(f==='pc'&&area(ST[kind].pc)&&!ST[kind].dist&&ST[kind].sort==='rec')ST[kind].sort='near';changed(kind)},f==='pc'?350:200)});
+ F.addEventListener('click',function(e){var c=e.target.closest('[data-fc]'),s=ST[kind];
+  if(c){var f=c.getAttribute('data-fc'),v=c.getAttribute('data-v'),i=s[f].indexOf(v);if(i>-1)s[f].splice(i,1);else s[f].push(v);changed(kind);return}
+  var x=e.target.closest('[data-fx]');if(x){drop(kind,x.getAttribute('data-fx'),x.getAttribute('data-v'));changed(kind);return}
+  if(e.target.closest('[data-r="more"]')){s.more=!s.more;save();sync(kind);return}
+  if(e.target.closest('[data-r="clear"]')){clear(kind);return}
+  if(e.target.closest('[data-r="go"]')){var c=$(kind+'-count');if(c)c.scrollIntoView({behavior:'smooth',block:'start'})}});
+ sync(kind)}
+function drop(kind,f,v){var s=ST[kind];if(f==='price'){s.pmin=0;s.pmax=0}else if(f==='year'){s.ymin=0;s.ymax=0}else if(f==='loc'){s.dist=0}else if(f==='make'){s.make='';s.model=''}else if(Array.isArray(s[f])){var i=s[f].indexOf(v);if(i>-1)s[f].splice(i,1)}else s[f]=typeof s[f]==='number'?0:''}
+function active(kind){var s=ST[kind],a=[],car=kind==='cars';
+ if(s.dist&&area(s.pc))a.push(['loc','','Within '+s.dist+' miles of '+AREA[area(s.pc)][2]]);
+ if(s.make)a.push(['make','',s.make]);if(s.model)a.push(['model','',s.model]);
+ if(s.pmin||s.pmax)a.push(['price','',s.pmin&&s.pmax?gbp(s.pmin)+' to '+gbp(s.pmax):s.pmin?'From '+gbp(s.pmin):'Up to '+gbp(s.pmax)]);
+ if(s.ymin||s.ymax)a.push(['year','',s.ymin&&s.ymax?(s.ymin===s.ymax?''+s.ymin:s.ymin+' to '+s.ymax):s.ymin?s.ymin+' or newer':s.ymax+' or older']);
+ if(s.miles)a.push(['miles','','Up to '+s.miles.toLocaleString('en-GB')+' miles']);
+ if(s.gear)a.push(['gear','',s.gear]);
+ s.fuel.forEach(function(v){a.push(['fuel',v,v])});s.body.forEach(function(v){a.push(['body',v,v])});s.col.forEach(function(v){a.push(['col',v,v])});
+ if(car&&s.doors)a.push(['doors','',s.doors+' doors']);if(car&&s.seats)a.push(['seats','',s.seats+' or more seats']);
+ if(car&&s.eng)a.push(['eng','',(ENG.filter(function(x){return x[0]===s.eng})[0]||['',''])[1]]);
+ if(!car&&s.pay)a.push(['pay','','Carries '+s.pay.toLocaleString('en-GB')+' kg or more']);
+ if(s.kw.trim())a.push(['kw','','“'+s.kw.trim()+'”']);return a}
+function advCount(kind){return active(kind).filter(function(x){return ['year','miles','gear','fuel','body','col','doors','seats','eng','pay','kw'].indexOf(x[0])>-1}).length}
+function withN(counts,label){return function(v){var n=counts[v]||0;return [v,(label?label(v):v)+' ('+n+')',!n]}}
+function sync(kind){var k=K[kind],root=$(k.root),F=root&&root.querySelector('.flt');if(!F)return;var s=ST[kind],p=kind,car=kind==='cars',L=all(kind);
+ function q(r){return F.querySelector('[data-r="'+r+'"]')}
+ var pc=$(p+'-f-pc');if(document.activeElement!==pc)pc.value=s.pc;var kw=$(p+'-f-kw');if(document.activeElement!==kw)kw.value=s.kw;
+ var a=area(s.pc),msg=q('pcmsg');msg.textContent=s.pc.trim()&&!a?'Enter a UK postcode, like LS1 4AP, to see what is near you.':a?'Showing distances from '+AREA[a][2]+' (approximate).':'';
+ opts($(p+'-f-dist'),'National',DIST.map(function(d){return [d,'Within '+d+' miles']}),s.dist||'');
+ var mk=tally(kind,'make','make');opts($(p+'-f-make'),'Any make',Object.keys(mk).sort().map(withN(mk)),s.make);
+ var md={};L.forEach(function(c){if(s.make&&c.make===s.make&&ok(kind,c,'model'))md[c.model]=(md[c.model]||0)+1});
+ var ms=$(p+'-f-model');opts(ms,s.make?'Any model':'Choose a make first',Object.keys(md).sort().map(withN(md)),s.model);ms.disabled=!s.make;
+ var pm=function(v){return [v,gbp(v)]};opts($(p+'-f-pmin'),'No min',PRICES.map(pm),s.pmin||'');opts($(p+'-f-pmax'),'No max',PRICES.map(pm),s.pmax||'');
+ [p+'-f-pmin',p+'-f-pmax'].forEach(function(id){var e=$(id),o=e.options[e.selectedIndex];if(o&&/^\d+$/.test(o.textContent))o.textContent=gbp(+o.textContent)});
+ var yr=[],now=new Date().getFullYear();for(var y=now;y>=2005;y--)yr.push([y,''+y]);opts($(p+'-f-ymin'),'Any',yr,s.ymin||'');opts($(p+'-f-ymax'),'Any',yr,s.ymax||'');
+ opts($(p+'-f-miles'),'Any mileage',MILES.map(function(m){return [m,'Up to '+m.toLocaleString('en-GB')+' miles']}),s.miles||'');
+ var gr=tally(kind,'gear','gear');opts($(p+'-f-gear'),'Any gearbox',['Automatic','Manual'].map(withN(gr)),s.gear);
+ chips(q('fuel'),'fuel',tally(kind,'fuel','fuel'),s.fuel,['Petrol','Diesel','Hybrid','Electric']);
+ chips(q('body'),'body',tally(kind,'body','body'),s.body,car?['Hatchback','Saloon','Estate','SUV','MPV','Coupe','Convertible']:['Small van','Medium van','Large van','Crew van','Pickup']);
+ chips(q('col'),'col',tally(kind,'col','col'),s.col);
+ if(car){var dr=tally(kind,doorsOf,'doors');opts($(p+'-f-doors'),'Any',[2,3,4,5].map(withN(dr,function(v){return v+' doors'})),s.doors||'');
+  var st={};[2,4,5,7].forEach(function(n){st[n]=L.filter(function(c){return ok(kind,c,'seats')&&seatsOf(c)>=n}).length});opts($(p+'-f-seats'),'Any',[2,4,5,7].map(withN(st,function(v){return v+' or more seats'})),s.seats||'');
+  var en=tally(kind,function(c){return engBucket(engOf(c))},'eng');opts($(p+'-f-eng'),'Any engine size',ENG.map(function(x){return [x[0],x[1]+' ('+(en[x[0]]||0)+')',!en[x[0]]]}),s.eng)}
+ else{var py={};PAY.forEach(function(n){py[n]=L.filter(function(c){return ok(kind,c,'pay')&&c.pay>=n}).length});opts($(p+'-f-pay'),'Any payload',PAY.map(withN(py,function(v){return (+v).toLocaleString('en-GB')+' kg or more'})),s.pay||'')}
+ var so=[['rec','Recently listed'],['pl','Price: low to high'],['ph','Price: high to low'],['mi','Lowest mileage'],['yr','Newest first']];if(!car)so.push(['pay','Highest payload']);if(a)so.push(['near','Nearest first']);else if(s.sort==='near')s.sort='rec';
+ var ss=$(p+'-f-sort');ss.innerHTML=so.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===s.sort?' selected':'')+'>'+x[1]+'</option>'}).join('');
+ var adv=$(p+'-f-adv'),mb=q('more'),n=advCount(kind);adv.hidden=!s.more;mb.setAttribute('aria-expanded',s.more?'true':'false');mb.innerHTML=(s.more?'Fewer filters':'More filters')+(n?' <i>'+n+' in use</i>':'')+'<small>'+(s.more?'':'Year, mileage, gearbox, fuel, '+(car?'body type, colour, doors, seats':'type of van, colour, payload')+'</small>');
+ var act=active(kind);q('act').innerHTML=act.map(function(x){return '<button type="button" class="fact" data-fx="'+x[0]+'" data-v="'+esc(x[1])+'" aria-label="Remove filter: '+esc(x[2])+'">'+esc(x[2])+' <b aria-hidden="true">&times;</b></button>'}).join('');
+ q('clear').hidden=!act.length&&!s.pc;var n2=run(kind).length;q('go').textContent=n2?'Show '+n2+' '+(n2===1?k.one:k.many):'No '+k.many+' match. Change a filter';q('go').hidden=!s.more&&!act.length}
+function changed(kind){save();sync(kind);var a=K[kind].api();if(a&&a.reset)a.reset()}
+function clear(kind){var keep=ST[kind].more;ST[kind]=blank();ST[kind].more=keep;changed(kind)}
+function set(kind,o){var b=blank();b.more=ST[kind].more;b.pc=ST[kind].pc;Object.keys(o||{}).forEach(function(f){if(f in b&&o[f]!=null)b[f]=o[f]});ST[kind]=b;if(advCount(kind))b.more=true;changed(kind)}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-fltclear]');if(b)clear(b.getAttribute('data-fltclear'))});
+window.MCflt={run:run,refresh:sync,clear:clear,set:set,state:function(k){return ST[k]},count:function(k){return run(k).length},
+ away:function(kind,c){var d=away(kind,c);return d==null?'':d<3?'Under 3 miles away':'About '+Math.round(d)+' miles away'},facets:function(kind){return {doors:doorsOf,seats:seatsOf,eng:engOf}}};
+mount('cars');mount('vans');
+['cars','vans'].forEach(function(k){var a=K[k].api();if(a&&a.reset)a.reset()});
+})();
+</script>
 <script>
 /* Site-wide search: "type what you need".
    One box that understands everyday words and reaches the whole website:
@@ -6030,15 +6247,14 @@ function vehicles(q,raw){var out={hits:[],cap:priceCap(raw),sum:[],buy:false},ca
    if(m>best)best=m;all.push({s:st[0]*3+wk[0]*(st[0]?1:2)+(buy?3:0)+(cap?1:0)+(saysVan&&K[0]==='vans'?2:0)+(qq.length?0:4),m:m,k:K[0],c:c})})});
  out.hits=all.filter(function(v){return v.m===best});out.best=Math.min(q.length,best+(q.length-qq.length));
  [['cars',window.GGcars],['vans',window.GGvans]].forEach(function(K){if(!K[1])return;var n=out.hits.filter(function(v){return v.k===K[0]}).length,flt={};
-  ['make','body','fuel'].forEach(function(f){var seen={};K[1].list().forEach(function(c){var v=c[f];if(!v||seen[v])return;seen[v]=1;var hv=hay(v),s=score(qq,hv);if(s[1]&&s[0]===2*s[1]&&(f==='make'||s[1]>=hv.length))flt[f]=v})});
-  var used=hay([flt.make,flt.body,flt.fuel].filter(Boolean).join(' ')),exact=qq.every(function(w){return used.indexOf(w)>-1});
-  if(n>1&&exact&&(cap||flt.make||flt.body||flt.fuel))out.sum.push({k:K[0],n:n,flt:flt,cap:cap,label:[flt.fuel,flt.make,flt.body].filter(Boolean).join(' ')});
-  else if(n&&cap&&!exact)out.sum.push({k:K[0],n:0,flt:flt,cap:cap,label:[flt.fuel,flt.make,flt.body].filter(Boolean).join(' ')})});
+  ['make','body','fuel','gear','col'].forEach(function(f){var seen={};K[1].list().forEach(function(c){var v=c[f];if(!v||seen[v])return;seen[v]=1;var hv=hay(v),s=score(qq,hv);if(s[1]&&s[0]===2*s[1]&&(f==='make'||s[1]>=hv.length))flt[f]=v})});
+  var used=hay([flt.make,flt.body,flt.fuel,flt.gear,flt.col].filter(Boolean).join(' ')),exact=qq.every(function(w){return used.indexOf(w)>-1});
+  if(n>1&&exact&&(cap||flt.make||flt.body||flt.fuel||flt.gear||flt.col))out.sum.push({k:K[0],n:n,flt:flt,cap:cap,label:[flt.col,flt.gear,flt.fuel,flt.make,flt.body].filter(Boolean).join(' ').replace(/^(.)(.*)$/,function(m,a,b){return a+b.toLowerCase().replace(/\b(bmw|suv|mpv|kia|vw|mg)\b/g,function(x){return x.toUpperCase()})})});
+  else if(n&&cap&&!exact)out.sum.push({k:K[0],n:0,flt:flt,cap:cap,label:''})});
  out.hits.sort(function(a,b){return b.s-a.s||a.c.price-b.c.price});return out}
-function showStock(k,flt,cap){var p=k==='cars'?'cf':'vf',api=k==='cars'?window.GGcars:window.GGvans;location.hash=k;
- setTimeout(function(){['make','body','fuel'].forEach(function(f){var s=$(p+'-'+f);if(s)s.value=flt[f]||''});
-  var r=$(p+'-price');if(r){r.value=cap?Math.min(+r.max,Math.max(+r.min,Math.ceil(cap/500)*500)):r.max;r.dispatchEvent(new Event('input',{bubbles:true}))}
-  if(api&&api.reset)api.reset();var c=$(k+'-count');if(c)c.scrollIntoView({behavior:'smooth',block:'center'})},120)}
+function showStock(k,flt,cap){location.hash=k;
+ setTimeout(function(){if(window.MCflt)window.MCflt.set(k,{make:flt.make||'',body:flt.body?[flt.body]:[],fuel:flt.fuel?[flt.fuel]:[],col:flt.col?[flt.col]:[],gear:flt.gear||'',pmax:cap?Math.ceil(cap):0});
+  var c=$(k+'-count');if(c)c.scrollIntoView({behavior:'smooth',block:'center'})},120)}
 
 /* motor trade vacancies */
 var WORK={job:1,jobs:1,work:1,working:1,vacancy:1,vacancies:1,career:1,careers:1,hiring:1,apprentice:1,apprenticeship:1,trainee:1,salary:1,wage:1,employment:1,position:1,role:1,recruiting:1};

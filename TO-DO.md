@@ -22,11 +22,15 @@ monthly cost, and data protection (privacy notice, ICO registration, who can see
 because it will hold real customers' names, phone numbers, addresses and registrations.
 This belongs in the real site rebuild (branch `nextjs-rebuild`).
 
-### 2. Ease-of-use ideas from the 17 Nov review (smaller, not done yet)
-- Search, next steps: keep a list of searches that found nothing (needs the shared database) so new words can be added; filters for gearbox and seats on the cars page so the search can open them.
-- Postcode: the box at the top is now hidden (the search comes first). Later it could show which partners cover an area.
-- Plain-English review of the other services (tyres, MOT, recovery, valeting, bodywork, car sales).
-- Check partner sign-up and dashboards are as easy for mechanics and garages.
+### 2. Smaller ideas, not done yet
+- Postcode: the box at the top of the front page is hidden (the search comes first). Later it could show which partners cover an area.
+- Search, next steps: keep a list of searches that found nothing (needs the shared database) so new words can be added.
+- Cars and vans, distance: the preview works out distance from the postcode area (the letters at the start), so it is only
+  approximate. The live site should use a proper postcode look-up (for example postcodes.io) and store each dealer's postcode.
+- Cars and vans, later: save a search and get an email when a matching car is listed; monthly finance figures; insurance group;
+  ULEZ and tax band filters (these need extra vehicle data from the registration look-up).
+- Partner sign-up is still one long page. Splitting it into numbered steps (about you, your work, documents, plan) would be easier on a phone.
+- The intro video shows the old front page and needs remaking.
 
 ### 3. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
@@ -48,6 +52,20 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: full search filters for cars and vans, in the style of the big car sites. Postcode and distance, make and model,
+  price from and to, year from and to, mileage, gearbox, fuel, body type, colour, doors, seats, engine size (vans: type and payload),
+  keyword, and sort (including nearest first). Every choice shows how many vehicles match, choices with none are greyed out,
+  filters in use show as removable chips, and filters are kept while you look at an advert and come back.
+  "Not sure what these mean?" explains gearbox, fuel, body types and payload in plain English. The front-page search now opens
+  these filters already set (for example "automatic under £20,000"). Ten more sample cars were added so every filter has stock.
+  Dealers adding a car can give doors and seats. The code is the script that starts "Cars and vans for sale: the search filters".
+- 18 Nov 2026: plain-English review of the other services. Bodywork: no more "smart repair", "paintless dent removal", "panels"
+  or "refurb" without an explanation; diamond-cut wheels and insurance excess explained. Tyres: budget, mid-range and premium explained.
+  EV charging: plug types explained, with "Not sure" first. MOT: plainer wording. "Get your exact price" now says why the
+  registration is needed for each service. Notes meant for the owner ("your own partners load here") no longer show to customers.
+- 18 Nov 2026: partner sign-up check. Every sign-up form now starts with what to have ready (two insurance certificates and photo ID,
+  about 5 minutes), and if something is missing the page jumps to that box, highlights it and says what is wrong, instead of
+  showing a message at the bottom of a long form.
 - 18 Nov 2026: microphone button in the search (front page and the Search button's pop-up). Tap it and say what you need;
   the words appear in the box and the results follow. It only shows on phones and browsers that can listen (Chrome, Safari, Edge),
   and asks the visitor's permission the first time. The speech is turned into text by the visitor's own browser (Google or Apple),
