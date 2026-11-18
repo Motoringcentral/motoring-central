@@ -23,6 +23,7 @@ because it will hold real customers' names, phone numbers, addresses and registr
 This belongs in the real site rebuild (branch `nextjs-rebuild`).
 
 ### 2. Ease-of-use ideas from the 17 Nov review (smaller, not done yet)
+- Search, next steps: a microphone button so people can say what they need; keep a list of searches that found nothing (needs the shared database) so new words can be added; filters for gearbox and seats on the cars page so the search can open them.
 - Postcode: the box at the top is now hidden (the search comes first). Later it could show which partners cover an area.
 - Plain-English review of the other services (tyres, MOT, recovery, valeting, bodywork, car sales).
 - Check partner sign-up and dashboards are as easy for mechanics and garages.
@@ -47,6 +48,16 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: the search now reaches the whole website. One box understands everyday words and finds problems (34 of them,
+  from "brakes squeaking" to "put the wrong fuel in"), services, every repair job, cars and vans for sale ("Ford Fiesta",
+  "automatic under £20,000", "electric car"), questions and answers ("can I cancel?"), motor trade vacancies, the customer's
+  bookings and log in, contact and call back, and the partner pages ("I am a mechanic and want more customers").
+  Results are grouped under plain headings, forgive small spelling slips, and a typed registration is recognised.
+  A Search button sits at the top of every page (or press / on a keyboard). A link can carry a search: add ?q=brakes to the address.
+  The search code is the script that starts "Site-wide search" near the end of index.html.
+- 18 Nov 2026: small fixes. "Request a call back" links go straight to the form; "Get an RAC quote" opens the RAC website
+  in a new tab; the cookie choice now comes before the intro video, and the video closes if the visitor moves to another page;
+  the logo shows as the browser tab and home-screen icon (favicon.svg, apple-touch-icon.png).
 - 18 Nov 2026: numbered booking steps (1 the job, 2 your car, 3 choose a partner, 4 book and pay) at the top of every
   booking, for all nine services. They follow the customer as they scroll, and each can be tapped to jump to it.
 - 18 Nov 2026: shorter front page (about 7,100 down to 5,600 pixels tall on a phone): removed the duplicate "Why book" section
