@@ -43,7 +43,7 @@ Done so far:
   of the advert, whether declared by the seller or found by the check; a declared write-off cannot be removed.
   Buyers can hide write-offs with a filter. NOW RUNNING ON SAMPLE RESULTS (try regs with WO, CATN, FIN, STO).
 - Dealer plans now include history checks: Starter £169 (5 checks), Standard £229 (10), Plus £299 (15),
-  Pro £379 (25), Premier £549 (50), all + VAT. Change in index.html (DPLANS) AND in the vehicle-history
+  Pro £379 (25), Premier £449 (25, changed 18 Nov 2026 so it is cheaper per car than Pro from 60 cars), all + VAT. Change in index.html (DPLANS) AND in the vehicle-history
   function (ALLOW) together. Terms text updated.
 
 To switch real history checks on (needs real card payments first, or private sellers cannot be charged):

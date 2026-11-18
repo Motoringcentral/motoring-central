@@ -10,7 +10,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const ORIGINS = ["https://preview.motoringcentral.co.uk", "https://motoringcentral.co.uk", "https://www.motoringcentral.co.uk"];
-const ALLOW = [5, 10, 15, 25, 50]; // history checks included each month in dealer plans Starter..Premier
+const ALLOW = [5, 10, 15, 25, 25]; // history checks included each month in dealer plans Starter..Premier
 const EXTRA = 3.5;                 // price of an extra check for a dealer, + VAT
 const TRIAL_DAYS = 92;             // dealers' free first 3 months: checks are not included
 
