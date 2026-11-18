@@ -1862,7 +1862,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 </div></section>
 <main>
 <div class="card cf" id="cars-filters"></div>
-<div class="bar2"><b id="cars-count"></b><button class="btn sm" id="cars-add-btn" type="button" hidden>List a car</button><button class="btn sm ghost" id="ps-open" type="button" data-sellcar="car">Sell your car &middot; &pound;29.99</button></div>
+<div class="bar2"><b id="cars-count"></b><button class="btn sm" id="cars-add-btn" type="button" hidden>List a car</button><button class="btn sm" id="ps-open" type="button" data-sellcar="car">Sell your car &middot; &pound;29.99</button></div>
 <div id="cars-fin"></div>
 <div class="card" id="cars-join" hidden><b>Dealers: join the network to list cars.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;149 + VAT a month. Bigger plans include free premium ads on the front-page banner.</p><button class="btn sm" id="cars-join-btn" type="button">Join the dealer network</button></div>
 <p class="okmsg" id="cars-ok" hidden></p>
@@ -1961,7 +1961,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 </div></section>
 <main>
 <div class="card cf" id="vans-filters"></div>
-<div class="bar2"><b id="vans-count"></b><button class="btn sm" id="vans-add-btn" type="button" hidden>List a van</button><button class="btn sm ghost" id="ps-open-van" type="button" data-sellcar="van">Sell your van &middot; &pound;29.99</button></div>
+<div class="bar2"><b id="vans-count"></b><button class="btn sm" id="vans-add-btn" type="button" hidden>List a van</button><button class="btn sm" id="ps-open-van" type="button" data-sellcar="van">Sell your van &middot; &pound;29.99</button></div>
 <div class="card" id="vans-join" hidden><b>Dealers: join the network to list vans.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;149 + VAT a month.</p><button class="btn sm" id="vans-join-btn" type="button">Join the dealer network</button></div>
 <p class="okmsg" id="vans-ok" hidden></p>
 <div id="vans-list"></div>
@@ -6024,6 +6024,7 @@ window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(funct
 .pv-msgs{background:var(--soft);border-radius:10px;padding:8px 12px;margin:0 0 10px;font-size:.9rem}.pv-msgs p{margin:6px 0 0}
 #ps-card .prev img{width:64px;height:48px;object-fit:cover;border-radius:6px;margin:6px 6px 0 0}
 #ps-open[hidden],#ps-open-van[hidden]{display:none}
+#v-cars .lprice .vat{font-size:.8rem;font-weight:600;margin-left:6px;color:var(--muted)}#v-cars .incv{font-size:.8rem;color:var(--muted)}
 .qlinks a.sell{background:#FFD43B;color:#0B1C35;border-color:#FFD43B;font-weight:800}
 .pv-seg{display:flex;gap:8px;margin:0 0 4px}.pv-seg label{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;padding:11px;border:2px solid var(--line);border-radius:12px;font-weight:800;cursor:pointer;color:var(--ink)}
 .pv-seg input{accent-color:#38BDF8}.pv-seg label:has(input:checked){border-color:#FFD43B;background:var(--soft)}
