@@ -57,6 +57,20 @@ To switch real history checks on (needs real card payments first, or private sel
 - Admin page: list of checks that blocked a listing (stolen, finance, Cat A/B), and refunds.
 - The repair look-up (/api/vrm on Vercel) may run outside the UK; set the Vercel function region to London.
 
+- Car sales, 18 Nov 2026 (late):
+  - Buyer messages and viewing or test drive requests are saved and reach the seller (dealer dashboard and My account,
+    "Messages about cars and vans"); the seller replies and confirms viewings there. Updates every 20 seconds.
+    No email or text alert yet (needs the email service).
+  - Mark as sold / remove now also removes database adverts for everyone.
+  - Owner switch on the admin page to hide the sample cars and vans once real stock is listed.
+  - Dealers: upload stock from a CSV (reg, price, mileage, plus optional columns), each car looked up and history
+    checked; add photos afterwards from the advert page ("Add photos").
+  - Dealer showroom page: ?dealer=<id>#cars, with a Share button; link shown on the dealer dashboard.
+  - MOT history on adverts (Supabase function "mot-history", London; only for regs of live adverts; kept for a day).
+    Sample MOT history shows on sample cars. NEEDS: apply for the free DVSA MOT history API in the company name, then add
+    DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY and DVSA_TOKEN_URL in Supabase > Edge Functions > Secrets.
+    DVSA revokes an API key that is not used for 90 days.
+
 Owner to do in the Supabase dashboard:
 - Authentication > URL Configuration: set "Site URL" to https://preview.motoringcentral.co.uk (the live address at launch).
   NOT DONE YET (checked 18 Nov 2026): it is still the default, localhost:3000, so the "confirm your email" link creates

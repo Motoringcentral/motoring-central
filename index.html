@@ -1133,7 +1133,7 @@ function gate(o){var err=o.err,priv=o.role==='private',reg=String(o.reg||'').toU
   if(priv&&s.finance&&s.finance.found){G.last='blocked';say('We cannot list this vehicle yet: our history check shows outstanding finance on it, and it belongs to the finance company until that is paid off. Once it is settled, contact us with the settlement letter and we will publish your advert. Or ask for a refund, less a £9.99 admin fee that covers the history check.');return null}
   G.last='ok';say('');return c})}
  G.last='';return go(o.paid?'demo':undefined)}
-var G=window.MChist={woField:woField,woErr:woErr,isWO:isWO,pill:pill,box:function(c){return box(c,'hc')},woBox:woBox,gate:gate,EXTRA:EXTRA};
+var G=window.MChist={run:run,sample:sample,woField:woField,woErr:woErr,isWO:isWO,pill:pill,box:function(c){return box(c,'hc')},woBox:woBox,gate:gate,EXTRA:EXTRA};
 function fill(){['cd','vd'].forEach(function(p){var b=document.getElementById(p+'-wobox');if(b&&!b.innerHTML)b.innerHTML=woField(p)})}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill);else fill();
 })();
@@ -3324,7 +3324,7 @@ function esc(s){var d=document.createElement('div');d.textContent=s==null?'':Str
 function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
 function price(c){return gbp(c.price)+(c.vat?'<span class="vat">+ VAT</span>':'')}
 function incv(c){return c.vat?'<div class="incv">'+gbp(c.price*1.2)+' including VAT</div>':''}
-function owns(c){var u=window.GGuser;if(c.private)return !!(u&&u.role==='customer'&&u.email===c.owner);return !!(u&&u.role==='dealer'&&(c.mine||c.dealer===u.name))}
+function owns(c){var u=window.GGuser;if(u&&u.sbid&&c.ownerId&&c.ownerId===u.sbid)return true;if(c.private)return !!(u&&u.role==='customer'&&u.email===c.owner);return !!(u&&u.role==='dealer'&&(c.mine||c.dealer===u.name))}
 var COL={Blue:'#3b78c4',Silver:'#b8c2c8',White:'#f4f6f7',Red:'#c8362c',Black:'#2a2f33',Grey:'#7b868c',Green:'#3f8a5a',Yellow:'#ffcf3f',Orange:'#ff7a1a'};
 var BODY={
 Hatchback:{b:'M0 30c0-8 3-13 10-14l14-12c3-3 6-4 10-4h28c4 0 8 2 11 5l9 11c8 1 12 4 12 10v4z',w:'M26 16l11-10c2-2 4-2 6-2h22c2 0 4 1 6 3l7 9z'},
@@ -3402,7 +3402,7 @@ d.innerHTML='<button type="button" class="btn ghost sm" id="cd-back" style="marg
 +(window.MChist?window.MChist.box(c):'')+(c.private&&window.MCpriv?window.MCpriv.notice('car',c.business):'')
 +'<div class="card" style="margin:0"><b>'+esc(c.dealer)+'</b><div class="note">'+esc(c.town)+'</div>'
 +(c.private&&!c.phone?'<p class="note" style="margin:8px 0 0">This seller takes messages through the site. Send one below.</p>':'<button type="button" class="btn ghost sm" id="cd-show" style="margin-top:8px">Show phone number</button> <span id="cd-num" hidden><b>'+esc(c.phone||'')+'</b></span>')
-+'<form id="cd-enq" novalidate><label class="f" for="en-n">Your name</label><input type="text" id="en-n"><label class="f" for="en-p">Your phone</label><input type="tel" id="en-p"><label class="f" for="en-m">Message</label><textarea id="en-m">Hi, is this car still available?</textarea><div class="tc"><input type="checkbox" id="tc-en"><label for="tc-en">'+(c.private?'I understand '+(c.business?'this vehicle is sold by a business that is not a dealer':'this is a private sale')+'. Any purchase is made with the seller, not Motoring Central, and there is no dealer warranty. <a href="#terms" data-tsec="tc-private">Read the terms</a>':'I understand any purchase is made with the dealer, not Motoring Central. The dealer is responsible for this car, its condition and any warranty. <a href="#terms" data-tsec="tc-sales">Read the terms</a>')+'</label></div><p class="err" id="en-err" role="alert"></p><button class="btn block" type="submit">'+(c.private?'Message seller':'Message dealer')+'</button></form><p class="okmsg" id="en-ok" hidden></p></div>'
++'<form id="cd-enq" novalidate data-ad="'+c.id+'" data-k="cars"><label class="f" for="en-n">Your name</label><input type="text" id="en-n"><label class="f" for="en-p">Your phone</label><input type="tel" id="en-p"><label class="f" for="en-m">Message</label><textarea id="en-m">Hi, is this car still available?</textarea><div class="tc"><input type="checkbox" id="tc-en"><label for="tc-en">'+(c.private?'I understand '+(c.business?'this vehicle is sold by a business that is not a dealer':'this is a private sale')+'. Any purchase is made with the seller, not Motoring Central, and there is no dealer warranty. <a href="#terms" data-tsec="tc-private">Read the terms</a>':'I understand any purchase is made with the dealer, not Motoring Central. The dealer is responsible for this car, its condition and any warranty. <a href="#terms" data-tsec="tc-sales">Read the terms</a>')+'</label></div><p class="err" id="en-err" role="alert"></p><button class="btn block" type="submit">'+(c.private?'Message seller':'Message dealer')+'</button></form><p class="okmsg" id="en-ok" hidden></p></div>'+(window.MCsales?window.MCsales.detail(c,'cars',owns(c)):'')
 +'<div class="dlv" data-dlv="car:'+c.id+'"></div>'+'<p style="margin:14px 0 0"><button type="button" class="btn ghost sm" id="cd-insp">Book a mobile mechanic to inspect this car</button></p>'
 +'<p style="margin:8px 0 0"><button type="button" class="btn ghost sm" id="cd-fav">'+(c.fav?'Saved. Tap to remove':'Save this car')+'</button>'+(owns(c)?(window.MCpdiBtn&&!c.private?' '+window.MCpdiBtn('cars:'+c.id,1):'')+' <button type="button" class="btn ghost sm" id="cd-sold">Mark as sold</button> <button type="button" class="btn ghost sm" id="cd-del">Remove my listing</button>':'')+(owns(c)&&c.waiting?' <span class="note">On the banner waiting list: number '+(waitList().indexOf(c)+1)+'.</span> <button type="button" class="btn ghost sm" id="cd-leave">Leave waiting list</button>':'')+(owns(c)&&!c.waiting&&!(c.featured&&c.fexp>Date.now())?' <button type="button" class="btn ghost sm" id="cd-feature">Make it a premium ad'+(c.private?' · £14.99':'')+'</button>':'')+(c.private&&!owns(c)?' <button type="button" class="pv-link" data-pvrep="1">Report this advert</button>':'')+'</p></div></div>';
 if(window.MCfin)MCfin.mount(c);
@@ -3513,7 +3513,7 @@ $('cars-join-btn').addEventListener('click',function(){location.hash='dealers'})
 function $(i){return document.getElementById(i)}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
-function owns(c){var u=window.GGuser;if(c.private)return !!(u&&u.role==='customer'&&u.email===c.owner);return !!(u&&u.role==='dealer'&&(c.mine||c.dealer===u.name))}
+function owns(c){var u=window.GGuser;if(u&&u.sbid&&c.ownerId&&c.ownerId===u.sbid)return true;if(c.private)return !!(u&&u.role==='customer'&&u.email===c.owner);return !!(u&&u.role==='dealer'&&(c.mine||c.dealer===u.name))}
 var COL={White:'#f4f6f7',Silver:'#b8c2c8',Blue:'#3b78c4',Red:'#c8362c',Black:'#2a2f33',Grey:'#7b868c',Yellow:'#ffcf3f',Green:'#3f8a5a'};
 var BODY={
 'Small van':{b:'M0 36V10q0-3 3-3h44q4 0 7 3l10 11c6 1 10 4 10 9v6z',w:'M48 11l8 10H40V11z'},
@@ -3580,7 +3580,7 @@ d.innerHTML='<button type="button" class="btn ghost sm" id="vd-back" style="marg
 +(window.MChist?window.MChist.box(c):'')+(c.private&&window.MCpriv?window.MCpriv.notice('van',c.business):'')
 +'<div class="card" style="margin:0"><b>'+esc(c.dealer)+'</b><div class="note">'+esc(c.town)+'</div>'
 +(c.private&&!c.phone?'<p class="note" style="margin:8px 0 0">This seller takes messages through the site. Send one below.</p>':'<button type="button" class="btn ghost sm" id="vd-show" style="margin-top:8px">Show phone number</button> <span id="vd-num" hidden><b>'+esc(c.phone||'')+'</b></span>')
-+'<form id="vd-enq" novalidate><label class="f" for="ven-n">Your name</label><input type="text" id="ven-n"><label class="f" for="ven-p">Your phone</label><input type="tel" id="ven-p"><label class="f" for="ven-m">Message</label><textarea id="ven-m">Hi, is this van still available?</textarea><div class="tc"><input type="checkbox" id="tc-ven"><label for="tc-ven">'+(c.private?'I understand '+(c.business?'this vehicle is sold by a business that is not a dealer':'this is a private sale')+'. Any purchase is made with the seller, not Motoring Central, and there is no dealer warranty. <a href="#terms" data-tsec="tc-private">Read the terms</a>':'I understand any purchase is made with the dealer, not Motoring Central. The dealer is responsible for this van, its condition and any warranty. <a href="#terms" data-tsec="tc-sales">Read the terms</a>')+'</label></div><p class="err" id="ven-err" role="alert"></p><button class="btn block" type="submit">'+(c.private?'Message seller':'Message dealer')+'</button></form><p class="okmsg" id="ven-ok" hidden></p></div>'
++'<form id="vd-enq" novalidate data-ad="'+c.id+'" data-k="vans"><label class="f" for="ven-n">Your name</label><input type="text" id="ven-n"><label class="f" for="ven-p">Your phone</label><input type="tel" id="ven-p"><label class="f" for="ven-m">Message</label><textarea id="ven-m">Hi, is this van still available?</textarea><div class="tc"><input type="checkbox" id="tc-ven"><label for="tc-ven">'+(c.private?'I understand '+(c.business?'this vehicle is sold by a business that is not a dealer':'this is a private sale')+'. Any purchase is made with the seller, not Motoring Central, and there is no dealer warranty. <a href="#terms" data-tsec="tc-private">Read the terms</a>':'I understand any purchase is made with the dealer, not Motoring Central. The dealer is responsible for this van, its condition and any warranty. <a href="#terms" data-tsec="tc-sales">Read the terms</a>')+'</label></div><p class="err" id="ven-err" role="alert"></p><button class="btn block" type="submit">'+(c.private?'Message seller':'Message dealer')+'</button></form><p class="okmsg" id="ven-ok" hidden></p></div>'+(window.MCsales?window.MCsales.detail(c,'vans',owns(c)):'')
 +'<div class="dlv" data-dlv="van:'+c.id+'"></div>'+'<p style="margin:14px 0 0"><button type="button" class="btn ghost sm" id="vd-insp">Book a mobile mechanic to inspect this van</button></p>'
 +'<p style="margin:8px 0 0"><button type="button" class="btn ghost sm" id="vd-fav">'+(c.fav?'Saved. Tap to remove':'Save this van')+'</button>'+(owns(c)?(window.MCpdiBtn&&!c.private?' '+window.MCpdiBtn('vans:'+c.id,1):'')+' <button type="button" class="btn ghost sm" id="vd-sold">Mark as sold</button> <button type="button" class="btn ghost sm" id="vd-del">Remove my listing</button>':'')+(owns(c)&&!(c.featured&&c.fexp>Date.now())?' <button type="button" class="btn ghost sm" id="vd-feature">Make it a premium ad'+(c.private?' · £14.99':'')+'</button>':'')+(c.private&&!owns(c)?' <button type="button" class="pv-link" data-pvrep="1">Report this advert</button>':'')+'</p></div></div>';
 $('vd-back').onclick=function(){showList(true);render()};
@@ -6108,6 +6108,7 @@ window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(funct
 .badge.pv,.mcnight .badge.pv{background:#FFD43B!important;color:#0B1C35!important;font-weight:800;border:0}
 #ps-sum small{display:block}
 .ps-steps{display:flex;gap:4px;list-style:none;padding:0;margin:0 0 12px;counter-reset:st}.ps-steps li{flex:1;font-size:.75rem;text-align:center;padding:6px 2px;border-radius:8px;background:var(--soft);color:var(--muted);counter-increment:st}.ps-steps li::before{content:counter(st) ". "}.ps-steps li.on{background:#FFD43B;color:#0B1C35;font-weight:800}.ps-steps li.done{background:#1F7A4D;color:#fff}.pv-paid{background:var(--soft);border-radius:10px;padding:8px 10px;margin:0 0 8px;font-size:.9rem}
+.mx-n{background:#C62828;color:#fff;border-radius:999px;font-size:.75rem;padding:2px 8px;vertical-align:middle;margin-left:6px}.mx-t{border-top:1px solid var(--line);padding:8px 0}.mx-t summary{cursor:pointer;list-style:none}.mx-t summary b{display:block}.mx-t summary small{color:var(--muted)}.mx-t.new summary b::after{content:" \2022 new";color:#C62828;font-size:.8rem}.mx-m{background:var(--soft);border-radius:10px;padding:8px 10px;margin:8px 0;max-width:92%}.mx-m.me{margin-left:auto;background:rgba(59,183,255,.15)}.mx-m small{color:var(--muted);font-size:.75rem}.mx-m p{margin:2px 0 0}.mx-act{margin-top:6px}.mx-r{display:flex;gap:8px;align-items:flex-end;margin-top:6px}.mx-r textarea{flex:1;min-width:0}.mot{margin-top:12px}.mot-l{list-style:none;margin:8px 0 0;padding:0}.mot-l>li{border-top:1px solid var(--line);padding:6px 0}.mot-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.mot-b{font-weight:800;font-size:.75rem;border-radius:6px;padding:2px 8px;color:#fff}.mot-b.p{background:#1F7A4D}.mot-b.f{background:#C62828}.mot-l details{margin-top:4px;font-size:.88rem}.mot-l details ul{margin:4px 0 0;padding-left:18px}.mot-l li.f{color:#C62828}.mot-warn{background:#FDECEA;color:#5F1212;border-radius:8px;padding:8px 10px;margin:8px 0 0}.mcnight .mot-warn{background:#3A1515;color:#FFDCDC}.showroom{margin-bottom:12px;border:2px solid #FFD43B}.sr-n{font-size:1.2rem}.sr-box{border:1px solid var(--line);border-radius:12px;padding:10px 12px}.sr-box input{width:100%;font-size:.85rem}.bulk-l{list-style:none;padding:0;margin:10px 0 0;font-size:.9rem}.bulk-l li{border-top:1px solid var(--line);padding:6px 0}.bulk-l li.x{color:var(--muted)}.bulk-l li.ok b{color:#1F7A4D}
 .dg-open{margin-top:6px}.dg{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px}.dg-f{border:0;padding:0;margin:10px 0 0}.dg-f legend{font-weight:700;font-size:.9rem;margin-bottom:6px}.dg-chips{display:flex;flex-wrap:wrap;gap:6px}.linkbtn{background:none;border:0;padding:0;color:inherit;text-decoration:underline;font:inherit;cursor:pointer}
 .regfind{display:flex;gap:8px;align-items:stretch}.regfind input{flex:1;min-width:0}.regfind .btn{flex:none;min-width:74px}
 .badge.wo,.mcnight .badge.wo{background:#C62828!important;color:#fff!important;font-weight:800;border:0}.badge.hc,.mcnight .badge.hc{background:#1F7A4D!important;color:#fff!important;border:0}.badge.fn,.mcnight .badge.fn{background:#B26A00!important;color:#fff!important;border:0}
@@ -6448,7 +6449,7 @@ var ENG=[['1.0','Up to 1.0 litre'],['1.4','1.1 to 1.4 litres'],['1.9','1.5 to 1.
 var DOORS={Hatchback:5,Saloon:4,SUV:5,Estate:5,Coupe:2,Convertible:2,MPV:5},SEATS={Coupe:4,Convertible:4,MPV:7};
 var K={cars:{root:'cars-filters',one:'car',many:'cars',api:function(){return window.GGcars},bodyLabel:'Body type'},
        vans:{root:'vans-filters',one:'van',many:'vans',api:function(){return window.GGvans},bodyLabel:'Type of van'}};
-function blank(){return {pc:'',dist:0,make:'',model:'',pmin:0,pmax:0,ymin:0,ymax:0,miles:0,gear:'',fuel:[],body:[],col:[],doors:0,seats:0,eng:'',pay:0,mmax:0,seller:'',wo:'',kw:'',sort:'rec',more:false}}
+function blank(){return {pc:'',dist:0,make:'',model:'',pmin:0,pmax:0,ymin:0,ymax:0,miles:0,gear:'',fuel:[],body:[],col:[],doors:0,seats:0,eng:'',pay:0,mmax:0,seller:'',wo:'',dealer:'',dname:'',kw:'',sort:'rec',more:false}}
 var ST={cars:blank(),vans:blank()};
 try{var sv=JSON.parse(sessionStorage.getItem('mc-flt')||'null');if(sv)['cars','vans'].forEach(function(k){if(sv[k]){var b=blank();Object.keys(b).forEach(function(f){if(sv[k][f]!=null&&typeof sv[k][f]===typeof b[f]&&Array.isArray(sv[k][f])===Array.isArray(b[f]))b[f]=sv[k][f]});ST[k]=b}})}catch(e){}
 function save(){try{sessionStorage.setItem('mc-flt',JSON.stringify(ST))}catch(e){}}
@@ -6465,6 +6466,7 @@ function ok(kind,c,skip){var s=ST[kind];
  if(c.private&&c.exp&&c.exp<Date.now())return false;
  if(skip!=='seller'&&s.seller&&(s.seller==='private')!==!!c.private)return false;
  if(skip!=='wo'&&s.wo==='hide'&&window.MChist&&window.MChist.isWO(c))return false;
+ if(s.dealer&&!(c.ownerId===s.dealer||(c.dealer||'')===s.dealer))return false;
  if(skip!=='make'&&skip!=='model'&&s.make&&c.make!==s.make)return false;
  if(skip!=='model'&&s.model&&c.model!==s.model)return false;
  if(skip!=='price'&&((s.pmin&&cost(kind,c)<s.pmin)||(s.pmax&&cost(kind,c)>s.pmax)))return false;
@@ -6557,7 +6559,7 @@ function active(kind){var s=ST[kind],a=[],car=kind==='cars';
  if(s.gear)a.push(['gear','',s.gear]);
  s.fuel.forEach(function(v){a.push(['fuel',v,v])});s.body.forEach(function(v){a.push(['body',v,v])});s.col.forEach(function(v){a.push(['col',v,v])});
  if(car&&s.doors)a.push(['doors','',s.doors+' doors']);if(car&&s.seats)a.push(['seats','',s.seats+' or more seats']);
- if(s.seller)a.push(['seller','',s.seller==='private'?'Private sellers only':'Dealers only']);if(s.wo)a.push(['wo','','No write-offs']);
+ if(s.seller)a.push(['seller','',s.seller==='private'?'Private sellers only':'Dealers only']);if(s.wo)a.push(['wo','','No write-offs']);if(s.dealer)a.push(['dealer','','Seller: '+(s.dname||s.dealer)]);
  if(car&&s.eng)a.push(['eng','',(ENG.filter(function(x){return x[0]===s.eng})[0]||['',''])[1]]);
  if(!car&&s.pay)a.push(['pay','','Carries '+s.pay.toLocaleString('en-GB')+' kg or more']);
  if(s.kw.trim())a.push(['kw','','“'+s.kw.trim()+'”']);return a}
@@ -7504,6 +7506,168 @@ var lastWho='',ticks=0;
 setInterval(function(){var u=window.GGuser,who=u&&u.sbid?u.sbid+u.role:'';ticks++;
  if(who!==lastWho){lastWho=who;adOwner();if(!who){qPut([]);return}bkSt={};pullBookings();pullQuotes();return}
  if(!who||document.hidden)return;pushStatuses();syncSettings();adSync();if(ticks%8===0){pullBookings();pullQuotes()}},3000);
+/* ---------- car and van sales: buyer messages, viewings, MOT history, showroom, bulk upload, sample switch ---------- */
+function E(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function gbp(n){return '£'+(+n).toFixed(2)}
+function dd(t){var d=new Date(t);return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
+function dt(t){var d=new Date(t);return isNaN(d)?'':d.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+function realUser(){var u=window.GGuser;return !!(sb&&u&&u.sbid)}
+function advBy(kind,id){var a=adApi(kind);if(!a)return null;return a.list().filter(function(x){return String(x.id)===String(id)})[0]||null}
+function advByDb(id){var r=null;['cars','vans'].forEach(function(k){var a=adApi(k);if(a&&!r)r=a.list().filter(function(x){return x.dbid===id})[0]||null});return r}
+/* messages */
+var MSG=[],msgSig='',SEEN={};try{SEEN=JSON.parse(localStorage.getItem('mc-msg-seen')||'{}')||{}}catch(e){}
+function seen(k){SEEN[k]=Date.now();try{localStorage.setItem('mc-msg-seen',JSON.stringify(SEEN))}catch(e){}}
+function pullMsgs(){if(!realUser())return;var u=window.GGuser;sb.from('advert_messages').select('*').order('created_at',{ascending:true}).limit(800).then(function(r){if(r.error||window.GGuser!==u)return;MSG=r.data||[];var sg=MSG.length+':'+(MSG.length?MSG[MSG.length-1].id:'');if(sg!==msgSig){msgSig=sg;drawInbox(true)}})}
+function sendMsg(row){return sb.from('advert_messages').insert(row).then(function(r){if(r.error)throw r.error;pullMsgs()})}
+function threads(){var u=window.GGuser,T={},L=[];MSG.forEach(function(m){var k=m.advert_id+':'+m.buyer_id;if(!T[k]){T[k]={key:k,advert_id:m.advert_id,buyer_id:m.buyer_id,seller_id:m.seller_id,title:m.advert_title,buyer:m.buyer_name,phone:m.buyer_phone,list:[]};L.push(T[k])}var t=T[k];t.list.push(m);if(m.from_role==='buyer'){t.buyer=m.buyer_name||t.buyer;t.phone=m.buyer_phone||t.phone}});
+ L.forEach(function(t){t.me=t.seller_id===u.sbid?'seller':'buyer';t.last=t.list[t.list.length-1];t.unread=t.list.some(function(m){return m.from_role!==t.me&&Date.parse(m.created_at)>(SEEN[t.key]||0)})});
+ return L.sort(function(a,b){return Date.parse(b.last.created_at)-Date.parse(a.last.created_at)})}
+function msgLine(m,t){var mine=m.from_role===t.me,who=mine?'You':(m.from_role==='seller'?'Seller':(t.buyer||'Buyer')),w=m.meta&&m.meta.when?dt(m.meta.when):'',body='';
+ if(m.kind==='viewing')body='<b>'+(m.meta&&m.meta.drive?'Test drive':'Viewing')+' request: '+E(w)+'</b>'+(m.body?'<br>'+E(m.body):'');
+ else if(m.kind==='viewing_ok')body='<b>&#10003; Confirmed: '+E(w)+'</b>'+(m.body?'<br>'+E(m.body):'');
+ else if(m.kind==='viewing_no')body='<b>That time does not suit: '+E(w)+'</b>'+(m.body?'<br>'+E(m.body):'');
+ else body=E(m.body);
+ var act='';if(m.kind==='viewing'&&t.me==='seller'&&!t.list.some(function(x){return (x.kind==='viewing_ok'||x.kind==='viewing_no')&&x.meta&&x.meta.of===m.id}))act='<div class="mx-act"><button type="button" class="btn sm" data-vwans="ok" data-mid="'+m.id+'">Confirm</button> <button type="button" class="btn sm ghost" data-vwans="no" data-mid="'+m.id+'">Suggest another time</button></div>';
+ return '<div class="mx-m'+(mine?' me':'')+'"><small>'+E(who)+' · '+E(dt(m.created_at))+'</small><p>'+body+'</p>'+act+'</div>'}
+var OPEN={},DRAFT={};
+function inboxHtml(){var L=threads(),n=L.filter(function(t){return t.unread}).length;
+ var h='<div class="card mx" id="mc-inbox"><h2>Messages about cars and vans'+(n?' <span class="mx-n">'+n+' new</span>':'')+'</h2>';
+ if(!L.length)return h+'<p class="note" style="margin:0">No messages yet. When a buyer messages you about an advert, or you message a seller, it appears here.</p></div>';
+ L.slice(0,40).forEach(function(t){var c=advByDb(t.advert_id),other=t.me==='seller'?(t.buyer||'Buyer')+(t.phone?' · '+t.phone:''):(c&&c.dealer?c.dealer:'The seller');
+  h+='<details class="mx-t'+(t.unread?' new':'')+'" data-tk="'+t.key+'"'+(OPEN[t.key]?' open':'')+'><summary><b>'+E(t.title||'Advert')+'</b><small>'+(t.me==='seller'?'Buyer: ':'Seller: ')+E(other)+' · '+E(dd(t.last.created_at))+'</small></summary>'+
+   t.list.map(function(m){return msgLine(m,t)}).join('')+
+   '<div class="mx-r"><textarea rows="2" maxlength="2000" data-mxd="'+t.key+'" placeholder="Write a reply">'+E(DRAFT[t.key]||'')+'</textarea><button type="button" class="btn sm" data-mxs="'+t.key+'">Send</button></div>'+
+   (c?'<p class="note" style="margin:6px 0 0"><a href="#'+(c.van?'vans':'cars')+'" data-mxopen="'+(c.van?'vans':'cars')+':'+c.id+'">View the advert</a></p>':'')+'<p class="err" data-mxe="'+t.key+'"></p></details>'});
+ return h+'</div>'}
+function drawInbox(force){if(!realUser())return;var u=window.GGuser,host=u.role==='customer'?(location.hash==='#account'?$('acc-body'):null):(location.hash==='#dashboard'?$('dash-body'):null);if(!host)return;
+ var old=$('mc-inbox');if(old&&!force)return;if(old&&old.contains(document.activeElement))return;
+ var d=document.createElement('div');d.innerHTML=inboxHtml();var card=d.firstChild;
+ if(old)old.parentNode.replaceChild(card,old);else{var first=u.role==='customer'?host.firstChild:host.children[1]||null;host.insertBefore(card,first)}}
+document.addEventListener('toggle',function(e){var t=e.target;if(!t.matches||!t.matches('details.mx-t'))return;var k=t.getAttribute('data-tk');OPEN[k]=t.open;if(t.open){seen(k);t.classList.remove('new')}},true);
+document.addEventListener('input',function(e){var k=e.target.getAttribute&&e.target.getAttribute('data-mxd');if(k)DRAFT[k]=e.target.value});
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ var s=t.closest('[data-mxs]');if(s){var k=s.getAttribute('data-mxs'),ta=document.querySelector('[data-mxd="'+k+'"]'),er=document.querySelector('[data-mxe="'+k+'"]'),txt=(ta&&ta.value||'').trim(),th=threads().filter(function(x){return x.key===k})[0];if(!txt||!th)return;s.disabled=true;
+  sendMsg({advert_id:th.advert_id,buyer_id:th.buyer_id,from_role:th.me,kind:'msg',body:txt}).then(function(){s.disabled=false;DRAFT[k]='';OPEN[k]=true;seen(k)},function(x){s.disabled=false;if(er)er.textContent=(x&&x.code==='P0001'&&x.message)||'Your message was not sent. Check your connection and try again.'});return}
+ var v=t.closest('[data-vwans]');if(v){var mid=v.getAttribute('data-mid'),m=MSG.filter(function(x){return x.id===mid})[0];if(!m)return;var ok=v.getAttribute('data-vwans')==='ok',note=ok?'':prompt('Suggest another day and time for the buyer (optional):','')||'';v.disabled=true;
+  sendMsg({advert_id:m.advert_id,buyer_id:m.buyer_id,from_role:'seller',kind:ok?'viewing_ok':'viewing_no',body:note,meta:{of:m.id,when:m.meta&&m.meta.when}}).catch(function(){v.disabled=false;toast('Your reply was not sent. Try again.',true)});return}
+ var o=t.closest('[data-mxopen]');if(o){e.preventDefault();var a=o.getAttribute('data-mxopen').split(':');location.hash=a[0];setTimeout(function(){var api=adApi(a[0]);if(api)api.open(isNaN(+a[1])?a[1]:+a[1])},200);return}});
+/* a buyer's message on an advert saved in the database goes to the seller */
+document.addEventListener('submit',function(e){var f=e.target;if(!f||(f.id!=='cd-enq'&&f.id!=='vd-enq'))return;var k=f.id==='cd-enq'?'en':'ven',c=advBy(f.getAttribute('data-k'),f.getAttribute('data-ad'));
+ setTimeout(function(){var ok=$(k+'-ok');if(!c||!c.dbid||!ok||ok.hidden||!realUser())return;
+  ok.textContent='Sending…';sendMsg({advert_id:c.dbid,buyer_id:window.GGuser.sbid,from_role:'buyer',kind:'msg',body:($(k+'-m').value||'').trim().slice(0,2000),meta:{name:($(k+'-n').value||'').trim().slice(0,120),phone:($(k+'-p').value||'').trim().slice(0,30)}}).then(function(){ok.textContent='Message sent to '+(c.dealer||'the seller')+'. Their reply will appear in My account, under Messages.'},function(x){ok.hidden=true;var er=$(k+'-err');if(er)er.textContent=(x&&x.code==='P0001'&&x.message)||'Your message was not sent. Check your connection and try again.'})},60)});
+/* removing or marking sold an advert saved in the database */
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#cd-sold,#cd-del,#vd-sold,#vd-del');if(!b||!sb)return;var f=$(b.id.slice(0,2)==='cd'?'cd-enq':'vd-enq');if(!f)return;var c=advBy(f.getAttribute('data-k'),f.getAttribute('data-ad'));
+ if(c&&c.dbid&&realUser()&&c.ownerId===window.GGuser.sbid)sb.from('adverts').update({status:'removed'}).eq('id',c.dbid).then(function(r){if(r.error)toast('That advert was not removed for other people. Try again.',true)})},true);
+/* viewing and test drive requests, MOT history and photos on the advert page */
+function slots(){var h='';for(var i=9;i<=18;i++){['00','30'].forEach(function(m){if(i===18&&m==='30')return;h+='<option>'+(i<10?'0':'')+i+':'+m+'</option>'})}return h}
+function detail(c,kind,mine){var h='';
+ if(!mine)h+='<div class="card vw-box" style="margin-top:12px" data-vwk="'+kind+'" data-vwid="'+c.id+'"><b>Book a viewing or test drive</b><p class="note" style="margin:4px 0 8px">Pick a day and time. The seller confirms by message.</p>'+
+  '<div class="two"><div><label class="f">Day</label><input type="date" class="vw-d" min="'+new Date().toISOString().slice(0,10)+'"></div><div><label class="f">Time</label><select class="vw-t">'+slots()+'</select></div></div>'+
+  '<label style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" class="vw-dr" style="width:20px;height:20px"> I would like a test drive</label>'+
+  '<label class="f">Anything the seller should know? (optional)</label><input type="text" class="vw-n" maxlength="300" placeholder="For example: I have a part exchange">'+
+  '<p class="err vw-e" role="alert"></p><button type="button" class="btn block" data-vwgo="1">Request a viewing</button><p class="okmsg vw-ok" hidden></p></div>';
+ h+='<div class="mot-box" data-mot="'+kind+':'+c.id+'"></div>';
+ if(mine)h+='<p style="margin:10px 0 0"><button type="button" class="btn ghost sm" data-addph="'+kind+':'+c.id+'">Add photos</button><input type="file" accept="image/*" multiple hidden data-addphf="'+kind+':'+c.id+'"></p>';
+ return h}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-vwgo]');if(!b)return;var box=b.closest('.vw-box'),c=advBy(box.getAttribute('data-vwk'),box.getAttribute('data-vwid')),er=box.querySelector('.vw-e'),ok=box.querySelector('.vw-ok');
+ var day=box.querySelector('.vw-d').value,tm=box.querySelector('.vw-t').value;if(!day){er.textContent='Choose a day.';return}var when=new Date(day+'T'+tm+':00');if(when<new Date()){er.textContent='Choose a day and time in the future.';return}er.textContent='';
+ var u=window.GGuser;if(!u){if(window.GGcustOpen)window.GGcustOpen('Create a free account or log in to book a viewing.','in');return}
+ var drive=box.querySelector('.vw-dr').checked,note=box.querySelector('.vw-n').value.trim();
+ if(!c||!c.dbid||!realUser()){ok.hidden=false;ok.textContent='Request sent to '+(c&&c.dealer||'the seller')+' for '+dt(when)+'. Sample advert: preview only, nothing was sent.';return}
+ b.disabled=true;sendMsg({advert_id:c.dbid,buyer_id:u.sbid,from_role:'buyer',kind:'viewing',body:note.slice(0,300),meta:{when:when.toISOString(),drive:drive,name:u.name||'',phone:u.phone||''}}).then(function(){b.disabled=false;ok.hidden=false;ok.textContent='Request sent to '+(c.dealer||'the seller')+' for '+dt(when)+'. You will see their answer in My account, under Messages.'},function(x){b.disabled=false;er.textContent=(x&&x.code==='P0001'&&x.message)||'Your request was not sent. Check your connection and try again.'})});
+/* MOT history */
+var MOTC={};
+function motSample(c){var yr=+c.year||2018,first=yr+3,now=new Date().getFullYear(),mi=+c.miles||40000,T=[],per=Math.max(3000,Math.round(mi/Math.max(1,now-yr)));
+ for(var y=first;y<=now&&T.length<12;y++){var m=Math.min(mi,per*(y-yr)),f=(y*7+(c.id||1))%5===0;T.unshift({date:y+'-0'+(3+(y%6))+'-1'+(y%9),result:f?'fail':'pass',miles:m,expiry:f?null:(y+1)+'-0'+(3+(y%6))+'-1'+(y%9),fail:f?['Nearside front tyre tread depth below requirements']:[],minor:[],adv:y%2?['Front brake discs worn, pitted or scored, but not seriously weakened']:[]});if(f)T.unshift({date:y+'-0'+(3+(y%6))+'-2'+(y%9),result:'pass',miles:m+12,expiry:(y+1)+'-0'+(3+(y%6))+'-1'+(y%9),fail:[],minor:[],adv:[]})}
+ return {sample:true,tests:T}}
+function motHtml(M){var T=(M.tests||[]).slice().sort(function(a,b){return a.date<b.date?1:-1});if(!T.length)return '<div class="card mot"><b>MOT history</b><p class="note" style="margin:6px 0 0">No MOT tests on record. Vehicles do not need an MOT until they are 3 years old.</p></div>';
+ var lastPass=T.filter(function(t){return t.result==='pass'&&t.expiry})[0],drop=false;for(var i=0;i<T.length-1;i++){if(T[i].miles&&T[i+1].miles&&T[i].miles<T[i+1].miles-50)drop=true}
+ var h='<div class="card mot"><b>MOT history</b>'+(lastPass?'<p class="note" style="margin:4px 0 0">'+(new Date(lastPass.expiry)>new Date()?'MOT valid until '+dd(lastPass.expiry):'MOT expired on '+dd(lastPass.expiry))+' · '+T.length+' test'+(T.length>1?'s':'')+' on record</p>':'')+
+  (drop?'<p class="mot-warn">The recorded mileage went down between two tests. Ask the seller about it before you buy.</p>':'')+'<ul class="mot-l">';
+ T.slice(0,15).forEach(function(t){var n=(t.fail||[]).length+(t.minor||[]).length+(t.adv||[]).length;
+  h+='<li><div class="mot-r"><span class="mot-b '+(t.result==='pass'?'p':'f')+'">'+(t.result==='pass'?'Pass':'Fail')+'</span><span>'+E(dd(t.date))+'</span><span>'+(t.miles?Number(t.miles).toLocaleString('en-GB')+' miles':'')+'</span></div>'+
+   (n?'<details><summary>'+n+' item'+(n>1?'s':'')+' noted</summary><ul>'+(t.fail||[]).map(function(x){return '<li class="f">'+E(x)+'</li>'}).join('')+(t.minor||[]).map(function(x){return '<li>Minor: '+E(x)+'</li>'}).join('')+(t.adv||[]).map(function(x){return '<li>Advisory: '+E(x)+'</li>'}).join('')+'</ul></details>':'')+'</li>'});
+ return h+'</ul><p class="note" style="margin:6px 0 0">'+(M.sample?'Sample MOT history for the preview.':'From the DVSA MOT history service. Contains public sector information licensed under the Open Government Licence v3.0.')+'</p></div>'}
+function fillMot(){[].forEach.call(document.querySelectorAll('.mot-box:not([data-done])'),function(box){box.setAttribute('data-done','1');var a=box.getAttribute('data-mot').split(':'),c=advBy(a[0],a[1]);if(!c)return;
+ if(!c.dbid){box.innerHTML=motHtml(motSample(c));return}var reg=String(c.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(!reg||!sb)return;
+ (MOTC[reg]?Promise.resolve(MOTC[reg]):sb.functions.invoke('mot-history',{body:{reg:reg},region:'eu-west-2'}).then(function(r){return r.data||null})).then(function(r){if(!r||!r.ok)return;MOTC[reg]=r;if(document.body.contains(box))box.innerHTML=motHtml(r.mot)}).catch(function(){})})}
+/* adding photos to an advert that is already listed */
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-addph]');if(!b)return;var f=document.querySelector('[data-addphf="'+b.getAttribute('data-addph')+'"]');if(f)f.click()});
+document.addEventListener('change',function(e){var f=e.target;if(!f.getAttribute||!f.getAttribute('data-addphf'))return;var a=f.getAttribute('data-addphf').split(':'),c=advBy(a[0],a[1]),api=adApi(a[0]);if(!c||!window.MCphotos)return;
+ var room=Math.max(0,30-(c.photos||[]).length);window.MCphotos.read(f.files,room).then(function(P){if(!P.length)return;c.photos=(c.photos||[]).concat(P);
+  if(c.dbid&&realUser()&&c.ownerId===window.GGuser.sbid){toast('Uploading your photos…');adPhotos(c).then(function(){var d=adClean(c);adSig[c.dbid]=JSON.stringify(d);return sb.from('adverts').update({data:d}).eq('id',c.dbid)}).then(function(r){if(r&&r.error)throw r.error;toast(P.length+' photo'+(P.length>1?'s':'')+' added.');api.open(c.id)},function(){toast('Your photos were not saved. Check your connection and try again.',true)})}
+  else{toast(P.length+' photo'+(P.length>1?'s':'')+' added.');api.open(c.id)}})});
+/* a dealer's showroom: ?dealer=<id>#cars lists only their cars and vans */
+var SHOW=null;try{SHOW=new URLSearchParams(location.search).get('dealer')}catch(e){}
+function showroomKey(u){return u.sbid||u.name}
+function showroomUrl(u){return location.origin+location.pathname+'?dealer='+encodeURIComponent(showroomKey(u))+'#cars'}
+function applyShowroom(){if(!SHOW||!window.MCflt)return;['cars','vans'].forEach(function(k){var api=adApi(k);if(!api)return;var L=api.list().filter(function(c){return c.ownerId===SHOW||c.dealer===SHOW}),st=window.MCflt.state(k);
+ var name=L.length?L[0].dealer:SHOW;if(st.dealer!==SHOW)window.MCflt.set(k,{dealer:SHOW,dname:name});
+ var list=$(k+'-list');if(!list)return;var head=$(k+'-showroom');if(!head){head=document.createElement('div');head.id=k+'-showroom';head.className='card showroom';list.parentNode.insertBefore(head,list)}
+ var c0=L[0]||{},other=adApi(k==='cars'?'vans':'cars'),on=other?other.list().filter(function(c){return c.ownerId===SHOW||c.dealer===SHOW}).length:0;
+ var html='<b class="sr-n">'+E(name)+'</b><p class="note" style="margin:2px 0 8px">'+E(c0.town||'')+(c0.phone?' · <a href="tel:'+E(String(c0.phone).replace(/\s/g,''))+'">'+E(c0.phone)+'</a>':'')+'</p><p style="margin:0 0 8px">'+L.length+' '+(k==='cars'?'car':'van')+(L.length===1?'':'s')+' for sale'+(on?' · <a href="?dealer='+encodeURIComponent(SHOW)+'#'+(k==='cars'?'vans':'cars')+'">'+on+' '+(k==='cars'?'van':'car')+(on===1?'':'s')+'</a>':'')+'</p><button type="button" class="btn sm" data-srshare="1">Share this showroom</button> <button type="button" class="btn sm ghost" data-srall="1">See all '+(k==='cars'?'cars':'vans')+'</button>';
+ if(head.getAttribute('data-h')!==html){head.innerHTML=html;head.setAttribute('data-h',html)}})}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ if(t.closest('[data-srall]')){SHOW=null;try{history.replaceState(null,'',location.pathname+location.hash)}catch(x){}['cars','vans'].forEach(function(k){var h=$(k+'-showroom');if(h)h.remove();if(window.MCflt)window.MCflt.set(k,{})});return}
+ var sh=t.closest('[data-srshare]');if(sh){var url=location.origin+location.pathname+'?dealer='+encodeURIComponent(sh.getAttribute('data-srshare')==='1'?SHOW:sh.getAttribute('data-srshare'))+'#cars';
+  if(navigator.share)navigator.share({title:'Cars for sale',url:url}).catch(function(){});else if(navigator.clipboard)navigator.clipboard.writeText(url).then(function(){toast('Showroom link copied.')});return}});
+/* dealer dashboard: showroom link and spreadsheet upload */
+var CSVT='reg,price,mileage,colour,vat,writeoff,fuel,gearbox,description\nAB12CDE,8995,52000,Blue,no,no,,,Two keys and full service history\nCD34EFG,12495,31000,,no,no,,,\n';
+function dashTools(){var u=window.GGuser;if(!u||u.role!=='dealer'||location.hash!=='#dashboard')return;var host=$('dash-body');if(!host||!host.firstChild||$('mc-dtools'))return;
+ var d=document.createElement('div');d.id='mc-dtools';d.className='card';
+ d.innerHTML='<div class="sr-box"><b>Your showroom</b><p class="note" style="margin:2px 0 6px">One page with all your cars and vans. Share it on Facebook or link to it from your own website.</p><input type="text" readonly value="'+E(showroomUrl(u))+'" onclick="this.select()"><div style="margin-top:6px"><button type="button" class="btn sm" data-srshare="'+E(showroomKey(u))+'">Share</button> <a class="btn sm ghost" href="'+E(showroomUrl(u))+'">Open it</a></div></div>'+
+ (u.status==='approved'?'<button type="button" class="btn sm ghost" id="mc-bulk" style="margin-top:10px">Upload stock from a spreadsheet</button><div id="mc-bulkp" hidden></div>':'');
+ host.insertBefore(d,host.firstChild.nextSibling)}
+function bulkPanel(){return '<div class="bulk"><p class="note" style="margin:8px 0">Upload a CSV file (in Excel or Google Sheets: File, Save as or Download, CSV). One car or van per row with columns <b>reg</b>, <b>price</b> and <b>mileage</b>. Optional: colour, vat (yes if the price is + VAT), writeoff (no, S, N, C, D or unsure), fuel, gearbox, description. We fill in the rest from the registration and run a history check on each one, taken from your plan. Add photos afterwards from each advert.</p>'+
+ '<p style="margin:0 0 8px"><a href="#" data-csvt="1">Download a blank template</a></p><input type="file" accept=".csv,text/csv" id="mc-bulkf">'+
+ '<label style="display:flex;gap:8px;align-items:flex-start;margin-top:10px"><input type="checkbox" id="mc-bulkok" style="width:20px;height:20px;flex:none"> <span>The write-off column is correct for every vehicle. A blank means I am not sure, and any write-off our check finds will be shown on the advert.</span></label>'+
+ '<p class="err" id="mc-bulke" role="alert"></p><button type="button" class="btn sm" id="mc-bulkgo">Upload and list</button><ul class="bulk-l" id="mc-bulkl"></ul></div>'}
+function csvRows(txt){var R=[],row=[],f='',q=false;for(var i=0;i<txt.length;i++){var ch=txt[i];if(q){if(ch==='"'){if(txt[i+1]==='"'){f+='"';i++}else q=false}else f+=ch}else if(ch==='"')q=true;else if(ch===','){row.push(f);f=''}else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&txt[i+1]==='\n')i++;row.push(f);f='';if(row.some(function(x){return x.trim()}))R.push(row);row=[]}else f+=ch}row.push(f);if(row.some(function(x){return x.trim()}))R.push(row);return R}
+function col(H,names){for(var i=0;i<H.length;i++){var h=H[i].toLowerCase().replace(/[^a-z]/g,'');if(names.indexOf(h)>-1)return i}return -1}
+function fuelOf(v){v=String(v||'').toLowerCase();return /hybrid/.test(v)?'Hybrid':/diesel|heavy/.test(v)?'Diesel':/electric/.test(v)?'Electric':/petrol/.test(v)?'Petrol':''}
+function gearOf(v){v=String(v||'').toLowerCase();return /auto|cvt|dsg/.test(v)?'Automatic':/man/.test(v)?'Manual':''}
+function bulkRun(){var u=window.GGuser,er=$('mc-bulke'),out=$('mc-bulkl'),f=$('mc-bulkf').files[0];er.textContent='';
+ if(!f){er.textContent='Choose your CSV file first.';return}if(!$('mc-bulkok').checked){er.textContent='Tick the box to confirm the write-off column.';return}
+ var P=window.DPLAN?window.DPLAN(u.plan==null?1:+u.plan):{max:Infinity},have=['cars','vans'].reduce(function(n,k){var a=adApi(k);return n+(a?a.list().filter(function(c){return c.mine||c.ownerId===u.sbid}).length:0)},0);
+ f.text().then(function(txt){var R=csvRows(txt);if(R.length<2){er.textContent='The file has no rows. The first row must be the column names.';return}var H=R[0],ci={reg:col(H,['reg','registration','vrm','regnumber']),price:col(H,['price','askingprice']),miles:col(H,['mileage','miles','odometer']),col:col(H,['colour','color']),vat:col(H,['vat','plusvat']),wo:col(H,['writeoff','wo','insurancewriteoff']),fuel:col(H,['fuel','fueltype']),gear:col(H,['gearbox','gear','transmission']),desc:col(H,['description','desc','notes']),type:col(H,['type','kind'])};
+  if(ci.reg<0||ci.price<0||ci.miles<0){er.textContent='The file needs columns called reg, price and mileage.';return}
+  var rows=R.slice(1,101).map(function(r){function g(k){return ci[k]>-1?String(r[ci[k]]||'').trim():''}return{reg:g('reg').toUpperCase().replace(/[^A-Z0-9]/g,''),price:+g('price').replace(/[^0-9.]/g,''),miles:+g('miles').replace(/[^0-9]/g,''),col:g('col'),vat:/^(y|yes|true|1|\+ ?vat)$/i.test(g('vat')),wo:(function(w){w=w.toUpperCase();return /^(S|N|C|D)$/.test(w)?w:/^(NO|N0|NONE|FALSE)$/.test(w)?'no':/^(A|B|AB)$/.test(w)?'AB':/^(YES|Y)$/.test(w)?'yes':'unsure'})(g('wo')),fuel:fuelOf(g('fuel')),gear:gearOf(g('gear')),desc:g('desc'),type:g('type').toLowerCase()}});
+  out.innerHTML='';$('mc-bulkgo').disabled=true;var paid=false,done=0,later=[];
+  function line(r,txt,cls){var li=document.createElement('li');li.className=cls||'';li.innerHTML='<b>'+E(r.reg||'(no reg)')+'</b> '+txt;out.appendChild(li)}
+  function one(r,pay){if(r.reg.length<2||r.reg.length>8){line(r,'skipped: the registration is not valid.','x');return Promise.resolve()}
+   if(!(r.price>0)){line(r,'skipped: no price.','x');return Promise.resolve()}if(!(r.miles>=0)||!isFinite(r.miles)){line(r,'skipped: no mileage.','x');return Promise.resolve()}
+   if(r.wo==='AB'){line(r,'skipped: Category A and B write-offs cannot be listed.','x');return Promise.resolve()}
+   if(have+done>=P.max){line(r,'skipped: your plan allows '+P.max+' adverts. Remove sold cars or move to a bigger plan.','x');return Promise.resolve()}
+   var M=window.MCvrm;return (M&&M.checkLive?M.checkLive():Promise.resolve()).then(function(){return M&&M.ready?M.ready(r.reg):'off'}).then(function(st){var d=st==='none'||st==='error'?null:(M?M.lookup(r.reg):null);
+    if(!d||!d.make){line(r,'skipped: we could not find this registration.','x');return}
+    var kind=/van/.test(r.type)?'vans':/car/.test(r.type)?'cars':(d.kind==='Van'?'vans':'cars'),fuel=r.fuel||fuelOf(d.fuel),gear=r.gear||gearOf(d.gear);
+    if(!fuel||!gear){line(r,'skipped: we could not read the '+(!fuel?'fuel type':'gearbox')+'. Add it in the fuel or gearbox column, or list it with the form.','x');return}
+    return window.MChist.run(kind,r.reg,pay).then(function(res){
+     if(res&&res.need==='payment'){later.push(r);return}
+     if(!res||!res.ok||!res.check){line(r,'skipped: the history check did not work. Try this one again.','x');return}
+     var s=res.check.summary||{};if(s.stolen&&s.stolen.found){line(r,'not listed: reported stolen. Contact us if this is wrong.','x');return}
+     if(s.scrapped){line(r,'not listed: recorded as scrapped.','x');return}if(s.writeoff&&s.writeoff.found&&/^(A|B)$/.test(s.writeoff.cat)){line(r,'not listed: Category '+s.writeoff.cat+' write-off.','x');return}
+     var api=adApi(kind),c={id:Date.now()+done,reg:r.reg,wo:r.wo,chk:res.check,make:d.make,model:d.model||'',variant:d.variant||'',year:+d.year||0,price:r.price,miles:r.miles,fuel:fuel,gear:gear,body:d.body||(kind==='vans'?'Medium van':'Hatchback'),col:r.col||d.col||'',town:u.town||'',pc:'',dealer:u.name,phone:u.phone||'',desc:r.desc||[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+', '+Number(r.miles).toLocaleString('en-GB')+' miles. Contact us to arrange a viewing.',photos:[],badge:'New',vat:r.vat,mine:true,van:kind==='vans'||undefined};
+     api.add(c);done++;var w=window.MChist.isWO(c);line(r,'listed: '+E([d.year,d.make,d.model].filter(Boolean).join(' '))+(w?' <span class="badge wo" style="position:static">Write-off</span>':'')+(s.finance&&s.finance.found?' <span class="badge fn" style="position:static">Finance to clear</span>':''),'ok')})})}
+  rows.reduce(function(p,r){return p.then(function(){return one(r)})},Promise.resolve()).then(function(){if(!later.length)return;var n=later.length;
+   return new Promise(function(res){if(!window.GGpay){res();return}window.GGpay({vat:1,amount:Math.round(n*(window.MChist.EXTRA||3.5)*100)/100,desc:n+' vehicle history check'+(n>1?'s':''),sub:'Your plan\u2019s history checks are used up'+(u.status?'':'')+', or you are in your free months. Each check is £3.50 + VAT.',onPaid:function(){res(later.reduce(function(p,r){return p.then(function(){return one(r,'demo')})},Promise.resolve()))}})})}).then(function(){$('mc-bulkgo').disabled=false;var li=document.createElement('li');li.innerHTML='<b>Done.</b> '+done+' listed. Add photos to each one from its advert page.';out.appendChild(li)},function(){$('mc-bulkgo').disabled=false})})}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ if(t.closest('#mc-bulk')){var p=$('mc-bulkp');if(!p.innerHTML)p.innerHTML=bulkPanel();p.hidden=!p.hidden;return}
+ if(t.closest('[data-csvt]')){e.preventDefault();var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([CSVT],{type:'text/csv'}));a.download='motoring-central-stock.csv';document.body.appendChild(a);a.click();a.remove();return}
+ if(t.closest('#mc-bulkgo'))bulkRun()});
+/* sample cars and vans: staff can hide them once real stock is listed */
+var SAMPLES={cars:[],vans:[]},hideS=false;['cars','vans'].forEach(function(k){var a=adApi(k);if(a)SAMPLES[k]=a.list().filter(function(c){return !c.dbid}).map(function(c){return c.id})});
+function applySamples(){if(!hideS)return;['cars','vans'].forEach(function(k){var a=adApi(k);if(!a)return;SAMPLES[k].forEach(function(id){if(a.list().some(function(c){return c.id===id&&!c.dbid}))a.act(id,'remove')})});if(window.GGbanner)window.GGbanner()}
+ready.then(function(){return sb.from('app_settings').select('key,value').eq('key','hide_samples').maybeSingle()}).then(function(r){hideS=!!(r&&r.data&&r.data.value===true);applySamples()}).catch(function(){});
+function adminCard(){var me=window.GGuser;if(!me||me.role!=='admin'||!me.sbid||me.level!=='owner')return;var b=$('admin-body');if(!b||$('mc-samples'))return;
+ var d=document.createElement('div');d.className='card';d.id='mc-samples';d.innerHTML='<h2>Sample cars and vans</h2><p class="note" style="margin:0 0 8px">'+(hideS?'Hidden. Only real adverts are shown.':'Showing. The made-up cars and vans are shown next to real adverts.')+'</p><button type="button" class="btn sm" data-samples="'+(hideS?'show':'hide')+'">'+(hideS?'Show the sample cars and vans':'Hide the sample cars and vans')+'</button>';b.insertBefore(d,b.firstChild)}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-samples]');if(!b)return;var hide=b.getAttribute('data-samples')==='hide';b.disabled=true;
+ sb.from('app_settings').update({value:hide}).eq('key','hide_samples').select('key').then(function(r){if(r.error||!r.data||!r.data.length){b.disabled=false;toast('That was not saved. Only an owner can change it.',true);return}hideS=hide;var c=$('mc-samples');if(c)c.remove();if(hide){applySamples();adminCard()}else location.reload()})});
+/* keep the sales parts drawn */
+setInterval(function(){try{drawInbox(false);dashTools();adminCard();fillMot();if(SHOW&&/^#(cars|vans)/.test(location.hash||''))applyShowroom()}catch(e){}},1200);
+setInterval(function(){if(realUser()&&!document.hidden)pullMsgs()},20000);
+var lastMsgWho='';setInterval(function(){var u=window.GGuser,w=u&&u.sbid?u.sbid:'';if(w!==lastMsgWho){lastMsgWho=w;MSG=[];msgSig='';var o=$('mc-inbox');if(o)o.remove();if(w)pullMsgs()}},1500);
+window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;
  if(type==='booking'){tb='bookings';var pn=d.partner||'';try{if(!pn&&window.MCreview&&window.MCreview.partnersOf)pn=window.MCreview.partnersOf(d.kind,d.text)[0]||''}catch(e){}row={kind:String(d.kind||'').slice(0,60),service:d.svc?String(d.svc).slice(0,200):null,summary:String(d.text||'Booking').slice(0,2000),vehicle:d.veh||null,made_at:new Date(d.t||Date.now()).toISOString(),partner_name:pn?String(pn).slice(0,160):null,partner_id:partnerId(pn)}}
