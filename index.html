@@ -1066,6 +1066,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <script>document.documentElement.classList.add("mcnight")</script>
 <canvas id="bg" aria-hidden="true"></canvas>
 <a href="#drivers" class="skip" id="skip">Skip to main content</a>
+<script>window.MCdir={L:{},reg:function(k,a){this.L[k]=a;return a}};</script>
 <div class="banner">Preview site with sample data. Customer accounts are real and are saved. No real payments or texts are made.</div>
 <header><div class="in2"><a href="#drivers" class="logo" aria-label="The Motoring Central, home" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><svg width="42" height="42" viewBox="0 0 120 120" aria-hidden="true" style="flex:none"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="7" stroke-linecap="round"/><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="8" fill="#FFD43B"/></svg><span style="display:flex;flex-direction:column;line-height:1;gap:3px;color:#0B1C35" aria-hidden="true"><span style="font-size:.55rem;font-weight:700;letter-spacing:.5em">THE</span><span style="font-size:1.2rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap">MOTORING</span><span style="align-self:flex-start;font-size:.6rem;font-weight:700;letter-spacing:.38em;padding:3px 3px 3px 7px;border-radius:5px;background:#0B1C35;color:#fff;white-space:nowrap">CENTRAL</span><small style="color:#0B1C35;font-weight:500;opacity:.9;font-size:.64rem;letter-spacing:.04em">Buy. Fix. Clean. Rescue.</small></span></a><button type="button" class="menubtn" id="menubtn" aria-expanded="false" aria-controls="tabs-public tabs-net acct"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button><nav class="tabs" id="tabs-public" aria-label="Browse"><a href="#drivers">Home</a><a href="#cars">Cars for sale</a><a href="#vans">Vans for sale</a><a href="#about">About us</a><a href="#network">For partners</a><a href="#breakdown">Breakdown cover</a><a href="#jobs">Jobs</a></nav><nav class="tabs" id="tabs-net" aria-label="Partner area" hidden><a href="#network">Join the network</a><a href="#trade">Trade</a><a href="#jobs">Jobs</a><a href="#login" id="t-login">Log in</a><a href="#dashboard" id="t-dash" hidden>My dashboard</a><a href="#drivers">Back to customer site</a></nav><div class="acct" id="acct"></div></div></header>
 <div class="launch" id="launch">&#127881; Launch offer: 50% off our booking fee. Just &pound;3.00 per booking including VAT, usually &pound;5.99.</div>
@@ -2624,8 +2625,8 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
     if(r.length<5){$('err').textContent='Enter a full registration, for example AB12 CDE.';return}
     $('err').textContent='';lastReg=r;render(r)}
   window.GGmode='mobile';var lastReg=null;
-  var AE=[{n:'Volt Auto Electrics (mobile)',i:'VA',r:52,rt:'4.9'},{n:'Kirkstall Road Garage (workshop)',i:'KR',r:58,rt:'4.8'},{n:'Spark Mobile Auto Electrical (mobile)',i:'SM',r:48,rt:'4.7'},{n:'KeyWise Auto Locksmiths (mobile)',i:'KW',r:55,rt:'4.9'}];
-  var MECH=[{n:'Dan K.',i:'DK',r:42,rt:'4.9'},{n:'Priya S.',i:'PS',r:48,rt:'5.0'},{n:'Marcus T.',i:'MT',r:38,rt:'4.7'},{n:'Hannah B.',i:'HB',r:55,rt:'4.9'}],mech=MECH[1];
+  var AE=[{n:'Volt Auto Electrics (mobile)',i:'VA',r:52,rt:'4.9'},{n:'Kirkstall Road Garage (workshop)',i:'KR',r:58,rt:'4.8'},{n:'Spark Mobile Auto Electrical (mobile)',i:'SM',r:48,rt:'4.7'},{n:'KeyWise Auto Locksmiths (mobile)',i:'KW',r:55,rt:'4.9'}];window.MCdir.reg('ae',AE);
+  var MECH=[{n:'Dan K.',i:'DK',r:42,rt:'4.9'},{n:'Priya S.',i:'PS',r:48,rt:'5.0'},{n:'Marcus T.',i:'MT',r:38,rt:'4.7'},{n:'Hannah B.',i:'HB',r:55,rt:'4.9'}],mech=MECH[1];window.MCdir.reg('mech',MECH);
   function drawMechs(){var box=$('mechs'),LST=window.GGmode==='autoelec'?AE:MECH;$('mechs-lead').textContent='Choose your '+(window.GGmode==='autoelec'?'auto electrician or locksmith':'mechanic')+'. Each sets their own hourly rate.';if(LST.indexOf(mech)<0)mech=LST[0];box.innerHTML='';LST.forEach(function(m){var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed',m===mech?'true':'false');var lab=Math.round(svc.hrs*m.r*100)/100;b.innerHTML='<b>'+m.n+(m.nat?' <span class="natpill">National partner</span>':'')+'</b><span class="d">'+money(m.r)+'/hr</span><small>'+m.rt+' rating. Labour for this job '+money(lab)+(m.nat?'. Available UK-wide':'')+'</small>';b.addEventListener('click',function(){mech=m;quote()});box.appendChild(b)})}
   [].forEach.call(document.querySelectorAll('#modes .opt'),function(b){b.addEventListener('click',function(){
     window.GGmode=b.getAttribute('data-m');pendSvc=null;
@@ -3047,7 +3048,7 @@ function $(i){return document.getElementById(i)}
 function money(n){return '£'+n.toFixed(2)}
 function row(a,b,c){return '<tr><td>'+a+'<small>'+b+'</small></td><td>'+money(c)+'</td></tr>'}
 var car=null,BOOKING=3,total=0;
-var FIT=[{n:'Quick Roll Mobile',f:12,p:30},{n:'Wheelwise Fitting',f:10,p:25},{n:'Premier Tyre Van',f:16,p:35}];
+var FIT=[{n:'Quick Roll Mobile',f:12,p:30},{n:'Wheelwise Fitting',f:10,p:25},{n:'Premier Tyre Van',f:16,p:35}];window.MCdir.reg('fit',FIT);
 var fsel=$('tfit');FIT.forEach(function(x,i){var o=document.createElement('option');o.value=i;o.textContent=x.n+': '+money(x.f)+' per tyre fitted, puncture '+money(x.p);fsel.appendChild(o)});fsel.addEventListener('change',function(){draw()});
 var days=$('tday');for(var n=1;n<=7;n++){var x=new Date();x.setDate(x.getDate()+n);if(x.getDay()===0)continue;var o=document.createElement('option');o.textContent=x.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'});days.appendChild(o)}
 function draw(){
@@ -3100,7 +3101,7 @@ function money(n){return '£'+n.toFixed(2)}
 function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%97;return h}
 function row(a,b,c){return '<tr><td>'+a+'<small>'+b+'</small></td><td>'+money(c)+'</td></tr>'}
 var NAMES=['Small','Medium','Large','Extra large or van'],BOOKING=3,total=0;
-var MOB=[{n:'Shine On Mobile',p:[79,99,129,149]},{n:'Gleam Team',p:[69,89,115,135]},{n:'Premier Valets',p:[95,119,149,175]}];
+var MOB=[{n:'Shine On Mobile',p:[79,99,129,149]},{n:'Gleam Team',p:[69,89,115,135]},{n:'Premier Valets',p:[95,119,149,175]}];window.MCdir.reg('mob',MOB);
 var SITES=[{n:'Sparkle Valet Centre',k:0.9,p:[75,95,125,145]},{n:'Northside Car Care',k:2.3,p:[65,85,110,130]},{n:'Park Road Detailing',k:4.1,p:[85,105,135,160]}];
 var days=$('vday');for(var n=1;n<=7;n++){var x=new Date();x.setDate(x.getDate()+n);if(x.getDay()===0)continue;var o=document.createElement('option');o.textContent=x.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'});days.appendChild(o)}
 function cur(){var g=$('vwhere').value==='garage',l=g?SITES:MOB,k=$('vsite').selectedIndex;return l[k<0?0:k]}
@@ -3657,7 +3658,7 @@ if(u.role==='body')f='<div class="rg">'+num('dr-hour','Body labour per hour (£)
 if(u.role==='tyres')f='<div class="rg">'+num('dr-fit','Fitting per tyre (£)',r.fit,0.5)+num('dr-punc','Puncture repair (£)',r.punc,0.5)+'</div>';
 if(u.role==='valet')f='<div class="rg">'+num('dr-p0','Small (£)',r.p[0])+num('dr-p1','Medium (£)',r.p[1])+num('dr-p2','Large (£)',r.p[2])+num('dr-p3','Extra large or van (£)',r.p[3])+'</div>';
 return '<div class="card"><h2>Your rates</h2>'+f+'<div style="margin-top:12px"><button class="btn sm" id="dr-save" type="button">Save rates</button> <span class="note" id="dr-msg" role="status"></span></div></div>'}
-function makeJobs(u){var r=u.rates||{};
+function makeJobs(u){if(u&&u.sbid)return [];var r=u.rates||{};
 if(u.role==='mechanic')return[{who:'Sam P.',what:'Full service, Ford Focus 2019',where:'LS6',when:'Tue 10am to 12pm',price:2*r.hour+60},{who:'Aisha K.',what:'Brake pads and discs, VW Golf 2016',where:'LS8',when:'Wed 2pm to 4pm',price:2*r.hour+91},{who:'Tom R.',what:'Battery replacement, Nissan Qashqai',where:'LS12',when:'Thu 8am to 10am',price:0.75*r.hour+105}];
 if(u.role==='evcharge')return[{who:'Mark T.',what:'Out of charge, Nissan Leaf',where:'M62 junction 27',when:'Now',price:r.call},{who:'Lucy B.',what:'Top-up to reach a charger, Kia Niro EV',where:'LS16',when:'In 30 minutes',price:r.call},{who:'Dev P.',what:'Out of charge, Tesla Model 3',where:'HX1, 10 miles outside your area',when:'In 1 hour',price:r.call+r.mile*10}];
 if(u.role==='recovery')return[{who:'Jo M.',what:'Will not start, Ford Fiesta',where:'LS1 to LS2, 12 miles',when:'Now',price:r.call+r.mile*12},{who:'Imran H.',what:'Flat tyre, Audi A3',where:'M60 to a garage, 8 miles',when:'In 45 minutes',price:r.call+r.mile*8},{who:'Kay D.',what:'Accident, Vauxhall Corsa',where:'LS9 to LS10, 20 miles',when:'In 1 hour',price:r.call+r.mile*20}];
@@ -4351,7 +4352,7 @@ if(a.tow){var q=a.tow.split(':'),x5=find(q[0]);x5.offers=x5.offers.filter(functi
 function $(i){return document.getElementById(i)}
 function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
 function m2(n){return '£'+(Math.round(n*100)/100).toFixed(2)}
-var PART=[{n:'Swift Recovery',b:65,m:2.4,r:'4.8'},{n:'Highway Rescue 24h',b:75,m:2.2,r:'4.9'},{n:'Metro Tow and Transport',b:60,m:3.1,r:'4.6'},{n:'Beacon Vehicle Recovery',b:85,m:2.0,r:'4.9'}];
+var PART=[{n:'Swift Recovery',b:65,m:2.4,r:'4.8'},{n:'Highway Rescue 24h',b:75,m:2.2,r:'4.9'},{n:'Metro Tow and Transport',b:60,m:3.1,r:'4.6'},{n:'Beacon Vehicle Recovery',b:85,m:2.0,r:'4.9'}];window.MCdir.reg('part',PART);
 var FEE=3,ST={};
 function veh(key){var p=key.split(':'),id=+p[1],l=p[0]==='car'?(window.GGcars&&GGcars.list()):p[0]==='van'?(window.GGvans&&GGvans.list()):window.GGtrade;
 var v=(l||[]).filter(function(x){return x.id===id})[0];if(!v)return null;
@@ -5659,7 +5660,7 @@ function plan(u){var r=u.role,sub=u.sub;
  if(r==='evcharge')return [['EV charging','Out-of-charge rescue'],['EV charging','Top-up charge to 80%']];
  return []}
 var HRS=[9,11.5,14,16.25,17.5];
-function seedDemo(u,S){if(!S||!S.B)return;var me=String(u.name||'').toLowerCase(),has=Object.keys(S.B).some(function(k){var b=S.B[k];return String(b.partner||'').toLowerCase()===me&&b.demo});if(has)return;
+function seedDemo(u,S){if(!S||!S.B||(u&&u.sbid))return;var me=String(u.name||'').toLowerCase(),has=Object.keys(S.B).some(function(k){var b=S.B[k];return String(b.partner||'').toLowerCase()===me&&b.demo});if(has)return;
  var d=new Date();d.setHours(0,0,0,0);var base=d.getTime(),off=hash(me)%997;
  plan(u).forEach(function(p,i){var t=base+Math.round(HRS[i]*36e5)+off+i,pp=PEOPLE[(i+off)%PEOPLE.length],r=REGS[(i+off)%REGS.length];if(S.B[t])return;
   var v=window.MCvrm&&window.MCvrm.lookup?window.MCvrm.lookup(r):null;
@@ -6995,7 +6996,7 @@ function syncPartner(){var u=window.GGuser;if(!sb||sending||!u||!u.sbid||u.role=
  todo.reduce(function(p,i){return p.then(function(){var d=u.docs[i],b=blobOf(d.data);b.name=d.file;return putDoc(u.sbid,i+1,b,d)})},Promise.resolve()).then(function(){return sb.rpc('resubmit_application')}).then(function(r){sending=false;
   if(r&&r.error)throw r.error;sigs[u.sbid]=sigOf(u);toast('Your new documents have been sent for review.')},function(){sending=false;(u.docs||[]).forEach(function(d){if(d&&d.data&&!d.path)d.path='failed'});toast('Your documents were not sent. Check your connection, then try again.',true)})}
 function wrapFn(name,after){var o=window[name];if(typeof o!=='function'||o.__sb)return;var f=function(){var r=o.apply(this,arguments);try{after()}catch(e){}return r};f.__sb=1;window[name]=f}
-wrapFn('GGadmin',syncStaff);wrapFn('GGdash',syncPartner);
+wrapFn('GGadmin',syncStaff);wrapFn('GGdash',function(){syncPartner();syncSettings()});
 document.addEventListener('change',function(e){if(e.target.closest&&e.target.closest('#admin-body'))setTimeout(syncStaff,0)});
 /* if the site logs someone out by itself (for example the staff time-out), end the database session too */
 setInterval(function(){if(cur&&!window.GGuser){cur=null;if(sb)sb.auth.signOut().catch(function(){})}},4000);
@@ -7009,9 +7010,97 @@ ready.then(function(){return sb.auth.getSession()}).then(function(r){
    if(conf)toast('Your email is confirmed and you are logged in.');
    if(location.hash==='#account'&&window.GGaccount)window.GGaccount();if(location.hash==='#dashboard'&&window.GGdash)window.GGdash();if(window.GGrerender)window.GGrerender()})}).catch(function(){});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#logout');if(b&&sb&&window.GGuser&&window.GGuser.sbid){cur=null;sb.auth.signOut().catch(function(){})}},true);
+/* ---------- approved partners appear in the booking lists ---------- */
+var DIR=[];
+function low(s){return String(s||'').trim().toLowerCase()}
+function ini(n){var w=String(n||'').replace(/[^A-Za-z ]/g,'').trim().split(/\s+/);return ((w[0]||'?').charAt(0)+((w[1]||w[0]||'').charAt(w[1]?0:1)||'')).toUpperCase()}
+function dirApply(){var L=(window.MCdir&&window.MCdir.L)||{};DIR.forEach(function(p){var R=p.rates||{},n=p.name;if(!n)return;
+  function add(k,o){var a=L[k];if(!a||a.some(function(x){return low(x.n)===low(n)}))return;o.n=n;o.real=1;a.push(o)}
+  if(p.role==='mechanic'&&p.sub==='mobile')add('mech',{i:ini(n),r:+R.hour||45,rt:'New'});
+  if(p.role==='mechanic'&&p.sub==='autoelec')add('ae',{i:ini(n),r:+R.hour||50,rt:'New'});
+  if(p.role==='tyres')add('fit',{f:+R.fit||12,p:+R.punc||30});
+  if(p.role==='valet'&&Array.isArray(R.p)&&R.p.length>=4)add('mob',{p:R.p.map(Number)});
+  if(p.role==='recovery')add('part',{b:+R.call||65,m:+R.mile||2.5,r:'New'})})}
+function dirLoad(){return sb.from('partner_directory').select('id,role,sub,name,town,rates').limit(2000).then(function(r){if(r.error)return;DIR=r.data||[];dirApply()})}
+function partnerId(n){n=low(n);if(!n)return null;var p=DIR.filter(function(x){return low(x.name)===n})[0];return p?p.id:null}
+ready.then(dirLoad).catch(function(){});
+/* ---------- bookings: partner sees them, customer sees the status ---------- */
+function hub(){return window.MChub&&window.MChub.state?window.MChub.state():null}
+function hubKeep(S){try{localStorage.setItem('mc-hub',JSON.stringify(S))}catch(e){}}
+var bkSt={},STT={onway:' is on the way',started:' has started your job',done:' has finished your job'};
+function redraw(){var u=window.GGuser;if(!u)return;try{if(u.role==='customer'){if(location.hash==='#account'&&window.GGaccount)window.GGaccount()}else if(location.hash==='#dashboard'&&window.GGdash&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#dash-body input,#dash-body textarea,#dash-body select')))window.GGdash();if(window.MChub&&window.MChub.badge)window.MChub.badge()}catch(e){}}
+function pullBookings(){var u=window.GGuser;if(!sb||!u||!u.sbid||u.role==='admin')return;var isP=u.role!=='customer';
+ sb.from('bookings').select('id,kind,service,summary,vehicle,status,made_at,partner_name,customer_name,customer_phone').eq(isP?'partner_id':'customer_id',u.sbid).order('made_at',{ascending:false}).limit(300).then(function(r){
+  if(r.error||!r.data||window.GGuser!==u)return;var S=hub();if(!S)return;var ch=false;
+  r.data.forEach(function(b){var t=ms(b.made_at),x=S.B[t];if(b.status==='cancelled')return;if(!/^(confirmed|onway|started|done)$/.test(b.status))b.status='confirmed';
+   if(!x){x=S.B[t]={t:t,acct:isP?'':low(u.email),cust:isP?(b.customer_name||'Customer'):u.name,phone:isP?b.customer_phone:(u.phone||''),kind:b.kind||'Booking',text:b.summary,partner:isP?u.name:(b.partner_name||''),status:b.status,notes:[]};if(b.vehicle)x.veh=b.vehicle;if(b.service)x.svc=b.service;ch=true}
+   x.dbid=b.id;
+   if(isP){if(bkSt[t]===undefined||bkSt[t]===x.status){if(x.status!==b.status){x.status=b.status;ch=true}bkSt[t]=b.status}}
+   else if(x.status!==b.status){x.status=b.status;ch=true;if(STT[b.status])x.notes.unshift({to:'customer',ch:'app',title:(x.partner||'Your partner')+STT[b.status],body:b.status==='done'?'Tell us how it went: leave a review in My account.':'We will keep you updated here.',t:Date.now()})}});
+  if(ch){hubKeep(S);redraw()}})}
+function pushStatuses(){var u=window.GGuser,S=hub();if(!sb||!S||!u||!u.sbid||u.role==='customer'||u.role==='admin')return;
+ Object.keys(S.B).forEach(function(k){var x=S.B[k];if(!x.dbid||bkSt[x.t]===undefined||bkSt[x.t]===x.status)return;var was=bkSt[x.t];bkSt[x.t]=x.status;
+  sb.from('bookings').update({status:x.status}).eq('id',x.dbid).select('id').then(function(r){if(r.error||!r.data||!r.data.length){bkSt[x.t]=was;toast('That job update was not saved. Check your connection and try again.',true)}})})}
+document.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-hubst]'))setTimeout(pushStatuses,80)});
+/* ---------- partners' own settings (rates, services, diary, plan) ---------- */
+var setSig={},setT=null;
+function slimBig(v,depth){depth=depth||0;if(v==null)return null;var t=typeof v;
+ if(t==='string')return v.length>300?null:v;if(t==='number')return isFinite(v)?v:null;if(t==='boolean')return v;if(t!=='object'||depth>5)return null;
+ if(Array.isArray(v))return v.slice(0,300).map(function(x){return slimBig(x,depth+1)});
+ var o={};Object.keys(v).slice(0,80).forEach(function(k){if(depth===0&&/^(email|pass|password|role|sub|name|phone|town|website|plan|rates|status|docs|joined|submitted|level|sbid|reject|suspend|ck|rec|jobs|dtab|dview|det|rejecting|restored|reviewedAt|logo|signins|fails)$/.test(k))return;if(k.charAt(0)==='_')return;var c=slimBig(v[k],depth+1);if(c!==null&&c!=='')o[k]=c});return o}
+function syncSettings(){var u=window.GGuser;if(!sb||!u||!u.sbid||u.role==='customer'||u.role==='admin')return;
+ var body;try{body={p_rates:slim(u.rates)||{},p_details:slimBig(u)||{},p_plan:u.plan||'payg'}}catch(e){return}var s=JSON.stringify(body);if(s.length>30000)return;
+ if(setSig[u.sbid]===undefined){setSig[u.sbid]=s;return}if(setSig[u.sbid]===s)return;setSig[u.sbid]=s;clearTimeout(setT);
+ setT=setTimeout(function(){sb.rpc('save_partner_settings',body).then(function(r){if(r.error){setSig[u.sbid]='';toast('Your changes were not saved. Check your connection and try again.',true)}})},1200)}
+/* ---------- quote requests and quotes ---------- */
+var QLS='mc-quote-req';
+function qAll(){try{return JSON.parse(localStorage.getItem(QLS)||'[]')||[]}catch(e){return[]}}
+function qPut(L){try{localStorage.setItem(QLS,JSON.stringify(L))}catch(e){}}
+function qDraw(){var u=window.GGuser;if(!u)return;try{if(u.role==='customer'){var c=$('mc-qr-cust');if(c)c.remove();else if(location.hash==='#account'&&$('acc-body'))$('acc-body').appendChild(document.createComment('q'))}
+  else{var card=$('mc-qr-partner');if(card&&window.MCqreqCard&&!(document.activeElement&&card.contains(document.activeElement))){var d=document.createElement('div');d.innerHTML=window.MCqreqCard(u);if(d.firstChild)card.parentNode.replaceChild(d.firstChild,card)}}}catch(e){}}
+function pullQuotes(){var u=window.GGuser;if(!sb||!u||!u.sbid||u.role==='admin')return;if(u.role!=='customer'&&u.role!=='mechanic')return;
+ Promise.all([sb.from('quote_requests').select('*').order('made_at',{ascending:true}).limit(300),sb.from('quotes').select('*').limit(2000)]).then(function(r){
+  if(r[0].error||window.GGuser!==u)return;var Q=r[1].data||[],old=JSON.stringify(qAll());
+  var L=(r[0].data||[]).map(function(q){var o={id:q.id,job:q.job,mode:q.mode,note:q.note,when:q.when_text,email:q.customer_id===u.sbid?u.email:'',t:ms(q.made_at),name:q.first_name,phone:'',veh:q.vehicle||null,status:q.status==='closed'?'booked':q.status,db:1,
+    quotes:Q.filter(function(x){return x.request_id===q.id}).map(function(x){return{partner:x.partner_name,email:x.partner_id===u.sbid?u.email:'',price:+x.price,note:x.note,t:ms(x.made_at),db:1}})};if(q.booked)o.booked=q.booked;return o});
+  qPut(L);if(JSON.stringify(L)!==old)qDraw()})}
+(function(){var o=window.MCquoteAdd;if(typeof o!=='function')return;window.MCquoteAdd=function(r0){var r=o.apply(this,arguments),u=window.GGuser;
+ if(sb&&r&&u&&u.sbid&&u.role==='customer')sb.from('quote_requests').insert({id:r.id,job:String(r.job||'').slice(0,200),mode:/^(mobile|garage)$/.test(r.mode)?r.mode:'any',note:String(r.note||'').slice(0,1000),when_text:String(r.when||'').slice(0,100),vehicle:r.veh||null,made_at:new Date(r.t||Date.now()).toISOString()}).then(function(x){if(x.error)toast('Your quote request was not sent. Check your connection and try again.',true)});
+ return r}})();
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest||!sb)return;var u=window.GGuser;if(!u||!u.sbid)return;
+ var s=t.closest('[data-qsend]');if(s){var id=s.getAttribute('data-qsend');setTimeout(function(){var L=qAll(),r=L.filter(function(x){return x.id===id})[0];if(!r)return;var q=(r.quotes||[]).filter(function(x){return low(x.email)===low(u.email)&&!x.db})[0];if(!q)return;q.db=1;qPut(L);
+   sb.from('quotes').insert({request_id:id,price:q.price,note:String(q.note||'').slice(0,300)}).then(function(x){if(x.error)toast('Your quote was not sent. Check your connection and try again.',true)})},60);return}
+ var b=t.closest('[data-qbook]');if(b){var id2=b.getAttribute('data-qbook').split(':')[0];setTimeout(function(){var r=qAll().filter(function(x){return x.id===id2})[0];if(!r||r.status!=='booked')return;
+   sb.from('quote_requests').update({status:'booked',booked:r.booked||null}).eq('id',id2).then(function(){})},60)}},true);
+/* ---------- car and van adverts ---------- */
+var adSig={};
+function adApi(k){return k==='vans'?window.GGvans:window.GGcars}
+function adClean(c){var o={};Object.keys(c).forEach(function(k){if(/^(id|dbid|owner|ownerId)$/.test(k)||k.charAt(0)==='_')return;var v=c[k];if(typeof v==='function'||v===undefined)return;o[k]=v});return o}
+function adPhotos(c){var u=window.GGuser,P=Array.isArray(c.photos)?c.photos:[];
+ return P.reduce(function(p,src,i){return p.then(function(){if(!/^data:image\//.test(String(src)))return;var path=u.sbid+'/'+Date.now()+'-'+i+'.jpg';
+  return sb.storage.from('advert-photos').upload(path,blobOf(src),{contentType:'image/jpeg'}).then(function(r){if(r.error)throw r.error;c.photos[i]=sb.storage.from('advert-photos').getPublicUrl(path).data.publicUrl})})},Promise.resolve())}
+function adSave(k,c){var u=window.GGuser;c._saving=1;
+ adPhotos(c).then(function(){var d=adClean(c);return sb.from('adverts').insert({kind:k,data:d,expires_at:c.exp?new Date(c.exp).toISOString():null}).select('id')}).then(function(r){c._saving=0;
+  if(r.error||!r.data||!r.data[0])throw r.error||new Error('x');c.dbid=r.data[0].id;c.ownerId=u.sbid;adSig[c.dbid]=JSON.stringify(adClean(c));toast('Your advert is saved and live.')}).catch(function(){c._saving=0;toast('Your advert was not saved, so other people cannot see it yet. Check your connection and add it again.',true)})}
+var adAdd={};
+['cars','vans'].forEach(function(k){var api=adApi(k);if(!api||api.__sb)return;api.__sb=1;var add0=api.add,act0=api.act;adAdd[k]=function(c){add0.call(api,c)};
+ api.add=function(c){add0.call(api,c);var u=window.GGuser;if(sb&&u&&u.sbid&&c&&!c.dbid&&!c._saving)adSave(k,c)};
+ api.act=function(id,a){var c=api.list().filter(function(x){return x.id===id})[0];act0.call(api,id,a);
+  if(c&&c.dbid&&sb&&a!=='feature')sb.from('adverts').update({status:'removed'}).eq('id',c.dbid).then(function(r){if(r.error)toast('That advert was not removed for other people. Try again.',true)})}});
+function adOwner(){var u=window.GGuser;['cars','vans'].forEach(function(k){var api=adApi(k);if(!api)return;api.list().forEach(function(c){if(c.dbid&&c.private)c.owner=(u&&u.sbid&&c.ownerId===u.sbid)?u.email:undefined})})}
+function adLoad(){return sb.from('adverts').select('id,owner_id,kind,data').order('created_at',{ascending:true}).limit(1000).then(function(r){if(r.error||!r.data)return;
+ r.data.forEach(function(row){var api=adApi(row.kind);if(!api||!row.data||api.list().some(function(x){return x.dbid===row.id}))return;var c=row.data;c.id=row.id;c.dbid=row.id;c.ownerId=row.owner_id;adSig[row.id]=JSON.stringify(adClean(c));adAdd[row.kind](c)});adOwner();if(window.GGbanner)window.GGbanner()})}
+function adSync(){var u=window.GGuser;if(!sb||!u||!u.sbid)return;['cars','vans'].forEach(function(k){var api=adApi(k);if(!api)return;api.list().forEach(function(c){if(!c.dbid||c.ownerId!==u.sbid)return;var s=JSON.stringify(adClean(c));if(adSig[c.dbid]===s||s.length>19000)return;adSig[c.dbid]=s;
+  sb.from('adverts').update({data:adClean(c)}).eq('id',c.dbid).then(function(){})})})}
+ready.then(adLoad).catch(function(){});
+/* ---------- keep everything fresh ---------- */
+var lastWho='',ticks=0;
+setInterval(function(){var u=window.GGuser,who=u&&u.sbid?u.sbid+u.role:'';ticks++;
+ if(who!==lastWho){lastWho=who;adOwner();if(!who){qPut([]);return}bkSt={};pullBookings();pullQuotes();return}
+ if(!who||document.hidden)return;pushStatuses();syncSettings();adSync();if(ticks%8===0){pullBookings();pullQuotes()}},3000);
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;
- if(type==='booking'){tb='bookings';row={kind:String(d.kind||'').slice(0,60),service:d.svc?String(d.svc).slice(0,200):null,summary:String(d.text||'Booking').slice(0,2000),vehicle:d.veh||null,made_at:new Date(d.t||Date.now()).toISOString()}}
+ if(type==='booking'){tb='bookings';var pn=d.partner||'';try{if(!pn&&window.MCreview&&window.MCreview.partnersOf)pn=window.MCreview.partnersOf(d.kind,d.text)[0]||''}catch(e){}row={kind:String(d.kind||'').slice(0,60),service:d.svc?String(d.svc).slice(0,200):null,summary:String(d.text||'Booking').slice(0,2000),vehicle:d.veh||null,made_at:new Date(d.t||Date.now()).toISOString(),partner_name:pn?String(pn).slice(0,160):null,partner_id:partnerId(pn)}}
  else{tb='enquiries';row={about:String(d.about||'').slice(0,500),message:String(d.text||'').slice(0,2000),made_at:new Date(d.t||Date.now()).toISOString()}}
  sb.from(tb).insert(row).then(function(r){if(r.error)toast('This was not saved to your account. Check your connection, then try again.',true)},function(){toast('This was not saved to your account. Check your connection, then try again.',true)})}
 var o=window.MCsave;window.MCsave=function(type,summary,data){var u=window.GGuser;

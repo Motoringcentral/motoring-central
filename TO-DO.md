@@ -22,6 +22,17 @@ Done so far:
   database (the "Add a reviewer" box on the admin page is still sample only).
 - Partners and dealers log in with their real account on any device and see their status.
 
+- Bookings reach the chosen partner on their own device (name, phone, job, vehicle). The partner's updates
+  (on the way, started, completed) reach the customer's account. Refreshes about every 25 seconds.
+- Approved real partners appear in the customer booking lists for: mobile mechanics, auto electricians,
+  mobile tyre fitters, mobile valeters and recovery. NOT YET for garages and MOT, valeting centres, bodywork,
+  alloy wheels and EV charging (their lists are built differently). A booking is matched to a partner by
+  business name, so two approved partners must not share a name.
+- Partners' rates, services, diary and plan are saved. Real partners no longer see sample jobs.
+- Quote requests are saved, shown to approved mechanics and garages, and their quotes come back to the customer.
+- Car and van adverts (dealer and private) are saved with their photos and shown to everyone. Removing and
+  premium upgrades are saved. Buyers' messages on private adverts are still kept in the browser only.
+
 Owner to do in the Supabase dashboard:
 - Authentication > URL Configuration: set "Site URL" to https://preview.motoringcentral.co.uk (the live address at launch).
 - Authentication > Sign In / Providers > Email: turn "Confirm email" OFF while testing (there is no email service yet).
@@ -33,11 +44,10 @@ Still to do, in this order:
   dashboard for that case
 - Forgotten password (reset by email) and changing account details
 - Two-step sign-in for staff (authenticator app); adding and removing reviewers from the admin page
-- Keep partners' dashboard changes (rates, services, diary, plan, logo) in the database
-- Bookings reach the right partner on their own device; job status updates reach the customer
-- Quote requests reach every partner who offers that job, and their quotes reach the customer
+- Real partners in the remaining booking lists (garages and MOT, valeting centres, bodywork, alloys, EV charging)
+- Chat between customer and partner, partner logo, and buyers' messages on adverts, in the database
+- Payments checked on the server (Stripe) before an advert or booking is accepted; at the moment the preview trusts the page
 - Service sheets, vehicle inspections and PDIs saved against the booking
-- Car and van adverts (dealer stock and private adverts) and their photos kept in the database
 - Customers list on the admin page from the database; chat messages, saved searches, failed-search list
 - Remove the demo logins and sample partners (they still show next to real ones on the preview)
 - Data protection: privacy notice says where data is kept (done); ICO fee; who can see what
