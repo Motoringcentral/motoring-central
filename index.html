@@ -2358,7 +2358,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <p><b>The dealer you contact.</b> When you send an enquiry about a car or van, we pass your name, contact details and message to that dealer.</p>
 <p><b>Suppliers who help us run the service</b>, under contract and only for that purpose: [payment provider], [vehicle data provider], [parts supplier], [email and text message provider], [website hosting provider] and [analytics provider].</p>
 <p><b>The RAC.</b> If you follow a link to buy breakdown cover, you buy direct from the RAC and their privacy policy applies to what you give them.</p>
-<p><b>Where your account is kept.</b> Your account details, bookings and messages are stored in a secure database run for us by Supabase, on servers in London. Your password is stored in a scrambled form that we cannot read.</p>
+<p><b>Where your account is kept.</b> Your account details, bookings and messages are stored in a secure database run for us by Supabase, on servers in London. Your password is stored in a scrambled form that we cannot read. Partners' and dealers' insurance certificates and photo ID are kept in private storage there, and can only be opened by that partner and by our staff who check applications.</p>
 <p><b>Postcode look-up.</b> When you type a postcode to see how far away a car or van is, that postcode is sent to Postcodes.io, a look-up service run by Ideal Postcodes, to find where it is. Nothing else about you is sent with it.</p>
 <p><b>Voice search.</b> If you tap the microphone in the search box, your own browser (for example Google Chrome or Apple Safari) turns your speech into text using its speech service. We do not record or keep the sound of your voice.</p>
 <p><b>Authorities and advisers</b>, where the law requires it or to protect our legal rights.</p>
@@ -3598,7 +3598,9 @@ document.addEventListener('click',function(e){var g=e.target.closest('[data-go]'
 /* login */
 $('lg-form').addEventListener('submit',function(e){e.preventDefault();
 var em=$('lg-mail').value.trim().toLowerCase(),pw=$('lg-pass').value;
-var u=USERS.filter(function(x){return x.role!=='admin'&&x.email===em&&x.pass===pw})[0];
+var u=USERS.filter(function(x){return x.pass&&x.role!=='admin'&&x.email===em&&x.pass===pw})[0];
+if(!u&&em&&pw&&window.MCdb&&window.MCdb.on){var lb=$('lg-form').querySelector('[type=submit]');if(lb)lb.disabled=true;$('lg-err').textContent='';
+window.MCdb.partnerSignIn(em,pw).then(function(x){if(lb)lb.disabled=false;$('lg-form').reset();setUser(x);location.hash='dashboard'},function(e2){if(lb)lb.disabled=false;$('lg-err').textContent=e2.message});return}
 if(!u){$('lg-err').textContent='Email or password not recognised.';return}
 $('lg-err').textContent='';$('lg-form').reset();setUser(u);location.hash='dashboard'});
 USERS.filter(function(u){return u.role!=='admin'&&USERS.indexOf(u)<7}).forEach(function(u){var b=document.createElement('button');b.type='button';b.textContent=u.role==='admin'?(u.level==='owner'?'Staff: owner':'Staff: reviewer'):u.role==='mechanic'?(u.sub==='garage'?'Garage':'Mobile mechanic'):ROLES[u.role];b.addEventListener('click',function(){$('lg-mail').value=u.email;$('lg-pass').value=u.pass});$('lg-demo').appendChild(b)});
@@ -3630,8 +3632,14 @@ var pw=$(f.pass).value,em=$(f.mail).value.trim().toLowerCase(),msg=docsMsg(f.p)|
 if(msg){ok.hidden=true;$(f.form).hidden=false;$(f.err).textContent=msg;return}
 var d=f.get();if(window.MCbrand)window.MCbrand.read(f.p,d);d.email=em;d.pass=pw;d.role=f.role;d.status='pending';d.joined=Date.now();d.docs=[{name:'Trade insurance',file:$(f.p+'-doc1').files[0].name,exp:$(f.p+'-exp1').value},{name:'Public liability insurance',file:$(f.p+'-doc2').files[0].name,exp:$(f.p+'-exp2').value},{name:'Photo ID',idtype:$(f.p+'-idtype').value,file:$(f.p+'-doc3').files[0].name,exp:$(f.p+'-exp3').value}];
 d.submitted=Date.now();var pl=$(f.form).querySelector('input[name="plan-'+f.p+'"]:checked');d.plan=pl?pl.value:'payg';d.proActive=false;
-[0,1,2].forEach(function(i){var fl=$(f.p+'-doc'+(i+1)).files[0];d.docs[i].type=fl.type;d.docs[i].size=fl.size;readData(fl).then(function(x){d.docs[i].data=x})});USERS.push(d);if(window.MCsave)window.MCsave('partner application',d.name+' applied to join as '+(ROLES[d.role]||d.role),{name:d.name,email:d.email,phone:d.phone,town:d.town,website:d.website,hasLogo:!!d.logo,role:d.role,sub:d.sub,motOnly:!!d.motOnly,aeWhere:d.aeWhere,bays:d.bays,motBays:d.motBays,plan:d.plan,rates:d.rates,submitted:d.submitted||Date.now(),documents:(d.docs||[]).map(function(x){return{name:x.name,file:x.file,exp:x.exp,idtype:x.idtype,size:x.size}})});setUser(d);
-ok.insertAdjacentHTML('beforeend','<button class="btn" type="button" data-go="dashboard" style="margin-top:12px">Go to my dashboard</button>')})});
+var fls=[0,1,2].map(function(i){var fl=$(f.p+'-doc'+(i+1)).files[0];d.docs[i].type=fl.type;d.docs[i].size=fl.size;readData(fl).then(function(x){d.docs[i].data=x});return fl});
+function finish(live){USERS.push(d);if(window.MCsave)window.MCsave('partner application',d.name+' applied to join as '+(ROLES[d.role]||d.role),{name:d.name,email:d.email,phone:d.phone,town:d.town,website:d.website,hasLogo:!!d.logo,role:d.role,sub:d.sub,motOnly:!!d.motOnly,aeWhere:d.aeWhere,bays:d.bays,motBays:d.motBays,plan:d.plan,rates:d.rates,submitted:d.submitted||Date.now(),documents:(d.docs||[]).map(function(x){return{name:x.name,file:x.file,exp:x.exp,idtype:x.idtype,size:x.size}})});if(live!==false)setUser(d);
+ok.insertAdjacentHTML('beforeend',live===false?'<p class="note" style="margin-top:12px"><b>One more step.</b> We have sent an email to '+em.replace(/[<>&"]/g,'')+'. Tap the link in it, then use Partner log in.</p>':'<button class="btn" type="button" data-go="dashboard" style="margin-top:12px">Go to my dashboard</button>')}
+if(window.MCdb&&window.MCdb.on){delete d.pass;var fm=$(f.form),sb2=fm.querySelector('[type=submit]'),er=$(f.err);ok.hidden=true;fm.hidden=false;er.textContent='Sending your application. Please wait…';if(sb2)sb2.disabled=true;
+window.MCdb.partnerSignUp(d,pw,fls).then(function(r){if(sb2)sb2.disabled=false;er.textContent='';fm.hidden=true;ok.hidden=false;finish(r.session);
+if(r.docsFailed)ok.insertAdjacentHTML('beforeend','<p class="note" style="margin-top:10px"><b>One of your documents did not upload.</b> Please contact us so we can sort it out.</p>');ok.scrollIntoView({block:'center'})},
+function(e){if(sb2)sb2.disabled=false;er.textContent=e.message});return}
+finish()})});
 
 /* dashboards */
 function head(u){return '<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">'+(window.MCbrand?window.MCbrand.logo(u):'')+'<div style="flex:1;min-width:0"><b style="font-size:1.15rem">'+esc(u.name)+'</b>'+(window.MCbrand?window.MCbrand.link(u):'')+'<div class="note">'+(u.role==='mechanic'&&u.sub?({mobile:'Mobile mechanic',garage:'Garage',autoelec:'Auto electrician or locksmith'}[u.motOnly?'x':u.sub]||(u.motOnly?'MOT test station':esc(u.sub)))+(u.aeWhere?' ('+u.aeWhere.toLowerCase()+')':''):ROLES[u.role]+(u.sub?' ('+esc(u.sub)+')':''))+(u.town?', '+esc(u.town):'')+'</div></div><span class="stat">'+stLabel(u)+'</span></div>'+(u.role==='dealer'?'<p class="note" style="margin:10px 0 0">'+DPLAN(u.plan==null?1:u.plan).n+' plan: first 3 months free, then £'+DPLAN(u.plan==null?1:u.plan).price+' a month.</p>':planHtml(u))+'</div>'}
@@ -3765,6 +3773,10 @@ function idSvg(u,d){return '<svg viewBox="0 0 320 200" role="img" aria-label="Sa
 function certSvg(u,d){if(d.name==='Photo ID')return idSvg(u,d);return '<svg viewBox="0 0 320 220" role="img" aria-label="Sample certificate" style="width:100%;height:auto;background:#fff;border-radius:8px"><rect x="6" y="6" width="308" height="208" fill="#fff" stroke="#0f6b5c" stroke-width="3"/><text x="160" y="38" text-anchor="middle" font-size="16" font-weight="700" fill="#0f6b5c" font-family="sans-serif">'+esc(d.name.toUpperCase())+'</text><text x="160" y="58" text-anchor="middle" font-size="10" fill="#587080" font-family="sans-serif">Certificate of insurance (sample)</text><text x="24" y="104" font-size="12" fill="#14212a" font-family="sans-serif">Insured: '+esc(u.name)+'</text><text x="24" y="128" font-size="12" fill="#14212a" font-family="sans-serif">Policy number: SAMPLE-'+(esc(u.email).length*913)+'</text><text x="24" y="152" font-size="12" fill="#14212a" font-family="sans-serif">Cover: £2,000,000</text><text x="24" y="176" font-size="12" fill="#14212a" font-family="sans-serif">Valid to: '+fmtD(d.exp)+'</text></svg>'}
 function byEmail(e){for(var i=0;i<USERS.length;i++)if(USERS[i].email===e)return USERS[i]}
 function openDoc(e,i){var u=byEmail(e),d=u.docs[i],body=$('dv-body');if(d.name==='Photo ID'&&window.GGuser)adm.log.unshift({t:Date.now(),by:window.GGuser.name,x:'Viewed photo ID: '+u.name});$('dv-title').textContent=u.name+': '+d.name;
+if(d.path&&!d.data&&window.MCdb&&window.MCdb.docUrl){body.innerHTML='<p class="note">Opening the document…</p>';$('docview').showModal();
+window.MCdb.docUrl(d.path).then(function(url){var lk='<p style="margin-top:10px"><a class="btn sm ghost" href="'+esc(url)+'" target="_blank" rel="noopener">Open in a new tab</a></p><p class="note">'+esc(d.file||'')+(d.size?' ('+sz(d.size)+')':'')+'. This private link stops working after 10 minutes.</p>';
+body.innerHTML=(/^image\//.test(d.type||'')?'<img src="'+esc(url)+'" alt="'+esc(d.name)+'" style="max-width:100%;border-radius:8px">':'<object data="'+esc(url)+'" type="application/pdf" style="width:100%;height:60vh"><p>The PDF cannot be shown here. Use the button below.</p></object>')+lk},
+function(){body.innerHTML='<p><b>The document could not be opened.</b></p><p class="note">Check your connection and try again.</p>'});return}
 if(d.data&&/^data:image\//.test(d.data))body.innerHTML='<img src="'+d.data+'" alt="'+esc(d.name)+'" style="max-width:100%;border-radius:8px">';
 else if(d.data)body.innerHTML='<object data="'+d.data+'" type="application/pdf" style="width:100%;height:60vh"><p>The PDF cannot be previewed in this preview. File: '+esc(d.file)+' ('+sz(d.size||0)+').</p></object>';
 else if(d.nofile)body.innerHTML='<p><b>'+esc(d.file||d.name)+'</b></p><p class="note">This application was restored from the saved inbox. Uploaded files are not kept in this preview, so the document itself cannot be shown. Ask the applicant to send it again if you need to check it.</p>';
@@ -3828,7 +3840,9 @@ else er.textContent=st.stage===1?'Email or password not recognised.':'That code 
 $('st-form').addEventListener('submit',function(e){e.preventDefault();var er=$('st-err');
 if(Date.now()<st.lockUntil){er.textContent='Too many attempts. Try again in '+Math.ceil((st.lockUntil-Date.now())/1000)+' seconds.';return}
 if(st.stage===1){var em=$('st-mail').value.trim().toLowerCase(),pw=$('st-pass').value;
-var u=USERS.filter(function(x){return x.role==='admin'&&x.email===em&&x.pass===pw})[0];
+var u=USERS.filter(function(x){return x.pass&&x.role==='admin'&&x.email===em&&x.pass===pw})[0];
+if(!u&&em&&pw&&window.MCdb&&window.MCdb.on){var sg=$('st-go');sg.disabled=true;er.textContent='';
+window.MCdb.staffSignIn(em,pw).then(function(x){sg.disabled=false;st.user=x;finishStaff()},function(){sg.disabled=false;failStaff('Failed staff sign-in for '+em)});return}
 if(!u){failStaff('Failed staff sign-in for '+(em||'(blank email)'),USERS.filter(function(x){return x.role==='admin'&&x.email===em})[0]);return}
 st.user=u;st.stage=2;$('st-s1').hidden=true;$('st-s2').hidden=false;er.textContent='';$('st-go').textContent='Sign in';$('st-code').focus()}
 else if(st.stage===2){if($('st-code').value.trim()!=='123456'){failStaff('Wrong verification code for '+st.user.email,st.user);return}
@@ -6899,7 +6913,9 @@ var MSG={invalid_credentials:'Email or password not recognised.',
  over_request_rate_limit:'Too many tries. Please wait a minute and try again.',
  email_address_not_authorized:'New accounts cannot be confirmed yet, because sign-up emails are not switched on for this preview.',
  email_address_invalid:'Enter a valid email address.',
- signup_disabled:'New accounts are switched off at the moment.'};
+ signup_disabled:'New accounts are switched off at the moment.',
+ x_partner:'This is a partner or dealer account. Close this box and use Partner log in instead.',
+ x_not_partner:'This is not a partner or dealer account. Use Customer log in instead.'};
 function fail(e){var m=(e&&MSG[e.code])||'';if(!m&&e&&/fetch|network|offline/i.test(String(e.message||'')))m='We could not reach our system. Check your connection and try again.';return new Error(m||'Something went wrong. Please try again.')}
 function ms(s){var t=Date.parse(s);return isFinite(t)?t:Date.now()}
 /* build the site's own customer object from the database */
@@ -6907,13 +6923,13 @@ function load(au){return Promise.all([
   sb.from('profiles').select('name,phone,postcode,news,terms_at,created_at').eq('id',au.id).maybeSingle(),
   sb.from('bookings').select('kind,service,summary,vehicle,made_at').order('made_at',{ascending:false}).limit(200),
   sb.from('enquiries').select('about,message,made_at').order('made_at',{ascending:false}).limit(200)]).then(function(r){
-  if(r[0].error)throw r[0].error;var p=r[0].data||{},md=au.user_metadata||{},C=window.GGcustomers||[];
+  if(r[0].error)throw r[0].error;var md=au.user_metadata||{};if(!r[0].data&&md.kind==='partner'){sb.auth.signOut().catch(function(){});throw{code:'x_partner'}}var p=r[0].data||{},C=window.GGcustomers||[];
   var u=C.filter(function(x){return x.sbid===au.id})[0];if(!u){u={role:'customer',sbid:au.id};C.push(u)}
   u.email=au.email;u.name=p.name||md.name||String(au.email).split('@')[0];u.phone=p.phone||md.phone||'';u.post=p.postcode||md.postcode||'';
   u.news=!!p.news;u.joined=ms(p.created_at||au.created_at);u.tcAt=ms(p.terms_at||au.created_at);
   u.bookings=(r[1].data||[]).map(function(b){var o={kind:b.kind,text:b.summary,t:ms(b.made_at),tc:true};if(b.service)o.svc=b.service;if(b.vehicle)o.veh=b.vehicle;return o});
   u.enquiries=(r[2].data||[]).map(function(q){return{text:q.message,about:q.about,t:ms(q.made_at)}});
-  return u})}
+  cur=u;return u})}
 function signUp(d,pw){return ready.then(function(){return sb.auth.signUp({email:d.email,password:pw,options:{emailRedirectTo:location.origin+'/',data:{name:d.name,phone:d.phone,postcode:d.post,news:!!d.news}}})}).then(function(r){
   if(r.error)throw r.error;var au=r.data&&r.data.user;
   if(au&&au.identities&&!au.identities.length)throw{code:'user_already_exists'};
@@ -6921,16 +6937,78 @@ function signUp(d,pw){return ready.then(function(){return sb.auth.signUp({email:
   return{user:null}}).catch(function(e){throw fail(e)})}
 function signIn(em,pw){return ready.then(function(){return sb.auth.signInWithPassword({email:em,password:pw})}).then(function(r){
   if(r.error)throw r.error;return load(r.data.user)}).catch(function(e){throw fail(e)})}
-window.MCdb={on:true,signUp:signUp,signIn:signIn};
+/* ---------- partners, dealers and staff ---------- */
+var BUCKET='partner-docs',cur=null,sigs={};
+function U(){return window.GGusers||[]}
+function sigOf(u){return JSON.stringify([u.status,u.reject||null,u.suspend||null,u.ck?u.ck.map(function(v){return v?1:0}):null,u.rec||null])}
+function partnerObj(p,docs){var L=U(),u=L.filter(function(x){return x.sbid===p.id})[0];if(!u){u={};L.push(u)}
+ var d=p.details||{};Object.keys(d).forEach(function(k){u[k]=d[k]});delete u.pass;delete u.level;
+ u.sbid=p.id;u.email=p.email;u.role=p.role;if(p.sub)u.sub=p.sub;u.name=p.name;u.phone=p.phone;u.town=p.town;if(p.website)u.website=p.website;
+ u.plan=p.plan||'payg';u.rates=p.rates||{};u.status=p.status;u.submitted=ms(p.submitted_at);u.joined=ms(p.created_at);if(u.proActive==null)u.proActive=false;
+ var rv=p.review||{};u.reject=rv.reject||null;u.suspend=rv.suspend||undefined;u.ck=Array.isArray(rv.ck)?rv.ck.map(Boolean):null;u.rec=rv.rec||undefined;u.rejecting=false;
+ if(p.reviewed_at)u.reviewedAt=ms(p.reviewed_at);
+ u.docs=(docs||[]).filter(function(x){return x.partner_id===p.id}).sort(function(a,b){return a.slot-b.slot}).map(function(x){var o={name:x.name,file:x.file_name,exp:x.expires||'',type:x.mime,size:x.size,path:x.path,slot:x.slot};if(x.id_type)o.idtype=x.id_type;return o});
+ sigs[p.id]=sigOf(u);return u}
+function loadPartner(au){return Promise.all([sb.from('partners').select('*').eq('id',au.id).maybeSingle(),sb.from('partner_documents').select('*').eq('partner_id',au.id)]).then(function(r){
+  if(r[0].error)throw r[0].error;if(!r[0].data)return null;return partnerObj(r[0].data,r[1].data||[])})}
+function loadAllPartners(){return Promise.all([sb.from('partners').select('*').order('submitted_at',{ascending:true}).limit(1000),sb.from('partner_documents').select('*').limit(4000)]).then(function(r){
+  if(r[0].error)throw r[0].error;(r[0].data||[]).forEach(function(p){partnerObj(p,r[1].data||[])})})}
+function slim(v,depth){depth=depth||0;if(v==null)return null;var t=typeof v;
+ if(t==='string')return v.length>300?null:v;if(t==='number')return isFinite(v)?v:null;if(t==='boolean')return v;if(t!=='object'||depth>3)return null;
+ if(Array.isArray(v))return v.slice(0,40).map(function(x){return slim(x,depth+1)});
+ var o={};Object.keys(v).slice(0,40).forEach(function(k){if(/^(email|pass|password|role|sub|name|phone|town|website|plan|rates|status|docs|joined|submitted|level|sbid|reject|suspend|ck|rec)$/.test(k))return;var c=slim(v[k],depth+1);if(c!==null&&c!=='')o[k]=c});return o}
+function ext(f){var m=/\.([a-z0-9]{1,5})$/i.exec(f.name||'');return m?'.'+m[1].toLowerCase():(f.type==='application/pdf'?'.pdf':'.jpg')}
+function putDoc(uid,slot,file,meta){var path=uid+'/'+slot+'-'+Date.now()+ext(file);
+ function up(){return sb.storage.from(BUCKET).upload(path,file,{contentType:file.type||'application/octet-stream'}).then(function(r){if(r.error)throw r.error})}
+ var row={name:meta.name,id_type:meta.idtype||null,file_name:String(meta.file||file.name||'').slice(0,200),path:path,mime:file.type||'',size:file.size||0,expires:meta.exp||null};
+ return up().catch(function(){return up()}).then(function(){row.uploaded_at=new Date().toISOString();return sb.from('partner_documents').update(row).eq('partner_id',uid).eq('slot',slot).select('id')}).then(function(r){
+  if(r.error)throw r.error;if(r.data&&r.data.length)return;delete row.uploaded_at;row.slot=slot;return sb.from('partner_documents').insert(row).then(function(x){if(x.error)throw x.error})}).then(function(){meta.path=path;meta.slot=slot})}
+function partnerSignUp(d,pw,files){var det=slim(d)||{};try{if(JSON.stringify(det).length>6000)det={}}catch(e){det={}}
+ var rates=slim(d.rates)||{};
+ return ready.then(function(){return sb.auth.signUp({email:d.email,password:pw,options:{emailRedirectTo:location.origin+'/',data:{kind:'partner',role:d.role,sub:d.sub||null,name:d.name||'',phone:d.phone||'',town:d.town||'',website:d.website||null,plan:d.plan||'payg',rates:rates,details:det}}})}).then(function(r){
+  if(r.error)throw r.error;var au=r.data&&r.data.user;if(!au)throw{};
+  if(au.identities&&!au.identities.length)throw{code:'user_already_exists'};
+  d.sbid=au.id;sigs[au.id]=sigOf(d);
+  if(!r.data.session)return{id:au.id,session:false};
+  cur=d;var bad=false;
+  return files.reduce(function(p,f,i){return p.then(function(){return f?putDoc(au.id,i+1,f,d.docs[i]).catch(function(){bad=true}):null})},Promise.resolve()).then(function(){return{id:au.id,session:true,docsFailed:bad}})}).catch(function(e){throw fail(e)})}
+function partnerSignIn(em,pw){return ready.then(function(){return sb.auth.signInWithPassword({email:em,password:pw})}).then(function(r){
+  if(r.error)throw r.error;return loadPartner(r.data.user).then(function(u){if(!u){sb.auth.signOut().catch(function(){});throw{code:'x_not_partner'}}cur=u;return u})}).catch(function(e){throw fail(e)})}
+function staffSignIn(em,pw){return ready.then(function(){return sb.auth.signInWithPassword({email:em,password:pw})}).then(function(r){
+  if(r.error)throw r.error;var au=r.data.user;
+  return sb.from('staff').select('level,name').eq('user_id',au.id).maybeSingle().then(function(s){
+   if(s.error||!s.data){sb.auth.signOut().catch(function(){});throw{code:'invalid_credentials'}}
+   var L=U(),u=L.filter(function(x){return x.sbid===au.id&&x.role==='admin'})[0];if(!u){u={role:'admin',sbid:au.id,signins:[],fails:[]};L.push(u)}
+   u.email=au.email;u.level=s.data.level;u.name=s.data.name||String(au.email).split('@')[0];u.status='approved';
+   return loadAllPartners().then(function(){cur=u;return u})})}).catch(function(e){throw fail(e)})}
+function docUrl(path){return ready.then(function(){return sb.storage.from(BUCKET).createSignedUrl(path,600)}).then(function(r){if(r.error||!r.data)throw new Error('x');return r.data.signedUrl})}
+/* staff decisions (approve, reject, suspend, checklist, recommendation) are written back as they are made */
+function syncStaff(){var me=window.GGuser;if(!sb||!me||me.role!=='admin'||!me.sbid)return;
+ U().forEach(function(u){if(!u.sbid||u.role==='admin')return;var s=sigOf(u);if(sigs[u.sbid]===s)return;var was=sigs[u.sbid];sigs[u.sbid]=s;
+  sb.from('partners').update({status:u.status,review:{reject:u.reject||null,suspend:u.suspend||null,ck:u.ck?u.ck.map(function(v){return v?1:0}):null,rec:u.rec||null}}).eq('id',u.sbid).select('id').then(function(r){
+   if(r.error||!r.data||!r.data.length){sigs[u.sbid]=was;toast('That decision for '+u.name+' was not saved. Check your connection and try again.',true)}})})}
+/* a rejected partner sends new documents from their dashboard */
+var sending=false;
+function blobOf(dataUrl){var p=String(dataUrl).split(','),mime=(/^data:([^;]+)/.exec(p[0])||[])[1]||'application/octet-stream',bin=atob(p[1]||''),a=new Uint8Array(bin.length);for(var i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return new Blob([a],{type:mime})}
+function syncPartner(){var u=window.GGuser;if(!sb||sending||!u||!u.sbid||u.role==='admin'||u.role==='customer')return;
+ var todo=(u.docs||[]).map(function(d,i){return d&&d.data&&!d.path?i:-1}).filter(function(i){return i>=0});if(!todo.length)return;sending=true;
+ todo.reduce(function(p,i){return p.then(function(){var d=u.docs[i],b=blobOf(d.data);b.name=d.file;return putDoc(u.sbid,i+1,b,d)})},Promise.resolve()).then(function(){return sb.rpc('resubmit_application')}).then(function(r){sending=false;
+  if(r&&r.error)throw r.error;sigs[u.sbid]=sigOf(u);toast('Your new documents have been sent for review.')},function(){sending=false;(u.docs||[]).forEach(function(d){if(d&&d.data&&!d.path)d.path='failed'});toast('Your documents were not sent. Check your connection, then try again.',true)})}
+function wrapFn(name,after){var o=window[name];if(typeof o!=='function'||o.__sb)return;var f=function(){var r=o.apply(this,arguments);try{after()}catch(e){}return r};f.__sb=1;window[name]=f}
+wrapFn('GGadmin',syncStaff);wrapFn('GGdash',syncPartner);
+document.addEventListener('change',function(e){if(e.target.closest&&e.target.closest('#admin-body'))setTimeout(syncStaff,0)});
+/* if the site logs someone out by itself (for example the staff time-out), end the database session too */
+setInterval(function(){if(cur&&!window.GGuser){cur=null;if(sb)sb.auth.signOut().catch(function(){})}},4000);
+window.MCdb={on:true,signUp:signUp,signIn:signIn,partnerSignUp:partnerSignUp,partnerSignIn:partnerSignIn,staffSignIn:staffSignIn,docUrl:docUrl};
 /* stay logged in when the page is opened again, and finish the "confirm your email" link */
 ready.then(function(){return sb.auth.getSession()}).then(function(r){
   var bad=/error_code=|error=/.test(land),conf=/type=signup/.test(land);
   if(bad){toast(/otp_expired/.test(land)?'That email link has run out or was already used. Log in, or create your account again.':'That email link did not work. Please try again.',true);if(/error/.test(location.hash))history.replaceState(null,'',location.pathname+location.search)}
   var s=r&&r.data&&r.data.session;if(!s||window.GGuser)return;
-  return load(s.user).then(function(u){if(window.GGuser||!window.GGsetUser)return;window.GGsetUser(u);
+  return ((s.user.user_metadata||{}).kind==='partner'?loadPartner(s.user):load(s.user)).then(function(u){if(!u||window.GGuser||!window.GGsetUser)return;cur=u;window.GGsetUser(u);
    if(conf)toast('Your email is confirmed and you are logged in.');
-   if(location.hash==='#account'&&window.GGaccount)window.GGaccount();if(window.GGrerender)window.GGrerender()})}).catch(function(){});
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#logout');if(b&&sb&&window.GGuser&&window.GGuser.sbid)sb.auth.signOut().catch(function(){})},true);
+   if(location.hash==='#account'&&window.GGaccount)window.GGaccount();if(location.hash==='#dashboard'&&window.GGdash)window.GGdash();if(window.GGrerender)window.GGrerender()})}).catch(function(){});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#logout');if(b&&sb&&window.GGuser&&window.GGuser.sbid){cur=null;sb.auth.signOut().catch(function(){})}},true);
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;
  if(type==='booking'){tb='bookings';row={kind:String(d.kind||'').slice(0,60),service:d.svc?String(d.svc).slice(0,200):null,summary:String(d.text||'Booking').slice(0,2000),vehicle:d.veh||null,made_at:new Date(d.t||Date.now()).toISOString()}}

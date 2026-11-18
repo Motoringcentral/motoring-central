@@ -12,24 +12,34 @@ Chosen: Supabase (project "The Motoring Central", London region, free plan while
 The site talks to it from the script that starts "Shared database (Supabase" in index.html. Only the public
 ("publishable") key is in the page. Never put a secret key or the database password in the site or in chat.
 
-Done so far: real customer accounts (sign up, log in, stay logged in, log out); customers' bookings and
-their messages to dealers are saved to their account and are there on any device.
+Done so far:
+- Real customer accounts (sign up, log in, stay logged in, log out); customers' bookings and their messages to
+  dealers are saved to their account and are there on any device.
+- Partner and dealer applications are saved in the database and reach the admin page from any device. Their
+  insurance certificates and photo ID go into private storage that only the partner and staff can open.
+- Real staff log-in on the Staff page. Approve, reject, suspend, reinstate, the checklist and reviewer
+  recommendations are saved. Only an owner can change a partner's status. Staff are added by Claude in the
+  database (the "Add a reviewer" box on the admin page is still sample only).
+- Partners and dealers log in with their real account on any device and see their status.
 
-Owner to do in the Supabase dashboard (Authentication > URL Configuration): set "Site URL" to
-https://preview.motoringcentral.co.uk (change to the live address at launch). Without this, the link in the
-"confirm your email" message goes nowhere.
+Owner to do in the Supabase dashboard:
+- Authentication > URL Configuration: set "Site URL" to https://preview.motoringcentral.co.uk (the live address at launch).
+- Authentication > Sign In / Providers > Email: turn "Confirm email" OFF while testing (there is no email service yet).
+  Turn it back ON before launch, once the email service is set up.
 
 Still to do, in this order:
+- A proper email service (custom SMTP), then turn "Confirm email" back on. When it is on, a new partner must
+  confirm their email before their documents can upload, so add "upload your documents" to the partner
+  dashboard for that case
 - Forgotten password (reset by email) and changing account details
-- A proper email service (custom SMTP). Until then Supabase's built-in email only sends to the owner's own
-  email address and only a few an hour, so nobody else can finish creating an account
-- Partner and dealer accounts in the database (applications, approval by staff, documents kept in secure storage);
-  staff logins. The demo, partner and staff logins are still inside the page code
+- Two-step sign-in for staff (authenticator app); adding and removing reviewers from the admin page
+- Keep partners' dashboard changes (rates, services, diary, plan, logo) in the database
 - Bookings reach the right partner on their own device; job status updates reach the customer
 - Quote requests reach every partner who offers that job, and their quotes reach the customer
 - Service sheets, vehicle inspections and PDIs saved against the booking
 - Car and van adverts (dealer stock and private adverts) and their photos kept in the database
-- Chat messages, saved searches and the failed-search list
+- Customers list on the admin page from the database; chat messages, saved searches, failed-search list
+- Remove the demo logins and sample partners (they still show next to real ones on the preview)
 - Data protection: privacy notice says where data is kept (done); ICO fee; who can see what
 
 ### 2. Smaller ideas, not done yet
