@@ -1874,6 +1874,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <form id="cars-form" novalidate>
 <div class="two"><div><label class="f" for="cd-dealer">Dealer name</label><input type="text" id="cd-dealer"></div><div><label class="f" for="cd-phone">Phone</label><input type="tel" id="cd-phone"></div></div>
 <div class="two"><div><label class="f" for="cd-reg">Registration (optional)</label><input type="text" id="cd-reg" maxlength="8" style="text-transform:uppercase"></div><div><label class="f" for="cd-town">Town or city</label><input type="text" id="cd-town"></div></div>
+<label class="f" for="cd-pc">Postcode where it can be viewed (optional)</label><input type="text" id="cd-pc" maxlength="8" autocomplete="postal-code" style="text-transform:uppercase"><p class="note" style="margin:4px 0 0">Buyers see how many miles away the car is. The postcode itself is not shown.</p>
 <div class="two"><div><label class="f" for="cd-make">Make</label><input type="text" id="cd-make"></div><div><label class="f" for="cd-model">Model</label><input type="text" id="cd-model"></div></div>
 <label class="f" for="cd-variant">Variant (for example 1.0 EcoBoost Zetec)</label><input type="text" id="cd-variant">
 <div class="two"><div><label class="f" for="cd-year">Year</label><input type="number" id="cd-year" min="1990" max="2027" value="2020"></div><div><label class="f" for="cd-price">Price (&pound;)</label><input type="number" id="cd-price" min="1" step="1"></div></div>
@@ -1968,6 +1969,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <form id="vans-form" novalidate>
 <div class="two"><div><label class="f" for="vd-dealer">Dealer name</label><input type="text" id="vd-dealer"></div><div><label class="f" for="vd-phone">Phone</label><input type="tel" id="vd-phone"></div></div>
 <div class="two"><div><label class="f" for="vd-reg">Registration (optional)</label><input type="text" id="vd-reg" maxlength="8" style="text-transform:uppercase"></div><div><label class="f" for="vd-town">Town or city</label><input type="text" id="vd-town"></div></div>
+<label class="f" for="vd-pc">Postcode where it can be viewed (optional)</label><input type="text" id="vd-pc" maxlength="8" autocomplete="postal-code" style="text-transform:uppercase"><p class="note" style="margin:4px 0 0">Buyers see how many miles away the van is. The postcode itself is not shown.</p>
 <div class="two"><div><label class="f" for="vd-make">Make</label><input type="text" id="vd-make"></div><div><label class="f" for="vd-model">Model</label><input type="text" id="vd-model"></div></div>
 <label class="f" for="vd-variant">Variant (for example 2.0 EcoBlue L2 H1)</label><input type="text" id="vd-variant">
 <div class="two"><div><label class="f" for="vd-year">Year</label><input type="number" id="vd-year" min="1990" max="2027" value="2020"></div><div><label class="f" for="vd-price">Price (&pound;)</label><input type="number" id="vd-price" min="1" step="1"></div></div>
@@ -2349,6 +2351,8 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 <p><b>The dealer you contact.</b> When you send an enquiry about a car or van, we pass your name, contact details and message to that dealer.</p>
 <p><b>Suppliers who help us run the service</b>, under contract and only for that purpose: [payment provider], [vehicle data provider], [parts supplier], [email and text message provider], [website hosting provider] and [analytics provider].</p>
 <p><b>The RAC.</b> If you follow a link to buy breakdown cover, you buy direct from the RAC and their privacy policy applies to what you give them.</p>
+<p><b>Postcode look-up.</b> When you type a postcode to see how far away a car or van is, that postcode is sent to Postcodes.io, a look-up service run by Ideal Postcodes, to find where it is. Nothing else about you is sent with it.</p>
+<p><b>Voice search.</b> If you tap the microphone in the search box, your own browser (for example Google Chrome or Apple Safari) turns your speech into text using its speech service. We do not record or keep the sound of your voice.</p>
 <p><b>Authorities and advisers</b>, where the law requires it or to protect our legal rights.</p>
 <p>Partners and dealers are independent businesses. They are responsible for how they use your information once they have it, and must use it only to carry out your booking or reply to your enquiry.</p></div></details>
 <details><summary>5. How long we keep it</summary><div class="tb">
@@ -3356,7 +3360,7 @@ else if($('cd-feat').checked&&actF().length>=CAP)msg='The banner is full right n
 $('cd-err').textContent=msg;if(msg)return;
 var feat=$('cd-feat').checked,wait=$('cd-wait').checked&&actF().length>=CAP;
 readFiles($('cd-photos').files).then(function(photos){
-CARS.unshift({id:nextId++,make:v('cd-make'),model:v('cd-model'),variant:v('cd-variant'),year:yr,price:pr,miles:mi,fuel:$('cd-fuel').value,gear:$('cd-gear').value,body:$('cd-body').value,doors:+$('cd-doors').value||0,seats:+$('cd-seats').value||0,col:$('cd-col').value,town:v('cd-town'),dealer:v('cd-dealer'),phone:v('cd-phone'),desc:v('cd-desc'),photos:photos,badge:'New',mine:true,featured:feat,fexp:feat?Date.now()+14*864e5:0,waiting:wait,wq:wait?Date.now():0});
+CARS.unshift({id:nextId++,make:v('cd-make'),model:v('cd-model'),variant:v('cd-variant'),year:yr,price:pr,miles:mi,fuel:$('cd-fuel').value,gear:$('cd-gear').value,body:$('cd-body').value,doors:+$('cd-doors').value||0,seats:+$('cd-seats').value||0,col:$('cd-col').value,town:v('cd-town'),pc:v('cd-pc').toUpperCase(),dealer:v('cd-dealer'),phone:v('cd-phone'),desc:v('cd-desc'),photos:photos,badge:'New',mine:true,featured:feat,fexp:feat?Date.now()+14*864e5:0,waiting:wait,wq:wait?Date.now():0});
 $('cars-form').reset();$('cd-prev').innerHTML='';$('cars-form-card').hidden=true;
 if(window.MCflt)window.MCflt.clear('cars');
 refreshFilters();showList(true);render();var ok=$('cars-ok');ok.textContent=feat?'Listed as a premium ad on the front-page banner for 2 weeks or until sold.':wait?'Listed. You are number '+waitList().length+' on the banner waiting list. Any charge is taken only when your car goes live.':'Listed. Included in your monthly plan.';ok.hidden=false;$('cars-list').scrollIntoView({behavior:'smooth',block:'start'})})});
@@ -3532,7 +3536,7 @@ else if(v('vd-pay')===''||!(pay>=0))msg='Enter the payload in kilograms.';
 $('vd-err').textContent=msg;if(msg)return;
 var feat=$('vd-feat').checked;
 readFiles($('vd-photos').files).then(function(photos){
-VANS.unshift({id:nextId++,make:v('vd-make'),model:v('vd-model'),variant:v('vd-variant'),year:yr,price:pr,miles:mi,pay:pay,fuel:$('vd-fuel').value,gear:$('vd-gear').value,body:$('vd-body').value,col:$('vd-col').value,town:v('vd-town'),dealer:v('vd-dealer'),phone:v('vd-phone'),desc:v('vd-desc'),photos:photos,badge:'New',vat:$('vd-vat').checked,mine:true,van:true,featured:feat,fexp:feat?Date.now()+14*864e5:0});
+VANS.unshift({id:nextId++,make:v('vd-make'),model:v('vd-model'),variant:v('vd-variant'),year:yr,price:pr,miles:mi,pay:pay,fuel:$('vd-fuel').value,gear:$('vd-gear').value,body:$('vd-body').value,col:$('vd-col').value,town:v('vd-town'),pc:v('vd-pc').toUpperCase(),dealer:v('vd-dealer'),phone:v('vd-phone'),desc:v('vd-desc'),photos:photos,badge:'New',vat:$('vd-vat').checked,mine:true,van:true,featured:feat,fexp:feat?Date.now()+14*864e5:0});
 $('vans-form').reset();$('vd-prev').innerHTML='';$('vans-form-card').hidden=true;
 if(window.MCflt)window.MCflt.clear('vans');
 refreshFilters();showList(true);render();if(window.GGbanner)window.GGbanner();var ok=$('vans-ok');ok.textContent=feat?'Listed as a premium ad on the front-page banner for 2 weeks or until sold.':'Listed. Included in your monthly plan.';ok.hidden=false;$('vans-list').scrollIntoView({behavior:'smooth',block:'start'})})});
@@ -5898,37 +5902,97 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
 <style>
 .pf-ready{background:var(--soft);border:2px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:.92rem;line-height:1.45;color:var(--ink)}
 .pf-ready b{display:block;margin-bottom:4px}.pf-ready ul{margin:6px 0 0;padding-left:18px}.pf-ready li{margin:2px 0}
+.pf-head{scroll-margin-top:120px;margin:0 0 14px}
+.pf-dots{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.pf-dots span{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;position:relative}
+.pf-dots span+span::before{content:"";position:absolute;top:14px;right:calc(50% + 18px);width:calc(100% - 36px);height:3px;border-radius:2px;background:var(--line)}
+.pf-dots span.on::before,.pf-dots span.done::before{background:#38BDF8}
+.pf-dots i{font-style:normal;font-weight:800;font-size:.9rem;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--line);color:var(--muted);background:var(--surface)}
+.pf-dots .on i{background:#FFD43B;border-color:#FFD43B;color:#0B1C35}.pf-dots .done i{background:#38BDF8;border-color:#38BDF8;color:#0B1C35}
+.pf-dots em{font-style:normal;font-size:.72rem;line-height:1.15;color:var(--muted)}.pf-dots .on em{color:var(--ink);font-weight:700}
+.pf-now{margin:10px 0 0;font-size:1.02rem;color:var(--ink)}
+.pf-step[hidden]{display:none}
+.pf-nav{display:flex;justify-content:space-between;gap:10px;margin-top:18px;flex-wrap:wrap}
+.pf-step[data-step="3"] .pf-nav{margin:0 0 12px}
+.pf-nav .pf-next{flex:1 1 auto}
+.pf-nav .pf-back{all:unset;box-sizing:border-box;cursor:pointer;font-weight:700;font-size:.95rem;color:var(--ink);text-decoration:underline;padding:12px 6px}
+.pf-nav .pf-back:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
+.pf-nav .pf-back::before{content:"‹ "}
 .fld-bad{outline:3px solid #D92D20!important;outline-offset:2px}
 .fld-msg{color:#B3261E;font-weight:700;font-size:.88rem;margin:6px 0 0}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .fld-msg{color:#FFB4AB}}
 .mcnight .fld-msg{color:#FFB4AB}
 </style>
 <script>
-/* Partner and dealer sign-up forms: say what to have ready, and take people straight to the box that needs fixing */
+/* Partner and dealer sign-up forms: say what to have ready, split the long form into numbered steps,
+   and take people straight to the box that needs fixing */
 (function(){
 var FORMS={form:1,'t-form':1,'va-form':1,'r-form':1,'bs-form':1,'ev-form':1,'dl-form':1};
-Object.keys(FORMS).forEach(function(id){var f=document.getElementById(id);if(!f||f.querySelector('.pf-ready'))return;var d=document.createElement('div');d.className='pf-ready';
- d.innerHTML='<b>Before you start: this takes about 5 minutes</b>Have these ready. You can take the photos with your phone as you go.<ul><li>Your trade insurance certificate</li><li>Your public liability insurance certificate</li><li>Photo ID: a passport, driving licence or national ID card</li></ul>'+(id==='dl-form'?'Nothing is charged during your free 3 months.':'Nothing is charged until we have checked your documents.');
- f.insertBefore(d,f.firstChild)});
-function clean(f){[].forEach.call(f.querySelectorAll('.fld-bad'),function(e){e.classList.remove('fld-bad')});[].forEach.call(f.querySelectorAll('.fld-msg'),function(e){e.remove()})}
+var NAMES=['About you','Your work','Your documents','Your plan'];
 function seen(e){return !!(e&&e.offsetParent!==null)}
+function build(f){if(f.querySelector('.pf-step'))return;var id=f.id,kids=[].slice.call(f.children),pw=-1,docs=-1,plan=-1;
+ kids.forEach(function(c,i){var t=c.textContent.replace(/\s+/g,' ').trim();
+  if(pw<0&&c.tagName==='INPUT'&&c.type==='password')pw=i;
+  if(docs<0&&c.tagName==='FIELDSET'&&/^Required: proof of trading/.test(t))docs=i;
+  if(c.tagName==='FIELDSET'&&/^Your plan/.test(t))plan=i});
+ if(pw<0||docs<0||plan<0||!(pw<docs&&docs<plan))return;
+ var ready=document.createElement('div');ready.className='pf-ready';
+ ready.innerHTML='<b>Before you start: this takes about 5 minutes</b>Have these ready. You can take the photos with your phone as you go.<ul><li>Your trade insurance certificate</li><li>Your public liability insurance certificate</li><li>Photo ID: a passport, driving licence or national ID card</li></ul>'+(id==='dl-form'?'Nothing is charged during your free 3 months.':'Nothing is charged until we have checked your documents.');
+ var head=document.createElement('div');head.className='pf-head';head.setAttribute('aria-live','polite');
+ var steps=[0,1,2,3].map(function(n){var d=document.createElement('div');d.className='pf-step';d.setAttribute('data-step',n);return d});
+ kids.forEach(function(c,i){if(c.classList.contains('pf-ready')){c.remove();return}steps[i<=pw?0:i<docs?1:i<plan?2:3].appendChild(c)});
+ steps[0].insertBefore(ready,steps[0].firstChild);
+ if(id==='dl-form')NAMES2[id]=['About you','Your dealership','Your documents','Your plan'];
+ steps.forEach(function(d,n){var nav=document.createElement('div');nav.className='pf-nav';
+  nav.innerHTML=(n?'<button type="button" class="btn ghost pf-back" data-pf="'+(n-1)+'">Back</button>':'<span></span>')+(n<3?'<button type="button" class="btn pf-next" data-pf="'+(n+1)+'">Next: '+esc(names(id)[n+1])+'</button>':'');
+  if(n<3)d.appendChild(nav);else d.insertBefore(nav,d.firstChild)});
+ f.appendChild(head);steps.forEach(function(d){f.appendChild(d)});f.insertBefore(head,f.firstChild);
+ f.setAttribute('data-pfstep','0');show(f,0,true)}
+var NAMES2={};
+function names(id){return NAMES2[id]||NAMES}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function show(f,n,quiet){var st=f.querySelectorAll('.pf-step');[].forEach.call(st,function(d,i){d.hidden=i!==n});f.setAttribute('data-pfstep',n);
+ var h=f.querySelector('.pf-head'),nm=names(f.id);
+ h.innerHTML='<div class="pf-dots">'+nm.map(function(x,i){return '<span class="'+(i<n?'done':i===n?'on':'')+'"><i>'+(i<n?'✓':i+1)+'</i><em>'+esc(x)+'</em></span>'}).join('')+'</div><p class="pf-now"><b>Step '+(n+1)+' of 4:</b> '+esc(nm[n])+'</p>';
+ if(!quiet)h.scrollIntoView({behavior:'smooth',block:'start'})}
+function stepOf(el){var s=el.closest('.pf-step');return s?+s.getAttribute('data-step'):-1}
+function clean(f){[].forEach.call(f.querySelectorAll('.fld-bad'),function(e){e.classList.remove('fld-bad')});[].forEach.call(f.querySelectorAll('.fld-msg'),function(e){e.remove()})}
+function flag(f,c,msg){var n=stepOf(c);if(n>-1&&n!==+f.getAttribute('data-pfstep'))show(f,n,true);
+ c.classList.add('fld-bad');var p=document.createElement('p');p.className='fld-msg';p.textContent=msg;
+ var host=c.type==='checkbox'?(c.closest('.tc,.chk,label')||c):c;host.parentNode.insertBefore(p,host.nextSibling);
+ c.scrollIntoView({behavior:'smooth',block:'center'});try{c.focus({preventScroll:true})}catch(x){}}
 function find(f,msg){var m=msg.toLowerCase(),best=null,bl=0;
- [].forEach.call(f.querySelectorAll('label[for]'),function(l){if(!seen(l))return;var t=l.textContent.replace(/\(.*?\)/g,'').replace(/[^a-z0-9 ]/gi,' ').replace(/\s+/g,' ').trim().toLowerCase();if(t.length<3)return;
-  var c=document.getElementById(l.getAttribute('for'));if(!c||!seen(c))return;
+ [].forEach.call(f.querySelectorAll('label[for]'),function(l){var t=l.textContent.replace(/\(.*?\)/g,'').replace(/[^a-z0-9 ]/gi,' ').replace(/\s+/g,' ').trim().toLowerCase();if(t.length<3)return;
+  var c=document.getElementById(l.getAttribute('for'));if(!c||!seen(c)||!seen(l))return;
   var words=t.split(' ').filter(function(w){return w.length>2&&w!=='your'&&w!=='the'}),hit=words.filter(function(w){return m.indexOf(w)>-1}).length;
   if(words.length&&hit===words.length&&t.length>bl){best=c;bl=t.length}});
  if(best)return best;
  if(/agree|confirm|tick|terms/.test(m)){var cb=[].filter.call(f.querySelectorAll('input[type=checkbox]'),function(c){return seen(c)&&!c.checked&&/agree|confirm|terms/i.test((c.closest('label,.tc,.chk')||c.parentNode).textContent)})[0];if(cb)return cb}
  if(/upload|certificate|photo id|document/.test(m)){var fi=[].filter.call(f.querySelectorAll('input[type=file]'),function(c){return seen(c)&&!c.files.length})[0];if(fi)return fi}
  return null}
-function check(f){var e=[].filter.call(f.querySelectorAll('.err,[role=alert]'),function(x){return seen(x)&&x.textContent.trim()})[0];clean(f);if(!e)return;
- var c=find(f,e.textContent);if(!c)return;c.classList.add('fld-bad');var p=document.createElement('p');p.className='fld-msg';p.textContent=e.textContent.trim();
- var host=c.type==='checkbox'?(c.closest('.tc,.chk,label')||c):c;host.parentNode.insertBefore(p,host.nextSibling);
- c.scrollIntoView({behavior:'smooth',block:'center'});try{c.focus({preventScroll:true})}catch(x){}}
+/* after the form's own checks have run: find the box its message is about, in whichever step it sits */
+function check(f){var e=[].filter.call(f.querySelectorAll('.err,[role=alert]'),function(x){return x.textContent.trim()&&!x.hidden})[0];clean(f);if(!e)return;
+ var st=f.querySelectorAll('.pf-step'),cur=+f.getAttribute('data-pfstep');[].forEach.call(st,function(d){d.hidden=false});
+ var c=find(f,e.textContent);[].forEach.call(st,function(d,i){d.hidden=i!==cur});
+ if(c)flag(f,c,e.textContent.trim())}
+/* step 1 is the same on every form: name, phone, email and password are all needed */
+function firstGap(f){var s=f.querySelector('.pf-step[data-step="0"]'),bad=null;
+ [].some.call(s.querySelectorAll('input'),function(c){if(!seen(c)||c.type==='file'||c.type==='checkbox'||c.type==='radio')return false;
+  var l=f.querySelector('label[for="'+c.id+'"]'),name=l?l.textContent.replace(/\(.*?\)/g,'').trim():'this box';if(l&&/optional/i.test(l.textContent))return false;
+  var v=c.value.trim(),msg=!v?'Please fill in: '+name+'.':c.type==='email'&&!/^\S+@\S+\.\S+$/.test(v)?'Enter a valid email address.':c.type==='password'&&v.length<8?'Your password needs at least 8 characters.':'';
+  if(msg){bad=[c,msg];return true}return false});return bad}
+Object.keys(FORMS).forEach(function(id){var f=document.getElementById(id);if(f)build(f)});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;var f=b.closest('form');if(!f||!FORMS[f.id])return;
+ if(b.hasAttribute('data-pf')){var to=+b.getAttribute('data-pf'),cur=+f.getAttribute('data-pfstep');clean(f);
+  if(to>cur&&cur===0){var g=firstGap(f);if(g){flag(f,g[0],g[1]);return}}
+  show(f,to);return}
+ if(b.type==='submit'||/submit|start my/i.test(b.textContent))setTimeout(function(){check(f)},40)});
 document.addEventListener('submit',function(e){var f=e.target;if(f&&FORMS[f.id])setTimeout(function(){check(f)},30)},true);
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;var f=b.closest('form');if(f&&FORMS[f.id]&&(b.type==='submit'||/submit|start my|apply|join/i.test(b.textContent)))setTimeout(function(){check(f)},40)});
 document.addEventListener('input',function(e){var c=e.target;if(c.classList&&c.classList.contains('fld-bad')){c.classList.remove('fld-bad');var n=(c.type==='checkbox'?(c.closest('.tc,.chk,label')||c):c).nextSibling;if(n&&n.classList&&n.classList.contains('fld-msg'))n.remove()}});
 document.addEventListener('change',function(e){var c=e.target;if(c.classList&&c.classList.contains('fld-bad'))c.dispatchEvent(new Event('input',{bubbles:true}))});
+/* a form that is opened again (or reset after a successful application) starts at step 1 */
+document.addEventListener('reset',function(e){var f=e.target;if(f&&FORMS[f.id]&&f.querySelector('.pf-step'))setTimeout(function(){clean(f);show(f,0,true)},0)},true);
+window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(function(id){var f=document.getElementById(id);if(f&&f.querySelector('.pf-step')&&!seen(f)&&!f.querySelector('.fld-bad'))show(f,0,true)})});
 })();
 </script>
 <style>
@@ -5965,7 +6029,8 @@ document.addEventListener('change',function(e){var c=e.target;if(c.classList&&c.
 /* Cars and vans for sale: the search filters (make, model, price, year, mileage, gearbox, fuel, body type,
    colour, doors, seats, engine size, payload, keyword, postcode and distance, sort).
    One set of code serves both pages. The cars and vans code asks MCflt.run() for the list to show.
-   Distance uses the postcode area (the letters at the start), so it is approximate in this preview. */
+   Distance: the postcode typed in is looked up with Postcodes.io (free, no account) to get its exact position.
+   If that look-up cannot be reached, it falls back to the postcode area (the letters at the start), which is rougher. */
 (function(){
 function $(i){return document.getElementById(i)}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
@@ -5974,6 +6039,19 @@ function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
 var AREA={AB:[57.15,-2.10,'Aberdeen'],AL:[51.75,-0.34,'St Albans'],B:[52.48,-1.90,'Birmingham'],BA:[51.38,-2.36,'Bath'],BB:[53.75,-2.48,'Blackburn'],BD:[53.79,-1.75,'Bradford'],BH:[50.72,-1.88,'Bournemouth'],BL:[53.58,-2.43,'Bolton'],BN:[50.83,-0.14,'Brighton'],BR:[51.40,0.02,'Bromley'],BS:[51.45,-2.59,'Bristol'],BT:[54.60,-5.93,'Belfast'],CA:[54.89,-2.94,'Carlisle'],CB:[52.20,0.12,'Cambridge'],CF:[51.48,-3.18,'Cardiff'],CH:[53.19,-2.89,'Chester'],CM:[51.73,0.47,'Chelmsford'],CO:[51.89,0.90,'Colchester'],CR:[51.37,-0.10,'Croydon'],CT:[51.28,1.08,'Canterbury'],CV:[52.41,-1.51,'Coventry'],CW:[53.10,-2.44,'Crewe'],DA:[51.44,0.22,'Dartford'],DD:[56.46,-2.97,'Dundee'],DE:[52.92,-1.48,'Derby'],DG:[55.07,-3.61,'Dumfries'],DH:[54.78,-1.58,'Durham'],DL:[54.52,-1.55,'Darlington'],DN:[53.52,-1.13,'Doncaster'],DT:[50.71,-2.44,'Dorchester'],DY:[52.51,-2.08,'Dudley'],E:[51.54,-0.03,'East London'],EC:[51.52,-0.09,'London'],EH:[55.95,-3.19,'Edinburgh'],EN:[51.65,-0.08,'Enfield'],EX:[50.72,-3.53,'Exeter'],FK:[56.00,-3.78,'Falkirk'],FY:[53.82,-3.05,'Blackpool'],G:[55.86,-4.25,'Glasgow'],GL:[51.86,-2.24,'Gloucester'],GU:[51.24,-0.57,'Guildford'],HA:[51.58,-0.34,'Harrow'],HD:[53.65,-1.78,'Huddersfield'],HG:[53.99,-1.54,'Harrogate'],HP:[51.75,-0.47,'Hemel Hempstead'],HR:[52.06,-2.72,'Hereford'],HS:[58.21,-6.39,'Stornoway'],HU:[53.74,-0.34,'Hull'],HX:[53.72,-1.86,'Halifax'],IG:[51.56,0.07,'Ilford'],IP:[52.06,1.16,'Ipswich'],IV:[57.48,-4.22,'Inverness'],KA:[55.61,-4.50,'Kilmarnock'],KT:[51.41,-0.30,'Kingston upon Thames'],KW:[58.98,-2.96,'Kirkwall'],KY:[56.11,-3.16,'Kirkcaldy'],L:[53.41,-2.98,'Liverpool'],LA:[54.05,-2.80,'Lancaster'],LD:[52.24,-3.38,'Llandrindod Wells'],LE:[52.63,-1.13,'Leicester'],LL:[53.32,-3.83,'Llandudno'],LN:[53.23,-0.54,'Lincoln'],LS:[53.80,-1.55,'Leeds'],LU:[51.88,-0.42,'Luton'],M:[53.48,-2.24,'Manchester'],ME:[51.39,0.54,'Medway'],MK:[52.04,-0.76,'Milton Keynes'],ML:[55.79,-3.99,'Motherwell'],N:[51.57,-0.10,'North London'],NE:[54.98,-1.61,'Newcastle'],NG:[52.95,-1.15,'Nottingham'],NN:[52.24,-0.90,'Northampton'],NP:[51.58,-3.00,'Newport'],NR:[52.63,1.30,'Norwich'],NW:[51.55,-0.19,'North West London'],OL:[53.54,-2.11,'Oldham'],OX:[51.75,-1.26,'Oxford'],PA:[55.85,-4.42,'Paisley'],PE:[52.57,-0.24,'Peterborough'],PH:[56.40,-3.43,'Perth'],PL:[50.38,-4.14,'Plymouth'],PO:[50.82,-1.09,'Portsmouth'],PR:[53.76,-2.70,'Preston'],RG:[51.45,-0.97,'Reading'],RH:[51.24,-0.17,'Redhill'],RM:[51.58,0.18,'Romford'],S:[53.38,-1.47,'Sheffield'],SA:[51.62,-3.94,'Swansea'],SE:[51.47,-0.06,'South East London'],SG:[51.90,-0.20,'Stevenage'],SK:[53.41,-2.16,'Stockport'],SL:[51.51,-0.59,'Slough'],SM:[51.36,-0.19,'Sutton'],SN:[51.56,-1.78,'Swindon'],SO:[50.90,-1.40,'Southampton'],SP:[51.07,-1.79,'Salisbury'],SR:[54.91,-1.38,'Sunderland'],SS:[51.54,0.71,'Southend'],ST:[53.00,-2.18,'Stoke-on-Trent'],SW:[51.47,-0.17,'South West London'],SY:[52.71,-2.75,'Shrewsbury'],TA:[51.02,-3.10,'Taunton'],TD:[55.62,-2.81,'Galashiels'],TF:[52.68,-2.45,'Telford'],TN:[51.19,0.27,'Tonbridge'],TQ:[50.46,-3.53,'Torquay'],TR:[50.26,-5.05,'Truro'],TS:[54.57,-1.23,'Middlesbrough'],TW:[51.45,-0.34,'Twickenham'],UB:[51.51,-0.38,'Southall'],W:[51.51,-0.19,'West London'],WA:[53.39,-2.60,'Warrington'],WC:[51.52,-0.12,'Central London'],WD:[51.66,-0.40,'Watford'],WF:[53.68,-1.50,'Wakefield'],WN:[53.55,-2.63,'Wigan'],WR:[52.19,-2.22,'Worcester'],WS:[52.59,-1.98,'Walsall'],WV:[52.59,-2.13,'Wolverhampton'],YO:[53.96,-1.08,'York'],ZE:[60.15,-1.14,'Lerwick']};
 var TOWN={};Object.keys(AREA).forEach(function(k){TOWN[AREA[k][2].toLowerCase()]=k});
 [['stoke','ST'],['newcastle upon tyne','NE'],['kingston','KT'],['hull','HU'],['kingston upon hull','HU'],['brighton and hove','BN'],['salford','M'],['rotherham','S'],['barnsley','S'],['solihull','B'],['gateshead','NE'],['birkenhead','CH'],['st helens','WA'],['dewsbury','WF'],['pontefract','WF'],['keighley','BD'],['rochdale','OL'],['bury','BL'],['burnley','BB'],['chesterfield','S'],['mansfield','NG'],['scunthorpe','DN'],['grimsby','DN'],['basingstoke','RG'],['maidstone','ME'],['poole','BH'],['cheltenham','GL'],['wrexham','LL'],['bangor','LL'],['southend-on-sea','SS'],['crawley','RH'],['woking','GU'],['high wycombe','HP'],['bedford','MK'],['warwick','CV'],['rugby','CV'],['lichfield','WS'],['kidderminster','DY'],['barnstaple','EX'],['penzance','TR'],['scarborough','YO'],['harlow','CM'],['basildon','SS'],['watford','WD'],['west bromwich','B']].forEach(function(x){TOWN[x[0]]=x[1]});
+/* exact positions from Postcodes.io, remembered for this visit: postcode -> [latitude, longitude, place], or null if it does not exist */
+var GEO={},ASK={};try{GEO=JSON.parse(sessionStorage.getItem('mc-geo')||'{}')||{}}catch(e){}
+function norm(pc){return String(pc||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+function shape(pc){var n=norm(pc);return /^[A-Z]{1,2}\d[A-Z\d]?\d[A-Z]{2}$/.test(n)?'full':/^[A-Z]{1,2}\d[A-Z\d]?$/.test(n)?'out':''}
+function pretty(pc){var n=norm(pc);return shape(pc)==='full'?n.slice(0,-3)+' '+n.slice(-3):n}
+function geo(pc,done){var n=norm(pc),sh=shape(pc);if(!sh||GEO[n]!==undefined||ASK[n]||!window.fetch)return;ASK[n]=1;
+ fetch('https://api.postcodes.io/'+(sh==='full'?'postcodes/':'outcodes/')+encodeURIComponent(n)).then(function(r){return r.status===404?{status:404}:r.json()}).then(function(j){var r=j&&j.result;
+  if(r&&r.latitude!=null){var d=r.admin_district;GEO[n]=[r.latitude,r.longitude,(Array.isArray(d)?d[0]:d)||'']}else if(j&&j.status===404)GEO[n]=null;else{delete ASK[n];return}
+  try{sessionStorage.setItem('mc-geo',JSON.stringify(GEO))}catch(e){}if(done)done()}).catch(function(){ASK[n]=2})}
+/* where the visitor is: exact if the look-up has answered, otherwise the middle of the postcode area */
+function here(kind){var pc=ST[kind].pc,n=norm(pc);if(!shape(pc)||GEO[n]===null)return null;if(GEO[n])return {pt:GEO[n],name:pretty(pc)+(GEO[n][2]?', '+GEO[n][2]:''),exact:true};var a=area(pc);return a?{pt:AREA[a],name:'the '+AREA[a][2]+' area',exact:false}:null}
+/* where the vehicle is: the advert's postcode if it has one, otherwise its town */
+function there(c){if(c.pc&&shape(c.pc)){var n=norm(c.pc);if(GEO[n])return GEO[n];geo(c.pc,function(){['cars','vans'].forEach(function(k){if(ST[k].pc)changed(k)})})}return townPt(c.town)}
 function area(pc){var m=String(pc||'').toUpperCase().replace(/\s/g,'').match(/^([A-Z]{1,2})\d[A-Z\d]?(\d[A-Z]{2})?$/);return m&&AREA[m[1]]?m[1]:''}
 function townPt(t){var a=TOWN[String(t||'').toLowerCase().trim()];return a?AREA[a]:null}
 function milesBetween(a,b){var R=3959,r=Math.PI/180,dl=(b[0]-a[0])*r,dn=(b[1]-a[1])*r,x=Math.sin(dl/2)*Math.sin(dl/2)+Math.cos(a[0]*r)*Math.cos(b[0]*r)*Math.sin(dn/2)*Math.sin(dn/2);return 2*R*Math.asin(Math.sqrt(x))}
@@ -5994,7 +6072,7 @@ function save(){try{sessionStorage.setItem('mc-flt',JSON.stringify(ST))}catch(e)
 function engOf(c){if(c.engine)return +c.engine;var m=String(c.variant||'').match(/(?:^|\s)(\d\.\d)(?=\s|$|[A-Za-z])/);return m?+m[1]:0}
 function doorsOf(c){return +c.doors||DOORS[c.body]||0}
 function seatsOf(c){return +c.seats||SEATS[c.body]||(DOORS[c.body]?5:0)}
-function away(kind,c){var a=area(ST[kind].pc);if(!a)return null;var p=townPt(c.town);return p?milesBetween(AREA[a],p):null}
+function away(kind,c){var h=here(kind);if(!h)return null;var p=there(c);return p?milesBetween(h.pt,p):null}
 function engBucket(e){return !e?'':e<=1.0?'1.0':e<=1.4?'1.4':e<=1.9?'1.9':'2.0'}
 /* does this vehicle pass every filter, apart from the one named in skip? */
 function ok(kind,c,skip){var s=ST[kind];
@@ -6013,10 +6091,10 @@ function ok(kind,c,skip){var s=ST[kind];
  else if(skip!=='pay'&&s.pay&&!(c.pay>=s.pay))return false;
  if(skip!=='kw'&&s.kw.trim()){var h=[c.make,c.model,c.variant,c.desc,c.dealer,c.town,c.col,c.fuel,c.gear,c.body,c.year].join(' ').toLowerCase();
   if(!s.kw.toLowerCase().split(/\s+/).filter(Boolean).every(function(w){return h.indexOf(w)>-1}))return false}
- if(skip!=='dist'&&s.dist&&area(s.pc)){var d=away(kind,c);if(d==null||d>s.dist)return false}
+ if(skip!=='dist'&&s.dist&&here(kind)){var d=away(kind,c);if(d==null||d>s.dist)return false}
  return true}
 function all(kind){var a=K[kind].api();return a?a.list():[]}
-function run(kind,list){var s=ST[kind],l=(list||all(kind)).filter(function(c){return ok(kind,c)}),near=area(s.pc);
+function run(kind,list){var s=ST[kind],l=(list||all(kind)).filter(function(c){return ok(kind,c)}),near=here(kind);
  l.sort(function(a,b){return s.sort==='pl'?a.price-b.price:s.sort==='ph'?b.price-a.price:s.sort==='mi'?a.miles-b.miles:s.sort==='yr'?(b.year-a.year)||(b.id-a.id):s.sort==='pay'?(b.pay||0)-(a.pay||0):s.sort==='near'&&near?((away(kind,a)==null?1e9:away(kind,a))-(away(kind,b)==null?1e9:away(kind,b)))||(b.id-a.id):b.id-a.id});return l}
 function tally(kind,field,skip){var n={};all(kind).forEach(function(c){if(!ok(kind,c,skip))return;var v=typeof field==='function'?field(c):c[field];if(v===''||v==null||v===0)return;n[v]=(n[v]||0)+1});return n}
 
@@ -6059,9 +6137,9 @@ function mount(kind){var k=K[kind],root=$(k.root);if(!root||root.querySelector('
   if(f==='make'){s.make=v;s.model=''}else if(f==='model'||f==='gear'||f==='eng'||f==='sort')s[f]=v;else s[f]=+v||0;
   if(f==='pmin'&&s.pmax&&s.pmin>s.pmax)s.pmax=0;if(f==='pmax'&&s.pmin&&s.pmax<s.pmin)s.pmin=0;
   if(f==='ymin'&&s.ymax&&s.ymin>s.ymax)s.ymax=0;if(f==='ymax'&&s.ymin&&s.ymax<s.ymin)s.ymin=0;
-  if(f==='dist'&&s.dist&&!area(s.pc)){var pc=$(p+'-f-pc');if(pc)pc.focus()}
+  if(f==='dist'&&s.dist&&!here(kind)){var pc=$(p+'-f-pc');if(pc)pc.focus()}
   changed(kind)});
- var t=null;F.addEventListener('input',function(e){var f=e.target.getAttribute('data-f');if(f!=='pc'&&f!=='kw')return;ST[kind][f]=e.target.value;clearTimeout(t);t=setTimeout(function(){if(f==='pc'&&area(ST[kind].pc)&&!ST[kind].dist&&ST[kind].sort==='rec')ST[kind].sort='near';changed(kind)},f==='pc'?350:200)});
+ var t=null;F.addEventListener('input',function(e){var f=e.target.getAttribute('data-f');if(f!=='pc'&&f!=='kw')return;ST[kind][f]=e.target.value;if(f==='pc'){var o=kind==='cars'?'vans':'cars';ST[o].pc=e.target.value}clearTimeout(t);t=setTimeout(function(){if(f==='pc'){geo(ST[kind].pc,function(){changed(kind);sync(kind==='cars'?'vans':'cars')});if(here(kind)&&!ST[kind].dist&&ST[kind].sort==='rec')ST[kind].sort='near'}changed(kind);if(f==='pc')sync(kind==='cars'?'vans':'cars')},f==='pc'?500:200)});
  F.addEventListener('click',function(e){var c=e.target.closest('[data-fc]'),s=ST[kind];
   if(c){var f=c.getAttribute('data-fc'),v=c.getAttribute('data-v'),i=s[f].indexOf(v);if(i>-1)s[f].splice(i,1);else s[f].push(v);changed(kind);return}
   var x=e.target.closest('[data-fx]');if(x){drop(kind,x.getAttribute('data-fx'),x.getAttribute('data-v'));changed(kind);return}
@@ -6071,7 +6149,7 @@ function mount(kind){var k=K[kind],root=$(k.root);if(!root||root.querySelector('
  sync(kind)}
 function drop(kind,f,v){var s=ST[kind];if(f==='price'){s.pmin=0;s.pmax=0}else if(f==='year'){s.ymin=0;s.ymax=0}else if(f==='loc'){s.dist=0}else if(f==='make'){s.make='';s.model=''}else if(Array.isArray(s[f])){var i=s[f].indexOf(v);if(i>-1)s[f].splice(i,1)}else s[f]=typeof s[f]==='number'?0:''}
 function active(kind){var s=ST[kind],a=[],car=kind==='cars';
- if(s.dist&&area(s.pc))a.push(['loc','','Within '+s.dist+' miles of '+AREA[area(s.pc)][2]]);
+ if(s.dist&&here(kind))a.push(['loc','','Within '+s.dist+' miles of '+pretty(s.pc)]);
  if(s.make)a.push(['make','',s.make]);if(s.model)a.push(['model','',s.model]);
  if(s.pmin||s.pmax)a.push(['price','',s.pmin&&s.pmax?gbp(s.pmin)+' to '+gbp(s.pmax):s.pmin?'From '+gbp(s.pmin):'Up to '+gbp(s.pmax)]);
  if(s.ymin||s.ymax)a.push(['year','',s.ymin&&s.ymax?(s.ymin===s.ymax?''+s.ymin:s.ymin+' to '+s.ymax):s.ymin?s.ymin+' or newer':s.ymax+' or older']);
@@ -6087,7 +6165,7 @@ function withN(counts,label){return function(v){var n=counts[v]||0;return [v,(la
 function sync(kind){var k=K[kind],root=$(k.root),F=root&&root.querySelector('.flt');if(!F)return;var s=ST[kind],p=kind,car=kind==='cars',L=all(kind);
  function q(r){return F.querySelector('[data-r="'+r+'"]')}
  var pc=$(p+'-f-pc');if(document.activeElement!==pc)pc.value=s.pc;var kw=$(p+'-f-kw');if(document.activeElement!==kw)kw.value=s.kw;
- var a=area(s.pc),msg=q('pcmsg');msg.textContent=s.pc.trim()&&!a?'Enter a UK postcode, like LS1 4AP, to see what is near you.':a?'Showing distances from '+AREA[a][2]+' (approximate).':'';
+ var a=here(kind),msg=q('pcmsg'),typed=s.pc.trim();msg.textContent=!typed?'':a?(a.exact?'Showing distances from '+a.name+'.':'Showing rough distances from '+a.name+'.'):(shape(s.pc)&&GEO[norm(s.pc)]===null)?'We could not find that postcode. Please check it and try again.':'Enter a UK postcode, like LS1 4AP, to see what is near you.';
  opts($(p+'-f-dist'),'National',DIST.map(function(d){return [d,'Within '+d+' miles']}),s.dist||'');
  var mk=tally(kind,'make','make');opts($(p+'-f-make'),'Any make',Object.keys(mk).sort().map(withN(mk)),s.make);
  var md={};L.forEach(function(c){if(s.make&&c.make===s.make&&ok(kind,c,'model'))md[c.model]=(md[c.model]||0)+1});
@@ -6114,8 +6192,9 @@ function clear(kind){var keep=ST[kind].more;ST[kind]=blank();ST[kind].more=keep;
 function set(kind,o){var b=blank();b.more=ST[kind].more;b.pc=ST[kind].pc;Object.keys(o||{}).forEach(function(f){if(f in b&&o[f]!=null)b[f]=o[f]});ST[kind]=b;if(advCount(kind))b.more=true;changed(kind)}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-fltclear]');if(b)clear(b.getAttribute('data-fltclear'))});
 window.MCflt={run:run,refresh:sync,clear:clear,set:set,state:function(k){return ST[k]},count:function(k){return run(k).length},
- away:function(kind,c){var d=away(kind,c);return d==null?'':d<3?'Under 3 miles away':'About '+Math.round(d)+' miles away'},facets:function(kind){return {doors:doorsOf,seats:seatsOf,eng:engOf}}};
+ away:function(kind,c){var d=away(kind,c);return d==null?'':d<1.5?'About 1 mile away':'About '+Math.round(d)+' miles away'},facets:function(kind){return {doors:doorsOf,seats:seatsOf,eng:engOf}}};
 mount('cars');mount('vans');
+if(ST.cars.pc)geo(ST.cars.pc,function(){changed('cars');sync('vans')});
 ['cars','vans'].forEach(function(k){var a=K[k].api();if(a&&a.reset)a.reset()});
 })();
 </script>

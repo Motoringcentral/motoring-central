@@ -25,11 +25,8 @@ This belongs in the real site rebuild (branch `nextjs-rebuild`).
 ### 2. Smaller ideas, not done yet
 - Postcode: the box at the top of the front page is hidden (the search comes first). Later it could show which partners cover an area.
 - Search, next steps: keep a list of searches that found nothing (needs the shared database) so new words can be added.
-- Cars and vans, distance: the preview works out distance from the postcode area (the letters at the start), so it is only
-  approximate. The live site should use a proper postcode look-up (for example postcodes.io) and store each dealer's postcode.
 - Cars and vans, later: save a search and get an email when a matching car is listed; monthly finance figures; insurance group;
   ULEZ and tax band filters (these need extra vehicle data from the registration look-up).
-- Partner sign-up is still one long page. Splitting it into numbered steps (about you, your work, documents, plan) would be easier on a phone.
 
 ### 3. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
@@ -51,6 +48,13 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: partner and dealer sign-up is now four numbered steps (About you, Your work, Your documents, Your plan) with
+  Back and Next buttons and a progress line. Step 1 is checked before moving on; on Submit, if anything is missing the form
+  opens the right step and highlights the box.
+- 18 Nov 2026: exact postcode look-up for car and van distance, using Postcodes.io (free, no account). A full postcode or the
+  first half ("LS6") both work; the postcode carries across the cars and vans pages. Dealers can add the postcode where a vehicle
+  can be viewed (only the distance is shown to buyers). If the look-up cannot be reached, it falls back to the rough postcode area.
+  The privacy policy draft now has lines for the postcode look-up and for voice search. For the live site, store every dealer's postcode.
 - 18 Nov 2026: intro video remade as a full tour for customers (1 min 46 s, female voiceover, captions): search and microphone,
   "Let a garage or mechanic decide", the four booking steps, all services, cars and vans search, breakdown cover, My account and help.
   The files to remake it are not in the repo; if the site changes a lot, ask for the video to be remade.
