@@ -30,7 +30,6 @@ This belongs in the real site rebuild (branch `nextjs-rebuild`).
 - Cars and vans, later: save a search and get an email when a matching car is listed; monthly finance figures; insurance group;
   ULEZ and tax band filters (these need extra vehicle data from the registration look-up).
 - Partner sign-up is still one long page. Splitting it into numbered steps (about you, your work, documents, plan) would be easier on a phone.
-- The intro video shows the old front page and needs remaking.
 
 ### 3. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
