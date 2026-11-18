@@ -3443,7 +3443,7 @@ else if(!(yr>=1990&&yr<=2027))msg='Enter a year between 1990 and 2027.';
 else if(!(pr>0))msg='Enter the price.';
 else if(!(mi>=0)||v('cd-miles')==='')msg='Enter the mileage.';
 else if($('cd-feat').checked&&actF().length>=CAP)msg='The banner is full right now. Untick the banner option or try again later.';
-if(!msg&&v('cd-reg').replace(/[^A-Za-z0-9]/g,'').length<2)msg='Enter the registration. We use it for the vehicle history check.';if(!msg)msg=window.MChist?window.MChist.woErr($('cd-wo').value):'';$('cd-err').textContent=msg;if(msg)return;
+if(!msg&&v('cd-reg').replace(/[^A-Za-z0-9]/g,'').length<2)msg='Enter the registration. We use it for the vehicle history check.';if(!msg&&!$('cd-fuel').value)msg='Choose the fuel type.';if(!msg&&!$('cd-gear').value)msg='Choose the gearbox.';if(!msg)msg=window.MChist?window.MChist.woErr($('cd-wo').value):'';$('cd-err').textContent=msg;if(msg)return;
 var feat=$('cd-feat').checked,wait=$('cd-wait').checked&&actF().length>=CAP;
 (window.MChist?window.MChist.gate({kind:'cars',reg:v('cd-reg'),role:'trade',err:$('cd-err')}):Promise.resolve(null)).then(function(chk){if(!chk&&window.MChist)return;readFiles($('cd-photos').files).then(function(photos){
 CARS.unshift({id:nextId++,reg:v('cd-reg').toUpperCase(),wo:$('cd-wo').value,chk:chk||undefined,make:v('cd-make'),model:v('cd-model'),variant:v('cd-variant'),year:yr,price:pr,miles:mi,fuel:$('cd-fuel').value,gear:$('cd-gear').value,body:$('cd-body').value,doors:+$('cd-doors').value||0,seats:+$('cd-seats').value||0,col:$('cd-col').value,town:v('cd-town'),pc:v('cd-pc').toUpperCase(),dealer:v('cd-dealer'),phone:v('cd-phone'),desc:v('cd-desc'),photos:photos,badge:'New',vat:$('cd-vat').value==='1',mine:true,featured:feat,fexp:feat?Date.now()+14*864e5:0,waiting:wait,wq:wait?Date.now():0});if(window.MCadSave)window.MCadSave('cars',CARS[0]);
@@ -3620,7 +3620,7 @@ else if(!(yr>=1990&&yr<=2027))msg='Enter a year between 1990 and 2027.';
 else if(!(pr>0))msg='Enter the price.';
 else if(v('vd-miles')===''||!(mi>=0))msg='Enter the mileage.';
 else if(v('vd-pay')===''||!(pay>=0))msg='Enter the payload in kilograms.';
-if(!msg&&v('vd-reg').replace(/[^A-Za-z0-9]/g,'').length<2)msg='Enter the registration. We use it for the vehicle history check.';if(!msg)msg=window.MChist?window.MChist.woErr($('vd-wo').value):'';$('vd-err').textContent=msg;if(msg)return;
+if(!msg&&v('vd-reg').replace(/[^A-Za-z0-9]/g,'').length<2)msg='Enter the registration. We use it for the vehicle history check.';if(!msg&&!$('vd-fuel').value)msg='Choose the fuel type.';if(!msg&&!$('vd-gear').value)msg='Choose the gearbox.';if(!msg)msg=window.MChist?window.MChist.woErr($('vd-wo').value):'';$('vd-err').textContent=msg;if(msg)return;
 var feat=$('vd-feat').checked;
 (window.MChist?window.MChist.gate({kind:'vans',reg:v('vd-reg'),role:'trade',err:$('vd-err')}):Promise.resolve(null)).then(function(chk){if(!chk&&window.MChist)return;readFiles($('vd-photos').files).then(function(photos){
 VANS.unshift({id:nextId++,reg:v('vd-reg').toUpperCase(),wo:$('vd-wo').value,chk:chk||undefined,make:v('vd-make'),model:v('vd-model'),variant:v('vd-variant'),year:yr,price:pr,miles:mi,pay:pay,fuel:$('vd-fuel').value,gear:$('vd-gear').value,body:$('vd-body').value,col:$('vd-col').value,town:v('vd-town'),pc:v('vd-pc').toUpperCase(),dealer:v('vd-dealer'),phone:v('vd-phone'),desc:v('vd-desc'),photos:photos,badge:'New',vat:$('vd-vat').value==='1',mine:true,van:true,featured:feat,fexp:feat?Date.now()+14*864e5:0});if(window.MCadSave)window.MCadSave('vans',VANS[0]);
@@ -6237,6 +6237,8 @@ function build(){if(!card||card.firstChild)return;
   if(v('ps-miles')===''||!(mi>=0))return bad('ps-miles','Enter the mileage.');
   if(!(pr>=100))return bad('ps-price','Enter the price you are asking.');
   if(!v('ps-col'))return bad('ps-col','Enter the colour.');
+  if(!$('ps-fuel').value)return bad('ps-fuel','Choose the fuel type.');
+  if(!$('ps-gear').value)return bad('ps-gear','Choose the gearbox.');
   if(window.MChist){var we=window.MChist.woErr($('ps-wo').value);if(we)return bad('ps-wo',we)}
   if(!v('ps-town'))return bad('ps-town','Enter your town or city.');
   if(v('ps-desc').length<20)return bad('ps-desc','Describe your '+W+' in a sentence or two. Tap “Write it for me” if you would like help.');
@@ -7523,6 +7525,7 @@ var F={ps:{make:'ps-make',model:'ps-model',variant:'ps-variant',year:'ps-year',f
 function put(id,v){var e=$(id);if(!e||v==null||v==='')return false;v=String(v);
  if(e.tagName==='SELECT'){var o=[].filter.call(e.options,function(x){return x.value.toLowerCase()===v.toLowerCase()||x.textContent.trim().toLowerCase()===v.toLowerCase()})[0];if(!o)return false;e.value=o.value}else e.value=v;
  e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));return true}
+function blank(id,label){var e=$(id);if(!e||e.tagName!=='SELECT')return;var o=e.querySelector('option[value=""]');if(!o){o=document.createElement('option');o.value='';o.textContent=label;e.insertBefore(o,e.firstChild)}e.value='';e.dispatchEvent(new Event('change',{bubbles:true}))}
 function note(p){var n=$(p+'-regnote');if(!n){var b=$(p+'-regfind');if(!b)return null;n=document.createElement('p');n.id=p+'-regnote';n.className='note';n.setAttribute('role','status');n.style.margin='4px 0 0';b.parentNode.parentNode.insertBefore(n,b.parentNode.nextSibling)}return n}
 function find(p){var inp=$(p+'-reg'),M=window.MCvrm,n=note(p),b=$(p+'-regfind');if(!inp||!M)return;var r=inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
  if(r.length<2){n.textContent='Enter the registration first, for example AB12 CDE.';inp.focus();return}
@@ -7532,9 +7535,9 @@ function find(p){var inp=$(p+'-reg'),M=window.MCvrm,n=note(p),b=$(p+'-regfind');
   if(st==='none'){n.textContent='We could not find that registration. Check it, or fill in the details yourself.';return}
   var d=M.lookup(r);if(!d){n.textContent='We could not find that registration. Check it, or fill in the details yourself.';return}
   if(p==='ps'&&d.kind){var want=d.kind==='Van'?'vans':'cars',rad=document.querySelector('[name=ps-type][value="'+want+'"]');if(rad&&!rad.checked){rad.checked=true;rad.dispatchEvent(new Event('change',{bubbles:true}))}}
-  var f=F[p];['make','model','variant','year','fuel','gear','body','col'].forEach(function(k){put(f[k],d[k])});
+  var f=F[p],miss=[];['make','model','variant','year','fuel','gear','body','col'].forEach(function(k){if(!put(f[k],d[k])&&(k==='fuel'||k==='gear')){blank(f[k],k==='fuel'?'Choose the fuel type':'Choose the gearbox');miss.push(k==='fuel'?'fuel type':'gearbox')}});
   var live=M.isLive&&M.isLive();
-  n.textContent=(live?'Found: ':'Sample details for the preview: ')+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+(p==='ps'?'. If this is your vehicle, tap Continue.':'. Check everything below and add the mileage and price.')},
+  n.textContent=(live?'Found: ':'Sample details for the preview: ')+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+(p==='ps'?'. If this is your vehicle, tap Continue.':'. Check everything below and add the mileage and price.')+(miss.length?' We could not read the '+miss.join(' or ')+', so please choose it below.':'')},
  function(){b.disabled=false;n.textContent='Our registration look-up is not working right now. Please fill in the details yourself.'})}
 function add(){['ps','cd','vd'].forEach(function(p){var inp=$(p+'-reg');if(!inp||$(p+'-regfind'))return;
  var w=document.createElement('div');w.className='regfind';inp.parentNode.insertBefore(w,inp);w.appendChild(inp);

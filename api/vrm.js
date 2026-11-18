@@ -64,14 +64,16 @@ const title = s => {
   return c.split(' ').map(w => UPPER.has(w.toUpperCase()) ? w.toUpperCase() : w.toLowerCase().replace(/\b[a-z]/g, ch => ch.toUpperCase())).join(' ');
 };
 
+// DVLA and other sources word fuel differently: diesel is often recorded as "HEAVY OIL", and some
+// answers give codes. Anything we cannot read with confidence is left out, so the seller chooses it.
 function normFuel(f) {
   if (!f) return null;
-  const s = String(f).toLowerCase();
-  if (s.includes('electric') && !s.includes('hybrid')) return 'Electric';
-  if (s.includes('hybrid')) return 'Hybrid';
-  if (s.includes('diesel')) return 'Diesel';
-  if (s.includes('petrol')) return 'Petrol';
-  return title(f);
+  const s = String(f).toLowerCase().trim();
+  if (s.includes('hybrid') || /\b(phev|hev|mhev)\b/.test(s) || (s.includes('electric') && (s.includes('diesel') || s.includes('petrol')))) return 'Hybrid';
+  if (s.includes('diesel') || s.includes('heavy oil') || s.includes('derv') || s === 'd' || s === 'hvo') return 'Diesel';
+  if (s.includes('electric') || s === 'ev' || s === 'bev' || s === 'e') return 'Electric';
+  if (s.includes('petrol') || s.includes('gasoline') || s.includes('unleaded') || s === 'p') return 'Petrol';
+  return null;
 }
 function normGear(g) {
   if (!g) return null;
@@ -138,7 +140,7 @@ module.exports = async (req, res) => {
       model,
       variant,
       year: +(find(j, ['yearOfManufacture', 'manufactureYear', 'yearOfRegistration', 'year']) || String(firstReg || '').slice(0, 4) || 0) || null,
-      fuel: normFuel(find(j, ['fuelType', 'dvlaFuelType', 'fuel'])),
+      fuel: normFuel(find(j, ['dvlaFuelType', 'fuelType', 'fuelTypeDescription', 'fuelDescription', 'engineFuelType', 'primaryFuelType', 'fuel'])),
       gear: normGear(find(j, ['transmissionType', 'transmission', 'gearbox'])),
       body: title(body),
       col: title(find(j, ['colour', 'color', 'primaryColour'])),
