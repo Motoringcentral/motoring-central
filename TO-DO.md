@@ -41,6 +41,9 @@ Owner (business and legal):
 - FCA: get full permission for credit broking BEFORE finance is shown on the live site. Until it is granted, finance must be
   switched off on the live site (in index.html, in the script that starts "Car finance", set on:false). Showing finance prices
   to the public without authorisation is against the law.
+- Private adverts: solicitor to check the draft private-seller terms and the buyer notice; decide the refund rule (the draft
+  says no refund if the car sells early); decide how reported adverts are handled and who checks them; consider checking the
+  registration against DVLA records and limiting adverts per person, so traders cannot pose as private sellers.
 - Finance wording: replace the sample 11.9% APR with the real representative APR, fill in the FCA firm reference number and the
   commission wording (in [square brackets] on the site), and have all finance wording approved. Solicitor to update the terms,
   which still say finance is agreed between the buyer and the dealer.
@@ -62,6 +65,13 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: private sellers can advertise their own car. £9.99 including VAT for a 30-day advert, no commission; £9.99 more
+  makes it a premium advert (front-page banner and Featured label for 2 weeks or until sold). Needs a free customer account.
+  Every private advert carries a yellow "Private sale" label, shows "Private seller" and the town only, and has a notice for
+  buyers explaining their rights and what to check. Buyers message through the site unless the seller chooses to show a phone
+  number. No finance examples on private adverts. Sellers manage adverts under My account (messages from buyers, make premium,
+  add 30 days, mark as sold, remove). There is a "Seller" filter (dealers or private), a "Report this advert" link, a limit of
+  3 live private adverts per account, FAQs, and draft private-seller terms. Cars only for now, not vans.
 - 18 Nov 2026: saved searches for cars and vans. "Save this search" appears once a filter is set; saved searches are listed
   under the filters with how many match now and a "new" badge when more have been listed since. Kept on the visitor's own
   device for now.
