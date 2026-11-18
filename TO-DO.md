@@ -23,9 +23,9 @@ because it will hold real customers' names, phone numbers, addresses and registr
 This belongs in the real site rebuild (branch `nextjs-rebuild`).
 
 ### 2. Ease-of-use ideas from the 17 Nov review (smaller, not done yet)
-- The postcode box at the top of the front page only scrolls to the services. It could show partners near that postcode.
-- The front page is very long on a phone. Some "why choose us" sections repeat and could be merged.
-- Show the customer's progress through booking (choose job, see prices, choose partner, pay) as numbered steps.
+- Postcode: the box at the top is now hidden (the search comes first). Later it could show which partners cover an area.
+- Plain-English review of the other services (tyres, MOT, recovery, valeting, bodywork, car sales).
+- Check partner sign-up and dashboards are as easy for mechanics and garages.
 
 ### 3. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
@@ -47,6 +47,11 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: numbered booking steps (1 the job, 2 your car, 3 choose a partner, 4 book and pay) at the top of every
+  booking, for all nine services. They follow the customer as they scroll, and each can be tapped to jump to it.
+- 18 Nov 2026: shorter front page (about 7,100 down to 5,600 pixels tall on a phone): removed the duplicate "Why book" section
+  (its two unique points moved into "Car care you can actually trust"), hid "Popular repairs" (the search chips cover it),
+  and slimmed the top banner so the search is the first thing people see.
 - 17 Nov 2026: 1-minute intro video for customers (female voiceover, captions) in video/. It plays once, muted with
   captions, for new visitors on the front page ("Tap for sound"), and any time from "Watch how it works (1 min)".
   If the site changes a lot, the video needs remaking so it still matches the screens.
