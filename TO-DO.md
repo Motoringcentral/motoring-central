@@ -27,14 +27,20 @@ This belongs in the real site rebuild (branch `nextjs-rebuild`).
 - Search, next steps: keep a list of searches that found nothing (needs the shared database) so new words can be added.
 - Cars and vans, later: save a search and get an email when a matching car is listed; insurance group; ULEZ and tax band
   filters (these need extra vehicle data from the registration look-up).
-- Car finance. Decided 18 Nov 2026: for launch, finance is left to the dealers. No monthly prices or finance quotes on adverts;
-  buyers ask the dealer. Later, once the business is running and making money, the plan is for The Motoring Central to get its own
-  FCA permission (or become an appointed representative of an authorised firm) so finance can be shown and commission earned.
-  Until then, do not add monthly prices, "finance available" claims or finance calculators to the site. To tidy: the forecourt
-  pictures at the top of the cars and vans pages have "Finance Available" written in the image.
+- Car finance. Decided 18 Nov 2026: The Motoring Central will apply for FCA full permission for credit broking, and the site is
+  being built on that basis. The preview now shows finance examples on car adverts (see Done). Still to do for finance:
+  connect real lenders and their rates (a finance technology provider such as Codeweavers or iVendi does this); PCP as well as
+  hire purchase (needs lenders' figures); an online application or eligibility check; van finance (business and VAT rules differ);
+  and the forecourt picture on the cars page has "Finance Available" written in the image.
 
 ### 3. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
+- FCA: get full permission for credit broking BEFORE finance is shown on the live site. Until it is granted, finance must be
+  switched off on the live site (in index.html, in the script that starts "Car finance", set on:false). Showing finance prices
+  to the public without authorisation is against the law.
+- Finance wording: replace the sample 11.9% APR with the real representative APR, fill in the FCA firm reference number and the
+  commission wording (in [square brackets] on the site), and have all finance wording approved. Solicitor to update the terms,
+  which still say finance is agreed between the buyer and the dealer.
 - Register The Motoring Central Ltd at Companies House (until then, do not say "Ltd" on the site)
 - Pay the ICO data protection fee
 - RAC conflict of interest form approved in writing, and an agreement with the RAC before selling their breakdown cover
@@ -53,6 +59,11 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: car finance examples (preview illustration, sample rate of 11.9% APR). Each car advert shows "or about £X a month";
+  a representative example sits above the results; each advert has a calculator (deposit slider, 2 to 5 years) with the full
+  breakdown, a plain-English "How does this work?", and "Ask about finance on this car", which fills in the message to the dealer.
+  A "Monthly budget" filter and searches like "cars under £200 a month" work too. Cars only, not vans. Everything is tagged
+  "Preview example" and the credit broker wording has placeholders for the FCA number.
 - 18 Nov 2026: partner and dealer sign-up is now four numbered steps (About you, Your work, Your documents, Your plan) with
   Back and Next buttons and a progress line. Step 1 is checked before moving on; on Submit, if anything is missing the form
   opens the right step and highlights the box.
