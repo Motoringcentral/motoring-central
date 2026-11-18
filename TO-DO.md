@@ -23,10 +23,13 @@ because it will hold real customers' names, phone numbers, addresses and registr
 This belongs in the real site rebuild (branch `nextjs-rebuild`).
 
 ### 2. Smaller ideas, not done yet
-- Postcode: the box at the top of the front page is hidden (the search comes first). Later it could show which partners cover an area.
+- Which partners cover a postcode: waits for real partners. The sample partners have no real locations (their distances are
+  made up), so showing "5 mechanics cover LS6" now would be invented. Build it with the shared database, storing each
+  partner's postcode and how far they travel; the postcode look-up it needs is already in place.
 - Search, next steps: keep a list of searches that found nothing (needs the shared database) so new words can be added.
-- Cars and vans, later: save a search and get an email when a matching car is listed; insurance group; ULEZ and tax band
-  filters (these need extra vehicle data from the registration look-up).
+- Cars and vans, later: email alerts for saved searches (needs the shared database and an email service), and showing saved
+  searches in the customer's account; insurance group; ULEZ and tax band filters (these need extra vehicle data from the
+  registration look-up).
 - Car finance. Decided 18 Nov 2026: The Motoring Central will apply for FCA full permission for credit broking, and the site is
   being built on that basis. The preview now shows finance examples on car adverts (see Done). Still to do for finance:
   connect real lenders and their rates (a finance technology provider such as Codeweavers or iVendi does this); PCP as well as
@@ -59,6 +62,12 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 18 Nov 2026: saved searches for cars and vans. "Save this search" appears once a filter is set; saved searches are listed
+  under the filters with how many match now and a "new" badge when more have been listed since. Kept on the visitor's own
+  device for now.
+- 18 Nov 2026: read the logged-in screens (customer account and booking steps, mechanic and dealer dashboards) for plain English.
+  They read clearly; small fixes only: the dashboard now says "Mobile mechanic" or "Garage" instead of the long role name,
+  "our fee (5% launch rate)", and "Pads and discs for both front wheels" instead of "axle set".
 - 18 Nov 2026: car finance examples (preview illustration, sample rate of 11.9% APR). Each car advert shows "or about £X a month";
   a representative example sits above the results; each advert has a calculator (deposit slider, 2 to 5 years) with the full
   breakdown, a plain-English "How does this work?", and "Ask about finance on this car", which fills in the message to the dealer.
