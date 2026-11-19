@@ -1172,7 +1172,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 })();
 </script>
 <div class="banner">Preview site with sample data. Customer accounts are real and are saved. No real payments or texts are made.</div>
-<header><div class="in2"><a href="#drivers" class="logo" aria-label="The Motoring Central, home" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><svg width="42" height="42" viewBox="0 0 120 120" aria-hidden="true" style="flex:none"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="7" stroke-linecap="round"/><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="8" fill="#FFD43B"/></svg><span style="display:flex;flex-direction:column;line-height:1;gap:3px;color:#0B1C35" aria-hidden="true"><span style="font-size:.55rem;font-weight:700;letter-spacing:.5em">THE</span><span style="font-size:1.2rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap">MOTORING</span><span style="align-self:flex-start;font-size:.6rem;font-weight:700;letter-spacing:.38em;padding:3px 3px 3px 7px;border-radius:5px;background:#0B1C35;color:#fff;white-space:nowrap">CENTRAL</span><small style="color:#0B1C35;font-weight:500;opacity:.9;font-size:.64rem;letter-spacing:.04em">Buy. Fix. Clean. Rescue.</small></span></a><button type="button" class="menubtn" id="menubtn" aria-expanded="false" aria-controls="tabs-public tabs-net acct"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button><nav class="tabs" id="tabs-public" aria-label="Browse"><a href="#drivers">Home</a><a href="#cars">Cars for sale</a><a href="#vans">Vans for sale</a><a href="#about">About us</a><a href="#network">For partners</a><a href="#breakdown">Breakdown cover</a><a href="#jobs">Jobs</a></nav><nav class="tabs" id="tabs-net" aria-label="Partner area" hidden><a href="#network">Join the network</a><a href="#trade">Trade</a><a href="#jobs">Jobs</a><a href="#login" id="t-login">Log in</a><a href="#dashboard" id="t-dash" hidden>My dashboard</a><a href="#drivers">Back to customer site</a></nav><div class="acct" id="acct"></div></div></header>
+<header><div class="in2"><a href="#drivers" class="logo" aria-label="The Motoring Central, home" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><svg width="42" height="42" viewBox="0 0 120 120" aria-hidden="true" style="flex:none"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="7" stroke-linecap="round"/><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="8" fill="#FFD43B"/></svg><span style="display:flex;flex-direction:column;line-height:1;gap:3px;color:#0B1C35" aria-hidden="true"><span style="font-size:.55rem;font-weight:700;letter-spacing:.5em">THE</span><span style="font-size:1.2rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap">MOTORING</span><span style="align-self:flex-start;font-size:.6rem;font-weight:700;letter-spacing:.38em;padding:3px 3px 3px 7px;border-radius:5px;background:#0B1C35;color:#fff;white-space:nowrap">CENTRAL</span><small style="color:#0B1C35;font-weight:500;opacity:.9;font-size:.64rem;letter-spacing:.04em">Buy. Fix. Clean. Rescue.</small></span></a><button type="button" class="menubtn" id="menubtn" aria-expanded="false" aria-controls="tabs-public tabs-net acct"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button><nav class="tabs" id="tabs-public" aria-label="Browse"><a href="#drivers">Home</a><a href="#cars">Cars for sale</a><a href="#vans">Vans for sale</a><a href="#about">About us</a><a href="#network">For partners</a><a href="#breakdown">Breakdown cover</a><a href="#jobs">Jobs</a><a href="#cars" class="mob" data-sellcar="1">Sell a car or van</a><a href="#contact" class="mob">Help and contact</a></nav><nav class="tabs" id="tabs-net" aria-label="Partner area" hidden><a href="#network">Join the network</a><a href="#trade">Trade</a><a href="#jobs">Jobs</a><a href="#login" id="t-login">Log in</a><a href="#dashboard" id="t-dash" hidden>My dashboard</a><a href="#drivers">Back to customer site</a></nav><div class="acct" id="acct"></div></div></header>
 <div class="launch" id="launch">&#127881; Launch offer: 50% off our booking fee. Just &pound;3.00 per booking including VAT, usually &pound;5.99.</div>
 <div class="sidemap" aria-hidden="true"></div>
 <div class="sidetext" aria-hidden="true"><span>The UK&rsquo;s growing network of</span><b>Independent</b><b>Motor</b><b>Traders</b><i></i></div>
@@ -2105,6 +2105,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <h1>Join the Motoring Central network.</h1>
 <p>For mechanics, garages, auto electricians, locksmiths, body shops, alloy wheel specialists, recovery companies, tyre fitters, valeters and car or van dealers. Set your own rates and get paid what you charge.</p>
 <a class="cta" href="#login" style="text-decoration:none">Already a member? Log in</a>
+<nav class="rolepick" aria-label="Choose how you join"><span>I am a:</span><a href="#mechanics">Mechanic or garage</a><a href="#mechanics">MOT test station</a><a href="#mechanics">Auto electrician or locksmith</a><a href="#tyres">Tyre fitter</a><a href="#bodyshop">Body shop or alloys</a><a href="#valets">Valeter</a><a href="#recovery">Recovery company</a><a href="#evcharging">Mobile EV charging</a><a href="#dealers">Car or van dealer</a></nav>
 </div></section>
 <main>
 <div class="stats"><div><b>5%</b>launch fee on jobs</div><div><b>3 months</b>free for dealers</div><div><b>You</b>set your rates</div></div>
@@ -4433,7 +4434,7 @@ if(u.role==='dealer')body=t==='stock'?stockHtml(u):t==='docs'?docsHtml(u):dealer
 else if(u.role==='mechanic')body=t==='diary'?diaryHtml(u)+res:t==='docs'?brand+docsHtml(u):jobsHtml(u)+res+ratesHtml(u)+(window.MCqreqCard?window.MCqreqCard(u):'')+(window.MCSVC?window.MCSVC.card(u):'');
 else body=jobsHtml(u)+res+ratesHtml(u)+brand+docsHtml(u);
 if(u.role==='dealer'){top=res;if(t==='docs')body=brand+body}
-$('dash-body').innerHTML=head(u)+pendingHtml(u)+(window.GGquick?window.GGquick(u):'')+(window.MCjobs?window.MCjobs(u):(window.MChub?window.MChub.partnerCard(u):''))+top+tb+body;if(window.MCbrand)window.MCbrand.bind(u);bind(u)};
+$('dash-body').innerHTML=head(u)+pendingHtml(u)+(window.MCjobs?window.MCjobs(u):(window.MChub?window.MChub.partnerCard(u):''))+(window.GGquick?window.GGquick(u):'')+top+tb+body;if(window.MCbrand)window.MCbrand.bind(u);bind(u)};
 chrome();if(window.GGroute)GGroute();
 })();</script>
 <script>(function(){
@@ -4906,18 +4907,19 @@ fill();draw();drawPost();window.GGjobs={refresh:function(){draw();drawPost()},co
 var IC={job:'<path d="M4 8h16v11H4zM9 8V5h6v3M4 13h16"/>',car:'<path d="M3 15v-3l2-5h14l2 5v3M5 15h14M7 18v-3M17 18v-3"/>',search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',pound:'<path d="M15 7a3.5 3.5 0 0 0-6.5 2v4c0 2-1 3.500-2.500 4H17M7 12.500h7"/>',doc:'<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/>',plus:'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',mega:'<path d="M4 10v4h3l7 4V6l-7 4zM17 9a4 4 0 0 1 0 6"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.700.400-1 .900-1 1.700M12 17h.01"/>',offer:'<path d="M4 12l8-8h8v8l-8 8zM15.500 8.500h.01"/>'};
 function tile(a,ic,t,d,pay){return '<button type="button" class="qab'+(pay?' pay':'')+'" data-qa="'+a+'"><svg viewBox="0 0 24 24" aria-hidden="true">'+IC[ic]+'</svg><b>'+t+'</b><small>'+d+'</small></button>'}
 window.GGquick=function(u){if(!u||u.role==='customer'||u.role==='admin')return '';var h='';
-h+=tile('job','job','Post a job advert','£9.99 + VAT, live for 90 days',1);
-h+=tile('trade-sell','car','Sell a trade car or van',u.role==='dealer'?'5 free listings a month':'Trade to trade, £9.99 + VAT a listing',1);
-if(u.role==='dealer')h+=tile('tab:stock','offer','Move stock to trade or retail','One click from each vehicle');
-h+=tile('trade','search','Browse trade stock','Buy from other partners');
-h+=tile('trade-offers','offer','My trade offers','Offers made and received');
-if(u.role==='dealer'){h+=tile('pdi','doc','Pre-delivery inspection','Hand over a sold vehicle');h+=tile('tab:stock','plus','Add or manage stock','Your cars and vans');h+=tile('tab:ads','mega','Adverts and plan','Premium ads and Facebook boost');h+=tile('tab:docs','doc','My documents','Insurance and ID')}
+/* everyday work first (usability pass 19 Nov 2026), then the extras */
+if(u.role==='dealer'){h+=tile('tab:stock','plus','Add or manage stock','Your cars and vans');h+=tile('tab:ads','mega','Adverts and plan','Premium ads and Facebook boost');h+=tile('pdi','doc','Pre-delivery inspection','Hand over a sold vehicle');h+=tile('tab:docs','doc','My documents','Insurance and ID')}
 else if(u.role==='mechanic'){h+=tile('tab:diary','cal','Booking diary','Today’s jobs and bays');h+=tile('tab:jobs','pound','Jobs and rates','Your prices and work');h+=tile('tab:docs','doc','My documents','Insurance and ID')}
-else{h+=tile('sec:rate','pound','My rates','Set your own prices');h+=tile('sec:job','cal','My jobs','Booked and completed work');h+=tile('sec:document','doc','My documents','Insurance and ID')}
+else{h+=tile('sec:job','cal','My jobs','Booked and completed work');h+=tile('sec:rate','pound','My rates','Set your own prices');h+=tile('sec:document','doc','My documents','Insurance and ID')}
 if(u.role!=='dealer')h+=tile('inspect','car','Vehicle inspection','Record damage before you start work');
 if(u.role==='mechanic'&&u.sub!=='autoelec')h+=tile('service','doc','Vehicle service sheet','Interim, Full or Major service checklist');
-h+=tile('jobs','search','See all vacancies','The motor trade jobs board');
 h+=tile('help','help','Get help','Talk to our UK team');
+h+=tile('trade','search','Browse trade stock','Buy from other partners');
+h+=tile('trade-sell','car','Sell a trade car or van',u.role==='dealer'?'5 free listings a month':'Trade to trade, £9.99 + VAT a listing',1);
+h+=tile('trade-offers','offer','My trade offers','Offers made and received');
+if(u.role==='dealer')h+=tile('tab:stock','offer','Move stock to trade or retail','One click from each vehicle');
+h+=tile('job','job','Post a job advert','£9.99 + VAT, live for 90 days',1);
+h+=tile('jobs','search','See all vacancies','The motor trade jobs board');
 return '<div class="card qa"><h2>Quick actions</h2><p class="note">Everything you can do as a partner, one click away.</p><div class="qagrid">'+h+'</div></div>'};
 function later(f){setTimeout(f,260)}
 function scrollTo(el){if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
@@ -5211,7 +5213,7 @@ window.MCMOT={table:T,payout:payout,
  label:function(){var t=cur();return 'Class '+t.c+' MOT ('+t.n.charAt(0).toLowerCase()+t.n.slice(1)+')'},
  read:read,
  ratesHtml:function(u){var have=u.rates&&u.rates.motc;if(!have){have={};have['4-car']=(u.rates&&u.rates.mot)||54.85}
-  return '<h3 class="sh" style="margin-top:14px">MOT classes you test, and what we pay you</h3><p class="note" style="margin:0 0 8px">Tick each type of test you are authorised for. Customers pay the official maximum when they book online. We pay you 82% of the official fee for every test, for example £44.98 for a car MOT. Nothing else is taken from it.</p><div class="motlist" id="dm-list">'+rows('dm',have)+'</div><p class="note err" id="dm-err" role="alert"></p>'}};
+  return '<h3 class="sh" style="margin-top:14px">MOT classes you test, and what we pay you</h3><p class="note" style="margin:0 0 8px">Tick each type of test you are authorised for. Customers pay the official maximum when they book online. We pay you 82% of the official fee for every test, for example £44.98 for a car MOT. Nothing else is taken from it.</p><details class="motdet"><summary>'+(function(n){return n+' MOT class'+(n===1?'':'es')+' ticked. Tap to see or change'})(Object.keys(have).length)+'</summary><div class="motlist" id="dm-list">'+rows('dm',have)+'</div></details><p class="note err" id="dm-err" role="alert"></p>'}};
 })();
 </script>
 <script>
@@ -8325,7 +8327,102 @@ setInterval(add,700);if(document.readyState!=='loading')add();else document.addE
 window.MCdesc={write:write};
 })();
 </script>
+<style>
+/* ---------- Usability pass (19 Nov 2026): phone layout and navigation ---------- */
+/* menu: extra links only in the phone menu; account actions look like buttons */
+@media (min-width:861px){.tabs a.mob{display:none}}
+.mcnight header.open .acct{flex-wrap:wrap}
+.mcnight header.open .acct a,.mcnight header.open .acct button{display:inline-flex;align-items:center;justify-content:center;flex:1 1 140px;min-height:44px;padding:8px 12px;border-radius:10px;border:2px solid #0B1C35;font-weight:700;text-decoration:none;box-sizing:border-box;background:#fff}
+.mcnight header.open .acct #cust-in{background:#FFD43B;border-color:#FFD43B}
+.mcnight header.open .acct span{flex:1 1 100%;font-weight:600}
+/* customer log-in box: the main button stands out */
+#cust-dlg .cu-btn{background:#FFD43B;color:#0B1C35}
+#cust-dlg .cu-btn:hover{filter:brightness(.96)}
+#cust-dlg .cu-out{all:unset;box-sizing:border-box;cursor:pointer;display:block;margin-top:10px;text-align:center;padding:10px 14px;border-radius:10px;background:#fff;color:#0B1C35;font-weight:800}
+#cust-dlg .cu-out:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
+/* launch banner can be closed */
+.launch{padding-right:44px}
+.launch .lx{all:unset;cursor:pointer;position:absolute;right:8px;top:50%;transform:translateY(-50%);width:32px;height:32px;display:grid;place-items:center;border-radius:8px;font-size:20px;line-height:1;color:inherit}
+.launch .lx:hover,.launch .lx:focus-visible{background:rgba(11,28,53,.12);outline:none}
+html.nolaunch .launch{display:none!important}
+/* cars and vans on a phone: results first, filters behind a button */
+.fltbtn{display:none}
+@media (max-width:640px){
+ #v-cars .heroimg,#v-vans .heroimg{display:none}
+ #v-cars .hero h1,#v-vans .hero h1{font-size:1.6rem}
+ .fltbtn{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin:-30px 0 12px;position:relative;z-index:2;padding:14px;border-radius:12px;background:#FFD43B;color:#0B1C35;font-weight:800;box-shadow:0 8px 24px rgba(0,0,0,.14)}
+ .fltbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+ .fltbtn:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
+ .cf.fcol{display:none}
+ .cf.fopen{margin-top:0!important}
+}
+/* an open advert: no big banner above it */
+#v-cars.mc-detail>.hero,#v-vans.mc-detail>.hero{display:none}
+#v-cars.mc-detail main,#v-vans.mc-detail main{padding-top:14px}
+#v-cars.mc-detail .fltbtn,#v-vans.mc-detail .fltbtn{display:none}
+/* advert on a phone: message and viewing always one tap away */
+.adbar{display:none}
+@media (max-width:640px){
+ body.mc-adbar .adbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:44;gap:8px;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:#0B1C35;box-shadow:0 -6px 18px rgba(0,0,0,.25)}
+ .adbar button{all:unset;box-sizing:border-box;cursor:pointer;flex:1;text-align:center;padding:12px 8px;border-radius:10px;font-weight:800;font-size:.95rem}
+ .adbar .a1{background:#FFD43B;color:#0B1C35}.adbar .a2{background:#fff;color:#0B1C35}
+ .adbar button:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
+ body.mc-adbar #hub-btn,body.mc-adbar .totop{bottom:84px!important}
+ body.mc-adbar main{padding-bottom:96px!important}
+}
+/* partner dashboard on a phone: compact quick actions */
+@media (max-width:640px){
+ #v-dash .qagrid{grid-template-columns:1fr 1fr;gap:8px}
+ #v-dash .qab{grid-template-columns:1fr;justify-items:start;padding:10px 12px;gap:6px}
+ #v-dash .qab small{display:none}
+ #v-dash .qab b{font-size:.9rem;line-height:1.2}
+}
+#v-dash .motdet{border:1px solid var(--line);border-radius:12px;padding:0;margin:0 0 6px}
+#v-dash .motdet>summary{cursor:pointer;padding:12px 14px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:10px}
+#v-dash .motdet>summary::-webkit-details-marker{display:none}
+#v-dash .motdet>summary::after{content:"+";font-weight:800}
+#v-dash .motdet[open]>summary::after{content:"\2212"}
+#v-dash .motdet>.motlist{padding:0 10px 10px}
+/* join page: pick your trade straight away */
+.rolepick{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;align-items:center}
+.rolepick span{font-weight:700;margin-right:2px}
+.rolepick a{display:inline-block;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.35);color:#fff;text-decoration:none;font-weight:700;font-size:.9rem}
+.rolepick a:hover,.rolepick a:focus-visible{background:#FFD43B;border-color:#FFD43B;color:#0B1C35;outline:none}
+</style>
+<div class="adbar" id="adbar" aria-label="Contact the seller"><button type="button" class="a1" id="adbar-msg">Message seller</button><button type="button" class="a2" id="adbar-view">Book a viewing</button></div>
+<script>
+/* Usability pass (19 Nov 2026): small helpers that sit on top of the existing pages */
+(function(){function $(i){return document.getElementById(i)}
+var phone=matchMedia('(max-width:640px)');
+/* launch banner: close for this visit */
+try{if(sessionStorage.getItem('mc-nolaunch')==='1')document.documentElement.classList.add('nolaunch')}catch(e){}
+function lx(){var L=$('launch');if(!L||L.querySelector('.lx'))return;var b=document.createElement('button');b.type='button';b.className='lx';b.setAttribute('aria-label','Close the offer banner');b.textContent='×';
+ b.onclick=function(){document.documentElement.classList.add('nolaunch');try{sessionStorage.setItem('mc-nolaunch','1')}catch(e){}};L.appendChild(b)}
+/* customer log-in box: offer to log out of a partner account */
+function custOut(){var w=$('cu-why');if(!w||w.hidden||!/partner or dealer/.test(w.textContent)||w.querySelector('.cu-out'))return;var b=document.createElement('button');b.type='button';b.className='cu-out';b.textContent='Log out of the partner account';
+ b.onclick=function(){var o=$('logout');if(o)o.click();setTimeout(function(){if(window.GGcustOpen)window.GGcustOpen('','in')},120)};w.appendChild(b)}
+/* cars and vans: filters behind a button on a phone, with a count of what is set */
+function active(root){var n=0;[].forEach.call(root.querySelectorAll('select'),function(s){if(s.selectedIndex>0)n++});[].forEach.call(root.querySelectorAll('input[type=text],input[type=number],input[type=search]'),function(i){if(i.value.trim())n++});[].forEach.call(root.querySelectorAll('input[type=checkbox]:checked'),function(){n++});return n}
+function fbtn(kind){var root=$(kind+'-filters');if(!root||!root.querySelector('.flt'))return;var b=$(kind+'-fltbtn');
+ if(!b){b=document.createElement('button');b.type='button';b.id=kind+'-fltbtn';b.className='fltbtn';b.setAttribute('aria-controls',kind+'-filters');b.setAttribute('aria-expanded','false');root.parentNode.insertBefore(b,root);root.classList.add('fcol');
+  b.onclick=function(){var open=root.classList.toggle('fcol')===false;root.classList.toggle('fopen',open);b.setAttribute('aria-expanded',String(open));lbl()};
+  root.addEventListener('change',lbl);root.addEventListener('input',lbl)}
+ function lbl(){var n=active(root),open=!root.classList.contains('fcol');b.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>'+(open?'Hide filters':'Filter and sort'+(n?' ('+n+' set)':''))}lbl()}
+/* an open advert: hide the banner, show the phone action bar */
+function adv(){var on=false;['cars','vans'].forEach(function(k){var v=$('v-'+k),d=$(k+'-detail');if(!v)return;var open=!!(d&&!d.hidden&&d.innerHTML.trim()&&!v.hidden);var was=v.classList.contains('mc-detail');v.classList.toggle('mc-detail',open);if(open&&!was)window.scrollTo(0,0);if(open)on=true});
+ var d=$('cars-detail'),vd=$('vans-detail'),cur=(d&&!d.hidden&&!$('v-cars').hidden)?d:(vd&&!vd.hidden&&!$('v-vans').hidden)?vd:null;
+ var f=cur&&cur.querySelector('form [id$="en-err"]'),vw=cur&&cur.querySelector('.vw-box');
+ var show=on&&phone.matches&&!!(f||vw);document.body.classList.toggle('mc-adbar',show);
+ if(show){var priv=cur.textContent.indexOf('Message seller')>-1;$('adbar-msg').textContent=priv?'Message seller':'Message dealer';$('adbar-msg').hidden=!f;$('adbar-view').hidden=!vw}}
+function go(el,focusSel){if(!el)return;el.scrollIntoView({behavior:'smooth',block:'start'});var t=focusSel&&el.querySelector(focusSel);if(t)setTimeout(function(){try{t.focus({preventScroll:true})}catch(e){t.focus()}},450)}
+$('adbar-msg').onclick=function(){var cur=$('v-cars').classList.contains('mc-detail')?$('cars-detail'):$('vans-detail');var e=cur&&cur.querySelector('form [id$="en-err"]');go(e&&e.closest('form'),'textarea')};
+$('adbar-view').onclick=function(){var cur=$('v-cars').classList.contains('mc-detail')?$('cars-detail'):$('vans-detail');go(cur&&cur.querySelector('.vw-box'),'input')};
+function tick(){lx();custOut();fbtn('cars');fbtn('vans');adv()}
+setInterval(tick,500);tick();addEventListener('hashchange',function(){setTimeout(tick,60)});
+})();
+</script>
 </body>
+
 
 
 
