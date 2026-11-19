@@ -340,6 +340,23 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 19 Nov 2026 (evening): car sales tools that need no email, business details or Stripe.
+  - Leads inbox ("Your leads") for dealers on the dashboard and for private sellers in My account: every buyer who
+    messaged or asked for a viewing, with status (New, Contacted, Viewing booked, Sold, Lost), notes, a follow-up date
+    (due ones are highlighted), Call button, this month's totals, and "Open the conversation". Table: advert_leads.
+  - Part exchange: on dealer adverts, buyers can add their car's reg and mileage to a message or viewing request; the
+    dealer sees it in the lead and the chat, with "Show the car" (uses the registration look-up, only when tapped).
+  - Price reduced: sellers can change the price on their own advert page ("Change the price"). Lowering it shows a green
+    "Reduced £X" label on the card and advert for 30 days. Worked out by the database, so it cannot be faked.
+  - Private adverts: Renew now really extends the advert for buyers (before, it only changed on the seller's device).
+    My adverts shows "ends in N days" reminders with a Renew button, and views, saves and enquiries for each advert.
+    Only staff or a renewal can change when an advert ends.
+  - Report this advert (all adverts, logged-in buyers): reason and note go to the new "Reported adverts" card on the
+    admin page (take it down or dismiss), and an email to owners (sent once emails are on). Table: advert_reports.
+  - "Buying safely" tips under the message box on every advert.
+  Code: supabase/migrations/20261119g_car_sales_tools.sql, and the block "19 Nov 2026: leads inbox..." in index.html.
+  When Stripe is set up: renew_advert() and new private adverts must check the payment on the server (now the site's
+  payment screen is trusted, as everywhere else in the preview).
 - 19 Nov 2026: separate join pages. #mot-station (MOT only: 82% paid, no monthly fee, free to join until 31 May 2027,
   pricing table, MOT earnings slider, MOT video, form fixed to MOT station with no labour rate or repair jobs), #garage
   (repairs on 5% or Pro, plus "How MOT pricing works" and the "We also do MOT tests" tick box), #mobile-mechanic and
