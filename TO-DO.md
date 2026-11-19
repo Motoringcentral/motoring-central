@@ -340,6 +340,16 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 19 Nov 2026: usability pass (phone and desktop). Phone menu now has "Sell a car or van" and "Help and contact", and the
+  log-in links are proper buttons. The customer log-in box has a clear yellow Log in button and, if a partner is signed in,
+  a "Log out of the partner account" button. The launch banner can be closed (stays closed for the visit). Cars and vans on
+  a phone show results straight away, with filters behind a "Filter and sort" button that counts what is set. An open advert
+  hides the big banner, and on a phone a bar at the bottom offers "Message dealer/seller" and "Book a viewing". Join the
+  network has "I am a:" buttons at the top. Partner dashboard: today's booked jobs come first, quick actions start with
+  everyday work (diary, rates, documents, inspection, service sheet, help) and trade and job adverts follow; on a phone
+  they show as a compact 2-column grid. The long MOT class list folds away, showing how many classes are ticked.
+  Code: the block that starts "Usability pass (19 Nov 2026)" at the end of index.html.
+  Still worth doing later: a sticky section bar on the dashboard, and the dashboard checked with real partners.
 - 18 Nov 2026: guided check in the search ("Help me work out what's wrong"). Picking a problem such as "Brakes squeal",
   "A warning light is on" or "My car won't start" now asks 1 to 3 plain questions, then shows the most likely job, why,
   other things it could be, and a fixed-price diagnostic if the customer is still unsure. 28 questions lead to 95 results
