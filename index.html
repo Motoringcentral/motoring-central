@@ -1089,6 +1089,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 .st-t{width:100%;border-collapse:collapse;font-size:.85rem}.st-t th,.st-t td{padding:6px 4px;border-top:1px solid var(--line,#e3e7ec);text-align:right;vertical-align:top}.st-t th:first-child,.st-t td:first-child{text-align:left}.st-t small{display:block;color:#b26a00}
 html.embed header,html.embed .banner,html.embed footer,html.embed .foot,html.embed .ckbar,html.embed .sfcols,html.embed #findbtn,html.embed .chatfab,html.embed .mcchat,html.embed #mc-cmpbar,html.embed .launch,html.embed #hub-btn,html.embed #v-cars>.hero,html.embed #v-vans>.hero,html.embed [data-srall],html.embed #cars-add-btn,html.embed #vans-add-btn,html.embed [data-sellcar],html.embed .flt-clear,html.embed [data-fltclear]{display:none!important}
 html.embed main{padding-top:12px}
+.mvw{position:relative}.msnd{all:unset;cursor:pointer;position:absolute;z-index:2;left:50%;top:12px;transform:translateX(-50%);background:#FFD43B;color:#0B1C35;font-weight:800;padding:10px 16px;border-radius:999px;box-shadow:0 6px 16px rgba(0,0,0,.35)}.msnd:focus-visible{outline:3px solid #fff;outline-offset:2px}
 .dvid video{width:100%;height:auto;border-radius:12px;display:block;background:#071630}
 html.embed .embed-by{display:block!important}
 </style>
@@ -1548,7 +1549,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <label class="chk"><input type="radio" name="kind" value="mot"><span>MOT test station<br><small>MOT testing only</small></span></label>
 <label class="chk"><input type="radio" name="kind" value="autoelec"><span>Auto electrician or locksmith<br><small>Electrical or key specialist</small></span></label>
 </div></fieldset>
-<div class="dvid" id="mot-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">MOT test stations: see how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, your agreed fee per test, bookings 24/7 and a free live diary. Under 2 minutes.</p><video controls playsinline preload="none" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English"></video></div>
+<div class="dvid" id="mot-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">MOT test stations: see how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, your agreed fee per test, bookings 24/7 and a free live diary. Under 2 minutes.</p><div class="mvw"><button type="button" class="msnd" id="mot-snd" hidden>🔊 Tap for sound</button><video id="mot-v" controls playsinline preload="metadata" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English" default></video></div></div>
 <div class="two"><div><label class="f" for="name">Full name</label><input type="text" id="name" autocomplete="name"></div>
 <div><label class="f" for="tel">Mobile</label><input type="tel" id="tel" autocomplete="tel"></div></div>
 <label class="f" for="mail">Email</label><input type="email" id="mail" autocomplete="email">
@@ -3056,7 +3057,7 @@ var L={mobile:['Servicing','Brakes','Battery','Diagnostics','Pre-MOT checks','Ty
 function kind(){return document.querySelector('input[name=kind]:checked').value}
 function apply(){
 var k=kind(),g=k==='garage'||k==='mot',ae=k==='autoelec';
-$('g-fields').hidden=!g;$('ae-fields').hidden=!ae;var gv=$('mot-vid');if(gv){gv.hidden=k!=='mot';if(gv.hidden){var vv=gv.querySelector('video');if(vv&&!vv.paused)vv.pause()}}$('m-rad').hidden=g;$('m-veh').hidden=g;
+$('g-fields').hidden=!g;$('ae-fields').hidden=!ae;var gv=$('mot-vid');if(gv){var was=gv.hidden;gv.hidden=k!=='mot';if(gv.hidden){var vv=gv.querySelector('video');if(vv&&!vv.paused)vv.pause()}else if(was&&window.MCmotVid)window.MCmotVid(true)}$('m-rad').hidden=g;$('m-veh').hidden=g;
 document.querySelector('label[for=post]').textContent=g?'Garage postcode':ae?'Base or workshop postcode':'Home postcode';
 var box=$('svcs'),old={};[].forEach.call(box.querySelectorAll('input:checked'),function(i){old[i.value]=1});
 if(k==='mobile'||k==='garage'){window.MCSVC.render(box,k,old);return}
@@ -3065,7 +3066,16 @@ box.innerHTML='';
 [].forEach.call(document.querySelectorAll('input[name=kind]'),function(r){r.addEventListener('change',apply)});
 [].forEach.call(document.querySelectorAll('.pick'),function(b){b.addEventListener('click',function(){
 document.querySelector('input[name=kind][value='+b.getAttribute('data-k')+']').checked=true;apply();
-$('apply').scrollIntoView({behavior:'smooth'})})});
+if(b.getAttribute('data-k')==='mot'){var mv=$('mot-vid');if(mv)setTimeout(function(){mv.scrollIntoView({behavior:'smooth',block:'center'})},50)}else $('apply').scrollIntoView({behavior:'smooth'})})});
+/* MOT test station video: plays by itself as soon as it shows. With sound when the visitor has just tapped
+   (choosing MOT test station); browsers only allow silent autoplay on page load, so then a "Tap for sound" button shows. */
+(function(){var V=$('mot-v'),S=$('mot-snd');if(!V||!S)return;
+ window.MCmotVid=function(sound){V.currentTime=0;V.muted=!sound;S.hidden=!!sound;var p=V.play();if(p&&p.catch)p.catch(function(){V.muted=true;S.hidden=false;V.play().catch(function(){})})};
+ S.addEventListener('click',function(){V.muted=false;S.hidden=true;if(V.currentTime>3)V.currentTime=0;V.play().catch(function(){})});
+ V.addEventListener('volumechange',function(){if(!V.muted)S.hidden=true});
+ function deep(){if(location.hash!=='#mot-station')return;var r=document.querySelector('input[name=kind][value=mot]');if(!r)return;r.checked=true;apply();
+  setTimeout(function(){var mv=$('mot-vid');if(mv)mv.scrollIntoView({block:'center'});window.MCmotVid(false)},120)}
+ window.addEventListener('hashchange',deep);if(document.readyState==='complete')deep();else window.addEventListener('load',deep)})();
 })();
 </script>
 <script>(function(){
@@ -3075,7 +3085,7 @@ var T_PUB='\uD83C\uDF89 Launch offer: 50% off our booking fee. Just \u00A33.00 p
 var T_NET='\uD83C\uDF89 Launch offer: 50% off for partners who join. Partners pay 5% instead of 10%. Dealers get their first 3 months free. Monthly and fixed fees are plus VAT.';
 function $(i){return document.getElementById(i)}
 function show(){
-var h=(location.hash||'').replace('#','');if(!v[h])h='drivers';
+var h=(location.hash||'').replace('#','');if(h==='mot-station')h='mechanics';if(!v[h])h='drivers';
 if(h==='dashboard'&&!window.GGuser){location.hash='login';return}
 if(h==='dashboard'&&window.GGuser.role==='customer'){location.hash='account';return}
 if(h==='account'&&!(window.GGuser&&window.GGuser.role==='customer')){location.hash='drivers';if(window.GGcustOpen)setTimeout(function(){window.GGcustOpen('Log in to see your account.','in')},50);return}

@@ -370,3 +370,4 @@ Option to consider: a soft launch taking quote requests only, before full bookin
 - 17 Nov 2026: customers can search and browse every repair when booking.
 - 17 Nov 2026: mobile mechanics and garages tick the services they offer (about 130 jobs).
 - 17 Nov 2026: vehicle service sheet (update pack TMC-UPD-20261117-A).
+- MOT station video link to send to test stations: motoringcentral.co.uk/#mot-station (opens the join form with MOT test station chosen and plays the video).
