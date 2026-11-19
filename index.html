@@ -725,6 +725,7 @@ h2.sec,#jb-post-h{scroll-margin-top:112px}
 .mset{border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px;margin:0 0 10px}.mset legend{font-weight:800;padding:0 6px}
 .mdays{display:flex;flex-wrap:wrap;gap:6px}.mdays label{display:inline-flex}.mdays input{position:absolute;opacity:0;width:1px;height:1px}.mdays span{padding:7px 11px;border-radius:999px;border:1.5px solid rgba(255,255,255,.3);font-weight:700;cursor:pointer;font-size:.85rem}.mdays input:checked+span{background:#38BDF8;border-color:#38BDF8;color:#0B1C35}.mdays input:focus-visible+span{outline:3px solid #FFD43B;outline-offset:2px}
 .dbk .dol{display:block;font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.03em}
+.motpay{display:flex;flex-direction:column;align-items:flex-end;line-height:1.1}.motpay b{font-size:1rem}.motpay small{font-size:.7rem;opacity:.8}
 .gar .mnext{display:block;margin-top:4px;font-weight:700;color:#0369A1}
 .motrow .motfee{display:flex;align-items:center;gap:4px;font-weight:700}
 .motrow .motfee input{width:92px!important;padding:8px!important;text-align:right}
@@ -1494,7 +1495,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="join2">
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><b>Mobile mechanic</b><br><small>Travel to drivers' homes and workplaces. Your van, your hours.</small><button class="btn pick" data-k="mobile" type="button">Join as mobile</button></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12M7 21v-7h10v7M7 17h10"/></svg><b>Garage</b><br><small>Drivers bring their cars to you. Repairs and servicing, and MOT too if you test.</small><button class="btn pick" data-k="garage" type="button">Join as a garage</button></div>
-<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></svg><b>MOT test station</b><br><small>MOT testing only. No monthly fee, no commission: we pay you an agreed fee per test. Free to join until 31 May 2027.</small><button class="btn pick" data-k="mot" type="button">Join as an MOT station</button></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></svg><b>MOT test station</b><br><small>MOT testing only. No monthly fee, no commission: we pay you £45.00 for every car MOT. Free to join until 31 May 2027.</small><button class="btn pick" data-k="mot" type="button">Join as an MOT station</button></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>Auto electrician or locksmith</b><br><small>Electrical faults, starting and charging, dash cams, car keys, fobs and lockouts. Mobile, workshop or both.</small><button class="btn pick" data-k="autoelec" type="button">Join as an auto electrician or locksmith</button></div>
 </div>
 
@@ -1549,7 +1550,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <label class="chk"><input type="radio" name="kind" value="mot"><span>MOT test station<br><small>MOT testing only</small></span></label>
 <label class="chk"><input type="radio" name="kind" value="autoelec"><span>Auto electrician or locksmith<br><small>Electrical or key specialist</small></span></label>
 </div></fieldset>
-<div class="dvid" id="mot-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">MOT test stations: see how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, your agreed fee per test, bookings 24/7 and a free live diary. Under 2 minutes.</p><div class="mvw"><button type="button" class="msnd" id="mot-snd" hidden>🔊 Tap for sound</button><video id="mot-v" controls playsinline preload="metadata" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English" default></video></div></div>
+<div class="dvid" id="mot-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">MOT test stations: see how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, £45.00 paid to you per car MOT, bookings 24/7 and a free live diary. Under 2 minutes.</p><div class="mvw"><button type="button" class="msnd" id="mot-snd" hidden>🔊 Tap for sound</button><video id="mot-v" controls playsinline preload="metadata" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English" default></video></div></div>
 <div class="two"><div><label class="f" for="name">Full name</label><input type="text" id="name" autocomplete="name"></div>
 <div><label class="f" for="tel">Mobile</label><input type="tel" id="tel" autocomplete="tel"></div></div>
 <label class="f" for="mail">Email</label><input type="email" id="mail" autocomplete="email">
@@ -1572,7 +1573,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div id="g-motbays" hidden><label class="f" for="gmotbays">MOT bays</label><input type="number" id="gmotbays" min="1" max="6" step="1" value="1" inputmode="numeric"></div>
 <p class="note">Each bay becomes a column in your free booking diary. You can add, rename or remove bays later.</p>
 <input type="hidden" id="g-motfee" value="54.85">
-<fieldset id="g-motclasses" hidden><legend>MOT classes you test, and the fee you ask for each</legend><p class="note" style="margin:0 0 8px">Tick each type of test your station is authorised for and enter the fee you would like for each. We agree your fee with you before we approve you, then pay it to you for every MOT booked online: no booking fee or commission is taken from it, and the customer pays in full when they book. Bookings go straight into your free live diary, and your own walk-ins and phone bookings close those times online. MOT test fees are exempt from VAT.</p><div class="motlist" id="gm-list"></div><p class="err" id="gm-err" role="alert"></p></fieldset>
+<fieldset id="g-motclasses" hidden><legend>MOT classes you test, and what we pay you</legend><p class="note" style="margin:0 0 8px">Tick each type of test your station is authorised for. We pay you a fixed fee for every MOT booked online, shown next to each test (£45.00 for a car MOT): no booking fee or commission is taken from it, and the customer pays in full when they book. Bookings go straight into your free live diary, and your own walk-ins and phone bookings close those times online. MOT test fees are exempt from VAT.</p><div class="motlist" id="gm-list"></div><p class="err" id="gm-err" role="alert"></p></fieldset>
 <label class="up">Business registration or MOT station authorisation<input type="file" accept="image/*,.pdf"></label>
 </div>
 <fieldset><legend>Jobs you can do</legend><div class="checks" id="svcs"></div></fieldset>
@@ -1590,11 +1591,11 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <fieldset>
 <label class="chk one"><input type="checkbox" id="ins"><span>I confirm both insurance documents are valid and in date.</span></label>
 <label class="chk one"><input type="checkbox" id="chk"><span>I agree to the checks and the <a href="#terms" data-tsec="tc-contractor">partner terms</a>. I am responsible for my work, the parts I supply and the warranty I give customers.</span></label></fieldset>
-<fieldset id="m-planfs"><legend>Your plan</legend><p class="note" id="m-plan-motnote" hidden style="margin:0 0 8px">Your plan covers repairs and servicing. MOT tests booked online carry no fee and are not part of Pro: we pay you your agreed fee for every MOT.</p><div class="checks">
+<fieldset id="m-planfs"><legend>Your plan</legend><p class="note" id="m-plan-motnote" hidden style="margin:0 0 8px">Your plan covers repairs and servicing. MOT tests booked online carry no fee and are not part of Pro: we pay you a fixed fee for every MOT (£45.00 for a car).</p><div class="checks">
 <label class="chk"><input type="radio" name="plan-m" value="payg" checked><span>Pay as you go<br><small>5% + VAT per job, no monthly fee (usually 10%)</small></span></label>
 <label class="chk"><input type="radio" name="plan-m" value="pro"><span>Pro<br><small>&pound;74.50 + VAT a month, 0% per job (usually &pound;149 + VAT). Charged once you are verified.</small></span></label>
 </div></fieldset>
-<div class="card" id="m-motplan" hidden style="background:var(--soft);border:0;margin:0 0 12px"><b>Your plan: MOT test station</b><ul class="note" style="margin:6px 0 0;padding-left:18px"><li>No monthly fee and no commission. No 5% fee and no Pro membership needed.</li><li>We pay you the fee we agree with you for every MOT booked online, with nothing taken off it.</li><li id="m-motjoin"></li></ul></div>
+<div class="card" id="m-motplan" hidden style="background:var(--soft);border:0;margin:0 0 12px"><b>Your plan: MOT test station</b><ul class="note" style="margin:6px 0 0;padding-left:18px"><li>No monthly fee and no commission. No 5% fee and no Pro membership needed.</li><li>We pay you a fixed fee for every MOT booked online: £45.00 for a car MOT, with nothing taken off it.</li><li id="m-motjoin"></li></ul></div>
 <p class="err" id="merr" role="alert"></p>
 <button class="btn" type="submit">Submit application</button>
 </form>
@@ -2182,7 +2183,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <details id="tc-mot"><summary>3. MOT tests</summary><div class="tb">
 <p>MOT tests are carried out by DVSA-authorised test centres listed on Motoring Central. The test result is the test centre&rsquo;s decision. If you disagree with a result, raise it with the test centre first; you can also appeal to the DVSA. Any repairs after the test are a separate job with the garage, with its own price and warranty from that garage.</p>
 <h3>MOT classes and fees</h3><p>The MOT you need depends on your vehicle: its class is set by the type of vehicle, its seats and its weight. Choose the right class when you book. If the test centre finds your vehicle is in a different class, they will tell you the correct fee before testing. The price shown for each class is the maximum fee set by the DVSA for that class. Our booking fee is included in that price: there is nothing extra to pay to book.</p>
-<h3>Booking times and payment</h3><p>Online MOT bookings are taken from the test centre&rsquo;s live diary, so the time you choose is held for you in that diary as soon as you pay. You pay the full price when you book. The Motoring Central takes your full payment and pays the test centre the fee we have agreed with them for each test. You and the test centre both get a confirmation by email and text. To move your MOT to another time, ask the test centre: they can move it in their diary and you get a new confirmation. To cancel, contact us so your payment can be refunded.</p>
+<h3>Booking times and payment</h3><p>Online MOT bookings are taken from the test centre&rsquo;s live diary, so the time you choose is held for you in that diary as soon as you pay. You pay the full price when you book. The Motoring Central takes your full payment and pays the test centre a fixed fee for each test. You and the test centre both get a confirmation by email and text. To move your MOT to another time, ask the test centre: they can move it in their diary and you get a new confirmation. To cancel, contact us so your payment can be refunded.</p>
 </div></details>
 <details id="tc-tyres"><summary>4. Tyre fitting</summary><div class="tb">
 <p>The tyre fitter named in your booking supplies and fits the tyres and is responsible for the fitting work and its warranty. Tyres carry the manufacturer&rsquo;s warranty, which the fitter will deal with for you. Puncture repairs are only carried out where the tyre can be safely repaired; if it cannot, the fitter will tell you and offer a replacement. Follow the fitter&rsquo;s advice on rechecking wheel nuts after fitting.</p>
@@ -2214,7 +2215,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <h3>Insurance and documents</h3><p>You must hold trade insurance and public liability insurance at all times (and, for recovery, cover for vehicles in your care), and keep the copies on Motoring Central in date. We may pause your account if a document expires.</p>
 <h3>Working properly</h3><p>You must have the skills, qualifications and authorisations the work needs (for example DVSA authorisation for MOT tests), follow the law, dispose of waste such as oil, tyres, paint and solvents legally, follow HSE rules for spraying 2K paints, only describe yourself as insurance approved if you are on an insurer or accident management panel, and get the customer&rsquo;s agreement before doing extra work.</p>
 <h3>Fees and payment</h3><p>You choose a plan. Pay as you go: we charge a fee on each completed job [launch offer 5%, usually 10%]. Pro: a monthly membership [launch offer &pound;74.50 plus VAT, usually &pound;149 plus VAT] with no fee on jobs, charged once your documents are verified. You can switch or cancel at the end of any month. We pay you what customers paid, less our fee, every week. Trade listings are [&pound;9.99 plus VAT] each. All our fees to partners, including the per-job fee, are exclusive of VAT, which is added at the rate in force. [VAT treatment of the per-job fee: to be confirmed with our accountant.]</p>
-<h3>MOT tests</h3><p>For MOT tests booked through Motoring Central, the customer pays us the official maximum fee for the class when they book. We pay you the fee per test that we agreed with you when your application was approved. No pay as you go fee is charged on MOT tests, and MOT tests are not part of Pro. MOT test stations (MOT testing only) pay no monthly fee and no commission. MOT test stations that apply on or before 31 May 2027 join free; from 1 June 2027 a one-off joining fee of &pound;99.99 plus VAT applies, charged once your documents are approved.</p>
+<h3>MOT tests</h3><p>For MOT tests booked through Motoring Central, the customer pays us the official maximum fee for the class when they book. We pay you a fixed fee per test, set by us for each class and shown when you join (for example &pound;45.00 for a car, class 4). No pay as you go fee is charged on MOT tests, and MOT tests are not part of Pro. MOT test stations (MOT testing only) pay no monthly fee and no commission. MOT test stations that apply on or before 31 May 2027 join free; from 1 June 2027 a one-off joining fee of &pound;99.99 plus VAT applies, charged once your documents are approved.</p>
 <h3>Indemnity</h3><p>You agree to cover any loss, claim or cost we suffer because of your work, your goods or your breach of these terms.</p>
 <h3>Customer information</h3><p>Use customer details only to carry out the booking, and keep them secure in line with data protection law.</p>
 <h3>Ending the agreement</h3><p>You can close your account at any time. We may suspend or close accounts for poor service, missing documents or breaking these terms.</p>
@@ -3007,7 +3008,7 @@ $('mgo').addEventListener('click',function(){if(!pick)return;var g=pick;
    if(r.error)throw r.error;finish(text,t,true);loadReal(g);if(r.data&&r.data.id)window.MCmotDb.notify(r.data.id)}).catch(function(e){var k=Object.keys(ERR).filter(function(x){return String(e&&e.message||'').indexOf(x)>-1})[0];
    $('m-err2').textContent=k?ERR[k]:'Your MOT was not booked. Check your connection and try again. If you were charged, it will be refunded in full.';BUSY[g.id]=null;choose(g,document.querySelector('#garages [aria-pressed="true"]')||document.createElement('b'),$('garages'))}).then(function(){btn.disabled=false;btn.textContent='Book MOT'});return}
  var S=store(),rec=S[g.id]=S[g.id]||{};rec.online=(rec.online||[]).filter(function(o){return o.day>=dk(new Date())});
- rec.online.push({id:'o'+Date.now(),day:day,bay:bay,start:st,dur:cfg(g,bay).step,cust:u.name||'Customer',phone:u.phone||'',reg:reg,veh:vh?[vh.make,vh.model,vh.year].filter(Boolean).join(' '):'',label:lab,pay:g.fee,total:P(g)});put(S);
+ rec.online.push({id:'o'+Date.now(),day:day,bay:bay,start:st,dur:cfg(g,bay).step,cust:u.name||'Customer',phone:u.phone||'',reg:reg,veh:vh?[vh.make,vh.model,vh.year].filter(Boolean).join(' '):'',label:lab,pay:window.MCMOT?window.MCMOT.payout(cls().k):45,total:P(g)});put(S);
  finish(text,Date.now(),false)});
 })();
 </script>
@@ -3805,7 +3806,7 @@ function m(n){return '£'+(+n).toFixed(2)}
 var ROLES={mechanic:'Mechanic, garage, auto electrician or locksmith',recovery:'Recovery company',evcharge:'Mobile EV charging',body:'Body shop or alloy wheel specialist',tyres:'Tyre fitter',valet:'Valeter',dealer:'Car or van dealer',admin:'Staff admin'};
 var USERS=[
 {email:'mechanic@demo.com',pass:'demo1234',role:'mechanic',name:'Dan K.',phone:'07000 000001',town:'Leeds',sub:'mobile',rates:{hour:42,mot:54.85}},
-{email:'garage@demo.com',pass:'demo1234',role:'mechanic',name:'Kirkstall Road Garage',phone:'0113 000 0110',town:'Leeds',sub:'garage',bays:2,motBays:1,motAgreed:{all:45},plan:'pro',proActive:true,rates:{hour:58,mot:49.99}},
+{email:'garage@demo.com',pass:'demo1234',role:'mechanic',name:'Kirkstall Road Garage',phone:'0113 000 0110',town:'Leeds',sub:'garage',bays:2,motBays:1,plan:'pro',proActive:true,rates:{hour:58,mot:49.99}},
 {email:'recovery@demo.com',pass:'demo1234',role:'recovery',name:'Swift Recovery',phone:'07000 000002',town:'Leeds',rates:{call:65,mile:2.4}},
 {email:'tyres@demo.com',pass:'demo1234',role:'tyres',name:'Quick Roll Mobile',phone:'07000 000003',town:'Leeds',rates:{fit:12,punc:30}},
 {email:'valet@demo.com',pass:'demo1234',role:'valet',name:'Shine On Mobile',phone:'07000 000004',town:'Leeds',rates:{p:[79,99,129,149]}},
@@ -3882,7 +3883,7 @@ finish()})});
 
 /* dashboards */
 function head(u){return '<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">'+(window.MCbrand?window.MCbrand.logo(u):'')+'<div style="flex:1;min-width:0"><b style="font-size:1.15rem">'+esc(u.name)+'</b>'+(window.MCbrand?window.MCbrand.link(u):'')+'<div class="note">'+(u.role==='mechanic'&&u.sub?({mobile:'Mobile mechanic',garage:'Garage',autoelec:'Auto electrician or locksmith'}[u.motOnly?'x':u.sub]||(u.motOnly?'MOT test station':esc(u.sub)))+(u.aeWhere?' ('+u.aeWhere.toLowerCase()+')':''):ROLES[u.role]+(u.sub?' ('+esc(u.sub)+')':''))+(u.town?', '+esc(u.town):'')+'</div></div><span class="stat">'+stLabel(u)+'</span></div>'+(u.role==='dealer'?'<p class="note" style="margin:10px 0 0">'+DPLAN(u.plan==null?1:u.plan).n+' plan: first 3 months free, then £'+DPLAN(u.plan==null?1:u.plan).price+' a month.</p>':planHtml(u))+'</div>'}
-function planHtml(u){if(u.role==='mechanic'&&u.motOnly){var jf=+u.joinFee||0;return '<div class="planbox"><div><span class="note">Your plan</span><b>MOT test station</b><small>No monthly fee and no commission. You are paid your agreed fee for every MOT booked online. '+(jf?'One-off joining fee £'+jf.toFixed(2)+' + VAT, charged once approved.':'Free to join.')+'</small></div></div>'}
+function planHtml(u){if(u.role==='mechanic'&&u.motOnly){var jf=+u.joinFee||0;return '<div class="planbox"><div><span class="note">Your plan</span><b>MOT test station</b><small>No monthly fee and no commission. You are paid a fixed fee for every MOT booked online (£45.00 for a car). '+(jf?'One-off joining fee £'+jf.toFixed(2)+' + VAT, charged once approved.':'Free to join.')+'</small></div></div>'}
 var pro=u.plan==='pro',act=pro&&u.proActive,s='<div class="planbox"><div><span class="note">Your plan</span><b>'+(pro?'Pro':'Pay as you go')+'</b><small>'+(act?'0% per job. £74.50 + VAT a month (usually £149 + VAT). You keep everything you charge.':pro?'Pro starts once your documents are verified. Until then, nothing is charged.':'5% + VAT per job (usually 10%). No monthly fee.')+'</small></div>';
 if(pro&&!act&&u.status==='approved')s+='<button class="btn sm" type="button" data-plan="activate">Activate Pro, £74.50 + VAT a month</button>';
 else if(pro)s+='<button class="btn sm ghost" type="button" data-plan="payg">Switch to Pay as you go</button>';
@@ -3994,20 +3995,9 @@ function sz(n){return n>1e6?(n/1e6).toFixed(1)+' MB':Math.max(1,Math.round(n/1e3
 var CK=['Documents are clear and look genuine','Insured name matches the applicant','Both certificates are in date','Cover level meets our minimum','Photo ID matches the applicant and is in date'];
 function logit(t){adm.log.unshift({t:Date.now(),by:window.GGuser.name,x:t})}
 function docRows(u){var s='';(u.docs||[]).forEach(function(d,i){s+='<div class="job"><div><b>'+esc(d.name)+(d.idtype?' ('+esc(d.idtype)+')':'')+'</b><small>'+esc(d.file)+(d.size?' ('+sz(d.size)+')':' (sample)')+'</small><small>Expires '+fmtD(d.exp)+'</small></div><div class="jp">'+flag(d.exp)+'</div><div class="jb"><button class="btn sm ghost" type="button" data-view="'+esc(u.email)+':'+i+'">View document</button></div></div>'});return s}
-/* the MOT fee agreed with a test centre at sign-up: what we pay them for each test booked online */
-function motAsk(u){var r=u.rates||{};return r.motc&&r.motc['4-car']!=null?+r.motc['4-car']:+r.mot||54.85}
+/* MOT test centres are paid a fixed fee per test (official maximum minus our £9.85 incl. VAT) */
 function motAgreedBox(u){if(u.role!=='mechanic'||u.sub!=='garage'||!(u.motOnly||+u.motBays>0||(u.rates&&(u.rates.motc||u.rates.mot))))return '';
-var ag=u.motAgreed&&u.motAgreed.all!=null?+u.motAgreed.all:null,max=54.85,id=esc(u.email),v=ag!=null?ag:45;
-return '<div class="motag" style="margin-top:10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px"><b>Agreed MOT fee</b><p class="note" style="margin:4px 0 8px">Customers pay the official maximum ('+m(max)+' for a car), with our booking fee included in it. We pay the test centre the fee agreed here for every test booked online. They asked for '+m(motAsk(u))+' for a car MOT. Our standard offer is £45.00 (negotiate between £42 and £47).</p>'
-+'<div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap"><div><label class="f" for="ag-'+id+'" style="margin:0 0 4px">Agreed fee per test (£)</label><input type="number" id="ag-'+id+'" data-agin="'+id+'" min="1" max="'+max+'" step="0.01" value="'+v.toFixed(2)+'" style="width:110px"'+(owner()?'':' disabled')+'></div>'+(owner()?'<button class="btn sm" type="button" data-motag="'+id+'">Save agreed fee</button>':'')+'</div>'
-+'<p class="note" data-agm="'+id+'" style="margin:6px 0 0">'+agMsg(v)+(ag==null?' Not agreed yet: until it is saved, the test centre is paid the fee it asked for.':'')+'</p></div>'}
-function agMsg(v){var max=54.85,net=Math.round((max-v)*100)/100,vat=Math.round(net/6*100)/100;return 'On a car MOT the customer pays '+m(max)+': '+m(v)+' to the test centre and '+m(net)+' to us, which includes '+m(vat)+' VAT (so '+m(net-vat)+' after VAT).'}
-document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute||!t.getAttribute('data-agin'))return;var x=document.querySelector('[data-agm="'+t.getAttribute('data-agin')+'"]');if(x)x.textContent=agMsg(Math.min(54.85,Math.max(0,+t.value||0)))});
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-motag]');if(!b||!owner())return;var em=b.getAttribute('data-motag'),u=byEmail(em),inp=document.getElementById('ag-'+em),v=Math.round(+(inp&&inp.value)*100)/100;if(!u)return;
- var x=document.querySelector('[data-agm="'+em+'"]');if(!(v>0)||v>54.85){if(x)x.textContent='Enter a fee between £1.00 and £54.85.';return}
- u.motAgreed={all:v};logit('Agreed MOT fee for '+u.name+': '+m(v));
- if(u.sbid&&window.MCmotDb){b.disabled=true;window.MCmotDb.setAgreed(u.sbid,{all:v}).then(function(r){b.disabled=false;if(x)x.textContent=(r&&!r.error&&r.data&&r.data.length?'Saved. ':'Not saved: check your connection and try again. ')+agMsg(v)},function(){b.disabled=false;if(x)x.textContent='Not saved: check your connection and try again.'})}
- else if(x)x.textContent='Saved. '+agMsg(v)});
+return '<div class="motag" style="margin-top:10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px"><b>MOT fee paid to this test centre</b><p class="note" style="margin:4px 0 0">Fixed, no negotiation: £45.00 for a car MOT (class 4). Every class pays the official maximum minus our £9.85, which includes £1.64 VAT.</p></div>'}
 function appCardBase(u){var ck=u.ck||[0,0,0,0,0],all=ck.every(Boolean);
 var bad=(u.docs||[]).some(function(d){return dleft(d.exp)<0});
 var s='<div class="card app" data-app="'+esc(u.email)+'"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><b style="font-size:1.05rem">'+esc(u.name)+'</b><div class="note">'+ROLES[u.role]+(u.sub?' ('+({mobile:'mobile mechanic',garage:'garage',autoelec:'auto electrician or locksmith'}[u.motOnly?'x':u.sub]||(u.motOnly?'MOT test station':u.sub))+(u.aeWhere?', '+u.aeWhere.toLowerCase():'')+')':'')+', '+esc(u.town||'')+'</div><div class="note">'+esc(u.email)+', '+esc(u.phone||'')+'</div></div><span class="stat">Submitted '+ago(u.submitted||Date.now())+'</span></div>'
@@ -5185,15 +5175,17 @@ var ICON={"bike": "<circle cx='11' cy='24' r='6'/><circle cx='37' cy='24' r='6'/
 /* which classes each sample garage tests, by its place in the list */
 var SAMPLE=[['1','2','3','4','4a','7'],['1','2','3','4','7'],[],['4','4a','5','5a','7'],['4']],MOTONLY=[0];
 function money(n){return '£'+(+n).toFixed(2)}
+/* we pay test centres a fixed fee per test: the official maximum minus our £9.85 (incl. VAT). Car (class 4): £45.00 */
+var MARGIN=9.85;function payout(k){var t=BY[k];return t?Math.round((t.max-MARGIN)*100)/100:0}
 function cur(){var s=$('mclass');return BY[s&&s.value]||BY['4-car']}
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function rows(p,have){var h='';T.forEach(function(t){var on=have?have[t.k]!=null:t.k==='4-car',fee=have&&have[t.k]!=null?have[t.k]:t.max;
+function rows(p,have){var h='';T.forEach(function(t){var on=have?have[t.k]!=null:t.k==='4-car',fee=payout(t.k);
  if(t.g)h+='<div class="motgrp">'+esc(t.g)+'</div>';
- h+='<div class="motrow'+(on?'':' off')+'"><input type="checkbox" id="'+p+'-c-'+t.k+'" data-motc="'+t.k+'"'+(on?' checked':'')+'><label for="'+p+'-c-'+t.k+'">'+esc(t.n)+'<small>'+(t.h?esc(t.h)+'. ':'')+'Class '+t.c+'. Maximum '+money(t.max)+'</small></label>'
-  +'<span class="motfee">£<input type="number" id="'+p+'-f-'+t.k+'" data-motf="'+t.k+'" min="1" max="'+t.max+'" step="0.01" value="'+(+fee).toFixed(2)+'" inputmode="decimal" aria-label="The fee you ask for '+esc(t.n)+', maximum '+money(t.max)+'"'+(on?'':' disabled')+'></span></div>'});return h}
-function read(p){var o={};T.forEach(function(t){var c=$(p+'-c-'+t.k),f=$(p+'-f-'+t.k);if(c&&c.checked&&f){var v=Math.round(+f.value*100)/100;if(!(v>0))v=t.max;o[t.k]=Math.min(t.max,v)}});return o}
+ h+='<div class="motrow'+(on?'':' off')+'"><input type="checkbox" id="'+p+'-c-'+t.k+'" data-motc="'+t.k+'"'+(on?' checked':'')+'><label for="'+p+'-c-'+t.k+'">'+esc(t.n)+'<small>'+(t.h?esc(t.h)+'. ':'')+'Class '+t.c+'. Customer pays '+money(t.max)+'</small></label>'
+  +'<span class="motfee motpay"><b>'+money(fee)+'</b><small>paid to you</small><input type="hidden" id="'+p+'-f-'+t.k+'" data-motf="'+t.k+'" value="'+fee.toFixed(2)+'"'+(on?'':' disabled')+'></span></div>'});return h}
+function read(p){var o={};T.forEach(function(t){var c=$(p+'-c-'+t.k);if(c&&c.checked)o[t.k]=payout(t.k)});return o}
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;
- if(t.hasAttribute('data-motc')){var row=t.closest('.motrow'),f=row.querySelector('[data-motf]');f.disabled=!t.checked;row.classList.toggle('off',!t.checked);if(t.checked)f.focus();sync()}
+ if(t.hasAttribute('data-motc')){var row=t.closest('.motrow'),f=row.querySelector('[data-motf]');f.disabled=!t.checked;row.classList.toggle('off',!t.checked);sync()}
  else if(t.hasAttribute('data-motf')){var m=BY[t.getAttribute('data-motf')],v=+t.value,er=$(t.id.slice(0,2)+'-err');
   if(v>m.max){t.value=m.max.toFixed(2);if(er)er.textContent='The most you can charge for "'+m.n+'" is '+money(m.max)+', so we set it to that.'}
   else if(!(v>0)){t.value=m.max.toFixed(2)}else{t.value=v.toFixed(2);if(er)er.textContent=''}sync()}
@@ -5205,7 +5197,7 @@ function note(){var n=$('mclass-note'),t=cur();if(n)n.textContent='Class '+t.c+'
 var sel=$('mclass');if(sel){var h='',open=false;T.forEach(function(t){if(t.g){if(open)h+='</optgroup>';h+='<optgroup label="'+esc(t.g)+'">';open=true}h+='<option value="'+t.k+'"'+(t.k==='4-car'?' selected':'')+'>'+esc(t.n)+'</option>'});sel.innerHTML=h+'</optgroup>';note()}
 var gl=$('gm-list');if(gl){gl.innerHTML=rows('gm',null);var gm=$('gmot'),bx=$('g-motclasses');if(gm&&bx)bx.hidden=!gm.checked}
 if(typeof window.GGmot==='function'){var o=window.GGmot;window.GGmot=function(on,i){var mc=$('mot-class');if(mc)mc.hidden=!(on&&i&&i.mot)||window.GGmode==='mot';return o.apply(this,arguments)}}
-window.MCMOT={table:T,
+window.MCMOT={table:T,payout:payout,
  price:function(g){return cur().max},cur:cur,
  tests:function(i){var t=cur(),l=SAMPLE[i]||['4'];return l.indexOf(t.c)>=0},
  motOnly:function(i){return MOTONLY.indexOf(i)>=0},
@@ -5214,8 +5206,7 @@ window.MCMOT={table:T,
  label:function(){var t=cur();return 'Class '+t.c+' MOT ('+t.n.charAt(0).toLowerCase()+t.n.slice(1)+')'},
  read:read,
  ratesHtml:function(u){var have=u.rates&&u.rates.motc;if(!have){have={};have['4-car']=(u.rates&&u.rates.mot)||54.85}
-  var ag=u.motAgreed&&Object.keys(u.motAgreed).length?'<p class="note" style="margin:0 0 8px;background:#DDF7E4;color:#0F4D22;border-radius:10px;padding:8px 10px"><b>Agreed fee paid to you per test:</b> '+Object.keys(u.motAgreed).map(function(k){return (k==='all'?'all classes':(BY[k]?BY[k].n:k))+' '+money(u.motAgreed[k])}).join(', ')+'. Agreed with The Motoring Central when your application was approved.</p>':'';
-  return '<h3 class="sh" style="margin-top:14px">MOT classes you test, and the fee you ask for each</h3>'+ag+'<p class="note" style="margin:0 0 8px">Tick each type of test you are authorised for. Customers pay the official maximum when they book online; you are paid the fee agreed with us for every test, with no booking fee or commission taken from it. MOT test fees are exempt from VAT.</p><div class="motlist" id="dm-list">'+rows('dm',have)+'</div><p class="note err" id="dm-err" role="alert"></p>'}};
+  return '<h3 class="sh" style="margin-top:14px">MOT classes you test, and what we pay you</h3><p class="note" style="margin:0 0 8px">Tick each type of test you are authorised for. Customers pay the official maximum when they book online. We pay you a fixed fee for every test, for example £45.00 for a car MOT, with no booking fee or commission taken from it.</p><div class="motlist" id="dm-list">'+rows('dm',have)+'</div><p class="note err" id="dm-err" role="alert"></p>'}};
 })();
 </script>
 <script>
