@@ -340,6 +340,13 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 19 Nov 2026: separate join pages. #mot-station (MOT only: 82% paid, no monthly fee, free to join until 31 May 2027,
+  pricing table, MOT earnings slider, MOT video, form fixed to MOT station with no labour rate or repair jobs), #garage
+  (repairs on 5% or Pro, plus "How MOT pricing works" and the "We also do MOT tests" tick box), #mobile-mechanic and
+  #auto-electrician (no MOT content). #mechanics is still the general page with a choice of all four. Join the network now
+  has a card for each. Launch banner text matches the trade.
+  Recruiting phase: to show only some trades on Join the network (e.g. MOT stations and dealers first), set
+  RECRUIT=['mot','dealer'] in the script that starts "Join pages by trade" in index.html (Claude can do it).
 - 19 Nov 2026: usability pass (phone and desktop). Phone menu now has "Sell a car or van" and "Help and contact", and the
   log-in links are proper buttons. The customer log-in box has a clear yellow Log in button and, if a partner is signed in,
   a "Log out of the partner account" button. The launch banner can be closed (stays closed for the visit). Cars and vans on
