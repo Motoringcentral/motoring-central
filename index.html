@@ -1084,6 +1084,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 .st-t{width:100%;border-collapse:collapse;font-size:.85rem}.st-t th,.st-t td{padding:6px 4px;border-top:1px solid var(--line,#e3e7ec);text-align:right;vertical-align:top}.st-t th:first-child,.st-t td:first-child{text-align:left}.st-t small{display:block;color:#b26a00}
 html.embed header,html.embed .banner,html.embed footer,html.embed .foot,html.embed .ckbar,html.embed .sfcols,html.embed #findbtn,html.embed .chatfab,html.embed .mcchat,html.embed #mc-cmpbar,html.embed .launch,html.embed #hub-btn,html.embed #v-cars>.hero,html.embed #v-vans>.hero,html.embed [data-srall],html.embed #cars-add-btn,html.embed #vans-add-btn,html.embed [data-sellcar],html.embed .flt-clear,html.embed [data-fltclear]{display:none!important}
 html.embed main{padding-top:12px}
+.dvid video{width:100%;height:auto;border-radius:12px;display:block;background:#071630}
 html.embed .embed-by{display:block!important}
 </style>
 <script>try{if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.classList.add('embed')}catch(e){}</script>
@@ -1961,7 +1962,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="card cf" id="cars-filters"></div>
 <div class="bar2"><b id="cars-count"></b><button class="btn sm" id="cars-add-btn" type="button" hidden>List a car</button><button class="btn sm" id="ps-open" type="button" data-sellcar="car">Sell your car &middot; &pound;29.99</button></div>
 <div id="cars-fin"></div>
-<div class="card" id="cars-join" hidden><b>Dealers: join the network to list cars.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;149 + VAT a month. Bigger plans include free premium ads on the front-page banner.</p><button class="btn sm" id="cars-join-btn" type="button">Join the dealer network</button></div>
+<div class="card" id="cars-join" hidden><b>Dealers: join the network to list cars.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;169 + VAT a month. Bigger plans include free premium ads on the front-page banner.</p><button class="btn sm" id="cars-join-btn" type="button">Join the dealer network</button></div>
 <p class="okmsg" id="cars-ok" hidden></p>
 <div class="card" id="ps-card" hidden></div>
 <div id="cars-list"></div>
@@ -1997,12 +1998,13 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div id="v-dealers" hidden>
 <section class="hero"><div class="in">
 <h1>Sell more cars. Your first 3 months are free.</h1>
-<p>Choose a plan by how many cars and vans you list, from &pound;149 + VAT a month. Pay nothing for your first 3 months. Bigger plans include free premium ads on the front-page banner every month.</p>
+<p>Choose a plan by how many cars and vans you list, from &pound;169 + VAT a month. Pay nothing for your first 3 months. Bigger plans include free premium ads on the front-page banner every month.</p>
 <button class="cta" id="dl-top" type="button">Join the network</button>
 <br><a class="swl" href="#cars">Browse cars for sale &rarr;</a>
 <img class="heroimg" src="img/car-sales.webp" alt="Motoring Central car sales forecourts with new and used cars for sale" width="1400" height="788" loading="lazy"></div></section>
 <main>
-<div class="stats"><div><b>3 months</b>free for every dealer</div><div><b>&pound;149 + VAT</b>plans from, a month</div><div><b>5</b>plans to fit your stock</div><div><b>Up to 5</b>free premium ads a month</div></div>
+<div class="card dvid"><h2 style="margin:0 0 4px;font-size:1.2rem">See what you get, in one minute</h2><p class="note" style="margin:0 0 10px">What you need to join, and everything we give you as a dealer.</p><video controls playsinline preload="none" poster="video/dealer-poster.jpg" width="1280" height="720" aria-label="Video: what dealers need to join The Motoring Central and what they get. The words are shown on screen; there is no sound."><source src="video/dealer.mp4" type="video/mp4"></video></div>
+<div class="stats"><div><b>3 months</b>free for every dealer</div><div><b>&pound;169 + VAT</b>plans from, a month</div><div><b>5</b>plans to fit your stock</div><div><b>Up to 5</b>free premium ads a month</div></div>
 <h2 class="sec">Dealer plans</h2>
 <div class="card dfree"><b>Your first 3 months are free on every plan.</b><p>Including your free premium ads. Nothing is charged until month 4, and you can cancel any time before then without paying a penny.</p></div>
 <p class="note" style="margin:0 0 12px">After your free 3 months, plans are billed monthly. Cancel at the end of any month.</p>
@@ -2059,7 +2061,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <main>
 <div class="card cf" id="vans-filters"></div>
 <div class="bar2"><b id="vans-count"></b><button class="btn sm" id="vans-add-btn" type="button" hidden>List a van</button><button class="btn sm" id="ps-open-van" type="button" data-sellcar="van">Sell your van &middot; &pound;29.99</button></div>
-<div class="card" id="vans-join" hidden><b>Dealers: join the network to list vans.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;149 + VAT a month.</p><button class="btn sm" id="vans-join-btn" type="button">Join the dealer network</button></div>
+<div class="card" id="vans-join" hidden><b>Dealers: join the network to list vans.</b><p class="note" style="margin:6px 0 10px">First 3 months free, then plans from &pound;169 + VAT a month.</p><button class="btn sm" id="vans-join-btn" type="button">Join the dealer network</button></div>
 <p class="okmsg" id="vans-ok" hidden></p>
 <div id="vans-list"></div>
 <div id="vans-detail" hidden></div>
