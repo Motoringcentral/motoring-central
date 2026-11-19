@@ -356,6 +356,24 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 19 Nov 2026 (night): dealer, car sales and MOT tools (no email, Stripe or paid data needed).
+  - Windscreen cards: dealers and private sellers print an A5 card per car (price, details, ULEZ, phone and a QR code
+    that opens the advert). "Print windscreen cards for all" on the dealer dashboard. QR library: js/qrcode.min.js (MIT).
+  - Advert links: ?ad=<advert id>#cars or #vans opens one advert ("Copy the advert link" on the seller's own advert).
+  - Stock age and price tips on "How your adverts are doing": days listed (recorded by our server, data.since),
+    comparison with similar cars on the site, and a nudge after 21 days with no enquiries.
+  - ULEZ and Clean Air Zones: badge on cards and adverts, plus a filter. Worked out from fuel and age (petrol Euro 4:
+    cars 2006+, vans 2007+; diesel Euro 6: cars Sept 2015+, vans Sept 2016+), with a link to the TfL/GOV.UK checkers.
+  - Price history on adverts ("reduced twice, now £800 less"), recorded by our server on every price change (data.ph).
+  - Free MOT reminders for anyone (home page "Set one up", the MOT booking page and My account): reg, email and MOT
+    due date ("Find it for me" uses the reg look-up). Emails 30 and 7 days before, with a stop link (?motstop=).
+    Table mot_reminders; queued daily at 17:00 by the 'mot-reminders' job; they go out once emails are switched on.
+  - MOT station tools (Diary tab): today's tests, Tested / No-show buttons for online bookings, a printable test sheet
+    and a monthly statement of payouts (printable). Admin MOT list shows no-shows.
+  - DECISION FOR THE OWNER: a no-show is currently paid to the test centre as normal (customer did not cancel) and not
+    refunded. Change in public.mot_outcome and the wording on the MOT tools card if you want a different rule.
+  Code: supabase/migrations/20261119h_dealer_mot_tools.sql and the block "19 Nov 2026 (later): windscreen cards..."
+  in index.html.
 - 19 Nov 2026 (evening): car sales tools that need no email, business details or Stripe.
   - Leads inbox ("Your leads") for dealers on the dashboard and for private sellers in My account: every buyer who
     messaged or asked for a viewing, with status (New, Contacted, Viewing booked, Sold, Lost), notes, a follow-up date
