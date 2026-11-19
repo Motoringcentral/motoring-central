@@ -3,6 +3,52 @@
 This is the running list of work still to do before launch. When the owner asks
 "what is left to do?", answer from this file, and tick items off here as they are finished.
 
+## SATURDAY 21 NOV 2026: switch the emails on (owner, back in the UK, about 1 hour)
+
+The email side is BUILT (19 Nov 2026) and waiting for these steps. Nothing is sent until step 3.
+1. Google Workspace (mailboxes): sign up at workspace.google.com/intl/en_uk, Business Starter, country United Kingdom,
+   domain motoringcentral.co.uk. At 123-reg > Manage DNS: Google's TXT verification record, MX smtp.google.com
+   (priority 1, delete 123-reg's old MX records), SPF TXT "v=spf1 include:_spf.google.com ~all", DMARC TXT on _dmarc
+   "v=DMARC1; p=none; rua=mailto:<your address>", then Gmail DKIM (google._domainkey). Add the free aliases info@,
+   bookings@, support@, partners@. Do NOT touch the A or CNAME records (they run the website).
+2. Resend (the site's emails): free account at resend.com, Domains > Add motoringcentral.co.uk (region Ireland), add
+   its records at 123-reg (they are on "send" and "resend._domainkey", so they do not clash with Google), press Verify.
+   API Keys > Create, "Sending access". Never paste the key in chat.
+3. Supabase > Edge Functions > Secrets: add RESEND_API_KEY (the key from step 2). From then on every email below is
+   sent within 2 minutes. Optional: NOTIFY_FROM (default "The Motoring Central <bookings@motoringcentral.co.uk>")
+   and NOTIFY_REPLY_TO (default support@motoringcentral.co.uk).
+4. Supabase > Authentication > Emails > SMTP Settings: Enable custom SMTP. Host smtp.resend.com, port 465,
+   username resend, password = the same Resend key, sender email noreply@motoringcentral.co.uk, sender name
+   The Motoring Central. Then Authentication > Emails > Templates: paste the files in supabase/email-templates
+   (Confirm signup, Reset password, Change email address, Magic link), subjects: "Confirm your email address",
+   "Reset your password", "Confirm your new email address", "Your log-in link".
+5. Supabase > Authentication > URL Configuration: Site URL https://preview.motoringcentral.co.uk, and under Redirect
+   URLs add https://preview.motoringcentral.co.uk/** (the password reset page needs it).
+6. Supabase > Authentication > Sign In / Providers > Email: turn "Confirm email" back ON.
+7. Test with Claude: forgotten password on the preview (Log in > "Forgotten your password?"), a new customer sign-up,
+   a partner application, approve it, an advert approved and declined, a buyer message, a quote.
+Texts (SMS) are built too but need a Twilio account (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM). Not chosen yet.
+
+### What the emails cover (built 19 Nov 2026)
+- Partners and dealers: application received; approved (welcome and next steps); needs attention (with the reason);
+  paused; active again. Owner gets "New application to review" and "Application sent back".
+- Car and van adverts: "We are checking your advert", "Your advert is live", "Your advert needs a change" (with the
+  reason). Owner gets "Adverts are waiting for approval" (at most one every 30 minutes).
+- Buyers and sellers: new message, viewing request, viewing confirmed or not possible, seller replied. At most one
+  email per conversation every 30 minutes, so a chat does not flood anyone's inbox.
+- Bookings (not MOT): confirmation to the customer, "New job booked" to the partner, "on the way", "job completed"
+  (asks for a review), cancelled. MOT: booked, moved, cancelled (customer and garage) and a reminder at 5pm the day before.
+- Quotes: "New quote for your ..." to the customer.
+- Login emails (Supabase): confirm email, reset password, change email, log-in link, in the same branding.
+- New page: /reset.html (forgotten password), linked from the partner and customer log-in forms.
+How it works: the database writes every email into the table "notifications"; a timed job runs the function "notify"
+every 2 minutes while anything is waiting. Demo and test addresses (demo.com, example.com) are never sent. Anything that
+waited more than 24 hours is dropped, so test messages from before Saturday are not sent by surprise. To see what was
+sent: Supabase > Table editor > notifications (status sent, skipped, queued or failed, with the error).
+Code: supabase/migrations/20261119e_email_notifications.sql and supabase/functions/notify.
+Still to do later: email partners about new quote requests near them, saved-search and price-drop alerts, the weekly
+garage payout statement, and an unsubscribe link for marketing emails (only service emails are sent for now).
+
 ## FIRST THING ON 19 NOV 2026 (owner, with Claude)
 
 1. Supabase settings (5 minutes):
@@ -30,7 +76,7 @@ This is the running list of work still to do before launch. When the owner asks
    to show a history check summary on an advert for its whole life.
 6. Ask the accountant: VAT when we collect the partner's price on their behalf (we charge VAT only on our own fee),
    and VAT on refunds less the £9.99 admin fee.
-7. Choose an email service so sign-up, enquiry and booking emails can be sent (Claude to set out options and costs).
+7. Email service: DONE 19 Nov 2026 (Google Workspace for mailboxes, Resend for the site's emails; built and waiting for the Saturday steps at the top).
 8. Decide the next car-sales features (Claude can build each one; the ones with a cost need your OK first):
    - Needs the email service (item 7): email alerts for saved searches ("3 new cars match"), price-drop alerts on
      saved cars, and emails to sellers when an advert is approved or declined, a buyer messages, or a viewing is
@@ -144,7 +190,7 @@ Still to do, in this order:
 - A proper email service (custom SMTP), then turn "Confirm email" back on. When it is on, a new partner must
   confirm their email before their documents can upload, so add "upload your documents" to the partner
   dashboard for that case
-- Forgotten password (reset by email) and changing account details
+- Forgotten password: DONE 19 Nov 2026 (/reset.html; works once the Saturday email steps are done). Still to do: changing account details (name, phone, email)
 - Two-step sign-in for staff (authenticator app); adding and removing reviewers from the admin page
 - Real partners in the remaining booking lists (garages and MOT, valeting centres, bodywork, alloys, EV charging)
 - Chat between customer and partner, partner logo, and buyers' messages on adverts, in the database
@@ -170,11 +216,11 @@ Built and live:
 - Demo: book an MOT at "Kirkstall Road Garage" as customer@demo.com, then log in as garage@demo.com > Booking diary.
 
 Still to do:
-- SWITCH ON EMAILS AND TEXTS: create a Resend account (email) and a Twilio account (texts), then add the secrets in
+- SWITCH ON EMAILS AND TEXTS (emails: see the Saturday steps at the top; texts still need Twilio): create a Resend account (email) and a Twilio account (texts), then add the secrets in
   Supabase > Edge Functions > Secrets: RESEND_API_KEY, NOTIFY_FROM, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN,
   TWILIO_FROM. Verify motoringcentral.co.uk in Resend (DNS records at 123-reg). Until then messages wait in the queue
   and are sent when the next booking for them triggers the function (or staff run it with { all: true }).
-- Add a timed job (pg_cron) to retry queued messages every few minutes, and a reminder the day before the MOT.
+- DONE 19 Nov 2026: timed job (pg_cron) sends waiting messages every 2 minutes, and an MOT reminder goes at 5pm the day before.
 - DVSA: confirm that including our booking fee inside the maximum MOT fee is fine when we take the payment.
 - Real payments (Stripe): hold the slot, take the payment, then confirm; refund automatically if the slot was taken.
   Pay garages their agreed fees (weekly payout statement in the garage dashboard).
