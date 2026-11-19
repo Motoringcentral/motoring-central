@@ -8500,6 +8500,7 @@ function setMode(){var m=mode();if(!m||V.hidden&&m===last)return;if(m===last&&V.
  if(mot&&window.MCmotVid)setTimeout(function(){window.MCmotVid(false)},60);
  /* "On this page" links: only to sections on this page */
  [].forEach.call(V.querySelectorAll('nav.jump a'),function(a){var t=document.getElementById(a.getAttribute('href').slice(1));a.hidden=!!(t&&t.hidden)});
+ var L=$('launch');if(L&&!L.hidden){var lt=c&&c.k==='mot'?'\uD83C\uDF89 Launch offer: MOT test stations join free until 31 May 2027. No monthly fee, no commission.':c?'\uD83C\uDF89 Launch offer: 50% off. Pay 5% + VAT per job instead of 10%, or Pro at \u00a374.50 + VAT a month instead of \u00a3149.':null;if(lt){var x=L.querySelector('.lx');L.textContent=lt;if(x)L.appendChild(x)}}
  motCalc()}
 function motCalc(){var r=$('motwk');if(!r)return;var n=+r.value;$('motwkv').textContent=n;$('motest').textContent='£'+Math.round(n*44.98*52/12).toLocaleString('en-GB')}
 var mw=$('motwk');if(mw)mw.addEventListener('input',motCalc);
@@ -8508,7 +8509,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 var ROLE={'#mot-station':'mot','#garage':'garage','#mobile-mechanic':'mobile','#auto-electrician':'autoelec','#tyres':'tyres','#bodyshop':'body','#valets':'valet','#recovery':'recovery','#evcharging':'ev','#dealers':'dealer'};
 function recruit(){if(!RECRUIT)return;[].forEach.call(document.querySelectorAll('#v-network .card.role, #v-network .rolepick a'),function(el){var a=el.matches('a')?el:el.querySelector('a.btn');var r=a&&ROLE[a.getAttribute('href')];if(r)el.hidden=RECRUIT.indexOf(r)<0})}
 recruit();
-addEventListener('hashchange',function(){setTimeout(setMode,0)});setMode();setTimeout(setMode,300);
+addEventListener('hashchange',function(){last=null;setTimeout(setMode,0)});setMode();setTimeout(function(){last=null;setMode()},300);
 })();
 </script>
 </body>
