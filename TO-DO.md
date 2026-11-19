@@ -188,8 +188,8 @@ Still to do:
 - Free to join for MOT stations that apply by 31 May 2027; from 1 June 2027 a one-off joining fee of £99.99 + VAT,
   charged once documents are approved (stored as joinFee on the application). Real charging needs Stripe.
 - Garages that also test MOTs: MOTs carry no fee and are not part of Pro; repairs stay on 5% or Pro.
-- Fixed payout, no negotiation (19 Nov 2026): we pay the official maximum minus £9.85 (incl. VAT) for every class.
-  Car (class 4) £45.00; motorcycle £19.80; class 7 £48.75; class 5 (17+ seats) £70.80. Database: private.mot_payout.
+- Payout, no negotiation (19 Nov 2026): we pay 82% of the official maximum for every class and keep 18% (incl. VAT).
+  Car (class 4) £44.98; motorcycle £24.31; class 7 £48.05; class 5 (17+ seats) £66.13. Database: private.mot_payout.
 
 ### Intro video (customer) – next time it is updated
 - Add the advantage of booking through us: customers can book any time, day or night, even when the garage is closed
