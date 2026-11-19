@@ -48,7 +48,10 @@ This is the running list of work still to do before launch. When the owner asks
      cars registered before April 2017); Claude can check with VDG_DEBUG.
 9. FCA: decided 19 Nov 2026 to wait until the business is making money. Finance stays switched off. Until then,
    build as much as possible for the pre-launch (below).
-10. Optional: ask Claude for a one-page dealer pitch (prices, what is included, 3 months free) to send to dealers.
+10. Dealer pitch: DONE 19 Nov 2026. Pitch deck "The Motoring Central: dealer pitch" (12 slides with speaker notes,
+   in your Claude artifacts; download as PowerPoint or PDF from the deck) and a one-minute video on the Join as a dealer
+   page (video/dealer.mp4). Before pitching for real: the MOT history and history checks must be switched on (items 4
+   and 5), because the deck and video promise them. To change the video, ask Claude (its source is kept outside the site).
 
 Preview site: https://preview.motoringcentral.co.uk
 
