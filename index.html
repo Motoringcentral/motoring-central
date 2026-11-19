@@ -1548,7 +1548,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <label class="chk"><input type="radio" name="kind" value="mot"><span>MOT test station<br><small>MOT testing only</small></span></label>
 <label class="chk"><input type="radio" name="kind" value="autoelec"><span>Auto electrician or locksmith<br><small>Electrical or key specialist</small></span></label>
 </div></fieldset>
-<div class="dvid" id="garage-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">Test MOTs? See how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, your agreed fee per test, bookings 24/7 and a free live diary. Under 2 minutes.</p><video controls playsinline preload="none" poster="video/garage-mot-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for partner garages."><source src="video/garage-mot.mp4" type="video/mp4"><track kind="captions" src="video/garage-mot.vtt" srclang="en" label="English"></video></div>
+<div class="dvid" id="mot-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">MOT test stations: see how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, your agreed fee per test, bookings 24/7 and a free live diary. Under 2 minutes.</p><video controls playsinline preload="none" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English"></video></div>
 <div class="two"><div><label class="f" for="name">Full name</label><input type="text" id="name" autocomplete="name"></div>
 <div><label class="f" for="tel">Mobile</label><input type="tel" id="tel" autocomplete="tel"></div></div>
 <label class="f" for="mail">Email</label><input type="email" id="mail" autocomplete="email">
@@ -3056,7 +3056,7 @@ var L={mobile:['Servicing','Brakes','Battery','Diagnostics','Pre-MOT checks','Ty
 function kind(){return document.querySelector('input[name=kind]:checked').value}
 function apply(){
 var k=kind(),g=k==='garage'||k==='mot',ae=k==='autoelec';
-$('g-fields').hidden=!g;$('ae-fields').hidden=!ae;var gv=$('garage-vid');if(gv){gv.hidden=k!=='garage';if(gv.hidden){var vv=gv.querySelector('video');if(vv&&!vv.paused)vv.pause()}}$('m-rad').hidden=g;$('m-veh').hidden=g;
+$('g-fields').hidden=!g;$('ae-fields').hidden=!ae;var gv=$('mot-vid');if(gv){gv.hidden=k!=='mot';if(gv.hidden){var vv=gv.querySelector('video');if(vv&&!vv.paused)vv.pause()}}$('m-rad').hidden=g;$('m-veh').hidden=g;
 document.querySelector('label[for=post]').textContent=g?'Garage postcode':ae?'Base or workshop postcode':'Home postcode';
 var box=$('svcs'),old={};[].forEach.call(box.querySelectorAll('input:checked'),function(i){old[i.value]=1});
 if(k==='mobile'||k==='garage'){window.MCSVC.render(box,k,old);return}

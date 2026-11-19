@@ -186,8 +186,8 @@ Still to do:
 ### Intro video (customer) – next time it is updated
 - Add the advantage of booking through us: customers can book any time, day or night, even when the garage is closed
   (asked 19 Nov 2026). Also update MOT pricing in it (official maximum, no extra booking fee) if it is mentioned.
-- Garage MOT video (video/garage-mot.mp4, 19 Nov 2026) shows on the join form only when "Garage" is chosen
-  (not for "MOT test station"). Voice: Kokoro bf_emma (same British female voice as the intro and dealer videos).
+- MOT station video (video/mot-station.mp4, 19 Nov 2026) shows on the join form only when "MOT test station" is chosen
+  (not for "Garage"). Voice: Kokoro bf_emma (same British female voice as the intro and dealer videos).
 
 
 ### 2. Guided check: keeping the repair on the site (next steps)
