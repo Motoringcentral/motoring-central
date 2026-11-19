@@ -183,6 +183,15 @@ Still to do:
   close time and time per MOT (30, 45 or 60 minutes). Diary > MOT times. The booking page and the database both use them.
 - Real garages in the garage repair booking list too (same live diary, workshop bays).
 
+### MOT go-live gaps closed (19 Nov 2026)
+- DVSA test station number (VTS) asked on sign-up for MOT stations and garages that test MOTs; checked live against
+  the DVSA list (gov.uk, 22,974 stations). Admin cards show the match. Refresh the list every quarter:
+  open https://hctboldpuyztugpwexdy.supabase.co/functions/v1/vts-sync (reloads if older than 7 days).
+- Admin > MOT bookings: list of online MOTs; the owner can cancel and refund (frees the diary slot, emails and texts
+  both sides). Refund is marked "due" until it is refunded in Stripe, then "Mark refunded". Real refunds need Stripe.
+- Still open from the go-live review: cancellation/no-show policy wording, weekly garage payouts and self-billing
+  invoices, wrong-class handling, company registration, ICO registration, solicitor check of terms, DVSA written OK.
+
 ### MOT side FINAL (19 Nov 2026): 18% model. Do not change without the owner.
 - Customer pays the official maximum (booking fee included). Test centre paid 82%, we keep 18% (incl. VAT).
 - Site, terms (customer + partner), sign-up, dashboards, admin, video and database all match (checked 19 Nov 2026).

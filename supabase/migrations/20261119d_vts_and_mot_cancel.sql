@@ -1,0 +1,8 @@
+-- 19 Nov 2026 (applied with the Supabase tool as "vts_check_and_mot_cancel"):
+-- 1) public.mot_stations + public.mot_stations_sync: DVSA list of active MOT test stations, loaded by the
+--    'vts-sync' edge function from gov.uk (22,974 stations on 19 Nov 2026). public.check_vts(number) -> found/name/postcode/classes.
+-- 2) bookings: cancelled_at, cancel_reason, cancelled_by, refund_amount, refund_status ('due','refunded').
+--    public.staff_mot_bookings(), public.staff_cancel_mot(booking, reason, refund), public.staff_mark_refunded(booking): staff only.
+--    Cancelling frees the diary slot and queues 'cancelled' emails and texts to the customer and the garage
+--    (private.queue_notes now handles 'booked', 'moved' and 'cancelled').
+-- Full SQL: see the Supabase migration history for this project.

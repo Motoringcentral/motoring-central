@@ -1573,7 +1573,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div id="g-motbays" hidden><label class="f" for="gmotbays">MOT bays</label><input type="number" id="gmotbays" min="1" max="6" step="1" value="1" inputmode="numeric"></div>
 <p class="note">Each bay becomes a column in your free booking diary. You can add, rename or remove bays later.</p>
 <input type="hidden" id="g-motfee" value="54.85">
-<fieldset id="g-motclasses" hidden><legend>MOT classes you test, and what we pay you</legend><p class="note" style="margin:0 0 8px">Tick each type of test your station is authorised for. We pay you 82% of the official fee for every MOT booked online, shown next to each test (£44.98 for a car MOT). Nothing else is taken from it, and the customer pays in full when they book. Bookings go straight into your free live diary, and your own walk-ins and phone bookings close those times online.</p><div class="motlist" id="gm-list"></div><p class="err" id="gm-err" role="alert"></p></fieldset>
+<fieldset id="g-motclasses" hidden><legend>MOT classes you test, and what we pay you</legend><label class="f" for="gvts">DVSA test station number (VTS)</label><input type="text" id="gvts" class="up" maxlength="10" autocomplete="off" placeholder="e.g. 0087B1" aria-describedby="gvts-msg"><p class="note" id="gvts-msg" style="margin:4px 0 10px">The site number on your DVSA authorisation. We check it against the DVSA list of MOT test stations.</p><p class="note" style="margin:0 0 8px">Tick each type of test your station is authorised for. We pay you 82% of the official fee for every MOT booked online, shown next to each test (£44.98 for a car MOT). Nothing else is taken from it, and the customer pays in full when they book. Bookings go straight into your free live diary, and your own walk-ins and phone bookings close those times online.</p><div class="motlist" id="gm-list"></div><p class="err" id="gm-err" role="alert"></p></fieldset>
 <label class="up">Business registration or MOT station authorisation<input type="file" accept="image/*,.pdf"></label>
 </div>
 <fieldset><legend>Jobs you can do</legend><div class="checks" id="svcs"></div></fieldset>
@@ -2906,6 +2906,7 @@ window.MCSVC={cats:C,list:list,names:names,common:common,render:render,read:read
     else if(!(+$('m-rate').value>=15))msg='Enter your hourly labour rate.';
     else if(document.querySelector('input[name=kind]:checked').value==='garage'&&!$('gname').value.trim())msg='Enter your garage name.';
     else if(document.querySelector('input[name=kind]:checked').value==='garage'&&!$('gaddr').value.trim())msg='Enter your garage address.';
+    else if($('g-motclasses')&&!$('g-motclasses').hidden&&!/^(?=.*\d)[A-Z0-9]{4,8}$/.test(($('gvts').value||'').toUpperCase().replace(/\s/g,'')))msg='Enter your DVSA test station number (VTS), for example 0087B1.';
     else if(!any)msg='Tick at least one job you can do.';
     else if(!$('ins').checked)msg='Please confirm your insurance.';
     else if(!$('chk').checked)msg='Please agree to the checks and terms.';
@@ -3847,7 +3848,7 @@ USERS.filter(function(u){return u.role!=='admin'&&USERS.indexOf(u)<7}).forEach(f
 
 /* sign-up on each join form creates an account */
 var FORMS=[
-{form:'form',ok:'ok',err:'merr',pass:'m-pass',mail:'mail',role:'mechanic',p:'m',get:function(){var kk=document.querySelector('input[name=kind]:checked').value,mo=kk==='mot',g=kk==='garage'||mo,ae=kk==='autoelec';if(mo)kk='garage';return{svcs:mo||ae?null:window.MCSVC.read($('svcs')),name:g?$('gname').value.trim():(ae&&$('ae-biz').value.trim()?$('ae-biz').value.trim():$('name').value.trim()),phone:$('tel').value.trim(),town:$('post').value.trim(),sub:kk,motOnly:mo,aeWhere:ae?$('ae-where').value:null,bays:g?(mo?0:Math.min(12,Math.max(1,Math.round(+$('gbays').value)||1))):0,motBays:g&&$('gmot').checked?Math.min(6,Math.max(1,Math.round(+$('gmotbays').value)||1)):0,rates:{hour:+$('m-rate').value,mot:g?+$('g-motfee').value:null,motc:g&&$('gmot').checked&&window.MCMOT?window.MCMOT.read('gm'):null}}}},
+{form:'form',ok:'ok',err:'merr',pass:'m-pass',mail:'mail',role:'mechanic',p:'m',get:function(){var kk=document.querySelector('input[name=kind]:checked').value,mo=kk==='mot',g=kk==='garage'||mo,ae=kk==='autoelec';if(mo)kk='garage';return{svcs:mo||ae?null:window.MCSVC.read($('svcs')),name:g?$('gname').value.trim():(ae&&$('ae-biz').value.trim()?$('ae-biz').value.trim():$('name').value.trim()),phone:$('tel').value.trim(),town:$('post').value.trim(),sub:kk,motOnly:mo,vts:($('g-motclasses')&&!$('g-motclasses').hidden)?($('gvts').value||'').toUpperCase().replace(/\s/g,''):null,vtsCheck:window.MCvtsLast||null,aeWhere:ae?$('ae-where').value:null,bays:g?(mo?0:Math.min(12,Math.max(1,Math.round(+$('gbays').value)||1))):0,motBays:g&&$('gmot').checked?Math.min(6,Math.max(1,Math.round(+$('gmotbays').value)||1)):0,rates:{hour:+$('m-rate').value,mot:g?+$('g-motfee').value:null,motc:g&&$('gmot').checked&&window.MCMOT?window.MCMOT.read('gm'):null}}}},
 {form:'r-form',ok:'r-ok',err:'r-err',pass:'r-pass',mail:'r-mail',role:'recovery',p:'r',get:function(){return{name:$('r-co').value.trim(),phone:$('r-tel').value.trim(),town:$('r-post').value.trim(),rates:{call:+$('r-call').value,mile:+$('r-mile').value}}}},
 {form:'ev-form',ok:'ev-ok',err:'ev-err',pass:'ev-pass',mail:'ev-mail',role:'evcharge',p:'ev',get:function(){return{name:$('ev-co').value.trim(),phone:$('ev-tel').value.trim(),town:$('ev-post').value.trim(),rates:{call:+$('ev-call').value,mile:+$('ev-mile').value}}}},
 {form:'bs-form',ok:'bs-ok',err:'bs-err',pass:'bs-pass',mail:'bs-mail',role:'body',p:'bs',get:function(){var k=document.querySelector('input[name=bs-kind]:checked').value,ap=document.querySelector('input[name=bs-appr]:checked').value==='yes',b=$('bs-dobody').checked,a=$('bs-doalloy').checked;return{name:$('bs-co').value.trim(),phone:$('bs-tel').value.trim(),town:$('bs-post').value.trim(),sub:({mobile:'mobile',shop:'workshop',both:'mobile and workshop'}[k])+(b&&a?', bodywork and alloys':b?', bodywork':', alloys')+(ap?', insurance approved':''),approved:ap,insurers:ap?$('bs-insurers').value.trim():'',rates:{hour:b?+$('bs-hour').value:0,wheel:a?+$('bs-wheel').value:0,dcut:a&&k!=='mobile'?+$('bs-dcut').value:0}}}},
@@ -3997,7 +3998,8 @@ function logit(t){adm.log.unshift({t:Date.now(),by:window.GGuser.name,x:t})}
 function docRows(u){var s='';(u.docs||[]).forEach(function(d,i){s+='<div class="job"><div><b>'+esc(d.name)+(d.idtype?' ('+esc(d.idtype)+')':'')+'</b><small>'+esc(d.file)+(d.size?' ('+sz(d.size)+')':' (sample)')+'</small><small>Expires '+fmtD(d.exp)+'</small></div><div class="jp">'+flag(d.exp)+'</div><div class="jb"><button class="btn sm ghost" type="button" data-view="'+esc(u.email)+':'+i+'">View document</button></div></div>'});return s}
 /* MOT test centres are paid 82% of the official maximum for every class; we keep 18% (incl. VAT) */
 function motAgreedBox(u){if(u.role!=='mechanic'||u.sub!=='garage'||!(u.motOnly||+u.motBays>0||(u.rates&&(u.rates.motc||u.rates.mot))))return '';
-return '<div class="motag" style="margin-top:10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px"><b>MOT fee paid to this test centre</b><p class="note" style="margin:4px 0 0">Fixed, no negotiation: 82% of the official maximum for every class, £44.98 for a car MOT (class 4). We keep 18% (£9.87 on a car, including £1.65 VAT).</p></div>'}
+setTimeout(function(){if(window.MCvtsFill)window.MCvtsFill()},0);
+return '<div class="motag" style="margin-top:10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px"><p style="margin:0 0 8px"><b>DVSA test station number:</b> '+(u.vts?esc(u.vts)+' <span data-vtsq="'+esc(u.vts)+'" data-vtsn="'+esc(u.name||'')+'">checking the DVSA list…</span>':'<span style="color:#FCA5A5">none given</span>'+(u.sbid?'':' (sample account)'))+'</p><b>MOT fee paid to this test centre</b><p class="note" style="margin:4px 0 0">Fixed, no negotiation: 82% of the official maximum for every class, £44.98 for a car MOT (class 4). We keep 18% (£9.87 on a car, including £1.65 VAT).</p></div>'}
 function appCardBase(u){var ck=u.ck||[0,0,0,0,0],all=ck.every(Boolean);
 var bad=(u.docs||[]).some(function(d){return dleft(d.exp)<0});
 var s='<div class="card app" data-app="'+esc(u.email)+'"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><b style="font-size:1.05rem">'+esc(u.name)+'</b><div class="note">'+ROLES[u.role]+(u.sub?' ('+({mobile:'mobile mechanic',garage:'garage',autoelec:'auto electrician or locksmith'}[u.motOnly?'x':u.sub]||(u.motOnly?'MOT test station':u.sub))+(u.aeWhere?', '+u.aeWhere.toLowerCase():'')+')':'')+', '+esc(u.town||'')+'</div><div class="note">'+esc(u.email)+', '+esc(u.phone||'')+'</div></div><span class="stat">Submitted '+ago(u.submitted||Date.now())+'</span></div>'
@@ -4035,12 +4037,13 @@ var exp=appr.filter(function(u){return (u.docs||[]).some(function(d){return dlef
 var s='<div class="card" style="padding:12px 18px"><b>Your access:</b> '+(owner()?'Owner. You can approve, reject, suspend and reinstate partners.':'Reviewer. You can view documents, complete the checklist and recommend a decision. An owner makes the final decision.')+'</div>'+(adm.msg?'<div class="toast" role="status">'+esc(adm.msg)+'</div>':'')
 +'<div class="card"><div class="kpi"><div><b>'+pend.length+'</b>waiting for review</div><div><b>'+appr.length+'</b>approved</div><div><b>'+exp.length+'</b>documents expiring</div></div>'
 +'<label class="f" for="ad-role">Show</label><select id="ad-role"><option value="">All partner types</option>'+['mechanic','recovery','evcharge','body','tyres','valet','dealer'].map(function(r){return '<option value="'+r+'"'+(adm.role===r?' selected':'')+'>'+ROLES[r]+'</option>'}).join('')+'</select>'
-+'<div class="atabs" role="group" aria-label="Sections">'+[['pending','Pending ('+pend.length+')'],['approved','Approved ('+appr.length+')'],['declined','Declined or suspended ('+rej.length+')'],['cust','Customers ('+(window.MCadminCount?window.MCadminCount():0)+')'],['stats','Views and clicks'],['prep','Partner reports'],['rev','Reviews'],['log','Activity log'],['fb','Facebook feed']].concat(owner()?[['staff','Staff']]:[]).map(function(t){return '<button type="button" data-tab="'+t[0]+'" aria-pressed="'+(adm.tab===t[0]?'true':'false')+'">'+t[1]+'</button>'}).join('')+'</div></div>';
++'<div class="atabs" role="group" aria-label="Sections">'+[['pending','Pending ('+pend.length+')'],['approved','Approved ('+appr.length+')'],['declined','Declined or suspended ('+rej.length+')'],['cust','Customers ('+(window.MCadminCount?window.MCadminCount():0)+')'],['stats','Views and clicks'],['prep','Partner reports'],['rev','Reviews'],['mot','MOT bookings'],['log','Activity log'],['fb','Facebook feed']].concat(owner()?[['staff','Staff']]:[]).map(function(t){return '<button type="button" data-tab="'+t[0]+'" aria-pressed="'+(adm.tab===t[0]?'true':'false')+'">'+t[1]+'</button>'}).join('')+'</div></div>';
 if(adm.tab==='pending')s+=pend.length?pend.map(appCard).join(''):'<div class="card">No applications are waiting.</div>';
 if(adm.tab==='approved'){s+='<div class="card"><h2>Approved partners</h2>';appr.forEach(function(u){var soon=(u.docs||[]).some(function(d){return dleft(d.exp)<=30});s+=simpleRow(u,(soon?'<button class="btn sm ghost" type="button" data-remind="'+esc(u.email)+'">Send renewal reminder</button>':'')+'<button class="btn sm ghost" type="button" data-susp="'+esc(u.email)+'">Suspend</button><button class="btn sm ghost" type="button" data-view="'+esc(u.email)+':0">View documents</button>')+motAgreedBox(u)});if(!appr.length)s+='<p class="note">None yet.</p>';s+='</div>'}
 if(adm.tab==='declined'){s+='<div class="card"><h2>Declined or suspended</h2>';rej.forEach(function(u){s+=simpleRow(u,u.status==='suspended'?'<button class="btn sm" type="button" data-reinst="'+esc(u.email)+'">Reinstate</button>':'')});if(!rej.length)s+='<p class="note">None.</p>';s+='</div>'}
 if((adm.tab==='cust'||adm.tab==='stats'||adm.tab==='prep'||adm.tab==='rev')&&window.MCadminTab)s+='<div id="mc-atab">'+window.MCadminTab(adm.tab)+'</div>';
 if(adm.tab==='fb')s+=fbFeedHtml();
+if(adm.tab==='mot')s+='<div id="mc-amot">'+(window.MCadminMot?window.MCadminMot():'')+'</div>';
 if(adm.tab==='log'){s+='<div class="card"><h2>Activity log</h2>';adm.log.forEach(function(l){s+='<div class="job"><div><b>'+esc(l.x)+'</b><small>'+esc(l.by)+'</small></div><div class="jp"><small>'+ago(l.t)+'</small></div></div>'});s+='</div>'}
 if(adm.tab==='staff'&&owner()){
 s+='<div class="card"><h2>Staff</h2>';
@@ -5207,6 +5210,79 @@ window.MCMOT={table:T,payout:payout,
  read:read,
  ratesHtml:function(u){var have=u.rates&&u.rates.motc;if(!have){have={};have['4-car']=(u.rates&&u.rates.mot)||54.85}
   return '<h3 class="sh" style="margin-top:14px">MOT classes you test, and what we pay you</h3><p class="note" style="margin:0 0 8px">Tick each type of test you are authorised for. Customers pay the official maximum when they book online. We pay you 82% of the official fee for every test, for example £44.98 for a car MOT. Nothing else is taken from it.</p><div class="motlist" id="dm-list">'+rows('dm',have)+'</div><p class="note err" id="dm-err" role="alert"></p>'}};
+})();
+</script>
+<script>
+/* DVSA test station number (VTS): checked against the DVSA list of active MOT test stations (loaded by 'vts-sync') */
+(function(){function $(i){return document.getElementById(i)}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function norm(v){return String(v||'').toUpperCase().replace(/\s/g,'')}
+function fmt(r){return esc(r.name)+(r.postcode?', '+esc(r.postcode):'')+(r.classes&&r.classes.length?' (classes '+esc(r.classes.join(', '))+')':'')}
+function ask(n){return window.MCmotDb&&window.MCmotDb.checkVts?window.MCmotDb.checkVts(n).then(function(r){if(!r||r.error)throw r&&r.error;return r.data}):Promise.reject()}
+var inp=$('gvts'),msg=$('gvts-msg'),t=null,DEF=msg?msg.textContent:'';
+if(inp&&msg)inp.addEventListener('input',function(){clearTimeout(t);window.MCvtsLast=null;var v=norm(inp.value);msg.style.color='';
+ if(!v){msg.textContent=DEF;return}if(!/^(?=.*\d)[A-Z0-9]{4,8}$/.test(v)){msg.textContent='Station numbers are 4 to 8 letters and numbers, for example 0087B1.';return}
+ msg.textContent='Checking the DVSA list…';t=setTimeout(function(){ask(v).then(function(r){if(norm(inp.value)!==v)return;window.MCvtsLast=r;
+  if(r.found){msg.style.color='#86EFAC';msg.innerHTML='&#10003; Found in the DVSA list: '+fmt(r)+'.'}
+  else{msg.style.color='#FDE68A';msg.textContent='We could not find '+v+' in the latest DVSA list. Check the number, or carry on and our team will check it with you.'}},
+  function(){msg.textContent='We could not check the number just now. Carry on and our team will check it.'})},500)});
+/* admin: fill each "checking the DVSA list…" */
+window.MCvtsFill=function(){[].forEach.call(document.querySelectorAll('[data-vtsq]:not([data-done])'),function(el){el.setAttribute('data-done','1');
+ ask(el.getAttribute('data-vtsq')).then(function(r){if(r.found){var same=String(r.name||'').toLowerCase().replace(/[^a-z]/g,'').slice(0,6)===String(el.getAttribute('data-vtsn')).toLowerCase().replace(/[^a-z]/g,'').slice(0,6);
+  el.innerHTML='<span style="color:#86EFAC">&#10003; in the DVSA list:</span> '+fmt(r)+(same?'':' <span style="color:#FDE68A">(name differs from the application: check it is the same business)</span>')}
+  else el.innerHTML='<span style="color:#FCA5A5">&#10007; not in the latest DVSA list. Check with the applicant before approving.</span>'},
+ function(){el.textContent='(could not check just now)'})})};
+})();
+</script>
+<script>
+/* Staff: online MOT bookings, with cancel and refund. Real bookings come from the database (staff only);
+   the demo admin sees the demo garage's online bookings kept in this browser. Only the owner can cancel. */
+(function(){
+var ST={rows:null,err:'',open:null,busy:false},LS='mc-motdiary';
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function m(n){return '£'+(+n||0).toFixed(2)}
+function tm(x){var h=Math.floor(x/60),mm=x%60,ap=h>=12?'pm':'am';h=h%12||12;return h+':'+(mm<10?'0':'')+mm+ap}
+function dl(k){return new Date(k+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
+function store(){try{return JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){return{}}}
+function put(S){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function owner(){var u=window.GGuser;return !!(u&&u.level==='owner')}
+function real(){var u=window.GGuser;return !!(u&&u.sbid)}
+function demoRows(){var S=store(),R=S['demo-kr']||{},out=[];
+ (R.online||[]).forEach(function(o){out.push({id:'ls:'+o.id,slot_day:o.day,slot_start:o.start,status:'confirmed',customer_name:o.cust,customer_phone:o.phone,vehicle:{reg:o.reg},partner_name:'Kirkstall Road Garage',price_total:o.total||54.85,partner_payout:o.pay,summary:o.label})});
+ (S.cancelled||[]).forEach(function(c){out.push(c)});return out.sort(function(a,b){return (a.slot_day+a.slot_start)<(b.slot_day+b.slot_start)?-1:1})}
+function load(){if(!real()){ST.rows=demoRows();return}
+ if(ST.busy||!window.MCmotDb)return;ST.busy=true;window.MCmotDb.staffList().then(function(r){ST.busy=false;if(r&&r.error){ST.err='Could not load bookings: '+r.error.message;ST.rows=[]}else{ST.rows=r.data||[];ST.err=''}draw()},function(){ST.busy=false;ST.err='Could not load bookings. Check your connection.';ST.rows=[];draw()})}
+function draw(){var el=document.getElementById('mc-amot');if(el)el.innerHTML=html()}
+function row(b){var c=b.status==='cancelled',reg=b.vehicle&&b.vehicle.reg?String(b.vehicle.reg).toUpperCase():'',open=ST.open===b.id;
+ var s='<div class="job"><div><b>'+(b.slot_day?dl(b.slot_day)+', '+tm(b.slot_start):'')+' &middot; '+esc(b.partner_name||'')+'</b><small>'+esc(b.customer_name||'')+(b.customer_phone?', '+esc(b.customer_phone):'')+(reg?' &middot; '+esc(reg):'')+'</small>'
+  +'<small>Paid '+m(b.price_total)+' &middot; garage '+m(b.partner_payout)+' &middot; ours '+m((+b.price_total||0)-(+b.partner_payout||0))+'</small>'
+  +(c?'<small><span class="sst" style="background:#FECACA;color:#7A1010">Cancelled</span> '+esc(b.cancel_reason||'')+(b.refund_amount>0?' &middot; refund '+m(b.refund_amount)+(b.refund_status==='refunded'?' <b>refunded</b>':' <b style="color:#FDE68A">due: refund it in Stripe, then mark it</b>'):'')+'</small>':'')+'</div>'
+  +'<div class="jb">'+(owner()?(c?(b.refund_status==='due'?'<button class="btn sm" type="button" data-mref="'+esc(b.id)+'">Mark refunded</button>':''):'<button class="btn sm ghost" type="button" data-mcan="'+esc(b.id)+'">Cancel and refund</button>'):'')+'</div></div>';
+ if(open&&!c)s+='<div class="card dform" style="margin:6px 0 12px"><b>Cancel this MOT and refund the customer</b><p class="note" style="margin:4px 0 8px">The time is freed in the garage&rsquo;s diary, and the customer and the garage are told by email and text. Nothing is paid to the garage for a cancelled booking.</p>'
+  +'<label class="f" for="mc-why">Reason</label><select id="mc-why"><option>Customer asked to cancel</option><option>Garage cannot do it</option><option>Booked the wrong class or vehicle</option><option>Duplicate booking</option><option>Other</option></select>'
+  +'<label class="f" for="mc-amt">Refund to the customer (£)</label><input type="number" id="mc-amt" min="0" max="'+(+b.price_total).toFixed(2)+'" step="0.01" value="'+(+b.price_total).toFixed(2)+'"><p class="note err" id="mc-err" role="alert"></p>'
+  +'<div class="dtools"><button class="btn sm" type="button" data-mgo="'+esc(b.id)+'">Cancel booking and refund</button><button class="btn sm ghost" type="button" data-mclose>Keep the booking</button></div></div>';
+ return s}
+function html(){if(ST.rows===null){load();if(ST.rows===null)return '<div class="card"><h2>MOT bookings</h2><p class="note">Loading…</p></div>'}
+ var L=ST.rows,act=L.filter(function(b){return b.status!=='cancelled'}),due=L.filter(function(b){return b.refund_status==='due'});
+ var s='<div class="card"><h2>MOT bookings</h2><p class="note" style="margin:0 0 10px">Online MOT bookings from the last 30 days onwards.'+(real()?'':' Sample: the demo garage&rsquo;s bookings made in this browser.')+(owner()?'':' Only the owner can cancel bookings.')+'</p>'
+  +'<div class="kpi"><div><b>'+act.length+'</b>booked</div><div><b>'+m(act.reduce(function(a,b){return a+((+b.price_total||0)-(+b.partner_payout||0))},0))+'</b>our share</div><div><b>'+due.length+'</b>refunds due</div></div>'
+  +(ST.err?'<p class="note err">'+esc(ST.err)+'</p>':'')+(L.length?L.map(row).join(''):'<p class="note">No online MOT bookings yet.</p>')
+  +'<div class="dtools"><button class="btn sm ghost" type="button" data-mreload>Refresh</button></div></div>';return s}
+window.MCadminMot=function(){if(!real())ST.rows=demoRows();return html()};
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-amot button');if(!t)return;var a=t.dataset;
+ if(a.mreload!=null){ST.rows=null;draw();return}
+ if(a.mclose!=null){ST.open=null;draw();return}
+ if(a.mcan){if(!owner())return;ST.open=a.mcan;draw();var w=document.getElementById('mc-why');if(w)w.focus();return}
+ if(a.mgo){if(!owner())return;var id=a.mgo,why=document.getElementById('mc-why').value,amt=Math.round(+document.getElementById('mc-amt').value*100)/100,b=ST.rows.filter(function(x){return x.id===id})[0],er=document.getElementById('mc-err');
+  if(!b)return;if(!(amt>=0)||amt>+b.price_total){er.textContent='Enter a refund between £0.00 and '+m(b.price_total)+'.';return}
+  if(id.indexOf('ls:')===0){var S=store(),R=S['demo-kr']||{},oid=id.slice(3);R.online=(R.online||[]).filter(function(o){return o.id!==oid});S['demo-kr']=R;
+   S.cancelled=(S.cancelled||[]).concat([Object.assign({},b,{id:'c:'+oid,status:'cancelled',cancel_reason:why,refund_amount:amt,refund_status:amt>0?'due':null})]);put(S);ST.open=null;ST.rows=demoRows();draw();return}
+  t.disabled=true;t.textContent='Cancelling…';window.MCmotDb.staffCancel(id,why,amt).then(function(r){if(r&&r.error)throw r.error;ST.open=null;ST.rows=null;draw();if(window.MCmotDb.notify)window.MCmotDb.notify(id)})
+   .catch(function(x){t.disabled=false;t.textContent='Cancel booking and refund';er.textContent=/already_cancelled/.test(String(x&&x.message))?'This booking is already cancelled.':'Not cancelled: '+(x&&x.message||'check your connection')+'.'});return}
+ if(a.mref){if(!owner())return;var rid=a.mref;
+  if(rid.indexOf('c:')===0){var S2=store();(S2.cancelled||[]).forEach(function(c){if(c.id===rid)c.refund_status='refunded'});put(S2);ST.rows=demoRows();draw();return}
+  t.disabled=true;window.MCmotDb.staffRefunded(rid).then(function(){ST.rows=null;draw()},function(){t.disabled=false})}});
 })();
 </script>
 <script>
@@ -7667,6 +7743,10 @@ window.MCmotDb={garages:function(){return DIR.filter(function(p){return p.role==
  agreed:function(id){return ready.then(function(){return sb.from('partners').select('mot_agreed').eq('id',id).maybeSingle()})},
  setAgreed:function(id,v){return ready.then(function(){return sb.from('partners').update({mot_agreed:v}).eq('id',id).select('id')})},
  move:function(o){return ready.then(function(){return sb.rpc('move_online_booking',o)})},
+ checkVts:function(n){return ready.then(function(){return sb.rpc('check_vts',{p_number:n})})},
+ staffList:function(){return ready.then(function(){return sb.rpc('staff_mot_bookings',{})})},
+ staffCancel:function(id,reason,amt){return ready.then(function(){return sb.rpc('staff_cancel_mot',{p_booking:id,p_reason:reason,p_refund:amt})})},
+ staffRefunded:function(id){return ready.then(function(){return sb.rpc('staff_mark_refunded',{p_booking:id})})},
  notify:function(id){return ready.then(function(){return sb.functions.invoke('notify',{body:{booking_id:id}})}).catch(function(){})}};
 /* ---------- bookings: partner sees them, customer sees the status ---------- */
 function hub(){return window.MChub&&window.MChub.state?window.MChub.state():null}
