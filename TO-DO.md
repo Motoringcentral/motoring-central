@@ -251,6 +251,22 @@ Still to do:
 - Payout, no negotiation (19 Nov 2026): we pay 82% of the official maximum for every class and keep 18% (incl. VAT).
   Car (class 4) £44.98; motorcycle £24.31; class 7 £48.05; class 5 (17+ seats) £66.13. Database: private.mot_payout.
 
+### Repairs pricing: OWNER THINKING IT OVER (discussed 19 Nov 2026, nothing built or decided yet)
+- Problem: repair prices on the site are sample figures (made-up hours and parts, same for every car).
+- Pricing by vehicle size rejected by the owner: labour time depends on exact model/engine (e.g. Ranger vs Navara).
+- Proper price = labour time for that exact vehicle (licensed data by reg) x partner's own hourly rate + parts for that
+  vehicle + fees. Data options to ask for API quotes: Autodata API, HaynesPro (Infopro), J.D. Power Repair Estimate
+  (Glass's). Parts: supplier trade account (Euro Car Parts, GSF) or partner adds parts price.
+- Idea until data is licensed: "Get a fixed quote" (partners see the exact vehicle and send a fixed price), with the
+  instant-price engine built but switched off.
+- Owner's view: with quotes, a % fee invites going direct, so repairs should move to a subscription.
+- Ideas raised (not agreed): free until 31 May 2027, then e.g. £49 + VAT (mobile) / £99 + VAT (garage) a month;
+  no customer booking fee on repairs; quotes within 2 hours; phone numbers hidden until a quote is accepted;
+  pay after the job, guaranteed warranty; local and job pages for Google; licence the data soon after Saturday.
+- Competitors: ClickMechanic (instant prices, pay online, 12-month warranty), BookMyGarage (free for customers,
+  pay the garage), WhoCanFixMyCar (quotes).
+- After this is settled: one video for mobile mechanics and one for garages, same audio.
+
 ### Intro video (customer) – next time it is updated
 - Add the advantage of booking through us: customers can book any time, day or night, even when the garage is closed
   (asked 19 Nov 2026). Also update MOT pricing in it (official maximum, no extra booking fee) if it is mentioned.
