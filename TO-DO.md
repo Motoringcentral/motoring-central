@@ -46,9 +46,23 @@ This is the running list of work still to do before launch. When the owner asks
      dealer_reviews).
    - When the real registration look-up is on: check that CO2 and fuel economy come through (needed for road tax on
      cars registered before April 2017); Claude can check with VDG_DEBUG.
-9. Optional: ask Claude for a one-page dealer pitch (prices, what is included, 3 months free) to send to dealers.
+9. FCA: decided 19 Nov 2026 to wait until the business is making money. Finance stays switched off. Until then,
+   build as much as possible for the pre-launch (below).
+10. Optional: ask Claude for a one-page dealer pitch (prices, what is included, 3 months free) to send to dealers.
 
 Preview site: https://preview.motoringcentral.co.uk
+
+### Pre-launch build plan (no FCA needed), in order
+1. Email service set up (item 7), then: sign-up and booking emails, advert approved/declined emails, buyer message and
+   viewing emails, saved-search alerts, price-drop alerts, saved cars kept in the account.
+2. "Sell to local dealers" (private sellers get bids from our dealers; fee per car bought).
+3. Stock feeds updating overnight on their own; staff screen to remove unfair dealer reviews.
+4. Payments (Stripe, needs the company and business bank account): take real payments for private adverts, dealer
+   plans, premium adverts and booking fees, in place of the preview payment screen.
+5. Real registration look-up and history checks switched on (Vehicle Data Global), MOT history (DVSA).
+6. Launch checks: privacy notice, cookie notice and terms checked by the solicitor; Supabase on the Pro plan;
+   remove "noindex" so Google can list the site; real domain (motoringcentral.co.uk) pointed at the site.
+Later, once the business is making money: FCA credit broking permission, then finance quotes and online reservations.
 
 ## To do
 
