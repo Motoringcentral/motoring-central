@@ -357,8 +357,8 @@ Option to consider: a soft launch taking quote requests only, before full bookin
 
 ## Done
 - 19 Nov 2026 (night): dealer, car sales and MOT tools (no email, Stripe or paid data needed).
-  - Windscreen cards (A4, colour): the dealer's logo, name, town, website, rating and phone, in a colour taken from
-    their logo (navy if no logo), with the car photo, price (and saving if reduced), details and a QR code
+  - Windscreen cards (A4, colour): the dealer's logo, name, town, website, rating and phone, in our website's blue theme
+    (sky blue header, navy price and footer), with the car photo, price (and saving if reduced), details and a QR code
     that opens the advert). "Print windscreen cards for all" on the dealer dashboard. QR library: js/qrcode.min.js (MIT).
   - Advert links: ?ad=<advert id>#cars or #vans opens one advert ("Copy the advert link" on the seller's own advert).
   - Stock age and price tips on "How your adverts are doing": days listed (recorded by our server, data.since),
