@@ -182,6 +182,13 @@ Still to do:
 - Garage opening hours and MOT length per garage (now fixed at 8am to 6pm, Monday to Saturday, 1 hour per test).
 - Real garages in the garage repair booking list too (same live diary, workshop bays).
 
+### Intro video (customer) – next time it is updated
+- Add the advantage of booking through us: customers can book any time, day or night, even when the garage is closed
+  (asked 19 Nov 2026). Also update MOT pricing in it (official maximum, no extra booking fee) if it is mentioned.
+- Garage MOT video (video/garage-mot.mp4, 19 Nov 2026) shows on the join form only when "Garage" is chosen
+  (not for "MOT test station"). Voice: Kokoro bf_emma (same British female voice as the intro and dealer videos).
+
+
 ### 2. Guided check: keeping the repair on the site (next steps)
 The guided check is live in the search (see Done, 18 Nov 2026). Two parts are still to build, so a booking that starts
 as "find the fault" still earns a fee on the repair:
