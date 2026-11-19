@@ -6596,7 +6596,7 @@ document.addEventListener('click',function(e){if(!e.target.closest)return;
  var a=e.target.closest('[data-pva]');if(!a)return;var id=+a.getAttribute('data-id'),k=a.getAttribute('data-k')||'cars',A=api(k),c=find(k,id),act=a.getAttribute('data-pva');if(!c)return;
  if(act==='view'){location.hash=k;setTimeout(function(){A.open(id)},150)}
  else if(act==='sold'||act==='del'){A.act(id,'remove');account()}
- else if(act==='renew')window.GGpay({amount:FEE,desc:'Renew advert: '+c.year+' '+c.make+' '+c.model,sub:'Another '+DAYS+' days. Price includes VAT.',incvat:1,onPaid:function(){c.exp=Math.max(c.exp,Date.now())+DAYS*DAY;A.reset();account()}});
+ else if(act==='renew')window.GGpay({amount:FEE,desc:'Renew advert: '+c.year+' '+c.make+' '+c.model,sub:'Another '+DAYS+' days. Price includes VAT.',incvat:1,onPaid:function(){c.exp=Math.max(c.exp,Date.now())+DAYS*DAY;A.reset();account();if(window.MCrenew)window.MCrenew(c)}});
  else if(act==='prem')premium(c,account,k)});
 function premium(c,done,k){window.GGpay({amount:PREM,desc:'Premium advert: '+c.year+' '+c.make+' '+c.model,sub:'Front-page banner and Featured label for 2 weeks, or until sold. Price includes VAT.',incvat:1,onPaid:function(){api(k||'cars').act(c.id,'feature');if(done)done()}})}
 /* after logging in or registering from "Sell your car", carry on to the form */
@@ -7892,6 +7892,7 @@ function msgLine(m,t){var mine=m.from_role===t.me,who=mine?'You':(m.from_role===
  else if(m.kind==='viewing_no')body='<b>That time does not suit: '+E(w)+'</b>'+(m.body?'<br>'+E(m.body):'');
  else body=E(m.body);
  var act='';if(m.kind==='viewing'&&t.me==='seller'&&!t.list.some(function(x){return (x.kind==='viewing_ok'||x.kind==='viewing_no')&&x.meta&&x.meta.of===m.id}))act='<div class="mx-act"><button type="button" class="btn sm" data-vwans="ok" data-mid="'+m.id+'">Confirm</button> <button type="button" class="btn sm ghost" data-vwans="no" data-mid="'+m.id+'">Suggest another time</button></div>';
+ if(m.meta&&m.meta.px)body+=pxLine(m.meta.px);
  return '<div class="mx-m'+(mine?' me':'')+'"><small>'+E(who)+' · '+E(dt(m.created_at))+'</small><p>'+body+'</p>'+act+'</div>'}
 var OPEN={},DRAFT={};
 function inboxHtml(){var L=threads(),n=L.filter(function(t){return t.unread}).length;
@@ -7918,7 +7919,7 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
 /* a buyer's message on an advert saved in the database goes to the seller */
 document.addEventListener('submit',function(e){var f=e.target;if(!f||(f.id!=='cd-enq'&&f.id!=='vd-enq'))return;var k=f.id==='cd-enq'?'en':'ven',c=advBy(f.getAttribute('data-k'),f.getAttribute('data-ad'));
  setTimeout(function(){var ok=$(k+'-ok');if(!c||!c.dbid||!ok||ok.hidden||!realUser())return;
-  ok.textContent='Sending…';sendMsg({advert_id:c.dbid,buyer_id:window.GGuser.sbid,from_role:'buyer',kind:'msg',body:($(k+'-m').value||'').trim().slice(0,2000),meta:{name:($(k+'-n').value||'').trim().slice(0,120),phone:($(k+'-p').value||'').trim().slice(0,30)}}).then(function(){ok.textContent='Message sent to '+(c.dealer||'the seller')+'. Their reply will appear in My account, under Messages.'},function(x){ok.hidden=true;var er=$(k+'-err');if(er)er.textContent=(x&&x.code==='P0001'&&x.message)||'Your message was not sent. Check your connection and try again.'})},60)});
+  ok.textContent='Sending…';sendMsg({advert_id:c.dbid,buyer_id:window.GGuser.sbid,from_role:'buyer',kind:'msg',body:($(k+'-m').value||'').trim().slice(0,2000),meta:(function(){var mt={name:($(k+'-n').value||'').trim().slice(0,120),phone:($(k+'-p').value||'').trim().slice(0,30)},px=pxOf(f);if(px)mt.px=px;return mt})()}).then(function(){ok.textContent='Message sent to '+(c.dealer||'the seller')+'. Their reply will appear in My account, under Messages.'},function(x){ok.hidden=true;var er=$(k+'-err');if(er)er.textContent=(x&&x.code==='P0001'&&x.message)||'Your message was not sent. Check your connection and try again.'})},60)});
 /* removing or marking sold an advert saved in the database */
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#cd-sold,#cd-del,#vd-sold,#vd-del');if(!b||!sb)return;var f=$(b.id.slice(0,2)==='cd'?'cd-enq':'vd-enq');if(!f)return;var c=advBy(f.getAttribute('data-k'),f.getAttribute('data-ad'));
  if(c&&c.dbid&&realUser()&&c.ownerId===window.GGuser.sbid)sb.from('adverts').update({status:'removed'}).eq('id',c.dbid).then(function(r){if(r.error)toast('That advert was not removed for other people. Try again.',true)})},true);
@@ -7928,7 +7929,7 @@ function detail(c,kind,mine){var h=mine?reviewBox(c,kind):'';
  if(!mine)h+='<div class="card vw-box" style="margin-top:12px" data-vwk="'+kind+'" data-vwid="'+c.id+'"><b>Book a viewing or test drive</b><p class="note" style="margin:4px 0 8px">Pick a day and time. The seller confirms by message.</p>'+
   '<div class="two"><div><label class="f">Day</label><input type="date" class="vw-d" min="'+new Date().toISOString().slice(0,10)+'"></div><div><label class="f">Time</label><select class="vw-t">'+slots()+'</select></div></div>'+
   '<label style="display:flex;gap:8px;align-items:center;margin-top:10px"><input type="checkbox" class="vw-dr" style="width:20px;height:20px"> I would like a test drive</label>'+
-  '<label class="f">Anything the seller should know? (optional)</label><input type="text" class="vw-n" maxlength="300" placeholder="For example: I have a part exchange">'+
+  '<label class="f">Anything the seller should know? (optional)</label><input type="text" class="vw-n" maxlength="300" placeholder="For example: I would like to bring my own mechanic">'+(c.private?'':pxHtml())+
   '<p class="err vw-e" role="alert"></p><button type="button" class="btn block" data-vwgo="1">Request a viewing</button><p class="okmsg vw-ok" hidden></p></div>';
  h+='<div class="mot-box" data-mot="'+kind+':'+c.id+'"></div>';
  h+='<p style="margin:10px 0 0">'+cmpBtn(c,kind)+'</p><div class="mc-rv"></div>'+(mine?'<div class="mc-st"></div>':'');
@@ -7939,7 +7940,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
  var u=window.GGuser;if(!u){if(window.GGcustOpen)window.GGcustOpen('Create a free account or log in to book a viewing.','in');return}
  var drive=box.querySelector('.vw-dr').checked,note=box.querySelector('.vw-n').value.trim();
  if(!c||!c.dbid||!realUser()){ok.hidden=false;ok.textContent='Request sent to '+(c&&c.dealer||'the seller')+' for '+dt(when)+'. Sample advert: preview only, nothing was sent.';return}
- b.disabled=true;sendMsg({advert_id:c.dbid,buyer_id:u.sbid,from_role:'buyer',kind:'viewing',body:note.slice(0,300),meta:{when:when.toISOString(),drive:drive,name:u.name||'',phone:u.phone||''}}).then(function(){b.disabled=false;ok.hidden=false;ok.textContent='Request sent to '+(c.dealer||'the seller')+' for '+dt(when)+'. You will see their answer in My account, under Messages.'},function(x){b.disabled=false;er.textContent=(x&&x.code==='P0001'&&x.message)||'Your request was not sent. Check your connection and try again.'})});
+ b.disabled=true;sendMsg({advert_id:c.dbid,buyer_id:u.sbid,from_role:'buyer',kind:'viewing',body:note.slice(0,300),meta:(function(){var mt={when:when.toISOString(),drive:drive,name:u.name||'',phone:u.phone||''},px=pxOf(box);if(px)mt.px=px;return mt})()}).then(function(){b.disabled=false;ok.hidden=false;ok.textContent='Request sent to '+(c.dealer||'the seller')+' for '+dt(when)+'. You will see their answer in My account, under Messages.'},function(x){b.disabled=false;er.textContent=(x&&x.code==='P0001'&&x.message)||'Your request was not sent. Check your connection and try again.'})});
 /* MOT history */
 var MOTC={};
 function motSample(c){var yr=+c.year||2018,first=yr+3,now=new Date().getFullYear(),mi=+c.miles||40000,T=[],per=Math.max(3000,Math.round(mi/Math.max(1,now-yr)));
@@ -8255,6 +8256,110 @@ setInterval(function(){try{enhance();cmpBar();drawStats();feedAuto();if(Date.now
 setInterval(function(){try{drawInbox(false);dashTools();adminCard();drawQueue(false);fillMot();if(SHOW&&/^#(cars|vans)/.test(location.hash||''))applyShowroom()}catch(e){}},1200);
 setInterval(function(){if(realUser()&&!document.hidden)pullMsgs()},20000);
 var lastMsgWho='';setInterval(function(){var u=window.GGuser,w=u&&u.sbid?u.sbid:'';if(w!==lastMsgWho){lastMsgWho=w;MSG=[];msgSig='';var o=$('mc-inbox');if(o)o.remove();if(w)pullMsgs()}},1500);
+/* ---------- 19 Nov 2026: leads inbox, part exchange, price reduced, renewals, seller stats, reports, safety tips ---------- */
+var DAYMS=864e5;
+function gbp0(n){return '£'+Number(n||0).toLocaleString('en-GB')}
+/* price reduced: worked out on our server when a seller lowers the price; shown for 30 days */
+function reduced(c){var w=+c.was,p=+c.price;return (w>p&&c.reduced_at&&Date.now()-Date.parse(c.reduced_at)<30*DAYMS)?w-p:0}
+function redBadges(){['cars','vans'].forEach(function(k){var L=$(k+'-list');if(!L)return;[].forEach.call(L.querySelectorAll('[data-fav]'),function(h){var art=h.closest('article')||h.parentNode&&h.parentNode.parentNode;if(!art||art.querySelector('.redb'))return;var c=advBy(k,h.getAttribute('data-fav')),r=c&&reduced(c);if(!r)return;var lp=art.querySelector('.lprice');if(lp)lp.insertAdjacentHTML('beforeend',' <span class="redb">Reduced '+gbp0(r)+'</span>')})})}
+/* part exchange: the buyer's reg and mileage go with their message or viewing request (dealer adverts only) */
+function pxHtml(pre){return '<details class="pxbox"><summary>Got a car to part exchange? (optional)</summary><div class="two"><div><label class="f">Its registration</label><input type="text" class="px-r up" maxlength="8" autocomplete="off" placeholder="e.g. AB12 CDE"></div><div><label class="f">Its mileage</label><input type="number" class="px-m" min="0" max="999999" inputmode="numeric" placeholder="e.g. 45000"></div></div><p class="note" style="margin:4px 0 0">The dealer sees the make and model, so they can value it before you arrive.</p></details>'}
+function pxOf(box){if(!box)return null;var r=box.querySelector('.px-r'),m=box.querySelector('.px-m');if(!r)return null;var reg=String(r.value||'').toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8),mi=Math.round(+String(m&&m.value||'').replace(/[^0-9]/g,''));return reg.length>=2?{reg:reg,miles:mi>0?mi:null}:null}
+function pxLine(px){if(!px||!px.reg)return '';return '<div class="pxl"><b>Part exchange:</b> '+E(px.reg)+(px.miles?', '+Number(px.miles).toLocaleString('en-GB')+' miles':'')+' <button type="button" class="pv-link" data-pxlook="'+E(px.reg)+'">Show the car</button><span class="pxv"></span></div>'}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-pxlook]');if(!b)return;var reg=b.getAttribute('data-pxlook'),out=b.parentNode.querySelector('.pxv'),M=window.MCvrm;b.disabled=true;out.textContent=' Looking it up…';
+ (M&&M.checkLive?M.checkLive():Promise.resolve()).then(function(){return M&&M.ready?M.ready(reg):'off'}).then(function(st){var d=st==='none'||st==='error'?null:(M?M.lookup(reg):null);out.textContent=d&&d.make?' '+[d.year,d.make,d.model,d.variant,d.fuel,d.col].filter(Boolean).join(', '):' We could not find that registration.';b.hidden=true},function(){b.disabled=false;out.textContent=' The look-up did not work. Try again.'})});
+/* leads: every buyer conversation on the seller's adverts, with a status, note and follow-up date */
+var LEADS={},LF='open',leadSig='',leadsAt=0,LOPEN={};
+var LST={new:'New',contacted:'Contacted',viewing:'Viewing booked',sold:'Sold',lost:'Lost'};
+function pullLeads(){if(!realUser())return;var u=window.GGuser;leadsAt=Date.now();sb.from('advert_leads').select('*').eq('seller_id',u.sbid).limit(2000).then(function(r){if(r.error||window.GGuser!==u)return;var L={};(r.data||[]).forEach(function(x){L[x.advert_id+':'+x.buyer_id]=x});LEADS=L;leadSig='';drawLeads(true)})}
+function leadList(){return threads().filter(function(t){return t.me==='seller'})}
+function stateOf(t){var x=LEADS[t.key];if(x)return x.status;if(t.list.some(function(m){return m.kind==='viewing_ok'}))return 'viewing';if(t.list.some(function(m){return m.from_role==='seller'}))return 'contacted';return 'new'}
+function today(){return new Date().toISOString().slice(0,10)}
+function due(t){var x=LEADS[t.key],s=stateOf(t);return !!(x&&x.follow_up&&x.follow_up<=today()&&s!=='sold'&&s!=='lost')}
+function leadsHtml(){var L=leadList();if(!L.length)return '';var C={new:0,contacted:0,viewing:0,sold:0,lost:0},D=0,m0=new Date();m0.setDate(1);m0.setHours(0,0,0,0);var mon={n:0,v:0,s:0};
+ L.forEach(function(t){var s=stateOf(t);C[s]++;if(due(t))D++;if(Date.parse(t.list[0].created_at)>=+m0)mon.n++;if(s==='viewing'&&Date.parse(t.last.created_at)>=+m0)mon.v++;var x=LEADS[t.key];if(s==='sold'&&x&&Date.parse(x.updated_at)>=+m0)mon.s++});
+ var V=L.filter(function(t){var s=stateOf(t);return LF==='open'?(s==='new'||s==='contacted'||s==='viewing'):LF==='due'?due(t):LF==='all'?true:s===LF}).sort(function(a,b){return (due(b)-due(a))||(Date.parse(b.last.created_at)-Date.parse(a.last.created_at))});
+ var h='<div class="card" id="mc-leads"><h2>Your leads'+(C.new?' <span class="mx-n">'+C.new+' new</span>':'')+'</h2><p class="note" style="margin:0 0 8px">Every buyer who has messaged you or asked for a viewing. Keep track of who you have called, set a follow-up date and mark the sale. Only you can see this.</p>'+
+  '<p class="ld-mon">This month: <b>'+mon.n+'</b> new lead'+(mon.n===1?'':'s')+' · <b>'+mon.v+'</b> viewing'+(mon.v===1?'':'s')+' · <b>'+mon.s+'</b> sold</p>'+
+  (D?'<p class="ld-due">&#9888; '+D+' follow-up'+(D===1?'':'s')+' due today or overdue</p>':'')+
+  '<div class="ld-f" role="group" aria-label="Show leads">'+[['open','Open',C.new+C.contacted+C.viewing],['due','Follow up',D],['new','New',C.new],['contacted','Contacted',C.contacted],['viewing','Viewing booked',C.viewing],['sold','Sold',C.sold],['lost','Lost',C.lost],['all','All',L.length]].map(function(f){return '<button type="button" data-lf="'+f[0]+'" aria-pressed="'+(LF===f[0])+'">'+f[1]+' <span>'+f[2]+'</span></button>'}).join('')+'</div>';
+ if(!V.length)h+='<p class="note" style="margin:8px 0 0">No leads here.</p>';
+ V.slice(0,60).forEach(function(t){var s=stateOf(t),x=LEADS[t.key]||{},c=advByDb(t.advert_id),px=null,vw=null;t.list.forEach(function(m){if(m.meta&&m.meta.px)px=m.meta.px;if(m.kind==='viewing')vw=m});var first=t.list.filter(function(m){return m.from_role==='buyer'&&m.body})[0];
+  h+='<details class="ld'+(due(t)?' due':'')+'" data-lk="'+t.key+'"'+(LOPEN[t.key]?' open':'')+'><summary><span class="ld-s ld-'+s+'">'+LST[s]+'</span><b>'+E(t.buyer||'Buyer')+'</b><small>'+E(t.title||'Advert')+(c?' · '+gbp0(c.price):'')+' · '+E(dd(t.last.created_at))+(due(t)?' · <b>Follow up</b>':'')+'</small></summary><div class="ld-b">'+
+   (t.phone?'<p style="margin:0 0 6px"><a class="btn sm" href="tel:'+E(String(t.phone).replace(/[^0-9+]/g,''))+'">Call '+E(t.phone)+'</a></p>':'')+
+   (first?'<p class="ld-q">&ldquo;'+E(String(first.body).slice(0,240))+'&rdquo;</p>':'')+
+   (vw?'<p class="note" style="margin:0 0 6px">'+(vw.meta&&vw.meta.drive?'Test drive':'Viewing')+' asked for '+E(vw.meta&&vw.meta.when?dt(vw.meta.when):'')+'</p>':'')+pxLine(px)+
+   '<div class="two"><div><label class="f">Status</label><select data-ls="'+t.key+'">'+Object.keys(LST).map(function(k){return '<option value="'+k+'"'+(k===s?' selected':'')+'>'+LST[k]+'</option>'}).join('')+'</select></div><div><label class="f">Follow up on</label><input type="date" data-lfu="'+t.key+'" value="'+E(x.follow_up||'')+'"></div></div>'+
+   '<label class="f">Your notes</label><textarea rows="2" maxlength="1000" data-ln="'+t.key+'" placeholder="For example: wants £500 for his part exchange, call back Friday">'+E(x.note||'')+'</textarea>'+
+   '<div class="ld-a"><button type="button" class="btn sm" data-lsave="'+t.key+'">Save</button> <button type="button" class="btn sm ghost" data-lchat="'+t.key+'">Open the conversation</button></div><p class="err" data-le="'+t.key+'" role="alert"></p></div></details>'});
+ return h+'</div>'}
+function drawLeads(force){if(!realUser())return;var u=window.GGuser,inbox=$('mc-inbox');var host=u.role==='customer'?(location.hash==='#account'?$('acc-body'):null):(location.hash==='#dashboard'?$('dash-body'):null);var old=$('mc-leads');
+ if(!host||!inbox){return}if(!leadsAt||Date.now()-leadsAt>60000)pullLeads();
+ var html=leadsHtml(),sig=html.length+':'+LF+':'+JSON.stringify(LEADS).length+':'+msgSig;if(old&&!force&&sig===leadSig)return;if(old&&old.contains(document.activeElement))return;leadSig=sig;
+ if(!html){if(old)old.remove();return}var d=document.createElement('div');d.innerHTML=html;var card=d.firstChild;if(old)old.parentNode.replaceChild(card,old);else inbox.parentNode.insertBefore(card,inbox)}
+document.addEventListener('toggle',function(e){var t=e.target;if(t.matches&&t.matches('details.ld'))LOPEN[t.getAttribute('data-lk')]=t.open},true);
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ var f=t.closest('[data-lf]');if(f){LF=f.getAttribute('data-lf');drawLeads(true);return}
+ var ch=t.closest('[data-lchat]');if(ch){var k=ch.getAttribute('data-lchat');OPEN[k]=true;drawInbox(true);var el=document.querySelector('details.mx-t[data-tk="'+k+'"]');if(el){el.open=true;el.scrollIntoView({behavior:'smooth',block:'start'});var ta=el.querySelector('textarea');if(ta)setTimeout(function(){ta.focus({preventScroll:true})},500)}return}
+ var sv=t.closest('[data-lsave]');if(!sv||!realUser())return;var key=sv.getAttribute('data-lsave'),th=leadList().filter(function(x){return x.key===key})[0],er=document.querySelector('[data-le="'+key+'"]');if(!th)return;
+ var row={seller_id:window.GGuser.sbid,advert_id:th.advert_id,buyer_id:th.buyer_id,status:document.querySelector('[data-ls="'+key+'"]').value,follow_up:document.querySelector('[data-lfu="'+key+'"]').value||null,note:(document.querySelector('[data-ln="'+key+'"]').value||'').trim().slice(0,1000)||null,updated_at:new Date().toISOString()};
+ sv.disabled=true;sb.from('advert_leads').upsert(row,{onConflict:'advert_id,buyer_id'}).select('*').then(function(r){sv.disabled=false;if(r.error||!r.data||!r.data.length){if(er)er.textContent='That was not saved. You can only track leads on adverts that are still yours.';return}LEADS[key]=r.data[0];LOPEN[key]=true;leadSig='';if(document.activeElement)document.activeElement.blur();drawLeads(true);toast(row.status==='sold'?'Marked as sold. Remember to remove the advert, or mark it as sold on the advert page.':'Lead saved.')})});
+/* the seller's own advert: change the price (lowering it shows "Reduced" to buyers for 30 days) */
+function priceBox(c,k){return '<div class="card pcbox" style="margin-top:12px"><b>Change the price</b><p class="note" style="margin:4px 0 8px">Lower the price and buyers see a "Reduced" label for 30 days.'+(c.private?'':' Buyers who saved this vehicle can see the new price straight away.')+'</p><div style="display:flex;gap:8px;align-items:center"><span>£</span><input type="number" min="1" step="1" data-pcv="'+k+':'+c.id+'" value="'+E(c.price)+'" style="max-width:160px"><button type="button" class="btn sm" data-pcgo="'+k+':'+c.id+'">Save the price</button></div><p class="err" data-pce="'+k+':'+c.id+'" role="alert"></p></div>'}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-pcgo]');if(!b)return;var key=b.getAttribute('data-pcgo'),a=key.split(':'),c=advBy(a[0],a[1]),er=document.querySelector('[data-pce="'+key+'"]'),p=Math.round(+document.querySelector('[data-pcv="'+key+'"]').value);
+ if(!c)return;if(!(p>=100&&p<=500000)){er.textContent='Enter a price between £100 and £500,000.';return}if(p===+c.price){er.textContent='That is the price already.';return}er.textContent='';
+ if(!c.dbid||!realUser()){var w=+c.price;c.price=p;if(p<w){c.was=Math.max(+c.was||0,w);c.reduced_at=new Date().toISOString()}toast('Price changed. Preview only.');var api=adApi(a[0]);if(api)api.open(c.id);return}
+ var data=adClean(c);data.price=p;b.disabled=true;sb.from('adverts').update({data:data}).eq('id',c.dbid).select('id,status,data').then(function(r){b.disabled=false;if(r.error||!r.data||!r.data.length){er.textContent='That was not saved. Check your connection and try again.';return}var nd=r.data[0].data||{};c.price=nd.price;if(nd.was!=null){c.was=nd.was;c.reduced_at=nd.reduced_at}else{delete c.was;delete c.reduced_at}adSig[c.dbid]=JSON.stringify(adClean(c));markReview(c,r.data[0].status,c.rnote);toast(nd.was>nd.price?'Price lowered. Buyers now see it as reduced.':'Price changed.');var api=adApi(a[0]);if(api)api.open(c.id)})});
+/* buying safely, and reporting an advert */
+var REPW={scam:'Looks like a scam or fraud',sold:'Already sold',wrong:'Wrong details or price',undeclared:'Write-off, damage or finance not declared',offensive:'Offensive or inappropriate',other:'Something else'};
+function safeHtml(c){return '<details class="safe"><summary>&#128737; Buying safely</summary><ul><li>See the vehicle, its V5C log book and the seller’s ID in person before you pay anything.</li><li>Check the registration and VIN on the V5C match the vehicle.</li><li>Never pay a deposit or the full price by bank transfer before you have seen it, and never through a link someone sends you.</li><li>Be wary of a price far below similar vehicles, or a seller who is "abroad" or wants a courier to deliver.</li><li>Keep your messages on The Motoring Central, so we can help if something goes wrong.</li></ul></details>'}
+function repHtml(c,k){return '<div class="rep"><button type="button" class="pv-link" data-mcrep="'+k+':'+c.id+'">Report this advert</button><div class="repf" hidden><label class="f">What is wrong?</label><select class="rep-w"><option value="">Choose a reason…</option>'+Object.keys(REPW).map(function(x){return '<option value="'+x+'">'+REPW[x]+'</option>'}).join('')+'</select><label class="f">Anything else we should know? (optional)</label><textarea class="rep-d" rows="2" maxlength="1000"></textarea><p class="err rep-e" role="alert"></p><button type="button" class="btn sm" data-mcrepgo="'+k+':'+c.id+'">Send report</button></div><p class="okmsg rep-ok" hidden></p></div>'}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ var o=t.closest('[data-mcrep]');if(o){var f=o.parentNode.querySelector('.repf');f.hidden=!f.hidden;if(!f.hidden)f.querySelector('select').focus();return}
+ var g=t.closest('[data-mcrepgo]');if(!g)return;var box=g.closest('.rep'),a=g.getAttribute('data-mcrepgo').split(':'),c=advBy(a[0],a[1]),why=box.querySelector('.rep-w').value,det=box.querySelector('.rep-d').value.trim(),er=box.querySelector('.rep-e'),ok=box.querySelector('.rep-ok');
+ if(!why){er.textContent='Choose a reason.';return}er.textContent='';
+ function done(msg){box.querySelector('.repf').hidden=true;box.querySelector('[data-mcrep]').hidden=true;ok.hidden=false;ok.textContent=msg}
+ if(!c||!c.dbid){done('Thank you. This is a sample advert, so nothing was sent.');return}
+ if(!realUser()){if(window.GGcustOpen)window.GGcustOpen('Log in or create a free account to report an advert. It stops false reports.','in');return}
+ g.disabled=true;sb.from('advert_reports').insert({advert_id:c.dbid,reason:why,details:det.slice(0,1000)||null}).then(function(r){g.disabled=false;
+  if(r.error){if(r.error.code==='23505'){done('You have already reported this advert. Our team will check it.');return}er.textContent=(r.error.code==='P0001'&&r.error.message)||'Your report was not sent. Check your connection and try again.';return}
+  done('Thank you. Our team will check this advert, usually the same day.')})});
+/* staff: reported adverts */
+var REPS=null,repSig='',repAt=0;
+function pullReps(){if(!isStaff())return;repAt=Date.now();sb.from('advert_reports').select('id,advert_id,reason,details,created_at,adverts(id,kind,status,owner_id,data)').eq('status','open').order('created_at',{ascending:true}).limit(200).then(function(r){if(r.error)return;REPS=r.data||[];var s=JSON.stringify(REPS.map(function(x){return x.id}));if(s!==repSig){repSig=s;drawReps(true)}})}
+function repsHtml(){var G={},order=[];(REPS||[]).forEach(function(x){if(!G[x.advert_id]){G[x.advert_id]={ad:x.adverts,list:[]};order.push(x.advert_id)}G[x.advert_id].list.push(x)});
+ var h='<div class="card" id="mc-reps"><h2>Reported adverts'+(order.length?' <span class="mx-n">'+order.length+'</span>':'')+'</h2>';
+ if(REPS===null)return h+'<p class="note">Loading…</p></div>';if(!order.length)return h+'<p class="note" style="margin:0">No reports. When a buyer reports an advert, it appears here.</p></div>';
+ order.forEach(function(id){var g=G[id],a=g.ad||{},d=a.data||{};
+  h+='<div class="adq" style="border-top:1px solid #e3e7ec;padding:12px 0"><b>'+E([d.year,d.make,d.model].filter(Boolean).join(' ')||'Advert '+id)+'</b> <span class="note">'+E(d.reg||'')+' · '+(d.price?gbp0(d.price):'')+' · '+(d.private?'Private seller':'Dealer: '+E(d.dealer||''))+(a.status&&a.status!=='live'?' · now '+E(a.status):'')+'</span>'+
+   g.list.map(function(x){return '<p style="margin:6px 0 0"><span class="badge" style="position:static;display:inline-block;background:#c0392b">'+E(REPW[x.reason]||x.reason)+'</span> <small class="note">'+E(dt(x.created_at))+'</small>'+(x.details?'<br>'+E(x.details):'')+'</p>'}).join('')+
+   '<div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"><button type="button" class="btn sm ghost" data-mxopen="'+(a.kind||'cars')+':'+id+'">Open the advert</button><button type="button" class="btn sm" data-repdo="remove" data-ra="'+id+'">Take the advert down</button><button type="button" class="btn sm ghost" data-repdo="dismiss" data-ra="'+id+'">Nothing wrong: dismiss</button></div></div>'});
+ return h+'</div>'}
+function drawReps(force){if(!isStaff()||location.hash!=='#admin')return;var b=$('admin-body');if(!b)return;var old=$('mc-reps');if(old&&!force)return;if(REPS===null&&Date.now()-repAt>5000)pullReps();
+ var d=document.createElement('div');d.innerHTML=repsHtml();var card=d.firstChild;if(old)old.parentNode.replaceChild(card,old);else{var q=$('mc-adq');if(q)q.parentNode.insertBefore(card,q.nextSibling);else b.insertBefore(card,b.firstChild)}}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-repdo]');if(!b||!isStaff())return;var id=+b.getAttribute('data-ra'),rm=b.getAttribute('data-repdo')==='remove';
+ if(rm&&!confirm('Take this advert down? Buyers will no longer see it. The seller can contact you if they think it is a mistake.'))return;b.disabled=true;
+ (rm?sb.from('adverts').update({status:'removed'}).eq('id',id):Promise.resolve({})).then(function(r){if(r&&r.error)throw r.error;return sb.from('advert_reports').update({status:rm?'removed':'dismissed'}).eq('advert_id',id).eq('status','open')}).then(function(r){if(r&&r.error)throw r.error;toast(rm?'Advert taken down.':'Report dismissed.');if(rm){var c=advByDb(id);if(c){var api=adApi(kindOf(c));if(api)api.act(c.id,'remove')}}pullReps()},function(){b.disabled=false;toast('That was not saved. Try again.',true)})});
+/* private sellers: renewing keeps the advert live for real (not just on this device) */
+window.MCrenew=function(c){if(!c||!c.dbid||!realUser())return;sb.rpc('renew_advert',{p_id:c.dbid}).then(function(r){if(r.error){toast('Your renewal was not saved for buyers: '+(r.error.message||'try again')+'.',true);return}var t=Date.parse(r.data);if(t){c.exp=t;adSig[c.dbid]=JSON.stringify(adClean(c))}toast('Renewed. Your advert is live until '+dd(t)+'.')})};
+/* private sellers' "My adverts": ending soon, and views, saves and enquiries */
+function myAds(){var u=window.GGuser,out=[];if(!u)return out;['cars','vans'].forEach(function(k){var a=adApi(k);if(a)a.list().forEach(function(c){if(c.private&&(c.owner===u.email||(u.sbid&&c.ownerId===u.sbid)))out.push({k:k,c:c})})});return out}
+function pvExtras(){if(location.hash!=='#account')return;var box=$('ps-acct');if(!box||!box.firstChild)return;var card=box.querySelector('.card');if(!card)return;
+ if(!card.querySelector('.pv-remind')){var R=myAds().filter(function(x){var l=(x.c.exp-Date.now())/DAYMS;return x.c.exp&&l<=5&&l>-14});if(R.length){var h='<div class="pv-remind">'+R.map(function(x){var c=x.c,l=Math.ceil((c.exp-Date.now())/DAYMS),t=[c.year,c.make,c.model].filter(Boolean).join(' ');return '<p>'+(l>0?'&#9200; Your advert for <b>'+E(t)+'</b> ends in '+l+' day'+(l===1?'':'s')+'.':'Your advert for <b>'+E(t)+'</b> has ended, so buyers cannot see it.')+' <button type="button" class="btn sm" data-pva="renew" data-id="'+c.id+'" data-k="'+x.k+'">Renew for 30 days</button></p>'}).join('')+'</div>';var h2=card.querySelector('h2');if(h2)h2.insertAdjacentHTML('afterend',h)}}
+ if(!realUser())return;pullStats().then(function(S){[].forEach.call(card.querySelectorAll('.pv-ad'),function(ad){if(ad.querySelector('.pv-st'))return;var b=ad.querySelector('[data-pva][data-id]');if(!b)return;var c=advBy(b.getAttribute('data-k')||'cars',b.getAttribute('data-id'));if(!c||!c.dbid)return;var s=(S&&S[c.dbid])||{views:0,saves:0,contacts:0};var hint=s.views>=40&&!s.contacts?' Lots of views but no enquiries: try a lower price or more photos.':(!(c.photos&&c.photos.length)?' Add photos: adverts with photos get far more views.':'');
+  var btns=ad.querySelector('.pv-btns');(btns||ad).insertAdjacentHTML('beforebegin','<p class="note pv-st" style="margin:0 0 8px">Last 30 days: '+statLine(s)+'.'+hint+'</p>')})})}
+/* putting it on the advert page */
+var lastExt='';
+function enhance2(){var a=curAd();if(!a||!a.host)return;var c=a.c,k=a.k,host=a.host,u=window.GGuser,mine=!!(u&&((c.ownerId&&c.ownerId===u.sbid)||(!c.dbid&&(c.mine||c.owner===u.email))));
+ var sp=host.querySelector('.specs'),r=reduced(c);if(r&&sp&&!host.querySelector('.rednote'))sp.insertAdjacentHTML('beforebegin','<p class="rednote"><span class="redb">Reduced '+gbp0(r)+'</span> Was '+gbp0(c.was)+', lowered on '+E(dd(c.reduced_at))+'.</p>');
+ if(mine){var st=host.querySelector('.mc-st');if(st&&!host.querySelector('.pcbox')&&!c.review)st.insertAdjacentHTML('afterend',priceBox(c,k));return}
+ var f=$(k==='cars'?'cd-enq':'vd-enq');
+ if(f&&!c.private&&!f.querySelector('.pxbox')){var sub=f.querySelector('button[type=submit],.btn');if(sub)sub.insertAdjacentHTML('beforebegin',pxHtml());else f.insertAdjacentHTML('beforeend',pxHtml())}
+ if(f&&!host.querySelector('.safe'))f.insertAdjacentHTML('afterend',safeHtml(c));
+ if(!host.querySelector('.rep')){var more=host.querySelector('.more');var html=repHtml(c,k);if(more)more.insertAdjacentHTML('beforebegin',html);else host.insertAdjacentHTML('beforeend',html)}}
+setInterval(function(){try{enhance2();redBadges();drawLeads(false);pvExtras();drawReps(false);if(isStaff()&&location.hash==='#admin'&&Date.now()-repAt>30000)pullReps()}catch(e){}},900);
+var lastLeadWho='';setInterval(function(){var u=window.GGuser,w=u&&u.sbid?u.sbid:'';if(w!==lastLeadWho){lastLeadWho=w;LEADS={};leadsAt=0;leadSig='';REPS=null;repSig='';['mc-leads','mc-reps'].forEach(function(i){var o=$(i);if(o)o.remove()})}},1500);
+
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;if(d&&d.dbDone)return;
@@ -8423,6 +8528,21 @@ html.nolaunch .launch{display:none!important}
 #v-dash .motdet>summary::after{content:"+";font-weight:800}
 #v-dash .motdet[open]>summary::after{content:"\2212"}
 #v-dash .motdet>.motlist{padding:0 10px 10px}
+
+/* car sales tools (19 Nov 2026) */
+[data-pvrep]{display:none!important}
+.redb{display:inline-block;background:#1F7A45;color:#fff;font-size:.75rem;font-weight:800;padding:2px 8px;border-radius:999px;vertical-align:middle;margin-left:6px;font-family:var(--fb,inherit)}
+.rednote{margin:10px 0;font-size:.95rem}.rednote .redb{margin:0 6px 0 0}
+.pxbox{margin:10px 0;border:1px dashed var(--line,#d6e2ee);border-radius:10px;padding:8px 12px}.pxbox>summary{cursor:pointer;font-weight:700}
+.pxl{margin-top:6px;font-size:.9rem;background:var(--soft,#f1f6fb);border-radius:8px;padding:6px 10px;color:var(--ink,#0B1C35)}
+.safe{margin:12px 0;border-radius:10px;background:var(--soft,#f1f6fb);padding:8px 12px;color:var(--ink,#0B1C35)}.safe>summary{cursor:pointer;font-weight:700}.safe ul{margin:8px 0 4px;padding-left:18px;font-size:.92rem}.safe li{margin:4px 0}
+.rep{margin:14px 0 4px}.repf{margin-top:6px;max-width:520px}
+#mc-leads .ld-mon{margin:0 0 6px}#mc-leads .ld-due{margin:0 0 8px;font-weight:700;color:#B45309}
+.ld-f{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.ld-f button{all:unset;cursor:pointer;padding:6px 10px;border-radius:999px;border:1.5px solid var(--line,#d6e2ee);font-weight:700;font-size:.85rem}.ld-f button[aria-pressed=true]{background:#0B1C35;color:#fff;border-color:#0B1C35}.ld-f button span{opacity:.7;margin-left:2px}.ld-f button:focus-visible{outline:3px solid #38BDF8}
+.ld{border-top:1px solid var(--line,#e3e7ec);padding:8px 0}.ld>summary{cursor:pointer;list-style:none;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center}.ld>summary::-webkit-details-marker{display:none}.ld>summary small{flex-basis:100%;opacity:.8}
+.ld.due>summary b{color:#B45309}.ld-b{padding:8px 0 4px}.ld-q{margin:0 0 6px;font-style:italic}.ld-a{margin-top:8px}
+.ld-s{font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:999px;background:#E3ECF5;color:#0B1C35}.ld-new{background:#FFD43B}.ld-contacted{background:#BAE6FD}.ld-viewing{background:#C7F0D8}.ld-sold{background:#1F7A45;color:#fff}.ld-lost{background:#E5E7EB;color:#4B5563}
+.pv-remind{background:#FFF7D6;border:1px solid #F5D565;border-radius:10px;padding:4px 12px;margin:0 0 10px}.pv-remind p{margin:8px 0}
 /* MOT station page: video in place of the banner photo */
 .herovid{margin-top:16px}
 .herovid video{display:block;width:100%;height:auto;border-radius:14px;background:#0B1C35;box-shadow:0 12px 30px rgba(0,0,0,.35)}
