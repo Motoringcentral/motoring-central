@@ -721,6 +721,9 @@ h2.sec,#jb-post-h{scroll-margin-top:112px}
 .motrow input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
 .motrow label{font-size:.92rem;line-height:1.3;cursor:pointer}
 .motrow label small{display:block;color:var(--muted);font-size:.78rem}
+.dslot.off{background:repeating-linear-gradient(135deg,rgba(255,255,255,.05) 0 6px,rgba(148,163,184,.22) 6px 12px)!important;cursor:default}
+.mset{border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px;margin:0 0 10px}.mset legend{font-weight:800;padding:0 6px}
+.mdays{display:flex;flex-wrap:wrap;gap:6px}.mdays label{display:inline-flex}.mdays input{position:absolute;opacity:0;width:1px;height:1px}.mdays span{padding:7px 11px;border-radius:999px;border:1.5px solid rgba(255,255,255,.3);font-weight:700;cursor:pointer;font-size:.85rem}.mdays input:checked+span{background:#38BDF8;border-color:#38BDF8;color:#0B1C35}.mdays input:focus-visible+span{outline:3px solid #FFD43B;outline-offset:2px}
 .dbk .dol{display:block;font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.03em}
 .gar .mnext{display:block;margin-top:4px;font-weight:700;color:#0369A1}
 .motrow .motfee{display:flex;align-items:center;gap:4px;font-weight:700}
@@ -2930,8 +2933,12 @@ function tm(x){var h=Math.floor(x/60),mm=x%60,ap=h>=12?'pm':'am';h=h%12||12;retu
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function store(){try{return JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){return{}}}
 function put(S){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
-function workDays(){var r=[],d=new Date();for(var i=0;r.length<12&&i<21;i++){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+i,12);if(x.getDay()!==0)r.push(dk(x))}return r}
-function bays(g){if(g.real)return (BUSY[g.id]&&BUSY[g.id].bays)||['MOT bay'];var n=g.mb||1,a=[];if(n===1)return ['MOT bay'];for(var i=1;i<=n;i++)a.push('MOT bay '+i);return a}
+function workDays(){var r=[],d=new Date();for(var i=0;i<14;i++){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+i,12);r.push(dk(x))}return r}
+function bays(g){if(g.real)return ((BUSY[g.id]&&BUSY[g.id].bays)||['MOT bay']).slice(0,3);if(g.demo){var R=store()[g.id];if(R&&R.motBays&&R.motBays.length)return R.motBays.slice(0,3)}var n=g.mb||1,a=[];if(n===1)return ['MOT bay'];for(var i=1;i<=n;i++)a.push('MOT bay '+i);return a}
+/* each MOT bay's working days, first MOT, close and time per MOT, as set by the garage (defaults: Mon to Sat, 8am to 6pm, 1 hour) */
+var SAMPLESET={s1:{'MOT bay':{step:45}},s3:{'MOT bay':{step:30,open:510,close:1050}},s4:{'MOT bay':{days:[1,2,3,4,5]}}};
+function cfg(g,b){var set=g.real?(BUSY[g.id]&&BUSY[g.id].set):g.demo?(store()[g.id]||{}).motSet:SAMPLESET[g.id];var c=(set||{})[b]||{};
+ return{days:Array.isArray(c.days)?c.days.map(Number):[1,2,3,4,5,6],open:c.open!=null?+c.open:480,close:c.close!=null?+c.close:1080,step:+c.step||60}}
 /* every busy time on a day: [bay, start, length] */
 function busy(g,day){var out=[],S=store()[g.id]||{};
  (S.online||[]).forEach(function(o){if(o.day===day)out.push([o.bay,o.start,o.dur])});
@@ -2939,16 +2946,22 @@ function busy(g,day){var out=[],S=store()[g.id]||{};
  if(g.demo){var own=S.own;if(!own){var W=workDays();own=[[W[0],'MOT bay',510,60],[W[0],'MOT bay',600,60],[W[0],'MOT bay',840,60],[W[1],'MOT bay',540,60],[W[3],'MOT bay',600,60]]}/* the demo garage's sample diary until it is first opened */
   own.forEach(function(o){if(o[0]===day)out.push([o[1],o[2],o[3]])});return out}
  bays(g).forEach(function(b){for(var s=DOPEN;s<=DLAST;s+=60)if(hash2(g.n+day+b+s)%10<4)out.push([b,s,60])});return out}
-function freeBay(g,day,s){var B=busy(g,day),L=bays(g);for(var i=0;i<L.length;i++){var b=L[i];if(!B.some(function(x){return x[0]===b&&s<x[1]+x[2]&&x[1]<s+DUR}))return b}return null}
-function freeTimes(g,day){var r=[],now=new Date(),early=0;if(day===dk(now))early=now.getHours()*60+now.getMinutes()+60;
- for(var s=DOPEN;s<=DLAST;s+=STEP)if(s>=early&&freeBay(g,day,s))r.push(s);return r}
+function dow(day){return new Date(day+'T12:00:00').getDay()}
+function openOn(g,day){var w=dow(day);return bays(g).some(function(b){return cfg(g,b).days.indexOf(w)>-1})}
+/* free slots on a day: {s: start, b: bay, d: length}, first free bay for each start time */
+function slots(g,day){var B=busy(g,day),w=dow(day),now=new Date(),early=day===dk(now)?now.getHours()*60+now.getMinutes()+60:0,seen={},out=[];
+ bays(g).forEach(function(b){var k=cfg(g,b);if(k.days.indexOf(w)<0)return;for(var s=k.open;s+k.step<=k.close;s+=k.step){if(s<early||seen[s])continue;
+  if(!B.some(function(x){return x[0]===b&&s<x[1]+x[2]&&x[1]<s+k.step})){seen[s]=1;out.push({s:s,b:b,d:k.step})}}});
+ return out.sort(function(a,b){return a.s-b.s})}
+function freeBay(g,day,s){var f=slots(g,day).filter(function(x){return x.s===s})[0];return f?f.b:null}
+function freeTimes(g,day){return slots(g,day).map(function(x){return x.s})}
 function realList(){var c=cls();return (window.MCmotDb?window.MCmotDb.garages():[]).filter(function(p){var mc=p.rates&&p.rates.motc;return mc&&typeof mc==='object'?mc[c.k]!=null:/^4-/.test(c.k)}).map(function(p){return{id:p.id,n:p.name,a:p.town||'',real:1,r:+(p.rates&&p.rates.hour)||0,fee:cls().max}})}
-function loadReal(g){if(!window.MCmotDb)return Promise.resolve();var D=workDays();return window.MCmotDb.busy(g.id,D[0],D[D.length-1]).then(function(r){if(r&&!r.error&&r.data){var rows=r.data.filter(function(x){return x.day}),b=(r.data[0]&&r.data[0].mot_bays)||[];BUSY[g.id]={rows:rows,bays:b.length?b:['MOT bay'],at:Date.now()}}})}
+function loadReal(g){if(!window.MCmotDb)return Promise.resolve();var D=workDays();return window.MCmotDb.busy(g.id,D[0],D[D.length-1]).then(function(r){if(r&&!r.error&&r.data){var rows=r.data.filter(function(x){return x.day}),inf=r.data.filter(function(x){return !x.day})[0]||{},b=inf.mot_bays||[];BUSY[g.id]={rows:rows,bays:b.length?b.slice(0,3):['MOT bay'],set:inf.mot_set||{},at:Date.now()}}})}
 function msgLive(t){var e=$('mlive');if(e){e.textContent=t||'';e.hidden=!t}}
 function fillDays(){var g=pick,d=$('mday'),keep=d.value;d.innerHTML='';
  if(!motMode()){for(var n=1;n<=7;n++){var x=new Date();x.setDate(x.getDate()+n);if(x.getDay()===0)continue;var o=document.createElement('option');o.textContent=x.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'});d.appendChild(o)}
   $('mtime').innerHTML=OLDT.map(function(t){return '<option>'+t+'</option>'}).join('');return}
- var first='';workDays().forEach(function(k){var n=freeTimes(g,k).length,o=document.createElement('option');o.value=k;o.textContent=dayLab(k)+(n?' ('+n+' time'+(n===1?'':'s')+' free)':' (fully booked)');if(!n)o.disabled=true;else if(!first)first=k;d.appendChild(o)});
+ var first='';workDays().forEach(function(k){var n=freeTimes(g,k).length,o=document.createElement('option');o.value=k;o.textContent=dayLab(k)+(n?' ('+n+' time'+(n===1?'':'s')+' free)':openOn(g,k)?' (fully booked)':' (closed)');if(!n)o.disabled=true;else if(!first)first=k;d.appendChild(o)});
  d.value=keep&&d.querySelector('option[value="'+keep+'"]:not([disabled])')?keep:first;fillTimes()}
 function fillTimes(){if(!motMode())return;var t=$('mtime'),keep=t.value,L=pick&&$('mday').value?freeTimes(pick,$('mday').value):[];
  t.innerHTML=L.length?L.map(function(s){return '<option value="'+s+'">'+tm(s)+'</option>'}).join(''):'<option value="">No free times</option>';if(keep&&L.indexOf(+keep)>-1)t.value=keep;
@@ -2991,7 +3004,7 @@ $('mgo').addEventListener('click',function(){if(!pick)return;var g=pick;
    if(r.error)throw r.error;finish(text,t,true);loadReal(g);if(r.data&&r.data.id)window.MCmotDb.notify(r.data.id)}).catch(function(e){var k=Object.keys(ERR).filter(function(x){return String(e&&e.message||'').indexOf(x)>-1})[0];
    $('m-err2').textContent=k?ERR[k]:'Your MOT was not booked. Check your connection and try again. If you were charged, it will be refunded in full.';BUSY[g.id]=null;choose(g,document.querySelector('#garages [aria-pressed="true"]')||document.createElement('b'),$('garages'))}).then(function(){btn.disabled=false;btn.textContent='Book MOT'});return}
  var S=store(),rec=S[g.id]=S[g.id]||{};rec.online=(rec.online||[]).filter(function(o){return o.day>=dk(new Date())});
- rec.online.push({id:'o'+Date.now(),day:day,bay:bay,start:st,dur:DUR,cust:u.name||'Customer',phone:u.phone||'',reg:reg,veh:vh?[vh.make,vh.model,vh.year].filter(Boolean).join(' '):'',label:lab,pay:g.fee,total:P(g)});put(S);
+ rec.online.push({id:'o'+Date.now(),day:day,bay:bay,start:st,dur:cfg(g,bay).step,cust:u.name||'Customer',phone:u.phone||'',reg:reg,veh:vh?[vh.make,vh.model,vh.year].filter(Boolean).join(' '):'',label:lab,pay:g.fee,total:P(g)});put(S);
  finish(text,Date.now(),false)});
 })();
 </script>
@@ -3016,7 +3029,7 @@ window.MCmotSync=function(u){if(!u||u.role!=='mechanic'||u.sub!=='garage'||!u.di
  if(!u.sbid){if(u.email!=='garage@demo.com')return;var S=store(),R=S['demo-kr']=S['demo-kr']||{};
   var ch=merge(u,(R.online||[]).map(function(o){return{key:'ls'+o.id,day:o.day,bay:o.bay,start:o.start,dur:o.dur,cust:o.cust,phone:o.phone,reg:o.reg,veh:o.veh,label:o.label,pay:o.pay}}),'ls');
   if(ch)u.dmsg='New MOT booked online by a customer: it is in your diary and already paid.';
-  R.own=ownList(u).map(function(x){return [x.day,x.bay,x.start,x.dur]});put(S);return}
+  R.own=ownList(u).map(function(x){return [x.day,x.bay,x.start,x.dur]});R.motBays=u.bays.filter(function(b){return /MOT/i.test(b)}).slice(0,3);R.motSet=u.motSet||{};put(S);return}
  var D=window.MCmotDb;if(!D)return;
  /* own bookings up (only when they change) */
  var own=ownList(u),s1=JSON.stringify(own);if(sig[u.sbid]!==s1){sig[u.sbid]=s1;clearTimeout(timer[u.sbid]);timer[u.sbid]=setTimeout(function(){D.syncOwn(own).then(function(r){if(r&&r.error)sig[u.sbid]=''},function(){sig[u.sbid]=''})},900)}
@@ -4090,6 +4103,27 @@ function addDays(k,n){var d=dfrom(k);d.setDate(d.getDate()+n);return dkey(d)}
 function hm(x){var h=Math.floor(x/60),mm=x%60;return(h<10?'0':'')+h+':'+(mm<10?'0':'')+mm}
 function dayLabel(k,long){return dfrom(k).toLocaleDateString('en-GB',long?{weekday:'long',day:'numeric',month:'long'}:{weekday:'short',day:'numeric',month:'short'})}
 var DOPEN=8*60,DCLOSE=18*60,DSTEP=30;
+/* MOT bay settings (up to 3 MOT bays): working days, opening and closing time, and time per MOT */
+var MDEF={days:[1,2,3,4,5,6],open:480,close:1080,step:60},DOWN=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function motCfg(u,name){var c=(u.motSet||{})[name]||{};return{days:Array.isArray(c.days)?c.days.map(Number):MDEF.days.slice(),open:c.open!=null?+c.open:MDEF.open,close:c.close!=null?+c.close:MDEF.close,step:+c.step||MDEF.step}}
+function motBayList(u){return u.sub==='garage'?u.bays.filter(function(b){return /MOT/i.test(b)}).slice(0,3):[]}
+function dHours(u){var L=motBayList(u),o=480,c=1080;L.forEach(function(b){var k=motCfg(u,b);o=Math.min(o,k.open);c=Math.max(c,k.close)});DOPEN=o;DCLOSE=c;DSTEP=L.some(function(b){return motCfg(u,b).step%30})?15:30}
+function dayOpen(u,dk){return dfrom(dk).getDay()!==0||motBayList(u).some(function(b){return motCfg(u,b).days.indexOf(0)>-1})}
+function motSlotsOf(k){var r=[];for(var t=k.open;t+k.step<=k.close;t+=k.step)r.push(t);return r}
+function motSetCard(u){var L=motBayList(u),opt=function(a,b,v){var o='';for(var t=a;t<=b;t+=15)o+='<option value="'+t+'"'+(t===v?' selected':'')+'>'+hm(t)+'</option>';return o};
+var s='<div class="card dform" id="motset-card"><h2>MOT times</h2><p class="note" style="margin:0 0 10px">Set the days, the hours and the time per MOT for each MOT bay. Customers can only book these times online, and only when the bay is free in your diary.</p>';
+if(!L.length)s+='<p class="note">You have no MOT bay yet. Add one below.</p>';
+L.forEach(function(b,i){var k=motCfg(u,b),sl=motSlotsOf(k);
+s+='<fieldset class="mset"><legend>'+esc(b)+'</legend><p class="f" style="margin:0 0 6px">Days you test</p><div class="mdays">'+[1,2,3,4,5,6,0].map(function(d){return '<label><input type="checkbox" id="ms-d'+i+'-'+d+'"'+(k.days.indexOf(d)>-1?' checked':'')+'><span>'+DOWN[d]+'</span></label>'}).join('')+'</div>'
++'<div class="rg"><div><label class="f" for="ms-o'+i+'">First MOT</label><select id="ms-o'+i+'">'+opt(360,720,k.open)+'</select></div><div><label class="f" for="ms-c'+i+'">Close</label><select id="ms-c'+i+'">'+opt(720,1320,k.close)+'</select></div><div><label class="f" for="ms-s'+i+'">Time per MOT</label><select id="ms-s'+i+'">'+[30,45,60].map(function(m){return '<option value="'+m+'"'+(m===k.step?' selected':'')+'>'+m+' minutes</option>'}).join('')+'</select></div></div>'
++'<p class="note" id="ms-p'+i+'" style="margin:6px 0 0">'+slotText(sl)+'</p></fieldset>'});
+s+='<p class="note err" id="ms-err" role="alert"></p><div class="dtools">'+(L.length<3?'<button class="btn sm" type="button" data-msadd>+ MOT bay</button>':'')+'<button class="btn sm" type="button" data-mssave>Save MOT times</button><button class="btn sm ghost" type="button" data-dmotset>Close</button></div>'
++'<p class="note" style="margin:8px 0 0">You can set up to 3 MOT bays here. Need more? <a href="#contact">Contact us</a> and we will set them up for you.</p></div>';return s}
+function slotText(sl){return sl.length?sl.length+' MOT'+(sl.length===1?'':'s')+' a day: '+sl.slice(0,6).map(hm).join(', ')+(sl.length>6?' … last at '+hm(sl[sl.length-1]):'')+'.':'No MOT fits between these times.'}
+document.addEventListener('change',function(e){var m=/^ms-[osc](\d)$/.exec(e.target&&e.target.id||'');if(!m)return;var i=m[1],p=$('ms-p'+i);if(p)p.textContent=slotText(motSlotsOf({open:+$('ms-o'+i).value,close:+$('ms-c'+i).value,step:+$('ms-s'+i).value}))});
+function readMotSet(u){var L=motBayList(u),err='',out={};L.forEach(function(b,i){var o=$('ms-o'+i);if(!o)return;var k={days:[0,1,2,3,4,5,6].filter(function(d){var c=$('ms-d'+i+'-'+d);return c&&c.checked}),open:+o.value,close:+$('ms-c'+i).value,step:+$('ms-s'+i).value};
+ if(!k.days.length)err='Tick at least one day for '+b+'.';else if(k.close<k.open+k.step)err='For '+b+', the close time must be at least one MOT after the first MOT.';out[b]=k});
+ if(err)return err;u.motSet=Object.assign({},u.motSet||{},out);return ''}
 var BTYPES=['Full service','Interim service','MOT','Repair','Diagnostics','Brakes','Tyres','Air con','Other'];
 var BST=[['booked','Booked'],['arrived','Arrived'],['progress','In progress'],['ready','Ready to collect'],['collected','Collected']];
 var BSRC={walk:'Walk-in',phone:'Phone',web:'Motoring Central'};
@@ -4126,38 +4160,41 @@ function bayCard(u){var g=u.sub==='garage',s='<div class="card dform" id="bay-ca
 u.bays.forEach(function(b,i){var n=u.diary.filter(function(x){return x.bay===i}).length;
 s+='<div class="bayrow"><div><label class="f" for="bay-n'+i+'" style="margin:0 0 4px">'+(isMot(b)?'MOT bay':(g?'Workshop bay':'Column'))+'</label><input type="text" id="bay-n'+i+'" value="'+esc(b)+'" maxlength="24"></div><button class="btn sm ghost" type="button" data-bayrm="'+i+'"'+(u.bays.length<2?' disabled':'')+' aria-label="Remove '+esc(b)+'">Remove</button>'+(n?'<small class="note">'+n+' booking'+(n===1?'':'s')+'</small>':'')+'</div>'});
 s+='<p class="note err" id="bay-err" role="alert"></p><div class="dtools">'+(g?'<button class="btn sm" type="button" data-bayadd="w">+ Workshop bay</button><button class="btn sm" type="button" data-bayadd="m">+ MOT bay</button>':'<button class="btn sm" type="button" data-bayadd="w">+ Add a column</button>')+'<button class="btn sm ghost" type="button" data-bayclose>Save and close</button></div></div>';return s}
-function readBays(u){u.bays.forEach(function(b,i){var e=$('bay-n'+i);if(e&&e.value.trim())u.bays[i]=e.value.trim()})}
+function renameMot(u,a,b){if(a!==b&&u.motSet&&u.motSet[a]){u.motSet[b]=u.motSet[a];delete u.motSet[a]}}
+function readBays(u){u.bays.forEach(function(b,i){var e=$('bay-n'+i);if(e&&e.value.trim()){renameMot(u,b,e.value.trim());u.bays[i]=e.value.trim()}})}
 function shiftBays(u,from,by){u.diary.forEach(function(x){if(x.bay>=from)x.bay+=by})}
 function dayBk(u,k){return u.diary.filter(function(b){return b.date===k}).sort(function(a,b){return a.start-b.start||a.bay-b.bay})}
 function bkById(u,id){return u.diary.filter(function(b){return b.id===id})[0]}
 function bkTitle(b){return b.type==='Blocked'?(b.notes||'Blocked'):(b.cust||b.reg)}
 function clash(u,b){return u.diary.some(function(x){return x.id!==b.id&&x.date===b.date&&x.bay===b.bay&&b.start<x.start+x.dur&&x.start<b.start+b.dur})}
 function legend(){return '<div class="legend">'+BST.map(function(x){return '<span><i class="st-'+x[0]+'"></i>'+x[1]+'</span>'}).join('')+'<span><i class="st-blocked"></i>Blocked</span></div>'}
-function diaryHtml(u){if(!u.diary)seedDiary(u);if(window.MCmotSync)try{window.MCmotSync(u)}catch(x){}
-var k=u.dsel,list=dayBk(u,k),closed=dfrom(k).getDay()===0,jobs=list.filter(function(b){return b.type!=='Blocked'}),booked=0,take=0,today=dkey(new Date());
+function diaryHtml(u){if(!u.diary)seedDiary(u);dHours(u);if(window.MCmotSync)try{window.MCmotSync(u)}catch(x){}
+var k=u.dsel,list=dayBk(u,k),closed=!dayOpen(u,k),jobs=list.filter(function(b){return b.type!=='Blocked'}),booked=0,take=0,today=dkey(new Date());
 list.forEach(function(b){booked+=b.dur});jobs.forEach(function(b){take+=+b.price||0});
 var util=closed?0:Math.min(100,Math.round(100*booked/((DCLOSE-DOPEN)*u.bays.length)));
 var s='<div class="card"><div class="dhead"><h2 style="margin:0">Booking diary</h2><div class="dnav"><button class="btn sm ghost" type="button" data-dmove="-7" aria-label="Previous week">&lsaquo;</button><button class="btn sm ghost" type="button" data-dtoday>Today</button><button class="btn sm ghost" type="button" data-dmove="7" aria-label="Next week">&rsaquo;</button></div></div>';
 s+='<div class="dweek" role="group" aria-label="Choose a day">';
 var mon=addDays(k,-((dfrom(k).getDay()+6)%7));
-for(var i=0;i<7;i++){var dk=addDays(mon,i),sun=dfrom(dk).getDay()===0,n=dayBk(u,dk).filter(function(b){return b.type!=='Blocked'}).length;
+for(var i=0;i<7;i++){var dk=addDays(mon,i),sun=!dayOpen(u,dk),n=dayBk(u,dk).filter(function(b){return b.type!=='Blocked'}).length;
 s+='<button type="button" data-dday="'+dk+'" aria-pressed="'+(dk===k)+'"'+(dk===today?' class="today"':'')+' aria-label="'+dayLabel(dk,true)+(sun?', closed':', '+n+' booking'+(n===1?'':'s'))+'"><span>'+DAYN[dfrom(dk).getDay()]+'</span><b>'+dfrom(dk).getDate()+'</b><small>'+(sun?'Closed':n+' job'+(n===1?'':'s'))+'</small></button>'}
 s+='</div><p style="margin:14px 0 10px;font-weight:800">'+dayLabel(k,true)+(k===today?' (today)':'')+'</p>';
 s+='<div class="kpi"><div><b>'+jobs.length+'</b>bookings</div><div><b>'+util+'%</b>'+(u.bays.length>1?'bay time booked':'day booked')+'</div><div><b>'+m(take)+'</b>expected takings</div></div>';
-s+='<div class="dtools"><div class="seg" role="group" aria-label="Diary view"><button type="button" data-dv="grid" aria-pressed="'+(u.dview==='grid')+'">Timeline</button><button type="button" data-dv="list" aria-pressed="'+(u.dview==='list')+'">List</button></div><button class="btn sm" type="button" data-dnew>+ New booking</button><button class="btn sm ghost" type="button" data-dblock>Block time</button><button class="btn sm ghost" type="button" data-dbays>Manage bays</button></div>';
+s+='<div class="dtools"><div class="seg" role="group" aria-label="Diary view"><button type="button" data-dv="grid" aria-pressed="'+(u.dview==='grid')+'">Timeline</button><button type="button" data-dv="list" aria-pressed="'+(u.dview==='list')+'">List</button></div><button class="btn sm" type="button" data-dnew>+ New booking</button><button class="btn sm ghost" type="button" data-dblock>Block time</button><button class="btn sm ghost" type="button" data-dbays>Manage bays</button>'+(u.sub==='garage'?'<button class="btn sm ghost" type="button" data-dmotset>MOT times</button>':'')+'</div>';
 s+='<label class="f" for="d-find">Find a booking by reg or customer</label><input type="text" id="d-find" placeholder="e.g. YD19 KXF" value="'+esc(u.dfind||'')+'" autocomplete="off"><div id="d-found">'+foundHtml(u)+'</div>';
 if(u.dmsg)s+='<p class="dmsg" role="status">'+esc(u.dmsg)+'</p>';
 s+='</div>';
 if(u.dbays)s+=bayCard(u);
+if(u.dmotset)s+=motSetCard(u);
 if(u.dedit)s+=bkForm(u);
-if(closed)s+='<div class="card"><b>Closed on Sundays.</b><p class="note">Pick another day to see bookings.</p></div>';
+if(closed)s+='<div class="card"><b>Closed on '+dayLabel(k,true)+'.</b><p class="note">Pick another day. To test MOTs on Sundays, tick Sun in MOT times.</p></div>';
 else s+=u.dview==='list'?dList(u,list):dGrid(u,list);
 return s}
+function mOff(u,c,t){var b=u.bays[c],L=motBayList(u);if(L.indexOf(b)<0)return false;var k=motCfg(u,b);return k.days.indexOf(dfrom(u.dsel).getDay())<0||t<k.open||t>=k.close}
 function dGrid(u,list){var rows=(DCLOSE-DOPEN)/DSTEP,nb=u.bays.length;
-var s='<div class="card"><div class="dscroll"><div class="dgrid" style="grid-template-columns:56px repeat('+nb+',minmax(160px,1fr));grid-template-rows:38px repeat('+rows+',30px)"><div class="dcorner" style="grid-column:1;grid-row:1"></div>';
+var s='<div class="card"><div class="dscroll"><div class="dgrid" style="grid-template-columns:56px repeat('+nb+',minmax(160px,1fr));grid-template-rows:38px repeat('+rows+','+(DSTEP===15?16:30)+'px)"><div class="dcorner" style="grid-column:1;grid-row:1"></div>';
 u.bays.forEach(function(b,i){s+='<div class="dbay" style="grid-column:'+(i+2)+';grid-row:1">'+esc(b)+'</div>'});
 for(var r=0;r<rows;r++){var t=DOPEN+r*DSTEP;s+='<div class="dtime" style="grid-column:1;grid-row:'+(r+2)+'">'+(t%60===0?hm(t):'')+'</div>';
-for(var c=0;c<nb;c++)s+='<button type="button" class="dslot'+(t%60===0?' hr':'')+'" style="grid-column:'+(c+2)+';grid-row:'+(r+2)+'" data-dslot="'+c+':'+t+'" aria-label="New booking, '+esc(u.bays[c])+' at '+hm(t)+'"></button>'}
+for(var c=0;c<nb;c++)s+='<button type="button" class="dslot'+(t%60===0?' hr':'')+(mOff(u,c,t)?' off':'')+'" style="grid-column:'+(c+2)+';grid-row:'+(r+2)+'" data-dslot="'+c+':'+t+'" aria-label="New booking, '+esc(u.bays[c])+' at '+hm(t)+'"></button>'}
 list.forEach(function(b){var r0=Math.max(0,(b.start-DOPEN)/DSTEP)+2,span=Math.max(1,Math.round(b.dur/DSTEP)),bl=b.type==='Blocked';
 s+='<button type="button" class="dbk st-'+(bl?'blocked':b.status)+'" style="grid-column:'+(b.bay+2)+';grid-row:'+r0+' / span '+span+'" data-dopen="'+b.id+'"><b>'+hm(b.start)+' '+esc(bkTitle(b))+'</b>'+(b.ol?'<span class="dol">Online, paid</span>':'')+(bl?'':'<span>'+esc(b.reg)+' &middot; '+esc(b.type)+'</span>'+(span>2?'<span>'+esc(b.veh)+'</span>':'')+(span>3?'<span>'+stName(b.status)+(b.paid?', paid':'')+'</span>':''))+'</button>'});
 return s+'</div></div>'+legend()+'<p class="note">Tap an empty slot to book it, or tap a booking to open it.</p></div>'}
@@ -4181,9 +4218,9 @@ return s}
 function readBk(u){var e=u.dedit;if(!e||!$('bk-date'))return;function g(id){var x=$(id);return x?x.value:null}
 if($('bk-reg')){e.reg=g('bk-reg').trim().toUpperCase();e.veh=g('bk-veh').trim();e.cust=g('bk-cust').trim();e.phone=g('bk-phone').trim();e.type=g('bk-type');e.price=g('bk-price')===''?'':+g('bk-price');e.src=g('bk-src');e.paid=$('bk-paid').checked}
 e.date=g('bk-date');e.bay=+g('bk-bay');e.start=+g('bk-start');e.dur=+g('bk-dur');e.notes=g('bk-notes').trim()}
-function saveBk(u){readBk(u);var e=u.dedit,bl=e.type==='Blocked',err='';
+function saveBk(u){readBk(u);dHours(u);var e=u.dedit,bl=e.type==='Blocked',err='';
 if(!e.date)err='Choose a date.';
-else if(dfrom(e.date).getDay()===0)err='The diary is closed on Sundays. Choose another day.';
+else if(!dayOpen(u,e.date))err='The diary is closed on that day. Choose another day.';
 else if(!bl&&!e.reg&&!e.cust)err='Enter a registration or a customer name.';
 else if(e.start+e.dur>DCLOSE)err='This runs past closing time ('+hm(DCLOSE)+'). Make it shorter or start earlier.';
 else if(clash(u,e))err='That overlaps another booking in '+u.bays[e.bay]+'. Pick another time'+(u.bays.length>1?' or bay':'')+'.';
@@ -4312,9 +4349,13 @@ if(u.status!=='approved'){u.plan='pro';u.proActive=false;u.planmsg='Pro chosen. 
 if(window.GGpay)window.GGpay({vat:1,amount:74.5,per:'a month',desc:'Pro membership (launch offer, usually £149 + VAT a month)',sub:'0% fee on every job. First month today, then monthly. Cancel at the end of any month.',onPaid:act});else act();return}
 if(a.dtab){u.dtab=a.dtab;u.dedit=null;u.sedit=null;rd();return}
 if(a.dbays!=null){u.dbays=!u.dbays;rd();if(u.dbays)focusCard('bay-card');return}
+if(a.dmotset!=null){u.dmotset=!u.dmotset;rd();if(u.dmotset)focusCard('motset-card');return}
+if(a.mssave!=null){var me=readMotSet(u);if(me){$('ms-err').textContent=me;return}u.dmotset=false;u.dmsg='MOT times saved. Customers can now book these times online.';rd();return}
+if(a.msadd!=null){var me2=readMotSet(u);if(me2){$('ms-err').textContent=me2;return}var mc2=u.bays.filter(isMot).length;if(mc2>=3){$('ms-err').textContent='You can have up to 3 MOT bays. Need more? Contact us.';return}
+ if(mc2===1){var oi2=u.bays.indexOf('MOT bay');if(oi2>-1){renameMot(u,'MOT bay','MOT bay 1');u.bays[oi2]='MOT bay 1'}}u.bays.push(mc2?'MOT bay '+(mc2+1):'MOT bay');rd();focusCard('motset-card');return}
 if(a.bayclose!=null){readBays(u);u.dbays=false;u.dmsg='Bays saved.';rd();return}
 if(a.bayadd){readBays(u);if(u.bays.length>=12){$('bay-err').textContent='You can have up to 12 columns.';return}
-if(a.bayadd==='m'){var mc=u.bays.filter(isMot).length;if(mc===1){var oi=u.bays.indexOf('MOT bay');if(oi>-1)u.bays[oi]='MOT bay 1'}u.bays.push(mc?'MOT bay '+(mc+1):'MOT bay')}
+if(a.bayadd==='m'){var mc=u.bays.filter(isMot).length;if(mc>=3){$('bay-err').textContent='You can have up to 3 MOT bays. Need more? Contact us and we will set them up for you.';return}if(mc===1){var oi=u.bays.indexOf('MOT bay');if(oi>-1){renameMot(u,'MOT bay','MOT bay 1');u.bays[oi]='MOT bay 1'}}u.bays.push(mc?'MOT bay '+(mc+1):'MOT bay')}
 else{var fm=-1;u.bays.forEach(function(b,i){if(fm<0&&isMot(b))fm=i});var at=fm<0?u.bays.length:fm,wc=u.bays.filter(function(b){return !isMot(b)}).length;u.bays.splice(at,0,u.sub==='garage'?'Bay '+(wc+1):'Van '+(wc+1));shiftBays(u,at,1)}
 rd();focusCard('bay-card');return}
 if(a.bayrm!=null){readBays(u);var ri=+a.bayrm,cnt=u.diary.filter(function(x){return x.bay===ri}).length;if(cnt){$('bay-err').textContent='Move or cancel the '+cnt+' booking'+(cnt===1?'':'s')+' in '+u.bays[ri]+' first.';return}

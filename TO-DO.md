@@ -179,7 +179,8 @@ Still to do:
 - Real payments (Stripe): hold the slot, take the payment, then confirm; refund automatically if the slot was taken.
   Pay garages their agreed fees (weekly payout statement in the garage dashboard).
 - Staff screen to cancel an online MOT booking (frees the slot, refunds the customer, emails both).
-- Garage opening hours and MOT length per garage (now fixed at 8am to 6pm, Monday to Saturday, 1 hour per test).
+- DONE 19 Nov 2026: garages set MOT times per MOT bay (up to 3 bays; more via contact us): days they test, first MOT,
+  close time and time per MOT (30, 45 or 60 minutes). Diary > MOT times. The booking page and the database both use them.
 - Real garages in the garage repair booking list too (same live diary, workshop bays).
 
 ### Intro video (customer) – next time it is updated
