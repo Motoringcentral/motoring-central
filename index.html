@@ -8423,6 +8423,10 @@ html.nolaunch .launch{display:none!important}
 #v-dash .motdet>summary::after{content:"+";font-weight:800}
 #v-dash .motdet[open]>summary::after{content:"\2212"}
 #v-dash .motdet>.motlist{padding:0 10px 10px}
+/* MOT station page: video in place of the banner photo */
+.herovid{margin-top:16px}
+.herovid video{display:block;width:100%;height:auto;border-radius:14px;background:#0B1C35;box-shadow:0 12px 30px rgba(0,0,0,.35)}
+.herovid .msnd{font-size:1.05rem;padding:12px 20px}
 /* join page: pick your trade straight away */
 .rolepick{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 0;align-items:center}
 .rolepick span{font-weight:700;margin-right:2px}
@@ -8497,11 +8501,29 @@ function setMode(){var m=mode();if(!m||V.hidden&&m===last)return;if(m===last&&V.
  ['svcs','qual'].forEach(function(id){var e=$(id);var f=e&&e.closest('fieldset');if(f)f.hidden=mot});
  var ex=$('exp');if(ex&&ex.parentNode)ex.parentNode.hidden=mot;
  var gn=document.querySelector('label[for=gname]'),ga=document.querySelector('label[for=gaddr]');if(gn)gn.textContent=mot?'MOT station name':'Garage name';if(ga)ga.textContent=mot?'MOT station address':'Garage address';
- if(mot&&window.MCmotVid)setTimeout(function(){window.MCmotVid(false)},60);
+ heroVid(m==='mot-station');
  /* "On this page" links: only to sections on this page */
  [].forEach.call(V.querySelectorAll('nav.jump a'),function(a){var t=document.getElementById(a.getAttribute('href').slice(1));a.hidden=!!(t&&t.hidden)});
  var L=$('launch');if(L&&!L.hidden){var lt=c&&c.k==='mot'?'\uD83C\uDF89 Launch offer: MOT test stations join free until 31 May 2027. No monthly fee, no commission.':c?'\uD83C\uDF89 Launch offer: 50% off. Pay 5% + VAT per job instead of 10%, or Pro at \u00a374.50 + VAT a month instead of \u00a3149.':null;if(lt){var x=L.querySelector('.lx');L.textContent=lt;if(x)L.appendChild(x)}}
  motCalc()}
+/* MOT station page: the video replaces the banner photo and starts by itself. The MOT network banner is its first and
+   last frame, and the picture shown whenever it is not playing. Browsers only let a video start by itself with the sound
+   off unless the visitor has just tapped, so then a big "Tap for sound" button shows. */
+var HV=null,HB=null,HW=null;
+function heroVid(on){
+ if(on&&!HW){HW=document.createElement('div');HW.className='mvw herovid';
+  HW.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: The Motoring Central MOT network. Online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English" default></video>';
+  IMG.parentNode.insertBefore(HW,IMG.nextSibling);HV=HW.querySelector('video');HB=HW.querySelector('.msnd');
+  HB.addEventListener('click',function(){HV.muted=false;HV.volume=1;HB.hidden=true;if(HV.currentTime>4||HV.ended)HV.currentTime=0;HV.play().catch(function(){HB.hidden=false})});
+  HV.addEventListener('volumechange',function(){if(!HV.muted)HB.hidden=true});
+  HV.addEventListener('ended',function(){HB.hidden=true;HV.load()})}
+ if(!HW)return;
+ HW.hidden=!on;IMG.hidden=on;var fv=$('mot-vid');
+ if(on){if(fv){fv.hidden=true;var x=fv.querySelector('video');if(x&&!x.paused)x.pause()}
+  HV.currentTime=0;HV.muted=false;HB.hidden=true;var p=HV.play();
+  if(p&&p.catch)p.catch(function(){HV.muted=true;HB.hidden=false;HV.play().catch(function(){})})}
+ else if(!HV.paused)HV.pause()}
+addEventListener('hashchange',function(){if(HV&&location.hash!=='#mot-station'&&!HV.paused)HV.pause()});
 function motCalc(){var r=$('motwk');if(!r)return;var n=+r.value;$('motwkv').textContent=n;$('motest').textContent='£'+Math.round(n*44.98*52/12).toLocaleString('en-GB')}
 var mw=$('motwk');if(mw)mw.addEventListener('input',motCalc);
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-jump]');if(!a)return;e.preventDefault();var t=$(a.getAttribute('data-jump'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})});
