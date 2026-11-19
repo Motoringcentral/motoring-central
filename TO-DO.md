@@ -183,6 +183,11 @@ Still to do:
   close time and time per MOT (30, 45 or 60 minutes). Diary > MOT times. The booking page and the database both use them.
 - Real garages in the garage repair booking list too (same live diary, workshop bays).
 
+### MOT side FINAL (19 Nov 2026): 18% model. Do not change without the owner.
+- Customer pays the official maximum (booking fee included). Test centre paid 82%, we keep 18% (incl. VAT).
+- Site, terms (customer + partner), sign-up, dashboards, admin, video and database all match (checked 19 Nov 2026).
+- Still to update outside the site: partner overview PDF and pitch PDFs, if they mention MOT fees.
+
 ### MOT station pricing (decided 19 Nov 2026)
 - MOT test stations: no 5% fee, no Pro. No monthly fee, no commission. Income = maximum MOT fee minus agreed fee.
 - Free to join for MOT stations that apply by 31 May 2027; from 1 June 2027 a one-off joining fee of £99.99 + VAT,
