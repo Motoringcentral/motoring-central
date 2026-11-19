@@ -5298,7 +5298,7 @@ function load(){if(!real()){ST.rows=demoRows();return}
 function draw(){var el=document.getElementById('mc-amot');if(el)el.innerHTML=html()}
 function row(b){var c=b.status==='cancelled',reg=b.vehicle&&b.vehicle.reg?String(b.vehicle.reg).toUpperCase():'',open=ST.open===b.id;
  var s='<div class="job"><div><b>'+(b.slot_day?dl(b.slot_day)+', '+tm(b.slot_start):'')+' &middot; '+esc(b.partner_name||'')+'</b><small>'+esc(b.customer_name||'')+(b.customer_phone?', '+esc(b.customer_phone):'')+(reg?' &middot; '+esc(reg):'')+'</small>'
-  +'<small>Paid '+m(b.price_total)+' &middot; garage '+m(b.partner_payout)+' &middot; ours '+m((+b.price_total||0)-(+b.partner_payout||0))+'</small>'
+  +(b.status==='no_show'?'<small><span class="sst" style="background:#FDE68A;color:#5A3B00">No-show</span> marked by the garage (paid as normal)</small>':b.status==='done'?'<small><span class="sst">Tested</span></small>':'')+'<small>Paid '+m(b.price_total)+' &middot; garage '+m(b.partner_payout)+' &middot; ours '+m((+b.price_total||0)-(+b.partner_payout||0))+'</small>'
   +(c?'<small><span class="sst" style="background:#FECACA;color:#7A1010">Cancelled</span> '+esc(b.cancel_reason||'')+(b.refund_amount>0?' &middot; refund '+m(b.refund_amount)+(b.refund_status==='refunded'?' <b>refunded</b>':' <b style="color:#FDE68A">due: refund it in Stripe, then mark it</b>'):'')+'</small>':'')+'</div>'
   +'<div class="jb">'+(owner()?(c?(b.refund_status==='due'?'<button class="btn sm" type="button" data-mref="'+esc(b.id)+'">Mark refunded</button>':''):'<button class="btn sm ghost" type="button" data-mcan="'+esc(b.id)+'">Cancel and refund</button>'):'')+'</div></div>';
  if(open&&!c)s+='<div class="card dform" style="margin:6px 0 12px"><b>Cancel this MOT and refund the customer</b><p class="note" style="margin:4px 0 8px">The time is freed in the garage&rsquo;s diary, and the customer and the garage are told by email and text. Nothing is paid to the garage for a cancelled booking.</p>'
@@ -6776,7 +6776,17 @@ var ENG=[['1.0','Up to 1.0 litre'],['1.4','1.1 to 1.4 litres'],['1.9','1.5 to 1.
 var DOORS={Hatchback:5,Saloon:4,SUV:5,Estate:5,Coupe:2,Convertible:2,MPV:5},SEATS={Coupe:4,Convertible:4,MPV:7};
 var K={cars:{root:'cars-filters',one:'car',many:'cars',api:function(){return window.GGcars},bodyLabel:'Body type'},
        vans:{root:'vans-filters',one:'van',many:'vans',api:function(){return window.GGvans},bodyLabel:'Type of van'}};
-function blank(){return {pc:'',dist:0,make:'',model:'',pmin:0,pmax:0,ymin:0,ymax:0,miles:0,gear:'',fuel:[],body:[],col:[],doors:0,seats:0,eng:'',pay:0,mmax:0,seller:'',wo:'',dealer:'',dname:'',kw:'',sort:'rec',more:false}}
+/* ULEZ and Clean Air Zones (London ULEZ and class D zone rules for cars and vans): worked out from fuel and age.
+   Petrol (and petrol hybrids) need Euro 4: cars from 2006, vans from 2007. Diesel needs Euro 6: cars from Sept 2015, vans from Sept 2016.
+   'check' means the year is on the edge, so the exact vehicle must be checked. */
+window.MCulez=function(kind,c){if(!c)return '';var f=String(c.fuel||'').toLowerCase(),v=String(c.variant||'').toLowerCase(),y=+c.year||0,van=kind==='vans'||!!c.van,fr=c.firstReg?String(c.firstReg).slice(0,10):'';
+ if(/electric/.test(f)&&!/hybrid/.test(f))return 'yes';if(!y)return '';
+ var diesel=/diesel/.test(f)||(/hybrid/.test(f)&&/(tdi|crdi|cdti|dci|diesel|hdi|d-4d|d4d|tdci)/.test(v));
+ if(diesel){var cut=van?'2016-09-01':'2015-09-01',cy=van?2016:2015;if(/^\d{4}-\d{2}-\d{2}$/.test(fr))return fr>=cut?'yes':(fr>=(cy-1)+'-01-01'?'check':'no');return y>cy?'yes':y===cy?'check':'no'}
+ if(/petrol|hybrid/.test(f)){var py=van?2007:2006;if(y>=py)return 'yes';return y>=py-5?'check':'no'}
+ return ''};
+function ulezOf(kind,c){return window.MCulez(kind,c)}
+function blank(){return {pc:'',dist:0,make:'',model:'',pmin:0,pmax:0,ymin:0,ymax:0,miles:0,gear:'',fuel:[],body:[],col:[],doors:0,seats:0,eng:'',pay:0,mmax:0,seller:'',wo:'',ulez:'',dealer:'',dname:'',kw:'',sort:'rec',more:false}}
 var ST={cars:blank(),vans:blank()};
 try{var sv=JSON.parse(sessionStorage.getItem('mc-flt')||'null');if(sv)['cars','vans'].forEach(function(k){if(sv[k]){var b=blank();Object.keys(b).forEach(function(f){if(sv[k][f]!=null&&typeof sv[k][f]===typeof b[f]&&Array.isArray(sv[k][f])===Array.isArray(b[f]))b[f]=sv[k][f]});ST[k]=b}})}catch(e){}
 function save(){try{sessionStorage.setItem('mc-flt',JSON.stringify(ST))}catch(e){}}
@@ -6793,6 +6803,7 @@ function ok(kind,c,skip){var s=ST[kind];
  if(c.private&&c.exp&&c.exp<Date.now())return false;
  if(skip!=='seller'&&s.seller&&(s.seller==='private')!==!!c.private)return false;
  if(skip!=='wo'&&s.wo==='hide'&&window.MChist&&window.MChist.isWO(c))return false;
+ if(skip!=='ulez'&&s.ulez==='yes'&&ulezOf(kind,c)!=='yes')return false;
  if(s.dealer&&!(c.ownerId===s.dealer||(c.dealer||'')===s.dealer))return false;
  if(skip!=='make'&&skip!=='model'&&s.make&&c.make!==s.make)return false;
  if(skip!=='model'&&s.model&&c.model!==s.model)return false;
@@ -6848,17 +6859,18 @@ function mount(kind){var k=K[kind],root=$(k.root);if(!root||root.querySelector('
   :'<div class="flt-g"><div class="wide"><label class="f" for="'+p+'-f-pay">Payload (the weight it can carry)</label><select id="'+p+'-f-pay" data-f="pay"></select></div></div>')+
  '<label class="f" for="'+p+'-f-seller">Seller</label><select id="'+p+'-f-seller" data-f="seller"></select>'+
   '<label class="f" for="'+p+'-f-wo">Insurance write-offs</label><select id="'+p+'-f-wo" data-f="wo"></select>'+
+  '<label class="f" for="'+p+'-f-ulez">ULEZ and Clean Air Zones</label><select id="'+p+'-f-ulez" data-f="ulez"></select>'+
  '<label class="f" for="'+p+'-f-kw">Keyword</label><input type="text" id="'+p+'-f-kw" data-f="kw" autocomplete="off" placeholder="'+(car?'e.g. sat nav, one owner, parking sensors':'e.g. ply lined, tow bar, racking')+'">'+
  '<details class="flt-help"><summary>Not sure what these mean?</summary><div>'+
- (car?'<p><b>Gearbox.</b> Automatic changes gear for you and has no clutch pedal. Manual has a clutch pedal and a gear stick. If your licence is automatic only, choose Automatic.</p><p><b>Fuel.</b> Petrol suits short local trips. Diesel suits long motorway miles. A hybrid is petrol with electric help, so it uses less fuel. Electric has no engine and is charged from a plug.</p><p><b>Body type.</b> Hatchback: the boot lid and back window lift together, the most common shape. Saloon: a separate boot. Estate: a longer boot for more luggage. SUV: taller, with a higher seat.</p><p><b>Seller.</b> A dealer is a business, so you get stronger legal rights and usually a warranty. A private seller is an individual selling their own car, often for less, but with fewer rights if something goes wrong. Private adverts are marked Private sale.</p><p><b>Engine size.</b> Smaller engines (up to 1.4 litres) are usually cheaper to insure and run, which suits new drivers.</p>'
-  :'<p><b>Payload.</b> The most weight the van can legally carry, including the driver and passengers.</p><p><b>Prices before VAT.</b> Van prices are shown before VAT. Unless the advert says no VAT, add 20% if you are not VAT registered. The price including VAT is shown under each van.</p><p><b>Type of van.</b> Small vans are car-sized. Medium vans are the most common builder’s van. Large vans suit removals and deliveries. A crew van has a second row of seats. A pickup has an open load bed.</p><p><b>Gearbox.</b> Automatic changes gear for you and has no clutch pedal.</p><p><b>Seller.</b> A dealer is a business, so you get stronger legal rights. A private seller is an individual selling their own van. Private adverts are marked Private sale and have no VAT to pay.</p>')+
+ (car?'<p><b>Gearbox.</b> Automatic changes gear for you and has no clutch pedal. Manual has a clutch pedal and a gear stick. If your licence is automatic only, choose Automatic.</p><p><b>Fuel.</b> Petrol suits short local trips. Diesel suits long motorway miles. A hybrid is petrol with electric help, so it uses less fuel. Electric has no engine and is charged from a plug.</p><p><b>Body type.</b> Hatchback: the boot lid and back window lift together, the most common shape. Saloon: a separate boot. Estate: a longer boot for more luggage. SUV: taller, with a higher seat.</p><p><b>ULEZ and Clean Air Zones.</b> Older petrol and diesel vehicles pay a daily charge to drive in London and some other cities. We work this out from the fuel type and age, so check the exact vehicle on the TfL or GOV.UK checker before you buy.</p><p><b>Seller.</b> A dealer is a business, so you get stronger legal rights and usually a warranty. A private seller is an individual selling their own car, often for less, but with fewer rights if something goes wrong. Private adverts are marked Private sale.</p><p><b>Engine size.</b> Smaller engines (up to 1.4 litres) are usually cheaper to insure and run, which suits new drivers.</p>'
+  :'<p><b>Payload.</b> The most weight the van can legally carry, including the driver and passengers.</p><p><b>Prices before VAT.</b> Van prices are shown before VAT. Unless the advert says no VAT, add 20% if you are not VAT registered. The price including VAT is shown under each van.</p><p><b>Type of van.</b> Small vans are car-sized. Medium vans are the most common builder’s van. Large vans suit removals and deliveries. A crew van has a second row of seats. A pickup has an open load bed.</p><p><b>Gearbox.</b> Automatic changes gear for you and has no clutch pedal.</p><p><b>ULEZ and Clean Air Zones.</b> Older petrol and diesel vehicles pay a daily charge to drive in London and some other cities. We work this out from the fuel type and age, so check the exact vehicle on the TfL or GOV.UK checker before you buy.</p><p><b>Seller.</b> A dealer is a business, so you get stronger legal rights. A private seller is an individual selling their own van. Private adverts are marked Private sale and have no VAT to pay.</p>')+
  '</div></details></div>'+
  '<div class="flt-foot"><div><label class="f" for="'+p+'-f-sort">Sort by</label><select id="'+p+'-f-sort" data-f="sort"></select></div><button type="button" class="flt-clear" data-r="clear">Clear all filters</button></div>'+
  '<div class="flt-act" data-r="act"></div><button type="button" class="btn block flt-go" data-r="go"></button>'+
  '<button type="button" class="flt-save" data-r="save"></button><div class="flt-saved" data-r="saved"></div></form>';
  var F=root.querySelector('.flt');
  F.addEventListener('change',function(e){var f=e.target.getAttribute('data-f');if(!f||f==='pc'||f==='kw')return;var s=ST[kind],v=e.target.value;
-  if(f==='make'){s.make=v;s.model=''}else if(f==='model'||f==='gear'||f==='eng'||f==='sort'||f==='seller'||f==='wo')s[f]=v;else s[f]=+v||0;
+  if(f==='make'){s.make=v;s.model=''}else if(f==='model'||f==='gear'||f==='eng'||f==='sort'||f==='seller'||f==='wo'||f==='ulez')s[f]=v;else s[f]=+v||0;
   if(f==='pmin'&&s.pmax&&s.pmin>s.pmax)s.pmax=0;if(f==='pmax'&&s.pmin&&s.pmax<s.pmin)s.pmin=0;
   if(f==='ymin'&&s.ymax&&s.ymin>s.ymax)s.ymax=0;if(f==='ymax'&&s.ymin&&s.ymax<s.ymin)s.ymin=0;
   if(f==='dist'&&s.dist&&!here(kind)){var pc=$(p+'-f-pc');if(pc)pc.focus()}
@@ -6886,11 +6898,11 @@ function active(kind){var s=ST[kind],a=[],car=kind==='cars';
  if(s.gear)a.push(['gear','',s.gear]);
  s.fuel.forEach(function(v){a.push(['fuel',v,v])});s.body.forEach(function(v){a.push(['body',v,v])});s.col.forEach(function(v){a.push(['col',v,v])});
  if(car&&s.doors)a.push(['doors','',s.doors+' doors']);if(car&&s.seats)a.push(['seats','',s.seats+' or more seats']);
- if(s.seller)a.push(['seller','',s.seller==='private'?'Private sellers only':'Dealers only']);if(s.wo)a.push(['wo','','No write-offs']);if(s.dealer)a.push(['dealer','','Seller: '+(s.dname||s.dealer)]);
+ if(s.seller)a.push(['seller','',s.seller==='private'?'Private sellers only':'Dealers only']);if(s.wo)a.push(['wo','','No write-offs']);if(s.ulez)a.push(['ulez','','Meets ULEZ rules']);if(s.dealer)a.push(['dealer','','Seller: '+(s.dname||s.dealer)]);
  if(car&&s.eng)a.push(['eng','',(ENG.filter(function(x){return x[0]===s.eng})[0]||['',''])[1]]);
  if(!car&&s.pay)a.push(['pay','','Carries '+s.pay.toLocaleString('en-GB')+' kg or more']);
  if(s.kw.trim())a.push(['kw','','“'+s.kw.trim()+'”']);return a}
-function advCount(kind){return active(kind).filter(function(x){return ['year','miles','gear','fuel','body','col','doors','seats','eng','seller','wo','pay','kw'].indexOf(x[0])>-1}).length}
+function advCount(kind){return active(kind).filter(function(x){return ['year','miles','gear','fuel','body','col','doors','seats','eng','seller','wo','ulez','pay','kw'].indexOf(x[0])>-1}).length}
 function withN(counts,label){return function(v){var n=counts[v]||0;return [v,(label?label(v):v)+' ('+n+')',!n]}}
 function sync(kind){var k=K[kind],root=$(k.root),F=root&&root.querySelector('.flt');if(!F)return;var s=ST[kind],p=kind,car=kind==='cars',L=all(kind);
  function q(r){return F.querySelector('[data-r="'+r+'"]')}
@@ -6914,6 +6926,7 @@ function sync(kind){var k=K[kind],root=$(k.root),F=root&&root.querySelector('.fl
   var en=tally(kind,function(c){return engBucket(engOf(c))},'eng');opts($(p+'-f-eng'),'Any engine size',ENG.map(function(x){return [x[0],x[1]+' ('+(en[x[0]]||0)+')',!en[x[0]]]}),s.eng)}
  else{var py={};PAY.forEach(function(n){py[n]=L.filter(function(c){return ok(kind,c,'pay')&&c.pay>=n}).length});opts($(p+'-f-pay'),'Any payload',PAY.map(withN(py,function(v){return (+v).toLocaleString('en-GB')+' kg or more'})),s.pay||'')}
  var sl={trade:0,private:0};L.forEach(function(c){if(ok(kind,c,'seller'))sl[c.private?'private':'trade']++});opts($(p+'-f-seller'),'Dealers and private sellers',[['trade','Dealers only ('+sl.trade+')',!sl.trade],['private','Private sellers only ('+sl.private+')',!sl.private]],s.seller);var wn=0;L.forEach(function(c){if(ok(kind,c,'wo')&&window.MChist&&window.MChist.isWO(c))wn++});opts($(p+'-f-wo'),'Show them (clearly marked)',[['hide','Hide write-offs ('+wn+')',false]],s.wo);
+ var un=0;L.forEach(function(c){if(ok(kind,c,'ulez')&&ulezOf(kind,c)==='yes')un++});opts($(p+'-f-ulez'),'Show all',[['yes','Only ones that should meet the rules ('+un+')',!un&&s.ulez!=='yes']],s.ulez);
  var so=[['rec','Recently listed'],['pl','Price: low to high'],['ph','Price: high to low'],['mi','Lowest mileage'],['yr','Newest first']];if(!car)so.push(['pay','Highest payload']);if(a)so.push(['near','Nearest first']);else if(s.sort==='near')s.sort='rec';
  var ss=$(p+'-f-sort');ss.innerHTML=so.map(function(x){return '<option value="'+x[0]+'"'+(x[0]===s.sort?' selected':'')+'>'+x[1]+'</option>'}).join('');
  var adv=$(p+'-f-adv'),mb=q('more'),n=advCount(kind);adv.hidden=!s.more;mb.setAttribute('aria-expanded',s.more?'true':'false');mb.innerHTML=(s.more?'Fewer filters':'More filters')+(n?' <i>'+n+' in use</i>':'')+'<small>'+(s.more?'':'Year, mileage, gearbox, fuel, '+(car?'body type, colour, doors, seats':'type of van, colour, payload')+'</small>');
@@ -8360,6 +8373,141 @@ function enhance2(){var a=curAd();if(!a||!a.host)return;var c=a.c,k=a.k,host=a.h
 setInterval(function(){try{enhance2();redBadges();drawLeads(false);pvExtras();drawReps(false);if(isStaff()&&location.hash==='#admin'&&Date.now()-repAt>30000)pullReps()}catch(e){}},900);
 var lastLeadWho='';setInterval(function(){var u=window.GGuser,w=u&&u.sbid?u.sbid:'';if(w!==lastLeadWho){lastLeadWho=w;LEADS={};leadsAt=0;leadSig='';REPS=null;repSig='';['mc-leads','mc-reps'].forEach(function(i){var o=$(i);if(o)o.remove()})}},1500);
 
+/* ---------- 19 Nov 2026 (later): windscreen cards, advert links, stock age and price tips, ULEZ, price history, MOT reminders, MOT station tools ---------- */
+function ulezOf(k,c){return window.MCulez?window.MCulez(k,c):''}
+var ULZ={yes:['ok','ULEZ ✓','Should meet the ULEZ and Clean Air Zone rules'],check:['chk','Check ULEZ','It might meet the ULEZ and Clean Air Zone rules, so check before you buy'],no:['no','ULEZ charge','Likely to pay the daily charge in ULEZ and charging Clean Air Zones']};
+function ulezCards(){['cars','vans'].forEach(function(k){var L=$(k+'-list');if(!L)return;[].forEach.call(L.querySelectorAll('article.lcard'),function(a){var sp=a.querySelector('.lspecs');if(!sp||sp.querySelector('.ulz'))return;var c=advBy(k,a.getAttribute('data-id')),z=c&&ULZ[ulezOf(k,c)];
+ if(!z||z[0]==='chk'){sp.insertAdjacentHTML('beforeend','<i class="ulz" hidden></i>');return}sp.insertAdjacentHTML('beforeend','<span class="ulz '+z[0]+'">'+z[1]+'</span>')})})}
+/* price history: recorded by our server every time the price changes */
+function phHtml(c){var P=Array.isArray(c.ph)?c.ph.filter(function(x){return x&&+x.p>0}):[];if(P.length<2)return '';var down=0;for(var i=1;i<P.length;i++)if(+P[i].p<+P[i-1].p)down++;
+ var diff=+P[0].p-(+c.price),sum=down?(down===1?'reduced once':'reduced '+down+' times')+(diff>0?', now '+gbp0(diff)+' less than when first listed':''):'price changed';
+ return '<details class="phist"><summary>Price history: '+sum+'</summary><ul>'+P.slice().reverse().map(function(x,j){return '<li><span>'+E(dd(x.at))+(j===P.length-1?' (first listed)':'')+'</span><b>'+gbp0(x.p)+'</b></li>'}).join('')+'</ul></details>'}
+function adKey(c){return c.dbid?String(c.dbid):'s'+c.id}
+function adUrl(k,c){return location.origin+location.pathname+'?ad='+encodeURIComponent(adKey(c))+'#'+k}
+function isMine(c){var u=window.GGuser;return !!(u&&((c.ownerId&&c.ownerId===u.sbid)||(!c.dbid&&(c.mine||c.owner===u.email))))}
+function detail3(){var a=curAd();if(!a||!a.host)return;var c=a.c,k=a.k,h=a.host,sp=h.querySelector('.specs');if(!sp)return;
+ if(!sp.querySelector('.ulzd')){var z=ULZ[ulezOf(k,c)];sp.insertAdjacentHTML('beforeend',z?'<div class="ulzd"><span>Clean air zones</span><b class="ulz '+z[0]+'">'+z[1]+'</b></div>':'<div class="ulzd" hidden></div>');
+  if(z)sp.insertAdjacentHTML('afterend','<p class="note ulzn">'+z[2]+'. Worked out from the fuel type and age. Check the exact vehicle on <a href="https://tfl.gov.uk/modes/driving/check-your-vehicle/" target="_blank" rel="noopener">TfL</a> or <a href="https://www.gov.uk/clean-air-zones" target="_blank" rel="noopener">GOV.UK</a> before you buy.</p>')}
+ if(!h.querySelector('.phist,.phx')){var anc=h.querySelector('.ulzn')||sp;anc.insertAdjacentHTML('afterend',phHtml(c)||'<i class="phx" hidden></i>')}
+ if(isMine(c)&&!h.querySelector('.wsrow')){var at=h.querySelector('.pcbox')||h.querySelector('.mc-st');if(at)at.insertAdjacentHTML('afterend','<p class="wsrow"><button type="button" class="btn ghost sm" data-wsc="'+k+':'+c.id+'">Print a windscreen card</button> <button type="button" class="btn ghost sm" data-adlink="'+k+':'+c.id+'">Copy the advert link</button></p>')}}
+/* a link that opens one advert: ?ad=<id>#cars (used by the QR code on windscreen cards) */
+(function(){var key=null;try{key=new URLSearchParams(location.search).get('ad')}catch(e){}if(!key)return;var n=0,t=setInterval(function(){n++;var k=/^#vans/.test(location.hash||'')?'vans':'cars',api=adApi(k);
+ var c=api?api.list().filter(function(x){return adKey(x)===key})[0]:null;if(c){clearInterval(t);api.open(c.id);try{history.replaceState(null,'',location.pathname+'#'+k)}catch(e){}}else if(n>40){clearInterval(t);toast('That advert has ended or been sold.')}},500)})();
+/* printing: windscreen cards with a QR code, the MOT test sheet and MOT statements */
+var qrP=null;function qrLib(){if(window.qrcode)return Promise.resolve(window.qrcode);if(qrP)return qrP;qrP=new Promise(function(ok,no){var s=document.createElement('script');s.src='js/qrcode.min.js';s.onload=function(){window.qrcode?ok(window.qrcode):no()};s.onerror=function(){qrP=null;no()};document.head.appendChild(s)});return qrP}
+function qrSvg(q,text){var x=q(0,'M');x.addData(text);x.make();var n=x.getModuleCount(),d='';for(var r=0;r<n;r++)for(var cc=0;cc<n;cc++)if(x.isDark(r,cc))d+='M'+cc+' '+r+'h1v1h-1z';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 '+(n+4)+' '+(n+4)+'" shape-rendering="crispEdges" role="img" aria-label="QR code"><rect x="-2" y="-2" width="'+(n+4)+'" height="'+(n+4)+'" fill="#fff"/><path d="'+d+'" fill="#000"/></svg>'}
+function printWin(title,css,build){var w=window.open('','_blank');if(!w){toast('Your browser blocked the print window. Allow pop-ups for this site, then try again.',true);return}
+ w.document.write('<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"><title>'+E(title)+'</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>'+css+'</style></head><body><p style="font-family:Arial,sans-serif">Getting it ready…</p></body></html>');w.document.close();
+ Promise.resolve().then(build).then(function(html){w.document.body.innerHTML=html;setTimeout(function(){try{w.focus();w.print()}catch(e){}},400)},function(){w.document.body.innerHTML='<p style="font-family:Arial,sans-serif">Sorry, this could not be made. Check your connection and try again.</p>'})}
+var WSCSS='@page{size:A5 portrait;margin:8mm}*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#111}.ws{height:192mm;display:flex;flex-direction:column;page-break-after:always;break-after:page;border:3px solid #111;border-radius:5mm;padding:6mm 7mm}.ws:last-child{page-break-after:auto;break-after:auto}.ws-top{font-size:13pt;font-weight:700;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid #111;padding-bottom:2mm}.ws-price{font-size:46pt;font-weight:800;line-height:1.05;margin:4mm 0 1mm}.ws-price small{font-size:16pt;font-weight:700}h1{font-size:21pt;margin:0}.ws-var{font-size:13pt;color:#333;margin:1mm 0 3mm}table{width:100%;border-collapse:collapse;font-size:12.5pt}th,td{text-align:left;padding:1.3mm 0;border-bottom:1px solid #bbb}th{width:42%;color:#444;font-weight:600}.ws-desc{font-size:10.5pt;margin:3mm 0 0;line-height:1.35}.ws-qr{display:flex;gap:5mm;align-items:center;margin-top:auto;padding-top:4mm}.ws-qr svg{width:34mm;height:34mm;flex:none}.ws-qr b{display:block;font-size:13pt}.ws-qr span{display:block;font-size:10.5pt;margin-top:1mm}.ws-qr .ws-ph{font-size:16pt;font-weight:700;margin-top:2mm}.ws-foot{font-size:9pt;color:#555;margin-top:3mm;text-align:center}@media screen{body{background:#e9e9e9;padding:12px}.ws{background:#fff;width:132mm;margin:0 auto 12px}}';
+function wsCard(k,c,q){var van=k==='vans',z=ULZ[ulezOf(k,c)];
+ var rows=[['Year',c.year],['Mileage',c.miles!=null?Number(c.miles).toLocaleString('en-GB')+' miles':''],['Fuel',c.fuel],['Gearbox',c.gear],[van?'Type of van':'Body type',c.body],['Colour',c.col]];
+ if(van&&c.pay)rows.push(['Payload',Number(c.pay).toLocaleString('en-GB')+' kg']);if(!van&&c.seats)rows.push(['Seats',c.seats]);if(z&&z[0]!=='chk')rows.push(['ULEZ and clean air zones',z[0]==='ok'?'Should meet the rules':'Likely to be charged']);
+ return '<section class="ws"><div class="ws-top">'+E(c.dealer||'For sale')+'</div><div class="ws-price">'+E(gbp0(c.price))+(c.vat?' <small>+ VAT</small>':'')+'</div><h1>'+E([c.year,c.make,c.model].filter(Boolean).join(' '))+'</h1><div class="ws-var">'+E(c.variant||'')+'</div><table>'
+  +rows.filter(function(r){return r[1]!==''&&r[1]!=null}).map(function(r){return '<tr><th>'+E(r[0])+'</th><td>'+E(r[1])+'</td></tr>'}).join('')+'</table>'
+  +(c.desc?'<p class="ws-desc">'+E(String(c.desc).slice(0,230))+(String(c.desc).length>230?'…':'')+'</p>':'')
+  +'<div class="ws-qr">'+qrSvg(q,adUrl(k,c))+'<div><b>Scan for photos and the full advert</b><span>Message the seller or book a viewing or test drive online</span>'+(c.phone?'<span class="ws-ph">'+E(c.phone)+'</span>':'')+'</div></div><div class="ws-foot">The Motoring Central · motoringcentral.co.uk</div></section>'}
+function printCards(list){if(!list.length){toast('No adverts to print yet.');return}printWin(list.length===1?'Windscreen card':'Windscreen cards',WSCSS,function(){return qrLib().then(function(q){return list.map(function(x){return wsCard(x.k,x.c,q)}).join('')})})}
+function myAdsAll(){var u=window.GGuser,L=[];if(!u)return L;['cars','vans'].forEach(function(k){var api=adApi(k);if(api)api.list().forEach(function(c){if((u.sbid&&c.ownerId===u.sbid)||(!u.sbid&&c.mine))L.push({k:k,c:c})})});return L}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ var w=t.closest('[data-wsc]');if(w){var p=w.getAttribute('data-wsc').split(':'),c=advBy(p[0],p[1]);if(c)printCards([{k:p[0],c:c}]);return}
+ if(t.closest('[data-wsall]')){printCards(myAdsAll());return}
+ var l=t.closest('[data-adlink]');if(l){var q=l.getAttribute('data-adlink').split(':'),c2=advBy(q[0],q[1]);if(!c2)return;var url=adUrl(q[0],c2);
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(function(){toast('Advert link copied.')},function(){prompt('Copy the advert link:',url)});else prompt('Copy the advert link:',url)}});
+/* stock age and price tips on the dealer's "How your adverts are doing" card */
+function median(a){a=a.slice().sort(function(x,y){return x-y});var m=a.length>>1;return a.length%2?a[m]:(a[m-1]+a[m])/2}
+function daysListed(c){var t=c.since?Date.parse(c.since):(typeof c.listed==='number'?c.listed:0);if(t)return Math.max(0,Math.floor((Date.now()-t)/DAYMS));
+ if(!c.dbid){var n=String(c.reg||c.id).split('').reduce(function(a,ch){return a+ch.charCodeAt(0)},0);return 3+n%55}return null}
+function simPrice(k,c){var api=adApi(k);if(!api)return [];return api.list().filter(function(x){return x!==c&&x.make===c.make&&x.model===c.model&&Math.abs((+x.year||0)-(+c.year||0))<=1&&+x.price>0&&!(x.private&&x.exp&&x.exp<Date.now())})}
+function tipsFor(k,c,s){var t=[],d=daysListed(c),sim=simPrice(k,c),word=k==='vans'?'vans':'cars';
+ if(d!=null)t.push('Listed '+(d===0?'today':d===1?'1 day':d+' days'));
+ if(sim.length>=2){var md=median(sim.map(function(x){return +x.price})),diff=Math.round((+c.price-md)/50)*50,gap=Math.max(250,md*0.04);
+  if(diff>gap)t.push('<em>'+sim.length+' similar '+word+' on the site are about '+gbp0(diff)+' cheaper</em>');else if(-diff>gap)t.push('Priced about '+gbp0(-diff)+' under similar '+word)}
+ if(d!=null&&d>=21&&s&&!s.contacts)t.push('<em>No enquiries in '+d+' days: try a lower price, more photos or a featured spot</em>');else if(d!=null&&d>=60)t.push('<em>Over 60 days: think about a price drop</em>');
+ return t}
+function stockTips(){var box=$('mc-stats');if(!box||box.getAttribute('data-tips'))return;var u=window.GGuser;if(!u)return;box.setAttribute('data-tips','1');var real=!!u.sbid,old=0,ages=[];
+ [].forEach.call(box.querySelectorAll('a[data-mxopen]'),function(a){var p=a.getAttribute('data-mxopen').split(':'),k=p[0],c=advBy(k,p[1]);if(!c)return;
+  var s=real?((STATS&&STATS[c.dbid])||{views:0,saves:0,contacts:0}):sampleStats(c),T=tipsFor(k,c,s),d=daysListed(c);if(d!=null){ages.push(d);if(d>=60)old++}
+  var td=a.closest('td');if(!td)return;if(T.length)td.insertAdjacentHTML('beforeend','<small class="sttip">'+T.join(' · ')+'</small>');
+  td.insertAdjacentHTML('beforeend','<span class="wsrow"><button type="button" class="pv-link" data-wsc="'+k+':'+c.id+'">Windscreen card</button> <button type="button" class="pv-link" data-adlink="'+k+':'+c.id+'">Copy link</button></span>')});
+ var h=box.querySelector('h2');if(h&&ages.length)h.insertAdjacentHTML('afterend','<p class="note sttop">Average time listed: <b>'+Math.round(ages.reduce(function(a,b){return a+b},0)/ages.length)+' days</b>'+(old?' · <b>'+old+'</b> listed for over 60 days':'')+'. Price tips compare each advert with similar ones on the site. <button type="button" class="pv-link" data-wsall="1">Print windscreen cards for all</button></p>')}
+/* free MOT reminders: anyone, by registration and email; sent 30 and 7 days before the MOT is due */
+function remHtml(id,inCard){var u=window.GGuser,em=u&&u.role==='customer'&&u.email?u.email:'';
+ return '<div class="'+(inCard?'motrem in':'card motrem')+'" id="'+id+'"><h2>Free MOT reminders</h2><p class="note" style="margin:0 0 8px">We email you a month before and a week before your MOT is due. It is free, and you do not need an account. Stop any time with the link in the email.</p>'
+  +'<form class="mr-f" novalidate><div class="two"><div><label class="f" for="'+id+'-r">Registration</label><input type="text" id="'+id+'-r" class="mr-reg up" maxlength="8" autocomplete="off" placeholder="e.g. AB12 CDE"></div><div><label class="f" for="'+id+'-e">Your email</label><input type="email" id="'+id+'-e" class="mr-em" autocomplete="email" value="'+E(em)+'"></div></div>'
+  +'<label class="f" for="'+id+'-d">MOT due date</label><div class="mr-row"><input type="date" id="'+id+'-d" class="mr-due"><button type="button" class="btn ghost sm mr-find">Find it for me</button></div><p class="note mr-hint" style="margin:4px 0 0">It is on your last MOT certificate, or check it free on <a href="https://www.gov.uk/check-mot-history" target="_blank" rel="noopener">GOV.UK</a>.</p>'
+  +'<p class="note err mr-err" role="alert"></p><button type="submit" class="btn">Remind me</button><p class="note mr-ok" role="status" hidden></p></form><div class="mr-list"></div></div>'}
+function nreg(r){return String(r||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.mr-find');if(!b)return;var f=b.closest('form'),reg=nreg(f.querySelector('.mr-reg').value),hint=f.querySelector('.mr-hint'),M=window.MCvrm;
+ if(reg.length<2){f.querySelector('.mr-err').textContent='Enter the registration first.';return}b.disabled=true;b.textContent='Looking…';
+ (M&&M.checkLive?M.checkLive():Promise.resolve(false)).then(function(on){if(!on)return 'off';return M.ready(reg)}).then(function(st){b.disabled=false;b.textContent='Find it for me';var d=st==='live'?M.lookup(reg):null;
+  if(d&&d.mot){f.querySelector('.mr-due').value=String(d.mot).slice(0,10);hint.textContent=(d.make?[d.make,d.model].filter(Boolean).join(' ')+': ':'')+(d.firstMot?'first MOT due ':'MOT due ')+dd(d.mot)+'. Check it is right.'}
+  else hint.innerHTML=(st==='none'?'We could not find that registration. ':'We could not look it up just now. ')+'Check the date free on <a href="https://www.gov.uk/check-mot-history" target="_blank" rel="noopener">GOV.UK</a> and type it in.'},function(){b.disabled=false;b.textContent='Find it for me'})});
+document.addEventListener('submit',function(e){var f=e.target;if(!f.classList||!f.classList.contains('mr-f'))return;e.preventDefault();var er=f.querySelector('.mr-err'),ok=f.querySelector('.mr-ok'),btn=f.querySelector('button[type=submit]');
+ var reg=nreg(f.querySelector('.mr-reg').value),em=String(f.querySelector('.mr-em').value||'').trim(),due=f.querySelector('.mr-due').value;er.textContent='';ok.hidden=true;
+ if(reg.length<2){er.textContent='Enter the registration.';return}if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){er.textContent='Enter your email address.';return}
+ if(!due){er.textContent='Enter the MOT due date, so we know when to remind you.';return}var dt0=new Date(due+'T12:00:00');if(isNaN(dt0)||dt0<new Date(Date.now()-400*DAYMS)){er.textContent='Check the MOT due date.';return}
+ btn.disabled=true;ready.then(function(){return sb.rpc('add_mot_reminder',{p_reg:reg,p_email:em,p_due:due})}).then(function(r){btn.disabled=false;var v=r&&r.data;
+  if(r.error||v!=='ok'){er.textContent=v==='bad_reg'?'Check the registration.':v==='bad_email'?'Check your email address.':v==='too_many'?'That email already has reminders for 10 vehicles.':'That did not save. Check your connection and try again.';return}
+  var days=Math.round((dt0-Date.now())/DAYMS);ok.hidden=false;ok.textContent='Done. We will email '+em+' about '+reg+(days>30?' on '+dd(new Date(dt0-30*DAYMS))+' and '+dd(new Date(dt0-7*DAYMS)):days>7?' shortly, and again on '+dd(new Date(dt0-7*DAYMS)):' shortly')+'.';
+  f.querySelector('.mr-reg').value='';f.querySelector('.mr-due').value='';remAt=0;drawRemList()},function(){btn.disabled=false;er.textContent='That did not save. Check your connection and try again.'})});
+var REM=null,remAt=0;
+function drawRemList(){var u=window.GGuser;[].forEach.call(document.querySelectorAll('.motrem .mr-list'),function(box){if(!realUser()){box.innerHTML='';return}
+ if(!REM||Date.now()-remAt>60000){remAt=Date.now();sb.from('mot_reminders').select('id,reg,due,stopped').eq('user_id',u.sbid).order('due').then(function(r){if(r.error)return;REM=r.data||[];drawRemList()});if(!REM)return}
+ var h=REM.filter(function(x){return !x.stopped}).map(function(x){return '<li><b>'+E(x.reg)+'</b> MOT due '+E(dd(x.due))+' <button type="button" class="pv-link" data-mrdel="'+x.id+'">Stop</button></li>'}).join('');box.innerHTML=h?'<p class="note" style="margin:10px 0 4px">Your reminders</p><ul class="mr-ul">'+h+'</ul>':''})}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-mrdel]');if(!b||!realUser())return;b.disabled=true;sb.from('mot_reminders').delete().eq('id',+b.getAttribute('data-mrdel')).then(function(r){if(r.error){b.disabled=false;toast('That did not work. Try again.',true);return}remAt=0;REM=null;toast('Reminder stopped.');drawRemList()})});
+(function(){var tok=null;try{tok=new URLSearchParams(location.search).get('motstop')}catch(e){}if(!tok||!/^[0-9a-f-]{36}$/i.test(tok))return;
+ ready.then(function(){return sb.rpc('stop_mot_reminder',{p_token:tok})}).then(function(r){toast(r&&r.data?'MOT reminders stopped for that vehicle.':'Those reminders were already stopped.');try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}})})();
+function placeRem(){var m=$('mot');if(m&&!$('mr-mot'))m.insertAdjacentHTML('beforeend',remHtml('mr-mot',true));
+ var u=window.GGuser,ab=$('acc-body');if(ab&&u&&u.role==='customer'&&location.hash==='#account'&&ab.firstChild&&!$('mr-acc'))ab.insertAdjacentHTML('beforeend',remHtml('mr-acc',false));
+ if(document.querySelector('.motrem .mr-list'))drawRemList()}
+/* MOT test stations: today's test sheet, tested or no-show, and a monthly statement */
+function motU(){var u=window.GGuser;if(!u||u.role!=='mechanic'||u.sub!=='garage'||!Array.isArray(u.diary)||!Array.isArray(u.bays)||!u.bays.some(function(b){return /MOT/i.test(b)}))return null;return u}
+function dkey(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function hm(m){m=+m||0;return ('0'+Math.floor(m/60)).slice(-2)+':'+('0'+m%60).slice(-2)}
+function money2(n){return '£'+(+n||0).toFixed(2)}
+function isMotB(u,b){return b.type==='MOT'||/MOT/i.test(u.bays[b.bay]||'')}
+var MOUT={},moutAt=0,mtSig='',MST=null;
+function pullOut(u){if(!u.sbid||!window.MCmotDb||Date.now()-moutAt<30000)return;moutAt=Date.now();var from=new Date();from.setDate(from.getDate()-7);
+ window.MCmotDb.mine(dkey(from)).then(function(r){if(!r||r.error||!r.data)return;r.data.forEach(function(x){MOUT[x.booking_id]=x.status});drawMotTools(true)})}
+function outOf(b){return b.bid&&MOUT[b.bid]&&MOUT[b.bid]!=='confirmed'?MOUT[b.bid]:(b.bid?'':(b.motOut||''))}
+function todayList(u){var t=dkey(new Date());return u.diary.filter(function(b){return b.date===t&&isMotB(u,b)&&b.status!=='cancelled'}).sort(function(a,b){return a.start-b.start})}
+function motToolsHtml(u){var L=todayList(u),past=function(b){var n=new Date();return n.getHours()*60+n.getMinutes()>=(+b.start||0)};
+ var rows=L.map(function(b){var o=outOf(b),on=!!b.ol;return '<div class="mt-r"><b class="mt-t">'+hm(b.start)+'</b><span class="mt-v"><b>'+E(String(b.reg||'').toUpperCase()||'No reg')+'</b> '+E(b.veh||'')+'<small>'+E(b.cust||'')+(b.phone?', '+E(b.phone):'')+(on?' · booked online and paid':'')+'</small></span>'
+  +(on?'<span class="mt-o">'+(o==='done'?'<i class="mt-done">Tested</i> ':o==='no_show'?'<i class="mt-ns">No-show</i> ':'')+(o?'<button type="button" class="pv-link" data-mout="confirmed" data-mb="'+E(b.ol)+'">Undo</button>':(past(b)?'<button type="button" class="btn sm" data-mout="done" data-mb="'+E(b.ol)+'">Tested</button> <button type="button" class="btn sm ghost" data-mout="no_show" data-mb="'+E(b.ol)+'">No-show</button>':'<small class="note">Mark it after '+hm(b.start)+'</small>'))+'</span>':'')+'</div>'}).join('');
+ var mo='';for(var i=0;i<6;i++){var d=new Date();d.setDate(1);d.setMonth(d.getMonth()-i);var v=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);mo+='<option value="'+v+'"'+(MST&&MST.m===v?' selected':'')+'>'+d.toLocaleDateString('en-GB',{month:'long',year:'numeric'})+'</option>'}
+ return '<div class="card" id="mc-mott"><h2>MOT tools</h2><h3 class="mt-h">Today’s MOT tests ('+L.length+')</h3>'+(rows||'<p class="note">No MOT tests in the diary today.</p>')
+  +'<p class="note" style="margin:8px 0 0">Once the time has passed, mark each online booking as tested or as a no-show. A no-show is still paid to you, because the customer did not cancel.</p><div class="dtools"><button type="button" class="btn sm" data-msheet>Print today’s test sheet</button></div>'
+  +'<h3 class="mt-h">Monthly statement</h3><p class="note" style="margin:0 0 6px">Every online MOT for the month and what you are paid for each.</p><div class="mr-row"><select id="mt-month" aria-label="Month">'+mo+'</select><button type="button" class="btn sm ghost" data-mstate>Show statement</button></div><div id="mt-st">'+(MST&&MST.html||'')+'</div></div>'}
+function drawMotTools(force){var u=motU(),old=$('mc-mott'),host=$('dash-body');if(!u||location.hash!=='#dashboard'||u.dtab!=='diary'||!host){if(old)old.remove();return}
+ pullOut(u);var html=motToolsHtml(u);if(old&&!force&&html===mtSig&&host.contains(old))return;if(old&&old.contains(document.activeElement)&&!force)return;mtSig=html;
+ var d=document.createElement('div');d.innerHTML=html;if(old&&host.contains(old))old.parentNode.replaceChild(d.firstChild,old);else host.appendChild(d.firstChild)}
+function stLabel(s,day){return s==='done'?'Tested':s==='no_show'?'No-show (paid)':day<dkey(new Date())?'Not marked':'Booked'}
+function stmtRows(u,m){if(u.sbid)return ready.then(function(){return sb.rpc('my_online_diary',{p_from:m+'-01'})}).then(function(r){if(r.error)throw r.error;return (r.data||[]).filter(function(x){return String(x.day).slice(0,7)===m}).map(function(x){var v=x.vehicle||{};return{day:x.day,start:x.start_min,reg:v.reg||'',veh:[v.make,v.model].filter(Boolean).join(' '),pay:+x.partner_payout||0,st:x.status}})});
+ return Promise.resolve(u.diary.filter(function(b){return b.ol&&String(b.date).slice(0,7)===m&&b.status!=='cancelled'}).map(function(b){return{day:b.date,start:b.start,reg:b.reg,veh:b.veh,pay:+b.price||0,st:b.motOut||'confirmed'}}))}
+function stmtTable(u,m,R,printing){R.sort(function(a,b){return (a.day+hm(a.start))<(b.day+hm(b.start))?-1:1});var tot=R.reduce(function(a,x){return a+x.pay},0),ns=R.filter(function(x){return x.st==='no_show'}).length,mn=new Date(m+'-01T12:00:00').toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+ var h=(printing?'<h1>MOT statement: '+E(mn)+'</h1><p>'+E(u.name||'')+(u.town?', '+E(u.town):'')+'</p>':'')+'<div class="kpi"><div><b>'+R.length+'</b>online MOTs</div><div><b>'+ns+'</b>no-shows</div><div><b>'+money2(tot)+'</b>paid to you</div></div>';
+ if(!R.length)return h+'<p class="note">No online MOT bookings in '+E(mn)+'.</p>';
+ h+='<table class="st-t mt-tab"><thead><tr><th>Date</th><th>Time</th><th>Vehicle</th><th>Result</th><th>Paid to you</th></tr></thead><tbody>'+R.map(function(x){return '<tr><td>'+E(dd(x.day))+'</td><td>'+hm(x.start)+'</td><td><b>'+E(String(x.reg||'').toUpperCase())+'</b> '+E(x.veh||'')+'</td><td>'+stLabel(x.st,x.day)+'</td><td>'+money2(x.pay)+'</td></tr>'}).join('')+'</tbody><tfoot><tr><td colspan="4"><b>Total</b></td><td><b>'+money2(tot)+'</b></td></tr></tfoot></table>';
+ return h+(printing?'<p class="small">Paid by The Motoring Central for MOT tests booked online. Cancelled bookings are not shown and are not paid.</p>':'<p class="note" style="margin:6px 0 0">Cancelled bookings are not shown and are not paid. Payouts start once card payments are switched on. <button type="button" class="pv-link" data-mprint="'+m+'">Print this statement</button></p>')}
+var PCSS='@page{size:A4;margin:12mm}body{font-family:Arial,Helvetica,sans-serif;color:#111;font-size:11pt}h1{font-size:17pt;margin:0 0 2mm}table{width:100%;border-collapse:collapse;margin-top:4mm}th,td{text-align:left;border:1px solid #999;padding:2mm;vertical-align:top}th{background:#eee}.kpi{display:flex;gap:8mm;margin:3mm 0}.kpi b{display:block;font-size:15pt}.small{font-size:9pt;color:#444;margin-top:4mm}.box{display:inline-block;width:4mm;height:4mm;border:1px solid #111;margin:0 1mm 0 3mm;vertical-align:middle}';
+function sheetHtml(u){var L=todayList(u),t=new Date();
+ return '<h1>MOT test sheet: '+E(t.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'}))+'</h1><p>'+E(u.name||'')+(u.town?', '+E(u.town):'')+' · '+L.length+' test'+(L.length===1?'':'s')+'</p>'
+  +'<table><thead><tr><th>Time</th><th>Bay</th><th>Registration and vehicle</th><th>Customer</th><th>Booked</th><th>Result</th><th>Tester</th></tr></thead><tbody>'
+  +(L.length?L.map(function(b){return '<tr><td><b>'+hm(b.start)+'</b></td><td>'+E(u.bays[b.bay]||'')+'</td><td><b>'+E(String(b.reg||'').toUpperCase())+'</b><br>'+E(b.veh||'')+'</td><td>'+E(b.cust||'')+(b.phone?'<br>'+E(b.phone):'')+'</td><td>'+(b.ol?'Online, paid':'Garage')+'</td><td><span class="box"></span>Pass<span class="box"></span>Fail<span class="box"></span>No-show</td><td></td></tr>'}).join(''):'<tr><td colspan="7">No MOT tests booked today.</td></tr>')
+  +'</tbody></table><p class="small">Printed from The Motoring Central diary at '+hm(t.getHours()*60+t.getMinutes())+'. Online bookings are already paid: do not take payment from the customer.</p>'}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.closest('#mc-mott'))return;var u=motU();if(!u)return;
+ if(t.closest('[data-msheet]')){printWin('MOT test sheet',PCSS,function(){return sheetHtml(u)});return}
+ var pr=t.closest('[data-mprint]');if(pr){var pm=pr.getAttribute('data-mprint');printWin('MOT statement',PCSS,function(){return stmtRows(u,pm).then(function(R){return stmtTable(u,pm,R,true)})});return}
+ if(t.closest('[data-mstate]')){var m=$('mt-month').value,box=$('mt-st');box.innerHTML='<p class="note">Loading…</p>';stmtRows(u,m).then(function(R){MST={m:m,html:stmtTable(u,m,R,false)};box.innerHTML=MST.html},function(){box.innerHTML='<p class="note err">The statement could not be loaded. Check your connection.</p>'});return}
+ var o=t.closest('[data-mout]');if(!o)return;var key=o.getAttribute('data-mb'),val=o.getAttribute('data-mout'),b=u.diary.filter(function(x){return x.ol===key})[0];if(!b)return;
+ if(!b.bid){b.motOut=val==='confirmed'?'':val;drawMotTools(true);return}
+ o.disabled=true;ready.then(function(){return sb.rpc('mot_outcome',{p_booking:b.bid,p_outcome:val})}).then(function(r){var v=r&&r.data;if(r.error||v!=='ok'){o.disabled=false;toast(v==='too_early'?'You can mark it once the test day has arrived.':v==='cancelled'?'This booking was cancelled.':'That was not saved. Try again.',true);return}
+  MOUT[b.bid]=val;drawMotTools(true);toast(val==='done'?'Marked as tested.':val==='no_show'?'Marked as a no-show.':'Mark removed.')},function(){o.disabled=false;toast('That was not saved. Try again.',true)})});
+var lastMtWho='';setInterval(function(){try{var u=window.GGuser,w=u?(u.sbid||u.email||''):'';if(w!==lastMtWho){lastMtWho=w;MOUT={};moutAt=0;MST=null;REM=null;remAt=0}
+ ulezCards();detail3();stockTips();placeRem();drawMotTools(false)}catch(e){}},1000);
+
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;if(d&&d.dbDone)return;
@@ -8543,6 +8691,12 @@ html.nolaunch .launch{display:none!important}
 .ld.due>summary b{color:#B45309}.ld-b{padding:8px 0 4px}.ld-q{margin:0 0 6px;font-style:italic}.ld-a{margin-top:8px}
 .ld-s{font-size:.72rem;font-weight:800;padding:2px 8px;border-radius:999px;background:#E3ECF5;color:#0B1C35}.ld-new{background:#FFD43B}.ld-contacted{background:#BAE6FD}.ld-viewing{background:#C7F0D8}.ld-sold{background:#1F7A45;color:#fff}.ld-lost{background:#E5E7EB;color:#4B5563}
 .pv-remind{background:#FFF7D6;border:1px solid #F5D565;border-radius:10px;padding:4px 12px;margin:0 0 10px}.pv-remind p{margin:8px 0}
+/* 19 Nov 2026: ULEZ, price history, windscreen cards, stock tips, MOT reminders and MOT tools */
+.ulz{font-weight:700}.lspecs .ulz{border-radius:999px;padding:1px 8px}.ulz.ok{background:#DCFCE7;color:#14532D}.ulz.no{background:#FEE2E2;color:#7F1D1D}.ulz.chk{background:#FEF3C7;color:#713F12}.specs .ulzd b{display:inline-block;border-radius:999px;padding:1px 8px;margin-top:2px}.ulzn{margin:4px 0 10px}
+.phist{margin:0 0 12px;border:1px solid var(--line);border-radius:10px;padding:8px 12px}.phist summary{cursor:pointer;font-weight:600}.phist ul{list-style:none;margin:8px 0 0;padding:0}.phist li{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-top:1px solid var(--line)}
+.wsrow{margin:8px 0 0;display:block}.sttip{display:block;margin-top:2px}.sttip em{font-style:normal;color:#9A3412;font-weight:600}.mcnight .sttip em{color:#FDBA74}.sttop{margin:0 0 8px}
+.motrem.in{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.motrem h2{font-size:1.1rem;margin:0 0 4px}.mr-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.mr-row input,.mr-row select{flex:1 1 160px;min-width:0}.mr-ul{margin:0;padding-left:18px}.mr-ul li{margin:3px 0}.mr-ok{color:#14532D;font-weight:600}.mcnight .mr-ok{color:#86EFAC}
+#mc-mott .mt-h{font-size:1rem;margin:12px 0 6px}.mt-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line)}.mt-t{min-width:48px}.mt-v{flex:1 1 200px}.mt-v small{display:block}.mt-o{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.mt-done,.mt-ns{font-style:normal;font-weight:700;border-radius:999px;padding:2px 9px}.mt-done{background:#DCFCE7;color:#14532D}.mt-ns{background:#FEF3C7;color:#713F12}.mt-tab td,.mt-tab th{font-size:.9rem}
 /* MOT station page: video in place of the banner photo */
 .herovid{margin-top:16px}
 .herovid video{display:block;width:100%;height:auto;border-radius:14px;background:#0B1C35;box-shadow:0 12px 30px rgba(0,0,0,.35)}
