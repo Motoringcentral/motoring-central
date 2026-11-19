@@ -721,6 +721,8 @@ h2.sec,#jb-post-h{scroll-margin-top:112px}
 .motrow input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent)}
 .motrow label{font-size:.92rem;line-height:1.3;cursor:pointer}
 .motrow label small{display:block;color:var(--muted);font-size:.78rem}
+.dbk .dol{display:block;font-weight:800;font-size:.7rem;text-transform:uppercase;letter-spacing:.03em}
+.gar .mnext{display:block;margin-top:4px;font-weight:700;color:#0369A1}
 .motrow .motfee{display:flex;align-items:center;gap:4px;font-weight:700}
 .motrow .motfee input{width:92px!important;padding:8px!important;text-align:right}
 .motrow.off .motfee{opacity:.45}
@@ -1372,7 +1374,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div id="mbook" hidden>
 <div class="two"><div><label class="f2" for="mday">Day</label><select id="mday"></select></div><div><label class="f2" for="mtime">Time</label><select id="mtime"><option>8:30am</option><option>10:00am</option><option>11:30am</option><option>1:00pm</option><option>2:30pm</option><option>4:00pm</option></select></div></div>
 <p id="mtot" style="font-size:1.25rem;font-weight:800;margin:14px 0 0"></p>
-<p class="sample">Price set by the garage, plus our booking fee.</p>
+<p class="sample" id="mprice-note">Price set by the garage, plus our booking fee.</p>
+<p class="note" id="mlive" hidden style="background:#E0F4FE;color:#0B3B5C;border-radius:10px;padding:8px 10px;font-size:.85rem"></p><p class="err" id="m-err2" role="alert"></p>
 <div class="tc"><input type="checkbox" id="tc-mgo"><label for="tc-mgo">I understand my MOT is with the test centre I have chosen. The test centre is responsible for the test and any repairs, including their warranty. <a href="#terms" data-tsec="tc-mot">Read the terms</a></label></div><p class="tcerr" id="tc-mgo-err" role="alert"></p><button class="btn block" id="mgo" type="button">Book MOT</button>
 </div>
 <p class="okmsg" id="mdone" hidden></p>
@@ -1564,7 +1567,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div id="g-motbays" hidden><label class="f" for="gmotbays">MOT bays</label><input type="number" id="gmotbays" min="1" max="6" step="1" value="1" inputmode="numeric"></div>
 <p class="note">Each bay becomes a column in your free booking diary. You can add, rename or remove bays later.</p>
 <input type="hidden" id="g-motfee" value="54.85">
-<fieldset id="g-motclasses" hidden><legend>MOT classes you test, and your fee for each</legend><p class="note" style="margin:0 0 8px">Tick each type of test your station is authorised for and set your own price. You cannot charge more than the legal maximum shown. MOT test fees are exempt from VAT.</p><div class="motlist" id="gm-list"></div><p class="err" id="gm-err" role="alert"></p></fieldset>
+<fieldset id="g-motclasses" hidden><legend>MOT classes you test, and the fee you ask for each</legend><p class="note" style="margin:0 0 8px">Tick each type of test your station is authorised for and enter the fee you would like for each. We agree your fee with you before we approve you, then pay it to you for every MOT booked online: no booking fee or commission is taken from it, and the customer pays in full when they book. Bookings go straight into your free live diary, and your own walk-ins and phone bookings close those times online. MOT test fees are exempt from VAT.</p><div class="motlist" id="gm-list"></div><p class="err" id="gm-err" role="alert"></p></fieldset>
 <label class="up">Business registration or MOT station authorisation<input type="file" accept="image/*,.pdf"></label>
 </div>
 <fieldset><legend>Jobs you can do</legend><div class="checks" id="svcs"></div></fieldset>
@@ -2172,7 +2175,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </div></details>
 <details id="tc-mot"><summary>3. MOT tests</summary><div class="tb">
 <p>MOT tests are carried out by DVSA-authorised test centres listed on Motoring Central. The test result is the test centre&rsquo;s decision. If you disagree with a result, raise it with the test centre first; you can also appeal to the DVSA. Any repairs after the test are a separate job with the garage, with its own price and warranty from that garage.</p>
-<h3>MOT classes and fees</h3><p>The MOT you need depends on your vehicle: its class is set by the type of vehicle, its seats and its weight. Choose the right class when you book. If the test centre finds your vehicle is in a different class, they will tell you the correct fee before testing. Each test centre sets its own fee for each class it is authorised to test, and no test centre may charge more than the maximum fee set by the DVSA for that class. MOT test fees are exempt from VAT. Our booking fee is separate and includes VAT.</p>
+<h3>MOT classes and fees</h3><p>The MOT you need depends on your vehicle: its class is set by the type of vehicle, its seats and its weight. Choose the right class when you book. If the test centre finds your vehicle is in a different class, they will tell you the correct fee before testing. The price shown for each class is the maximum fee set by the DVSA for that class. MOT test fees are exempt from VAT. Our booking fee is separate and includes VAT.</p>
+<h3>Booking times and payment</h3><p>Online MOT bookings are taken from the test centre&rsquo;s live diary, so the time you choose is held for you in that diary as soon as you pay. You pay the full price (the MOT fee and our booking fee) when you book. The Motoring Central takes your full payment and pays the test centre the fee we have agreed with them for each test. To move or cancel an MOT booked online, contact us rather than the test centre, so the diary and your payment are updated together.</p>
 </div></details>
 <details id="tc-tyres"><summary>4. Tyre fitting</summary><div class="tb">
 <p>The tyre fitter named in your booking supplies and fits the tyres and is responsible for the fitting work and its warranty. Tyres carry the manufacturer&rsquo;s warranty, which the fitter will deal with for you. Puncture repairs are only carried out where the tyre can be safely repaired; if it cannot, the fitter will tell you and offer a replacement. Follow the fitter&rsquo;s advice on rechecking wheel nuts after fitting.</p>
@@ -2399,7 +2403,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <details><summary>Are the reviews real?</summary><div class="tb"><p>Reviews can only be left after a real, completed booking or purchase. We remove reviews that are false, offensive or unlawful.</p></div></details>
 
 <h2 class="sec">Services</h2>
-<details><summary>Which MOT do I need, and what does it cost?</summary><div class="tb"><p>It depends on your vehicle. Most cars, motorhomes, taxis and vans up to 3,000kg are <b>class 4</b>. Motorcycles are <b>class 1 or 2</b>, three-wheelers up to 450kg are <b>class 3</b>, minibuses with 13 or more seats are <b>class 5</b>, and larger vans from 3,000kg to 3,500kg are <b>class 7</b>. Vehicles with 9 or more seats may also need a seat belt installation check (class 4a or 5a).</p><p>Choose your MOT type when you book and we show each garage&rsquo;s price. Garages set their own fees, up to the legal maximum for the class: for example &pound;54.85 for a car and &pound;29.65 for a motorcycle.</p></div></details>
+<details><summary>Which MOT do I need, and what does it cost?</summary><div class="tb"><p>It depends on your vehicle. Most cars, motorhomes, taxis and vans up to 3,000kg are <b>class 4</b>. Motorcycles are <b>class 1 or 2</b>, three-wheelers up to 450kg are <b>class 3</b>, minibuses with 13 or more seats are <b>class 5</b>, and larger vans from 3,000kg to 3,500kg are <b>class 7</b>. Vehicles with 9 or more seats may also need a seat belt installation check (class 4a or 5a).</p><p>Choose your MOT type when you book and we show each garage&rsquo;s price. The price is the official maximum fee for the class: for example &pound;54.85 for a car and &pound;29.65 for a motorcycle, plus our &pound;3.00 booking fee. You pick a free time from the test centre&rsquo;s live diary and pay when you book.</p></div></details>
 <details><summary>Can a mobile mechanic do an MOT?</summary><div class="tb"><p>No. An MOT must be done at an approved test station. Choose <b>MOT</b>, pick your type of MOT, and book at a partner test station.</p></div></details>
 <details><summary>I have lost my car keys or locked them in the car. Can you help?</summary><div class="tb"><p>Yes. Choose <b>Auto electrician and locksmith</b>. A vehicle locksmith can open the car without damage, cut and program a new key or fob, and wipe lost keys from the car&rsquo;s memory. They will ask for proof that the vehicle is yours.</p></div></details>
 <details><summary>My electric car has run out of charge. What can you do?</summary><div class="tb"><p>Choose <b>Mobile EV charging</b>. A charging van comes to you and gives you enough charge to reach a charger or get home. If the car cannot be charged where it is, choose <b>Recovery</b> instead.</p></div></details>
@@ -2613,7 +2617,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   function services(c){
     var ev=c.fuel==='Electric';
     var L=[];
-    if(window.GGmode==='mot'&&window.MCMOT){var TB={};window.MCMOT.table.forEach(function(t){TB[t.k]=t});window.MCMOT.order.map(function(k){return TB[k]}).forEach(function(t){L.push({id:'mot-'+t.k,mot:true,mk:t.k,from:Math.floor(t.max*0.82),n:t.n,d:'Class '+t.c+' MOT. Legal maximum \u00A3'+t.max.toFixed(2),lab:0,parts:function(){return[]}})});return L}
+    if(window.GGmode==='mot'&&window.MCMOT){var TB={};window.MCMOT.table.forEach(function(t){TB[t.k]=t});window.MCMOT.order.map(function(k){return TB[k]}).forEach(function(t){L.push({id:'mot-'+t.k,mot:true,mk:t.k,from:t.max.toFixed(2),n:t.n,d:'Class '+t.c+' MOT. Legal maximum \u00A3'+t.max.toFixed(2),lab:0,parts:function(){return[]}})});return L}
     if(window.GGmode==='autoelec'){
       L.push({id:'efault',n:'Electrical fault finding',d:'Warning lights, battery drain, dead circuits',lab:60,hrs:1,parts:function(){return[]}});
       if(!ev)L.push({id:'alt',n:'Alternator replacement',d:'Battery not charging',lab:60,hrs:1.5,parts:function(){return[['Alternator','Matched to your engine, exchange unit',[95,160,260],1]]}});
@@ -2697,7 +2701,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
       b.innerHTML=s.mk&&window.MCMOT?window.MCMOT.tile(s.mk,D?null:fromPrice(s)):window.MCJOB?window.MCJOB.tile(s,D?null:fromPrice(s)):'<span>'+s.n+'<small>'+s.d+(D?'':'. <b class="fromp">From £'+fromPrice(s)+'</b>')+'</small></span>';
       b.addEventListener('click',function(){svc=s;window.GGsvc=s;[].forEach.call(box.querySelectorAll('.opt'),function(c){c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');
         if(D){quote();$('quote').scrollIntoView({behavior:'smooth',block:'nearest'})}
-        else{pendSvc=s.id;U.innerHTML=unlockHtml(r,s.mot?s.n+': MOT from £'+fromPrice(s)+'. Each test station sets its own price, up to the legal maximum.':s.n+' from £'+fromPrice(s)+'. The exact price depends on your engine and the parts it needs.');U.hidden=false;U.scrollIntoView({behavior:'smooth',block:'nearest'})}});
+        else{pendSvc=s.id;U.innerHTML=unlockHtml(r,s.mot?s.n+': MOT £'+fromPrice(s)+', the official maximum fee, plus our £3.00 booking fee. Book a free time straight from the test centre’s live diary.':s.n+' from £'+fromPrice(s)+'. The exact price depends on your engine and the parts it needs.');U.hidden=false;U.scrollIntoView({behavior:'smooth',block:'nearest'})}});
       box.appendChild(b)});
     $('flow').hidden=false}
 
@@ -2906,25 +2910,122 @@ window.MCSVC={cats:C,list:list,names:names,common:common,render:render,read:read
 <script>(function(){
 function $(i){return document.getElementById(i)}
 function money(n){return '£'+n.toFixed(2)}
-var G=[{n:'Northside MOT Centre',a:'Unit 4, Mill Lane',k:0.8,fee:54.85,r:52},{n:'Park Road Garage',a:'12 Park Road',k:1.6,fee:49.99,r:60},{n:'Albion Motors',a:'Albion Industrial Estate',k:2.9,fee:54.85,r:68},{n:'Greenway Auto Centre',a:'88 Greenway',k:4.2,fee:44.99,r:48},{n:'Hilltop Tyres and MOT',a:'Hilltop Business Park',k:6.5,fee:54.85,r:58}];
-var BOOKING=3,pick=null,info=null;function P(g){return info?info.price(g):g.fee}
+/* MOT and garage booking. For MOT tests the times come from the garage's live diary: online bookings take the slot
+   in the garage's diary, and the garage's own bookings (walk-ins, phone, blocked time) close those times here.
+   Customers pay the official maximum MOT fee for the class plus our booking fee, in full, when they book.
+   Real garages: Supabase (garage_busy, book_mot). Sample garages: kept in this browser (mc-motdiary), so the
+   demo garage (garage@demo.com) shows customers' MOT bookings in its diary. */
+var G=[{id:'s0',n:'Northside MOT Centre',a:'Unit 4, Mill Lane',k:0.8,fee:54.85,r:52,mb:2},{id:'s1',n:'Park Road Garage',a:'12 Park Road',k:1.6,fee:49.99,r:60,mb:1},{id:'s2',n:'Albion Motors',a:'Albion Industrial Estate',k:2.9,fee:54.85,r:68,mb:1},{id:'s3',n:'Greenway Auto Centre',a:'88 Greenway',k:4.2,fee:44.99,r:48,mb:1},{id:'s4',n:'Hilltop Tyres and MOT',a:'Hilltop Business Park',k:6.5,fee:54.85,r:58,mb:1},{id:'demo-kr',n:'Kirkstall Road Garage',a:'Kirkstall Road',k:3.4,fee:45,r:58,mb:1,demo:1}];
+var BOOKING=3,pick=null,info=null,BUSY={},LS='mc-motdiary',DOPEN=480,DLAST=1020,STEP=30,DUR=60;
+var OLDT=['8:30am','10:00am','11:30am','1:00pm','2:30pm','4:00pm'];
+function P(g){return info?info.price(g):g.fee}
+function motMode(){return !!(info&&info.mot)}
+function cls(){return window.MCMOT&&window.MCMOT.cur?window.MCMOT.cur():{k:'4-car',c:'4',max:54.85}}
 function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%97;return h}
-var days=$('mday');for(var n=1;n<=7;n++){var x=new Date();x.setDate(x.getDate()+n);if(x.getDay()===0)continue;var o=document.createElement('option');o.textContent=x.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'});days.appendChild(o)}
-window.GGmot=function(on,i){info=i||null;$('mot').hidden=!on;if(on){$('mtitle').textContent=i?i.name+' at a partner garage':'Partner garage';pick=null;$('mbook').hidden=true;$('mdone').hidden=true;if($('mpost').value.replace(/\s/g,'').length>=5)find();else $('garages').innerHTML='';$('mot').scrollIntoView({behavior:'smooth',block:'nearest'})}};
+function hash2(s){var h=7;for(var i=0;i<s.length;i++)h=(h*131+s.charCodeAt(i))%100003;return h}
+function dk(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function dayLab(k){return new Date(k+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})}
+function tm(x){var h=Math.floor(x/60),mm=x%60,ap=h>=12?'pm':'am';h=h%12||12;return h+':'+(mm<10?'0':'')+mm+ap}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function store(){try{return JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){return{}}}
+function put(S){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function workDays(){var r=[],d=new Date();for(var i=0;r.length<12&&i<21;i++){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+i,12);if(x.getDay()!==0)r.push(dk(x))}return r}
+function bays(g){if(g.real)return (BUSY[g.id]&&BUSY[g.id].bays)||['MOT bay'];var n=g.mb||1,a=[];if(n===1)return ['MOT bay'];for(var i=1;i<=n;i++)a.push('MOT bay '+i);return a}
+/* every busy time on a day: [bay, start, length] */
+function busy(g,day){var out=[],S=store()[g.id]||{};
+ (S.online||[]).forEach(function(o){if(o.day===day)out.push([o.bay,o.start,o.dur])});
+ if(g.real){((BUSY[g.id]&&BUSY[g.id].rows)||[]).forEach(function(r){if(r.day===day)out.push([r.bay_name,r.start_min,r.dur_min])});return out}
+ if(g.demo){var own=S.own;if(!own){var W=workDays();own=[[W[0],'MOT bay',510,60],[W[0],'MOT bay',600,60],[W[0],'MOT bay',840,60],[W[1],'MOT bay',540,60],[W[3],'MOT bay',600,60]]}/* the demo garage's sample diary until it is first opened */
+  own.forEach(function(o){if(o[0]===day)out.push([o[1],o[2],o[3]])});return out}
+ bays(g).forEach(function(b){for(var s=DOPEN;s<=DLAST;s+=60)if(hash2(g.n+day+b+s)%10<4)out.push([b,s,60])});return out}
+function freeBay(g,day,s){var B=busy(g,day),L=bays(g);for(var i=0;i<L.length;i++){var b=L[i];if(!B.some(function(x){return x[0]===b&&s<x[1]+x[2]&&x[1]<s+DUR}))return b}return null}
+function freeTimes(g,day){var r=[],now=new Date(),early=0;if(day===dk(now))early=now.getHours()*60+now.getMinutes()+60;
+ for(var s=DOPEN;s<=DLAST;s+=STEP)if(s>=early&&freeBay(g,day,s))r.push(s);return r}
+function realList(){var c=cls();return (window.MCmotDb?window.MCmotDb.garages():[]).filter(function(p){var mc=p.rates&&p.rates.motc;return mc&&typeof mc==='object'?mc[c.k]!=null:/^4-/.test(c.k)}).map(function(p){return{id:p.id,n:p.name,a:p.town||'',real:1,r:+(p.rates&&p.rates.hour)||0,fee:cls().max}})}
+function loadReal(g){if(!window.MCmotDb)return Promise.resolve();var D=workDays();return window.MCmotDb.busy(g.id,D[0],D[D.length-1]).then(function(r){if(r&&!r.error&&r.data){var rows=r.data.filter(function(x){return x.day}),b=(r.data[0]&&r.data[0].mot_bays)||[];BUSY[g.id]={rows:rows,bays:b.length?b:['MOT bay'],at:Date.now()}}})}
+function msgLive(t){var e=$('mlive');if(e){e.textContent=t||'';e.hidden=!t}}
+function fillDays(){var g=pick,d=$('mday'),keep=d.value;d.innerHTML='';
+ if(!motMode()){for(var n=1;n<=7;n++){var x=new Date();x.setDate(x.getDate()+n);if(x.getDay()===0)continue;var o=document.createElement('option');o.textContent=x.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'short'});d.appendChild(o)}
+  $('mtime').innerHTML=OLDT.map(function(t){return '<option>'+t+'</option>'}).join('');return}
+ var first='';workDays().forEach(function(k){var n=freeTimes(g,k).length,o=document.createElement('option');o.value=k;o.textContent=dayLab(k)+(n?' ('+n+' time'+(n===1?'':'s')+' free)':' (fully booked)');if(!n)o.disabled=true;else if(!first)first=k;d.appendChild(o)});
+ d.value=keep&&d.querySelector('option[value="'+keep+'"]:not([disabled])')?keep:first;fillTimes()}
+function fillTimes(){if(!motMode())return;var t=$('mtime'),keep=t.value,L=pick&&$('mday').value?freeTimes(pick,$('mday').value):[];
+ t.innerHTML=L.length?L.map(function(s){return '<option value="'+s+'">'+tm(s)+'</option>'}).join(''):'<option value="">No free times</option>';if(keep&&L.indexOf(+keep)>-1)t.value=keep;
+ $('mgo').disabled=!L.length}
+function priceNote(){var n=$('mprice-note');if(!n||!pick)return;var c=cls();
+ n.textContent=motMode()?'MOT test £'+c.max.toFixed(2)+' (the official maximum for this class, no VAT) plus our £3.00 booking fee (includes 50p VAT). You pay the full amount now to secure the time.':'Price set by the garage, plus our booking fee.'}
+window.GGmot=function(on,i){info=i||null;$('mot').hidden=!on;if(on){$('mtitle').textContent=i?i.name+' at a partner garage':'Partner garage';pick=null;$('mbook').hidden=true;$('mdone').hidden=true;msgLive('');if($('mpost').value.replace(/\s/g,'').length>=5)find();else $('garages').innerHTML='';$('mot').scrollIntoView({behavior:'smooth',block:'nearest'})}};
+function choose(g,b,box){pick=g;[].forEach.call(box.children,function(c){if(c.setAttribute)c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');$('mdone').hidden=true;$('m-err2').textContent='';
+ $('mtot').textContent='Total '+money(P(g)+BOOKING);priceNote();$('mbook').hidden=false;
+ if(motMode()){msgLive('Live diary: you only see times that are free in this garage’s own diary. The time is held for you the moment you pay.');
+  if(g.real&&(!BUSY[g.id]||Date.now()-BUSY[g.id].at>20000)){$('mday').innerHTML='<option>Checking the garage’s diary…</option>';$('mtime').innerHTML='';$('mgo').disabled=true;loadReal(g).then(function(){if(pick===g)fillDays()},function(){if(pick===g){$('mday').innerHTML='';$('m-err2').textContent='We could not reach the garage’s diary. Check your connection and try again.'}});return}}
+ else msgLive('');fillDays()}
 function find(){
 var p=$('mpost').value.replace(/\s/g,'');
 if(p.length<5){$('mot-err').textContent='Enter your postcode to see garages near you.';return}
 $('mot-err').textContent='';pick=null;$('mbook').hidden=true;$('mdone').hidden=true;
 var off=(hash(p)%7)/10,box=$('garages');box.innerHTML='';
-var GL=G.filter(function(g,i){if(!window.MCMOT)return true;return info&&info.mot?window.MCMOT.tests(i):!window.MCMOT.motOnly(i)});
+var GL=G.filter(function(g,i){if(!window.MCMOT)return !g.demo;if(g.demo)return !!(info&&info.mot)&&/^4/.test(cls().c);return info&&info.mot?window.MCMOT.tests(i):!window.MCMOT.motOnly(i)});
+if(info&&info.mot)GL=realList().concat(GL);
 if(!GL.length){box.innerHTML='<p class="note">No partner garage near you tests this class yet. Try another postcode, or <a href="#contact">tell us</a> and we will find one.</p>'}
 GL.forEach(function(g){var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed','false');
-b.innerHTML='<b>'+g.n+'</b><span class="d">'+(g.k+off).toFixed(1)+' miles</span><small>'+g.a+'. '+(info&&info.mot&&window.MCMOT&&window.MCMOT.motOnly(G.indexOf(g))?'MOT test station. ':'')+(info&&!info.mot?money(g.r)+' per hour labour. ':'')+'Price '+money(P(g))+'</small>';
-b.addEventListener('click',function(){pick=g;[].forEach.call(box.children,function(c){c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');$('mdone').hidden=true;$('mtot').textContent='Total '+money(P(g)+BOOKING);$('mbook').hidden=false});
+var mo=info&&info.mot,nx='';if(mo&&!g.real){var D=workDays();for(var i=0;i<D.length&&!nx;i++){var f=freeTimes(g,D[i]);if(f.length)nx=(i===0&&D[i]===dk(new Date())?'Today':dayLab(D[i]).split(' ')[0])+' '+tm(f[0])}}
+b.innerHTML='<b>'+esc(g.n)+'</b><span class="d">'+(g.real?'Approved partner':(g.k+off).toFixed(1)+' miles')+'</span><small>'+esc(g.a)+(g.a?'. ':'')+(mo&&window.MCMOT&&!g.real&&window.MCMOT.motOnly(G.indexOf(g))?'MOT test station. ':'')+(info&&!info.mot?money(g.r)+' per hour labour. ':'')+'Price '+money(P(g))+(mo?' plus booking fee':'')+'</small>'+(mo?'<small class="mnext">'+(g.real?'Live diary: tap to see free times':nx?'Next free: '+nx:'No free times in the next 2 weeks')+'</small>':'');
+b.addEventListener('click',function(){choose(g,b,box)});
 box.appendChild(b)})}
 $('mfind').addEventListener('click',find);
 $('mpost').addEventListener('keydown',function(e){if(e.key==='Enter')find()});
-$('mgo').addEventListener('click',function(){if(!pick)return;$('mdone').textContent='Booked: '+(info?(info.mot&&window.MCMOT?window.MCMOT.label():info.name):'service')+' at '+pick.n+', '+$('mday').value+' at '+$('mtime').value+'. Total '+money(P(pick)+BOOKING)+'. Bring your car and show your reg at reception.';$('mdone').hidden=false;$('mbook').hidden=true});
+$('mday').addEventListener('change',fillTimes);
+function finish(text,t,viaDb){$('mdone').textContent=text;$('mdone').hidden=false;$('mbook').hidden=true;msgLive('');
+ if(viaDb&&window.GGrecBooking)window.GGrecBooking({kind:'MOT',svc:'MOT test',text:text,t:t,tc:true,dbDone:true})}
+var ERR={slot_taken:'Sorry, that time has just been booked by someone else. Pick another time. Your payment will be refunded in full.',bad_time:'That time can no longer be booked. Pick another time.',class_not_tested:'This garage does not test this class of vehicle. Pick another garage.',not_customer:'Please log in with a customer account to book.',not_logged_in:'Please log in to book.',no_mot_bay:'This garage has no MOT bay open for online booking yet. Pick another garage.'};
+$('mgo').addEventListener('click',function(){if(!pick)return;var g=pick;
+ if(!motMode()){$('mdone').textContent='Booked: '+(info?info.name:'service')+' at '+g.n+', '+$('mday').value+' at '+$('mtime').value+'. Total '+money(P(g)+BOOKING)+'. Bring your car and show your reg at reception.';$('mdone').hidden=false;$('mbook').hidden=true;return}
+ var day=$('mday').value,st=+$('mtime').value,u=window.GGuser||{},lab=window.MCMOT?window.MCMOT.label():'MOT test',tot=money(P(g)+BOOKING);
+ var vh=window.MCbookingVeh?window.MCbookingVeh():null,bay=freeBay(g,day,st),reg=String(($('reg')||{}).value||(vh&&vh.reg)||'').toUpperCase().trim();
+ if(!bay||freeTimes(g,day).indexOf(st)<0){$('m-err2').textContent=ERR.slot_taken;fillDays();return}
+ var text='Booked and paid: '+lab+' at '+g.n+', '+dayLab(day)+' at '+tm(st)+'. Total '+tot+'. This time is now held in the garage’s diary. Bring your vehicle and show your reg at reception.';
+ if(g.real){var t=Date.now(),btn=$('mgo');btn.disabled=true;btn.textContent='Booking…';$('m-err2').textContent='';
+  window.MCmotDb.book({p_partner:g.id,p_day:day,p_start:st,p_class:cls().k,p_reg:reg,p_vehicle:vh||null,p_label:lab,p_made_at:new Date(t).toISOString()}).then(function(r){
+   if(r.error)throw r.error;finish(text,t,true);loadReal(g)}).catch(function(e){var k=Object.keys(ERR).filter(function(x){return String(e&&e.message||'').indexOf(x)>-1})[0];
+   $('m-err2').textContent=k?ERR[k]:'Your MOT was not booked. Check your connection and try again. If you were charged, it will be refunded in full.';BUSY[g.id]=null;choose(g,document.querySelector('#garages [aria-pressed="true"]')||document.createElement('b'),$('garages'))}).then(function(){btn.disabled=false;btn.textContent='Book MOT'});return}
+ var S=store(),rec=S[g.id]=S[g.id]||{};rec.online=(rec.online||[]).filter(function(o){return o.day>=dk(new Date())});
+ rec.online.push({id:'o'+Date.now(),day:day,bay:bay,start:st,dur:DUR,cust:u.name||'Customer',phone:u.phone||'',reg:reg,veh:vh?[vh.make,vh.model,vh.year].filter(Boolean).join(' '):'',label:lab,pay:g.fee,total:P(g)+BOOKING});put(S);
+ finish(text,Date.now(),false)});
+})();
+</script>
+<script>
+/* Garage side of the live MOT diary: customers' online MOT bookings appear in the garage's diary on their own,
+   and the garage's own bookings and blocked time are sent up so those times close on the website. */
+(function(){
+var LS='mc-motdiary',seq=800000,last={},sig={},timer={};
+function dk(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function store(){try{return JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){return{}}}
+function put(S){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
+function bayIdx(u,name){var i=u.bays.indexOf(name);if(i>-1)return i;for(i=0;i<u.bays.length;i++)if(/MOT/i.test(u.bays[i]))return i;return 0}
+function m(n){return '£'+(+n||0).toFixed(2)}
+function entry(u,o){return{id:seq++,ol:o.key,date:o.day,bay:bayIdx(u,o.bay),start:o.start,dur:o.dur||60,cust:o.cust||'Customer',phone:o.phone||'',reg:o.reg||'',veh:o.veh||'',type:'MOT',price:+o.pay||0,status:'booked',src:'web',paid:true,
+ notes:(o.label||'MOT test')+'. Booked and paid online through The Motoring Central. You are paid '+m(o.pay)+' for this test.'}}
+/* put online bookings into the diary; drop ones that were cancelled. Returns true if anything changed. */
+function merge(u,list,prefix){var ch=false,today=dk(new Date()),have={};u.diary.forEach(function(b){if(b.ol)have[b.ol]=b});
+ var keys={};list.forEach(function(o){keys[o.key]=1;if(!have[o.key]){u.diary.push(entry(u,o));ch=true}});
+ u.diary=u.diary.filter(function(b){if(b.ol&&b.ol.indexOf(prefix)===0&&!keys[b.ol]&&b.date>=today){ch=true;return false}return true});return ch}
+function ownList(u){var today=dk(new Date());return u.diary.filter(function(b){return !b.ol&&b.date>=today}).map(function(b){return{day:b.date,bay:u.bays[b.bay]||'Bay',start:b.start,dur:b.dur}})}
+window.MCmotSync=function(u){if(!u||u.role!=='mechanic'||u.sub!=='garage'||!u.diary||!u.bays)return;
+ if(!u.sbid){if(u.email!=='garage@demo.com')return;var S=store(),R=S['demo-kr']=S['demo-kr']||{};
+  var ch=merge(u,(R.online||[]).map(function(o){return{key:'ls'+o.id,day:o.day,bay:o.bay,start:o.start,dur:o.dur,cust:o.cust,phone:o.phone,reg:o.reg,veh:o.veh,label:o.label,pay:o.pay}}),'ls');
+  if(ch)u.dmsg='New MOT booked online by a customer: it is in your diary and already paid.';
+  R.own=ownList(u).map(function(x){return [x.day,x.bay,x.start,x.dur]});put(S);return}
+ var D=window.MCmotDb;if(!D)return;
+ /* own bookings up (only when they change) */
+ var own=ownList(u),s1=JSON.stringify(own);if(sig[u.sbid]!==s1){sig[u.sbid]=s1;clearTimeout(timer[u.sbid]);timer[u.sbid]=setTimeout(function(){D.syncOwn(own).then(function(r){if(r&&r.error)sig[u.sbid]=''},function(){sig[u.sbid]=''})},900)}
+ /* online bookings down (every 25 seconds at most) */
+ if(Date.now()-(last[u.sbid]||0)<25000)return;last[u.sbid]=Date.now();
+ if(!u._agreedAt){u._agreedAt=1;D.agreed(u.sbid).then(function(r){if(r&&r.data&&r.data.mot_agreed)u.motAgreed=r.data.mot_agreed})}
+ D.mine(dk(new Date())).then(function(r){if(!r||r.error||!r.data||window.GGuser!==u)return;var v;
+  var ch=merge(u,r.data.map(function(x){v=x.vehicle||{};return{key:'db'+x.slot_id,day:x.day,bay:x.bay_name,start:x.start_min,dur:x.dur_min,cust:x.customer_name,phone:x.customer_phone,reg:v.reg||'',veh:[v.make,v.model,v.year].filter(Boolean).join(' '),label:'MOT test',pay:x.partner_payout}}),'db');
+  if(ch){u.dmsg='Your diary has been updated with MOT bookings made online.';if(location.hash==='#dashboard'&&u.dtab==='diary'&&window.GGdash&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#dash-body input,#dash-body textarea,#dash-body select')))window.GGdash()}})};
+setInterval(function(){var u=window.GGuser;if(u&&u.sbid&&u.sub==='garage'&&location.hash==='#dashboard'&&u.dtab==='diary'&&!document.hidden)window.MCmotSync(u)},26000);
 })();
 </script>
 <script>(function(){
@@ -3666,7 +3767,7 @@ function m(n){return '£'+(+n).toFixed(2)}
 var ROLES={mechanic:'Mechanic, garage, auto electrician or locksmith',recovery:'Recovery company',evcharge:'Mobile EV charging',body:'Body shop or alloy wheel specialist',tyres:'Tyre fitter',valet:'Valeter',dealer:'Car or van dealer',admin:'Staff admin'};
 var USERS=[
 {email:'mechanic@demo.com',pass:'demo1234',role:'mechanic',name:'Dan K.',phone:'07000 000001',town:'Leeds',sub:'mobile',rates:{hour:42,mot:54.85}},
-{email:'garage@demo.com',pass:'demo1234',role:'mechanic',name:'Kirkstall Road Garage',phone:'0113 000 0110',town:'Leeds',sub:'garage',bays:2,motBays:1,plan:'pro',proActive:true,rates:{hour:58,mot:49.99}},
+{email:'garage@demo.com',pass:'demo1234',role:'mechanic',name:'Kirkstall Road Garage',phone:'0113 000 0110',town:'Leeds',sub:'garage',bays:2,motBays:1,motAgreed:{all:45},plan:'pro',proActive:true,rates:{hour:58,mot:49.99}},
 {email:'recovery@demo.com',pass:'demo1234',role:'recovery',name:'Swift Recovery',phone:'07000 000002',town:'Leeds',rates:{call:65,mile:2.4}},
 {email:'tyres@demo.com',pass:'demo1234',role:'tyres',name:'Quick Roll Mobile',phone:'07000 000003',town:'Leeds',rates:{fit:12,punc:30}},
 {email:'valet@demo.com',pass:'demo1234',role:'valet',name:'Shine On Mobile',phone:'07000 000004',town:'Leeds',rates:{p:[79,99,129,149]}},
@@ -3854,10 +3955,24 @@ function sz(n){return n>1e6?(n/1e6).toFixed(1)+' MB':Math.max(1,Math.round(n/1e3
 var CK=['Documents are clear and look genuine','Insured name matches the applicant','Both certificates are in date','Cover level meets our minimum','Photo ID matches the applicant and is in date'];
 function logit(t){adm.log.unshift({t:Date.now(),by:window.GGuser.name,x:t})}
 function docRows(u){var s='';(u.docs||[]).forEach(function(d,i){s+='<div class="job"><div><b>'+esc(d.name)+(d.idtype?' ('+esc(d.idtype)+')':'')+'</b><small>'+esc(d.file)+(d.size?' ('+sz(d.size)+')':' (sample)')+'</small><small>Expires '+fmtD(d.exp)+'</small></div><div class="jp">'+flag(d.exp)+'</div><div class="jb"><button class="btn sm ghost" type="button" data-view="'+esc(u.email)+':'+i+'">View document</button></div></div>'});return s}
+/* the MOT fee agreed with a test centre at sign-up: what we pay them for each test booked online */
+function motAsk(u){var r=u.rates||{};return r.motc&&r.motc['4-car']!=null?+r.motc['4-car']:+r.mot||54.85}
+function motAgreedBox(u){if(u.role!=='mechanic'||u.sub!=='garage'||!(u.motOnly||+u.motBays>0||(u.rates&&(u.rates.motc||u.rates.mot))))return '';
+var ag=u.motAgreed&&u.motAgreed.all!=null?+u.motAgreed.all:null,max=54.85,id=esc(u.email),v=ag!=null?ag:motAsk(u);
+return '<div class="motag" style="margin-top:10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px"><b>Agreed MOT fee</b><p class="note" style="margin:4px 0 8px">Customers pay the official maximum ('+m(max)+' for a car) plus our £3.00 booking fee. We pay the test centre the fee agreed here for every test booked online. They asked for '+m(motAsk(u))+' for a car MOT.</p>'
++'<div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap"><div><label class="f" for="ag-'+id+'" style="margin:0 0 4px">Agreed fee per test (£)</label><input type="number" id="ag-'+id+'" data-agin="'+id+'" min="1" max="'+max+'" step="0.01" value="'+v.toFixed(2)+'" style="width:110px"'+(owner()?'':' disabled')+'></div>'+(owner()?'<button class="btn sm" type="button" data-motag="'+id+'">Save agreed fee</button>':'')+'</div>'
++'<p class="note" data-agm="'+id+'" style="margin:6px 0 0">'+agMsg(v)+(ag==null?' Not agreed yet: until it is saved, the test centre is paid the fee it asked for.':'')+'</p></div>'}
+function agMsg(v){var max=54.85,net=Math.round((max-v)*100)/100;return 'On a car MOT the customer pays '+m(max+3)+': '+m(v)+' to the test centre, '+m(net)+' margin and £3.00 booking fee to us ('+m(net+3)+' in total).'}
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute||!t.getAttribute('data-agin'))return;var x=document.querySelector('[data-agm="'+t.getAttribute('data-agin')+'"]');if(x)x.textContent=agMsg(Math.min(54.85,Math.max(0,+t.value||0)))});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-motag]');if(!b||!owner())return;var em=b.getAttribute('data-motag'),u=byEmail(em),inp=document.getElementById('ag-'+em),v=Math.round(+(inp&&inp.value)*100)/100;if(!u)return;
+ var x=document.querySelector('[data-agm="'+em+'"]');if(!(v>0)||v>54.85){if(x)x.textContent='Enter a fee between £1.00 and £54.85.';return}
+ u.motAgreed={all:v};logit('Agreed MOT fee for '+u.name+': '+m(v));
+ if(u.sbid&&window.MCmotDb){b.disabled=true;window.MCmotDb.setAgreed(u.sbid,{all:v}).then(function(r){b.disabled=false;if(x)x.textContent=(r&&!r.error&&r.data&&r.data.length?'Saved. ':'Not saved: check your connection and try again. ')+agMsg(v)},function(){b.disabled=false;if(x)x.textContent='Not saved: check your connection and try again.'})}
+ else if(x)x.textContent='Saved. '+agMsg(v)});
 function appCardBase(u){var ck=u.ck||[0,0,0,0,0],all=ck.every(Boolean);
 var bad=(u.docs||[]).some(function(d){return dleft(d.exp)<0});
 var s='<div class="card app" data-app="'+esc(u.email)+'"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start"><div><b style="font-size:1.05rem">'+esc(u.name)+'</b><div class="note">'+ROLES[u.role]+(u.sub?' ('+({mobile:'mobile mechanic',garage:'garage',autoelec:'auto electrician or locksmith'}[u.motOnly?'x':u.sub]||(u.motOnly?'MOT test station':u.sub))+(u.aeWhere?', '+u.aeWhere.toLowerCase():'')+')':'')+', '+esc(u.town||'')+'</div><div class="note">'+esc(u.email)+', '+esc(u.phone||'')+'</div></div><span class="stat">Submitted '+ago(u.submitted||Date.now())+'</span></div>'
-+'<p class="note" style="margin:8px 0 0">Rates: '+rateText(u)+'</p>'+docRows(u)
++'<p class="note" style="margin:8px 0 0">Rates: '+rateText(u)+'</p>'+motAgreedBox(u)+docRows(u)
 +'<div style="margin-top:8px"><b>Review checklist</b>'+CK.map(function(t,i){return '<label class="ck"><input type="checkbox" data-ck="'+i+'"'+(ck[i]?' checked':'')+'><span>'+t+'</span></label>'}).join('')+'</div>';
 if(bad)s+='<p class="note" style="color:#ff9d94;font-weight:700;margin:6px 0 0">A certificate has expired. Reject this application or ask for a current copy.</p>';
 if(u.rejecting){s+='<label class="f" for="rj-r-'+esc(u.email)+'">Reason</label><select data-rjr><option>Document unclear or unreadable</option><option>Certificate expired</option><option>Name does not match</option><option>Cover level too low</option><option>Photo ID does not match the applicant</option><option>Photo ID unclear or expired</option><option>Other</option></select><label class="f">Note to the applicant (optional)</label><textarea data-rjn></textarea><div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn sm" type="button" data-rjgo="'+esc(u.email)+'">Confirm rejection</button><button class="btn sm ghost" type="button" data-rjcancel="'+esc(u.email)+'">Cancel</button></div>'}
@@ -3893,7 +4008,7 @@ var s='<div class="card" style="padding:12px 18px"><b>Your access:</b> '+(owner(
 +'<label class="f" for="ad-role">Show</label><select id="ad-role"><option value="">All partner types</option>'+['mechanic','recovery','evcharge','body','tyres','valet','dealer'].map(function(r){return '<option value="'+r+'"'+(adm.role===r?' selected':'')+'>'+ROLES[r]+'</option>'}).join('')+'</select>'
 +'<div class="atabs" role="group" aria-label="Sections">'+[['pending','Pending ('+pend.length+')'],['approved','Approved ('+appr.length+')'],['declined','Declined or suspended ('+rej.length+')'],['cust','Customers ('+(window.MCadminCount?window.MCadminCount():0)+')'],['stats','Views and clicks'],['prep','Partner reports'],['rev','Reviews'],['log','Activity log'],['fb','Facebook feed']].concat(owner()?[['staff','Staff']]:[]).map(function(t){return '<button type="button" data-tab="'+t[0]+'" aria-pressed="'+(adm.tab===t[0]?'true':'false')+'">'+t[1]+'</button>'}).join('')+'</div></div>';
 if(adm.tab==='pending')s+=pend.length?pend.map(appCard).join(''):'<div class="card">No applications are waiting.</div>';
-if(adm.tab==='approved'){s+='<div class="card"><h2>Approved partners</h2>';appr.forEach(function(u){var soon=(u.docs||[]).some(function(d){return dleft(d.exp)<=30});s+=simpleRow(u,(soon?'<button class="btn sm ghost" type="button" data-remind="'+esc(u.email)+'">Send renewal reminder</button>':'')+'<button class="btn sm ghost" type="button" data-susp="'+esc(u.email)+'">Suspend</button><button class="btn sm ghost" type="button" data-view="'+esc(u.email)+':0">View documents</button>')});if(!appr.length)s+='<p class="note">None yet.</p>';s+='</div>'}
+if(adm.tab==='approved'){s+='<div class="card"><h2>Approved partners</h2>';appr.forEach(function(u){var soon=(u.docs||[]).some(function(d){return dleft(d.exp)<=30});s+=simpleRow(u,(soon?'<button class="btn sm ghost" type="button" data-remind="'+esc(u.email)+'">Send renewal reminder</button>':'')+'<button class="btn sm ghost" type="button" data-susp="'+esc(u.email)+'">Suspend</button><button class="btn sm ghost" type="button" data-view="'+esc(u.email)+':0">View documents</button>')+motAgreedBox(u)});if(!appr.length)s+='<p class="note">None yet.</p>';s+='</div>'}
 if(adm.tab==='declined'){s+='<div class="card"><h2>Declined or suspended</h2>';rej.forEach(function(u){s+=simpleRow(u,u.status==='suspended'?'<button class="btn sm" type="button" data-reinst="'+esc(u.email)+'">Reinstate</button>':'')});if(!rej.length)s+='<p class="note">None.</p>';s+='</div>'}
 if((adm.tab==='cust'||adm.tab==='stats'||adm.tab==='prep'||adm.tab==='rev')&&window.MCadminTab)s+='<div id="mc-atab">'+window.MCadminTab(adm.tab)+'</div>';
 if(adm.tab==='fb')s+=fbFeedHtml();
@@ -3975,6 +4090,7 @@ function workDays(n){var r=[],k=dkey(new Date());while(r.length<n){if(dfrom(k).g
 function bayNames(u){if(u.sub==='autoelec')return /Workshop/.test(u.aeWhere||'')&&!/Mobile/.test(u.aeWhere||'')?['Workshop']:['Van'];if(u.sub!=='garage')return ['Van'];var w=u.motOnly?0:(typeof u.bays==='number'&&u.bays>0?u.bays:2),mb=u.motBays!=null?u.motBays:1,a=[],i;if(u.motOnly&&mb<1)mb=1;for(i=1;i<=w;i++)a.push('Bay '+i);for(i=1;i<=mb;i++)a.push(mb===1?'MOT bay':'MOT bay '+i);return a}
 function seedDiary(u){var W=workDays(4),g=u.sub==='garage';
 u.bays=bayNames(u);
+if(u.sbid){u.diary=[];u.dsel=W[0];u.dview='grid';return}
 var L=g?[
 [0,0,480,120,'Sam P.','07700 900101','YD19 KXF','Ford Focus 2019','Full service',189,'arrived','web'],
 [0,0,630,90,'Priya N.','07700 900102','LS68 TRV','Toyota Yaris 2018','Brakes',165,'booked','phone'],
@@ -4008,7 +4124,7 @@ function bkById(u,id){return u.diary.filter(function(b){return b.id===id})[0]}
 function bkTitle(b){return b.type==='Blocked'?(b.notes||'Blocked'):(b.cust||b.reg)}
 function clash(u,b){return u.diary.some(function(x){return x.id!==b.id&&x.date===b.date&&x.bay===b.bay&&b.start<x.start+x.dur&&x.start<b.start+b.dur})}
 function legend(){return '<div class="legend">'+BST.map(function(x){return '<span><i class="st-'+x[0]+'"></i>'+x[1]+'</span>'}).join('')+'<span><i class="st-blocked"></i>Blocked</span></div>'}
-function diaryHtml(u){if(!u.diary)seedDiary(u);
+function diaryHtml(u){if(!u.diary)seedDiary(u);if(window.MCmotSync)try{window.MCmotSync(u)}catch(x){}
 var k=u.dsel,list=dayBk(u,k),closed=dfrom(k).getDay()===0,jobs=list.filter(function(b){return b.type!=='Blocked'}),booked=0,take=0,today=dkey(new Date());
 list.forEach(function(b){booked+=b.dur});jobs.forEach(function(b){take+=+b.price||0});
 var util=closed?0:Math.min(100,Math.round(100*booked/((DCLOSE-DOPEN)*u.bays.length)));
@@ -4034,9 +4150,9 @@ u.bays.forEach(function(b,i){s+='<div class="dbay" style="grid-column:'+(i+2)+';
 for(var r=0;r<rows;r++){var t=DOPEN+r*DSTEP;s+='<div class="dtime" style="grid-column:1;grid-row:'+(r+2)+'">'+(t%60===0?hm(t):'')+'</div>';
 for(var c=0;c<nb;c++)s+='<button type="button" class="dslot'+(t%60===0?' hr':'')+'" style="grid-column:'+(c+2)+';grid-row:'+(r+2)+'" data-dslot="'+c+':'+t+'" aria-label="New booking, '+esc(u.bays[c])+' at '+hm(t)+'"></button>'}
 list.forEach(function(b){var r0=Math.max(0,(b.start-DOPEN)/DSTEP)+2,span=Math.max(1,Math.round(b.dur/DSTEP)),bl=b.type==='Blocked';
-s+='<button type="button" class="dbk st-'+(bl?'blocked':b.status)+'" style="grid-column:'+(b.bay+2)+';grid-row:'+r0+' / span '+span+'" data-dopen="'+b.id+'"><b>'+hm(b.start)+' '+esc(bkTitle(b))+'</b>'+(bl?'':'<span>'+esc(b.reg)+' &middot; '+esc(b.type)+'</span>'+(span>2?'<span>'+esc(b.veh)+'</span>':'')+(span>3?'<span>'+stName(b.status)+(b.paid?', paid':'')+'</span>':''))+'</button>'});
+s+='<button type="button" class="dbk st-'+(bl?'blocked':b.status)+'" style="grid-column:'+(b.bay+2)+';grid-row:'+r0+' / span '+span+'" data-dopen="'+b.id+'"><b>'+hm(b.start)+' '+esc(bkTitle(b))+'</b>'+(b.ol?'<span class="dol">Online, paid</span>':'')+(bl?'':'<span>'+esc(b.reg)+' &middot; '+esc(b.type)+'</span>'+(span>2?'<span>'+esc(b.veh)+'</span>':'')+(span>3?'<span>'+stName(b.status)+(b.paid?', paid':'')+'</span>':''))+'</button>'});
 return s+'</div></div>'+legend()+'<p class="note">Tap an empty slot to book it, or tap a booking to open it.</p></div>'}
-function bkRow(u,b,showDate){var bl=b.type==='Blocked';return '<div class="job"><div><b>'+(showDate?esc(dayLabel(b.date))+', ':'')+hm(b.start)+' to '+hm(b.start+b.dur)+' &middot; '+esc(bkTitle(b))+'</b><small>'+esc(u.bays[b.bay]||'')+(bl?'':' &middot; '+esc(b.reg)+' &middot; '+esc(b.veh)+' &middot; '+esc(b.type))+'</small>'+(bl?'':'<small><span class="sst st-'+b.status+'">'+stName(b.status)+'</span>'+(b.paid?' Paid':'')+' &middot; via '+BSRC[b.src]+'</small>')+'</div><div class="jp">'+(bl?'':m(b.price))+'</div><div class="jb"><button class="btn sm ghost" type="button" data-dopen="'+b.id+'">Open</button></div></div>'}
+function bkRow(u,b,showDate){var bl=b.type==='Blocked';return '<div class="job"><div><b>'+(showDate?esc(dayLabel(b.date))+', ':'')+hm(b.start)+' to '+hm(b.start+b.dur)+' &middot; '+esc(bkTitle(b))+'</b>'+(b.ol?'<small><span class="sst st-booked">Booked online, paid</span></small>':'')+'<small>'+esc(u.bays[b.bay]||'')+(bl?'':' &middot; '+esc(b.reg)+' &middot; '+esc(b.veh)+' &middot; '+esc(b.type))+'</small>'+(bl?'':'<small><span class="sst st-'+b.status+'">'+stName(b.status)+'</span>'+(b.paid?' Paid':'')+' &middot; via '+BSRC[b.src]+'</small>')+'</div><div class="jp">'+(bl?'':m(b.price))+'</div><div class="jb"><button class="btn sm ghost" type="button" data-dopen="'+b.id+'">Open</button></div></div>'}
 function dList(u,list){var s='<div class="card"><h2>Day list</h2>';if(!list.length)s+='<p class="note">No bookings yet. Use New booking to add one.</p>';list.forEach(function(b){s+=bkRow(u,b,false)});return s+legend()+'</div>'}
 function foundHtml(u){var q=(u.dfind||'').toLowerCase().replace(/\s/g,'');if(q.length<2)return '';
 var l=u.diary.filter(function(b){return b.type!=='Blocked'&&(b.reg+b.cust).toLowerCase().replace(/\s/g,'').indexOf(q)>-1}).sort(function(a,b){return a.date<b.date?-1:a.date>b.date?1:a.start-b.start});
@@ -4060,6 +4176,7 @@ if(!e.date)err='Choose a date.';
 else if(dfrom(e.date).getDay()===0)err='The diary is closed on Sundays. Choose another day.';
 else if(!bl&&!e.reg&&!e.cust)err='Enter a registration or a customer name.';
 else if(e.start+e.dur>DCLOSE)err='This runs past closing time ('+hm(DCLOSE)+'). Make it shorter or start earlier.';
+else if(e.ol&&(function(o){return o&&(o.date!==e.date||o.start!==e.start||o.bay!==e.bay||o.dur!==e.dur)})(bkById(u,e.id)))err='This MOT was booked and paid online, so its day, time and bay cannot be changed here. To move it, contact The Motoring Central and we will arrange it with the customer.';
 else if(clash(u,e))err='That overlaps another booking in '+u.bays[e.bay]+'. Pick another time'+(u.bays.length>1?' or bay':'')+'.';
 if(err){$('bk-err').textContent=err;return}
 if(e.price==='')e.price=0;
@@ -4202,6 +4319,7 @@ if(a.bst){readBk(u);u.dedit.status=a.bst;var sb=bkById(u,u.dedit.id);if(sb)sb.st
 if(a.bclose!=null){u.dedit=null;rd();return}
 if(a.bsave!=null){saveBk(u);return}
 if(a.bremind!=null){readBk(u);u.dmsg='Text sent to '+(u.dedit.cust||'the customer')+(u.dedit.phone?' on '+u.dedit.phone:'')+' (demo).';rd();return}
+if(a.bdel!=null&&u.dedit&&u.dedit.ol){$('bk-err').textContent='This MOT was booked and paid online. To cancel it, contact The Motoring Central so the customer can be refunded.';return}
 if(a.bdel!=null){if(!t.getAttribute('data-armed')){t.setAttribute('data-armed','1');t.textContent='Tap again to confirm';return}u.diary=u.diary.filter(function(x){return x.id!==u.dedit.id});u.dmsg='Booking removed.';u.dedit=null;rd();return}
 if(a.sf){u.sfilter=a.sf;rd();return}
 if(a.snew!=null){u.sedit={kind:'Car',reg:'',make:'',model:'',variant:'',year:new Date().getFullYear()-4,miles:'',fuel:'Petrol',gear:'Manual',body:'Hatchback',col:'White',cost:'',inDate:iso(0),prep:[],price:'',status:'prep',loc:'Workshop',mot:'',notes:''};u.smsg='';rd();focusCard('st-card');return}
@@ -4312,6 +4430,7 @@ if(b.id==='logout')setTimeout(function(){if(window.GGrerender)window.GGrerender(
 if(BK[b.id]&&!isCust()){e.preventDefault();e.stopImmediatePropagation();pending={btn:b};open(BK[b.id])}},true);
 document.addEventListener('submit',function(e){var f=e.target;if((f.id==='cd-enq'||f.id==='vd-enq')&&!isCust()){e.preventDefault();e.stopImmediatePropagation();pending={form:f};open('Create a free account or log in to message the dealer.')}},true);
 /* record bookings and enquiries on the account */
+window.GGrecBooking=function(item){var u=window.GGuser;if(u&&u.bookings)rec(u.bookings,item)};
 var DONE={mgo:['MOT','mdone'],tgo:['Tyres','tdone'],vgo:['Valet','vdone'],rgo:['Recovery','rdone'],ego:['EV charging','evc-done'],bgo:['Alloy wheels','bdone'],bqgo:['Bodywork quotes','bqdone']};
 function rec(list,item){var last=list[0];if(last&&last.text===item.text&&Date.now()-last.t<3000)return;if(window.GGuser&&list===window.GGuser.bookings&&!item.veh&&window.MCbookingVeh){var vh=window.MCbookingVeh();if(vh)item.veh=vh}list.unshift(item);var u=window.GGuser;if(window.MCsave&&u)window.MCsave(list===u.bookings?'booking':'enquiry',item.text||item.about,Object.assign({acct:u.email,customer:u.name,phone:u.phone},item));if(u&&list===u.bookings){u.det=u.det||{regs:[],left:2};u.det.left=2}}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b||!isCust())return;var u=window.GGuser;
@@ -5002,7 +5121,7 @@ function esc(s){var d=document.createElement('div');d.textContent=s;return d.inn
 function rows(p,have){var h='';T.forEach(function(t){var on=have?have[t.k]!=null:t.k==='4-car',fee=have&&have[t.k]!=null?have[t.k]:t.max;
  if(t.g)h+='<div class="motgrp">'+esc(t.g)+'</div>';
  h+='<div class="motrow'+(on?'':' off')+'"><input type="checkbox" id="'+p+'-c-'+t.k+'" data-motc="'+t.k+'"'+(on?' checked':'')+'><label for="'+p+'-c-'+t.k+'">'+esc(t.n)+'<small>'+(t.h?esc(t.h)+'. ':'')+'Class '+t.c+'. Maximum '+money(t.max)+'</small></label>'
-  +'<span class="motfee">£<input type="number" id="'+p+'-f-'+t.k+'" data-motf="'+t.k+'" min="1" max="'+t.max+'" step="0.01" value="'+(+fee).toFixed(2)+'" inputmode="decimal" aria-label="Your fee for '+esc(t.n)+', maximum '+money(t.max)+'"'+(on?'':' disabled')+'></span></div>'});return h}
+  +'<span class="motfee">£<input type="number" id="'+p+'-f-'+t.k+'" data-motf="'+t.k+'" min="1" max="'+t.max+'" step="0.01" value="'+(+fee).toFixed(2)+'" inputmode="decimal" aria-label="The fee you ask for '+esc(t.n)+', maximum '+money(t.max)+'"'+(on?'':' disabled')+'></span></div>'});return h}
 function read(p){var o={};T.forEach(function(t){var c=$(p+'-c-'+t.k),f=$(p+'-f-'+t.k);if(c&&c.checked&&f){var v=Math.round(+f.value*100)/100;if(!(v>0))v=t.max;o[t.k]=Math.min(t.max,v)}});return o}
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttribute)return;
  if(t.hasAttribute('data-motc')){var row=t.closest('.motrow'),f=row.querySelector('[data-motf]');f.disabled=!t.checked;row.classList.toggle('off',!t.checked);if(t.checked)f.focus();sync()}
@@ -5012,21 +5131,22 @@ document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttri
  else if(t.id==='gmot'){var box=$('g-motclasses');if(box)box.hidden=!t.checked}
  else if(t.id==='mclass'){note();var p=$('mpost'),b=$('mfind');if(p&&b&&p.value.replace(/\s/g,'').length>=5)b.click();else if($('garages'))$('garages').innerHTML=''}});
 function sync(){var o=read('gm'),h=$('g-motfee');if(h){var k=o['4-car']!=null?'4-car':Object.keys(o)[0];h.value=k?o[k]:54.85}}
-function note(){var n=$('mclass-note'),t=cur();if(n)n.textContent='Class '+t.c+' MOT. Garages set their own price, up to the legal maximum of '+money(t.max)+'. MOT test fees are exempt from VAT. Our booking fee includes VAT.'}
+function note(){var n=$('mclass-note'),t=cur();if(n)n.textContent='Class '+t.c+' MOT: '+money(t.max)+', the official maximum fee for this class, at every partner test centre. MOT test fees are exempt from VAT. Our £3.00 booking fee includes VAT.'}
 /* customer picker */
 var sel=$('mclass');if(sel){var h='',open=false;T.forEach(function(t){if(t.g){if(open)h+='</optgroup>';h+='<optgroup label="'+esc(t.g)+'">';open=true}h+='<option value="'+t.k+'"'+(t.k==='4-car'?' selected':'')+'>'+esc(t.n)+'</option>'});sel.innerHTML=h+'</optgroup>';note()}
 var gl=$('gm-list');if(gl){gl.innerHTML=rows('gm',null);var gm=$('gmot'),bx=$('g-motclasses');if(gm&&bx)bx.hidden=!gm.checked}
 if(typeof window.GGmot==='function'){var o=window.GGmot;window.GGmot=function(on,i){var mc=$('mot-class');if(mc)mc.hidden=!(on&&i&&i.mot)||window.GGmode==='mot';return o.apply(this,arguments)}}
 window.MCMOT={table:T,
- price:function(g){var t=cur();return Math.min(t.max,Math.round(t.max*(g.fee/54.85)*100)/100)},
+ price:function(g){return cur().max},cur:cur,
  tests:function(i){var t=cur(),l=SAMPLE[i]||['4'];return l.indexOf(t.c)>=0},
  motOnly:function(i){return MOTONLY.indexOf(i)>=0},
  order:ORDER,group:function(k){return (META[k]||[])[3]||''},
- tile:function(k,from){var t=BY[k],m=META[k]||['car',t.n,'',''];return '<svg class="motic" viewBox="0 0 48 32" aria-hidden="true">'+ICON[m[0]]+'</svg><span class="mott"><b>'+esc(m[1])+'</b>'+(m[2]?'<small>'+esc(m[2])+'</small>':'')+'</span><span class="motp"><em>Class '+t.c+'</em>'+(from!=null?'<b>From \u00A3'+from+'</b>':'<b>Up to '+money(t.max)+'</b>')+'</span>'},
+ tile:function(k,from){var t=BY[k],m=META[k]||['car',t.n,'',''];return '<svg class="motic" viewBox="0 0 48 32" aria-hidden="true">'+ICON[m[0]]+'</svg><span class="mott"><b>'+esc(m[1])+'</b>'+(m[2]?'<small>'+esc(m[2])+'</small>':'')+'</span><span class="motp"><em>Class '+t.c+'</em>'+(from!=null?'<b>\u00A3'+from+'</b>':'<b>'+money(t.max)+'</b>')+'</span>'},
  label:function(){var t=cur();return 'Class '+t.c+' MOT ('+t.n.charAt(0).toLowerCase()+t.n.slice(1)+')'},
  read:read,
  ratesHtml:function(u){var have=u.rates&&u.rates.motc;if(!have){have={};have['4-car']=(u.rates&&u.rates.mot)||54.85}
-  return '<h3 class="sh" style="margin-top:14px">MOT classes you test, and your fee for each</h3><p class="note" style="margin:0 0 8px">Tick each type of test you are authorised for. You cannot charge more than the legal maximum shown. MOT test fees are exempt from VAT.</p><div class="motlist" id="dm-list">'+rows('dm',have)+'</div><p class="note err" id="dm-err" role="alert"></p>'}};
+  var ag=u.motAgreed&&Object.keys(u.motAgreed).length?'<p class="note" style="margin:0 0 8px;background:#DDF7E4;color:#0F4D22;border-radius:10px;padding:8px 10px"><b>Agreed fee paid to you per test:</b> '+Object.keys(u.motAgreed).map(function(k){return (k==='all'?'all classes':(BY[k]?BY[k].n:k))+' '+money(u.motAgreed[k])}).join(', ')+'. Agreed with The Motoring Central when your application was approved.</p>':'';
+  return '<h3 class="sh" style="margin-top:14px">MOT classes you test, and the fee you ask for each</h3>'+ag+'<p class="note" style="margin:0 0 8px">Tick each type of test you are authorised for. Customers pay the official maximum when they book online; you are paid the fee agreed with us for every test, with no booking fee or commission taken from it. MOT test fees are exempt from VAT.</p><div class="motlist" id="dm-list">'+rows('dm',have)+'</div><p class="note err" id="dm-err" role="alert"></p>'}};
 })();
 </script>
 <script>
@@ -6956,6 +7076,17 @@ try{var qp=new URLSearchParams(location.search).get('q');if(qp&&onHome()){H.I.va
 #mc-guide .gother small{display:block;font-weight:400;font-size:.8rem;color:#5A6B82;margin-top:1px}
 #mc-guide .gother button{all:unset;cursor:pointer;font-weight:800;font-size:.82rem;color:#0369A1;text-decoration:underline;white-space:nowrap;padding:6px 2px}
 #mc-guide .glink{all:unset;cursor:pointer;display:block;font-weight:700;font-size:.9rem;color:#0369A1;text-decoration:underline;margin:12px 2px 0}
+#mc-guide .wleg{display:grid;gap:4px;background:#0B1C35;color:#E5EEF8;border-radius:12px;padding:10px 12px;font-size:.8rem;line-height:1.35;margin:2px 0 4px}
+#mc-guide .wleg span{display:flex;align-items:flex-start;gap:7px}#mc-guide .wleg i{flex:none;width:11px;height:11px;border-radius:50%;margin-top:3px;box-shadow:0 0 6px currentColor}#mc-guide .wleg b{white-space:nowrap}
+#mc-guide .wlgrid{grid-template-columns:1fr 1fr}@media (max-width:520px){#mc-guide .wlgrid{grid-template-columns:1fr}}
+#mc-guide .qrow.wlrow{align-items:flex-start}
+#mc-guide .qrow span.wls,#mc-guide .wlres span.wls,.wls{display:flex;gap:4px;flex:0 0 auto;min-width:0}#mc-guide .qrow span.wl,#mc-guide span.wl{flex:0 0 auto;display:grid}
+.wl{width:56px;height:56px;border-radius:11px;background:#04080F;display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09),inset 0 -6px 12px rgba(255,255,255,.03)}
+.wl svg{width:46px;height:46px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 3px currentColor)}
+.wl.big{width:68px;height:68px;border-radius:14px}.wl.big svg{width:56px;height:56px}
+#mc-guide .qrow em.wr{display:inline-block;margin-top:5px;background:#FECACA;color:#7A1010}#mc-guide .qrow em.wa{display:inline-block;margin-top:5px;background:#FFE9A8;color:#5C4400}
+#mc-guide .wlres{display:flex;align-items:center;gap:12px;background:#0B1C35;color:#fff;border-radius:14px;padding:10px 12px;margin:8px 0 4px}
+#mc-guide .wlres b{display:block;font-size:1rem}#mc-guide .wlres small{display:block;color:#A9BCD6;font-size:.82rem;margin-top:2px;line-height:1.35}
 #mc-guide .gfoot{font-size:.8rem;color:#5A6B82;line-height:1.45;margin:14px 2px 0;border-top:1px solid #D6E2EE;padding-top:10px}
 </style>
 <script>
@@ -6968,6 +7099,13 @@ try{var qp=new URLSearchParams(location.search).get('q');if(qp&&onHome()){H.I.va
 function $(i){return document.getElementById(i)}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 var NS='Not sure: please check and advise';
+/* dashboard warning light symbols (drawn for the site, in the colour they show on the dashboard) */
+var WL={"engine": ["#F5A524", "<path d='M10 19h4v-4h6v-3h9v3h4l3 4h3v-3h4v15h-4v-3h-3l-3 4H17l-3-4h-4z'/><path d='M5 18v11M5 23.5h5M20 12h9'/>"], "battery": ["#EF4444", "<rect x='6' y='15' width='36' height='22' rx='3'/><path d='M12 15v-4h6v4M30 15v-4h6v4M11 26h7M30 26h7M33.5 22.5v7'/>"], "oil": ["#EF4444", "<path d='M15 19h15l4 4 9-5-10 14H15z'/><path d='M15 22H9l-4 4 4 3h6M20 19v-4h6v4'/><path d='M42 31c0 2.5-2 3.5-2 5.5a2 2 0 0 0 4 0c0-2-2-3-2-5.5z'/>"], "temp": ["#EF4444", "<path d='M21 27V9a3 3 0 0 1 6 0v18'/><circle cx='24' cy='31' r='5'/><path d='M27 12h5M27 17h5M27 22h5M5 41c3-2.5 6-2.5 9 0s6 2.5 9 0 6-2.5 9 0 6 2.5 9 0'/>"], "brake": ["#EF4444", "<circle cx='24' cy='24' r='12'/><path d='M24 17v9M10 12a17 17 0 0 0 0 24M38 12a17 17 0 0 1 0 24'/><circle cx='24' cy='30.5' r='1.3' fill='currentColor'/>"], "abs": ["#F5A524", "<circle cx='24' cy='24' r='12'/><path d='M10 12a17 17 0 0 0 0 24M38 12a17 17 0 0 1 0 24'/><text x='24' y='27.5' text-anchor='middle' font-size='9.5' font-weight='800' font-family='Arial,sans-serif' fill='currentColor' stroke='none'>ABS</text>"], "traction": ["#F5A524", "<path d='M13 24l3-9h16l3 9v7H13z'/><path d='M13 31v3M35 31v3M17 20h14'/><path d='M17 37c-3 3 3 5 0 8M31 37c-3 3 3 5 0 8'/>"], "airbag": ["#EF4444", "<circle cx='16' cy='9' r='3.5'/><path d='M15 15l-3 13h10l5 11M14 20l8 4M9 15v19h10'/><circle cx='35' cy='21' r='7'/>"], "steer": ["#F5A524", "<circle cx='20' cy='24' r='13'/><circle cx='20' cy='24' r='3.5'/><path d='M7.5 21h9M23.5 21h9M20 27.5V37M41 13v13'/><circle cx='41' cy='31.5' r='1.4' fill='currentColor'/>"], "tyre": ["#F5A524", "<path d='M11 35c-5-6-5-17 0-23M37 35c5-6 5-17 0-23M11 12h26M11 35h4M33 35h4M12 40l1.5-5M18 40l1.5-5M28.5 40l1.5-5M34.5 40l1.5-5M24 17v10'/><circle cx='24' cy='31.5' r='1.4' fill='currentColor'/>"], "glow": ["#F5A524", "<path d='M3 29h4c0-11 8-11 8 0 0-11 8-11 8 0 0-11 8-11 8 0 0-11 8-11 8 0h6'/><path d='M7 35h34'/>"], "dpf": ["#F5A524", "<rect x='9' y='13' width='30' height='22' rx='3'/><path d='M3 24h6M39 24h6'/><g fill='currentColor' stroke='none'><circle cx='17' cy='20' r='1.8'/><circle cx='24' cy='20' r='1.8'/><circle cx='31' cy='20' r='1.8'/><circle cx='17' cy='28' r='1.8'/><circle cx='24' cy='28' r='1.8'/><circle cx='31' cy='28' r='1.8'/></g>"], "adblue": ["#F5A524", "<path d='M24 7c6 8 10 13 10 19a10 10 0 0 1-20 0c0-6 4-11 10-19z'/><path d='M18 28c2 1.5 4 1.5 6 0s4-1.5 6 0'/>"], "service": ["#F5A524", "<path d='M31 7a8 8 0 0 0-8 11L9 32a3 3 0 0 0 4.2 4.2L27 22a8 8 0 0 0 11-8l-5 5-4.5-1L27.5 13.5z'/>"], "fuel": ["#F5A524", "<rect x='9' y='9' width='17' height='29' rx='2'/><path d='M13 13h9v8h-9zM26 18h4l4 4v12a2.2 2.2 0 0 0 4.4 0V18l-4-5M6 38h23'/>"], "unsure": ["#E5EEF8", "<circle cx='24' cy='24' r='15'/><path d='M19 19a5 5 0 1 1 7 4.6c-1.5.8-2 1.8-2 3.6'/><circle cx='24' cy='32.5' r='1.5' fill='currentColor'/>"]};
+function wl(k,big){var x=WL[k];if(!x)return '';return '<span class="wl'+(big?' big':'')+'" aria-hidden="true"><svg viewBox="0 0 48 48" style="color:'+x[0]+'">'+x[1]+'</svg></span>'}
+function wls(k,big){return (Array.isArray(k)?k:[k]).map(function(x){return wl(x,big)}).join('')}
+function wlTag(k){var c=WL[Array.isArray(k)?k[0]:k];if(!c)return '';return c[0]==='#EF4444'?'<em class="wr">Red: urgent</em>':c[0]==='#F5A524'?'<em class="wa">Amber: soon</em>':''}
+var LEG='<div class="wleg"><span><i style="background:#EF4444"></i><b>Red</b> stop safely and get it checked now</span><span><i style="background:#F5A524"></i><b>Amber or yellow</b> get it checked soon</span><span><i style="background:#22C55E"></i><b>Green or blue</b> information only, for example your lights are on</span></div>';
+var lastWl=null;
 /* jobs with a fixed price on the site today: [service tile, price row] */
 var FIX={'Full service':['mobile','svc'],'Brake discs and pads':['mobile','brk'],'Front brake pads':['mobile','brk'],'Battery test and replacement':['mobile','bat'],'Engine warning light diagnosis':['mobile','diag'],'Full fault code scan (all systems)':['mobile','diag']};
 /* results that are a whole service, not one job */
@@ -6994,18 +7132,21 @@ menu:{q:'What is the car doing?',h:'Pick the closest one. You do not need to kno
  ['Air con or heater','','climate'],
  ['Something else, or I really don’t know','',{lead:'diag',w:'That is fine. A diagnostic check is the quickest way to find out: a mechanic comes to you, checks the car and tells you what it needs before any repair.',j:[]}]]},
 
-light:{q:'Which warning light is on?',h:'Red lights are urgent. Amber or yellow lights mean get it checked soon.',a:[
- ['Engine light','Amber, shaped like an engine','light_engine'],
- ['Battery light','Red, shaped like a battery',{u:'soon',w:'The battery is not being charged, so the car is running on the battery alone and can cut out without warning. Switch off what you do not need (heated seats, air con) and avoid a long trip.',j:[['Alternator','The part that charges the battery while you drive. The most common cause'],['Auxiliary (drive) belt','The belt that turns the alternator may have snapped or be slipping'],['Battery test and replacement','A failing battery can bring the light on too']]}],
- ['Oil light','Red, shaped like an oil can',{u:'stop',w:'Stop the engine as soon as it is safe. Running an engine with low oil pressure can destroy it in minutes. Check the oil level with the dipstick if you know how, and do not restart it if the level is low.',lead:'diag',j:[['Oil leak repair','If the oil level keeps dropping'],['Oil and filter change','If the oil is old or the wrong level']]}],
- ['Temperature light','Red, a thermometer in waves',{u:'stop',w:'The engine is overheating. Stop when it is safe and switch off. Never open the coolant cap while it is hot.',j:[['Coolant hoses','A split hose or lost coolant is the most common cause'],['Thermostat replacement','A stuck thermostat stops the coolant flowing'],['Water pump replacement','The pump that moves coolant round the engine']]}],
- ['Brake light','Red, a circle with ! or the word BRAKE','light_brake'],
- ['ABS or traction control','Amber, says ABS or shows a skidding car',{w:'Your normal brakes still work, but the anti-lock system is switched off, so the wheels could lock in an emergency stop. Drive gently and leave more room.',j:[['ABS or traction control light diagnosis','A mechanic reads the fault and tells you which part it is'],['ABS sensor replacement','A wheel sensor is the usual cause']]}],
- ['Airbag','Red or amber, a person with a ball',{w:'The airbags may not go off in a crash while this light is on, so get it checked soon.',j:[['Airbag (SRS) warning light diagnosis','A mechanic reads the fault. It is often a connector under a seat']]}],
- ['Tyre pressure','Amber, a flat tyre shape with !','light_tyre'],
- ['Diesel filter (DPF) or AdBlue','Diesel cars only','light_diesel'],
- ['Service or spanner light','The car is telling you a service is due',{w:'This light comes on by time or mileage. It means a service is due, not that something has broken.',j:[['Full service','The yearly service most cars need. The light is reset as part of it'],['Interim service','A smaller check-up with an oil change, if it had a full service recently'],['Service light reset','If it has just been serviced and the light was not reset']]}],
- ['Another light, or I’m not sure','',{lead:'diag',w:'A mechanic plugs into the car’s computer, reads the fault and tells you what it means and what it needs.',j:[]}]]},
+light:{q:'Which warning light is on?',h:'Find the symbol that looks like the one on your dashboard. Most cars show it in the same colour as here.',leg:1,a:[
+ ['Engine light','Amber engine shape. Also called the check engine or engine management light','light_engine','engine'],
+ ['Battery light','Red battery with + and −. The battery is not being charged',{u:'soon',w:'The battery is not being charged, so the car is running on the battery alone and can cut out without warning. Switch off what you do not need (heated seats, air con) and avoid a long trip.',j:[['Alternator','The part that charges the battery while you drive. The most common cause'],['Auxiliary (drive) belt','The belt that turns the alternator may have snapped or be slipping'],['Battery test and replacement','A failing battery can bring the light on too']]},'battery'],
+ ['Oil light','Red oil can with a drip. The oil pressure is low',{u:'stop',w:'Stop the engine as soon as it is safe. Running an engine with low oil pressure can destroy it in minutes. Check the oil level with the dipstick if you know how, and do not restart it if the level is low.',lead:'diag',j:[['Oil leak repair','If the oil level keeps dropping'],['Oil and filter change','If the oil is old or the wrong level']]},'oil'],
+ ['Temperature light','Red thermometer in water. The engine is too hot',{u:'stop',w:'The engine is overheating. Stop when it is safe and switch off. Never open the coolant cap while it is hot.',j:[['Coolant hoses','A split hose or lost coolant is the most common cause'],['Thermostat replacement','A stuck thermostat stops the coolant flowing'],['Water pump replacement','The pump that moves coolant round the engine']]},'temp'],
+ ['Brake light','Red circle with ! inside brackets, or the word BRAKE','light_brake','brake'],
+ ['ABS or traction control','Amber circle with ABS, or a car with wavy skid lines',{w:'Your normal brakes still work, but the anti-lock system is switched off, so the wheels could lock in an emergency stop. Drive gently and leave more room.',j:[['ABS or traction control light diagnosis','A mechanic reads the fault and tells you which part it is'],['ABS sensor replacement','A wheel sensor is the usual cause']]},['abs','traction']],
+ ['Airbag','Red or amber: a seated person with a large ball in front',{w:'The airbags may not go off in a crash while this light is on, so get it checked soon.',j:[['Airbag (SRS) warning light diagnosis','A mechanic reads the fault. It is often a connector under a seat']]},'airbag'],
+ ['Power steering','Red or amber steering wheel, often with ! next to it',{u:'soon',w:'The power steering has a fault, so the steering can suddenly feel very heavy, mostly at low speed and when parking. You can still steer, but it takes much more effort. Keep trips short and gentle. If the light is red, or the steering is already very heavy, do not drive.',j:[['Power steering pump or rack','The part that helps you turn the wheel'],['Electrical fault finding','Most newer cars have electric power steering, so it is often a sensor or wiring fault']]},'steer'],
+ ['Tyre pressure','Amber horseshoe shape (a tyre cut in half) with ! in the middle','light_tyre','tyre'],
+ ['Glow plug light','Amber coil, like a spring. Diesel cars only',{lead:'diag',w:'On a diesel, this light comes on for a few seconds when you turn the key, then goes out. That is normal: wait for it to go out, then start the engine. If it flashes or stays on while you drive, the engine computer has found a fault.',j:[['Glow plugs','Worn glow plugs make a diesel hard to start when cold'],['EGR valve','Can bring this light on in some diesels']]},'glow'],
+ ['Diesel filter (DPF) or AdBlue','Amber box with dots, or a drop of liquid. Diesel cars only','light_diesel',['dpf','adblue']],
+ ['Service or spanner light','Amber or white spanner. A service is due',{w:'This light comes on by time or mileage. It means a service is due, not that something has broken.',j:[['Full service','The yearly service most cars need. The light is reset as part of it'],['Interim service','A smaller check-up with an oil change, if it had a full service recently'],['Service light reset','If it has just been serviced and the light was not reset']]},'service'],
+ ['Low fuel light','Amber fuel pump',{ok:'The fuel is low. Most cars have roughly 30 to 50 miles left when this light comes on, but do not count on it. Fill up as soon as you can: running the tank dry can damage the fuel pump, and a diesel may need bleeding before it will start again.'},'fuel'],
+ ['Another light, or I’m not sure','A mechanic reads what it means',{lead:'diag',w:'A mechanic plugs into the car’s computer, reads the fault and tells you what it means and what it needs.',j:[]},'unsure']]},
 light_engine:{q:'Is the light flashing, or is the car running badly?',a:[
  ['Yes: flashing, shaking or low on power','',{u:'soon',lead:'diag',w:'A flashing engine light usually means the engine is misfiring. Driving on can damage the catalytic converter, which is expensive, so keep trips short and gentle.',j:[['Ignition coils','Petrol cars: the most common cause of a misfire'],['Spark plug replacement','Petrol cars: worn plugs cause the same fault'],['Fuel injectors','More likely on a diesel']]}],
  ['No: it is on steadily and the car drives normally','',{lead:'diag',w:'A steady engine light has dozens of possible causes, and most are small. The car needs plugging in to read the fault, so a diagnostic check is the right first step.',j:[['Lambda (oxygen) sensor','A common cause, with higher fuel use'],['EGR valve','Common on diesels']]}]]},
@@ -7016,8 +7157,8 @@ light_tyre:{q:'Does a tyre look flat or low?',a:[
  ['Yes, or it keeps going down','',{svc:'tyres',w:'A tyre is losing air, most often from a nail or screw. A slow puncture can usually be repaired without a new tyre.'}],
  ['No, the tyres look fine and I have pumped them up','',{w:'If the pressures are right and the light stays on after a short drive, a sensor inside one of the wheels has probably failed.',j:[['Tyre pressure (TPMS) sensors','The sensors have batteries that run out after several years']]}]]},
 light_diesel:{q:'Which one?',a:[
- ['DPF: a box with dots in it','The exhaust soot filter',{u:'soon',w:'The soot filter is blocking up, usually after a lot of short trips. A steady 20 minutes on a fast road sometimes clears it. If the light stays on, get it cleaned before it blocks completely.',j:[['DPF clean and forced regeneration','Cleans the filter. Far cheaper than replacing it'],['DPF replacement','Only if cleaning does not work']]}],
- ['AdBlue warning','',{u:'soon',w:'Check the AdBlue level first and top it up: it is sold at fuel stations. If the tank is full and the warning stays, there is a fault. Many cars will not restart once the countdown reaches zero.',j:[['AdBlue system repair','A sensor, pump or injector fault in the AdBlue system']]}]]},
+ ['DPF: a box with dots in it','The exhaust soot filter',{u:'soon',w:'The soot filter is blocking up, usually after a lot of short trips. A steady 20 minutes on a fast road sometimes clears it. If the light stays on, get it cleaned before it blocks completely.',j:[['DPF clean and forced regeneration','Cleans the filter. Far cheaper than replacing it'],['DPF replacement','Only if cleaning does not work']]},'dpf'],
+ ['AdBlue warning','A drop of liquid, often with a countdown in miles',{u:'soon',w:'Check the AdBlue level first and top it up: it is sold at fuel stations. If the tank is full and the warning stays, there is a fault. Many cars will not restart once the countdown reaches zero.',j:[['AdBlue system repair','A sensor, pump or injector fault in the AdBlue system']]},'adblue']]},
 
 start:{q:'What happens when you try to start it?',a:[
  ['Nothing at all','No dashboard lights, or very dim',{w:'The battery is completely flat or has failed.',j:[['Battery test and replacement','Tested first, and replaced only if it needs it'],['Electrical fault finding','If something is draining a good battery']]}],
@@ -7163,16 +7304,17 @@ var busy=false;
 function shut(){if(dlg&&dlg.open)dlg.close()}
 function head(){return '<div class="fdh"><b>Let’s work out what it needs</b><button type="button" class="fdx" aria-label="Close">Close</button></div>'}
 function show(){var t=T[cur],n=path.length+1,h=head();
- h+='<p class="gstep">Question '+n+'</p><h3 tabindex="-1">'+esc(t.q)+'</h3>'+(t.h?'<p class="ghelp">'+esc(t.h)+'</p>':'')+'<div class="gans">';
- t.a.forEach(function(a,i){h+='<button type="button" class="qrow" data-ga="'+i+'"><span><b>'+esc(a[0])+'</b>'+(a[1]?'<small>'+esc(a[1])+'</small>':'')+'</span></button>'});
+ h+='<p class="gstep">Question '+n+'</p><h3 tabindex="-1">'+esc(t.q)+'</h3>'+(t.h?'<p class="ghelp">'+esc(t.h)+'</p>':'')+(t.leg?LEG:'')+'<div class="gans'+(t.leg?' wlgrid':'')+'">';
+ t.a.forEach(function(a,i){h+='<button type="button" class="qrow'+(a[3]?' wlrow':'')+'" data-ga="'+i+'">'+(a[3]?'<span class="wls">'+wls(a[3])+'</span>':'')+'<span><b>'+esc(a[0])+'</b>'+(a[1]?'<small>'+esc(a[1])+'</small>':'')+(a[3]?wlTag(a[3]):'')+'</span></button>'});
  h+='</div>'+(path.length?'<button type="button" class="gback">&larr; Back</button>':'')+
   '<p class="gfoot">Is the car unsafe or are you stuck at the roadside? <button type="button" class="glink" style="display:inline;margin:0" data-gd="svc" data-gv="recovery">Get recovery now</button></p>';
  dlg.innerHTML=h;dlg.scrollTop=0;var f=dlg.querySelector('h3');if(f)f.focus({preventScroll:true})}
-function pick(i){var a=T[cur].a[i];if(!a)return;path.push([cur,a[0]]);if(typeof a[2]==='string'){cur=a[2];show()}else{res=a[2];result()}}
-function back(){if(!path.length)return;var p=path.pop();cur=p[0];res=null;show()}
+function pick(i){var a=T[cur].a[i];if(!a)return;path.push([cur,a[0],a[3]||null]);if(a[3])lastWl={k:a[3],n:a[0],d:a[1]};if(typeof a[2]==='string'){cur=a[2];show()}else{res=a[2];result()}}
+function back(){if(!path.length)return;var p=path.pop();cur=p[0];res=null;lastWl=null;path.forEach(function(x){if(x[2])lastWl={k:x[2],n:x[1],d:''}});show()}
 function jobBtn(n,top){var f=FIX[n];return '<button type="button" class="gbtn'+(top?'':' alt')+'" data-gd="job" data-gv="'+esc(n)+'">'+(f?'See the fixed price':'Get prices for this job')+'</button>'}
 function result(){var r=res,h=head(),jobs=r.j||[],lead=r.lead==='diag',s=r.svc?SVC[r.svc]:null;
  h+='<p class="gstep">From your answers</p>';
+ if(lastWl)h+='<div class="wlres">'+wls(lastWl.k,true)+'<span><b>'+esc(lastWl.n)+'</b>'+(lastWl.d?'<small>'+esc(lastWl.d)+'</small>':'')+'</span></div>';
  if(r.ok){h+='<h3 tabindex="-1">Good news: this is normal</h3><p class="gok">'+esc(r.ok)+'</p><button type="button" class="gbtn alt fdx">Close</button>'+
    '<button type="button" class="glink" data-gd="diag">Still worried? Book a diagnostic check</button><button type="button" class="gback">&larr; Back</button>';dlg.innerHTML=h;dlg.scrollTop=0;return}
  h+='<h3 tabindex="-1">'+(s?'You need: '+esc(s[1].toLowerCase()):lead?'This needs a diagnostic check':'Most likely: '+esc(jobs[0][0].toLowerCase()))+'</h3>';
@@ -7196,7 +7338,7 @@ function act(kind,v){var G=window.MCgo;if(!G)return;var n=note();busy=true;shut(
  else if(kind==='svc')G.svc(SVC[v][0]);
  else if(kind==='ask')G.job('mobile',NS,n);
  else if(kind==='job'){var f=FIX[v];if(f)G.sid(f[0],f[1]);else G.job(garageOnly(v)?'garage':'mobile',v,n)}}
-function open(t,typed){build();said=String(typed||'').trim().slice(0,120);path=[];res=null;cur=topic(t)||'menu';show();if(!dlg.open){try{dlg.showModal()}catch(e){dlg.setAttribute('open','')}}}
+function open(t,typed){build();said=String(typed||'').trim().slice(0,120);path=[];res=null;lastWl=null;cur=topic(t)||'menu';show();if(!dlg.open){try{dlg.showModal()}catch(e){dlg.setAttribute('open','')}}}
 window.MCguide={open:open,has:function(t){return !!topic(t)},topics:T,fixed:FIX,services:SVC};
 })();
 </script>
@@ -7376,7 +7518,7 @@ function sigOf(u){return JSON.stringify([u.status,u.reject||null,u.suspend||null
 function partnerObj(p,docs){var L=U(),u=L.filter(function(x){return x.sbid===p.id})[0];if(!u){u={};L.push(u)}
  var d=p.details||{};Object.keys(d).forEach(function(k){u[k]=d[k]});delete u.pass;delete u.level;
  u.sbid=p.id;u.email=p.email;u.role=p.role;if(p.sub)u.sub=p.sub;u.name=p.name;u.phone=p.phone;u.town=p.town;if(p.website)u.website=p.website;
- u.plan=p.plan||'payg';u.rates=p.rates||{};u.status=p.status;u.submitted=ms(p.submitted_at);u.joined=ms(p.created_at);if(u.proActive==null)u.proActive=false;
+ u.plan=p.plan||'payg';u.rates=p.rates||{};u.status=p.status;if(p.mot_agreed&&Object.keys(p.mot_agreed).length)u.motAgreed=p.mot_agreed;else delete u.motAgreed;u.submitted=ms(p.submitted_at);u.joined=ms(p.created_at);if(u.proActive==null)u.proActive=false;
  var rv=p.review||{};u.reject=rv.reject||null;u.suspend=rv.suspend||undefined;u.ck=Array.isArray(rv.ck)?rv.ck.map(Boolean):null;u.rec=rv.rec||undefined;u.rejecting=false;
  if(p.reviewed_at)u.reviewedAt=ms(p.reviewed_at);
  u.docs=(docs||[]).filter(function(x){return x.partner_id===p.id}).sort(function(a,b){return a.slot-b.slot}).map(function(x){var o={name:x.name,file:x.file_name,exp:x.expires||'',type:x.mime,size:x.size,path:x.path,slot:x.slot};if(x.id_type)o.idtype=x.id_type;return o});
@@ -7455,6 +7597,15 @@ function dirApply(){var L=(window.MCdir&&window.MCdir.L)||{};DIR.forEach(functio
 function dirLoad(){return sb.from('partner_directory').select('id,role,sub,name,town,rates').limit(2000).then(function(r){if(r.error)return;DIR=r.data||[];dirApply()})}
 function partnerId(n){n=low(n);if(!n)return null;var p=DIR.filter(function(x){return low(x.name)===n})[0];return p?p.id:null}
 ready.then(dirLoad).catch(function(){});
+/* ---------- live MOT diary (garage_busy, book_mot, my_online_diary, sync_own_diary) ---------- */
+function motBays(p){var i=p.info||{};if(Array.isArray(i.bays))return i.bays.some(function(b){return /MOT/i.test(b)});return (+i.motBays>0)||!!i.motOnly}
+window.MCmotDb={garages:function(){return DIR.filter(function(p){return p.role==='mechanic'&&p.sub==='garage'&&motBays(p)})},
+ busy:function(id,from,to){return ready.then(function(){return sb.rpc('garage_busy',{p_partner:id,p_from:from,p_to:to})})},
+ book:function(o){return ready.then(function(){return sb.rpc('book_mot',o)})},
+ mine:function(from){return ready.then(function(){return sb.rpc('my_online_diary',{p_from:from})})},
+ syncOwn:function(list){return ready.then(function(){return sb.rpc('sync_own_diary',{p_entries:list})})},
+ agreed:function(id){return ready.then(function(){return sb.from('partners').select('mot_agreed').eq('id',id).maybeSingle()})},
+ setAgreed:function(id,v){return ready.then(function(){return sb.from('partners').update({mot_agreed:v}).eq('id',id).select('id')})}};
 /* ---------- bookings: partner sees them, customer sees the status ---------- */
 function hub(){return window.MChub&&window.MChub.state?window.MChub.state():null}
 function hubKeep(S){try{localStorage.setItem('mc-hub',JSON.stringify(S))}catch(e){}}
@@ -7478,7 +7629,7 @@ var setSig={},setT=null;
 function slimBig(v,depth){depth=depth||0;if(v==null)return null;var t=typeof v;
  if(t==='string')return v.length>300?null:v;if(t==='number')return isFinite(v)?v:null;if(t==='boolean')return v;if(t!=='object'||depth>5)return null;
  if(Array.isArray(v))return v.slice(0,300).map(function(x){return slimBig(x,depth+1)});
- var o={};Object.keys(v).slice(0,80).forEach(function(k){if(depth===0&&/^(email|pass|password|role|sub|name|phone|town|website|plan|rates|status|docs|joined|submitted|level|sbid|reject|suspend|ck|rec|jobs|dtab|dview|det|rejecting|restored|reviewedAt|logo|signins|fails)$/.test(k))return;if(k.charAt(0)==='_')return;var c=slimBig(v[k],depth+1);if(c!==null&&c!=='')o[k]=c});return o}
+ var o={};Object.keys(v).slice(0,80).forEach(function(k){if(depth===0&&/^(email|pass|password|role|sub|name|phone|town|website|plan|rates|status|docs|joined|submitted|level|sbid|reject|suspend|ck|rec|jobs|dtab|dview|det|rejecting|restored|reviewedAt|logo|signins|fails|motAgreed)$/.test(k))return;if(k.charAt(0)==='_')return;var c=slimBig(v[k],depth+1);if(c!==null&&c!=='')o[k]=c});return o}
 function syncSettings(){var u=window.GGuser;if(!sb||!u||!u.sbid||u.role==='customer'||u.role==='admin')return;
  var body;try{body={p_rates:slim(u.rates)||{},p_details:slimBig(u)||{},p_plan:u.plan||'payg'}}catch(e){return}var s=JSON.stringify(body);if(s.length>30000)return;
  if(setSig[u.sbid]===undefined){setSig[u.sbid]=s;return}if(setSig[u.sbid]===s)return;setSig[u.sbid]=s;clearTimeout(setT);
@@ -7921,7 +8072,7 @@ setInterval(function(){if(realUser()&&!document.hidden)pullMsgs()},20000);
 var lastMsgWho='';setInterval(function(){var u=window.GGuser,w=u&&u.sbid?u.sbid:'';if(w!==lastMsgWho){lastMsgWho=w;MSG=[];msgSig='';var o=$('mc-inbox');if(o)o.remove();if(w)pullMsgs()}},1500);
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
-function keep(type,d){var row,tb;
+function keep(type,d){var row,tb;if(d&&d.dbDone)return;
  if(type==='booking'){tb='bookings';var pn=d.partner||'';try{if(!pn&&window.MCreview&&window.MCreview.partnersOf)pn=window.MCreview.partnersOf(d.kind,d.text)[0]||''}catch(e){}row={kind:String(d.kind||'').slice(0,60),service:d.svc?String(d.svc).slice(0,200):null,summary:String(d.text||'Booking').slice(0,2000),vehicle:d.veh||null,made_at:new Date(d.t||Date.now()).toISOString(),partner_name:pn?String(pn).slice(0,160):null,partner_id:partnerId(pn)}}
  else{tb='enquiries';row={about:String(d.about||'').slice(0,500),message:String(d.text||'').slice(0,2000),made_at:new Date(d.t||Date.now()).toISOString()}}
  sb.from(tb).insert(row).then(function(r){if(r.error)toast('This was not saved to your account. Check your connection, then try again.',true)},function(){toast('This was not saved to your account. Check your connection, then try again.',true)})}
