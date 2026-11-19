@@ -1489,26 +1489,40 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <img class="heroimg" src="img/mobile-mechanic.webp" alt="A Motoring Central mobile mechanic working on a car beside a branded van" width="1400" height="788" loading="lazy"></div></section>
 
 <main>
-<div class="stats"><div><b>5%</b>launch fee</div><div><b>Weekly</b>payouts</div><div><b>You choose</b>your hours</div></div>
+<div class="stats" data-m="all mobile-mechanic garage auto-electrician"><div><b>5%</b>launch fee</div><div><b>Weekly</b>payouts</div><div><b>You choose</b>your hours</div></div>
+<div class="stats" data-m="mot-station" hidden><div><b>82%</b>of every MOT fee paid to you</div><div><b>&pound;0</b>monthly fee or commission</div><div><b>Free</b>to join until 31 May 2027</div></div>
 
-<h2 class="sec">Two ways to join</h2>
-<div class="join2">
-<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><b>Mobile mechanic</b><br><small>Travel to drivers' homes and workplaces. Your van, your hours.</small><button class="btn pick" data-k="mobile" type="button">Join as mobile</button></div>
-<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12M7 21v-7h10v7M7 17h10"/></svg><b>Garage</b><br><small>Drivers bring their cars to you. Repairs and servicing, and MOT too if you test.</small><button class="btn pick" data-k="garage" type="button">Join as a garage</button></div>
-<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></svg><b>MOT test station</b><br><small>MOT testing only. No monthly fee, no commission: we pay you 82% of the MOT fee, £44.98 for every car MOT. Free to join until 31 May 2027.</small><button class="btn pick" data-k="mot" type="button">Join as an MOT station</button></div>
-<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>Auto electrician or locksmith</b><br><small>Electrical faults, starting and charging, dash cams, car keys, fobs and lockouts. Mobile, workshop or both.</small><button class="btn pick" data-k="autoelec" type="button">Join as an auto electrician or locksmith</button></div>
+<h2 class="sec" data-m="all">Choose how you join</h2>
+<div class="join2" data-m="all">
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><b>Mobile mechanic</b><br><small>Travel to drivers' homes and workplaces. Your van, your hours.</small><a class="btn" href="#mobile-mechanic">Join as mobile</a></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12M7 21v-7h10v7M7 17h10"/></svg><b>Garage</b><br><small>Drivers bring their cars to you. Repairs and servicing, and MOT too if you test.</small><a class="btn" href="#garage">Join as a garage</a></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></svg><b>MOT test station</b><br><small>MOT testing only. No monthly fee, no commission: we pay you 82% of the MOT fee, £44.98 for every car MOT. Free to join until 31 May 2027.</small><a class="btn" href="#mot-station">Join as an MOT station</a></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><b>Auto electrician or locksmith</b><br><small>Electrical faults, starting and charging, dash cams, car keys, fobs and lockouts. Mobile, workshop or both.</small><a class="btn" href="#auto-electrician">Join as an auto electrician or locksmith</a></div>
 </div>
 
-<div class="card rate-ad"><b>You set your own rates.</b> No peanuts: you are paid exactly what you charge, less a flat 5% fee plus VAT (50% off our usual 10% during launch). Customers see your price before they choose you, so you never get squeezed.<br><b>MOT tests are different:</b> every partner charges the official maximum, and we pay you 82% of it (&pound;44.98 for a car MOT). No 5% fee, no Pro, no monthly fee.</div>
-<h2 class="sec">Why join</h2>
-<div class="grid3">
+<div class="card rate-ad" data-m="all mobile-mechanic garage auto-electrician"><b>You set your own rates.</b> No peanuts: you are paid exactly what you charge, less a flat 5% fee plus VAT (50% off our usual 10% during launch). Customers see your price before they choose you, so you never get squeezed.<span data-m="all garage"><br><b>MOT tests are different:</b> every partner charges the official maximum, and we pay you 82% of it (&pound;44.98 for a car MOT). No 5% fee, no Pro, no monthly fee. <a href="#mot-pricing" data-jump="mot-pricing">How MOT pricing works</a></span></div>
+<div class="card rate-ad" data-m="mot-station" hidden><b>One fair price, and 82% of it is yours.</b> Every MOT booked through us costs the customer the official DVSA maximum, so nobody undercuts you. We pay you 82% of it (&pound;44.98 for a car MOT). No monthly fee, no commission, no contract. <a href="#mot-pricing" data-jump="mot-pricing">See the figures</a></div>
+
+<h2 class="sec" data-m="mot-station" hidden>Why MOT stations join</h2>
+<div class="grid3" data-m="mot-station" hidden>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Booked 24/7</b><br><small>Drivers book and pay online any time, even when you are closed.</small></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/></svg><b>Free live diary</b><br><small>Online MOTs drop straight into your bays. Walk-ins and phone bookings close those times online.</small></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg><b>Your hours, your gaps</b><br><small>Choose your days, opening times and 30, 45 or 60 minutes per MOT, for up to 3 MOT bays.</small></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><b>Paid up front</b><br><small>The customer pays in full when they book. You are paid weekly. No chasing.</small></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg><b>No lock-in</b><br><small>No monthly fee and no contract. Keep your own customers and other booking sites.</small></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg><b>Fill quiet times</b><br><small>Customers see your free times first, so empty slots get booked.</small></div>
+</div>
+
+<h2 class="sec" data-m="all mobile-mechanic garage auto-electrician">Why join</h2>
+<div class="grid3" data-m="all mobile-mechanic garage auto-electrician">
+
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><b>Jobs sent to you</b><br><small>Customers book and pay up front. No chasing.</small></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5 5L3 18l3 3 6.5-6.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg><b>Parts sorted</b><br><small>The right parts for the car, ready to collect.</small></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Flexible hours</b><br><small>Open or close your diary whenever you like.</small></div>
 </div>
 
-<h2 class="sec">What could you earn?</h2>
-<div class="card calc">
+<h2 class="sec" data-m="all mobile-mechanic garage auto-electrician">What could you earn?</h2>
+<div class="card calc" data-m="all mobile-mechanic garage auto-electrician">
 <label for="jobs">Jobs per week <span id="jv">10</span></label>
 <input type="range" id="jobs" min="3" max="25" value="10">
 <label for="avg">Average job value <span id="av">£150</span></label>
@@ -1518,8 +1532,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <p class="note">Example only, after our 5% launch fee and before tax, parts costs and expenses. Not a guarantee.</p>
 </div>
 
-<h2 class="sec">Where the money goes</h2>
-<div class="card">
+<h2 class="sec" data-m="all mobile-mechanic garage auto-electrician">Where the money goes</h2>
+<div class="card" data-m="all mobile-mechanic garage auto-electrician">
 <div class="bar" role="img" aria-label="You keep 94 percent. Our fee is 6 percent, including VAT."><span class="you">You keep 94%</span><span class="us">6%</span></div>
 <table class="ft">
 <tr><td>Job price (customer pays)</td><td id="f1">£150.00</td></tr>
@@ -1536,12 +1550,33 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <p class="note">Uses the average job value from the slider above. Example figures.</p>
 </div>
 
-<h2 class="sec">Choose your plan</h2>
-<div class="plans">
+<h2 class="sec" data-m="all mobile-mechanic garage auto-electrician">Choose your plan</h2>
+<div class="plans" data-m="all mobile-mechanic garage auto-electrician">
 <div class="card plan"><b class="pn">Pay as you go</b><div class="pp">5% <small>+ VAT per job</small></div><p class="pu">Usually 10% + VAT. Launch offer: 50% off.</p><ul class="perks"><li>No monthly fee</li><li>Only pay when you earn</li><li>Best if you do fewer than about 10 jobs a month</li></ul></div>
 <div class="card plan pro"><span class="pbadge">Best for busy partners</span><b class="pn">Pro</b><div class="pp">&pound;74.50 <small>+ VAT a month</small></div><p class="pu">Plus VAT. Usually &pound;149. Launch offer: 50% off.</p><ul class="perks"><li><b>0% per job: keep everything you charge</b></li><li>Charged only once your documents are verified</li><li>Saves money from about 10 jobs a month</li><li>Switch plans or cancel at the end of any month</li></ul></div>
 </div>
-<p class="note">Example: 20 jobs a month at &pound;150 costs &pound;150 on Pay as you go or &pound;74.50 on Pro (usually &pound;300 or &pound;149). Pro prices are plus VAT. Customers pay the booking fee either way, so it never comes out of your price.</p>
+<p class="note" data-m="all mobile-mechanic garage auto-electrician">Example: 20 jobs a month at &pound;150 costs &pound;150 on Pay as you go or &pound;74.50 on Pro (usually &pound;300 or &pound;149). Pro prices are plus VAT. Customers pay the booking fee either way, so it never comes out of your price.</p>
+<h2 class="sec" id="mot-pricing" data-m="mot-station garage" hidden>How MOT pricing works</h2>
+<div class="card motpr" data-m="mot-station garage" hidden>
+<p style="margin:0 0 10px"><span data-m="garage">If you also test MOTs, they work differently from repairs. </span>Customers pay the official DVSA maximum fee when they book online, with nothing added on top. We pay you 82% of it and keep 18% (including VAT).</p>
+<table class="ft">
+<tr><th style="text-align:left">Test</th><th>Customer pays</th><th>Paid to you</th></tr>
+<tr><td>Car, up to 8 passenger seats (class 4)</td><td>&pound;54.85</td><td><b>&pound;44.98</b></td></tr>
+<tr><td>Motorcycle (class 1 and 2)</td><td>&pound;29.65</td><td><b>&pound;24.31</b></td></tr>
+<tr><td>Goods vehicle 3,000 to 3,500kg (class 7)</td><td>&pound;58.60</td><td><b>&pound;48.05</b></td></tr>
+<tr><td>More than 16 passenger seats (class 5)</td><td>&pound;80.65</td><td><b>&pound;66.13</b></td></tr>
+</table>
+<ul class="perks">
+<li>No monthly fee and no commission on MOTs<span data-m="garage">. MOTs are not part of the 5% fee or Pro, which only cover repairs and servicing</span></li>
+<li>Paid weekly, straight to your bank</li>
+<li>You choose which MOT classes you test, and customers only see you for those</li>
+<li>Online bookings go straight into your free live diary</li>
+<li data-m="mot-station">Free to join when you apply by 31 May 2027. After that, a one-off joining fee of &pound;99.99 + VAT, charged once your documents are approved</li>
+<li data-m="garage">Tick "We also do MOT tests" on the form below to add MOTs to your garage</li>
+</ul>
+<div data-m="mot-station" class="motcalc"><label for="motwk">MOTs booked through us per week <span id="motwkv">15</span></label><input type="range" id="motwk" min="1" max="80" value="15"><p style="margin:12px 0 0">Paid to you each month (car MOTs)</p><div class="big" id="motest">&pound;0</div><p class="note">Example only: car MOTs at &pound;44.98 each, before tax. Not a guarantee.</p></div>
+</div>
+
 <h2 class="sec" id="apply">Apply to join</h2>
 <form class="card" id="form" novalidate>
 <fieldset style="margin-top:0"><legend>I want to join as</legend><div class="checks">
@@ -2105,7 +2140,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <h1>Join the Motoring Central network.</h1>
 <p>For mechanics, garages, auto electricians, locksmiths, body shops, alloy wheel specialists, recovery companies, tyre fitters, valeters and car or van dealers. Set your own rates and get paid what you charge.</p>
 <a class="cta" href="#login" style="text-decoration:none">Already a member? Log in</a>
-<nav class="rolepick" aria-label="Choose how you join"><span>I am a:</span><a href="#mechanics">Mechanic or garage</a><a href="#mot-station">MOT test station</a><a href="#mechanics">Auto electrician or locksmith</a><a href="#tyres">Tyre fitter</a><a href="#bodyshop">Body shop or alloys</a><a href="#valets">Valeter</a><a href="#recovery">Recovery company</a><a href="#evcharging">Mobile EV charging</a><a href="#dealers">Car or van dealer</a></nav>
+<nav class="rolepick" aria-label="Choose how you join"><span>I am a:</span><a href="#mot-station">MOT test station</a><a href="#garage">Garage</a><a href="#mobile-mechanic">Mobile mechanic</a><a href="#auto-electrician">Auto electrician or locksmith</a><a href="#tyres">Tyre fitter</a><a href="#bodyshop">Body shop or alloys</a><a href="#valets">Valeter</a><a href="#recovery">Recovery company</a><a href="#evcharging">Mobile EV charging</a><a href="#dealers">Car or van dealer</a></nav>
 </div></section>
 <main>
 <div class="stats"><div><b>5%</b>launch fee on jobs</div><div><b>3 months</b>free for dealers</div><div><b>You</b>set your rates</div></div>
@@ -2119,7 +2154,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </section>
 <div class="card netwho"><b>Who you will work with</b><p>Motoring Central is run by a small UK team, not a faceless app. Every partner gets a dedicated partner manager on a direct line, [0113 000 0000], who helps you set up, answers questions and sorts out any problems with bookings. <a href="#about">Read who we are</a>.</p></div>
 <h2 class="sec" id="roles-start">Choose how you will join</h2>
-<div class="roles"><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5 5L3 18l3 3 6.5-6.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg><div><b>Mechanic, garage, auto electrician or locksmith</b><br><small>Mobile mechanics, garages, auto electricians and locksmiths. Get repair, MOT, electrical and key bookings.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job. MOT tests: 82% of the official fee paid to you, no monthly fee</span><a class="btn" href="#mechanics">Join as a mechanic, garage, auto electrician or locksmith</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></svg><div><b>Mobile tyre fitter</b><br><small>Tyre fitting and puncture repair jobs.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#tyres">Join as a tyre fitter</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M12 14.5v6M4.5 9.5l5.2 1.7M14.3 12.8l5.2 1.7"/></svg><div><b>Body shop or alloy wheel specialist</b><br><small>Body shops, mobile smart repairers, wheel centres and mobile alloy refurbishers. Insurance approved or independent.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#bodyshop">Join as a body shop or wheel specialist</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg><div><b>Valeter</b><br><small>Full valets, mobile or at your own premises.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#valets">Join as a valeter</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><div><b>Recovery company</b><br><small>Breakdown, accident and vehicle transport jobs.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#recovery">Join as a recovery company</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L5 14h6l-1 8 8-12h-6z"/></svg><div><b>Mobile EV charging</b><br><small>Out-of-charge rescues and booked top-ups for electric cars and vans.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#evcharging">Join as a mobile EV charger</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15v-3l2-5h14l2 5v3M5 15h14M7 18v-3M17 18v-3"/><circle cx="7.5" cy="12" r="1"/><circle cx="16.5" cy="12" r="1"/></svg><div><b>Car or van dealer</b><br><small>Car and van adverts, with free premium ads on bigger plans.</small><br><span class="tagp">3 months free, then from £169 + VAT a month</span><a class="btn" href="#dealers">Join as a dealer</a></div></div></div>
+<div class="roles"><div class="card role" data-role="mot"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></svg><div><b>MOT test station</b><br><small>MOT testing only. Online bookings 24/7 straight into a free live diary.</small><br><span class="tagp">82% of the official MOT fee paid to you (&pound;44.98 a car MOT). No monthly fee. Free to join until 31 May 2027</span><a class="btn" href="#mot-station">Join as an MOT test station</a></div></div><div class="card role" data-role="garage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12M7 21v-7h10v7M7 17h10"/></svg><div><b>Garage</b><br><small>Repairs and servicing at your workshop, and MOTs too if you test.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job. MOTs: 82% paid to you, no fee</span><a class="btn" href="#garage">Join as a garage</a></div></div><div class="card role" data-role="mobile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><div><b>Mobile mechanic</b><br><small>Repairs and servicing at drivers' homes and workplaces. Your van, your hours.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#mobile-mechanic">Join as a mobile mechanic</a></div></div><div class="card role" data-role="autoelec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg><div><b>Auto electrician or locksmith</b><br><small>Electrical faults, car keys, fobs and lockouts. Mobile, workshop or both.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#auto-electrician">Join as an auto electrician or locksmith</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></svg><div><b>Mobile tyre fitter</b><br><small>Tyre fitting and puncture repair jobs.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#tyres">Join as a tyre fitter</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M12 14.5v6M4.5 9.5l5.2 1.7M14.3 12.8l5.2 1.7"/></svg><div><b>Body shop or alloy wheel specialist</b><br><small>Body shops, mobile smart repairers, wheel centres and mobile alloy refurbishers. Insurance approved or independent.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#bodyshop">Join as a body shop or wheel specialist</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg><div><b>Valeter</b><br><small>Full valets, mobile or at your own premises.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#valets">Join as a valeter</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><div><b>Recovery company</b><br><small>Breakdown, accident and vehicle transport jobs.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#recovery">Join as a recovery company</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L5 14h6l-1 8 8-12h-6z"/></svg><div><b>Mobile EV charging</b><br><small>Out-of-charge rescues and booked top-ups for electric cars and vans.</small><br><span class="tagp">5% + VAT per job, or Pro with 0% per job</span><a class="btn" href="#evcharging">Join as a mobile EV charger</a></div></div><div class="card role"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15v-3l2-5h14l2 5v3M5 15h14M7 18v-3M17 18v-3"/><circle cx="7.5" cy="12" r="1"/><circle cx="16.5" cy="12" r="1"/></svg><div><b>Car or van dealer</b><br><small>Car and van adverts, with free premium ads on bigger plans.</small><br><span class="tagp">3 months free, then from £169 + VAT a month</span><a class="btn" href="#dealers">Join as a dealer</a></div></div></div>
 <h2 class="sec">How it works</h2>
 <div class="grid3">
 <div class="card"><b>1. Join</b><br><small>Create your account for the service you offer.</small></div>
@@ -2906,11 +2941,11 @@ window.MCSVC={cats:C,list:list,names:names,common:common,render:render,read:read
     else if(t.length<7)msg='Enter a mobile number we can reach you on.';
     else if(!/^\S+@\S+\.\S+$/.test(m))msg='Enter a valid email address.';
     else if(p.length<5)msg='Enter your home postcode.';
-    else if(!(+$('m-rate').value>=15))msg='Enter your hourly labour rate.';
-    else if(document.querySelector('input[name=kind]:checked').value==='garage'&&!$('gname').value.trim())msg='Enter your garage name.';
-    else if(document.querySelector('input[name=kind]:checked').value==='garage'&&!$('gaddr').value.trim())msg='Enter your garage address.';
+    else if(document.querySelector('input[name=kind]:checked').value!=='mot'&&!(+$('m-rate').value>=15))msg='Enter your hourly labour rate.';
+    else if(/^(garage|mot)$/.test(document.querySelector('input[name=kind]:checked').value)&&!$('gname').value.trim())msg=document.querySelector('input[name=kind]:checked').value==='mot'?'Enter your MOT station name.':'Enter your garage name.';
+    else if(/^(garage|mot)$/.test(document.querySelector('input[name=kind]:checked').value)&&!$('gaddr').value.trim())msg=document.querySelector('input[name=kind]:checked').value==='mot'?'Enter your MOT station address.':'Enter your garage address.';
     else if($('g-motclasses')&&!$('g-motclasses').hidden&&!/^(?=.*\d)[A-Z0-9]{4,8}$/.test(($('gvts').value||'').toUpperCase().replace(/\s/g,'')))msg='Enter your DVSA test station number (VTS), for example 0087B1.';
-    else if(!any)msg='Tick at least one job you can do.';
+    else if(!any&&document.querySelector('input[name=kind]:checked').value!=='mot')msg='Tick at least one job you can do.';
     else if(!$('ins').checked)msg='Please confirm your insurance.';
     else if(!$('chk').checked)msg='Please agree to the checks and terms.';
     $('merr').textContent=msg;
@@ -3088,8 +3123,8 @@ if(b.getAttribute('data-k')==='mot'){var mv=$('mot-vid');if(mv)setTimeout(functi
  S.addEventListener('click',function(){V.muted=false;V.volume=1;S.hidden=true;var p=V.play();if(p&&p.catch)p.catch(function(){S.hidden=false})});
  V.addEventListener('play',function(){if(V.muted)V.muted=false;S.hidden=true});
  V.addEventListener('volumechange',function(){if(!V.muted)S.hidden=true});
- function deep(){if(location.hash!=='#mot-station')return;var r=document.querySelector('input[name=kind][value=mot]');if(!r)return;r.checked=true;apply();
-  setTimeout(function(){var mv=$('mot-vid');if(mv)mv.scrollIntoView({block:'center'});window.MCmotVid(false)},120)}
+ function deep(){/* 19 Nov 2026: separate join pages; see "Join pages by trade" */}
+ window.MCmechApply=apply;
  window.addEventListener('hashchange',deep);if(document.readyState==='complete')deep();else window.addEventListener('load',deep)})();
 })();
 </script>
@@ -3100,7 +3135,7 @@ var T_PUB='\uD83C\uDF89 Launch offer: 50% off our booking fee. Just \u00A33.00 p
 var T_NET='\uD83C\uDF89 Launch offer: 50% off for partners who join. Partners pay 5% instead of 10%. Dealers get their first 3 months free. Monthly and fixed fees are plus VAT.';
 function $(i){return document.getElementById(i)}
 function show(){
-var h=(location.hash||'').replace('#','');if(h==='mot-station')h='mechanics';if(!v[h])h='drivers';
+var h=(location.hash||'').replace('#','');if(/^(mot-station|mobile-mechanic|garage|auto-electrician)$/.test(h))h='mechanics';if(!v[h])h='drivers';
 if(h==='dashboard'&&!window.GGuser){location.hash='login';return}
 if(h==='dashboard'&&window.GGuser.role==='customer'){location.hash='account';return}
 if(h==='account'&&!(window.GGuser&&window.GGuser.role==='customer')){location.hash='drivers';if(window.GGcustOpen)setTimeout(function(){window.GGcustOpen('Log in to see your account.','in')},50);return}
@@ -8426,7 +8461,58 @@ function tick(){lx();custOut();fbtn('cars');fbtn('vans');adv()}
 setInterval(tick,500);tick();addEventListener('hashchange',function(){setTimeout(tick,60)});
 })();
 </script>
+<script>
+/* Join pages by trade (19 Nov 2026): #mot-station, #garage, #mobile-mechanic and #auto-electrician are separate pages
+   (they share the v-mech view and its form). #mechanics is the general page with a choice of all four.
+   Content tagged data-m="..." shows only on the pages listed ("all" = the general page).
+   RECRUIT: to recruit only some trades (for example a first phase of MOT stations and dealers), list them here, e.g.
+   ['mot','dealer']. null shows every trade on Join the network. Trades: mot, garage, mobile, autoelec, tyres, body,
+   valet, recovery, ev, dealer. */
+(function(){function $(i){return document.getElementById(i)}
+var RECRUIT=null;
+var V=$('v-mech');if(!V)return;
+var hero=V.querySelector('.hero'),H1=hero.querySelector('h1'),P=hero.querySelector('p'),IMG=hero.querySelector('img.heroimg'),SW=hero.querySelector('.swl');
+var DEF={h:H1.textContent,p:P.textContent,img:IMG.getAttribute('src'),alt:IMG.getAttribute('alt'),sw:SW?SW.outerHTML:''};
+var MODES={
+ 'mot-station':{k:'mot',title:'Join as an MOT test station',h:'Fill your MOT bays. Free online booking.',p:'Drivers book and pay online, 24/7, straight into your free live diary. One fair price at every partner, and 82% of it is paid to you: £44.98 for a car MOT. No monthly fee, no commission.',img:'img/garage-mot.webp',alt:'A Motoring Central garage and MOT centre with cars on lifts',sw:'<a class="swl" href="#network">Not an MOT station? See every way to join &rarr;</a>'},
+ 'garage':{k:'garage',title:'Join as a garage',h:'Garages: more repairs, and MOTs too.',p:'Customers book repairs and servicing at your workshop at your own prices, and MOTs too if you test. Free booking diary for your bays.',img:'img/garage-mot.webp',alt:'A Motoring Central garage and MOT centre with cars on lifts',sw:'<a class="swl" href="#network">Not a garage? See every way to join &rarr;</a>'},
+ 'mobile-mechanic':{k:'mobile',title:'Join as a mobile mechanic',h:'Mobile mechanics: be your own boss. We bring you the work.',p:'Get booked jobs at drivers’ homes and workplaces near you, at your own prices. Parts sorted, paid weekly.',img:'img/mobile-mechanic.webp',alt:'A Motoring Central mobile mechanic working on a car beside a branded van',sw:'<a class="swl" href="#network">Not a mobile mechanic? See every way to join &rarr;</a>'},
+ 'auto-electrician':{k:'autoelec',title:'Join as an auto electrician or locksmith',h:'Auto electricians and locksmiths: we bring you the work.',p:'Electrical faults, keys, fobs and lockouts booked near you, at your own prices. Mobile, workshop or both.',img:'img/auto-electrician-locksmith.webp',alt:'Motoring Central auto electrician and locksmith vans outside a workshop',sw:'<a class="swl" href="#network">Not an auto electrician? See every way to join &rarr;</a>'}
+};
+var last=null;
+function mode(){var h=(location.hash||'').replace('#','');return MODES[h]?h:(h==='mechanics'?'all':null)}
+function setMode(){var m=mode();if(!m||V.hidden&&m===last)return;if(m===last&&V.getAttribute('data-mode')===m)return;last=m;V.setAttribute('data-mode',m);var c=MODES[m];
+ /* hero */
+ H1.textContent=c?c.h:DEF.h;P.textContent=c?c.p:DEF.p;IMG.setAttribute('src',c?c.img:DEF.img);IMG.setAttribute('alt',c?c.alt:DEF.alt);
+ var sw=hero.querySelector('.swl');if(sw){var t=document.createElement('div');t.innerHTML=c?c.sw:DEF.sw;if(t.firstChild)sw.replaceWith(t.firstChild)}
+ if(c)document.title=c.title+' | The Motoring Central';
+ /* sections for this trade only */
+ [].forEach.call(V.querySelectorAll('[data-m]'),function(el){el.hidden=el.getAttribute('data-m').split(' ').indexOf(m)<0});
+ /* the form: trade fixed on its own page */
+ var kr=document.querySelector('input[name=kind][value='+(c?c.k:'mobile')+']');var fs=kr&&kr.closest('fieldset');
+ if(c&&kr){kr.checked=true;if(window.MCmechApply)window.MCmechApply()}
+ if(fs)fs.hidden=!!c;
+ var mot=c&&c.k==='mot';
+ ['m-rate','m-ex'].forEach(function(id){var e=$(id);if(e)e.hidden=mot});var lr=document.querySelector('label[for=m-rate]');if(lr)lr.hidden=mot;
+ ['svcs','qual'].forEach(function(id){var e=$(id);var f=e&&e.closest('fieldset');if(f)f.hidden=mot});
+ var ex=$('exp');if(ex&&ex.parentNode)ex.parentNode.hidden=mot;
+ var gn=document.querySelector('label[for=gname]'),ga=document.querySelector('label[for=gaddr]');if(gn)gn.textContent=mot?'MOT station name':'Garage name';if(ga)ga.textContent=mot?'MOT station address':'Garage address';
+ if(mot&&window.MCmotVid)setTimeout(function(){window.MCmotVid(false)},60);
+ /* "On this page" links: only to sections on this page */
+ [].forEach.call(V.querySelectorAll('nav.jump a'),function(a){var t=document.getElementById(a.getAttribute('href').slice(1));a.hidden=!!(t&&t.hidden)});
+ motCalc()}
+function motCalc(){var r=$('motwk');if(!r)return;var n=+r.value;$('motwkv').textContent=n;$('motest').textContent='£'+Math.round(n*44.98*52/12).toLocaleString('en-GB')}
+var mw=$('motwk');if(mw)mw.addEventListener('input',motCalc);
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-jump]');if(!a)return;e.preventDefault();var t=$(a.getAttribute('data-jump'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})});
+/* recruiting phase: only show the trades being recruited */
+var ROLE={'#mot-station':'mot','#garage':'garage','#mobile-mechanic':'mobile','#auto-electrician':'autoelec','#tyres':'tyres','#bodyshop':'body','#valets':'valet','#recovery':'recovery','#evcharging':'ev','#dealers':'dealer'};
+function recruit(){if(!RECRUIT)return;[].forEach.call(document.querySelectorAll('#v-network .card.role, #v-network .rolepick a'),function(el){var a=el.matches('a')?el:el.querySelector('a.btn');var r=a&&ROLE[a.getAttribute('href')];if(r)el.hidden=RECRUIT.indexOf(r)<0})}
+recruit();
+addEventListener('hashchange',function(){setTimeout(setMode,0)});setMode();setTimeout(setMode,300);
+})();
+</script>
 </body>
+
 
 
 
