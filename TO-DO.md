@@ -183,6 +183,13 @@ Still to do:
   close time and time per MOT (30, 45 or 60 minutes). Diary > MOT times. The booking page and the database both use them.
 - Real garages in the garage repair booking list too (same live diary, workshop bays).
 
+### MOT station pricing (decided 19 Nov 2026)
+- MOT test stations: no 5% fee, no Pro. No monthly fee, no commission. Income = maximum MOT fee minus agreed fee.
+- Free to join for MOT stations that apply by 31 May 2027; from 1 June 2027 a one-off joining fee of £99.99 + VAT,
+  charged once documents are approved (stored as joinFee on the application). Real charging needs Stripe.
+- Garages that also test MOTs: MOTs carry no fee and are not part of Pro; repairs stay on 5% or Pro.
+- Standard agreed fee offer: £45.00 per car MOT (negotiate £42 to £47). Admin box starts at £45.
+
 ### Intro video (customer) – next time it is updated
 - Add the advantage of booking through us: customers can book any time, day or night, even when the garage is closed
   (asked 19 Nov 2026). Also update MOT pricing in it (official maximum, no extra booking fee) if it is mentioned.
