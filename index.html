@@ -2105,7 +2105,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <h1>Join the Motoring Central network.</h1>
 <p>For mechanics, garages, auto electricians, locksmiths, body shops, alloy wheel specialists, recovery companies, tyre fitters, valeters and car or van dealers. Set your own rates and get paid what you charge.</p>
 <a class="cta" href="#login" style="text-decoration:none">Already a member? Log in</a>
-<nav class="rolepick" aria-label="Choose how you join"><span>I am a:</span><a href="#mechanics">Mechanic or garage</a><a href="#mechanics">MOT test station</a><a href="#mechanics">Auto electrician or locksmith</a><a href="#tyres">Tyre fitter</a><a href="#bodyshop">Body shop or alloys</a><a href="#valets">Valeter</a><a href="#recovery">Recovery company</a><a href="#evcharging">Mobile EV charging</a><a href="#dealers">Car or van dealer</a></nav>
+<nav class="rolepick" aria-label="Choose how you join"><span>I am a:</span><a href="#mechanics">Mechanic or garage</a><a href="#mot-station">MOT test station</a><a href="#mechanics">Auto electrician or locksmith</a><a href="#tyres">Tyre fitter</a><a href="#bodyshop">Body shop or alloys</a><a href="#valets">Valeter</a><a href="#recovery">Recovery company</a><a href="#evcharging">Mobile EV charging</a><a href="#dealers">Car or van dealer</a></nav>
 </div></section>
 <main>
 <div class="stats"><div><b>5%</b>launch fee on jobs</div><div><b>3 months</b>free for dealers</div><div><b>You</b>set your rates</div></div>
@@ -3081,8 +3081,12 @@ if(b.getAttribute('data-k')==='mot'){var mv=$('mot-vid');if(mv)setTimeout(functi
 /* MOT test station video: plays by itself as soon as it shows. With sound when the visitor has just tapped
    (choosing MOT test station); browsers only allow silent autoplay on page load, so then a "Tap for sound" button shows. */
 (function(){var V=$('mot-v'),S=$('mot-snd');if(!V||!S)return;
- window.MCmotVid=function(sound){V.currentTime=0;V.muted=!sound;S.hidden=!!sound;var p=V.play();if(p&&p.catch)p.catch(function(){V.muted=true;S.hidden=false;V.play().catch(function(){})})};
- S.addEventListener('click',function(){V.muted=false;S.hidden=true;if(V.currentTime>3)V.currentTime=0;V.play().catch(function(){})});
+ /* 19 Nov 2026: never play silently. If the browser will not start it with sound, show a big "Play with sound" button
+    instead of playing muted (a muted autoplay looked like a video with no sound). */
+ function ask(){V.pause();S.textContent='\u25B6 Play with sound';S.hidden=false}
+ window.MCmotVid=function(sound){V.currentTime=0;V.muted=false;V.volume=1;if(!sound){ask();return}S.hidden=true;var p=V.play();if(p&&p.catch)p.catch(ask)};
+ S.addEventListener('click',function(){V.muted=false;V.volume=1;S.hidden=true;var p=V.play();if(p&&p.catch)p.catch(function(){S.hidden=false})});
+ V.addEventListener('play',function(){if(V.muted)V.muted=false;S.hidden=true});
  V.addEventListener('volumechange',function(){if(!V.muted)S.hidden=true});
  function deep(){if(location.hash!=='#mot-station')return;var r=document.querySelector('input[name=kind][value=mot]');if(!r)return;r.checked=true;apply();
   setTimeout(function(){var mv=$('mot-vid');if(mv)mv.scrollIntoView({block:'center'});window.MCmotVid(false)},120)}
