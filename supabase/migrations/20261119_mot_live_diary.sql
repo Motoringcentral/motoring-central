@@ -1,12 +1,15 @@
 -- Live MOT diary (19 Nov 2026)
 -- Online MOT bookings take a slot in the garage's diary, and the garage's own bookings
 -- (walk-ins, phone bookings, blocked time) close those times on the website.
--- Customers pay the legal maximum MOT fee plus our booking fee; the garage is paid the fee
--- agreed with it at sign-up (partners.mot_agreed), set by staff on the admin page.
+-- Customers pay the legal maximum MOT fee for the class and nothing more: our booking fee is part of it.
+-- The garage is paid the fee agreed with it at sign-up (partners.mot_agreed, set by staff on the admin page);
+-- our share (maximum minus the garage's fee) includes VAT.
+-- Garages can move an online booking when the customer asks; customer and garage get an email and a text
+-- for every booking and every move (notifications outbox, sent by the 'notify' edge function).
 
 alter table public.partners add column if not exists mot_agreed jsonb not null default '{}'::jsonb;
 alter table public.bookings add column if not exists price_total numeric(10,2),
-  add column if not exists booking_fee numeric(10,2),
+  add column if not exists our_share numeric(10,2),
   add column if not exists partner_payout numeric(10,2),
   add column if not exists paid boolean not null default false,
   add column if not exists slot_day date,
@@ -55,6 +58,60 @@ begin
 exception when others then return '{}';
 end $$;
 
+-- outbox of confirmation emails and texts (sent by the 'notify' edge function; staff can read it)
+create table if not exists public.notifications (
+  id bigint generated always as identity primary key,
+  booking_id uuid references public.bookings(id) on delete cascade,
+  to_who text not null check (to_who in ('customer','garage')),
+  channel text not null check (channel in ('email','sms')),
+  to_addr text not null,
+  subject text,
+  body text not null,
+  status text not null default 'queued' check (status in ('queued','sent','failed')),
+  error text,
+  tries int not null default 0,
+  created_at timestamptz not null default now(),
+  sent_at timestamptz
+);
+create index if not exists notifications_queued on public.notifications(status, created_at);
+create index if not exists notifications_booking on public.notifications(booking_id);
+alter table public.notifications enable row level security;
+drop policy if exists "notifications: staff read" on public.notifications;
+create policy "notifications: staff read" on public.notifications for select to authenticated using ((select private.is_staff()));
+revoke insert, update, delete, truncate on public.notifications from anon, authenticated;
+
+create or replace function private.uk_mobile(p text) returns text language sql immutable set search_path = '' as $$
+  select case when d ~ '^07[0-9]{9}$' then '+44' || substr(d, 2) when d ~ '^447[0-9]{9}$' then '+' || d else null end
+  from (select regexp_replace(coalesce(p,''), '[^0-9]', '', 'g') d) x $$;
+
+-- queue the email and text to the customer and the garage for a booking ('booked' or 'moved')
+create or replace function private.queue_notes(p_booking uuid, p_what text) returns void
+language plpgsql security definer set search_path = '' as $$
+declare b public.bookings; g public.partners; cemail text; when_txt text; veh text; c_sub text; c_body text; g_sub text; g_body text;
+begin
+  select * into b from public.bookings where id = p_booking;
+  if not found then return; end if;
+  select * into g from public.partners where id = b.partner_id;
+  select email into cemail from auth.users where id = b.customer_id;
+  when_txt := to_char(b.slot_day, 'FMDay FMDD FMMonth') || ' at ' || to_char(make_time(b.slot_start/60, b.slot_start%60, 0), 'FMHH12:MI') || lower(to_char(make_time(b.slot_start/60, b.slot_start%60, 0), 'AM'));
+  veh := coalesce(nullif(upper(b.vehicle->>'reg'),''), 'your vehicle');
+  if p_what = 'moved' then
+    c_sub := 'Your MOT has been moved: ' || when_txt;
+    c_body := 'Hello ' || coalesce(split_part(b.customer_name,' ',1),'') || E',\n\nAs you asked, ' || coalesce(g.name,'the garage') || ' has moved your MOT for ' || veh || ' to ' || when_txt || E'.\n\nGarage: ' || coalesce(g.name,'') || ', ' || coalesce(g.town,'') || ', ' || coalesce(g.phone,'') || E'\nYou have already paid £' || to_char(b.price_total,'FM990.00') || E'. Nothing more to pay.\n\nIf you did not ask for this change, reply to this email or call us.\n\nThe Motoring Central';
+    g_sub := 'MOT moved: ' || veh || ', now ' || when_txt;
+    g_body := 'The online MOT for ' || veh || ' (' || coalesce(b.customer_name,'customer') || ', ' || coalesce(b.customer_phone,'') || ') is now on ' || when_txt || E' in your diary.\nYou are paid £' || to_char(b.partner_payout,'FM990.00') || E' for this test.\n\nThe Motoring Central';
+  else
+    c_sub := 'MOT booked: ' || when_txt || ' at ' || coalesce(g.name,'the garage');
+    c_body := 'Hello ' || coalesce(split_part(b.customer_name,' ',1),'') || E',\n\nYour MOT for ' || veh || ' is booked for ' || when_txt || E'.\n\nGarage: ' || coalesce(g.name,'') || ', ' || coalesce(g.town,'') || ', ' || coalesce(g.phone,'') || E'\nPaid: £' || to_char(b.price_total,'FM990.00') || E' (nothing more to pay for the test).\nBooking reference: ' || upper(left(b.id::text, 8)) || E'\n\nPlease arrive a few minutes early and bring the vehicle''s V5C or reg. To move the booking, call the garage. To cancel, contact us.\n\nThe Motoring Central';
+    g_sub := 'New MOT booked online: ' || when_txt || ', ' || veh;
+    g_body := 'A customer has booked and paid for an MOT. It is already in your diary.' || E'\n\nWhen: ' || when_txt || E'\nVehicle: ' || veh || coalesce(' ' || nullif(trim(concat_ws(' ', b.vehicle->>'make', b.vehicle->>'model', b.vehicle->>'year')),''), '') || E'\nCustomer: ' || coalesce(b.customer_name,'') || ', ' || coalesce(b.customer_phone,'') || E'\nYou are paid: £' || to_char(b.partner_payout,'FM990.00') || E'\nReference: ' || upper(left(b.id::text, 8)) || E'\n\nThe Motoring Central';
+  end if;
+  if cemail is not null then insert into public.notifications(booking_id,to_who,channel,to_addr,subject,body) values (p_booking,'customer','email',cemail,c_sub,c_body); end if;
+  if private.uk_mobile(b.customer_phone) is not null then insert into public.notifications(booking_id,to_who,channel,to_addr,body) values (p_booking,'customer','sms',private.uk_mobile(b.customer_phone),left(c_sub || '. ' || coalesce(g.name,'') || ' ' || coalesce(g.phone,'') || '. Ref ' || upper(left(b.id::text,8)) || '. The Motoring Central',600)); end if;
+  if g.email is not null then insert into public.notifications(booking_id,to_who,channel,to_addr,subject,body) values (p_booking,'garage','email',g.email,g_sub,g_body); end if;
+  if private.uk_mobile(g.phone) is not null then insert into public.notifications(booking_id,to_who,channel,to_addr,body) values (p_booking,'garage','sms',private.uk_mobile(g.phone),left(g_sub || '. ' || coalesce(b.customer_name,'') || ' ' || coalesce(b.customer_phone,'') || '. In your diary. The Motoring Central',600)); end if;
+end $$;
+
 -- busy times in a garage's diary (no customer details), for the booking page.
 -- The last row (day null) only carries the garage's MOT bay names.
 create or replace function public.garage_busy(p_partner uuid, p_from date, p_to date)
@@ -70,13 +127,13 @@ language sql stable security definer set search_path = '' as $$
 $$;
 grant execute on function public.garage_busy(uuid, date, date) to anon, authenticated;
 
--- a customer books an MOT. Price = legal maximum for the class + £3.00 booking fee (incl. VAT).
+-- a customer books an MOT. Price = legal maximum for the class, with our booking fee included in it.
 -- The slot is taken in the first free MOT bay, under a lock, so two people cannot book the same time.
 create or replace function public.book_mot(p_partner uuid, p_day date, p_start int, p_class text, p_reg text,
   p_vehicle jsonb, p_label text, p_made_at timestamptz)
 returns jsonb language plpgsql security definer set search_path = '' as $$
 declare uid uuid := (select auth.uid()); g public.partners; prof public.profiles; bays text[]; bay text := null; b text;
-  mx numeric; fee numeric := 3.00; pay numeric; bid uuid; dur int := 60; at timestamptz; summ text;
+  mx numeric; pay numeric; bid uuid; dur int := 60; at timestamptz; summ text;
 begin
   if uid is null then raise exception 'not_logged_in'; end if;
   select * into prof from public.profiles where id = uid;
@@ -105,13 +162,14 @@ begin
           to_char(p_day, 'FMDay FMDD Mon') || ' at ' || to_char(make_time(p_start/60, p_start%60, 0), 'HH24:MI') ||
           coalesce('. Reg ' || nullif(upper(left(p_reg,10)),''), '') || '. Paid online.', 2000);
   insert into public.bookings(customer_id, kind, service, summary, vehicle, status, made_at, partner_id, partner_name,
-       customer_name, customer_phone, price_total, booking_fee, partner_payout, paid, slot_day, slot_start)
+       customer_name, customer_phone, price_total, our_share, partner_payout, paid, slot_day, slot_start)
   values (uid, 'MOT', 'MOT test', summ, p_vehicle, 'confirmed', coalesce(p_made_at, now()), p_partner, g.name,
-       prof.name, prof.phone, mx + fee, fee, pay, true, p_day, p_start)
+       prof.name, prof.phone, mx, mx - pay, pay, true, p_day, p_start)
   returning id into bid;
   insert into public.diary_slots(partner_id, booking_id, day, bay_name, start_min, dur_min, kind)
   values (p_partner, bid, p_day, bay, p_start, dur, 'online');
-  return jsonb_build_object('id', bid, 'bay', bay, 'total', mx + fee, 'summary', summ);
+  perform private.queue_notes(bid, 'booked');
+  return jsonb_build_object('id', bid, 'bay', bay, 'total', mx, 'summary', summ);
 end $$;
 revoke execute on function public.book_mot(uuid,date,int,text,text,jsonb,text,timestamptz) from anon, public;
 grant execute on function public.book_mot(uuid,date,int,text,text,jsonb,text,timestamptz) to authenticated;
@@ -139,6 +197,30 @@ begin
 end $$;
 revoke execute on function public.sync_own_diary(jsonb) from anon, public;
 grant execute on function public.sync_own_diary(jsonb) to authenticated;
+
+-- the garage moves an online booking (when the customer asks). Checks the new time is free in that bay.
+create or replace function public.move_online_booking(p_booking uuid, p_day date, p_start int, p_bay text, p_dur int default null)
+returns jsonb language plpgsql security definer set search_path = '' as $$
+declare uid uuid := (select auth.uid()); s public.diary_slots; d int;
+begin
+  select * into s from public.diary_slots where booking_id = p_booking and kind = 'online' and partner_id = uid;
+  if not found then raise exception 'not_yours'; end if;
+  d := coalesce(p_dur, s.dur_min);
+  if p_day < current_date or p_day > current_date + 120 or p_start < 0 or p_start + d > 1440 or p_start % 15 <> 0 or d < 15 or d > 480
+     or coalesce(length(p_bay),0) = 0 then raise exception 'bad_time'; end if;
+  perform pg_advisory_xact_lock(hashtextextended(uid::text || p_day::text, 0));
+  if exists (select 1 from public.diary_slots x where x.partner_id = uid and x.day = p_day and x.bay_name = p_bay and x.id <> s.id
+             and x.kind = 'online' and p_start < x.start_min + x.dur_min and x.start_min < p_start + d) then raise exception 'slot_taken'; end if;
+  if s.day = p_day and s.start_min = p_start and s.bay_name = p_bay and s.dur_min = d then return jsonb_build_object('moved', false); end if;
+  update public.diary_slots set day = p_day, start_min = p_start, bay_name = left(p_bay,40), dur_min = d where id = s.id;
+  update public.bookings set slot_day = p_day, slot_start = p_start,
+    summary = regexp_replace(summary, ', [A-Za-z]+ [0-9]+ [A-Za-z]+ at [0-9]{2}:[0-9]{2}', ', ' || to_char(p_day, 'FMDay FMDD Mon') || ' at ' || to_char(make_time(p_start/60, p_start%60, 0), 'HH24:MI'))
+  where id = p_booking;
+  if s.day <> p_day or s.start_min <> p_start then perform private.queue_notes(p_booking, 'moved'); end if;
+  return jsonb_build_object('moved', true);
+end $$;
+revoke execute on function public.move_online_booking(uuid,date,int,text,int) from anon, public;
+grant execute on function public.move_online_booking(uuid,date,int,text,int) to authenticated;
 
 -- online bookings shown in the garage's own diary, with the customer's details
 create or replace function public.my_online_diary(p_from date) returns table(slot_id bigint, booking_id uuid, day date, bay_name text,

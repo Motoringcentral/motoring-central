@@ -154,33 +154,32 @@ Still to do, in this order:
 - Remove the demo logins and sample partners (they still show next to real ones on the preview)
 - Data protection: privacy notice says where data is kept (done); ICO fee; who can see what
 
-### 1b. Live MOT diary and MOT pricing (built 19 Nov 2026)
-Built in the site:
-- Customers book an MOT from the test centre's live diary: only free times show, per day ("5 times free"), and the
-  time is taken in the garage's diary the moment they pay. The garage's own walk-ins, phone bookings and blocked time
-  close those times online. Online bookings show in the garage diary marked "Online, paid", with what the garage is
-  paid; the garage cannot move or cancel them (they contact us, so the customer is refunded or moved properly).
-- Price: customers pay the official maximum for the class (e.g. £54.85 car) plus the £3.00 booking fee, in full, when
-  they book. The garage is paid the fee agreed at sign-up. Admin page: "Agreed MOT fee" box on pending and approved
-  garages (owner only), showing our margin per test. Sign-up form now asks for the fee the garage "asks for".
+### 1b. Live MOT diary and MOT pricing (built 19 Nov 2026, live in the database the same day)
+Built and live:
+- Customers book an MOT from the test centre's live diary: only free times show, and the time is taken in the
+  garage's diary the moment they pay (database lock, so two people can never book the same time). The garage's own
+  walk-ins, phone bookings and blocked time close those times online. Garage diaries check for new online bookings
+  every 26 seconds; the booking page re-reads the garage diary every time a garage is picked.
+- Garages can move an online MOT in their diary when the customer asks (day, time, bay). The database checks the new
+  time is free. They still cannot cancel one (contact us, so the customer is refunded).
+- Price: customers pay the official maximum for the class (e.g. £54.85 car) and nothing more: the booking fee is part
+  of it. The garage is paid the agreed fee; our share is the rest and includes VAT (accountant). Admin page:
+  "Agreed MOT fee" box shows our share and its VAT.
+- Confirmations: every booking and every move queues an email and a text to the customer AND the garage
+  (table notifications), sent at once by the edge function 'notify'.
 - Demo: book an MOT at "Kirkstall Road Garage" as customer@demo.com, then log in as garage@demo.com > Booking diary.
-- Dashboard warning lights in the guided check now have symbols, colours (red urgent / amber soon) and plain
-  descriptions, plus power steering, glow plug and low fuel lights.
 
 Still to do:
-- APPLY THE DATABASE CHANGE: supabase/migrations/20261119_mot_live_diary.sql (new table diary_slots, columns
-  partners.mot_agreed and bookings price/payout, functions garage_busy, book_mot, sync_own_diary, my_online_diary).
-  Until it is applied, real garages do not appear in the MOT list; sample garages work.
-- Accountant: VAT on our margin between the MOT fee the customer pays and the fee we pay the garage (the MOT fee
-  itself is exempt only when charged by the test centre; if we sell the test and keep a margin, the margin is likely
-  our own taxable service). Also whether we act as agent or principal for the MOT fee.
-- DVSA: confirm that a booking fee on top of the maximum MOT fee is allowed when it is charged by a booking site,
-  not the test centre, and that the wording on the site is right.
+- SWITCH ON EMAILS AND TEXTS: create a Resend account (email) and a Twilio account (texts), then add the secrets in
+  Supabase > Edge Functions > Secrets: RESEND_API_KEY, NOTIFY_FROM, TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN,
+  TWILIO_FROM. Verify motoringcentral.co.uk in Resend (DNS records at 123-reg). Until then messages wait in the queue
+  and are sent when the next booking for them triggers the function (or staff run it with { all: true }).
+- Add a timed job (pg_cron) to retry queued messages every few minutes, and a reminder the day before the MOT.
+- DVSA: confirm that including our booking fee inside the maximum MOT fee is fine when we take the payment.
 - Real payments (Stripe): hold the slot, take the payment, then confirm; refund automatically if the slot was taken.
   Pay garages their agreed fees (weekly payout statement in the garage dashboard).
-- Staff screen to move or cancel an online MOT booking (frees the slot, refunds the customer).
+- Staff screen to cancel an online MOT booking (frees the slot, refunds the customer, emails both).
 - Garage opening hours and MOT length per garage (now fixed at 8am to 6pm, Monday to Saturday, 1 hour per test).
-- Emails/texts: booking confirmation to customer and garage, reminder the day before (needs the email service).
 - Real garages in the garage repair booking list too (same live diary, workshop bays).
 
 ### 2. Guided check: keeping the repair on the site (next steps)

@@ -2175,8 +2175,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </div></details>
 <details id="tc-mot"><summary>3. MOT tests</summary><div class="tb">
 <p>MOT tests are carried out by DVSA-authorised test centres listed on Motoring Central. The test result is the test centre&rsquo;s decision. If you disagree with a result, raise it with the test centre first; you can also appeal to the DVSA. Any repairs after the test are a separate job with the garage, with its own price and warranty from that garage.</p>
-<h3>MOT classes and fees</h3><p>The MOT you need depends on your vehicle: its class is set by the type of vehicle, its seats and its weight. Choose the right class when you book. If the test centre finds your vehicle is in a different class, they will tell you the correct fee before testing. The price shown for each class is the maximum fee set by the DVSA for that class. MOT test fees are exempt from VAT. Our booking fee is separate and includes VAT.</p>
-<h3>Booking times and payment</h3><p>Online MOT bookings are taken from the test centre&rsquo;s live diary, so the time you choose is held for you in that diary as soon as you pay. You pay the full price (the MOT fee and our booking fee) when you book. The Motoring Central takes your full payment and pays the test centre the fee we have agreed with them for each test. To move or cancel an MOT booked online, contact us rather than the test centre, so the diary and your payment are updated together.</p>
+<h3>MOT classes and fees</h3><p>The MOT you need depends on your vehicle: its class is set by the type of vehicle, its seats and its weight. Choose the right class when you book. If the test centre finds your vehicle is in a different class, they will tell you the correct fee before testing. The price shown for each class is the maximum fee set by the DVSA for that class. Our booking fee is included in that price: there is nothing extra to pay to book.</p>
+<h3>Booking times and payment</h3><p>Online MOT bookings are taken from the test centre&rsquo;s live diary, so the time you choose is held for you in that diary as soon as you pay. You pay the full price when you book. The Motoring Central takes your full payment and pays the test centre the fee we have agreed with them for each test. You and the test centre both get a confirmation by email and text. To move your MOT to another time, ask the test centre: they can move it in their diary and you get a new confirmation. To cancel, contact us so your payment can be refunded.</p>
 </div></details>
 <details id="tc-tyres"><summary>4. Tyre fitting</summary><div class="tb">
 <p>The tyre fitter named in your booking supplies and fits the tyres and is responsible for the fitting work and its warranty. Tyres carry the manufacturer&rsquo;s warranty, which the fitter will deal with for you. Puncture repairs are only carried out where the tyre can be safely repaired; if it cannot, the fitter will tell you and offer a replacement. Follow the fitter&rsquo;s advice on rechecking wheel nuts after fitting.</p>
@@ -2403,7 +2403,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <details><summary>Are the reviews real?</summary><div class="tb"><p>Reviews can only be left after a real, completed booking or purchase. We remove reviews that are false, offensive or unlawful.</p></div></details>
 
 <h2 class="sec">Services</h2>
-<details><summary>Which MOT do I need, and what does it cost?</summary><div class="tb"><p>It depends on your vehicle. Most cars, motorhomes, taxis and vans up to 3,000kg are <b>class 4</b>. Motorcycles are <b>class 1 or 2</b>, three-wheelers up to 450kg are <b>class 3</b>, minibuses with 13 or more seats are <b>class 5</b>, and larger vans from 3,000kg to 3,500kg are <b>class 7</b>. Vehicles with 9 or more seats may also need a seat belt installation check (class 4a or 5a).</p><p>Choose your MOT type when you book and we show each garage&rsquo;s price. The price is the official maximum fee for the class: for example &pound;54.85 for a car and &pound;29.65 for a motorcycle, plus our &pound;3.00 booking fee. You pick a free time from the test centre&rsquo;s live diary and pay when you book.</p></div></details>
+<details><summary>Which MOT do I need, and what does it cost?</summary><div class="tb"><p>It depends on your vehicle. Most cars, motorhomes, taxis and vans up to 3,000kg are <b>class 4</b>. Motorcycles are <b>class 1 or 2</b>, three-wheelers up to 450kg are <b>class 3</b>, minibuses with 13 or more seats are <b>class 5</b>, and larger vans from 3,000kg to 3,500kg are <b>class 7</b>. Vehicles with 9 or more seats may also need a seat belt installation check (class 4a or 5a).</p><p>Choose your MOT type when you book and we show the partner test centres near you. The price is the official maximum fee for the class: for example &pound;54.85 for a car and &pound;29.65 for a motorcycle, with no extra booking fee. You pick a free time from the test centre&rsquo;s live diary and pay when you book.</p></div></details>
 <details><summary>Can a mobile mechanic do an MOT?</summary><div class="tb"><p>No. An MOT must be done at an approved test station. Choose <b>MOT</b>, pick your type of MOT, and book at a partner test station.</p></div></details>
 <details><summary>I have lost my car keys or locked them in the car. Can you help?</summary><div class="tb"><p>Yes. Choose <b>Auto electrician and locksmith</b>. A vehicle locksmith can open the car without damage, cut and program a new key or fob, and wipe lost keys from the car&rsquo;s memory. They will ask for proof that the vehicle is yours.</p></div></details>
 <details><summary>My electric car has run out of charge. What can you do?</summary><div class="tb"><p>Choose <b>Mobile EV charging</b>. A charging van comes to you and gives you enough charge to reach a charger or get home. If the car cannot be charged where it is, choose <b>Recovery</b> instead.</p></div></details>
@@ -2701,7 +2701,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
       b.innerHTML=s.mk&&window.MCMOT?window.MCMOT.tile(s.mk,D?null:fromPrice(s)):window.MCJOB?window.MCJOB.tile(s,D?null:fromPrice(s)):'<span>'+s.n+'<small>'+s.d+(D?'':'. <b class="fromp">From £'+fromPrice(s)+'</b>')+'</small></span>';
       b.addEventListener('click',function(){svc=s;window.GGsvc=s;[].forEach.call(box.querySelectorAll('.opt'),function(c){c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');
         if(D){quote();$('quote').scrollIntoView({behavior:'smooth',block:'nearest'})}
-        else{pendSvc=s.id;U.innerHTML=unlockHtml(r,s.mot?s.n+': MOT £'+fromPrice(s)+', the official maximum fee, plus our £3.00 booking fee. Book a free time straight from the test centre’s live diary.':s.n+' from £'+fromPrice(s)+'. The exact price depends on your engine and the parts it needs.');U.hidden=false;U.scrollIntoView({behavior:'smooth',block:'nearest'})}});
+        else{pendSvc=s.id;U.innerHTML=unlockHtml(r,s.mot?s.n+': MOT £'+fromPrice(s)+', the official maximum fee, with no extra booking fee. Book a free time straight from the test centre’s live diary.':s.n+' from £'+fromPrice(s)+'. The exact price depends on your engine and the parts it needs.');U.hidden=false;U.scrollIntoView({behavior:'smooth',block:'nearest'})}});
       box.appendChild(b)});
     $('flow').hidden=false}
 
@@ -2912,7 +2912,7 @@ function $(i){return document.getElementById(i)}
 function money(n){return '£'+n.toFixed(2)}
 /* MOT and garage booking. For MOT tests the times come from the garage's live diary: online bookings take the slot
    in the garage's diary, and the garage's own bookings (walk-ins, phone, blocked time) close those times here.
-   Customers pay the official maximum MOT fee for the class plus our booking fee, in full, when they book.
+   Customers pay the official maximum MOT fee for the class, in full, when they book. Our booking fee is included in it.
    Real garages: Supabase (garage_busy, book_mot). Sample garages: kept in this browser (mc-motdiary), so the
    demo garage (garage@demo.com) shows customers' MOT bookings in its diary. */
 var G=[{id:'s0',n:'Northside MOT Centre',a:'Unit 4, Mill Lane',k:0.8,fee:54.85,r:52,mb:2},{id:'s1',n:'Park Road Garage',a:'12 Park Road',k:1.6,fee:49.99,r:60,mb:1},{id:'s2',n:'Albion Motors',a:'Albion Industrial Estate',k:2.9,fee:54.85,r:68,mb:1},{id:'s3',n:'Greenway Auto Centre',a:'88 Greenway',k:4.2,fee:44.99,r:48,mb:1},{id:'s4',n:'Hilltop Tyres and MOT',a:'Hilltop Business Park',k:6.5,fee:54.85,r:58,mb:1},{id:'demo-kr',n:'Kirkstall Road Garage',a:'Kirkstall Road',k:3.4,fee:45,r:58,mb:1,demo:1}];
@@ -2953,10 +2953,10 @@ function fillTimes(){if(!motMode())return;var t=$('mtime'),keep=t.value,L=pick&&
  t.innerHTML=L.length?L.map(function(s){return '<option value="'+s+'">'+tm(s)+'</option>'}).join(''):'<option value="">No free times</option>';if(keep&&L.indexOf(+keep)>-1)t.value=keep;
  $('mgo').disabled=!L.length}
 function priceNote(){var n=$('mprice-note');if(!n||!pick)return;var c=cls();
- n.textContent=motMode()?'MOT test £'+c.max.toFixed(2)+' (the official maximum for this class, no VAT) plus our £3.00 booking fee (includes 50p VAT). You pay the full amount now to secure the time.':'Price set by the garage, plus our booking fee.'}
+ n.textContent=motMode()?'£'+c.max.toFixed(2)+', the official maximum fee for this class. No extra booking fee: it is included. You pay the full amount now to secure the time.':'Price set by the garage, plus our booking fee.'}
 window.GGmot=function(on,i){info=i||null;$('mot').hidden=!on;if(on){$('mtitle').textContent=i?i.name+' at a partner garage':'Partner garage';pick=null;$('mbook').hidden=true;$('mdone').hidden=true;msgLive('');if($('mpost').value.replace(/\s/g,'').length>=5)find();else $('garages').innerHTML='';$('mot').scrollIntoView({behavior:'smooth',block:'nearest'})}};
 function choose(g,b,box){pick=g;[].forEach.call(box.children,function(c){if(c.setAttribute)c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');$('mdone').hidden=true;$('m-err2').textContent='';
- $('mtot').textContent='Total '+money(P(g)+BOOKING);priceNote();$('mbook').hidden=false;
+ $('mtot').textContent='Total '+money(P(g)+(motMode()?0:BOOKING));priceNote();$('mbook').hidden=false;
  if(motMode()){msgLive('Live diary: you only see times that are free in this garage’s own diary. The time is held for you the moment you pay.');
   if(g.real&&(!BUSY[g.id]||Date.now()-BUSY[g.id].at>20000)){$('mday').innerHTML='<option>Checking the garage’s diary…</option>';$('mtime').innerHTML='';$('mgo').disabled=true;loadReal(g).then(function(){if(pick===g)fillDays()},function(){if(pick===g){$('mday').innerHTML='';$('m-err2').textContent='We could not reach the garage’s diary. Check your connection and try again.'}});return}}
  else msgLive('');fillDays()}
@@ -2970,7 +2970,7 @@ if(info&&info.mot)GL=realList().concat(GL);
 if(!GL.length){box.innerHTML='<p class="note">No partner garage near you tests this class yet. Try another postcode, or <a href="#contact">tell us</a> and we will find one.</p>'}
 GL.forEach(function(g){var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed','false');
 var mo=info&&info.mot,nx='';if(mo&&!g.real){var D=workDays();for(var i=0;i<D.length&&!nx;i++){var f=freeTimes(g,D[i]);if(f.length)nx=(i===0&&D[i]===dk(new Date())?'Today':dayLab(D[i]).split(' ')[0])+' '+tm(f[0])}}
-b.innerHTML='<b>'+esc(g.n)+'</b><span class="d">'+(g.real?'Approved partner':(g.k+off).toFixed(1)+' miles')+'</span><small>'+esc(g.a)+(g.a?'. ':'')+(mo&&window.MCMOT&&!g.real&&window.MCMOT.motOnly(G.indexOf(g))?'MOT test station. ':'')+(info&&!info.mot?money(g.r)+' per hour labour. ':'')+'Price '+money(P(g))+(mo?' plus booking fee':'')+'</small>'+(mo?'<small class="mnext">'+(g.real?'Live diary: tap to see free times':nx?'Next free: '+nx:'No free times in the next 2 weeks')+'</small>':'');
+b.innerHTML='<b>'+esc(g.n)+'</b><span class="d">'+(g.real?'Approved partner':(g.k+off).toFixed(1)+' miles')+'</span><small>'+esc(g.a)+(g.a?'. ':'')+(mo&&window.MCMOT&&!g.real&&window.MCMOT.motOnly(G.indexOf(g))?'MOT test station. ':'')+(info&&!info.mot?money(g.r)+' per hour labour. ':'')+'Price '+money(P(g))+(mo?', no booking fee':'')+'</small>'+(mo?'<small class="mnext">'+(g.real?'Live diary: tap to see free times':nx?'Next free: '+nx:'No free times in the next 2 weeks')+'</small>':'');
 b.addEventListener('click',function(){choose(g,b,box)});
 box.appendChild(b)})}
 $('mfind').addEventListener('click',find);
@@ -2981,16 +2981,16 @@ function finish(text,t,viaDb){$('mdone').textContent=text;$('mdone').hidden=fals
 var ERR={slot_taken:'Sorry, that time has just been booked by someone else. Pick another time. Your payment will be refunded in full.',bad_time:'That time can no longer be booked. Pick another time.',class_not_tested:'This garage does not test this class of vehicle. Pick another garage.',not_customer:'Please log in with a customer account to book.',not_logged_in:'Please log in to book.',no_mot_bay:'This garage has no MOT bay open for online booking yet. Pick another garage.'};
 $('mgo').addEventListener('click',function(){if(!pick)return;var g=pick;
  if(!motMode()){$('mdone').textContent='Booked: '+(info?info.name:'service')+' at '+g.n+', '+$('mday').value+' at '+$('mtime').value+'. Total '+money(P(g)+BOOKING)+'. Bring your car and show your reg at reception.';$('mdone').hidden=false;$('mbook').hidden=true;return}
- var day=$('mday').value,st=+$('mtime').value,u=window.GGuser||{},lab=window.MCMOT?window.MCMOT.label():'MOT test',tot=money(P(g)+BOOKING);
+ var day=$('mday').value,st=+$('mtime').value,u=window.GGuser||{},lab=window.MCMOT?window.MCMOT.label():'MOT test',tot=money(P(g)+(motMode()?0:BOOKING));
  var vh=window.MCbookingVeh?window.MCbookingVeh():null,bay=freeBay(g,day,st),reg=String(($('reg')||{}).value||(vh&&vh.reg)||'').toUpperCase().trim();
  if(!bay||freeTimes(g,day).indexOf(st)<0){$('m-err2').textContent=ERR.slot_taken;fillDays();return}
- var text='Booked and paid: '+lab+' at '+g.n+', '+dayLab(day)+' at '+tm(st)+'. Total '+tot+'. This time is now held in the garage’s diary. Bring your vehicle and show your reg at reception.';
+ var text='Booked and paid: '+lab+' at '+g.n+', '+dayLab(day)+' at '+tm(st)+'. Total '+tot+'. This time is now held in the garage’s diary, and a confirmation is on its way to you and the garage by email and text. Bring your vehicle and show your reg at reception.';
  if(g.real){var t=Date.now(),btn=$('mgo');btn.disabled=true;btn.textContent='Booking…';$('m-err2').textContent='';
   window.MCmotDb.book({p_partner:g.id,p_day:day,p_start:st,p_class:cls().k,p_reg:reg,p_vehicle:vh||null,p_label:lab,p_made_at:new Date(t).toISOString()}).then(function(r){
-   if(r.error)throw r.error;finish(text,t,true);loadReal(g)}).catch(function(e){var k=Object.keys(ERR).filter(function(x){return String(e&&e.message||'').indexOf(x)>-1})[0];
+   if(r.error)throw r.error;finish(text,t,true);loadReal(g);if(r.data&&r.data.id)window.MCmotDb.notify(r.data.id)}).catch(function(e){var k=Object.keys(ERR).filter(function(x){return String(e&&e.message||'').indexOf(x)>-1})[0];
    $('m-err2').textContent=k?ERR[k]:'Your MOT was not booked. Check your connection and try again. If you were charged, it will be refunded in full.';BUSY[g.id]=null;choose(g,document.querySelector('#garages [aria-pressed="true"]')||document.createElement('b'),$('garages'))}).then(function(){btn.disabled=false;btn.textContent='Book MOT'});return}
  var S=store(),rec=S[g.id]=S[g.id]||{};rec.online=(rec.online||[]).filter(function(o){return o.day>=dk(new Date())});
- rec.online.push({id:'o'+Date.now(),day:day,bay:bay,start:st,dur:DUR,cust:u.name||'Customer',phone:u.phone||'',reg:reg,veh:vh?[vh.make,vh.model,vh.year].filter(Boolean).join(' '):'',label:lab,pay:g.fee,total:P(g)+BOOKING});put(S);
+ rec.online.push({id:'o'+Date.now(),day:day,bay:bay,start:st,dur:DUR,cust:u.name||'Customer',phone:u.phone||'',reg:reg,veh:vh?[vh.make,vh.model,vh.year].filter(Boolean).join(' '):'',label:lab,pay:g.fee,total:P(g)});put(S);
  finish(text,Date.now(),false)});
 })();
 </script>
@@ -3004,11 +3004,11 @@ function store(){try{return JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch
 function put(S){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 function bayIdx(u,name){var i=u.bays.indexOf(name);if(i>-1)return i;for(i=0;i<u.bays.length;i++)if(/MOT/i.test(u.bays[i]))return i;return 0}
 function m(n){return '£'+(+n||0).toFixed(2)}
-function entry(u,o){return{id:seq++,ol:o.key,date:o.day,bay:bayIdx(u,o.bay),start:o.start,dur:o.dur||60,cust:o.cust||'Customer',phone:o.phone||'',reg:o.reg||'',veh:o.veh||'',type:'MOT',price:+o.pay||0,status:'booked',src:'web',paid:true,
+function entry(u,o){return{id:seq++,ol:o.key,bid:o.bid||null,date:o.day,bay:bayIdx(u,o.bay),start:o.start,dur:o.dur||60,cust:o.cust||'Customer',phone:o.phone||'',reg:o.reg||'',veh:o.veh||'',type:'MOT',price:+o.pay||0,status:'booked',src:'web',paid:true,
  notes:(o.label||'MOT test')+'. Booked and paid online through The Motoring Central. You are paid '+m(o.pay)+' for this test.'}}
 /* put online bookings into the diary; drop ones that were cancelled. Returns true if anything changed. */
 function merge(u,list,prefix){var ch=false,today=dk(new Date()),have={};u.diary.forEach(function(b){if(b.ol)have[b.ol]=b});
- var keys={};list.forEach(function(o){keys[o.key]=1;if(!have[o.key]){u.diary.push(entry(u,o));ch=true}});
+ var keys={};list.forEach(function(o){keys[o.key]=1;var h=have[o.key];if(!h){u.diary.push(entry(u,o));ch=true}else if(prefix==='db'&&!h._pending&&(h.date!==o.day||h.start!==o.start||u.bays[h.bay]!==o.bay||h.dur!==(o.dur||60))){h.date=o.day;h.start=o.start;h.bay=bayIdx(u,o.bay);h.dur=o.dur||60;ch=true}});
  u.diary=u.diary.filter(function(b){if(b.ol&&b.ol.indexOf(prefix)===0&&!keys[b.ol]&&b.date>=today){ch=true;return false}return true});return ch}
 function ownList(u){var today=dk(new Date());return u.diary.filter(function(b){return !b.ol&&b.date>=today}).map(function(b){return{day:b.date,bay:u.bays[b.bay]||'Bay',start:b.start,dur:b.dur}})}
 window.MCmotSync=function(u){if(!u||u.role!=='mechanic'||u.sub!=='garage'||!u.diary||!u.bays)return;
@@ -3023,8 +3023,16 @@ window.MCmotSync=function(u){if(!u||u.role!=='mechanic'||u.sub!=='garage'||!u.di
  if(Date.now()-(last[u.sbid]||0)<25000)return;last[u.sbid]=Date.now();
  if(!u._agreedAt){u._agreedAt=1;D.agreed(u.sbid).then(function(r){if(r&&r.data&&r.data.mot_agreed)u.motAgreed=r.data.mot_agreed})}
  D.mine(dk(new Date())).then(function(r){if(!r||r.error||!r.data||window.GGuser!==u)return;var v;
-  var ch=merge(u,r.data.map(function(x){v=x.vehicle||{};return{key:'db'+x.slot_id,day:x.day,bay:x.bay_name,start:x.start_min,dur:x.dur_min,cust:x.customer_name,phone:x.customer_phone,reg:v.reg||'',veh:[v.make,v.model,v.year].filter(Boolean).join(' '),label:'MOT test',pay:x.partner_payout}}),'db');
+  var ch=merge(u,r.data.map(function(x){v=x.vehicle||{};return{key:'db'+x.slot_id,bid:x.booking_id,day:x.day,bay:x.bay_name,start:x.start_min,dur:x.dur_min,cust:x.customer_name,phone:x.customer_phone,reg:v.reg||'',veh:[v.make,v.model,v.year].filter(Boolean).join(' '),label:'MOT test',pay:x.partner_payout}}),'db');
   if(ch){u.dmsg='Your diary has been updated with MOT bookings made online.';if(location.hash==='#dashboard'&&u.dtab==='diary'&&window.GGdash&&!(document.activeElement&&document.activeElement.closest&&document.activeElement.closest('#dash-body input,#dash-body textarea,#dash-body select')))window.GGdash()}})};
+/* the garage moved an online booking (customer asked): update it live, then send the new confirmations */
+window.MCmotMoved=function(u,b,was){if(!b||!b.ol)return;
+ if(b.ol.indexOf('ls')===0){var S=store(),R=S['demo-kr']||{},id=b.ol.slice(2);(R.online||[]).forEach(function(o){if(o.id===id){o.day=b.date;o.start=b.start;o.bay=u.bays[b.bay];o.dur=b.dur}});put(S);return}
+ var D=window.MCmotDb;if(!D||!b.bid)return;b._pending=1;
+ D.move({p_booking:b.bid,p_day:b.date,p_start:b.start,p_bay:u.bays[b.bay]||'MOT bay',p_dur:b.dur}).then(function(r){delete b._pending;if(r&&r.error)throw r.error;if(r&&r.data&&r.data.moved)D.notify(b.bid)}).catch(function(e){delete b._pending;
+  b.date=was.date;b.start=was.start;b.bay=was.bay;b.dur=was.dur;u.dsel=was.date;
+  u.dmsg=/slot_taken/.test(String(e&&e.message))?'That time is already taken by another online booking, so the MOT was not moved. Pick another time.':'The MOT could not be moved (check your connection). It is still at the original time.';
+  if(window.GGuser===u&&window.GGdash)window.GGdash()})};
 setInterval(function(){var u=window.GGuser;if(u&&u.sbid&&u.sub==='garage'&&location.hash==='#dashboard'&&u.dtab==='diary'&&!document.hidden)window.MCmotSync(u)},26000);
 })();
 </script>
@@ -3959,10 +3967,10 @@ function docRows(u){var s='';(u.docs||[]).forEach(function(d,i){s+='<div class="
 function motAsk(u){var r=u.rates||{};return r.motc&&r.motc['4-car']!=null?+r.motc['4-car']:+r.mot||54.85}
 function motAgreedBox(u){if(u.role!=='mechanic'||u.sub!=='garage'||!(u.motOnly||+u.motBays>0||(u.rates&&(u.rates.motc||u.rates.mot))))return '';
 var ag=u.motAgreed&&u.motAgreed.all!=null?+u.motAgreed.all:null,max=54.85,id=esc(u.email),v=ag!=null?ag:motAsk(u);
-return '<div class="motag" style="margin-top:10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px"><b>Agreed MOT fee</b><p class="note" style="margin:4px 0 8px">Customers pay the official maximum ('+m(max)+' for a car) plus our £3.00 booking fee. We pay the test centre the fee agreed here for every test booked online. They asked for '+m(motAsk(u))+' for a car MOT.</p>'
+return '<div class="motag" style="margin-top:10px;border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:10px 12px"><b>Agreed MOT fee</b><p class="note" style="margin:4px 0 8px">Customers pay the official maximum ('+m(max)+' for a car), with our booking fee included in it. We pay the test centre the fee agreed here for every test booked online. They asked for '+m(motAsk(u))+' for a car MOT.</p>'
 +'<div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap"><div><label class="f" for="ag-'+id+'" style="margin:0 0 4px">Agreed fee per test (£)</label><input type="number" id="ag-'+id+'" data-agin="'+id+'" min="1" max="'+max+'" step="0.01" value="'+v.toFixed(2)+'" style="width:110px"'+(owner()?'':' disabled')+'></div>'+(owner()?'<button class="btn sm" type="button" data-motag="'+id+'">Save agreed fee</button>':'')+'</div>'
 +'<p class="note" data-agm="'+id+'" style="margin:6px 0 0">'+agMsg(v)+(ag==null?' Not agreed yet: until it is saved, the test centre is paid the fee it asked for.':'')+'</p></div>'}
-function agMsg(v){var max=54.85,net=Math.round((max-v)*100)/100;return 'On a car MOT the customer pays '+m(max+3)+': '+m(v)+' to the test centre, '+m(net)+' margin and £3.00 booking fee to us ('+m(net+3)+' in total).'}
+function agMsg(v){var max=54.85,net=Math.round((max-v)*100)/100,vat=Math.round(net/6*100)/100;return 'On a car MOT the customer pays '+m(max)+': '+m(v)+' to the test centre and '+m(net)+' to us, which includes '+m(vat)+' VAT (so '+m(net-vat)+' after VAT).'}
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.getAttribute||!t.getAttribute('data-agin'))return;var x=document.querySelector('[data-agm="'+t.getAttribute('data-agin')+'"]');if(x)x.textContent=agMsg(Math.min(54.85,Math.max(0,+t.value||0)))});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-motag]');if(!b||!owner())return;var em=b.getAttribute('data-motag'),u=byEmail(em),inp=document.getElementById('ag-'+em),v=Math.round(+(inp&&inp.value)*100)/100;if(!u)return;
  var x=document.querySelector('[data-agm="'+em+'"]');if(!(v>0)||v>54.85){if(x)x.textContent='Enter a fee between £1.00 and £54.85.';return}
@@ -4165,6 +4173,7 @@ if(!isNew&&!bl)s+='<p class="note" style="margin:0 0 6px">Job status</p><div cla
 if(!bl)s+='<div class="rg"><div><label class="f" for="bk-reg">Registration</label><input type="text" id="bk-reg" value="'+esc(e.reg)+'" class="up" autocomplete="off"></div><div><label class="f" for="bk-veh">Vehicle</label><input type="text" id="bk-veh" value="'+esc(e.veh)+'" placeholder="e.g. Ford Focus 2019"></div><div><label class="f" for="bk-cust">Customer name</label><input type="text" id="bk-cust" value="'+esc(e.cust)+'"></div><div><label class="f" for="bk-phone">Phone</label><input type="tel" id="bk-phone" value="'+esc(e.phone)+'"></div><div><label class="f" for="bk-type">Job</label><select id="bk-type">'+BTYPES.map(function(x){return '<option'+(x===e.type?' selected':'')+'>'+x+'</option>'}).join('')+'</select></div><div><label class="f" for="bk-price">Price (&pound;)</label><input type="number" id="bk-price" min="0" step="0.01" value="'+(e.price===''?'':e.price)+'"></div></div>';
 s+='<div class="rg"><div><label class="f" for="bk-date">Date</label><input type="date" id="bk-date" value="'+e.date+'"></div><div><label class="f" for="bk-bay">'+(u.bays.length>1?'Bay':'Diary')+'</label><select id="bk-bay">'+u.bays.map(function(b,i){return '<option value="'+i+'"'+(i===e.bay?' selected':'')+'>'+esc(b)+'</option>'}).join('')+'</select></div><div><label class="f" for="bk-start">Start</label><select id="bk-start">'+times+'</select></div><div><label class="f" for="bk-dur">Length</label><select id="bk-dur">'+durs+'</select></div></div>';
 if(!bl)s+='<div class="rg"><div><label class="f" for="bk-src">Booked via</label><select id="bk-src">'+Object.keys(BSRC).map(function(k){return '<option value="'+k+'"'+(k===e.src?' selected':'')+'>'+BSRC[k]+'</option>'}).join('')+'</select></div><div><label class="chk"><input type="checkbox" id="bk-paid"'+(e.paid?' checked':'')+'> Customer has paid</label></div></div>';
+if(e.ol)s+='<p class="note" style="background:#E0F4FE;color:#0B3B5C;border-radius:10px;padding:8px 10px"><b>Booked and paid online.</b> If the customer asks to move it, change the day, time or bay and save: the customer gets an email and a text with the new time. To cancel it, contact The Motoring Central so the customer can be refunded.</p>';
 s+='<label class="f" for="bk-notes">'+(bl?'Reason':'Job notes')+'</label><textarea id="bk-notes" rows="2">'+esc(e.notes)+'</textarea><p class="note err" id="bk-err" role="alert"></p>';
 s+='<div class="dtools"><button class="btn sm" type="button" data-bsave>'+(isNew?'Save':'Save changes')+'</button><button class="btn sm ghost" type="button" data-bclose>Close</button>'+(!isNew&&!bl?'<button class="btn sm ghost" type="button" data-bremind>Text the customer</button>':'')+(!isNew?'<button class="btn sm ghost danger" type="button" data-bdel>'+(bl?'Remove':'Cancel booking')+'</button>':'')+'</div></div>';
 return s}
@@ -4176,12 +4185,13 @@ if(!e.date)err='Choose a date.';
 else if(dfrom(e.date).getDay()===0)err='The diary is closed on Sundays. Choose another day.';
 else if(!bl&&!e.reg&&!e.cust)err='Enter a registration or a customer name.';
 else if(e.start+e.dur>DCLOSE)err='This runs past closing time ('+hm(DCLOSE)+'). Make it shorter or start earlier.';
-else if(e.ol&&(function(o){return o&&(o.date!==e.date||o.start!==e.start||o.bay!==e.bay||o.dur!==e.dur)})(bkById(u,e.id)))err='This MOT was booked and paid online, so its day, time and bay cannot be changed here. To move it, contact The Motoring Central and we will arrange it with the customer.';
 else if(clash(u,e))err='That overlaps another booking in '+u.bays[e.bay]+'. Pick another time'+(u.bays.length>1?' or bay':'')+'.';
 if(err){$('bk-err').textContent=err;return}
 if(e.price==='')e.price=0;
-if(e.id){var o=bkById(u,e.id);Object.keys(e).forEach(function(x){o[x]=e[x]})}else{e.id=bkSeq++;u.diary.push(e)}
-u.dsel=e.date;u.dedit=null;u.dmsg=(bl?'Time blocked: ':'Booking saved: ')+dayLabel(e.date)+' at '+hm(e.start)+'.';window.GGdash()}
+var was=null;if(e.id){var o=bkById(u,e.id);if(o.ol)was={date:o.date,start:o.start,bay:o.bay,dur:o.dur};Object.keys(e).forEach(function(x){o[x]=e[x]})}else{e.id=bkSeq++;u.diary.push(e)}
+var mv=was&&(was.date!==e.date||was.start!==e.start||was.bay!==e.bay||was.dur!==e.dur);
+u.dsel=e.date;u.dedit=null;u.dmsg=mv?'Online MOT moved to '+dayLabel(e.date)+' at '+hm(e.start)+'. The customer gets an email and a text with the new time.':(bl?'Time blocked: ':'Booking saved: ')+dayLabel(e.date)+' at '+hm(e.start)+'.';
+if(mv&&window.MCmotMoved)window.MCmotMoved(u,bkById(u,e.id),was);window.GGdash()}
 function jobToDiary(u,j){if(!u.diary)seedDiary(u);
 var mt=/(Mon|Tue|Wed|Thu|Fri|Sat|Sun)\w*\s+(\d+)(am|pm)(?:\s+to\s+(\d+)(am|pm))?/.exec(j.when);if(!mt)return;
 var k=dkey(new Date()),i;for(i=0;i<8;i++){if(DAYN[dfrom(k).getDay()]===mt[1])break;k=addDays(k,1)}
@@ -4658,7 +4668,7 @@ var BK={book:['#tbl tr.t td:last-child','Mechanic, auto electrician or locksmith
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b)return;
 if(BK[b.id]){var u=window.GGuser;if(!u||u.role!=='customer')return;if(PASS[b.id]){delete PASS[b.id];return}
 var a=amt(BK[b.id][0]);if(!(a>0))return;e.preventDefault();e.stopImmediatePropagation();
-window.GGpay({amount:a,desc:BK[b.id][1],sub:'Paid to The Motoring Central Ltd on behalf of your chosen partner. Includes our £3.00 booking fee, of which 50p is VAT.',onPaid:function(){PASS[b.id]=1;b.click()}});return}
+window.GGpay({amount:a,desc:BK[b.id][1],sub:b.id==='mgo'&&window.GGmode==='mot'?'Paid to The Motoring Central Ltd. This is the official maximum MOT fee for the class, with no extra booking fee. We pay the test centre for your test.':'Paid to The Motoring Central Ltd on behalf of your chosen partner. Includes our £3.00 booking fee, of which 50p is VAT.',onPaid:function(){PASS[b.id]=1;b.click()}});return}
 if(b.dataset.dbook){var k=b.dataset.dbook,id=k.replace(':','-'),tc=$('dtc-'+id),u2=window.GGuser;if(PASS['d'+k]){delete PASS['d'+k];return}
 if(!tc||!tc.checked)return;if(k.indexOf('trade')!==0&&!(u2&&u2.role==='customer'))return;
 var a2=+(b.textContent.replace(/,/g,'').match(/£([\d.]+)/)||[0,0])[1];if(!(a2>0))return;e.preventDefault();e.stopImmediatePropagation();
@@ -5131,7 +5141,7 @@ document.addEventListener('change',function(e){var t=e.target;if(!t||!t.getAttri
  else if(t.id==='gmot'){var box=$('g-motclasses');if(box)box.hidden=!t.checked}
  else if(t.id==='mclass'){note();var p=$('mpost'),b=$('mfind');if(p&&b&&p.value.replace(/\s/g,'').length>=5)b.click();else if($('garages'))$('garages').innerHTML=''}});
 function sync(){var o=read('gm'),h=$('g-motfee');if(h){var k=o['4-car']!=null?'4-car':Object.keys(o)[0];h.value=k?o[k]:54.85}}
-function note(){var n=$('mclass-note'),t=cur();if(n)n.textContent='Class '+t.c+' MOT: '+money(t.max)+', the official maximum fee for this class, at every partner test centre. MOT test fees are exempt from VAT. Our £3.00 booking fee includes VAT.'}
+function note(){var n=$('mclass-note'),t=cur();if(n)n.textContent='Class '+t.c+' MOT: '+money(t.max)+', the official maximum fee for this class, at every partner test centre. There is no extra booking fee.'}
 /* customer picker */
 var sel=$('mclass');if(sel){var h='',open=false;T.forEach(function(t){if(t.g){if(open)h+='</optgroup>';h+='<optgroup label="'+esc(t.g)+'">';open=true}h+='<option value="'+t.k+'"'+(t.k==='4-car'?' selected':'')+'>'+esc(t.n)+'</option>'});sel.innerHTML=h+'</optgroup>';note()}
 var gl=$('gm-list');if(gl){gl.innerHTML=rows('gm',null);var gm=$('gmot'),bx=$('g-motclasses');if(gm&&bx)bx.hidden=!gm.checked}
@@ -7605,7 +7615,9 @@ window.MCmotDb={garages:function(){return DIR.filter(function(p){return p.role==
  mine:function(from){return ready.then(function(){return sb.rpc('my_online_diary',{p_from:from})})},
  syncOwn:function(list){return ready.then(function(){return sb.rpc('sync_own_diary',{p_entries:list})})},
  agreed:function(id){return ready.then(function(){return sb.from('partners').select('mot_agreed').eq('id',id).maybeSingle()})},
- setAgreed:function(id,v){return ready.then(function(){return sb.from('partners').update({mot_agreed:v}).eq('id',id).select('id')})}};
+ setAgreed:function(id,v){return ready.then(function(){return sb.from('partners').update({mot_agreed:v}).eq('id',id).select('id')})},
+ move:function(o){return ready.then(function(){return sb.rpc('move_online_booking',o)})},
+ notify:function(id){return ready.then(function(){return sb.functions.invoke('notify',{body:{booking_id:id}})}).catch(function(){})}};
 /* ---------- bookings: partner sees them, customer sees the status ---------- */
 function hub(){return window.MChub&&window.MChub.state?window.MChub.state():null}
 function hubKeep(S){try{localStorage.setItem('mc-hub',JSON.stringify(S))}catch(e){}}
