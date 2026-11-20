@@ -356,6 +356,32 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 20 Nov 2026: recovery and mobile EV charging brought up to the MOT and car sales standard.
+  - Customers: new forms (postcode or "Use my location", exact spot, where to take it, what happened, vehicle type,
+    winching, keys, passengers, now or a booked time; for EV: need, plug, battery). Prices and the list of companies
+    come from the server function "roadside" (real postcode distances from postcodes.io, each partner's own rates,
+    their area and whether they are taking call-outs now). No account needed to see prices; sign in to book.
+    Pay (preview payment screen) then book: the server writes the booking with its own price and our share.
+  - Price: recovery = call-out + price per mile x miles carried + winching extra. EV = call-out (includes the charge)
+    + price per mile beyond their area (up to 40 miles beyond). Booking fee £3 on top. Our fee 6% (5% + VAT) on Pay as you
+    go, 0% on active Pro.
+  - My account: "Recovery and EV charging" card with live status, the driver's phone, and Cancel (full refund before
+    they set off; once on the way their call-out fee is kept and paid to them).
+  - Partners (dashboard "Call-outs" card): go available for 4, 12 or 24 hours, depot postcode and how far they travel,
+    vehicles or connectors, winching extra, jobs with Map and Directions links, call the customer, On my way / Arrived /
+    Job done, "I can't do this job" (customer fully refunded), monthly statement (printable).
+  - Staff: admin card "Recovery and EV charging bookings" with cancel and refund, and Mark refunded.
+  - Partners can no longer cancel a booking by changing its status directly (database guard); cancelling goes through
+    cancel_roadside, decline_roadside or staff_cancel_roadside. Emails to customer and partner as for other bookings.
+  - Join pages now save depot postcode, area, fleet, availability, vehicles or connectors and jobs.
+  - Terms section 7: how the price is worked out, cancelling and emergencies.
+  - When no real partner covers a place, sample companies are shown (clearly labelled, booking is preview only).
+    To hide them at launch: Supabase > Edge Functions > Secrets: ROADSIDE_SAMPLES=0.
+  Code: supabase/migrations/20261120_roadside.sql, supabase/functions/roadside, and the block
+  "20 Nov 2026: recovery and mobile EV charging" in index.html. Tested on the server with a temporary test partner
+  and customer (removed afterwards); the full pay-and-book needs a real customer log-in to try on the preview.
+  Still to do: "Need it delivered?" on car adverts still uses its own simple pricing (move it onto the roadside
+  function); text alerts to partners for jobs needed now (needs the SMS service); payment checked by Stripe.
 - 19 Nov 2026 (night): dealer, car sales and MOT tools (no email, Stripe or paid data needed).
   - Windscreen cards (A4, colour): the dealer's logo, name, town, website, rating and phone, in our website's blue theme
     (sky blue header, navy price and footer), with the car photo, price (and saving if reduced), details and a QR code
