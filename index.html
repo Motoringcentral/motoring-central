@@ -2697,8 +2697,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   function render(r){
     car=r?pick(r):CARS[0];svc=null;var D=!!r&&det(r),m=window.GGmode;var sh2=document.querySelector('#svc-card h2');if(sh2)sh2.textContent=m==='mot'?'Which MOT do you need? Most cars are Class 4':m==='autoelec'&&window.GGsub==='lock'?'What do you need help with?':'What does it need?';var side=['recovery','evcharge','tyres','valet','body'].indexOf(m)>-1,U=$('unlock'),u=cu();
     $('quote').hidden=true;$('job').hidden=true;if(window.GGmot)window.GGmot(false,null);$('svc-card').hidden=side;U.hidden=true;
-    if(window.GGval)window.GGval(D&&m==='valet',car);if(window.GGbdy)window.GGbdy(D&&m==='body',car);if(window.GGrec)window.GGrec(D&&m==='recovery',car);if(window.GGevc)window.GGevc(D&&m==='evcharge',car);if(window.GGtyr)window.GGtyr(D&&m==='tyres',car);
-    if(!D&&side){U.innerHTML=unlockHtml(r,FROM[m]);U.hidden=false}
+    if(window.GGval)window.GGval(D&&m==='valet',car);if(window.GGbdy)window.GGbdy(D&&m==='body',car);if(window.GGrec)window.GGrec(m==='recovery',D?car:null);if(window.GGevc)window.GGevc(m==='evcharge',D?car:null);if(window.GGtyr)window.GGtyr(D&&m==='tyres',car);
+    if(!D&&side&&m!=='recovery'&&m!=='evcharge'){U.innerHTML=unlockHtml(r,FROM[m]);U.hidden=false}
     var ev=car.fuel==='Electric',svg='<svg viewBox="0 0 92 52" aria-hidden="true"><path d="M6 36l6-14c2-4 6-6 10-6h30c5 0 9 2 12 6l10 8c4 1 6 3 6 6v2H6z" fill="var(--brand)"/><circle cx="26" cy="38" r="7" fill="var(--ink)"/><circle cx="68" cy="38" r="7" fill="var(--ink)"/></svg>';
     if(D)$('vehicle').innerHTML='<div class="car">'+svg+'<div><span class="tag">Full vehicle check: '+H(fmt(r))+'</span><h2>'+car.make+' '+car.model+'</h2></div></div>'
      +'<div class="spec"><div><span>Year</span>'+car.year+'</div><div><span>Fuel</span>'+car.fuel+'</div><div><span>Engine</span>'+(ev?'Electric motor':car.cc+' cc')+'</div><div><span>Gearbox</span>'+car.tr+'</div><div><span>Colour</span>'+car.col+'</div><div><span>MOT</span>'+car.mot+'</div><div><span>Tyre size</span>'+car.tyre+'</div></div>'
