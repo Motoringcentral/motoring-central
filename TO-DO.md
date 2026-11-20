@@ -356,6 +356,11 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 20 Nov 2026: all four videos (intro, dealer, MOT station, EV charging) re-voiced: the web address is now said
+  "motoring central dot co dot uk", MOT, RAC, EV and DVSA are spelled out letter by letter, prices and percentages
+  are read in full, and the delivery is a little slower with natural pauses between sentences. Same pictures, same
+  British female voice (Kokoro bf_emma), captions retimed. Rule for future videos: always write the spoken script
+  out in words ("dot co dot uk", "M O T") before making the voice.
 - 20 Nov 2026: EV charging "why join" video (video/ev-charging.mp4, 1 min 48, same British female voice, Kokoro
   bf_emma, with captions). It replaces the banner on the #evcharging join page and starts by itself when the page
   opens (muted with "Tap for sound" if the browser blocks sound). It does not promise work: it says drivers find

@@ -1552,7 +1552,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <label class="chk"><input type="radio" name="kind" value="mot"><span>MOT test station<br><small>MOT testing only</small></span></label>
 <label class="chk"><input type="radio" name="kind" value="autoelec"><span>Auto electrician or locksmith<br><small>Electrical or key specialist</small></span></label>
 </div></fieldset>
-<div class="dvid" id="mot-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">MOT test stations: see how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, 82% paid to you (£44.98 per car MOT), bookings 24/7 and a free live diary. About 1 minute 40.</p><div class="mvw"><button type="button" class="msnd" id="mot-snd" hidden>🔊 Tap for sound</button><video id="mot-v" controls playsinline preload="metadata" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English" default></video></div></div>
+<div class="dvid" id="mot-vid" hidden style="margin:4px 0 14px"><h3 style="margin:0 0 4px;font-size:1.1rem">MOT test stations: see how online booking fills your bays</h3><p class="note" style="margin:0 0 10px">One fair price at every partner, 82% paid to you (£44.98 per car MOT), bookings 24/7 and a free live diary. About 1 minute 40.</p><div class="mvw"><button type="button" class="msnd" id="mot-snd" hidden>🔊 Tap for sound</button><video id="mot-v" controls playsinline preload="metadata" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4?v=2" type="video/mp4"><track kind="captions" src="video/mot-station.vtt?v=2" srclang="en" label="English" default></video></div></div>
 <div class="two"><div><label class="f" for="name">Full name</label><input type="text" id="name" autocomplete="name"></div>
 <div><label class="f" for="tel">Mobile</label><input type="tel" id="tel" autocomplete="tel"></div></div>
 <label class="f" for="mail">Email</label><input type="email" id="mail" autocomplete="email">
@@ -2015,7 +2015,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <br><a class="swl" href="#cars">Browse cars for sale &rarr;</a>
 <img class="heroimg" src="img/car-sales.webp" alt="Motoring Central car sales forecourts with new and used cars for sale" width="1400" height="788" loading="lazy"></div></section>
 <main>
-<div class="card dvid"><h2 style="margin:0 0 4px;font-size:1.2rem">See what you get, in under 2 minutes</h2><p class="note" style="margin:0 0 10px">What you need to join, and everything we give you as a dealer.</p><video controls playsinline preload="none" poster="video/dealer-poster.jpg" width="1280" height="720" aria-label="Video: what dealers need to join The Motoring Central and what they get."><source src="video/dealer.mp4" type="video/mp4"><track kind="captions" src="video/dealer.vtt" srclang="en" label="English"></video></div>
+<div class="card dvid"><h2 style="margin:0 0 4px;font-size:1.2rem">See what you get, in under 2 minutes</h2><p class="note" style="margin:0 0 10px">What you need to join, and everything we give you as a dealer.</p><video controls playsinline preload="none" poster="video/dealer-poster.jpg" width="1280" height="720" aria-label="Video: what dealers need to join The Motoring Central and what they get."><source src="video/dealer.mp4?v=2" type="video/mp4"><track kind="captions" src="video/dealer.vtt?v=2" srclang="en" label="English"></video></div>
 <div class="stats"><div><b>3 months</b>free for every dealer</div><div><b>&pound;169 + VAT</b>plans from, a month</div><div><b>5</b>plans to fit your stock</div><div><b>Up to 5</b>free premium ads a month</div></div>
 <h2 class="sec">Dealer plans</h2>
 <div class="card dfree"><b>Your first 3 months are free on every plan.</b><p>Including your free premium ads. Nothing is charged until month 4, and you can cancel any time before then without paying a penny.</p></div>
@@ -7490,7 +7490,7 @@ window.MCguide={open:open,has:function(t){return !!topic(t)},topics:T,fixed:FIX,
 </style>
 <dialog id="mc-intro" aria-labelledby="mc-intro-t">
 <div class="ih"><b id="mc-intro-t">New here? A quick tour of the site</b><button type="button" class="ix" data-intro="close" aria-label="Close the guide">Skip</button></div>
-<div class="vw"><video id="mc-intro-v" playsinline muted preload="none" poster="video/intro-poster.jpg" controls><source src="video/intro.mp4" type="video/mp4"><track kind="captions" src="video/intro.vtt" srclang="en" label="English" default></video>
+<div class="vw"><video id="mc-intro-v" playsinline muted preload="none" poster="video/intro-poster.jpg" controls><source src="video/intro.mp4?v=2" type="video/mp4"><track kind="captions" src="video/intro.vtt?v=2" srclang="en" label="English" default></video>
 <button type="button" class="snd" id="mc-intro-snd">🔊 Tap for sound</button></div>
 <div class="if"><button type="button" class="go" data-intro="close">Start: type what you need</button></div>
 </dialog>
@@ -8954,7 +8954,7 @@ setInterval(tick,500);tick();addEventListener('hashchange',function(){setTimeout
 (function(){function $(i){return document.getElementById(i)}
 var V=$('v-evc');if(!V)return;var IMG=V.querySelector('img.heroimg');if(!IMG)return;var W=null,HV=null,HB=null;
 function build(){W=document.createElement('div');W.className='mvw herovid';
- W.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/ev-charging-poster.jpg" width="1280" height="720" aria-label="Video: why mobile EV charging companies join The Motoring Central, and how automatic bookings work."><source src="video/ev-charging.mp4" type="video/mp4"><track kind="captions" src="video/ev-charging.vtt" srclang="en" label="English" default></video>';
+ W.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/ev-charging-poster.jpg" width="1280" height="720" aria-label="Video: why mobile EV charging companies join The Motoring Central, and how automatic bookings work."><source src="video/ev-charging.mp4?v=2" type="video/mp4"><track kind="captions" src="video/ev-charging.vtt?v=2" srclang="en" label="English" default></video>';
  IMG.parentNode.insertBefore(W,IMG.nextSibling);HV=W.querySelector('video');HB=W.querySelector('.msnd');
  HB.addEventListener('click',function(){HV.muted=false;HV.volume=1;HB.hidden=true;if(HV.currentTime>4||HV.ended)HV.currentTime=0;HV.play().catch(function(){HB.hidden=false})});
  HV.addEventListener('volumechange',function(){if(!HV.muted)HB.hidden=true});
@@ -9015,7 +9015,7 @@ function setMode(){var m=mode();if(!m||V.hidden&&m===last)return;if(m===last&&V.
 var HV=null,HB=null,HW=null;
 function heroVid(on){
  if(on&&!HW){HW=document.createElement('div');HW.className='mvw herovid';
-  HW.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: The Motoring Central MOT network. Online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4" type="video/mp4"><track kind="captions" src="video/mot-station.vtt" srclang="en" label="English" default></video>';
+  HW.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: The Motoring Central MOT network. Online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4?v=2" type="video/mp4"><track kind="captions" src="video/mot-station.vtt?v=2" srclang="en" label="English" default></video>';
   IMG.parentNode.insertBefore(HW,IMG.nextSibling);HV=HW.querySelector('video');HB=HW.querySelector('.msnd');
   HB.addEventListener('click',function(){HV.muted=false;HV.volume=1;HB.hidden=true;if(HV.currentTime>4||HV.ended)HV.currentTime=0;HV.play().catch(function(){HB.hidden=false})});
   HV.addEventListener('volumechange',function(){if(!HV.muted)HB.hidden=true});
