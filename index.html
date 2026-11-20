@@ -1331,42 +1331,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <p class="sample">Sample prices shown for the preview.</p>
 </div>
 
-<div class="card" id="rec" hidden>
-<h2>Vehicle recovery</h2>
-<p style="margin:0;color:var(--muted)">Tell us where the car is and where it needs to go. In immediate danger, call 999 first.</p>
-<label class="f2" for="rpick">Where is the car? (postcode)</label>
-<input id="rpick" class="mp" maxlength="9" placeholder="e.g. LS1 4AP" style="width:100%">
-<label class="f2" for="rdest">Where should it go?</label>
-<select id="rdest"><option value="home">My home</option><option value="garage">A partner garage</option><option value="other">Another address</option></select>
-<input id="rdrop" class="mp" maxlength="9" placeholder="Destination postcode" style="width:100%;margin-top:8px">
-<label class="f2" for="rwhy">What happened?</label>
-<select id="rwhy"><option>Will not start</option><option>Broke down on the road</option><option>Accident</option><option>Flat tyre</option><option>Other</option></select>
-<button class="btn block" id="rfind" type="button">Get recovery prices</button>
-<p class="err" id="rec-err" role="alert"></p>
-<div class="opts" id="rprov"></div>
-<div id="rbook" hidden><p id="rtot" style="font-size:1.25rem;font-weight:800;margin:14px 0 0"></p><p class="sample">Price includes the journey, plus our booking fee.</p><div class="tc"><input type="checkbox" id="tc-rgo"><label for="tc-rgo">I understand my booking is with the recovery company I have chosen. They are responsible for my vehicle while it is in their care. <a href="#terms" data-tsec="tc-recovery">Read the terms</a></label></div><p class="tcerr" id="tc-rgo-err" role="alert"></p><button class="btn block" id="rgo" type="button">Book recovery</button></div>
-<p class="okmsg" id="rdone" hidden></p>
-<p class="sample">Sample companies shown for the preview.</p>
-</div>
-<div class="card" id="evc" hidden>
-<h2>Mobile EV charging</h2>
-<p style="margin:0;color:var(--muted)">A charging van comes to you with enough charge to get you moving. On a motorway, get to a safe place first. In immediate danger, call 999.</p>
-<p class="note" id="evc-ice" hidden>This vehicle is not shown as electric. If the car will not start because of a flat battery, choose Mobile mechanic or Recovery instead.</p>
-<label class="f2" for="evc-post">Where is the car? (postcode)</label>
-<input id="evc-post" class="mp" maxlength="9" placeholder="e.g. LS1 4AP">
-<label class="f2" for="evc-need">What do you need?</label>
-<select id="evc-need"><option value="rescue">Out of charge: reach a charge point</option><option value="home">Out of charge: enough charge to get home</option><option value="booked">Booked top-up at home or work</option></select>
-<label class="f2" for="evc-plug">Which charging plug does your car use?</label>
-<select id="evc-plug"><option>Not sure</option><option>Type 2</option><option>CCS</option><option>CHAdeMO</option></select><p class="sample" style="margin:6px 0 0">Most electric cars in the UK use Type 2 or CCS. Some older Nissan and Mitsubishi models use CHAdeMO. If you are not sure, leave it and the charging company will check from your registration.</p>
-<label class="f2" for="evc-when">When?</label>
-<select id="evc-when"><option value="now">Now</option><option value="today">Later today</option><option value="tomorrow">Tomorrow</option></select>
-<button class="btn block" id="evc-find" type="button" style="margin-top:14px">Get charging prices</button>
-<p class="err" id="evc-err" role="alert"></p>
-<div class="opts" id="evc-prov"></div>
-<div id="evc-book" hidden><p id="evc-tot" style="font-size:1.25rem;font-weight:800;margin:14px 0 0"></p><p class="sample">Price includes the call-out and the charge, plus our booking fee.</p><div class="tc"><input type="checkbox" id="tc-ego"><label for="tc-ego">I understand my booking is with the charging company I have chosen. They are responsible for charging my vehicle safely. <a href="#terms" data-tsec="tc-recovery">Read the terms</a></label></div><p class="tcerr" id="tc-ego-err" role="alert"></p><button class="btn block" id="ego" type="button">Book EV charging</button></div>
-<p class="okmsg" id="evc-done" hidden></p>
-<p class="sample">Sample companies shown for the preview.</p>
-</div>
+<div class="card" id="rec" hidden></div>
+<div class="card" id="evc" hidden></div>
 
 <div class="card" id="mot" hidden>
 <h2 id="mtitle">Partner garage</h2>
@@ -1641,7 +1607,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <h2>Application received</h2>
 <p id="ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick video call to meet you</li><li>Background and insurance checks</li><li>Go live and take your first job</li></ol>
-<p class="note">Preview only. No application was sent.</p>
+<p class="note">We will be in touch by email once we have checked your documents.</p>
 </div>
 
 <footer class="foot">© The Motoring Central Ltd. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Jobs</a> <a href="#contact">Contact</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
@@ -1710,7 +1676,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="card done" id="r-ok" hidden>
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="r-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to agree your coverage area</li><li>Insurance and licence checks</li><li>Go live and receive your first recovery</li></ol>
-<p class="note">Preview only. No application was sent.</p></div>
+<p class="note">We will be in touch by email once we have checked your documents.</p></div>
 <footer class="foot">&copy; The Motoring Central Ltd. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Jobs</a> <a href="#contact">Contact</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-evc" hidden>
@@ -1775,7 +1741,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="card done" id="ev-ok" hidden>
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="ev-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to agree your coverage area and equipment</li><li>Insurance and equipment checks</li><li>Go live and receive your first charging job</li></ol>
-<p class="note">Preview only. No application was sent.</p></div>
+<p class="note">We will be in touch by email once we have checked your documents.</p></div>
 <footer class="foot">&copy; The Motoring Central Ltd. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Jobs</a> <a href="#contact">Contact</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-body" hidden>
@@ -1866,7 +1832,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="card done" id="bs-ok" hidden>
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="bs-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to go through your services and work photos</li><li>Insurance, ID and approval checks</li><li>Go live and receive your first quote requests</li></ol>
-<p class="note">Preview only. No application was sent.</p></div>
+<p class="note">We will be in touch by email once we have checked your documents.</p></div>
 <footer class="foot">&copy; The Motoring Central Ltd. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Jobs</a> <a href="#contact">Contact</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-tyre" hidden>
@@ -1930,7 +1896,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="card done" id="t-ok" hidden>
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="t-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to meet you</li><li>Insurance and background checks</li><li>Go live and take your first job</li></ol>
-<p class="note">Preview only. No application was sent.</p></div>
+<p class="note">We will be in touch by email once we have checked your documents.</p></div>
 <footer class="foot">&copy; The Motoring Central Ltd. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Jobs</a> <a href="#contact">Contact</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-valet" hidden>
@@ -1995,7 +1961,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="card done" id="va-ok" hidden>
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="va-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to meet you</li><li>Insurance and background checks</li><li>Go live and take your first valet</li></ol>
-<p class="note">Preview only. No application was sent.</p></div>
+<p class="note">We will be in touch by email once we have checked your documents.</p></div>
 <footer class="foot">&copy; The Motoring Central Ltd. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Jobs</a> <a href="#contact">Contact</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-cars" hidden>
@@ -2238,7 +2204,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 </div></details>
 <details id="tc-recovery"><summary>7. Recovery, breakdown and mobile EV charging</summary><div class="tb">
 <p>For mobile EV charging, the charging company named in your booking is responsible for connecting and charging your vehicle safely with suitable, tested equipment. The price covers the call-out and the charge you chose. Follow the operator&rsquo;s safety instructions at the roadside.</p>
-<p>The recovery company named in your booking carries out the recovery and is responsible for your vehicle from when they load it until they deliver it. They must hold insurance for vehicles in their care. Prices are based on the details you give; if the job turns out to be different (for example a longer distance or extra equipment), the company must tell you the new price before carrying on. Please remove valuables, and always follow the driver&rsquo;s safety instructions at the roadside.</p><p>The same applies when you book a recovery partner to deliver a car or van you have bought. Delivery is a separate booking with the recovery partner. Make sure the vehicle is paid for and the seller has agreed the collection before the delivery day.</p>
+<p>The recovery company named in your booking carries out the recovery and is responsible for your vehicle from when they load it until they deliver it. They must hold insurance for vehicles in their care. Prices are based on the details you give; if the job turns out to be different (for example a longer distance or extra equipment), the company must tell you the new price before carrying on. Please remove valuables, and always follow the driver&rsquo;s safety instructions at the roadside.</p><p>The same applies when you book a recovery partner to deliver a car or van you have bought. Delivery is a separate booking with the recovery partner. Make sure the vehicle is paid for and the seller has agreed the collection before the delivery day.</p><h3>How the price is worked out</h3><p>You see each company&rsquo;s full price before you book. For recovery it is the company&rsquo;s call-out fee, plus their price per mile for the distance your vehicle is carried, plus any extra for winching a vehicle that will not roll. For mobile EV charging it is the company&rsquo;s call-out charge, which includes the charge, plus their price per mile if you are outside their usual area. Distances are worked out from the postcodes or the location you give us. We add a booking fee, shown separately. You pay the total when you book.</p><h3>Cancelling</h3><p>You can cancel in My account free of charge until the company sets off, and you get a full refund. Once they are on their way, you can still cancel, but their call-out fee is not refunded (it is paid to them for the journey); the rest is refunded. Once they have reached you and started, the booking cannot be cancelled online. If the company cannot do the job, they hand it back before setting off and you get a full refund. Refunds go back to the card you paid with, usually within 3 to 5 working days.</p><h3>Emergencies</h3><p>If you or anyone else is in danger, call 999 first. On a motorway, leave the vehicle by the left-hand doors and wait behind the barrier. Booking through us is not an emergency service and arrival times are estimates.</p>
 </div></details>
 <details id="tc-private"><summary>Selling your own car or van (private sellers)</summary><div class="tb"><h3>Who can place a private advert</h3><p>Private adverts are for people selling their own car or van, or one they have the owner&rsquo;s permission to sell. A business that is not a motor trader can also advertise a vehicle it owns, and can show the price plus VAT if it is VAT registered; its advert is marked as a business sale. Private adverts are not for motor traders. Anyone who buys and sells vehicles for profit must join as a dealer. You can have up to 3 private adverts running at once.</p><h3>What you pay</h3><p>A private advert costs &pound;29.99 including VAT and runs for 30 days. A premium advert costs a further &pound;14.99 and is shown on the front-page banner for 2 weeks or until the car is sold. We charge no commission. You pay before you enter your registration, because the registration look-up and the vehicle history check cost us money to run. Fees are not refunded if the car sells early or you remove the advert.</p><h3>Vehicle history check</h3><p>Every advert includes one vehicle history check for outstanding finance, insurance write-off and stolen records. Your payment covers <b>one vehicle</b>: the check is run on the registration you confirm, and that registration cannot be changed afterwards or used for a different vehicle. The result is shown on your advert and you cannot change or remove it.</p><p>We will not publish an advert for a vehicle that the check shows has been reported stolen, has been scrapped, or is a Category A or B write-off. If the check shows outstanding finance, we will not publish the advert until the finance has been paid off and you have sent us proof, for example the settlement letter. In any of these cases, contact us: we will refund your payment less an admin fee of &pound;9.99 including VAT, which covers the cost of the history check, or publish your advert once the finance is cleared (no admin fee). Any insurance write-off (Category S, N, C or D) is shown clearly on your advert, whether you told us about it or the check found it.</p><p>The check uses data from third parties and we cannot guarantee it is complete or correct. If you think a result is wrong, contact us.</p><h3>If you do not finish your advert</h3><p>If you pay but leave before your advert is published, it stays saved on the device and browser you used, and you can carry on from where you stopped for up to 6 days after paying. After that, the payment can no longer be used for an advert: contact us within 14 days of paying and we will refund it in full if the history check has not been run, or less the &pound;9.99 admin fee (including VAT) if it has.</p><h3>Your advert</h3><p>You are responsible for your advert. It must be honest and accurate, including the mileage, condition, history and any faults you know about. You must be legally able to sell the car. You must answer honestly whether it has ever been an insurance write-off. We can remove any advert that is misleading, breaks these terms or is reported and found to be a problem.</p><h3>Checking your advert before it goes live</h3><p>We check every advert before buyers can see it, usually within a few hours. Some checks are automatic and some are done by our team. Your 30 days (and any premium banner time) start when your advert goes live, not when you send it. If we do not approve your advert, we tell you why so you can fix it and send it back. If it cannot be fixed, contact us within 14 days and we will refund your payment less the &pound;9.99 admin fee (including VAT) that covers the history check. If we decline an advert because we believe it is a scam or deliberately misleading, we do not refund it.</p><h3>The sale</h3><p>The sale is a private agreement between you and the buyer. Motoring Central is not a party to it, does not inspect the car and does not handle the payment for the car.</p></div></details>
 <details id="tc-sales"><summary>8. Buying a car or van</summary><div class="tb">
@@ -2731,7 +2697,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   function render(r){
     car=r?pick(r):CARS[0];svc=null;var D=!!r&&det(r),m=window.GGmode;var sh2=document.querySelector('#svc-card h2');if(sh2)sh2.textContent=m==='mot'?'Which MOT do you need? Most cars are Class 4':m==='autoelec'&&window.GGsub==='lock'?'What do you need help with?':'What does it need?';var side=['recovery','evcharge','tyres','valet','body'].indexOf(m)>-1,U=$('unlock'),u=cu();
     $('quote').hidden=true;$('job').hidden=true;if(window.GGmot)window.GGmot(false,null);$('svc-card').hidden=side;U.hidden=true;
-    if(window.GGval)window.GGval(D&&m==='valet',car);if(window.GGbdy)window.GGbdy(D&&m==='body',car);if(window.GGrec)window.GGrec(D&&m==='recovery');if(window.GGevc)window.GGevc(D&&m==='evcharge',car);if(window.GGtyr)window.GGtyr(D&&m==='tyres',car);
+    if(window.GGval)window.GGval(D&&m==='valet',car);if(window.GGbdy)window.GGbdy(D&&m==='body',car);if(window.GGrec)window.GGrec(D&&m==='recovery',car);if(window.GGevc)window.GGevc(D&&m==='evcharge',car);if(window.GGtyr)window.GGtyr(D&&m==='tyres',car);
     if(!D&&side){U.innerHTML=unlockHtml(r,FROM[m]);U.hidden=false}
     var ev=car.fuel==='Electric',svg='<svg viewBox="0 0 92 52" aria-hidden="true"><path d="M6 36l6-14c2-4 6-6 10-6h30c5 0 9 2 12 6l10 8c4 1 6 3 6 6v2H6z" fill="var(--brand)"/><circle cx="26" cy="38" r="7" fill="var(--ink)"/><circle cx="68" cy="38" r="7" fill="var(--ink)"/></svg>';
     if(D)$('vehicle').innerHTML='<div class="car">'+svg+'<div><span class="tag">Full vehicle check: '+H(fmt(r))+'</span><h2>'+car.make+' '+car.model+'</h2></div></div>'
@@ -3189,46 +3155,13 @@ $('r-err').textContent=msg;if(msg)return;
 $('r-ref').textContent='Thanks '+n.split(' ')[0]+'. Your reference is RC-'+(Math.floor(Math.random()*90000)+10000)+'.';
 $('r-form').hidden=true;$('r-ok').hidden=false;$('r-ok').scrollIntoView({behavior:'smooth',block:'start'})});
 })();
-(function(){
-function $(i){return document.getElementById(i)}
-function money(n){return '£'+n.toFixed(2)}
-function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%997;return h}
-var C=[{n:'Swift Recovery',b:65,m:2.4},{n:'Highway Rescue 24h',b:75,m:2.2},{n:'Metro Tow and Transport',b:60,m:3.1},{n:'Beacon Vehicle Recovery',b:85,m:2.0}];
-var BOOKING=3,pick=null;
-window.GGrec=function(on){$('rec').hidden=!on;if(on){pick=null;$('rbook').hidden=true;$('rdone').hidden=true;$('rprov').innerHTML='';$('rec').scrollIntoView({behavior:'smooth',block:'nearest'})}};
-$('rdest').addEventListener('change',function(){$('rdrop').hidden=($('rdest').value==='garage')});
-$('rfind').addEventListener('click',function(){
-var a=$('rpick').value.replace(/\s/g,'').toUpperCase(),g=$('rdest').value==='garage',d=g?'GARAGE':$('rdrop').value.replace(/\s/g,'').toUpperCase();
-if(a.length<5){$('rec-err').textContent='Enter the postcode where the car is.';return}
-if(d.length<5){$('rec-err').textContent='Enter the postcode to take it to.';return}
-$('rec-err').textContent='';pick=null;$('rbook').hidden=true;$('rdone').hidden=true;
-var miles=g?6+hash(a)%10:5+hash(a+d)%35,box=$('rprov');box.innerHTML='';
-C.forEach(function(c,i){var p=c.b+c.m*miles,eta=20+(hash(a+c.n)%30)+i*6;
-var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed','false');
-b.innerHTML='<b>'+c.n+'</b><span class="d">'+money(p)+'</span><small>Arrives in about '+eta+' minutes. '+money(c.b)+' call-out + '+money(c.m)+' per mile x '+miles+' miles</small>';
-b.addEventListener('click',function(){pick={c:c,p:p,eta:eta};[].forEach.call(box.children,function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');$('rdone').hidden=true;$('rtot').textContent='Total '+money(p+BOOKING);$('rbook').hidden=false});
-box.appendChild(b)})});
-$('rgo').addEventListener('click',function(){if(!pick)return;$('rdone').textContent='Booked: '+pick.c.n+'. Your driver arrives in about '+pick.eta+' minutes. Total '+money(pick.p+BOOKING)+'.';$('rdone').hidden=false;$('rbook').hidden=true});
-})();</script>
+/* recovery booking for customers: see "20 Nov 2026: recovery and mobile EV charging" further down */
+</script>
 <script>(function(){
 function $(i){return document.getElementById(i)}
 function money(n){return '£'+n.toFixed(2)}
 function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%997;return h}
-var C=[{n:'ChargeUp Mobile',b:60,m:1.8,kit:'22kW AC van'},{n:'Volt Rescue 24/7',b:75,m:1.5,kit:'DC rapid van'},{n:'PlugIn Roadside',b:55,m:2.2,kit:'7kW AC van'}];
-var CHG={rescue:15,home:25,booked:35},BOOKING=3,pick=null;
-window.GGevc=function(on,car){$('evc').hidden=!on;if(on){pick=null;$('evc-book').hidden=true;$('evc-done').hidden=true;$('evc-prov').innerHTML='';$('evc-ice').hidden=!(car&&car.fuel&&!/electric|plug/i.test(car.fuel));$('evc').scrollIntoView({behavior:'smooth',block:'nearest'})}};
-$('evc-find').addEventListener('click',function(){
-var a=$('evc-post').value.replace(/\s/g,'').toUpperCase(),need=$('evc-need').value,when=$('evc-when').value;
-if(a.length<5){$('evc-err').textContent='Enter the postcode where the car is.';return}
-$('evc-err').textContent='';pick=null;$('evc-book').hidden=true;$('evc-done').hidden=true;
-var box=$('evc-prov');box.innerHTML='';
-C.forEach(function(c,i){var out=hash(a+c.n)%12,p=c.b+c.m*out+CHG[need],eta=25+(hash(a+c.n)%30)+i*7;
-var t=when==='now'?'Arrives in about '+eta+' minutes.':(when==='today'?'Choose a time later today.':'Choose a time tomorrow.');
-var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed','false');
-b.innerHTML='<b>'+c.n+'</b><span class="d">'+money(p)+'</span><small>'+t+' '+c.kit+'. '+money(c.b)+' call-out'+(out?' + '+money(c.m)+' a mile x '+out+' miles outside their area':'')+' + '+money(CHG[need])+' charge</small>';
-b.addEventListener('click',function(){pick={c:c,p:p,eta:eta,when:when};[].forEach.call(box.children,function(x){x.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');$('evc-done').hidden=true;$('evc-tot').textContent='Total '+money(p+BOOKING);$('evc-book').hidden=false});
-box.appendChild(b)})});
-$('ego').addEventListener('click',function(){if(!pick)return;$('evc-done').textContent='Booked: '+pick.c.n+'. '+(pick.when==='now'?'Your charging van arrives in about '+pick.eta+' minutes.':'They will confirm your time by text.')+' Total '+money(pick.p+BOOKING)+'.';$('evc-done').hidden=false;$('evc-book').hidden=true});
+/* EV charging booking for customers: see "20 Nov 2026: recovery and mobile EV charging" further down */
 /* front page tiles and "book as a driver" links pick the service */
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-svc]');if(!t)return;
 var m=t.getAttribute('data-svc'),b=document.querySelector('#modes .opt[data-m="'+m+'"]');var lb0=t.querySelector('b')?t.querySelector('b').textContent:'';window.GGsub=m==='autoelec'?(/locksmith/i.test(lb0)&&!/electric/i.test(lb0)?'lock':/electric/i.test(lb0)&&!/locksmith/i.test(lb0)?'elec':''):'';if(b)b.click();
@@ -3890,10 +3823,12 @@ $('lg-err').textContent='';$('lg-form').reset();setUser(u);location.hash='dashbo
 USERS.filter(function(u){return u.role!=='admin'&&USERS.indexOf(u)<7}).forEach(function(u){var b=document.createElement('button');b.type='button';b.textContent=u.role==='admin'?(u.level==='owner'?'Staff: owner':'Staff: reviewer'):u.role==='mechanic'?(u.sub==='garage'?'Garage':'Mobile mechanic'):ROLES[u.role];b.addEventListener('click',function(){$('lg-mail').value=u.email;$('lg-pass').value=u.pass});$('lg-demo').appendChild(b)});
 
 /* sign-up on each join form creates an account */
+function RSRAD(v){return /nation/i.test(v)?'Nationwide':(parseInt(v,10)||30)}
+function RSCHK(id){var b=$(id);return b?[].map.call(b.querySelectorAll('input:checked'),function(x){return x.value}):[]}
 var FORMS=[
 {form:'form',ok:'ok',err:'merr',pass:'m-pass',mail:'mail',role:'mechanic',p:'m',get:function(){var kk=document.querySelector('input[name=kind]:checked').value,mo=kk==='mot',g=kk==='garage'||mo,ae=kk==='autoelec';if(mo)kk='garage';return{svcs:mo||ae?null:window.MCSVC.read($('svcs')),name:g?$('gname').value.trim():(ae&&$('ae-biz').value.trim()?$('ae-biz').value.trim():$('name').value.trim()),phone:$('tel').value.trim(),town:$('post').value.trim(),sub:kk,motOnly:mo,vts:($('g-motclasses')&&!$('g-motclasses').hidden)?($('gvts').value||'').toUpperCase().replace(/\s/g,''):null,vtsCheck:window.MCvtsLast||null,aeWhere:ae?$('ae-where').value:null,bays:g?(mo?0:Math.min(12,Math.max(1,Math.round(+$('gbays').value)||1))):0,motBays:g&&$('gmot').checked?Math.min(6,Math.max(1,Math.round(+$('gmotbays').value)||1)):0,rates:{hour:+$('m-rate').value,mot:g?+$('g-motfee').value:null,motc:g&&$('gmot').checked&&window.MCMOT?window.MCMOT.read('gm'):null}}}},
-{form:'r-form',ok:'r-ok',err:'r-err',pass:'r-pass',mail:'r-mail',role:'recovery',p:'r',get:function(){return{name:$('r-co').value.trim(),phone:$('r-tel').value.trim(),town:$('r-post').value.trim(),rates:{call:+$('r-call').value,mile:+$('r-mile').value}}}},
-{form:'ev-form',ok:'ev-ok',err:'ev-err',pass:'ev-pass',mail:'ev-mail',role:'evcharge',p:'ev',get:function(){return{name:$('ev-co').value.trim(),phone:$('ev-tel').value.trim(),town:$('ev-post').value.trim(),rates:{call:+$('ev-call').value,mile:+$('ev-mile').value}}}},
+{form:'r-form',ok:'r-ok',err:'r-err',pass:'r-pass',mail:'r-mail',role:'recovery',p:'r',get:function(){return{name:$('r-co').value.trim(),phone:$('r-tel').value.trim(),town:$('r-post').value.trim(),post:$('r-post').value.trim().toUpperCase(),radius:RSRAD($('r-rad').value),fleet:$('r-fleet').value,avail:$('r-avail').value,types:RSCHK('r-types'),svcs:RSCHK('r-svcs'),rates:{call:+$('r-call').value,mile:+$('r-mile').value}}}},
+{form:'ev-form',ok:'ev-ok',err:'ev-err',pass:'ev-pass',mail:'ev-mail',role:'evcharge',p:'ev',get:function(){return{name:$('ev-co').value.trim(),phone:$('ev-tel').value.trim(),town:$('ev-post').value.trim(),post:$('ev-post').value.trim().toUpperCase(),radius:RSRAD($('ev-rad').value),fleet:$('ev-fleet').value,avail:$('ev-avail').value,kit:RSCHK('ev-types'),plugs:RSCHK('ev-plugs').map(function(x){return x.replace(/ \(with adapter\)/,'')}),svcs:RSCHK('ev-svcs'),rates:{call:+$('ev-call').value,mile:+$('ev-mile').value}}}},
 {form:'bs-form',ok:'bs-ok',err:'bs-err',pass:'bs-pass',mail:'bs-mail',role:'body',p:'bs',get:function(){var k=document.querySelector('input[name=bs-kind]:checked').value,ap=document.querySelector('input[name=bs-appr]:checked').value==='yes',b=$('bs-dobody').checked,a=$('bs-doalloy').checked;return{name:$('bs-co').value.trim(),phone:$('bs-tel').value.trim(),town:$('bs-post').value.trim(),sub:({mobile:'mobile',shop:'workshop',both:'mobile and workshop'}[k])+(b&&a?', bodywork and alloys':b?', bodywork':', alloys')+(ap?', insurance approved':''),approved:ap,insurers:ap?$('bs-insurers').value.trim():'',rates:{hour:b?+$('bs-hour').value:0,wheel:a?+$('bs-wheel').value:0,dcut:a&&k!=='mobile'?+$('bs-dcut').value:0}}}},
 {form:'t-form',ok:'t-ok',err:'t-err',pass:'t-pass',mail:'t-mail',role:'tyres',p:'t',get:function(){return{name:$('t-co').value.trim(),phone:$('t-tel').value.trim(),town:$('t-post').value.trim(),rates:{fit:+$('t-fit').value,punc:+$('t-punc').value}}}},
 {form:'va-form',ok:'va-ok',err:'va-err',pass:'va-pass',mail:'va-mail',role:'valet',p:'va',get:function(){return{name:$('va-co').value.trim(),phone:$('va-tel').value.trim(),town:$('va-post').value.trim(),rates:{p:[0,1,2,3].map(function(k){return +$('va-p'+k).value})}}}},
@@ -4472,7 +4407,7 @@ u.sedit={kind:x.kind,reg:x.reg||'',make:x.make,model:x.model,variant:x.variant||
 window.GGdash=function(){var u=window.GGuser;if(!u)return;var tb=dtabs(u),t=u.dtab,body;var res=window.MCmyResults?window.MCmyResults(u):'',brand=window.MCbrand?window.MCbrand.card(u):'',top='';
 if(u.role==='dealer')body=t==='stock'?stockHtml(u):t==='docs'?docsHtml(u):dealerHtml(u);
 else if(u.role==='mechanic')body=t==='diary'?diaryHtml(u)+res:t==='docs'?brand+docsHtml(u):jobsHtml(u)+res+ratesHtml(u)+(window.MCqreqCard?window.MCqreqCard(u):'')+(window.MCSVC?window.MCSVC.card(u):'');
-else body=jobsHtml(u)+res+ratesHtml(u)+brand+docsHtml(u);
+else body=((u.sbid&&(u.role==='recovery'||u.role==='evcharge'))?'':jobsHtml(u))+res+ratesHtml(u)+brand+docsHtml(u);
 if(u.role==='dealer'){top=res;if(t==='docs')body=brand+body}
 $('dash-body').innerHTML=head(u)+pendingHtml(u)+(window.MCjobs?window.MCjobs(u):(window.MChub?window.MChub.partnerCard(u):''))+(window.GGquick?window.GGquick(u):'')+top+tb+body;if(window.MCbrand)window.MCbrand.bind(u);bind(u)};
 chrome();if(window.GGroute)GGroute();
@@ -8541,6 +8476,199 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.c
 var lastMtWho='';setInterval(function(){try{var u=window.GGuser,w=u?(u.sbid||u.email||''):'';if(w!==lastMtWho){lastMtWho=w;MOUT={};moutAt=0;MST=null;REM=null;remAt=0}
  ulezCards();detail3();stockTips();placeRem();drawMotTools(false)}catch(e){}},1000);
 
+/* ---------- 20 Nov 2026: recovery and mobile EV charging (roadside) ----------
+   Prices, distances and the partners who cover a place come from the "roadside" server function (postcodes.io
+   locations, each partner's own rates). Bookings are written by that function; customers track and cancel them in
+   My account; partners go available, set their area, see full job details and a monthly statement. */
+var RS_FEE=3,RS={rec:null,evc:null},RSCAR={rec:null,evc:null};
+function rsCall(body){return ready.then(function(){return sb.functions.invoke('roadside',{body:body})}).then(function(r){
+ if(r.error){var c=r.error.context;if(c&&c.json)return c.json().then(function(j){return j||{ok:false,error:'server'}},function(){return{ok:false,error:'server'}});return{ok:false,error:'network'}}return r.data||{ok:false,error:'server'}})}
+function m2r(n){return '£'+(+n||0).toFixed(2)}
+function pcOk(s){return /^[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}$/i.test(String(s||'').trim())}
+function pad2(n){return ('0'+n).slice(-2)}
+function laterOpts(){var o='',d=new Date();d.setMinutes(0,0,0);for(var i=1;i<=14*24;i++){d=new Date(d.getTime()+36e5);var h=d.getHours();if(h<7||h>20)continue;o+='<option value="'+d.toISOString()+'">'+d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+', '+pad2(h)+':00</option>'}return o}
+function whenTxt(iso){var d=new Date(iso);return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+' at '+pad2(d.getHours())+':'+pad2(d.getMinutes())}
+var SAFE='<div class="rs-safe"><b>Stay safe.</b> On a motorway, leave by the left-hand doors, get behind the barrier and away from the traffic. If you are in danger, or on a smart motorway with no hard shoulder, call 999. If you can, call National Highways on 0300 123 5000.</div>';
+function locHtml(p){return '<label class="f2" for="'+p+'-from">Where is the vehicle?</label><div class="rs-loc"><input id="'+p+'-from" class="mp" maxlength="9" placeholder="Postcode, e.g. LS1 4AP" autocomplete="postal-code"><button type="button" class="btn ghost sm" data-rsgps="'+p+'">📍 Use my location</button></div><p class="note rs-gpsn" id="'+p+'-gpsn" role="status"></p>'
+ +'<label class="f2" for="'+p+'-spot">Exact spot or landmark (optional)</label><input id="'+p+'-spot" maxlength="160" placeholder="e.g. M62 eastbound after junction 27, hard shoulder" style="width:100%">'}
+function whenHtml(p){return '<label class="f2" for="'+p+'-when">When?</label><select id="'+p+'-when"><option value="now">Now: as soon as possible</option><option value="later">Book a time</option></select><select id="'+p+'-at" hidden style="margin-top:8px">'+laterOpts()+'</select>'}
+function recHtml(){return '<h2>Vehicle recovery</h2><p style="margin:0;color:var(--muted)">Tell us where the vehicle is and where it needs to go. You see each company’s full price before you book.</p>'+SAFE+locHtml('rs')
+ +'<label class="f2" for="rdest">Where should it go?</label><select id="rdest"><option value="home">My home</option><option value="garage">A garage</option><option value="other">Another address</option></select>'
+ +'<input id="rdrop" class="mp" maxlength="9" placeholder="Postcode to take it to" style="width:100%;margin-top:8px"><input id="rs-dest" maxlength="60" placeholder="Garage or place name (optional)" style="width:100%;margin-top:8px">'
+ +'<label class="f2" for="rwhy">What happened?</label><select id="rwhy"><option>Will not start</option><option>Broke down on the road</option><option>Accident</option><option>Flat tyre, no spare</option><option>Wrong fuel</option><option>Moving a vehicle (not broken down)</option><option>Other</option></select>'
+ +'<div class="two"><div><label class="f2" for="rs-vtype">Vehicle</label><select id="rs-vtype"><option value="car">Car</option><option value="van">Van up to 3.5 tonnes</option><option value="4x4">4x4 or pickup</option><option value="bike">Motorbike</option></select></div><div><label class="f2" for="rs-reg">Registration</label><input id="rs-reg" maxlength="8" style="text-transform:uppercase" autocomplete="off"></div></div>'
+ +'<label class="chk one" style="margin-top:10px"><input type="checkbox" id="rs-winch"><span>It will not roll or steer (locked wheels, crash damage). It needs winching.</span></label>'
+ +'<div class="two"><div><label class="f2" for="rs-keys">Keys with the vehicle?</label><select id="rs-keys"><option value="yes">Yes</option><option value="no">No</option></select></div><div><label class="f2" for="rs-pass">People who need a lift</label><select id="rs-pass"><option>0</option><option>1</option><option>2</option><option>3</option><option>4</option></select></div></div>'
+ +whenHtml('rs')+'<button class="btn block" id="rfind" type="button" style="margin-top:14px">Get recovery prices</button><p class="err" id="rec-err" role="alert"></p><p class="note" id="rs-sum"></p><div class="opts" id="rprov"></div>'
+ +'<div id="rbook" hidden><div id="rs-break"></div><div class="tc"><input type="checkbox" id="tc-rgo"><label for="tc-rgo">I understand my booking is with the recovery company I have chosen. They are responsible for my vehicle while it is in their care. I can cancel free of charge until they set off. <a href="#terms" data-tsec="tc-recovery">Read the terms</a></label></div><p class="tcerr" id="tc-rgo-err" role="alert"></p><button class="btn block" id="rgo" type="button">Pay and book recovery</button></div>'
+ +'<div class="okmsg rs-done" id="rdone" hidden></div>'}
+function evcHtml(){return '<h2>Mobile EV charging</h2><p style="margin:0;color:var(--muted)">A charging van comes to you with enough charge to get you moving. You see each company’s full price before you book.</p>'+SAFE
+ +'<p class="note" id="evc-ice" hidden>This vehicle is not shown as electric. If it will not start because of a flat battery, choose Mobile mechanic or Recovery instead.</p>'+locHtml('ev')
+ +'<label class="f2" for="evc-need">What do you need?</label><select id="evc-need"><option value="rescue">Out of charge: enough to reach a charge point</option><option value="home">Out of charge: enough to get home</option><option value="booked">A booked top-up at home or work</option></select>'
+ +'<div class="two"><div><label class="f2" for="evc-plug">Charging plug</label><select id="evc-plug"><option>Not sure</option><option>Type 2</option><option>CCS</option><option>CHAdeMO</option></select></div><div><label class="f2" for="ev-batt">Battery now (optional)</label><select id="ev-batt"><option value="">Not sure</option><option value="0">0%</option><option value="2">1 to 3%</option><option value="5">4 to 6%</option><option value="10">About 10%</option></select></div></div>'
+ +'<p class="sample" style="margin:6px 0 0">Most electric cars in the UK use Type 2 or CCS. Some older Nissan and Mitsubishi models use CHAdeMO. If you are not sure, leave it and the company will check from your registration.</p>'
+ +'<label class="f2" for="ev-reg">Registration</label><input id="ev-reg" maxlength="8" style="text-transform:uppercase" autocomplete="off">'
+ +whenHtml('ev')+'<button class="btn block" id="evc-find" type="button" style="margin-top:14px">Get charging prices</button><p class="err" id="evc-err" role="alert"></p><p class="note" id="ev-sum"></p><div class="opts" id="evc-prov"></div>'
+ +'<div id="evc-book" hidden><div id="ev-break"></div><div class="tc"><input type="checkbox" id="tc-ego"><label for="tc-ego">I understand my booking is with the charging company I have chosen. They are responsible for charging my vehicle safely. I can cancel free of charge until they set off. <a href="#terms" data-tsec="tc-recovery">Read the terms</a></label></div><p class="tcerr" id="tc-ego-err" role="alert"></p><button class="btn block" id="ego" type="button">Pay and book EV charging</button></div>'
+ +'<div class="okmsg rs-done" id="evc-done" hidden></div>'}
+function rsMount(){var r=$('rec'),e=$('evc');if(r&&!r.getAttribute('data-rs')){r.setAttribute('data-rs','1');r.innerHTML=recHtml();rsDest()}if(e&&!e.getAttribute('data-rs')){e.setAttribute('data-rs','1');e.innerHTML=evcHtml()}}
+function rsDest(){var d=$('rdest'),u=window.GGuser;if(!d)return;var home=d.value==='home';$('rs-dest').hidden=d.value!=='garage';$('rdrop').placeholder=home?'Your home postcode':d.value==='garage'?'The garage’s postcode':'Postcode to take it to';if(home&&u&&u.post&&!$('rdrop').value)$('rdrop').value=u.post}
+window.GGrec=function(on,car){rsMount();var c=$('rec');c.hidden=!on;if(!on)return;RSCAR.rec=car||null;if(car&&car.reg&&!$('rs-reg').value)$('rs-reg').value=car.reg;if(car&&/van/i.test(car.body||'')&&$('rs-vtype').value==='car')$('rs-vtype').value='van';rsReset('rs');rsDest();c.scrollIntoView({behavior:'smooth',block:'nearest'})};
+window.GGevc=function(on,car){rsMount();var c=$('evc');c.hidden=!on;if(!on)return;RSCAR.evc=car||null;$('evc-ice').hidden=!(car&&car.fuel&&!/electric|plug/i.test(car.fuel));if(car&&car.reg&&!$('ev-reg').value)$('ev-reg').value=car.reg;rsReset('ev');c.scrollIntoView({behavior:'smooth',block:'nearest'})};
+var GPS={rs:null,ev:null};
+function rsReset(p){var k=p==='rs'?'rec':'evc';RS[k]=null;var box=$(p==='rs'?'rprov':'evc-prov'),bk=$(p==='rs'?'rbook':'evc-book'),dn=$(p==='rs'?'rdone':'evc-done');if(box)box.innerHTML='';if(bk)bk.hidden=true;if(dn)dn.hidden=true;var s=$(p+'-sum');if(s)s.textContent=''}
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.id)return;
+ if(t.id==='rdest'){rsDest();rsReset('rs');return}
+ if(t.id==='rs-when'||t.id==='ev-when'){var p=t.id.slice(0,2);$(p+'-at').hidden=t.value!=='later';rsReset(p);return}
+ if(/^(rs-|ev-|evc-|rdrop|rwhy)/.test(t.id)&&!/^tc-/.test(t.id)){var q=/^(ev-|evc-)/.test(t.id)?'ev':'rs';if(t.id!=='rs-reg'&&t.id!=='ev-reg')rsReset(q)}});
+document.addEventListener('input',function(e){var t=e.target;if(t&&(t.id==='rs-from'||t.id==='ev-from')){var p=t.id.slice(0,2);if(GPS[p]){GPS[p]=null;$(p+'-gpsn').textContent=''}}});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-rsgps]');if(!b)return;var p=b.getAttribute('data-rsgps'),n=$(p+'-gpsn');
+ if(!navigator.geolocation){n.textContent='Your browser cannot share your location. Type the postcode instead.';return}
+ n.textContent='Finding where you are…';b.disabled=true;
+ navigator.geolocation.getCurrentPosition(function(pos){b.disabled=false;GPS[p]={lat:Math.round(pos.coords.latitude*1e5)/1e5,lng:Math.round(pos.coords.longitude*1e5)/1e5,acc:Math.round(pos.coords.accuracy||0)};$(p+'-from').value='';
+  n.textContent='Using your location'+(GPS[p].acc?' (to within about '+GPS[p].acc+' metres)':'')+'. Add the exact spot below if you can.';rsReset(p)},
+  function(err){b.disabled=false;n.textContent=err&&err.code===1?'You did not allow location. Type the postcode instead.':'We could not get your location. Type the postcode instead.'},{enableHighAccuracy:true,timeout:15000,maximumAge:60000})});
+function rsReq(p){var rec=p==='rs',err=$(rec?'rec-err':'evc-err'),from=GPS[p]?{lat:GPS[p].lat,lng:GPS[p].lng}:{pc:$(p+'-from').value.trim().toUpperCase()};
+ if(!GPS[p]&&!pcOk(from.pc)){err.textContent='Enter the full postcode where the vehicle is, or tap Use my location.';$(p+'-from').focus();return null}
+ var w=$(p+'-when').value,when=w==='now'?'now':$(p+'-at').value;
+ var b={action:'quote',kind:rec?'recovery':'evcharge',from:from,opt:{when:when}};
+ if(rec){var to=$('rdrop').value.trim().toUpperCase();if(!pcOk(to)){err.textContent='Enter the full postcode to take the vehicle to.';$('rdrop').focus();return null}
+  b.to={pc:to};b.opt.winch=$('rs-winch').checked;b.opt.vtype=$('rs-vtype').value}
+ else{b.opt.need=$('evc-need').value;b.opt.plug=$('evc-plug').value}
+ err.textContent='';return b}
+function rsList(p,res){var rec=p==='rs',box=$(rec?'rprov':'evc-prov'),k=rec?'rec':'evc',S=RS[k];box.innerHTML='';
+ var sum=$(p+'-sum'),L=(res.list||[]).map(function(x){x.real=1;return x}),smp=!L.length&&(res.samples||[]).length;
+ sum.innerHTML=(rec?'Collect from <b>'+E(res.from.label)+'</b>'+(res.from.area?', '+E(res.from.area):'')+', take to <b>'+E(res.to.label)+'</b>'+(res.to.area?', '+E(res.to.area):'')+': about '+res.loaded+' miles.':'Charging at <b>'+E(res.from.label)+'</b>'+(res.from.area?', '+E(res.from.area):'')+'.');
+ if(!L.length&&!smp){box.innerHTML='<p class="note"><b>No '+(rec?'recovery':'charging')+' company covers this place '+(S.when==='now'?'right now':'at that time')+' yet.</b> '+(S.when==='now'?'Try booking a time instead, or ':'')+'If you are in danger, call 999. Your breakdown cover provider can also help.</p>';return}
+ (L.length?L:res.samples).forEach(function(x,i){var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed','false');
+  var parts=m2r(x.call)+' call-out'+(rec?(x.loaded?' + '+m2r(x.mile)+' a mile × '+x.loaded+' miles':'')+(x.winch?' + '+m2r(x.winch)+' winching':''):(x.extraMiles?' + '+m2r(x.mile)+' a mile × '+x.extraMiles+' miles outside their area':''));
+  b.innerHTML='<b>'+E(x.name)+(x.sample?' <span class="rs-smp">Sample</span>':'')+'</b><span class="d">'+m2r(x.price)+'</span><small>'+(x.eta?'With you in about '+x.eta+' minutes. ':(S.when!=='now'?'For '+E(whenTxt(S.when))+'. ':''))+(x.away!=null?x.away+' miles away. ':'')+E(parts)+(x.kit&&x.kit.length?'. '+E(x.kit.join(', ')):'')+'</small>';
+  b.addEventListener('click',function(){S.pick=x;[].forEach.call(box.children,function(y){y.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');rsBreak(p)});box.appendChild(b)});
+ if(smp)box.insertAdjacentHTML('beforeend','<p class="sample">Sample companies, shown because no real partner covers this place yet. Prices use the real distance. Booking one is a preview only.</p>')}
+function rsBreak(p){var rec=p==='rs',S=RS[rec?'rec':'evc'],x=S.pick,bk=$(rec?'rbook':'evc-book');if(!x){bk.hidden=true;return}
+ var rows='<tr><td>'+E(x.name)+'<small>'+(rec?'Call-out'+(x.loaded?', '+x.loaded+' miles loaded':'')+(x.winch?', winching':''):'Call-out and charge'+(x.extraMiles?', '+x.extraMiles+' miles outside their area':''))+'</small></td><td>'+m2r(x.price)+'</td></tr><tr><td>Booking fee<small>Includes VAT. Launch offer: 50% off the usual £5.99</small></td><td>'+m2r(RS_FEE)+'</td></tr><tr class="dt"><td>Total to pay now</td><td>'+m2r(x.price+RS_FEE)+'</td></tr>';
+ $(rec?'rs-break':'ev-break').innerHTML='<table class="dtbl rs-tbl">'+rows+'</table>';$(rec?'rdone':'evc-done').hidden=true;bk.hidden=false;var g=$(rec?'rgo':'ego');g.textContent=(x.sample?'Book (preview) ':'Pay '+m2r(x.price+RS_FEE)+' and book ');bk.scrollIntoView({behavior:'smooth',block:'nearest'})}
+function rsFind(p){var rec=p==='rs',b=rsReq(p);if(!b)return;var k=rec?'rec':'evc',btn=$(rec?'rfind':'evc-find'),box=$(rec?'rprov':'evc-prov');
+ RS[k]={req:b,when:b.opt.when,pick:null};$(rec?'rbook':'evc-book').hidden=true;$(rec?'rdone':'evc-done').hidden=true;btn.disabled=true;btn.textContent='Finding companies near you…';box.innerHTML='';
+ rsCall(b).then(function(res){btn.disabled=false;btn.textContent=rec?'Get recovery prices':'Get charging prices';
+  if(!res||!res.ok){$(rec?'rec-err':'evc-err').textContent=res&&res.error==='bad_from'?'We could not find that place. Check the postcode, or tap Use my location.':res&&res.error==='bad_to'?'We could not find the postcode to take it to. Check it and try again.':'We could not get prices just now. Check your connection and try again. If you are in danger, call 999.';return}
+  RS[k].res=res;rsList(p,res)},function(){btn.disabled=false;btn.textContent=rec?'Get recovery prices':'Get charging prices';$(rec?'rec-err':'evc-err').textContent='We could not get prices just now. Check your connection and try again.'})}
+document.addEventListener('click',function(e){var t=e.target;if(!t||!t.id)return;if(t.id==='rfind')rsFind('rs');else if(t.id==='evc-find')rsFind('ev')});
+function rsInfo(p){if(p==='rs')return{what:$('rwhy').value,spot:$('rs-spot').value.trim(),dest:$('rdest').value==='garage'?$('rs-dest').value.trim():($('rdest').value==='home'?'Customer’s home':''),keys:$('rs-keys').value,pass:+$('rs-pass').value};
+ return{spot:$('ev-spot').value.trim(),battery:$('ev-batt').value}}
+function rsVeh(p){var c=RSCAR[p==='rs'?'rec':'evc']||{},reg=($(p==='rs'?'rs-reg':'ev-reg').value||c.reg||'').toUpperCase().replace(/[^A-Z0-9 ]/g,'');return{reg:reg,make:c.make||'',model:c.model||'',year:c.year||'',fuel:c.fuel||'',col:c.col||''}}
+function rsGo(p){var rec=p==='rs',k=rec?'rec':'evc',S=RS[k];if(!S||!S.pick)return;var tc=$(rec?'tc-rgo':'tc-ego'),te=$(rec?'tc-rgo-err':'tc-ego-err');
+ if(!tc.checked){te.textContent='Tick the box to confirm you understand who your booking is with.';tc.focus();return}te.textContent='';
+ var x=S.pick,done=$(rec?'rdone':'evc-done'),name=rec?'Recovery':'EV charging';
+ if(x.sample){$(rec?'rbook':'evc-book').hidden=true;setTimeout(function(){done.innerHTML='<b>Preview booking with '+E(x.name)+'.</b> This is a sample company, so nothing was sent and nothing was charged. When real '+(rec?'recovery':'charging')+' partners cover this place, they appear here instead.';done.hidden=false},400);return}
+ if(!window.GGpay){toast('Payment is not available right now.',true);return}
+ window.GGpay({amount:+(x.price+RS_FEE).toFixed(2),desc:name+' with '+x.name,sub:'Your price '+m2r(x.price)+' plus the '+m2r(RS_FEE)+' booking fee. Free to cancel until they set off.',onPaid:function(ref){
+  var body=Object.assign({},S.req,{action:'book',partner:x.id,vehicle:rsVeh(p),info:rsInfo(p),paid:ref||'preview'});
+  done.hidden=false;done.textContent='Booking…';$(rec?'rbook':'evc-book').hidden=true;
+  rsCall(body).then(function(r){
+   if(!r||!r.ok){$(rec?'rbook':'evc-book').hidden=false;done.hidden=true;var er=r&&r.error;
+    $(rec?'rec-err':'evc-err').textContent=er==='partner_unavailable'?'Sorry, '+x.name+' is no longer available. Tap the button to get prices again. You have not been charged for this.':er==='sign_in'||er==='not_customer'?'Please log in with your customer account and try again.':'The booking did not go through. You have not been charged for it. Try again, or call us.';
+    if(er==='partner_unavailable'){RS[k].pick=null;rsFind(p)}return}
+   var txt=name+' booked with '+r.partner+'. Reference '+r.ref+'. '+(r.eta?'They should be with you in about '+r.eta+' minutes. ':(S.when!=='now'?'Booked for '+whenTxt(S.when)+'. ':''))+'Total paid '+m2r(r.total)+'.';
+   done.innerHTML='<b>✓ '+E(txt)+'</b>'+(r.phone?'<br>Their phone: <a href="tel:'+E(String(r.phone).replace(/\s/g,''))+'">'+E(r.phone)+'</a>':'')+'<br><small>Follow it and see when they are on the way in <a href="#account">My account</a>. You can cancel free of charge until they set off.</small>';
+   if(window.GGrecBooking)window.GGrecBooking({kind:name,svc:rec?$('rwhy').value:'Mobile EV charging',partner:r.partner,text:txt,t:Date.now(),tc:true,dbDone:true});RSA=null;rsaAt=0})}})}
+document.addEventListener('click',function(e){var t=e.target;if(!t||!t.id)return;if(t.id==='rgo')rsGo('rs');else if(t.id==='ego')rsGo('ev')});
+
+/* customer: My account card with live status, the driver's phone and cancelling */
+var RSA=null,rsaAt=0,RSST={confirmed:'Booked',onway:'On the way',started:'With your vehicle',done:'Completed',cancelled:'Cancelled'};
+function rsaPull(){if(!realUser())return;rsaAt=Date.now();sb.rpc('my_roadside').then(function(r){if(r.error)return;RSA=r.data||[];rsaDraw(true)})}
+function rsaHtml(){var L=RSA||[];if(!L.length)return '';
+ return '<div class="card" id="mc-rsa"><h2>Recovery and EV charging</h2>'+L.slice(0,12).map(function(b){var d=b.details||{},can=b.status==='confirmed'||b.status==='onway',call=d.price&&d.price.call;
+  return '<div class="rsa'+(b.status==='cancelled'?' off':'')+'"><div class="rsa-h"><b>'+E(b.kind)+' with '+E(b.partner_name||'')+'</b><span class="jst '+E(b.status)+'">'+(RSST[b.status]||E(b.status))+'</span></div>'
+   +'<small>'+E(dt(b.made_at))+' · Ref '+E(String(b.id).slice(0,8).toUpperCase())+' · Paid '+m2r(b.price_total)+'</small><p>'+E(b.summary)+'</p>'
+   +(b.partner_phone?'<p class="rsa-ph">Call '+E(b.partner_name||'them')+': <a href="tel:'+E(String(b.partner_phone).replace(/\s/g,''))+'">'+E(b.partner_phone)+'</a></p>':'')
+   +(b.status==='cancelled'?'<small>'+E(b.cancel_reason||'')+(+b.refund_amount>0?' · Refund '+m2r(b.refund_amount)+(b.refund_status==='refunded'?' (refunded)':' (on its way to your card)'):'')+'</small>':'')
+   +(can?'<div class="rsa-c"><button type="button" class="btn sm ghost" data-rsacan="'+E(b.id)+'">Cancel this booking</button><small>'+(b.status==='confirmed'?'Free to cancel: they have not set off yet.':'They are on the way, so the '+m2r(call)+' call-out fee is not refunded.')+'</small></div>':'')+'</div>'}).join('')+'</div>'}
+function rsaDraw(force){var u=window.GGuser,b=$('acc-body');if(!b||!u||u.role!=='customer'||location.hash!=='#account'){return}
+ if(RSA===null||Date.now()-rsaAt>20000){if(Date.now()-rsaAt>4000)rsaPull()}var old=$('mc-rsa'),h=rsaHtml();if(!h){if(old)old.remove();return}
+ if(old&&!force&&old.getAttribute('data-v')===String(h.length))return;var d=document.createElement('div');d.innerHTML=h;var c=d.firstChild;c.setAttribute('data-v',String(h.length));
+ if(old)old.parentNode.replaceChild(c,old);else{var f=b.querySelector('.card');if(f&&f.nextSibling)b.insertBefore(c,f.nextSibling);else b.appendChild(c)}}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-rsacan]');if(!t)return;var id=t.getAttribute('data-rsacan'),b=(RSA||[]).filter(function(x){return x.id===id})[0];if(!b)return;
+ var call=b.details&&b.details.price?+b.details.price.call:0,msg=b.status==='onway'?'They are already on the way. If you cancel, '+m2r(call)+' (their call-out fee) is not refunded and the rest is. Cancel?':'Cancel this booking? You get a full refund of '+m2r(b.price_total)+'.';
+ if(!confirm(msg))return;t.disabled=true;sb.rpc('cancel_roadside',{p_booking:id,p_reason:'Cancelled by the customer'}).then(function(r){if(r.error){t.disabled=false;toast(/too_late/.test(r.error.message)?'They have already started, so it cannot be cancelled online. Call them or us.':'That did not work. Try again, or call us.',true);return}
+  toast('Booking cancelled. '+(r.data&&r.data.refund>0?m2r(r.data.refund)+' will be refunded to your card.':''));rsaPull()},function(){t.disabled=false;toast('That did not work. Check your connection.',true)})});
+
+/* partner: call-outs card on the dashboard (recovery and EV charging companies) */
+var RSP={jobs:null,at:0,me:null,stmt:null,busy:false};
+function rsU(){var u=window.GGuser;return u&&(u.role==='recovery'||u.role==='evcharge')?u:null}
+function rspPull(){var u=rsU();if(!u||!realUser())return;RSP.at=Date.now();
+ Promise.all([sb.rpc('my_roadside_jobs'),sb.from('partners').select('details,rates,online_until,base_pc').eq('id',u.sbid).maybeSingle()]).then(function(r){if(!r[0].error)RSP.jobs=r[0].data||[];if(!r[1].error&&r[1].data)RSP.me=r[1].data;rspDraw(true)})}
+function mapU(a){return 'https://www.google.com/maps/search/?api=1&query='+a.lat+','+a.lng}
+function dirU(a,b){return 'https://www.google.com/maps/dir/?api=1&origin='+a.lat+','+a.lng+'&destination='+b.lat+','+b.lng}
+var NX={confirmed:['onway','I’m on my way'],onway:['started','Arrived'],started:['done','Job done']};
+function rspJob(b){var d=b.details||{},v=b.vehicle||{},f=d.from,t=d.to,nx=NX[b.status],rec=b.kind==='Recovery';
+ return '<div class="rsj"><div class="rsa-h"><b>'+E(b.kind)+(d.when&&d.when!=='now'?' · '+E(whenTxt(d.when)):' · <span class="rs-now">Needed now</span>')+'</b><span class="jst '+E(b.status)+'">'+(RSST[b.status]||E(b.status))+'</span></div>'
+  +'<p><b>'+E(b.customer_name||'Customer')+'</b>'+(b.customer_phone?' · <a href="tel:'+E(String(b.customer_phone).replace(/\s/g,''))+'">'+E(b.customer_phone)+'</a>':'')+'</p>'
+  +'<p>'+(v.reg?'<span class="jplate">'+E(v.reg)+'</span> ':'')+E([v.make,v.model].filter(Boolean).join(' '))+(v.type&&v.type!=='car'?' ('+E(v.type)+')':'')+'</p>'
+  +(f?'<p class="rsj-l"><span>Collect</span>'+E(f.label)+(d.spot?' · '+E(d.spot):'')+' <a href="'+mapU(f)+'" target="_blank" rel="noopener">Map</a></p>':'')
+  +(rec&&t?'<p class="rsj-l"><span>Take to</span>'+E(t.label)+(d.dest?' · '+E(d.dest):'')+' ('+E(d.loaded)+' miles) <a href="'+dirU(f,t)+'" target="_blank" rel="noopener">Directions</a></p>':'')
+  +'<p class="note" style="margin:4px 0">'+E(rec?[d.what,d.winch?'Needs winching':'',d.keys==='no'?'No keys':'',d.pass?d.pass+' passenger(s)':''].filter(Boolean).join(' · '):['Plug: '+(d.plug||'not sure'),d.battery!==''&&d.battery!=null?'Battery about '+d.battery+'%':''].filter(Boolean).join(' · '))+'</p>'
+  +'<p class="note" style="margin:0 0 6px">You are paid '+m2r(b.partner_payout)+' · Ref '+E(String(b.id).slice(0,8).toUpperCase())+'</p>'
+  +'<div class="rsj-b">'+(nx?'<button type="button" class="btn sm" data-rspst="'+E(b.id)+':'+nx[0]+'">'+nx[1]+'</button>':'')+(b.status==='confirmed'?'<button type="button" class="btn sm ghost" data-rspdec="'+E(b.id)+'">I can’t do this job</button>':'')+'</div></div>'}
+function rspHtml(u){var me=RSP.me||{},d=me.details||{},R=me.rates||{},on=me.online_until&&Date.parse(me.online_until)>Date.now(),rec=u.role==='recovery',J=RSP.jobs||[];
+ var open=J.filter(function(b){return b.status==='confirmed'||b.status==='onway'||b.status==='started'});
+ var rad=d.radius==null||/nation/i.test(String(d.radius))?(d.radius==null&&!(d.rad&&/nation/i.test(d.rad))&&me.details&&!('radius' in me.details)?'30':''):String(d.radius);
+ var opt=function(v,l){return '<option value="'+v+'"'+(String(rad)===String(v)?' selected':'')+'>'+l+'</option>'};
+ var TY=rec?['Flatbed','Wheel-lift','Truck with winch','Van or trailer']:['Type 2','CCS','CHAdeMO'],have=rec?(d.types||[]):(d.plugs||[]);
+ var mo='';for(var i=0;i<6;i++){var dd2=new Date();dd2.setDate(1);dd2.setMonth(dd2.getMonth()-i);var mv=dd2.getFullYear()+'-'+pad2(dd2.getMonth()+1);mo+='<option value="'+mv+'"'+(RSP.stmt&&RSP.stmt.m===mv?' selected':'')+'>'+dd2.toLocaleDateString('en-GB',{month:'long',year:'numeric'})+'</option>'}
+ return '<div class="card" id="mc-rsp"><h2>'+(rec?'Recovery call-outs':'Charging call-outs')+'</h2>'
+  +'<div class="rsp-on'+(on?' is':'')+'"><div><b>'+(on?'You are taking call-outs now':'You are not taking call-outs now')+'</b><small>'+(on?'Until '+E(new Date(me.online_until).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}))+'. Customers who need help now can book you.':'Customers can still book you for a set time. Go available to get jobs that are needed now.')+'</small></div>'
+  +(on?'<button type="button" class="btn sm ghost" data-rspon="0">Stop</button>':'<span class="rsp-hrs"><button type="button" class="btn sm" data-rspon="4">Available 4 hours</button><button type="button" class="btn sm" data-rspon="12">12 hours</button><button type="button" class="btn sm" data-rspon="24">24 hours</button></span>')+'</div>'
+  +'<h3 class="mt-h">Jobs to do ('+open.length+')</h3>'+(open.length?open.map(rspJob).join(''):'<p class="note">No jobs right now. New bookings appear here, and we email you straight away.</p>')
+  +'<h3 class="mt-h">Your area and equipment</h3><div class="two"><div><label class="f" for="rsp-pc">Depot postcode</label><input id="rsp-pc" value="'+E(d.post||me.base_pc||u.town||'')+'" maxlength="9" style="text-transform:uppercase"></div><div><label class="f" for="rsp-rad">How far you travel</label><select id="rsp-rad">'+opt(10,'10 miles')+opt(15,'15 miles')+opt(20,'20 miles')+opt(30,'30 miles')+opt(50,'50 miles')+opt(75,'75 miles')+opt(100,'100 miles')+opt('','Nationwide')+'</select></div></div>'
+  +'<p class="note" style="margin:6px 0 0">'+(rec?'Your price is your call-out fee plus your price per mile for the miles the vehicle is carried (set them in Your rates).':'Your price is your call-out charge, plus your price per mile for any miles beyond your area (up to 40 miles more). Set them in Your rates.')+'</p>'
+  +'<fieldset style="margin-top:8px"><legend>'+(rec?'Vehicles you run':'Connectors you can charge')+'</legend><div class="checks">'+TY.map(function(x){return '<label class="chk"><input type="checkbox" data-rspty value="'+E(x)+'"'+(have.indexOf(x)>-1?' checked':'')+'><span>'+E(x)+'</span></label>'}).join('')+'</div></fieldset>'
+  +(rec?'<label class="f" for="rsp-winch">Extra for winching a vehicle that will not roll (£)</label><input type="number" id="rsp-winch" min="0" step="1" value="'+E(+R.winch||0)+'" style="max-width:160px">':'')
+  +'<div class="dtools"><button type="button" class="btn sm" data-rspsave>Save area and equipment</button></div>'
+  +'<h3 class="mt-h">Monthly statement</h3><div class="mr-row"><select id="rsp-month" aria-label="Month">'+mo+'</select><button type="button" class="btn sm ghost" data-rspstmt>Show statement</button></div><div id="rsp-st">'+(RSP.stmt?RSP.stmt.html:'')+'</div></div>'}
+function rspDraw(force){var u=rsU(),host=$('dash-body'),old=$('mc-rsp');if(!u||location.hash!=='#dashboard'||!host){if(old)old.remove();return}
+ if(!realUser()){if(!old){var dm=document.createElement('div');dm.innerHTML='<div class="card" id="mc-rsp"><h2>Call-outs</h2><p class="note">With a real partner account you go available for call-outs here, set your area and equipment, see each job with the pickup and drop-off on a map, and print a monthly statement. This demo account cannot take real bookings.</p></div>';var f0=host.querySelector('.card');if(f0&&f0.nextSibling)host.insertBefore(dm.firstChild,f0.nextSibling);else host.appendChild(dm.firstChild)}return}
+ if(Date.now()-RSP.at>25000)rspPull();if(RSP.jobs===null&&!RSP.me)return;if(old&&!force&&host.contains(old))return;if(old&&old.contains(document.activeElement)&&!force)return;
+ var d=document.createElement('div');d.innerHTML=rspHtml(u);var c=d.firstChild;if(old&&host.contains(old))old.parentNode.replaceChild(c,old);else{var f=host.querySelector('.card');if(f&&f.nextSibling)host.insertBefore(c,f.nextSibling);else host.appendChild(c)}}
+function rspStmt(u,m){return sb.rpc('my_roadside_jobs',{p_from:m+'-01T00:00:00Z'}).then(function(r){if(r.error)throw r.error;return (r.data||[]).filter(function(b){return String(b.made_at).slice(0,7)===m})})}
+function rspStmtHtml(u,m,L,printing){var mn=new Date(m+'-01T12:00:00').toLocaleDateString('en-GB',{month:'long',year:'numeric'}),paid=L.filter(function(b){return +b.partner_payout>0}),tot=paid.reduce(function(a,b){return a+(+b.partner_payout||0)},0),fees=paid.reduce(function(a,b){return a+Math.max(0,(+b.price_total||0)-RS_FEE-(+b.partner_payout||0))},0);
+ var h=(printing?'<h1>Statement: '+E(mn)+'</h1><p>'+E(u.name||'')+'</p>':'')+'<div class="kpi"><div><b>'+L.filter(function(b){return b.status!=='cancelled'}).length+'</b>jobs</div><div><b>'+m2r(fees)+'</b>our fee</div><div><b>'+m2r(tot)+'</b>paid to you</div></div>';
+ if(!L.length)return h+'<p class="note">No jobs in '+E(mn)+'.</p>';
+ h+='<table class="st-t mt-tab"><thead><tr><th>Date</th><th>Job</th><th>Status</th><th>Your price</th><th>Paid to you</th></tr></thead><tbody>'+L.slice().reverse().map(function(b){var p=b.details&&b.details.price?+b.details.price.partner:0;
+  return '<tr><td>'+E(dd(b.made_at))+'</td><td>'+E(b.kind)+(b.vehicle&&b.vehicle.reg?' · '+E(b.vehicle.reg):'')+'<br><small>'+E(b.customer_name||'')+'</small></td><td>'+E(RSST[b.status]||b.status)+'</td><td>'+m2r(p)+'</td><td>'+m2r(b.partner_payout)+'</td></tr>'}).join('')+'</tbody><tfoot><tr><td colspan="4"><b>Total</b></td><td><b>'+m2r(tot)+'</b></td></tr></tfoot></table>';
+ return h+(printing?'<p class="small">Our fee is 5% + VAT on Pay as you go (0% on Pro). Cancelled jobs are paid only if you were already on your way (the call-out fee).</p>':'<p class="note" style="margin:6px 0 0">Payouts start once card payments are switched on. <button type="button" class="pv-link" data-rspprint="'+m+'">Print this statement</button></p>')}
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.closest('#mc-rsp'))return;var u=rsU();if(!u||!realUser())return;var b;
+ if((b=t.closest('[data-rspon]'))){var h=+b.getAttribute('data-rspon');b.disabled=true;sb.rpc('set_roadside',{p:h?{online:true,hours:h}:{online:false}}).then(function(r){if(r.error){b.disabled=false;toast('That was not saved. Try again.',true);return}RSP.me=RSP.me||{};RSP.me.online_until=r.data&&r.data.online_until;toast(h?'You are taking call-outs for '+h+' hours.':'You are no longer taking call-outs now.');rspDraw(true)});return}
+ if(t.closest('[data-rspsave]')){var pc=$('rsp-pc').value.trim();if(!pcOk(pc)){toast('Enter your full depot postcode.',true);$('rsp-pc').focus();return}
+  var ty=[].map.call(document.querySelectorAll('#mc-rsp [data-rspty]:checked'),function(x){return x.value}),p={post:pc,radius:$('rsp-rad').value};if(u.role==='recovery'){p.types=ty;p.winch=+$('rsp-winch').value||0}else p.plugs=ty;
+  sb.rpc('set_roadside',{p:p}).then(function(r){if(r.error){toast(/bad_postcode/.test(r.error.message)?'Check the depot postcode.':'That was not saved. Try again.',true);return}toast('Saved. Customers see your new area straight away.');rspPull()});return}
+ if((b=t.closest('[data-rspst]'))){var a=b.getAttribute('data-rspst').split(':');b.disabled=true;sb.from('bookings').update({status:a[1]}).eq('id',a[0]).select('id').then(function(r){if(r.error||!r.data||!r.data.length){b.disabled=false;toast('That update was not saved. Try again.',true);return}toast(a[1]==='onway'?'The customer has been told you are on your way.':a[1]==='started'?'Marked as arrived.':'Job marked as done. The customer is asked for a review.');rspPull()});return}
+ if((b=t.closest('[data-rspdec]'))){var why=prompt('Why can’t you do this job? The customer gets a full refund and we tell them straight away.','No truck free');if(why===null)return;b.disabled=true;
+  sb.rpc('decline_roadside',{p_booking:b.getAttribute('data-rspdec'),p_reason:why}).then(function(r){if(r.error){b.disabled=false;toast(/too_late/.test(r.error.message)?'You have already set off, so call us to cancel it.':'That did not work. Try again.',true);return}toast('Job handed back. The customer is refunded.');rspPull()});return}
+ if(t.closest('[data-rspstmt]')){var m=$('rsp-month').value,box=$('rsp-st');box.innerHTML='<p class="note">Loading…</p>';rspStmt(u,m).then(function(L){RSP.stmt={m:m,html:rspStmtHtml(u,m,L,false)};box.innerHTML=RSP.stmt.html},function(){box.innerHTML='<p class="note err">The statement could not be loaded.</p>'});return}
+ if((b=t.closest('[data-rspprint]'))){var pm=b.getAttribute('data-rspprint');printWin('Statement',PCSS,function(){return rspStmt(u,pm).then(function(L){return rspStmtHtml(u,pm,L,true)})});return}});
+
+/* staff: recovery and charging bookings, with cancel and refund */
+var RSS={rows:null,at:0,open:null,err:''};
+function rssPull(){RSS.at=Date.now();sb.rpc('staff_roadside_bookings').then(function(r){RSS.err=r.error?'Could not load: '+r.error.message:'';RSS.rows=r.data||[];rssDraw(true)})}
+function rssOwner(){var u=window.GGuser;return !!(u&&u.level==='owner')}
+function rssHtml(){var L=RSS.rows||[],act=L.filter(function(b){return b.status!=='cancelled'}),due=L.filter(function(b){return b.refund_status==='due'});
+ return '<div class="card" id="mc-rss"><h2>Recovery and EV charging bookings</h2><p class="note" style="margin:0 0 10px">The last 30 days.'+(rssOwner()?'':' Only the owner can cancel bookings.')+'</p>'
+  +'<div class="kpi"><div><b>'+act.length+'</b>booked</div><div><b>'+m2r(act.reduce(function(a,b){return a+(+b.our_share||0)},0))+'</b>our share</div><div><b>'+due.length+'</b>refunds due</div></div>'+(RSS.err?'<p class="note err">'+E(RSS.err)+'</p>':'')
+  +(L.length?L.map(function(b){var c=b.status==='cancelled',op=RSS.open===b.id;return '<div class="job"><div><b>'+E(dt(b.made_at))+' · '+E(b.kind)+' · '+E(b.partner_name||'')+'</b><small>'+E(b.customer_name||'')+(b.customer_phone?', '+E(b.customer_phone):'')+' · partner '+E(b.partner_phone||'')+'</small><small>'+E(b.summary||'')+'</small>'
+   +'<small><span class="sst">'+(RSST[b.status]||E(b.status))+'</span> Paid '+m2r(b.price_total)+' · partner '+m2r(b.partner_payout)+' · ours '+m2r(b.our_share)+'</small>'
+   +(c?'<small>'+E(b.cancel_reason||'')+(+b.refund_amount>0?' · refund '+m2r(b.refund_amount)+(b.refund_status==='refunded'?' <b>refunded</b>':' <b>due: refund it in Stripe, then mark it</b>'):'')+'</small>':'')+'</div>'
+   +'<div class="jb">'+(rssOwner()?(c?(b.refund_status==='due'?'<button class="btn sm" type="button" data-rssref="'+E(b.id)+'">Mark refunded</button>':''):'<button class="btn sm ghost" type="button" data-rsscan="'+E(b.id)+'">Cancel and refund</button>'):'')+'</div></div>'
+   +(op&&!c?'<div class="card dform" style="margin:6px 0 12px"><b>Cancel this booking and refund the customer</b><label class="f" for="rss-why">Reason</label><select id="rss-why"><option>Customer asked to cancel</option><option>Partner cannot do it</option><option>Duplicate booking</option><option>Other</option></select><label class="f" for="rss-amt">Refund (£)</label><input type="number" id="rss-amt" min="0" step="0.01" value="'+(+b.price_total).toFixed(2)+'"><div class="dtools"><button class="btn sm" type="button" data-rssgo="'+E(b.id)+'">Cancel and refund</button><button class="btn sm ghost" type="button" data-rssx>Keep it</button></div></div>':'')}).join(''):'<p class="note">No recovery or charging bookings yet.</p>')
+  +'<div class="dtools"><button class="btn sm ghost" type="button" data-rssre>Refresh</button></div></div>'}
+function rssDraw(force){if(!isStaff()||location.hash!=='#admin')return;var b=$('admin-body');if(!b)return;var old=$('mc-rss');if(old&&!force&&b.contains(old))return;if(RSS.rows===null){if(Date.now()-RSS.at>5000)rssPull();return}
+ var d=document.createElement('div');d.innerHTML=rssHtml();var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var q=$('mc-amot')||$('mc-reps');if(q)q.parentNode.insertBefore(c,q.nextSibling);else b.appendChild(c)}}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-rss button');if(!t||!isStaff())return;var a=t.dataset;
+ if(a.rssre!=null){rssPull();return}if(a.rssx!=null){RSS.open=null;rssDraw(true);return}if(a.rsscan){RSS.open=a.rsscan;rssDraw(true);return}
+ if(a.rssgo){var amt=Math.round(+$('rss-amt').value*100)/100;t.disabled=true;sb.rpc('staff_cancel_roadside',{p_booking:a.rssgo,p_reason:$('rss-why').value,p_refund:amt}).then(function(r){if(r.error){t.disabled=false;toast('Not cancelled: '+r.error.message,true);return}RSS.open=null;toast('Cancelled. Refund marked as due.');rssPull()});return}
+ if(a.rssref){t.disabled=true;sb.rpc('staff_mark_refunded',{p_booking:a.rssref}).then(function(){rssPull()})}});
+setInterval(function(){try{rsMount();rsaDraw(false);rspDraw(false);rssDraw(false)}catch(e){}},1200);
+
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;if(d&&d.dbDone)return;
@@ -8730,6 +8858,16 @@ html.nolaunch .launch{display:none!important}
 .wsrow{margin:8px 0 0;display:block}.sttip{display:block;margin-top:2px}.sttip em{font-style:normal;color:#9A3412;font-weight:600}.mcnight .sttip em{color:#FDBA74}.sttop{margin:0 0 8px}
 .motrem.in{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}.motrem h2{font-size:1.1rem;margin:0 0 4px}.mr-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.mr-row input,.mr-row select{flex:1 1 160px;min-width:0}.mr-ul{margin:0;padding-left:18px}.mr-ul li{margin:3px 0}.mr-ok{color:#14532D;font-weight:600}.mcnight .mr-ok{color:#86EFAC}
 #mc-mott .mt-h{font-size:1rem;margin:12px 0 6px}.mt-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 0;border-top:1px solid var(--line)}.mt-t{min-width:48px}.mt-v{flex:1 1 200px}.mt-v small{display:block}.mt-o{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.mt-done,.mt-ns{font-style:normal;font-weight:700;border-radius:999px;padding:2px 9px}.mt-done{background:#DCFCE7;color:#14532D}.mt-ns{background:#FEF3C7;color:#713F12}.mt-tab td,.mt-tab th{font-size:.9rem}
+/* 20 Nov 2026: recovery and EV charging */
+.rs-safe{margin:12px 0 4px;padding:10px 12px;border-radius:10px;background:#FEF3C7;color:#5A3B00;font-size:.9rem;line-height:1.4}.mcnight .rs-safe{background:#3a2a05;color:#FDE68A}
+.rs-loc{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.rs-loc input{flex:1 1 170px;min-width:0}.rs-gpsn{margin:4px 0 0}
+.rs-smp{display:inline-block;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;background:#FEF3C7;color:#713F12;border-radius:99px;padding:1px 7px;vertical-align:middle}
+.rs-tbl{margin-top:12px}.rs-done{margin-top:12px;line-height:1.5}.rs-done a{font-weight:700}
+.rsa,.rsj{border-top:1px solid var(--line);padding:10px 0}.rsa.off{opacity:.7}.rsa-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.rsa p,.rsj p{margin:4px 0}
+.rsa-ph a,.rsj a{font-weight:700}.rsa-c{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}.rsj-l span{display:inline-block;min-width:62px;font-size:.78rem;font-weight:800;text-transform:uppercase;color:var(--muted)}
+.rsj-b{display:flex;gap:8px;flex-wrap:wrap}.rs-now{color:#B42318}.mcnight .rs-now{color:#FCA5A5}
+.rsp-on{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px;border-radius:12px;background:var(--soft);border:2px solid var(--line)}.rsp-on.is{border-color:#16A34A;background:#DCFCE7;color:#14532D}.mcnight .rsp-on.is{background:#0f3a22;color:#BBF7D0}
+.rsp-on small{display:block}.rsp-hrs{display:flex;gap:6px;flex-wrap:wrap}
 /* MOT station page: video in place of the banner photo */
 .herovid{margin-top:16px}
 .herovid video{display:block;width:100%;height:auto;border-radius:14px;background:#0B1C35;box-shadow:0 12px 30px rgba(0,0,0,.35)}
