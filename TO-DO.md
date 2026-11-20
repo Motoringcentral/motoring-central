@@ -356,6 +356,17 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 20 Nov 2026: EV charging "why join" video (video/ev-charging.mp4, 1 min 48, same British female voice, Kokoro
+  bf_emma, with captions). It replaces the banner on the #evcharging join page and starts by itself when the page
+  opens (muted with "Tap for sound" if the browser blocks sound). It does not promise work: it says drivers find
+  them here, rescues and booked top-ups, their own prices, automatic bookings, paid upfront.
+- 20 Nov 2026: automatic bookings for EV charging and recovery partners. On the dashboard "Call-outs" card they set
+  weekly opening hours (UK time, overnight allowed), how many vans or trucks take jobs at once and how long a job
+  takes, and tick "Take bookings automatically in my hours". In their hours they are available for jobs needed now
+  without pressing Available; booked times are only offered when they are open; never more jobs at once than vans.
+  When nobody is free, the customer is offered the next free times and can tap one to see prices for it.
+  Code: supabase/migrations/20261120b_roadside_auto.sql (set_roadside_auto) and the roadside function (version 4).
+  Tested on the server with a temporary partner (removed). Still to do: text alerts to partners for new jobs.
 - 20 Nov 2026: recovery and mobile EV charging brought up to the MOT and car sales standard.
   - Customers: new forms (postcode or "Use my location", exact spot, where to take it, what happened, vehicle type,
     winching, keys, passengers, now or a booked time; for EV: need, plug, battery). Prices and the list of companies

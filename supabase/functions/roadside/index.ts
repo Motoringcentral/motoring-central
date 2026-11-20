@@ -3,6 +3,8 @@
 // rates, so a customer's page cannot change them. Bookings are written here with the customer's own account
 // (the function checks the customer's sign-in itself, so the gateway JWT check is off, like the other functions).
 //   POST {action:"quote", kind:"recovery"|"evcharge", from:{pc}|{lat,lng}, to:{pc}, opt:{when, winch, vtype, plug, need}}
+//   Partners with weekly hours ("automatic bookings") count as available in those hours, and never get more jobs
+//   at once than they have vans. With nobody free, "next" lists the next times someone can do it.
 //   POST {action:"book", ...same, partner:"<uuid>", vehicle:{...}, info:{...}, paid:"<payment ref>"} with the customer's sign-in
 import { createClient } from "npm:@supabase/supabase-js@2";
 
@@ -97,9 +99,44 @@ function priceFor(kind: string, p: any, from: Pt, to: Pt | null, opt: any) {
   const rate = p.plan === "pro" && p.details && p.details.proActive ? 0 : DEFAULT_RATE;
   return { d0, rad, call: r2(call), mile: r2(mile), loaded, extraMiles, winch: r2(winch), price: r2(price), rate };
 }
+// ---- automatic bookings: weekly hours (UK time) and how many jobs at once ----
+const DOW: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+const UKF = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", weekday: "short", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+function ukAt(t: number) { const o: any = {}; UKF.formatToParts(new Date(t)).forEach((x) => o[x.type] = x.value); return { day: DOW[o.weekday] ?? 0, min: (+o.hour) * 60 + (+o.minute) }; }
+const hm = (s: string) => { const a = String(s).split(":"); return (+a[0]) * 60 + (+a[1] || 0); };
+// true / false when the partner has set weekly hours, null when they have not
+function inHours(d: any, t: number): boolean | null {
+  const w = d && d.week; if (!Array.isArray(w) || w.length !== 7) return null;
+  const u = ukAt(t), today = w[u.day], yest = w[(u.day + 6) % 7];
+  if (Array.isArray(today)) { const f = hm(today[0]), e = hm(today[1]); if (f < e ? (u.min >= f && u.min < e) : u.min >= f) return true; }
+  if (Array.isArray(yest)) { const f = hm(yest[0]), e = hm(yest[1]); if (f > e && u.min < e) return true; } // overnight hours from yesterday
+  return false;
+}
+const jobMins = (kind: string, d: any) => Math.max(30, Math.min(480, Number(d && d.mins) || (kind === "evcharge" ? 60 : 120)));
+const vansOf = (d: any) => Math.max(1, Math.min(50, Number(d && d.vans) || 1));
+function availableNow(p: any) {
+  if (p.online_until && Date.parse(p.online_until) > Date.now()) return true;
+  const d = p.details || {}; return d.auto === true && inHours(d, Date.now()) === true;
+}
+// partner id -> list of [start, status] for jobs still to do
+async function activeJobs(db: any, ids: string[]) {
+  const m: Record<string, any[]> = {}; if (!ids.length) return m;
+  const { data } = await db.from("bookings").select("partner_id,made_at,status,details").in("partner_id", ids).in("status", ["confirmed", "onway", "started"]).gte("made_at", new Date(Date.now() - 3 * 864e5).toISOString()).limit(2000);
+  (data || []).forEach((b: any) => { const w = b.details && b.details.when; const st = w && w !== "now" ? Date.parse(w) : Date.parse(b.made_at); (m[b.partner_id] = m[b.partner_id] || []).push([st, b.status, !w || w === "now"]); });
+  return m;
+}
+function freeAt(kind: string, p: any, jobs: any[] | undefined, t: number, now: boolean) {
+  const d = p.details || {}, len = jobMins(kind, d) * 60000;
+  const busy = (jobs || []).filter((j) => (now && j[2]) || Math.abs(j[0] - t) < len).length; // a job needed now is busy until it is done
+  return busy < vansOf(d);
+}
+function timeOk(kind: string, p: any, jobs: any[] | undefined, t: number, now: boolean) {
+  if (now) { if (!availableNow(p)) return false; }
+  else if (inHours(p.details || {}, t) === false) return false;
+  return freeAt(kind, p, jobs, t, now);
+}
 function covers(kind: string, p: any, q: any, opt: any) {
   if (q.rad != null && q.d0 > q.rad + (kind === "evcharge" ? 40 : 0)) return false;
-  if (opt.when === "now" && !(p.online_until && Date.parse(p.online_until) > Date.now())) return false;
   const d = p.details || {};
   if (kind === "evcharge" && opt.plug && !/not sure/i.test(opt.plug)) { const pl = arr(d.plugs); if (pl.length && !pl.some((x) => x.toLowerCase().includes(String(opt.plug).toLowerCase()))) return false; }
   if (kind === "recovery" && opt.winch) { const ty = arr(d.types); if (ty.length && !ty.some((x) => /winch|flatbed/i.test(x))) return false; }
@@ -113,21 +150,32 @@ async function quote(db: any, b: any) {
   const from = await where(b.from); if (!from) return { ok: false, error: "bad_from" };
   let to: Pt | null = null;
   if (kind === "recovery") { to = await where(b.to); if (!to) return { ok: false, error: "bad_to" }; }
-  const P = await partners(db, kind), list: any[] = [];
+  const P = await partners(db, kind), list: any[] = [], near: any[] = [];
+  const now = opt.when === "now" || !opt.when, T = now ? Date.now() : Date.parse(opt.when);
+  const J = await activeJobs(db, P.map((p: any) => p.id));
   for (const p of P) {
     const q = priceFor(kind, p, from, to, opt);
     if (!covers(kind, p, q, opt)) continue;
+    if (!isFinite(T) || !timeOk(kind, p, J[p.id], T, now)) { near.push(p); continue; }
     list.push({ id: p.id, name: p.name, town: p.town || "", price: q.price, total: r2(q.price + BOOKING_FEE), call: q.call, mile: q.mile, loaded: q.loaded, extraMiles: q.extraMiles, winch: q.winch, away: q.d0, eta: opt.when === "now" ? eta(q.d0) : null, kit: arr((p.details || {}).kit).slice(0, 3), _q: q, _p: p });
   }
   list.sort((a, b2) => a.price - b2.price || a.away - b2.away);
+  // nobody free at that time but someone covers the place: offer the next times they can do (in their hours, a van free)
+  let next: string[] = [];
+  if (!list.length && near.length) {
+    const start = Math.ceil(((now ? Date.now() + 3600000 : T + 1800000)) / 1800000) * 1800000;
+    for (let t = start; t < start + 3 * 864e5 && next.length < 3; t += 1800000) {
+      if (near.some((p: any) => inHours(p.details || {}, t) !== false && freeAt(kind, p, J[p.id], t, false))) { next.push(new Date(t).toISOString()); t += 3 * 3600000 - 1800000; }
+    }
+  }
   let samples: any[] = [];
-  if (!list.length && Deno.env.get("ROADSIDE_SAMPLES") !== "0") {
+  if (!list.length && !near.length && Deno.env.get("ROADSIDE_SAMPLES") !== "0") {
     samples = SAMPLES[kind].map((s, i) => {
       const loaded = to ? miles(from, to) : 0, price = r2(kind === "recovery" ? s.call + s.mile * loaded + (opt.winch ? 25 : 0) : s.call);
       return { sample: true, name: s.n, town: s.t, price, total: r2(price + BOOKING_FEE), call: s.call, mile: s.mile, loaded, extraMiles: 0, winch: opt.winch && kind === "recovery" ? 25 : 0, eta: opt.when === "now" ? 35 + i * 10 : null };
     });
   }
-  return { ok: true, kind, fee: BOOKING_FEE, from, to, loaded: to ? miles(from, to) : null, list, samples };
+  return { ok: true, kind, fee: BOOKING_FEE, from, to, loaded: to ? miles(from, to) : null, list, samples, next };
 }
 
 Deno.serve(async (req) => {

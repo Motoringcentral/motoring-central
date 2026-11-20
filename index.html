@@ -1628,7 +1628,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <h2 class="sec">Why join</h2>
 <div class="grid3">
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><b>Jobs sent to you</b><br><small>Drivers book and pay up front. No chasing.</small></div>
-<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Your hours</b><br><small>Go online for nights, weekends or 24/7.</small></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Automatic bookings</b><br><small>Set your weekly hours once. Bookings come in by themselves, and never more at once than you have vans.</small></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b>Your area</b><br><small>Choose how far you will travel.</small></div>
 </div>
 <h2 class="sec">Where the money goes</h2>
@@ -1692,7 +1692,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <h2 class="sec">Why join</h2>
 <div class="grid3">
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><b>Jobs sent to you</b><br><small>Drivers book and pay up front. No chasing.</small></div>
-<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Your hours</b><br><small>Go online for nights, weekends or 24/7.</small></div>
+<div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Automatic bookings</b><br><small>Set your weekly hours once. Bookings come in by themselves, and never more at once than you have vans.</small></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b>Your area</b><br><small>Choose how far you will travel.</small></div>
 </div>
 <h2 class="sec">Where the money goes</h2>
@@ -8539,7 +8539,9 @@ function rsReq(p){var rec=p==='rs',err=$(rec?'rec-err':'evc-err'),from=GPS[p]?{l
 function rsList(p,res){var rec=p==='rs',box=$(rec?'rprov':'evc-prov'),k=rec?'rec':'evc',S=RS[k];box.innerHTML='';
  var sum=$(p+'-sum'),L=(res.list||[]).map(function(x){x.real=1;return x}),smp=!L.length&&(res.samples||[]).length;
  sum.innerHTML=(rec?'Collect from <b>'+E(res.from.label)+'</b>'+(res.from.area?', '+E(res.from.area):'')+', take to <b>'+E(res.to.label)+'</b>'+(res.to.area?', '+E(res.to.area):'')+': about '+res.loaded+' miles.':'Charging at <b>'+E(res.from.label)+'</b>'+(res.from.area?', '+E(res.from.area):'')+'.');
- if(!L.length&&!smp){box.innerHTML='<p class="note"><b>No '+(rec?'recovery':'charging')+' company covers this place '+(S.when==='now'?'right now':'at that time')+' yet.</b> '+(S.when==='now'?'Try booking a time instead, or ':'')+'If you are in danger, call 999. Your breakdown cover provider can also help.</p>';return}
+ if(!L.length&&!smp){var NXT=res.next||[];
+  if(NXT.length){box.innerHTML='<p class="note"><b>No '+(rec?'recovery':'charging')+' company near you is free '+(S.when==='now'?'right now':'at that time')+'.</b> These are the next times one can come:</p><div class="rs-next">'+NXT.map(function(t){return '<button type="button" class="btn sm ghost" data-rsnext="'+p+'|'+E(t)+'">'+E(whenTxt(t))+'</button>'}).join('')+'</div><p class="note">If you are in danger, call 999. Your breakdown cover provider can also help.</p>';return}
+  box.innerHTML='<p class="note"><b>No '+(rec?'recovery':'charging')+' company covers this place '+(S.when==='now'?'right now':'at that time')+' yet.</b> '+(S.when==='now'?'Try booking a time instead, or ':'')+'If you are in danger, call 999. Your breakdown cover provider can also help.</p>';return}
  (L.length?L:res.samples).forEach(function(x,i){var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed','false');
   var parts=m2r(x.call)+' call-out'+(rec?(x.loaded?' + '+m2r(x.mile)+' a mile × '+x.loaded+' miles':'')+(x.winch?' + '+m2r(x.winch)+' winching':''):(x.extraMiles?' + '+m2r(x.mile)+' a mile × '+x.extraMiles+' miles outside their area':''));
   b.innerHTML='<b>'+E(x.name)+(x.sample?' <span class="rs-smp">Sample</span>':'')+'</b><span class="d">'+m2r(x.price)+'</span><small>'+(x.eta?'With you in about '+x.eta+' minutes. ':(S.when!=='now'?'For '+E(whenTxt(S.when))+'. ':''))+(x.away!=null?x.away+' miles away. ':'')+E(parts)+(x.kit&&x.kit.length?'. '+E(x.kit.join(', ')):'')+'</small>';
@@ -8554,6 +8556,10 @@ function rsFind(p){var rec=p==='rs',b=rsReq(p);if(!b)return;var k=rec?'rec':'evc
   if(!res||!res.ok){$(rec?'rec-err':'evc-err').textContent=res&&res.error==='bad_from'?'We could not find that place. Check the postcode, or tap Use my location.':res&&res.error==='bad_to'?'We could not find the postcode to take it to. Check it and try again.':'We could not get prices just now. Check your connection and try again. If you are in danger, call 999.';return}
   RS[k].res=res;rsList(p,res)},function(){btn.disabled=false;btn.textContent=rec?'Get recovery prices':'Get charging prices';$(rec?'rec-err':'evc-err').textContent='We could not get prices just now. Check your connection and try again.'})}
 document.addEventListener('click',function(e){var t=e.target;if(!t||!t.id)return;if(t.id==='rfind')rsFind('rs');else if(t.id==='evc-find')rsFind('ev')});
+/* "next free times": pick one and get the prices for that time */
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-rsnext]');if(!b)return;var a=b.getAttribute('data-rsnext').split('|'),p=a[0],iso=a[1],w=$(p+'-when'),at=$(p+'-at');if(!w||!at)return;
+ w.value='later';at.hidden=false;var o=[].filter.call(at.options,function(x){return x.value===iso})[0];if(!o){o=document.createElement('option');o.value=iso;o.textContent=whenTxt(iso).replace(' at ',', ');var after=[].filter.call(at.options,function(x){return x.value>iso})[0];at.insertBefore(o,after||null)}
+ at.value=iso;rsFind(p)});
 function rsInfo(p){if(p==='rs')return{what:$('rwhy').value,spot:$('rs-spot').value.trim(),dest:$('rdest').value==='garage'?$('rs-dest').value.trim():($('rdest').value==='home'?'Customer’s home':''),keys:$('rs-keys').value,pass:+$('rs-pass').value};
  return{spot:$('ev-spot').value.trim(),battery:$('ev-batt').value}}
 function rsVeh(p){var c=RSCAR[p==='rs'?'rec':'evc']||{},reg=($(p==='rs'?'rs-reg':'ev-reg').value||c.reg||'').toUpperCase().replace(/[^A-Z0-9 ]/g,'');return{reg:reg,make:c.make||'',model:c.model||'',year:c.year||'',fuel:c.fuel||'',col:c.col||''}}
@@ -8597,7 +8603,9 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
 var RSP={jobs:null,at:0,me:null,stmt:null,busy:false};
 function rsU(){var u=window.GGuser;return u&&(u.role==='recovery'||u.role==='evcharge')?u:null}
 function rspPull(){var u=rsU();if(!u||!realUser())return;RSP.at=Date.now();
- Promise.all([sb.rpc('my_roadside_jobs'),sb.from('partners').select('details,rates,online_until,base_pc').eq('id',u.sbid).maybeSingle()]).then(function(r){if(!r[0].error)RSP.jobs=r[0].data||[];if(!r[1].error&&r[1].data)RSP.me=r[1].data;rspDraw(true)})}
+ Promise.all([sb.rpc('my_roadside_jobs'),sb.from('partners').select('details,rates,online_until,base_pc').eq('id',u.sbid).maybeSingle()]).then(function(r){if(!r[0].error)RSP.jobs=r[0].data||[];if(!r[1].error&&r[1].data)RSP.me=r[1].data;rspDraw(!RSP.dirty)})}
+/* do not redraw over settings the partner is still changing */
+['input','change'].forEach(function(ev){document.addEventListener(ev,function(e){var t=e.target;if(t&&t.closest&&t.closest('#mc-rsp')&&t.id!=='rsp-month')RSP.dirty=true})});
 function mapU(a){return 'https://www.google.com/maps/search/?api=1&query='+a.lat+','+a.lng}
 function dirU(a,b){return 'https://www.google.com/maps/dir/?api=1&origin='+a.lat+','+a.lng+'&destination='+b.lat+','+b.lng}
 var NX={confirmed:['onway','I’m on my way'],onway:['started','Arrived'],started:['done','Job done']};
@@ -8610,16 +8618,33 @@ function rspJob(b){var d=b.details||{},v=b.vehicle||{},f=d.from,t=d.to,nx=NX[b.s
   +'<p class="note" style="margin:4px 0">'+E(rec?[d.what,d.winch?'Needs winching':'',d.keys==='no'?'No keys':'',d.pass?d.pass+' passenger(s)':''].filter(Boolean).join(' · '):['Plug: '+(d.plug||'not sure'),d.battery!==''&&d.battery!=null?'Battery about '+d.battery+'%':''].filter(Boolean).join(' · '))+'</p>'
   +'<p class="note" style="margin:0 0 6px">You are paid '+m2r(b.partner_payout)+' · Ref '+E(String(b.id).slice(0,8).toUpperCase())+'</p>'
   +'<div class="rsj-b">'+(nx?'<button type="button" class="btn sm" data-rspst="'+E(b.id)+':'+nx[0]+'">'+nx[1]+'</button>':'')+(b.status==='confirmed'?'<button type="button" class="btn sm ghost" data-rspdec="'+E(b.id)+'">I can’t do this job</button>':'')+'</div></div>'}
-function rspHtml(u){var me=RSP.me||{},d=me.details||{},R=me.rates||{},on=me.online_until&&Date.parse(me.online_until)>Date.now(),rec=u.role==='recovery',J=RSP.jobs||[];
+/* automatic bookings: weekly hours in UK time (Sunday first, like the server) */
+var UKD={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6},UKF0=null;
+function ukNow(){try{UKF0=UKF0||new Intl.DateTimeFormat('en-GB',{timeZone:'Europe/London',weekday:'short',hour:'2-digit',minute:'2-digit',hourCycle:'h23'});var o={};UKF0.formatToParts(new Date()).forEach(function(x){o[x.type]=x.value});return{day:UKD[o.weekday]||0,min:(+o.hour)*60+(+o.minute)}}catch(e){var n=new Date();return{day:n.getDay(),min:n.getHours()*60+n.getMinutes()}}}
+function hmM(t){var a=String(t).split(':');return (+a[0])*60+(+a[1]||0)}
+function inWeek(d){var w=d&&d.week;if(!w||w.length!==7)return null;var u=ukNow(),a=w[u.day],y=w[(u.day+6)%7];
+ if(a){var f=hmM(a[0]),e=hmM(a[1]);if(f<e?(u.min>=f&&u.min<e):u.min>=f)return a[1]}
+ if(y){var f2=hmM(y[0]),e2=hmM(y[1]);if(f2>e2&&u.min<e2)return y[1]}return false}
+var WKN=[[1,'Monday'],[2,'Tuesday'],[3,'Wednesday'],[4,'Thursday'],[5,'Friday'],[6,'Saturday'],[0,'Sunday']];
+function autoHtml(u,d){var rec=u.role==='recovery',w=d.week&&d.week.length===7?d.week:null,mins=+d.mins||(rec?120:60),vans=+d.vans||1;
+ var mo=[30,45,60,90,120,180,240].map(function(m){return '<option value="'+m+'"'+(m===mins?' selected':'')+'>'+(m<60?m+' minutes':m/60+(m===60?' hour':' hours'))+'</option>'}).join('');
+ return '<h3 class="mt-h">Automatic bookings</h3>'
+  +'<label class="chk one"><input type="checkbox" id="rsp-auto"'+(d.auto===true?' checked':'')+'><span><b>Take bookings automatically in my hours.</b> In your hours you are available for jobs needed now without pressing anything. Customers can book a set time only when you are open, and we never book more jobs at once than you have '+(rec?'trucks':'vans')+'.</span></label>'
+  +'<table class="rsp-wk"><tbody>'+WKN.map(function(x){var v=w?w[x[0]]:(x[0]===0?null:['08:00','20:00']);return '<tr><td><label class="chk"><input type="checkbox" data-wkon="'+x[0]+'"'+(v?' checked':'')+'><span>'+x[1]+'</span></label></td><td><input type="time" data-wkf="'+x[0]+'" value="'+E(v?v[0]:'08:00')+'" aria-label="'+x[1]+' from"></td><td>to</td><td><input type="time" data-wkt="'+x[0]+'" value="'+E(v?(v[1]==='24:00'?'23:59':v[1]):'20:00')+'" aria-label="'+x[1]+' to"></td></tr>'}).join('')+'</tbody></table>'
+  +'<p class="note" style="margin:0 0 6px">UK time. For night cover, set a finish time earlier than the start (for example 18:00 to 06:00).</p>'
+  +'<div class="two"><div><label class="f" for="rsp-vans">'+(rec?'Trucks':'Vans')+' taking jobs at once</label><input type="number" id="rsp-vans" min="1" max="50" step="1" value="'+vans+'"></div><div><label class="f" for="rsp-mins">A job usually takes</label><select id="rsp-mins">'+mo+'</select></div></div>'
+  +'<div class="dtools"><button type="button" class="btn sm" data-rspauto>Save automatic bookings</button></div>'}
+function rspHtml(u){var me=RSP.me||{},d=me.details||{},R=me.rates||{},man=me.online_until&&Date.parse(me.online_until)>Date.now(),wk=d.auto===true?inWeek(d):false,on=man||!!wk,rec=u.role==='recovery',J=RSP.jobs||[];
  var open=J.filter(function(b){return b.status==='confirmed'||b.status==='onway'||b.status==='started'});
  var rad=d.radius==null||/nation/i.test(String(d.radius))?(d.radius==null&&!(d.rad&&/nation/i.test(d.rad))&&me.details&&!('radius' in me.details)?'30':''):String(d.radius);
  var opt=function(v,l){return '<option value="'+v+'"'+(String(rad)===String(v)?' selected':'')+'>'+l+'</option>'};
  var TY=rec?['Flatbed','Wheel-lift','Truck with winch','Van or trailer']:['Type 2','CCS','CHAdeMO'],have=rec?(d.types||[]):(d.plugs||[]);
  var mo='';for(var i=0;i<6;i++){var dd2=new Date();dd2.setDate(1);dd2.setMonth(dd2.getMonth()-i);var mv=dd2.getFullYear()+'-'+pad2(dd2.getMonth()+1);mo+='<option value="'+mv+'"'+(RSP.stmt&&RSP.stmt.m===mv?' selected':'')+'>'+dd2.toLocaleDateString('en-GB',{month:'long',year:'numeric'})+'</option>'}
  return '<div class="card" id="mc-rsp"><h2>'+(rec?'Recovery call-outs':'Charging call-outs')+'</h2>'
-  +'<div class="rsp-on'+(on?' is':'')+'"><div><b>'+(on?'You are taking call-outs now':'You are not taking call-outs now')+'</b><small>'+(on?'Until '+E(new Date(me.online_until).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}))+'. Customers who need help now can book you.':'Customers can still book you for a set time. Go available to get jobs that are needed now.')+'</small></div>'
-  +(on?'<button type="button" class="btn sm ghost" data-rspon="0">Stop</button>':'<span class="rsp-hrs"><button type="button" class="btn sm" data-rspon="4">Available 4 hours</button><button type="button" class="btn sm" data-rspon="12">12 hours</button><button type="button" class="btn sm" data-rspon="24">24 hours</button></span>')+'</div>'
+  +'<div class="rsp-on'+(on?' is':'')+'"><div><b>'+(on?'You are taking call-outs now':'You are not taking call-outs now')+'</b><small>'+(man?'Until '+E(new Date(me.online_until).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}))+'. Customers who need help now can book you.':wk?'Automatic bookings: you are open until '+E(String(wk).replace('24:00','midnight'))+'. Customers who need help now can book you.':'Customers can still book you for a set time'+(d.auto===true?' in your hours':'')+'. Go available to get jobs that are needed now.')+'</small></div>'
+  +(man?'<button type="button" class="btn sm ghost" data-rspon="0">Stop</button>':wk?'<span class="note" style="margin:0">Change your hours below to stop.</span>':'<span class="rsp-hrs"><button type="button" class="btn sm" data-rspon="4">Available 4 hours</button><button type="button" class="btn sm" data-rspon="12">12 hours</button><button type="button" class="btn sm" data-rspon="24">24 hours</button></span>')+'</div>'
   +'<h3 class="mt-h">Jobs to do ('+open.length+')</h3>'+(open.length?open.map(rspJob).join(''):'<p class="note">No jobs right now. New bookings appear here, and we email you straight away.</p>')
+  +autoHtml(u,d)
   +'<h3 class="mt-h">Your area and equipment</h3><div class="two"><div><label class="f" for="rsp-pc">Depot postcode</label><input id="rsp-pc" value="'+E(d.post||me.base_pc||u.town||'')+'" maxlength="9" style="text-transform:uppercase"></div><div><label class="f" for="rsp-rad">How far you travel</label><select id="rsp-rad">'+opt(10,'10 miles')+opt(15,'15 miles')+opt(20,'20 miles')+opt(30,'30 miles')+opt(50,'50 miles')+opt(75,'75 miles')+opt(100,'100 miles')+opt('','Nationwide')+'</select></div></div>'
   +'<p class="note" style="margin:6px 0 0">'+(rec?'Your price is your call-out fee plus your price per mile for the miles the vehicle is carried (set them in Your rates).':'Your price is your call-out charge, plus your price per mile for any miles beyond your area (up to 40 miles more). Set them in Your rates.')+'</p>'
   +'<fieldset style="margin-top:8px"><legend>'+(rec?'Vehicles you run':'Connectors you can charge')+'</legend><div class="checks">'+TY.map(function(x){return '<label class="chk"><input type="checkbox" data-rspty value="'+E(x)+'"'+(have.indexOf(x)>-1?' checked':'')+'><span>'+E(x)+'</span></label>'}).join('')+'</div></fieldset>'
@@ -8639,9 +8664,15 @@ function rspStmtHtml(u,m,L,printing){var mn=new Date(m+'-01T12:00:00').toLocaleD
  return h+(printing?'<p class="small">Our fee is 5% + VAT on Pay as you go (0% on Pro). Cancelled jobs are paid only if you were already on your way (the call-out fee).</p>':'<p class="note" style="margin:6px 0 0">Payouts start once card payments are switched on. <button type="button" class="pv-link" data-rspprint="'+m+'">Print this statement</button></p>')}
 document.addEventListener('click',function(e){var t=e.target;if(!t.closest||!t.closest('#mc-rsp'))return;var u=rsU();if(!u||!realUser())return;var b;
  if((b=t.closest('[data-rspon]'))){var h=+b.getAttribute('data-rspon');b.disabled=true;sb.rpc('set_roadside',{p:h?{online:true,hours:h}:{online:false}}).then(function(r){if(r.error){b.disabled=false;toast('That was not saved. Try again.',true);return}RSP.me=RSP.me||{};RSP.me.online_until=r.data&&r.data.online_until;toast(h?'You are taking call-outs for '+h+' hours.':'You are no longer taking call-outs now.');rspDraw(true)});return}
+ if(t.closest('[data-rspauto]')){var wk=[null,null,null,null,null,null,null],bad=false;
+  for(var i=0;i<7;i++){var on=document.querySelector('#mc-rsp [data-wkon="'+i+'"]');if(!on||!on.checked)continue;var f=document.querySelector('#mc-rsp [data-wkf="'+i+'"]').value,to=document.querySelector('#mc-rsp [data-wkt="'+i+'"]').value;if(!/^\d\d:\d\d$/.test(f)||!/^\d\d:\d\d$/.test(to)||f===to){bad=true;break}wk[i]=[f,to==='23:59'?'24:00':to]}
+  if(bad){toast('Check the opening and closing times. They cannot be the same.',true);return}
+  var ab=t.closest('[data-rspauto]');ab.disabled=true;
+  sb.rpc('set_roadside_auto',{p:{week:wk,auto:$('rsp-auto').checked,vans:+$('rsp-vans').value||1,mins:+$('rsp-mins').value}}).then(function(r){ab.disabled=false;if(r.error){toast('That was not saved. Try again.',true);return}
+   RSP.dirty=false;RSP.me=RSP.me||{};RSP.me.details=Object.assign({},RSP.me.details||{},r.data);toast(r.data&&r.data.auto?'Saved. Bookings now come in automatically in your hours.':'Saved. Automatic bookings are off.');rspDraw(true)});return}
  if(t.closest('[data-rspsave]')){var pc=$('rsp-pc').value.trim();if(!pcOk(pc)){toast('Enter your full depot postcode.',true);$('rsp-pc').focus();return}
   var ty=[].map.call(document.querySelectorAll('#mc-rsp [data-rspty]:checked'),function(x){return x.value}),p={post:pc,radius:$('rsp-rad').value};if(u.role==='recovery'){p.types=ty;p.winch=+$('rsp-winch').value||0}else p.plugs=ty;
-  sb.rpc('set_roadside',{p:p}).then(function(r){if(r.error){toast(/bad_postcode/.test(r.error.message)?'Check the depot postcode.':'That was not saved. Try again.',true);return}toast('Saved. Customers see your new area straight away.');rspPull()});return}
+  sb.rpc('set_roadside',{p:p}).then(function(r){if(r.error){toast(/bad_postcode/.test(r.error.message)?'Check the depot postcode.':'That was not saved. Try again.',true);return}RSP.dirty=false;toast('Saved. Customers see your new area straight away.');rspPull()});return}
  if((b=t.closest('[data-rspst]'))){var a=b.getAttribute('data-rspst').split(':');b.disabled=true;sb.from('bookings').update({status:a[1]}).eq('id',a[0]).select('id').then(function(r){if(r.error||!r.data||!r.data.length){b.disabled=false;toast('That update was not saved. Try again.',true);return}toast(a[1]==='onway'?'The customer has been told you are on your way.':a[1]==='started'?'Marked as arrived.':'Job marked as done. The customer is asked for a review.');rspPull()});return}
  if((b=t.closest('[data-rspdec]'))){var why=prompt('Why can’t you do this job? The customer gets a full refund and we tell them straight away.','No truck free');if(why===null)return;b.disabled=true;
   sb.rpc('decline_roadside',{p_booking:b.getAttribute('data-rspdec'),p_reason:why}).then(function(r){if(r.error){b.disabled=false;toast(/too_late/.test(r.error.message)?'You have already set off, so call us to cancel it.':'That did not work. Try again.',true);return}toast('Job handed back. The customer is refunded.');rspPull()});return}
@@ -8866,7 +8897,7 @@ html.nolaunch .launch{display:none!important}
 .rsa,.rsj{border-top:1px solid var(--line);padding:10px 0}.rsa.off{opacity:.7}.rsa-h{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.rsa p,.rsj p{margin:4px 0}
 .rsa-ph a,.rsj a{font-weight:700}.rsa-c{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:6px}.rsj-l span{display:inline-block;min-width:62px;font-size:.78rem;font-weight:800;text-transform:uppercase;color:var(--muted)}
 .rsj-b{display:flex;gap:8px;flex-wrap:wrap}.rs-now{color:#B42318}.mcnight .rs-now{color:#FCA5A5}
-.rsp-on{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px;border-radius:12px;background:var(--soft);border:2px solid var(--line)}.rsp-on.is{border-color:#16A34A;background:#DCFCE7;color:#14532D}.mcnight .rsp-on.is{background:#0f3a22;color:#BBF7D0}
+.rs-next{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 8px}.rsp-wk{width:100%;border-collapse:collapse;margin:6px 0}.rsp-wk td{padding:4px 6px 4px 0;vertical-align:middle}.rsp-wk input[type=time]{max-width:120px}.rsp-on{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px;border-radius:12px;background:var(--soft);border:2px solid var(--line)}.rsp-on.is{border-color:#16A34A;background:#DCFCE7;color:#14532D}.mcnight .rsp-on.is{background:#0f3a22;color:#BBF7D0}
 .rsp-on small{display:block}.rsp-hrs{display:flex;gap:6px;flex-wrap:wrap}
 /* MOT station page: video in place of the banner photo */
 .herovid{margin-top:16px}
@@ -8908,6 +8939,27 @@ $('adbar-msg').onclick=function(){var cur=$('v-cars').classList.contains('mc-det
 $('adbar-view').onclick=function(){var cur=$('v-cars').classList.contains('mc-detail')?$('cars-detail'):$('vans-detail');go(cur&&cur.querySelector('.vw-box'),'input')};
 function tick(){lx();custOut();fbtn('cars');fbtn('vans');adv()}
 setInterval(tick,500);tick();addEventListener('hashchange',function(){setTimeout(tick,60)});
+})();
+</script>
+<script>
+/* EV charging join page (20 Nov 2026): the "why join" video replaces the banner photo and starts by itself when the
+   page opens. The banner is its first and last frame. Browsers only allow sound when the visitor has just tapped
+   (arriving from a link on the site counts); otherwise it plays muted with a big "Tap for sound" button. */
+(function(){function $(i){return document.getElementById(i)}
+var V=$('v-evc');if(!V)return;var IMG=V.querySelector('img.heroimg');if(!IMG)return;var W=null,HV=null,HB=null;
+function build(){W=document.createElement('div');W.className='mvw herovid';
+ W.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/ev-charging-poster.jpg" width="1280" height="720" aria-label="Video: why mobile EV charging companies join The Motoring Central, and how automatic bookings work."><source src="video/ev-charging.mp4" type="video/mp4"><track kind="captions" src="video/ev-charging.vtt" srclang="en" label="English" default></video>';
+ IMG.parentNode.insertBefore(W,IMG.nextSibling);HV=W.querySelector('video');HB=W.querySelector('.msnd');
+ HB.addEventListener('click',function(){HV.muted=false;HV.volume=1;HB.hidden=true;if(HV.currentTime>4||HV.ended)HV.currentTime=0;HV.play().catch(function(){HB.hidden=false})});
+ HV.addEventListener('volumechange',function(){if(!HV.muted)HB.hidden=true});
+ HV.addEventListener('ended',function(){HB.hidden=true;HV.load()})}
+var was=false;
+function check(){var on=location.hash==='#evcharging';
+ if(on&&!was){if(!W)build();W.hidden=false;IMG.hidden=true;HV.currentTime=0;HV.muted=false;HB.hidden=true;var p=HV.play();
+  if(p&&p.catch)p.catch(function(){HV.muted=true;HB.hidden=false;HV.play().catch(function(){})})}
+ else if(!on&&was&&HV&&!HV.paused)HV.pause();
+ was=on}
+addEventListener('hashchange',function(){setTimeout(check,30)});setTimeout(check,300);
 })();
 </script>
 <script>
