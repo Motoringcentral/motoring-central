@@ -40,6 +40,9 @@ WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
 - Launch offer: the site says dealers get their first 3 months free (then full price), and partners pay 5% (not 10%)
   and Pro £74.50 (not £149). The owner described the offer as "sign up in the first 3 months: months 0-3 free,
   months 3-6 half price". These are different: decide which is right, then the site, terms and FAQ follow.
+- Phone (Voipfone, 020 8191 4290): line works and diverts to the owner's mobile. Left for later: how business calls
+  show on the mobile (Line Presentation in Services > My Numbers > Phone, or the Voipfone Mobile app), calling credit
+  for the divert, and out-of-hours voicemail. WhatsApp Business on the number not set up yet.
 - (done) Menu name: "Motor trade jobs" in the menu, "Work in the motor trade" kept as the page heading.
 
 Found in the end-to-end tests (21 Nov) and still to fix:
