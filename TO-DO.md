@@ -40,8 +40,7 @@ WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
 - Launch offer: the site says dealers get their first 3 months free (then full price), and partners pay 5% (not 10%)
   and Pro £74.50 (not £149). The owner described the offer as "sign up in the first 3 months: months 0-3 free,
   months 3-6 half price". These are different: decide which is right, then the site, terms and FAQ follow.
-- Menu name for the jobs page: options shown to the owner (keep "Work in the motor trade", or "Motor trade jobs",
-  "Trade jobs" or "Careers" in the menu with "Work in the motor trade" kept as the page heading).
+- (done) Menu name: "Motor trade jobs" in the menu, "Work in the motor trade" kept as the page heading.
 
 Found in the end-to-end tests (21 Nov) and still to fix:
 - A link to /#dashboard (as in our emails) shows the log-in form for a moment-old saved session: the partner is logged
