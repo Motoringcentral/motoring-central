@@ -1099,7 +1099,7 @@ html.embed .embed-by{display:block!important}
 <script>try{if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.classList.add('embed')}catch(e){}</script>
 </head>
 <body>
-<script>document.documentElement.classList.add("mcnight")</script>
+<script>document.documentElement.classList.add("mcnight");window.MCland=location.hash||""</script>
 <canvas id="bg" aria-hidden="true"></canvas>
 <a href="#drivers" class="skip" id="skip">Skip to main content</a>
 <script>window.MCdir={L:{},reg:function(k,a){this.L[k]=a;return a}};</script>
@@ -7756,7 +7756,7 @@ ready.then(function(){return sb.auth.getSession()}).then(function(r){
   var s=r&&r.data&&r.data.session;if(!s||window.GGuser)return;
   return ((s.user.user_metadata||{}).kind==='partner'?loadPartner(s.user):load(s.user)).then(function(u){if(!u||window.GGuser||!window.GGsetUser)return;cur=u;window.GGsetUser(u);
    if(conf)toast('Your email is confirmed and you are logged in.');
-   var want=(String(land).match(/^#(dashboard|account|admin|messages)$/)||[])[0];if(want&&location.hash!==want){location.hash=want;return}
+   var want=(String(window.MCland||land).match(/^#(dashboard|account|admin|messages)$/)||[])[0];window.MCland='';if(want&&location.hash!==want){location.hash=want;return}
    if(location.hash==='#account'&&window.GGaccount)window.GGaccount();if(location.hash==='#dashboard'&&window.GGdash)window.GGdash();if(window.GGrerender)window.GGrerender()})}).catch(function(){});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#logout');if(b&&sb&&window.GGuser&&window.GGuser.sbid){cur=null;sb.auth.signOut().catch(function(){})}},true);
 /* ---------- approved partners appear in the booking lists ---------- */
