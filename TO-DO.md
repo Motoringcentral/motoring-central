@@ -58,13 +58,23 @@ WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
 - (done) Menu name: "Motor trade jobs" in the menu, "Work in the motor trade" kept as the page heading.
 
 Found in the end-to-end tests (21 Nov) and still to fix:
-- A link to /#dashboard (as in our emails) shows the log-in form for a moment-old saved session: the partner is logged
-  in but sees "Partner log in". Send them to the dashboard once the saved log-in is restored.
-- Real MOT station dashboard still shows sample cards ("Live jobs for you (sample)", "Earnings ... sample figures") and
-  a "Messages about cars and vans" card it does not need.
-- MOT station sign-up: the "Application received" steps are the general ones ("video call", "take your first job").
-- EV charging job card says "COLLECT" for the place the van goes to. "Booking alerts" in Messages are still kept in
-  the browser only. Customer MOT list shows sample garages with made-up distances next to real ones.
+- Customer MOT list shows sample garages with made-up distances next to real ones (goes when the samples are
+  switched off at launch).
+(Fixed 21 Nov evening: email links to /#dashboard and /#account; sample "Live jobs" and "Earnings" cards on real
+partner dashboards; car and van messages card for partners who do not sell cars; EV job card said "Collect"; sign-up
+steps promised a video call; pretend booking alerts for real accounts.)
+
+SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fully ready)
+1. Build now: (a) test fixes DONE; (b) real partners in the remaining booking lists: garage repairs, valeting
+   centres, bodywork, alloys; (c) customers and partners change their own name, phone and email; (d) weekly payout
+   statements and self-billing invoices; (e) inspections, PDIs and service sheets saved against the booking;
+   (f) saved searches, price-drop alerts, saved cars in the account, staff tool to remove unfair reviews;
+   (g) two-step login for staff, add or remove reviewers.
+2. Owner decides: launch offer; repairs pricing.
+3. After company registration: Stripe and weekly payouts, bank, Vehicle Data Global, DVSA MOT history, ICO, solicitor,
+   Supabase Pro, motoringcentral.co.uk pointed at the site, Twilio texts.
+4. Launch day: remove demo log-ins, sample partners, sample reviews and the Preview banner; let Google list the site.
+
 Texts (SMS) are built too but need a Twilio account (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM). Not chosen yet.
 
 ### What the emails cover (built 19 Nov 2026)
