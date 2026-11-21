@@ -69,7 +69,8 @@ SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fu
    valeting centres, bodywork with photos sent to the repairers, alloys); (c) customers and partners change their own name, phone and email DONE (owner emailed if an approved
    partner renames their business); (d) weekly payout
    statements and self-billing invoices DONE (partner dashboard card + Staff "Weekly payouts"; ASK THE
-   ACCOUNTANT to check the self-billing agreement wording and the VAT lines before the first real payout); (e) inspections, PDIs and service sheets saved against the booking;
+   ACCOUNTANT to check the self-billing agreement wording and the VAT lines before the first real payout); (e) inspections, PDIs and service sheets saved against the booking DONE (table job_records, PDFs in
+   private storage "job-records"; customers see them under "Your vehicle records" in My account);
    (f) saved searches, price-drop alerts, saved cars in the account, staff tool to remove unfair reviews;
    (g) two-step login for staff, add or remove reviewers.
 2. Owner decides: launch offer; repairs pricing.

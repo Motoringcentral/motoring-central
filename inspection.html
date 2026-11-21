@@ -8,6 +8,7 @@
 <title>The Motoring Central – Pre-Work Vehicle Inspection</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/records.js"></script>
 <style>
 :root{--sky:#38BDF8;--navy:#0B1C35;--yellow:#FFD43B;--bg:#F1F6FB;--line:#D6E2EE;--muted:#5A6B82;--red:#E5484D;--green:#1F9D55}
 *{box-sizing:border-box}
@@ -533,6 +534,7 @@ async function makePdf(){
  const fname=`Inspection_${(S.f.vrm||'vehicle').replace(/\s+/g,'').toUpperCase()}_${(S.f.when||'').slice(0,10)}.pdf`;
  try{const R=JSON.parse(localStorage.getItem('tmc-inspections')||'{}')||{};if(S.f.job){R[S.f.job]={time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),dmg:S.dmg.length,vrm:S.f.vrm||'',at:Date.now()};localStorage.setItem('tmc-inspections',JSON.stringify(R))}}catch(_){}
  const blob=doc.output('blob');
+ if(window.TMCrec)TMCrec.save({kind:'inspection',job:S.f.job,booking_id:S.booking&&S.booking.dbid,reg:S.f.vrm,blob:blob,summary:{when:S.f.when||'',mileage:S.f.mileage||'',make:S.f.make||'',partner:S.f.partner||'',service:S.booking&&S.booking.service||'',damage:S.dmg.map(d=>d.where+' - '+d.type).slice(0,40),checks_failed:CHECKS.filter((c,i)=>BAD.has(S.checks[i])).map(c=>c[0]),notes:String(S.f.notes||'').slice(0,800)}}).then(r=>setTimeout(()=>toast(TMCrec.msg(r)),1500));
  let dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(_){}
  if(dl){try{await dl.save({filename:fname,data:blob});doneModal();return}catch(err){try{await dl.save({filename:fname,data:new Uint8Array(await blob.arrayBuffer())});doneModal();return}catch(e2){if(e2&&/declin|cancel|reject/i.test(String(e2.code||e2.message))){toast('Save cancelled');return}}}}
  try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();doneModal()}catch(_){toast('Could not save PDF here – use Copy text')}

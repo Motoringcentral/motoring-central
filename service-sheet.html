@@ -284,6 +284,7 @@ input.locked{background:var(--soft);border-color:#B9E3F8;color:var(--navy);font-
 <div class="toast" id="toast"></div>
 <footer><b>The Motoring Central</b> · <span>Everything your car needs, in one place</span> · motoringcentral.co.uk<br><span style="color:#C9D1DC;font-size:11px">© 2026 The Motoring Central. All rights reserved. This service sheet and its content may not be copied, reproduced or used without written permission.</span></footer>
 
+<script src="js/records.js"></script>
 <script>
 /* ---------- Checklist data ----------
  lv  : minimum service level (1 Interim, 2 Full, 3 Major)
@@ -628,6 +629,7 @@ document.getElementById('saveBtn').addEventListener('click',()=>{
   savedBox.classList.remove('hide');
   document.getElementById('savedBack').addEventListener('click',markBack);
   toast('Service sheet saved');
+  if(window.TMCrec)TMCrec.save({kind:'service',job:rec.job,booking_id:BK&&BK.dbid,reg:rec.vrm,summary:{level:rec.level,fuel:rec.fuel,miles:rec.miles,ok:rec.ok,adv:rec.adv,urg:rec.urg,next:rec.next,comments:rec.comments,partner:rec.partner,text:rec.summary}}).then(r=>setTimeout(()=>toast(TMCrec.msg(r)),1200));
 });
 
 /* ---------- Bookings ----------

@@ -8,6 +8,7 @@
 <title>The Motoring Central – Pre-Delivery Inspection</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/records.js"></script>
 <style>
 :root{--sky:#38BDF8;--navy:#0B1C35;--yellow:#FFD43B;--bg:#F1F6FB;--line:#D6E2EE;--muted:#5A6B82;--red:#E5484D;--green:#1F9D55}
 *{box-sizing:border-box}
@@ -496,7 +497,7 @@ async function makePdf(){
  const pages=doc.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFontSize(7.5);doc.setTextColor(...MUT);doc.text(`The Motoring Central · PDI · ${S.f.dealer||''} · ${(S.f.vrm||'').toUpperCase()} · Page ${i} of ${pages}`,W/2,291,{align:'center'})}
  const fname=`PDI_${(S.f.vrm||'vehicle').replace(/\s+/g,'').toUpperCase()}_${(S.f.when||'').slice(0,10)}.pdf`;
  try{const R=JSON.parse(localStorage.getItem('tmc-pdis')||'{}')||{};const k=S.veh&&S.veh.key||('reg:'+(S.f.vrm||'').toUpperCase().replace(/\s/g,''));R[k]={date:new Date().toLocaleDateString('en-GB'),buyer:S.f.bname||'',at:Date.now()};localStorage.setItem('tmc-pdis',JSON.stringify(R))}catch(_){}
- const blob=doc.output('blob');let dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(_){}
+ const blob=doc.output('blob');if(window.TMCrec)TMCrec.save({kind:'pdi',job:S.veh&&S.veh.key||'',reg:S.f.vrm,blob:blob,summary:{when:S.f.when||'',dealer:S.f.dealer||'',buyer:S.f.bname||''}}).then(r=>setTimeout(()=>toast(TMCrec.msg(r).replace('The customer can see it in their account.','It is kept on your account.')),1500));let dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(_){}
  if(dl){try{await dl.save({filename:fname,data:blob});doneModal();return}catch(err){try{await dl.save({filename:fname,data:new Uint8Array(await blob.arrayBuffer())});doneModal();return}catch(e2){if(e2&&/declin|cancel|reject/i.test(String(e2.code||e2.message))){toast('Save cancelled');return}}}}
  try{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();doneModal()}catch(_){toast('Could not save PDF here – use Copy text')}
 }
