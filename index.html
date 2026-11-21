@@ -7745,7 +7745,7 @@ function dirApply(){var L=(window.MCdir&&window.MCdir.L)||{};DIR.forEach(functio
   if(p.role==='tyres')add('fit',{f:+R.fit||12,p:+R.punc||30});
   if(p.role==='valet'&&Array.isArray(R.p)&&R.p.length>=4)add('mob',{p:R.p.map(Number)});
   if(p.role==='recovery')add('part',{b:+R.call||65,m:+R.mile||2.5,r:'New'})})}
-function dirLoad(){return sb.from('partner_directory').select('id,role,sub,name,town,rates').limit(2000).then(function(r){if(r.error)return;DIR=r.data||[];dirApply()})}
+function dirLoad(){return sb.from('partner_directory').select('id,role,sub,name,town,rates,info').limit(2000).then(function(r){if(r.error)return;DIR=r.data||[];dirApply()})}
 function partnerId(n){n=low(n);if(!n)return null;var p=DIR.filter(function(x){return low(x.name)===n})[0];return p?p.id:null}
 ready.then(dirLoad).catch(function(){});
 /* ---------- live MOT diary (garage_busy, book_mot, my_online_diary, sync_own_diary) ---------- */
