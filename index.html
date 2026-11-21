@@ -1628,7 +1628,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="tick" aria-hidden="true">✓</div>
 <h2>Application received</h2>
 <p id="ref" style="margin:0 0 8px"></p>
-<ol class="steps"><li>We review your documents within 2 working days</li><li>Quick video call to meet you</li><li>Background and insurance checks</li><li>Go live and take your first job</li></ol>
+<ol class="steps" id="m-steps"><li>We check your documents, usually within 2 working days</li><li>We email you as soon as you are approved</li><li>Set your prices, services and diary</li><li>Go live and take your first booking</li></ol>
 <p class="note">We will be in touch by email once we have checked your documents.</p>
 </div>
 
@@ -3907,7 +3907,7 @@ if(u.role==='body')return[{who:'Sarah M.',what:'Quote request: rear bumper scuff
 if(u.role==='tyres')return[{who:'Beth W.',what:'4 tyres fitted, 205/55 R16',where:'LS15',when:'Fri 11am to 2pm',price:4*r.fit},{who:'Raj S.',what:'Puncture repair, BMW 3 Series',where:'LS17',when:'Sat 8am to 11am',price:r.punc},{who:'Lee C.',what:'2 tyres fitted, 235/45 R18',where:'LS4',when:'Mon 2pm to 5pm',price:2*r.fit}];
 if(u.role==='valet')return[{who:'Chris L.',what:'Full valet, medium (Golf)',where:'LS7',when:'Sat 10am',price:r.p[1]},{who:'Nina F.',what:'Full valet, large (Qashqai)',where:'LS9',when:'Sun 12pm',price:r.p[2]},{who:'Omar T.',what:'Full valet, small (Fiesta)',where:'LS11',when:'Mon 8am',price:r.p[0]}];
 return[]}
-function jobsHtml(u){u.jobs=u.jobs||makeJobs(u);
+function jobsHtml(u){if(u&&u.sbid)return '';u.jobs=u.jobs||makeJobs(u);
 var s='<div class="card"><h2>Live jobs for you <span class="note">(sample)</span></h2>';
 u.jobs.forEach(function(j,i){s+='<div class="job"><div><b>'+esc(j.what)+'</b><small>'+esc(j.who)+', '+esc(j.where)+'</small><small>'+esc(j.when)+'</small></div><div class="jp">'+m(j.price)+'<small>your price</small></div><div class="jb" data-job="'+i+'">'+(j.state==='accepted'?'<span class="stat">Accepted</span>':j.state==='declined'?'<span class="note">Declined</span>':(u.status!=='approved'?'<span class="note">Available once verified</span>':'<button class="btn sm" type="button" data-act="accepted">Accept</button><button class="btn sm ghost" type="button" data-act="declined">Decline</button>'))+'</div></div>'});
 var tot=0;u.jobs.forEach(function(j){if(j.state==='accepted')tot+=j.price});
@@ -5307,7 +5307,8 @@ function sync(){var mo=k()==='mot',g=k()==='garage'||mo;
  var rate=$('m-rate');if(rate){hide(rate,mo);hide(document.querySelector('label[for="m-rate"]'),mo);hide($('m-ex'),mo)}
  var gl=document.querySelector('label[for="gname"]');if(gl)gl.textContent=mo?'Test station name':'Garage name';
  var ga=document.querySelector('label[for="gaddr"]');if(ga)ga.textContent=mo?'Test station address':'Garage address';
- var bx=$('g-motclasses');if(bx)bx.hidden=!(g&&gm.checked)}
+ var bx=$('g-motclasses');if(bx)bx.hidden=!(g&&gm.checked);
+ var st=$('m-steps');if(st)st.innerHTML=mo?'<li>We check your documents and your DVSA test station number, usually within 2 working days</li><li>We email you as soon as you are approved</li><li>Set your MOT times in your free booking diary</li><li>Go live: customers book your free times online</li>':'<li>We check your documents, usually within 2 working days</li><li>We email you as soon as you are approved</li><li>Set your prices, services and diary</li><li>Go live and take your first booking</li>'}
 [].forEach.call(document.querySelectorAll('input[name=kind]'),function(r){r.addEventListener('change',sync)});
 [].forEach.call(document.querySelectorAll('.pick'),function(b){b.addEventListener('click',function(){setTimeout(sync,0)})});
 gm.addEventListener('change',function(){setTimeout(sync,0)});
@@ -5783,7 +5784,8 @@ function send(T,text){var m=me();text=String(text||'').trim().slice(0,800);if(!m
  S.R[m.key]=S.R[m.key]||{};S.R[m.key][T.id]=Date.now()+2;keep()}
 /* ----- the panel ----- */
 function advN(){try{return window.MCadvUnread?window.MCadvUnread():0}catch(e){return 0}}
-function count(){var m=me();if(!m)return 0;var n=0;myThreads().forEach(function(T){n+=unread(T,m)});return n+(m.role==='mc'?0:unseenNotes(m))+advN()}
+function realAcct(){return !!(window.MCrealUser&&window.MCrealUser())}
+function count(){var m=me();if(!m)return 0;var n=0;myThreads().forEach(function(T){n+=unread(T,m)});return n+(m.role==='mc'||realAcct()?0:unseenNotes(m))+advN()}
 function badge(){var b=$('hub-n'),n=count();b.hidden=!n;b.textContent=n;$('hub-btn').classList.toggle('hot',!!n);document.body.classList.add('hubon');$('hub-btn').setAttribute('aria-label','Messages'+(n?', '+n+' new':''));$('hub-btn').hidden=view.open||/^#(staff)$/.test(location.hash)}
 function draw(focus){var H=$('hub'),m=me();H.hidden=!view.open;badge();if(!view.open)return;var h='';
  if(!m){H.innerHTML='<div class="hh"><b>Chat to us</b><button type="button" data-hub="close">Close</button></div><div class="hb"><p class="empty">Log in to chat with our team or with the partner doing your job. Your chats and booking alerts are kept in one place.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="th" style="width:auto;background:#38BDF8;color:#06202e;font-weight:800" data-hub="login">Customer log in</button><a class="th" style="width:auto;text-decoration:none;color:#fff;font-weight:700" href="#contact" data-hub="close">Contact form</a></div></div>';return}
@@ -5795,8 +5797,8 @@ function draw(focus){var H=$('hub'),m=me();H.hidden=!view.open;badge();if(!view.
   h+='</div><form class="hf" id="hub-form"><label class="sr" for="hub-text" style="position:absolute;left:-9999px">Your message</label><textarea id="hub-text" maxlength="800" placeholder="Type a message"></textarea><button type="submit">Send</button></form>'}
  else{var un=advN();L.forEach(function(x){un+=unread(x,m)});var na=m.role==='mc'?0:unseenNotes(m);
   h='<div class="hh"><b>'+(m.role==='mc'?'All chats':'Messages')+'</b><button type="button" data-hub="close">Close</button></div>'
-  +(m.role==='mc'?'':'<div class="tabs2" role="group" aria-label="Sections"><button type="button" data-hubtab="chats" aria-pressed="'+(view.tab==='chats')+'">Chats'+(un?' ('+un+')':'')+'</button><button type="button" data-hubtab="alerts" aria-pressed="'+(view.tab==='alerts')+'">Booking alerts'+(na?' ('+na+')':'')+'</button></div>')+'<div class="hb">';
-  if(view.tab==='alerts'&&m.role!=='mc'){var N=myNotes();S.R[m.key]=S.R[m.key]||{};S.R[m.key]['@notes']=Date.now();keep();
+  +(m.role==='mc'||realAcct()?'':'<div class="tabs2" role="group" aria-label="Sections"><button type="button" data-hubtab="chats" aria-pressed="'+(view.tab==='chats')+'">Chats'+(un?' ('+un+')':'')+'</button><button type="button" data-hubtab="alerts" aria-pressed="'+(view.tab==='alerts')+'">Booking alerts'+(na?' ('+na+')':'')+'</button></div>')+'<div class="hb">';
+  if(view.tab==='alerts'&&m.role!=='mc'&&!realAcct()){var N=myNotes();S.R[m.key]=S.R[m.key]||{};S.R[m.key]['@notes']=Date.now();keep();
    if(!N.length)h+='<p class="empty">No alerts yet. Booking confirmations, reminders and updates appear here, and are sent by email and text.</p>';
    N.slice(0,40).forEach(function(n){h+=noteHtml(n)})}
   else{var av='';try{av=window.MCadvHub?window.MCadvHub():''}catch(e){}h+=av;if(!L.length&&!av)h+='<p class="empty">No chats yet.</p>';
@@ -5820,12 +5822,12 @@ document.addEventListener('submit',function(e){if(e.target.id!=='hub-form')retur
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&view.open){view.open=false;draw();$('hub-btn').focus()}
  if(e.key==='Enter'&&!e.shiftKey&&e.target.id==='hub-text'){e.preventDefault();$('hub-form').requestSubmit()}});
 /* ----- new bookings arrive here ----- */
-(function(){var o=window.MCsave;window.MCsave=function(type,summary,data){if(type==='booking'&&data){try{addBooking(data);toast('Booking confirmed. We have sent you an email and a text.');setTimeout(function(){badge();acct()},200)}catch(e){}}return o?o.apply(this,arguments):false}})();
+(function(){var o=window.MCsave;window.MCsave=function(type,summary,data){if(type==='booking'&&data){try{addBooking(data);toast(realAcct()?'Booking confirmed. We have sent you an email.':'Booking confirmed. We have sent you an email and a text.');setTimeout(function(){badge();acct()},200)}catch(e){}}return o?o.apply(this,arguments):false}})();
 function toast(msg){var t=$('mctoast');if(!t)return;setTimeout(function(){t.textContent=msg;t.className='mctoast';t.hidden=false;setTimeout(function(){t.hidden=true},4500)},900)}
 /* ----- customer account: live status, alerts and chat buttons ----- */
 var TR=[['confirmed','Confirmed'],['onway','On the way'],['started','Job started'],['done','Completed']];
 function track(b){var i=TR.map(function(x){return x[0]}).indexOf(b.status),steps=MOBILE[b.kind]?TR:TR.filter(function(x){return x[0]!=='onway'});return '<div class="hubtrack" role="img" aria-label="Status: '+TR[i][1]+'">'+steps.map(function(x){return '<span class="'+(TR.map(function(y){return y[0]}).indexOf(x[0])<=i?'on':'')+'">'+x[1]+'</span>'}).join('')+'</div>'}
-function acct(){var u=window.GGuser,body=$('acc-body');if(!u||u.role!=='customer'||!body||location.hash!=='#account')return;seed();
+function acct(){var u=window.GGuser,body=$('acc-body');if(!u||u.role!=='customer'||!body||location.hash!=='#account'||realAcct())return;seed();
  if(!$('hub-acct')){var N=myNotes().slice(0,4),h='<div class="card" id="hub-acct"><h2>Booking alerts and messages</h2><p class="note" style="margin:0 0 10px">Every confirmation, reminder and update is sent to you by email and text, and kept here.</p>';
   if(!N.length)h+='<p class="note">Nothing yet. Your alerts appear here as soon as you book.</p>';N.forEach(function(n){h+=noteHtml(n)});
   h+='<div class="hubrow"><button type="button" class="btn" data-hubalerts="1">See all alerts</button><button type="button" class="btn ghost" data-hubchat="support">Chat to our team</button></div></div>';
@@ -7754,6 +7756,7 @@ ready.then(function(){return sb.auth.getSession()}).then(function(r){
   var s=r&&r.data&&r.data.session;if(!s||window.GGuser)return;
   return ((s.user.user_metadata||{}).kind==='partner'?loadPartner(s.user):load(s.user)).then(function(u){if(!u||window.GGuser||!window.GGsetUser)return;cur=u;window.GGsetUser(u);
    if(conf)toast('Your email is confirmed and you are logged in.');
+   var want=(String(land).match(/^#(dashboard|account|admin|messages)$/)||[])[0];if(want&&location.hash!==want){location.hash=want;return}
    if(location.hash==='#account'&&window.GGaccount)window.GGaccount();if(location.hash==='#dashboard'&&window.GGdash)window.GGdash();if(window.GGrerender)window.GGrerender()})}).catch(function(){});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#logout');if(b&&sb&&window.GGuser&&window.GGuser.sbid){cur=null;sb.auth.signOut().catch(function(){})}},true);
 /* ---------- approved partners appear in the booking lists ---------- */
@@ -7991,7 +7994,7 @@ function inboxHtml(){var L=threads(),n=L.filter(function(t){return t.unread}).le
    reviewForm(t)+'<div class="mx-r"><textarea rows="2" maxlength="2000" data-mxd="'+t.key+'" placeholder="Write a reply">'+E(DRAFT[t.key]||'')+'</textarea><button type="button" class="btn sm" data-mxs="'+t.key+'">Send</button></div>'+
    (c?'<p class="note" style="margin:6px 0 0"><a href="#'+(c.van?'vans':'cars')+'" data-mxopen="'+(c.van?'vans':'cars')+':'+c.id+'">View the advert</a></p>':'')+'<p class="err" data-mxe="'+t.key+'"></p></details>'});
  return h+'</div>'}
-function drawInbox(force){if(!realUser())return;var u=window.GGuser,host=u.role==='customer'?(location.hash==='#account'?$('acc-body'):null):(location.hash==='#dashboard'?$('dash-body'):null);if(!host)return;
+function drawInbox(force){if(!realUser())return;var u=window.GGuser;if(u.role!=='customer'&&u.role!=='dealer'&&!threads().length){var o0=$('mc-inbox');if(o0)o0.remove();return}u=window.GGuser;var host=u.role==='customer'?(location.hash==='#account'?$('acc-body'):null):(location.hash==='#dashboard'?$('dash-body'):null);if(!host)return;
  var old=$('mc-inbox');if(old&&!force)return;if(old&&old.contains(document.activeElement))return;
  var d=document.createElement('div');d.innerHTML=inboxHtml();var card=d.firstChild;
  if(old)old.parentNode.replaceChild(card,old);else{var first=u.role==='customer'?host.firstChild:host.children[1]||null;host.insertBefore(card,first)}}
@@ -8761,7 +8764,7 @@ function rspJob(b){var d=b.details||{},v=b.vehicle||{},f=d.from,t=d.to,nx=NX[b.s
  return '<div class="rsj"><div class="rsa-h"><b>'+E(b.kind)+(d.when&&d.when!=='now'?' · '+E(whenTxt(d.when)):' · <span class="rs-now">Needed now</span>')+'</b><span class="jst '+E(b.status)+'">'+(RSST[b.status]||E(b.status))+'</span></div>'
   +'<p><b>'+E(b.customer_name||'Customer')+'</b>'+(b.customer_phone?' · <a href="tel:'+E(String(b.customer_phone).replace(/\s/g,''))+'">'+E(b.customer_phone)+'</a>':'')+'</p>'
   +'<p>'+(v.reg?'<span class="jplate">'+E(v.reg)+'</span> ':'')+E([v.make,v.model].filter(Boolean).join(' '))+(v.type&&v.type!=='car'?' ('+E(v.type)+')':'')+'</p>'
-  +(f?'<p class="rsj-l"><span>Collect</span>'+E(f.label)+(d.spot?' · '+E(d.spot):'')+' <a href="'+mapU(f)+'" target="_blank" rel="noopener">Map</a></p>':'')
+  +(f?'<p class="rsj-l"><span>'+(rec?'Collect':'Location')+'</span>'+E(f.label)+(d.spot?' · '+E(d.spot):'')+' <a href="'+mapU(f)+'" target="_blank" rel="noopener">Map</a></p>':'')
   +(rec&&t?'<p class="rsj-l"><span>Take to</span>'+E(t.label)+(d.dest?' · '+E(d.dest):'')+' ('+E(d.loaded)+' miles) <a href="'+dirU(f,t)+'" target="_blank" rel="noopener">Directions</a></p>':'')
   +'<p class="note" style="margin:4px 0">'+E(rec?[d.what,d.winch?'Needs winching':'',d.keys==='no'?'No keys':'',d.pass?d.pass+' passenger(s)':''].filter(Boolean).join(' · '):['Plug: '+(d.plug||'not sure'),d.battery!==''&&d.battery!=null?'Battery about '+d.battery+'%':''].filter(Boolean).join(' · '))+'</p>'
   +'<p class="note" style="margin:0 0 6px">You are paid '+m2r(b.partner_payout)+' · Ref '+E(String(b.id).slice(0,8).toUpperCase())+'</p>'
