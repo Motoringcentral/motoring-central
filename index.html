@@ -7815,6 +7815,33 @@ window.MCmotDb={garages:function(){return DIR.filter(function(p){return p.role==
  staffCancel:function(id,reason,amt){return ready.then(function(){return sb.rpc('staff_cancel_mot',{p_booking:id,p_reason:reason,p_refund:amt})})},
  staffRefunded:function(id){return ready.then(function(){return sb.rpc('staff_mark_refunded',{p_booking:id})})},
  notify:function(id){return ready.then(function(){return sb.functions.invoke('notify',{body:{booking_id:id}})}).catch(function(){})}};
+/* ---------- your details: customers and partners change their own name, phone and email ---------- */
+function dE(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
+function detHtml(u){var p=u.role!=='customer',biz=p&&u.role!=='mechanic'||(p&&u.sub==='garage'),pend=u.emailPending;
+ return '<div class="card mc-form" id="mc-mydet"><h2>Your details</h2><p class="note" style="margin:0 0 6px">Keep these up to date so '+(p?'customers and our team':'your partners and our team')+' can reach you.</p>'
+  +'<label class="f" for="md-name">'+(p?(biz?'Business name':'Your name or trading name'):'Your name')+'</label><input type="text" id="md-name" autocomplete="'+(p?'organization':'name')+'" maxlength="120" value="'+dE(u.name)+'">'
+  +'<label class="f" for="md-tel">Phone</label><input type="tel" id="md-tel" autocomplete="tel" maxlength="30" value="'+dE(u.phone)+'">'
+  +(p?'':'<label class="f" for="md-post">Postcode</label><input type="text" id="md-post" autocomplete="postal-code" maxlength="10" value="'+dE(u.post)+'">')
+  +'<label class="f" for="md-mail">Email</label><input type="email" id="md-mail" autocomplete="email" maxlength="200" value="'+dE(u.email)+'">'
+  +'<p class="note" style="margin:4px 0 0">'+(pend?'We sent a link to <b>'+dE(pend)+'</b>. Your email changes when you tap it.':'If you change your email, we send a link to the new address first. It changes when you tap it.')+'</p>'
+  +(p&&u.status==='approved'?'<p class="note" style="margin:4px 0 0">If you change your business name, our team is told so we can check it matches your documents.</p>':'')
+  +'<p class="err" id="md-err" role="alert"></p><div class="dtools"><button class="btn sm" type="button" id="md-save">Save my details</button></div></div>'}
+function detMount(){var u=window.GGuser;if(!u||!u.sbid||u.role==='admin')return;var h=location.hash,box=u.role==='customer'?(h==='#account'&&$('acc-body')):(h==='#dashboard'&&$('dash-body'));if(!box||$('mc-mydet'))return;
+ var d=document.createElement('div');d.innerHTML=detHtml(u);var c=d.firstChild;if(u.role==='customer'){var f=box.querySelector('.card');if(f&&f.nextSibling)box.insertBefore(c,f.nextSibling);else box.appendChild(c)}else box.appendChild(c)}
+(function(){var st=document.createElement('style');st.textContent='.mc-form label.f{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}.mc-form input[type=text],.mc-form input[type=email],.mc-form input[type=tel],.mc-form input[type=number],.mc-form input[type=date],.mc-form select,.mc-form textarea{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px}.mc-form input:focus-visible,.mc-form select:focus-visible,.mc-form textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.mc-form .err{color:#c62828;font-weight:600;font-size:.9rem;margin:8px 0 0}.mc-form .err:empty{display:none}';document.head.appendChild(st)})();
+setInterval(function(){try{detMount()}catch(e){}},1000);
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#md-save');if(!b||!sb)return;var u=window.GGuser;if(!u||!u.sbid)return;
+ var n=$('md-name').value.trim(),t=$('md-tel').value.trim(),m=$('md-mail').value.trim().toLowerCase(),pc=$('md-post')?$('md-post').value.trim().toUpperCase():null,er=$('md-err'),msg='';
+ if(n.length<2)msg='Enter your name.';else if(t.replace(/\D/g,'').length<10)msg='Enter a phone number with at least 10 digits.';else if(!/^\S+@\S+\.\S+$/.test(m))msg='Enter a valid email address.';
+ else if(pc!=null&&pc&&!/^[A-Z]{1,2}[0-9][A-Z0-9]? ?[0-9][A-Z]{2}$/.test(pc))msg='Enter a full UK postcode, for example LS1 4AP.';
+ er.textContent=msg;if(msg)return;b.disabled=true;b.textContent='Saving…';
+ var jobs=[],mailCh=m!==String(u.email||'').toLowerCase();
+ jobs.push(ready.then(function(){return u.role==='customer'?sb.from('profiles').update({name:n,phone:t,postcode:pc}).eq('id',u.sbid).select('id'):sb.rpc('update_my_contact',{p_name:n,p_phone:t})}).then(function(r){if(r.error)throw r.error;if(u.role==='customer'&&(!r.data||!r.data.length))throw new Error('not saved')}));
+ if(mailCh)jobs.push(ready.then(function(){return sb.auth.updateUser({email:m},{emailRedirectTo:location.origin+'/'+(u.role==='customer'?'#account':'#dashboard')})}).then(function(r){if(r.error)throw r.error}));
+ Promise.all(jobs).then(function(){u.name=n;u.phone=t;if(pc!=null)u.post=pc;if(mailCh)u.emailPending=m;
+  toast(mailCh?'Saved. Check '+m+' and tap the link to finish changing your email.':'Your details are saved.');var c=$('mc-mydet');if(c)c.remove();
+  try{if(u.role==='customer'&&window.GGaccount)window.GGaccount();else if(window.GGdash)window.GGdash()}catch(x){}detMount()}).catch(function(x){b.disabled=false;b.textContent='Save my details';
+  var k=String(x&&(x.code||x.message)||'');er.textContent=/email_exists|already/i.test(k)?'That email is already used by another account.':/rate|limit/i.test(k)?'Too many tries. Please wait a minute and try again.':/bad_phone/.test(k)?'Enter a phone number with at least 10 digits.':'Your details were not saved. Check your connection and try again.'})});
 /* ---------- bookings: partner sees them, customer sees the status ---------- */
 function hub(){return window.MChub&&window.MChub.state?window.MChub.state():null}
 function hubKeep(S){try{localStorage.setItem('mc-hub',JSON.stringify(S))}catch(e){}}

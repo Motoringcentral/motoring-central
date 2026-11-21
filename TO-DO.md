@@ -66,7 +66,8 @@ steps promised a video call; pretend booking alerts for real accounts.)
 
 SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fully ready)
 1. Build now: (a) test fixes DONE; (b) real partners in the remaining booking lists DONE (21 Nov night: garage repairs,
-   valeting centres, bodywork with photos sent to the repairers, alloys); (c) customers and partners change their own name, phone and email; (d) weekly payout
+   valeting centres, bodywork with photos sent to the repairers, alloys); (c) customers and partners change their own name, phone and email DONE (owner emailed if an approved
+   partner renames their business); (d) weekly payout
    statements and self-billing invoices; (e) inspections, PDIs and service sheets saved against the booking;
    (f) saved searches, price-drop alerts, saved cars in the account, staff tool to remove unfair reviews;
    (g) two-step login for staff, add or remove reviewers.
