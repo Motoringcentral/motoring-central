@@ -23,7 +23,7 @@ Follow-ups from the testing:
 - Decide: history checks free during a dealer's free months, or keep £3.50 + VAT each (as the terms say now).
 - Phone 020 8191 4290 (virtual number, diverts to the owner's mobile; ordered 21 Nov, takes about 24 hours to go
   live) is on the site for calls and WhatsApp. Once it is live: set up WhatsApp Business on it (verify with "Call me")
-  and test the WhatsApp link. Opening hours on About us and the contact page are still a placeholder in brackets.
+  and test the WhatsApp link. Opening hours agreed 21 Nov: Mon to Fri 8am to 6pm, Sat 9am to 1pm.
 - At launch: change the Supabase Site URL to https://motoringcentral.co.uk, and forward motoringcentral.com to it.
 Test accounts (real accounts, kept for testing until launch, then remove):
 - Owner and staff log-in (Staff page, /#staff): the owner's Gmail address.
