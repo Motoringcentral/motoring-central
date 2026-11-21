@@ -1,0 +1,20 @@
+const L=require('./lib');(async()=>{const {b,p}=await L.open();const F='r-form',em='vimen+recovery@motoringcentral.co.uk';
+ await p.go('recovery');
+ await p.fill('#r-co','TEST Recovery Dartford');await p.fill('#r-name','Test Driver');await p.fill('#r-tel','020 8191 4290');await p.fill('#r-mail',em);await p.fill('#r-pass',L.PW);
+ await p.next(F,'Next: Your work');console.log('err after step1:',await p.txt('#r-err'));
+ await p.fill('#r-post','DA1 1DE');await p.selectOption('#r-rad',{index:1});
+ for(const t of ['Flatbed','Truck with winch','Breakdown recovery','Vehicle transport']){await p.locator('#'+F+' label:visible',{hasText:t}).first().click()}
+ await p.next(F,'Next: Your documents');console.log('err after step2:',await p.txt('#r-err'));
+ await p.setInputFiles('#r-doc1',L.DIR+'/test-trade-insurance.png');await p.fill('#r-exp1',L.future(200));
+ await p.setInputFiles('#r-doc2',L.DIR+'/test-public-liability.png');await p.fill('#r-exp2',L.future(220));
+ await p.selectOption('#r-idtype','Passport');await p.setInputFiles('#r-doc3',L.DIR+'/test-photo-id.png');await p.fill('#r-exp3',L.future(900));
+ await p.check('#r-ins');await p.check('#r-chk');
+ await p.next(F,'Next: Your plan');console.log('err after step3:',await p.txt('#r-err'));
+ await p.shot('rec-1-plan');
+ await p.locator('#'+F+' button[type=submit]:visible').click();
+ await p.waitForTimeout(9000);
+ console.log('form err:',await p.txt('#r-err'));console.log('OK card visible:',await p.vis('#r-ok'),'|',(await p.txt('#r-ok')).slice(0,500));
+ console.log('stash:',await p.evaluate(async em=>{const d=await window.MCdocStash.get(em);return d?d.map(x=>x.name+':'+(x.data||'').length).join(', '):'none'},em));
+ await p.shot('rec-2-done');console.log('page errors:',p.errs);
+ await p.context().storageState({path:L.DIR+'/state-recovery.json',indexedDB:true}).catch(e=>console.log('state save:',String(e).slice(0,100)));
+ await b.close()})();

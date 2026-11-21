@@ -1,0 +1,15 @@
+const L=require('./lib');(async()=>{const {b,p}=await L.open();const F='ev-form',em='vimen+ev@motoringcentral.co.uk';
+ await p.go('evcharging');
+ await p.fill('#ev-co','TEST EV Charging Dartford');await p.fill('#ev-name','Test Charger');await p.fill('#ev-tel','020 8191 4290');await p.fill('#ev-mail',em);await p.fill('#ev-pass',L.PW);
+ await p.next(F,'Next: Your work');console.log('err1:',await p.txt('#ev-err'));
+ await p.fill('#ev-post','DA1 1DR');await p.selectOption('#ev-rad',{index:1});
+ const cbs=p.locator('#'+F+' input[type=checkbox]:visible');const n=await cbs.count();for(let i=0;i<n;i++)await cbs.nth(i).check().catch(()=>{});console.log('ticked',n);
+ await p.next(F,'Next: Your documents');console.log('err2:',await p.txt('#ev-err'));
+ await p.setInputFiles('#ev-doc1',L.DIR+'/test-trade-insurance.png');await p.fill('#ev-exp1',L.future(200));
+ await p.setInputFiles('#ev-doc2',L.DIR+'/test-public-liability.png');await p.fill('#ev-exp2',L.future(220));
+ await p.selectOption('#ev-idtype','Passport');await p.setInputFiles('#ev-doc3',L.DIR+'/test-photo-id.png');await p.fill('#ev-exp3',L.future(900));
+ const c2=p.locator('#'+F+' input[type=checkbox]:visible');for(let i=0;i<await c2.count();i++)await c2.nth(i).check().catch(()=>{});
+ await p.next(F,'Next: Your plan');console.log('err3:',await p.txt('#ev-err'));
+ await p.locator('#'+F+' button[type=submit]:visible').click();await p.waitForTimeout(9000);
+ console.log('form err:',await p.txt('#ev-err'));console.log('OK:',await p.vis('#ev-ok'),'|',(await p.txt('#ev-ok')).slice(0,200));
+ await p.context().storageState({path:L.DIR+'/state-ev.json',indexedDB:true});console.log('errors',p.errs);await b.close()})();

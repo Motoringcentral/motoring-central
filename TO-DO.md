@@ -35,6 +35,14 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+WHERE WE STOPPED (21 Nov, about 5am). Next when the owner is back:
+- Owner is visiting local MOT stations and dealers with the printed pitches. The join pages still show the launch
+  offers (5%, £74.50 Pro, 3 months free, free to join) while the pitches show full prices: decide which to keep.
+- Decide: history checks free in a dealer's free months, or £3.50 + VAT each as now.
+- The inspection and PDI forms say "The Motoring Central Ltd" in the small print (company not registered yet).
+- The longer menu name "Work in the motor trade" puts the main menu on its own row on a computer: keep or shorten.
+- The end-to-end test scripts are in tools/e2e (the test password is not stored there: set MC_TEST_PW).
+
 Found in the end-to-end tests (21 Nov) and still to fix:
 - A link to /#dashboard (as in our emails) shows the log-in form for a moment-old saved session: the partner is logged
   in but sees "Partner log in". Send them to the dashboard once the saved log-in is restored.
@@ -372,6 +380,16 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026 (early morning): SALES PITCHES. Four printable A4 proposals, 7 pages each, and one combined 28-page PDF,
+  in the folder pitch/ (The-Motoring-Central-Partner-Proposals.pdf is the combined one; MOT stations, car and van
+  dealers, recovery, EV charging). Full prices only, no launch offers. Each has: cover and vision, what they get and
+  the money, how it works, a screenshot of their own tool, the protection page (vehicle inspection report, or PDI for
+  dealers), the whole platform (trade cars and vans, Work in the motor trade, weekly payouts) and prices with a QR
+  code to the join page on the preview site. To change wording or prices ask Claude: the text is in pitch/*.js and
+  "node build.js" in that folder rebuilds the PDFs (screenshots are retaken with pitch/tools). The folders pitch/ and
+  tools/, this file and the database files are no longer published on the website (.vercelignore).
+- 21 Nov 2026: "Jobs" renamed "Work in the motor trade" across the site. Weekly hours rows on the recovery and EV
+  dashboards and the "Date sold" box on the PDI form tidied.
 - 21 Nov 2026: partner documents fixed. With "Confirm email" on there is no log-in at sign-up, so documents were
   never stored. They are now kept in the browser (IndexedDB, 7 days) and sent at the first log-in on that device;
   otherwise the dashboard shows "One more step: upload your documents". Staff see "No documents uploaded yet" on an
