@@ -49,7 +49,12 @@ WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
   Facebook Page "The Motoring Central" CREATED (picture, cover, contact details, Send message button, notifications on);
   username facebook.com/themotoringcentral not available to set yet: try again in a few days. TikTok WAITING: TikTok
   insists on a mobile number and the owner's is on his personal TikTok, so he is getting a business mobile SIM.
-  Still to claim: YouTube, LinkedIn, X. Images and steps for each are in social/.
+  YouTube @themotoringcentral CLAIMED on vimen@ (banner, description, contact email, video watermark done; the four
+  videos not uploaded yet). LinkedIn and X: left for later at the owner's request. LinkedIn made a personal account
+  for vimen@ when he started; to create the company page it needs his real name, but he does not want his name linked
+  to the company yet: do not list The Motoring Central as his job, and set public profile visibility Off. Owner wants
+  his name kept away from the brand for now (local contacts trust a bigger-looking company more).
+  Images and steps for each platform are in social/.
 - (done) Menu name: "Motor trade jobs" in the menu, "Work in the motor trade" kept as the page heading.
 
 Found in the end-to-end tests (21 Nov) and still to fix:
