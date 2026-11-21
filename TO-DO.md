@@ -43,6 +43,12 @@ WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
 - Phone (Voipfone, 020 8191 4290): line works and diverts to the owner's mobile. Left for later: how business calls
   show on the mobile (Line Presentation in Services > My Numbers > Phone, or the Voipfone Mobile app), calling credit
   for the divert, and out-of-hours voicemail. WhatsApp Business on the number not set up yet.
+- Social media (21 Nov): login email social@motoringcentral.co.uk (alias). Instagram @themotoringcentral CLAIMED (business
+  account, Automotive Service, two-step login on, backup codes saved; picture and bio still to add from social/Instagram).
+  Facebook Page "The Motoring Central" CREATED (picture, cover, contact details, Send message button, notifications on);
+  username facebook.com/themotoringcentral not available to set yet: try again in a few days. TikTok WAITING: TikTok
+  insists on a mobile number and the owner's is on his personal TikTok, so he is getting a business mobile SIM.
+  Still to claim: YouTube, LinkedIn, X. Images and steps for each are in social/.
 - (done) Menu name: "Motor trade jobs" in the menu, "Work in the motor trade" kept as the page heading.
 
 Found in the end-to-end tests (21 Nov) and still to fix:
