@@ -4237,7 +4237,8 @@ function daysIn(v){var end=v.sold?dfrom(v.sold.date):new Date();return v.inDate?
 function margin(v){return(v.sold?v.sold.price:(+v.price||0))-(+v.cost||0)-prepTot(v)}
 function stById(u,id){return u.stock.filter(function(v){return v.id===id})[0]}
 function apiFor(k){return k==='cars'?window.GGcars:window.GGvans}
-function seedStock(u){var own=[],regs=['YD19 KXF','YK20 VNA','LS18 HMP','YB68 WRT','YL19 DHE'];
+function seedStock(u){if(u&&u.sbid){u.stock=[];return} /* real dealers start with an empty stock book; the samples are only for the demo log-in */
+var own=[],regs=['YD19 KXF','YK20 VNA','LS18 HMP','YB68 WRT','YL19 DHE'];
 (window.GGcars?GGcars.list():[]).filter(owned).forEach(function(c){own.push({k:'cars',c:c})});
 (window.GGvans?GGvans.list():[]).filter(owned).forEach(function(c){own.push({k:'vans',c:c})});
 u.stock=own.map(function(x,i){var c=x.c;return{id:stSeq++,kind:x.k==='vans'?'Van':'Car',reg:regs[i%regs.length],make:c.make,model:c.model,variant:c.variant||'',year:c.year,miles:c.miles,fuel:c.fuel,gear:c.gear,body:c.body,col:c.col,cost:Math.round(c.price*0.8/50)*50,inDate:iso(-(14+i*19)),prep:[{d:'Valet',a:79},{d:'Service',a:145}],price:c.price,status:'sale',ad:{k:x.k,id:c.id},loc:'Forecourt',mot:iso(200+i*40),notes:''}});
@@ -7834,7 +7835,7 @@ function advByDb(id){var r=null;['cars','vans'].forEach(function(k){var a=adApi(
 /* messages */
 var MSG=[],msgSig='',SEEN={};try{SEEN=JSON.parse(localStorage.getItem('mc-msg-seen')||'{}')||{}}catch(e){}
 function seen(k){SEEN[k]=Date.now();try{localStorage.setItem('mc-msg-seen',JSON.stringify(SEEN))}catch(e){}}
-function pullMsgs(){if(!realUser())return;var u=window.GGuser;sb.from('advert_messages').select('*').order('created_at',{ascending:true}).limit(800).then(function(r){if(r.error||window.GGuser!==u)return;MSG=r.data||[];var sg=MSG.length+':'+(MSG.length?MSG[MSG.length-1].id:'');if(sg!==msgSig){msgSig=sg;drawInbox(true)}})}
+function pullMsgs(){if(!realUser())return;var u=window.GGuser;sb.from('advert_messages').select('*').order('created_at',{ascending:true}).limit(800).then(function(r){if(r.error||window.GGuser!==u)return;MSG=r.data||[];var sg=MSG.length+':'+(MSG.length?MSG[MSG.length-1].id:'');if(sg!==msgSig){msgSig=sg;drawInbox(true)}msgNudge()})}
 function sendMsg(row){return sb.from('advert_messages').insert(row).then(function(r){if(r.error)throw r.error;pullMsgs()})}
 function threads(){var u=window.GGuser,T={},L=[];MSG.forEach(function(m){var k=m.advert_id+':'+m.buyer_id;if(!T[k]){T[k]={key:k,advert_id:m.advert_id,buyer_id:m.buyer_id,seller_id:m.seller_id,title:m.advert_title,buyer:m.buyer_name,phone:m.buyer_phone,list:[]};L.push(T[k])}var t=T[k];t.list.push(m);if(m.from_role==='buyer'){t.buyer=m.buyer_name||t.buyer;t.phone=m.buyer_phone||t.phone}});
  L.forEach(function(t){t.me=t.seller_id===u.sbid?'seller':'buyer';t.last=t.list[t.list.length-1];t.unread=t.list.some(function(m){return m.from_role!==t.me&&Date.parse(m.created_at)>(SEEN[t.key]||0)})});
@@ -7848,11 +7849,17 @@ function msgLine(m,t){var mine=m.from_role===t.me,who=mine?'You':(m.from_role===
  if(m.meta&&m.meta.px)body+=pxLine(m.meta.px);
  return '<div class="mx-m'+(mine?' me':'')+'"><small>'+E(who)+' · '+E(dt(m.created_at))+'</small><p>'+body+'</p>'+act+'</div>'}
 var OPEN={},DRAFT={};
+/* a new message is easy to miss: show a "new message" button on every page until it has been read */
+function msgNudge(){var u=window.GGuser,el=$('mc-nudge'),page=u&&u.role==='customer'?'#account':'#dashboard',n=realUser()?threads().filter(function(t){return t.unread}).length:0;
+ if(!n||location.hash===page){if(el)el.remove();return}
+ if(!el){el=document.createElement('a');el.id='mc-nudge';el.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:60;background:#0B1C35;color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.3);max-width:92vw;text-align:center';
+  el.addEventListener('click',function(){setTimeout(function(){drawInbox(true);var i=$('mc-inbox');if(i)i.scrollIntoView({behavior:'smooth',block:'start'})},500)});document.body.appendChild(el)}
+ el.href=page;el.textContent=n===1?'You have a new message about a car or van. Read it':'You have '+n+' new messages about cars and vans. Read them'}
 function inboxHtml(){var L=threads(),n=L.filter(function(t){return t.unread}).length;
  var h='<div class="card mx" id="mc-inbox"><h2>Messages about cars and vans'+(n?' <span class="mx-n">'+n+' new</span>':'')+'</h2>';
  if(!L.length)return h+'<p class="note" style="margin:0">No messages yet. When a buyer messages you about an advert, or you message a seller, it appears here.</p></div>';
  L.slice(0,40).forEach(function(t){var c=advByDb(t.advert_id),other=t.me==='seller'?(t.buyer||'Buyer')+(t.phone?' · '+t.phone:''):(c&&c.dealer?c.dealer:'The seller');
-  h+='<details class="mx-t'+(t.unread?' new':'')+'" data-tk="'+t.key+'"'+(OPEN[t.key]?' open':'')+'><summary><b>'+E(t.title||'Advert')+'</b><small>'+(t.me==='seller'?'Buyer: ':'Seller: ')+E(other)+' · '+E(dd(t.last.created_at))+'</small></summary>'+
+  h+='<details class="mx-t'+(t.unread?' new':'')+'" data-tk="'+t.key+'"'+((t.key in OPEN?OPEN[t.key]:t.unread)?' open':'')+'><summary><b>'+E(t.title||'Advert')+'</b><small>'+(t.me==='seller'?'Buyer: ':'Seller: ')+E(other)+' · '+E(dd(t.last.created_at))+'</small></summary>'+
    t.list.map(function(m){return msgLine(m,t)}).join('')+
    reviewForm(t)+'<div class="mx-r"><textarea rows="2" maxlength="2000" data-mxd="'+t.key+'" placeholder="Write a reply">'+E(DRAFT[t.key]||'')+'</textarea><button type="button" class="btn sm" data-mxs="'+t.key+'">Send</button></div>'+
    (c?'<p class="note" style="margin:6px 0 0"><a href="#'+(c.van?'vans':'cars')+'" data-mxopen="'+(c.van?'vans':'cars')+':'+c.id+'">View the advert</a></p>':'')+'<p class="err" data-mxe="'+t.key+'"></p></details>'});
@@ -8206,7 +8213,7 @@ function enhance(){var a=curAd();if(!a||!a.host)return;var key=a.k+':'+a.c.id;
  if(!a.host.querySelector('.more')){var m=document.createElement('div');m.className='more';m.innerHTML=moreHtml(a.k,a.c);a.host.appendChild(m)}}
 setInterval(function(){try{enhance();cmpBar();drawStats();feedAuto();if(Date.now()-rvAt>300000)pullReviews();var u=window.GGuser;if(u&&u.role==='dealer'&&location.hash==='#dashboard'&&$('mc-dtools')&&!$('mc-dtools').querySelector('.dt-more'))$('mc-dtools').insertAdjacentHTML('beforeend',moreTools(u))}catch(e){}},700);
 /* keep the sales parts drawn */
-setInterval(function(){try{drawInbox(false);dashTools();adminCard();drawQueue(false);fillMot();if(SHOW&&/^#(cars|vans)/.test(location.hash||''))applyShowroom()}catch(e){}},1200);
+setInterval(function(){try{drawInbox(false);msgNudge();dashTools();adminCard();drawQueue(false);fillMot();if(SHOW&&/^#(cars|vans)/.test(location.hash||''))applyShowroom()}catch(e){}},1200);
 setInterval(function(){if(realUser()&&!document.hidden)pullMsgs()},20000);
 var lastMsgWho='';setInterval(function(){var u=window.GGuser,w=u&&u.sbid?u.sbid:'';if(w!==lastMsgWho){lastMsgWho=w;MSG=[];msgSig='';var o=$('mc-inbox');if(o)o.remove();if(w)pullMsgs()}},1500);
 /* ---------- 19 Nov 2026: leads inbox, part exchange, price reduced, renewals, seller stats, reports, safety tips ---------- */

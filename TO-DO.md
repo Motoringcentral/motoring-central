@@ -20,15 +20,8 @@ How it is set up (do not redo):
 Follow-ups from the testing:
 - Google Admin > Apps > Gmail > Authenticate email: check it says "Authenticating email with DKIM". If not, press
   "Start authentication" again (the DNS record is correct).
-- Customer account: a dealer's reply is hard to find after logging in. Make new replies obvious (owner asked 21 Nov).
-- Quote email subject reads badly when the job is "Not sure: please check and advise". Reword.
-- Dealer stock book: adding a vehicle and advertising it are two steps. Decide whether a new vehicle should go
-  straight to "sent for approval" unless the dealer keeps it private.
-- New real dealers get 5 sample vehicles in their stock book. Remove the samples for real accounts before launch.
 - Decide: history checks free during a dealer's free months, or keep £3.50 + VAT each (as the terms say now).
 - At launch: change the Supabase Site URL to https://motoringcentral.co.uk, and forward motoringcentral.com to it.
-- Test accounts made on 21 Nov (info@ garage "VIMS CARS", hello@ dealer "prestige motors", vimen@ customer, the BMW
-  and Ford adverts): remove before launch.
 Texts (SMS) are built too but need a Twilio account (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM). Not chosen yet.
 
 ### What the emails cover (built 19 Nov 2026)
@@ -358,6 +351,11 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026 (after the email tests): new messages about cars and vans now show a "You have a new message" button on
+  every page until read, and unread conversations open by themselves in My account and the dealer dashboard. Quote
+  email reworded ("You have a new quote: £x from <partner>"; migration 20261121_quote_email_wording.sql). Real dealers
+  now start with an empty stock book (the 5 sample vehicles are only for the demo log-in). Decided by the owner: stock
+  needs no approval, advertising does (a stock vehicle may go to trade instead). The 21 Nov test accounts were removed.
 - 21 Nov 2026: emails switched on and tested end to end (Google Workspace mailboxes, Resend, Supabase). Fixed on the
   way: dealer sign-up no longer says "You can now list cars and vans" before approval; the stock book's "Advertise on
   Motoring Central" button now runs the vehicle history check (before, the database refused the advert and nothing
