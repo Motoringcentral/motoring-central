@@ -264,7 +264,13 @@ Still to do:
 - Still open from the go-live review: cancellation/no-show policy wording, weekly garage payouts and self-billing
   invoices, wrong-class handling, company registration, ICO registration, solicitor check of terms, DVSA written OK.
 
-### MOT side FINAL (19 Nov 2026): 18% model. Do not change without the owner.
+### MOT side (changed 21 Nov 2026 by the owner): flat £5 booking fee, no joining fee. Replaces the 18% model below.
+- Customer pays the official maximum (e.g. £54.85 car). Test centre paid that less £5 (car £49.85, motorcycle £24.65,
+  class 7 £53.60, class 5 £75.65). We keep £5 incl. VAT. No joining fee. Database: private.mot_payout (migration
+  20261121g). Site, terms, sign-up, dashboards, admin, MOT video line and MOT pitch all updated the same day.
+  Reason: the first MOT station visited (charges the full £54.85 himself) said no to giving away 18%.
+
+### MOT side (OLD, replaced 21 Nov) (19 Nov 2026): 18% model. Do not change without the owner.
 - Customer pays the official maximum (booking fee included). Test centre paid 82%, we keep 18% (incl. VAT).
 - Site, terms (customer + partner), sign-up, dashboards, admin, video and database all match (checked 19 Nov 2026).
 - Still to update outside the site: partner overview PDF and pitch PDFs, if they mention MOT fees.
@@ -382,6 +388,7 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026: MOT stations now pay a flat £5 booking fee per online MOT (was 18%), and the £99.99 joining fee is gone.
 - 21 Nov 2026 (morning): owner's decisions done. (1) Launch offer on the site stays as it is; the pitches stay at full
   price and the owner explains the offer in person. (2) History checks in a dealer's free months are a choice: pay
   £3.50 + VAT, or list free without one. Without a check the dealer must declare the write-off status, the advert is
