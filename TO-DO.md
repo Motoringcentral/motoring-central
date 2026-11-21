@@ -22,6 +22,13 @@ Follow-ups from the testing:
   "Start authentication" again (the DNS record is correct).
 - Decide: history checks free during a dealer's free months, or keep £3.50 + VAT each (as the terms say now).
 - At launch: change the Supabase Site URL to https://motoringcentral.co.uk, and forward motoringcentral.com to it.
+Test accounts (real accounts, kept for testing until launch, then remove):
+- Owner and staff log-in (Staff page, /#staff): the owner's Gmail address.
+- Test dealer "VIMS CARS": hello@motoringcentral.co.uk (Partner log in).
+- Test customer: the owner's Sky address (Customer log in).
+- No test garage or mechanic at the moment. To make one, apply with info@motoringcentral.co.uk and approve it.
+- The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
+  and they do not see real applications or adverts.
 Texts (SMS) are built too but need a Twilio account (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM). Not chosen yet.
 
 ### What the emails cover (built 19 Nov 2026)
@@ -351,6 +358,11 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026: messages about cars and vans are now in the Messages button that is on every page (bottom right) and
+  in a "Messages" link in the header. Both turn red and show the number of new messages. The list shows a dealer's
+  conversations grouped by customer (name, phone) with the car or van each one is about (title, registration, price,
+  mileage); opening one shows the conversation with a reply box and the viewing buttons. Tested in a browser with
+  pretend data. This replaces the "You have a new message" button added earlier the same day.
 - 21 Nov 2026 (after the email tests): new messages about cars and vans now show a "You have a new message" button on
   every page until read, and unread conversations open by themselves in My account and the dealer dashboard. Quote
   email reworded ("You have a new quote: £x from <partner>"; migration 20261121_quote_email_wording.sql). Real dealers

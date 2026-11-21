@@ -882,6 +882,7 @@ h2.sec,#jb-post-h{scroll-margin-top:112px}
 #hub-btn svg{width:20px;height:20px;stroke:#38BDF8;fill:none;stroke-width:2}
 #hub-btn:focus-visible{outline:3px solid #FFD43B;outline-offset:3px}
 #hub-btn .n{background:#FFD43B;color:#0B1C35;border-radius:20px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.8rem;padding:0 5px;box-sizing:border-box}
+#hub-btn.hot{background:#C62828!important;border-color:#fff!important}
 body.hubon #totop{bottom:78px}
 #hub-btn[hidden]{display:none}
 #hub{position:fixed;right:16px;bottom:16px;z-index:70;width:380px;max-width:calc(100vw - 24px);height:min(600px,calc(100vh - 32px));background:#0b1f42;color:#f3f8fe;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.55);display:flex;flex-direction:column;overflow:hidden;border:1px solid #3a5f92}
@@ -5755,8 +5756,9 @@ function send(T,text){var m=me();text=String(text||'').trim().slice(0,800);if(!m
  if(T.kind==='booking'){var b=S.B[T.bt];if(b)note(b,m.role==='customer'?'partner':'customer','app','New message from '+(m.role==='customer'?b.cust:b.partner),text.slice(0,120),{chat:T.id})}
  S.R[m.key]=S.R[m.key]||{};S.R[m.key][T.id]=Date.now()+2;keep()}
 /* ----- the panel ----- */
-function count(){var m=me();if(!m)return 0;var n=0;myThreads().forEach(function(T){n+=unread(T,m)});return n+(m.role==='mc'?0:unseenNotes(m))}
-function badge(){var b=$('hub-n'),n=count();b.hidden=!n;b.textContent=n;document.body.classList.add('hubon');$('hub-btn').setAttribute('aria-label','Messages'+(n?', '+n+' new':''));$('hub-btn').hidden=view.open||/^#(staff)$/.test(location.hash)}
+function advN(){try{return window.MCadvUnread?window.MCadvUnread():0}catch(e){return 0}}
+function count(){var m=me();if(!m)return 0;var n=0;myThreads().forEach(function(T){n+=unread(T,m)});return n+(m.role==='mc'?0:unseenNotes(m))+advN()}
+function badge(){var b=$('hub-n'),n=count();b.hidden=!n;b.textContent=n;$('hub-btn').classList.toggle('hot',!!n);document.body.classList.add('hubon');$('hub-btn').setAttribute('aria-label','Messages'+(n?', '+n+' new':''));$('hub-btn').hidden=view.open||/^#(staff)$/.test(location.hash)}
 function draw(focus){var H=$('hub'),m=me();H.hidden=!view.open;badge();if(!view.open)return;var h='';
  if(!m){H.innerHTML='<div class="hh"><b>Chat to us</b><button type="button" data-hub="close">Close</button></div><div class="hb"><p class="empty">Log in to chat with our team or with the partner doing your job. Your chats and booking alerts are kept in one place.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button type="button" class="th" style="width:auto;background:#38BDF8;color:#06202e;font-weight:800" data-hub="login">Customer log in</button><a class="th" style="width:auto;text-decoration:none;color:#fff;font-weight:700" href="#contact" data-hub="close">Contact form</a></div></div>';return}
  var L=myThreads(),T=view.th&&S.T[view.th];if(T&&L.indexOf(T)<0)T=null;
@@ -5765,19 +5767,21 @@ function draw(focus){var H=$('hub'),m=me();H.hidden=!view.open;badge();if(!view.
   +'<div class="msg sys">'+esc(T.kind==='support'?(m.role==='mc'?'Support chat with '+T.who:'You are chatting with The Motoring Central team.'):(m.role==='mc'?'Chat between '+T.cust+' and '+T.partner+' about their '+T.what.toLowerCase()+' booking. You can step in if needed.':'Chat about your '+T.what.toLowerCase()+' booking. Keep bookings and payments on The Motoring Central so you stay protected.'))+'</div>';
   T.msgs.forEach(function(x){h+='<div class="msg'+(x.by===m.key?' me':'')+'">'+esc(x.text)+'<small>'+esc(x.by===m.key?'You':x.name)+', '+when(x.t)+'</small></div>'});
   h+='</div><form class="hf" id="hub-form"><label class="sr" for="hub-text" style="position:absolute;left:-9999px">Your message</label><textarea id="hub-text" maxlength="800" placeholder="Type a message"></textarea><button type="submit">Send</button></form>'}
- else{var un=0;L.forEach(function(x){un+=unread(x,m)});var na=m.role==='mc'?0:unseenNotes(m);
+ else{var un=advN();L.forEach(function(x){un+=unread(x,m)});var na=m.role==='mc'?0:unseenNotes(m);
   h='<div class="hh"><b>'+(m.role==='mc'?'All chats':'Messages')+'</b><button type="button" data-hub="close">Close</button></div>'
   +(m.role==='mc'?'':'<div class="tabs2" role="group" aria-label="Sections"><button type="button" data-hubtab="chats" aria-pressed="'+(view.tab==='chats')+'">Chats'+(un?' ('+un+')':'')+'</button><button type="button" data-hubtab="alerts" aria-pressed="'+(view.tab==='alerts')+'">Booking alerts'+(na?' ('+na+')':'')+'</button></div>')+'<div class="hb">';
   if(view.tab==='alerts'&&m.role!=='mc'){var N=myNotes();S.R[m.key]=S.R[m.key]||{};S.R[m.key]['@notes']=Date.now();keep();
    if(!N.length)h+='<p class="empty">No alerts yet. Booking confirmations, reminders and updates appear here, and are sent by email and text.</p>';
    N.slice(0,40).forEach(function(n){h+=noteHtml(n)})}
-  else{if(!L.length)h+='<p class="empty">No chats yet.</p>';
+  else{var av='';try{av=window.MCadvHub?window.MCadvHub():''}catch(e){}h+=av;if(!L.length&&!av)h+='<p class="empty">No chats yet.</p>';
    L.forEach(function(x){var u=unread(x,m),lm=x.msgs[x.msgs.length-1];h+='<button type="button" class="th" data-hubth="'+esc(x.id)+'"><div><b>'+esc(title(x,m))+'</b><small>'+esc(lm?(lm.by===m.key?'You: ':'')+lm.text:sub(x,m))+'</small></div>'+(u?'<span class="dot" aria-label="'+u+' new">'+u+'</span>':'')+'</button>'})}
   h+='</div>'}
  H.innerHTML=h;var box=$('hub-msgs');if(box)box.scrollTop=box.scrollHeight;badge();
  if(focus){var f=$('hub-text')||H.querySelector('.th,[data-hubtab],[data-hub="close"]');if(f)f.focus()}}
 function noteHtml(n){var CH={email:'Email',text:'Text',app:'Alert'};return '<div class="al"><span class="hubch ch '+n.ch+'">'+CH[n.ch]+'</span><b>'+esc(n.title)+'</b><div style="margin-top:4px">'+esc(n.body)+'</div><small>'+(n.sched?esc(n.sched):'Sent '+when(n.t))+'</small></div>'}
 function openHub(th,tab){view.open=true;if(tab)view.tab=tab;view.th=th||null;draw(true)}
+/* car and van conversations (kept in the shared database) are listed in this panel too: see "messages on every page" */
+window.MChubMsg={badge:badge,redraw:function(){if(view.open&&!view.th&&view.tab==='chats'&&!$('hub').contains(document.activeElement))draw()},close:function(){if(view.open){view.open=false;draw()}},open:function(){view.tab='chats';openHub(null)}};
 $('hub-btn').addEventListener('click',function(){openHub(null)});
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-hub],[data-hubtab],[data-hubth],[data-hubchat],[data-hubst],[data-hubalerts]');if(!t)return;
  if(t.hasAttribute('data-hubst')){var p=t.getAttribute('data-hubst').split(':');setStatus(p[0],p[1]);if(window.GGdash&&location.hash==='#dashboard')window.GGdash();badge();return}
@@ -7835,7 +7839,7 @@ function advByDb(id){var r=null;['cars','vans'].forEach(function(k){var a=adApi(
 /* messages */
 var MSG=[],msgSig='',SEEN={};try{SEEN=JSON.parse(localStorage.getItem('mc-msg-seen')||'{}')||{}}catch(e){}
 function seen(k){SEEN[k]=Date.now();try{localStorage.setItem('mc-msg-seen',JSON.stringify(SEEN))}catch(e){}}
-function pullMsgs(){if(!realUser())return;var u=window.GGuser;sb.from('advert_messages').select('*').order('created_at',{ascending:true}).limit(800).then(function(r){if(r.error||window.GGuser!==u)return;MSG=r.data||[];var sg=MSG.length+':'+(MSG.length?MSG[MSG.length-1].id:'');if(sg!==msgSig){msgSig=sg;drawInbox(true)}msgNudge()})}
+function pullMsgs(){if(!realUser())return;var u=window.GGuser;sb.from('advert_messages').select('*').order('created_at',{ascending:true}).limit(800).then(function(r){if(r.error||window.GGuser!==u)return;MSG=r.data||[];var sg=MSG.length+':'+(MSG.length?MSG[MSG.length-1].id:'');if(sg!==msgSig){msgSig=sg;drawInbox(true);if(PM.open)pmDraw()}msgNudge()})}
 function sendMsg(row){return sb.from('advert_messages').insert(row).then(function(r){if(r.error)throw r.error;pullMsgs()})}
 function threads(){var u=window.GGuser,T={},L=[];MSG.forEach(function(m){var k=m.advert_id+':'+m.buyer_id;if(!T[k]){T[k]={key:k,advert_id:m.advert_id,buyer_id:m.buyer_id,seller_id:m.seller_id,title:m.advert_title,buyer:m.buyer_name,phone:m.buyer_phone,list:[]};L.push(T[k])}var t=T[k];t.list.push(m);if(m.from_role==='buyer'){t.buyer=m.buyer_name||t.buyer;t.phone=m.buyer_phone||t.phone}});
  L.forEach(function(t){t.me=t.seller_id===u.sbid?'seller':'buyer';t.last=t.list[t.list.length-1];t.unread=t.list.some(function(m){return m.from_role!==t.me&&Date.parse(m.created_at)>(SEEN[t.key]||0)})});
@@ -7849,12 +7853,61 @@ function msgLine(m,t){var mine=m.from_role===t.me,who=mine?'You':(m.from_role===
  if(m.meta&&m.meta.px)body+=pxLine(m.meta.px);
  return '<div class="mx-m'+(mine?' me':'')+'"><small>'+E(who)+' · '+E(dt(m.created_at))+'</small><p>'+body+'</p>'+act+'</div>'}
 var OPEN={},DRAFT={};
-/* a new message is easy to miss: show a "new message" button on every page until it has been read */
-function msgNudge(){var u=window.GGuser,el=$('mc-nudge'),page=u&&u.role==='customer'?'#account':'#dashboard',n=realUser()?threads().filter(function(t){return t.unread}).length:0;
- if(!n||location.hash===page){if(el)el.remove();return}
- if(!el){el=document.createElement('a');el.id='mc-nudge';el.style.cssText='position:fixed;left:50%;transform:translateX(-50%);bottom:18px;z-index:60;background:#0B1C35;color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;text-decoration:none;box-shadow:0 6px 24px rgba(0,0,0,.3);max-width:92vw;text-align:center';
-  el.addEventListener('click',function(){setTimeout(function(){drawInbox(true);var i=$('mc-inbox');if(i)i.scrollIntoView({behavior:'smooth',block:'start'})},500)});document.body.appendChild(el)}
- el.href=page;el.textContent=n===1?'You have a new message about a car or van. Read it':'You have '+n+' new messages about cars and vans. Read them'}
+/* messages on every page: a Messages button (and a link in the header) that lights up with the number of new
+   messages, and a panel where the conversations can be read and answered without going to My account or the dashboard.
+   A seller sees the conversations grouped by customer, each with the car or van it is about. */
+var PM={open:false,key:null};
+function advLine(t){var c=advByDb(t.advert_id);if(!c)return '<span style="min-width:0"><b>'+E(t.title||'Advert')+'</b></span>';
+ var ph=c.photos&&c.photos[0],bits=[c.reg,c.price?'£'+Number(c.price).toLocaleString('en-GB'):'',c.miles!=null&&c.miles!==''?Number(c.miles).toLocaleString('en-GB')+' miles':''].filter(Boolean).join(' · ');
+ return (ph?'<img src="'+E(ph)+'" alt="" style="width:64px;height:48px;object-fit:cover;border-radius:8px;flex:none">':'')+'<span style="min-width:0"><b>'+E(t.title||[c.year,c.make,c.model].filter(Boolean).join(' '))+'</b>'+(bits?'<small style="display:block;color:#5A6B82">'+E(bits)+'</small>':'')+'</span>'}
+function pmRow(t){var m=t.last,pv=m.kind==='viewing'?'Viewing request':m.kind==='viewing_ok'?'Viewing confirmed':m.kind==='viewing_no'?'Another time suggested':String(m.body||'');if(pv.length>70)pv=pv.slice(0,70)+'…';
+ return '<button type="button" data-pmopen="'+E(t.key)+'" style="all:unset;box-sizing:border-box;cursor:pointer;display:flex;gap:10px;align-items:center;width:100%;padding:10px;margin:6px 0;border:1px solid '+(t.unread?'#C62828':'#D9E0EA')+';border-radius:12px;background:'+(t.unread?'#FFF4F4':'#fff')+';color:#0B1C35">'+advLine(t)+
+  '<span style="margin-left:auto;text-align:right;flex:none;max-width:45%"><small style="display:block;color:#5A6B82">'+E(dd(m.created_at))+'</small>'+(t.unread?'<span class="mx-n" style="margin:0">New</span>':'')+'</span></button>'+
+  '<small style="display:block;color:#5A6B82;margin:-2px 4px 8px">'+(m.from_role===t.me?'You: ':'')+E(pv)+'</small>'}
+function pmHtml(){var L=threads(),h='';
+ if(PM.key){var t=L.filter(function(x){return x.key===PM.key})[0];if(!t){PM.key=null;return pmHtml()}
+  var c=advByDb(t.advert_id),other=t.me==='seller'?(t.buyer||'Buyer'):(c&&c.dealer?c.dealer:'The seller'),k=c?(c.van?'vans':'cars'):'';
+  return '<button type="button" class="btn sm ghost" data-pmback>&larr; All messages</button>'+
+   '<div style="display:flex;gap:10px;align-items:center;margin:12px 0 4px">'+advLine(t)+'</div>'+
+   '<p class="note" style="margin:0 0 8px">'+(t.me==='seller'?'Customer: ':'Seller: ')+'<b>'+E(other)+'</b>'+(t.me==='seller'&&t.phone?' · <a href="tel:'+E(t.phone)+'">'+E(t.phone)+'</a>':'')+(c?' · <a href="#'+k+'" data-mxopen="'+k+':'+c.id+'" data-pmclose>View the advert</a>':'')+'</p>'+
+   t.list.map(function(m){return msgLine(m,t)}).join('')+
+   '<div class="mx-r"><textarea rows="2" maxlength="2000" id="pm-ta" placeholder="Write a reply">'+E(DRAFT[t.key]||'')+'</textarea><button type="button" class="btn sm" data-pmsend>Send</button></div><p class="err" id="pm-err"></p>'}
+ return pmList(L)}
+function pmList(L,inHub){var h='';
+ if(!L.length)return inHub?'':'<p class="note">No messages yet. When a buyer messages you about an advert, or you message a seller about a car or van, the conversation appears here.</p>';
+ var sell=L.filter(function(t){return t.me==='seller'}),buy=L.filter(function(t){return t.me!=='seller'});
+ if(sell.length){var G={},order=[];sell.forEach(function(t){if(!G[t.buyer_id]){G[t.buyer_id]={name:'',phone:'',list:[]};order.push(t.buyer_id)}var g=G[t.buyer_id];g.name=g.name||t.buyer||'';g.phone=g.phone||t.phone||'';g.list.push(t)});
+  h+='<h3 style="margin:4px 0 8px">From customers</h3>';
+  order.forEach(function(id){var g=G[id],n=g.list.filter(function(t){return t.unread}).length;
+   h+='<div style="margin:0 0 14px"><div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;border-bottom:2px solid #0B1C35;padding-bottom:4px"><b>'+E(g.name||'Customer')+(n?' <span class="mx-n">'+n+' new</span>':'')+'</b>'+(g.phone?'<a href="tel:'+E(g.phone)+'" style="font-size:.9rem">'+E(g.phone)+'</a>':'')+'</div>'+g.list.map(pmRow).join('')+'</div>'})}
+ if(buy.length){h+='<h3 style="margin:4px 0 8px">'+(sell.length?'Your messages to sellers':'Your conversations')+'</h3>'+buy.map(function(t){var c=advByDb(t.advert_id);return '<small style="display:block;color:#5A6B82;margin:8px 4px 0">Seller: '+E(c&&c.dealer?c.dealer:'The seller')+'</small>'+pmRow(t)}).join('')}
+ return h}
+function pmDraw(){var el=$('mc-pm');if(!PM.open||!realUser()){if(el)el.remove();return}
+ if(!el){el=document.createElement('div');el.id='mc-pm';el.setAttribute('role','dialog');el.setAttribute('aria-label','Messages');el.style.cssText='position:fixed;inset:0;z-index:80;background:rgba(11,28,53,.45);display:flex;justify-content:flex-end';
+  el.innerHTML='<div style="background:#fff;color:#0B1C35;width:min(460px,100vw);height:100%;display:flex;flex-direction:column;box-shadow:-8px 0 30px rgba(0,0,0,.3)"><div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid #D9E0EA"><b style="font-size:1.1rem">Messages</b><button type="button" class="btn sm ghost" data-pmclose>Close</button></div><div id="mc-pm-b" style="flex:1;overflow:auto;padding:12px 16px"></div></div>';
+  var st=document.createElement('style');st.textContent='#mc-pm,#mc-pm b,#mc-pm p,#mc-pm small{color:#0B1C35}#mc-pm .note,#mc-pm .mx-m small{color:#5A6B82}#mc-pm a{color:#0B5CAD}#mc-pm .mx-m{background:#EEF2F7;border-radius:10px;padding:8px 10px;margin:8px 0;max-width:92%}#mc-pm .mx-m.me{background:#DCEBFF;margin-left:auto}#mc-pm .mx-m p{margin:2px 0 0}#mc-pm textarea{flex:1;background:#fff;color:#0B1C35;border:1px solid #8A99AD;border-radius:8px;padding:8px;font:inherit;min-height:52px}#mc-pm .btn{all:unset;box-sizing:border-box;cursor:pointer;background:#0B1C35;color:#fff;font-weight:700;padding:8px 14px;border-radius:8px;font-size:.92rem}#mc-pm .btn.ghost{background:#fff;color:#0B1C35;border:1px solid #0B1C35}#mc-pm .btn:focus-visible,#mc-pm textarea:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}#mc-pm .err{color:#B00020}#mc-pm .mx-r{display:flex;gap:8px;align-items:flex-end;margin-top:8px}';el.appendChild(st);
+  document.body.appendChild(el)}
+ var b=$('mc-pm-b'),ta=$('pm-ta'),foc=!!ta&&document.activeElement===ta,pos=foc?ta.selectionStart:0;
+ if(ta&&PM.key)DRAFT[PM.key]=ta.value;
+ b.innerHTML=pmHtml();
+ if(PM.key){seen(PM.key);b.scrollTop=b.scrollHeight;var n=$('pm-ta');if(n&&foc){n.focus();try{n.setSelectionRange(pos,pos)}catch(e){}}}else b.scrollTop=0}
+function pmOpen(){PM.open=true;PM.key=null;pmDraw();msgNudge()}
+function msgNudge(){var on=realUser()&&!document.documentElement.classList.contains('embed'),l=$('mc-msglink'),H=window.MChubMsg;
+ if(!on){if(l)l.remove();if(PM.open){PM.open=false;pmDraw()}if(H&&PM.n){PM.n=0;H.badge()}return}
+ var n=threads().filter(function(t){return t.unread}).length;if(H&&PM.n!==n){PM.n=n;H.badge();H.redraw()}
+ var a=$('acct');if(a&&!l){l=document.createElement('a');l.id='mc-msglink';l.href='#messages';l.setAttribute('data-pmfab','');a.insertBefore(l,$('logout')||null)}
+ if(l){var hb=$('hub-n'),tot=hb&&!hb.hidden?(+hb.textContent||n):n,tx='Messages'+(tot?' ('+tot+' new)':'');if(l.textContent!==tx){l.textContent=tx;l.style.cssText=tot?'background:#C62828;color:#fff;padding:2px 10px;border-radius:999px;text-decoration:none':''}}}
+window.MCadvUnread=function(){return realUser()?threads().filter(function(t){return t.unread}).length:0};
+window.MCadvHub=function(){if(!realUser())return '';var h=pmList(threads(),true);return h?'<div style="background:#fff;color:#0B1C35;border-radius:12px;padding:10px 12px;margin:0 0 12px"><b style="display:block;font-size:1.02rem;margin-bottom:6px">Cars and vans</b>'+h+'</div>':''};
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+ if(t.closest('[data-pmfab]')){e.preventDefault();if(window.MChubMsg&&$('hub-btn')&&!$('hub-btn').hidden)window.MChubMsg.open();else if(PM.open){PM.open=false;pmDraw()}else pmOpen();return}
+ if(t.id==='mc-pm'||t.closest('[data-pmclose]')){PM.open=false;pmDraw();return}
+ var o=t.closest('[data-pmopen]');if(o){PM.open=true;PM.key=o.getAttribute('data-pmopen');if(window.MChubMsg)window.MChubMsg.close();pmDraw();msgNudge();return}
+ if(t.closest('[data-pmback]')){PM.key=null;if(window.MChubMsg&&$('hub-btn')){PM.open=false;pmDraw();window.MChubMsg.open()}else pmDraw();return}
+ var s=t.closest('[data-pmsend]');if(s){var ta=$('pm-ta'),er=$('pm-err'),txt=(ta&&ta.value||'').trim(),k=PM.key,th=threads().filter(function(x){return x.key===k})[0];if(!txt||!th)return;s.disabled=true;
+  sendMsg({advert_id:th.advert_id,buyer_id:th.buyer_id,from_role:th.me,kind:'msg',body:txt}).then(function(){DRAFT[k]='';var x=$('pm-ta');if(x)x.value='';seen(k);pmDraw()},function(x){s.disabled=false;if(er)er.textContent=(x&&x.code==='P0001'&&x.message)||'Your message was not sent. Check your connection and try again.'})}});
+document.addEventListener('input',function(e){if(e.target.id==='pm-ta'&&PM.key)DRAFT[PM.key]=e.target.value});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&PM.open){PM.open=false;pmDraw()}});
 function inboxHtml(){var L=threads(),n=L.filter(function(t){return t.unread}).length;
  var h='<div class="card mx" id="mc-inbox"><h2>Messages about cars and vans'+(n?' <span class="mx-n">'+n+' new</span>':'')+'</h2>';
  if(!L.length)return h+'<p class="note" style="margin:0">No messages yet. When a buyer messages you about an advert, or you message a seller, it appears here.</p></div>';
