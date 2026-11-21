@@ -249,7 +249,7 @@ input.locked{background:#F4F8FC!important;color:var(--navy);border-style:dashed}
   <div class="sig"><canvas id="sigCust"></canvas><div class="base"></div><button class="clr" data-clear="sigCust">Clear</button></div>
   <label class="check"><input type="checkbox" id="absent" data-k="absent"> Customer not present. Photos taken as a record instead of a signature.</label>
   <label class="check"><input type="checkbox" id="agree" data-k="agree"> The customer and technician agree this is a true record of the vehicle's condition before work started.</label>
-  <div class="legal">This inspection records damage and faults already on the vehicle before the partner began work. It protects both the customer and the partner. Damage not listed here is not admitted as pre-existing, and any claim about work carried out is handled with the partner, who provides the warranty for their work. The Motoring Central Ltd is not responsible for the work carried out.</div>
+  <div class="legal">This inspection records damage and faults already on the vehicle before the partner began work. It protects both the customer and the partner. Damage not listed here is not admitted as pre-existing, and any claim about work carried out is handled with the partner, who provides the warranty for their work. The Motoring Central is not responsible for the work carried out.</div>
 </section>
 </main>
 
@@ -523,13 +523,13 @@ async function makePdf(){
  H('Signatures',40);need(40);const sw=(W-2*M-8)/2;
  [['Technician',S.sig.sigTech,S.f.tech],['Customer',S.sig.sigCust,S.f.cname]].forEach(([lab,img,nm],j)=>{const x=M+j*(sw+8);doc.setDrawColor(...hex('#D6E2EE'));doc.setLineWidth(.3);doc.roundedRect(x,y,sw,26,2,2);if(img)doc.addImage(img,'PNG',x+2,y+1,sw-4,24);else if(j===1&&S.f.absent){doc.setFontSize(9);doc.setTextColor(...MUT);doc.text('Customer not present – photo record taken',x+4,y+14)}doc.setFontSize(8.5);doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');doc.text(`${lab}: ${nm||''}`,x,y+31)});
  y+=37;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...MUT);
- const leg=doc.splitTextToSize((S.f.agree?'Both parties agreed this is a true record of the vehicle condition before work started. ':'')+'This record shows damage and faults already on the vehicle before the partner began work. Damage not listed is not admitted as pre-existing. Warranty for work carried out is provided by the partner. The Motoring Central Ltd is not responsible for the work carried out.',W-2*M);need(leg.length*4);doc.text(leg,M,y);y+=leg.length*4;
+ const leg=doc.splitTextToSize((S.f.agree?'Both parties agreed this is a true record of the vehicle condition before work started. ':'')+'This record shows damage and faults already on the vehicle before the partner began work. Damage not listed is not admitted as pre-existing. Warranty for work carried out is provided by the partner. The Motoring Central is not responsible for the work carried out.',W-2*M);need(leg.length*4);doc.text(leg,M,y);y+=leg.length*4;
  // photos
  if(S.photos.length){doc.addPage();y=16;H(`Photos (${S.photos.length})`);const pw=(W-2*M-6)/2;let col=0;
   let rowH=0;for(const [i,p] of S.photos.entries()){const [iw,ih]=await imgSize(p.src);const ph=Math.min(pw*ih/iw,110);if(col===0){need(119);rowH=0}const x=M+col*(pw+6);doc.addImage(p.src,'JPEG',x,y,pw,ph);doc.setFontSize(7.5);doc.setTextColor(...MUT);doc.text(`Photo ${i+1} · ${p.t}`,x,y+ph+4);rowH=Math.max(rowH,ph);if(col===1||i===S.photos.length-1){y+=rowH+9;col=0}else col=1}
  }
  // footer
- const pages=doc.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFontSize(7.5);doc.setTextColor(...MUT);doc.text(`The Motoring Central Ltd · Inspection ${S.f.job||''} · ${(S.f.vrm||'').toUpperCase()} · Page ${i} of ${pages}`,W/2,291,{align:'center'})}
+ const pages=doc.getNumberOfPages();for(let i=1;i<=pages;i++){doc.setPage(i);doc.setFontSize(7.5);doc.setTextColor(...MUT);doc.text(`The Motoring Central · Inspection ${S.f.job||''} · ${(S.f.vrm||'').toUpperCase()} · Page ${i} of ${pages}`,W/2,291,{align:'center'})}
  const fname=`Inspection_${(S.f.vrm||'vehicle').replace(/\s+/g,'').toUpperCase()}_${(S.f.when||'').slice(0,10)}.pdf`;
  try{const R=JSON.parse(localStorage.getItem('tmc-inspections')||'{}')||{};if(S.f.job){R[S.f.job]={time:new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}),dmg:S.dmg.length,vrm:S.f.vrm||'',at:Date.now()};localStorage.setItem('tmc-inspections',JSON.stringify(R))}}catch(_){}
  const blob=doc.output('blob');
