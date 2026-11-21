@@ -6,3 +6,6 @@ YOUTUBE CHANNEL
 4. Banner: "YouTube - banner image (2560x1440).png" (the text sits in the middle, so it shows on phones, computers and TVs)
 5. Description: Everything your car needs, in one place. MOTs, servicing, repairs, tyres, recovery, EV charging and cars for sale from checked local UK businesses.
 6. Upload the four videos from the website's video folder (intro, dealer, MOT station, EV charging).
+
+7. Video watermark (optional): YouTube Studio > Customisation > Branding > Video watermark > Upload
+   "YouTube - video watermark (300x300).png". Display time: Entire video.
