@@ -29,19 +29,19 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - Owner and staff log-in (Staff page, /#staff): the owner's Gmail address.
 - Test dealer "VIMS CARS": hello@motoringcentral.co.uk (Partner log in). Test customer: the owner's Sky address.
 - Made by Claude for the end-to-end tests on 21 Nov (all arrive in the vimen@ mailbox; the owner has the password):
-  vimen+customer@ (customer "Test Customer"), vimen+recovery@ ("TEST Recovery Dartford"), vimen+ev@ ("TEST EV
+  vimen+customer@ (customer "Test Customer"), vimen+dealer@ (dealer "TEST Dealer Dartford", in its free months),
+  vimen+recovery@ ("TEST Recovery Dartford"), vimen+ev@ ("TEST EV
   Charging Dartford"), vimen+mot@ ("TEST MOT Station Dartford", using the real DVSA number 11423 of a Dartford
   station, so remove it before any real MOT station there joins).
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
-WHERE WE STOPPED (21 Nov, about 5am). Next when the owner is back:
-- Owner is visiting local MOT stations and dealers with the printed pitches. The join pages still show the launch
-  offers (5%, £74.50 Pro, 3 months free, free to join) while the pitches show full prices: decide which to keep.
-- Decide: history checks free in a dealer's free months, or £3.50 + VAT each as now.
-- The inspection and PDI forms say "The Motoring Central Ltd" in the small print (company not registered yet).
-- The longer menu name "Work in the motor trade" puts the main menu on its own row on a computer: keep or shorten.
-- The end-to-end test scripts are in tools/e2e (the test password is not stored there: set MC_TEST_PW).
+WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
+- Launch offer: the site says dealers get their first 3 months free (then full price), and partners pay 5% (not 10%)
+  and Pro £74.50 (not £149). The owner described the offer as "sign up in the first 3 months: months 0-3 free,
+  months 3-6 half price". These are different: decide which is right, then the site, terms and FAQ follow.
+- Menu name for the jobs page: options shown to the owner (keep "Work in the motor trade", or "Motor trade jobs",
+  "Trade jobs" or "Careers" in the menu with "Work in the motor trade" kept as the page heading).
 
 Found in the end-to-end tests (21 Nov) and still to fix:
 - A link to /#dashboard (as in our emails) shows the log-in form for a moment-old saved session: the partner is logged
@@ -380,6 +380,18 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026 (morning): owner's decisions done. (1) Launch offer on the site stays as it is; the pitches stay at full
+  price and the owner explains the offer in person. (2) History checks in a dealer's free months are a choice: pay
+  £3.50 + VAT, or list free without one. Without a check the dealer must declare the write-off status, the advert is
+  marked "Not history checked" for its whole life, it is flagged for our team ("No history check (dealer's free
+  months)") and buyers get a link to the free GOV.UK MOT history checker (our own MOT history card appears by itself
+  once the DVSA API is connected). The database allows it only for approved dealers in their first 92 days
+  (migration 20261121f). Works from the List form, the stock book and the spreadsheet upload. Dealer page, dealer
+  terms, buyer FAQ, the dealer video line and the dealer pitch no longer say every car is checked. Tested on the live
+  site with a new test dealer (vimen+dealer@, "TEST Dealer Dartford"): without a check from the List form and from the
+  stock book, and with a paid check. (3) "Ltd" removed everywhere until the company is registered; the legal company
+  details keep "[The Motoring Central Ltd]" in brackets with the other details to fill in.
+- Fixed on the way: a new real dealer's stock list showed nothing until they tapped "All" (no filter was set).
 - 21 Nov 2026 (early morning): SALES PITCHES. Four printable A4 proposals, 7 pages each, and one combined 28-page PDF,
   in the folder pitch/ (The-Motoring-Central-Partner-Proposals.pdf is the combined one; MOT stations, car and van
   dealers, recovery, EV charging). Full prices only, no launch offers. Each has: cover and vision, what they get and
