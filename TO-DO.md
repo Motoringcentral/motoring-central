@@ -358,6 +358,15 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026: one message system for the whole site (owner's decision). Customers and the partner doing their booking
+  (garage, MOT station, mobile mechanic, recovery, tyres, valeting, EV charging) can now message each other for real:
+  table booking_messages (migration 20261121b_booking_messages.sql), shown in the same Messages panel as car and van
+  messages, grouped by customer for partners, with the booking it is about. The other person gets an email (at most one
+  per booking and direction every 30 minutes). Any booking from the last 60 days appears in Messages so either side can
+  start the conversation. Tested: panel in a browser with pretend data; database rules with a dry run (only the customer
+  and the partner of a booking can read or send; emails queue). The old browser-only booking chats are hidden for real
+  accounts. STILL TO DO: the chat with The Motoring Central team (support) is still browser-only, so staff never receive
+  it; build it on the same system with a staff inbox.
 - 21 Nov 2026: messages about cars and vans are now in the Messages button that is on every page (bottom right) and
   in a "Messages" link in the header. Both turn red and show the number of new messages. The list shows a dealer's
   conversations grouped by customer (name, phone) with the car or van each one is about (title, registration, price,
