@@ -65,8 +65,8 @@ partner dashboards; car and van messages card for partners who do not sell cars;
 steps promised a video call; pretend booking alerts for real accounts.)
 
 LAUNCH LINE-UP (owner, 21 Nov 2026): first launch is MOT, car and van sales (dealers, private, trade), mobile EV
-charging, recovery and valeting, together. Repairs and servicing come after (mobile mechanics, garage repairs, auto
-electricians and locksmiths, tyres, bodywork and alloys). Built: window.MCLAUNCH.LIVE in index.html (customers: tiles,
+charging, recovery, valeting, bodywork and alloys, and auto electricians and locksmiths (last two added the same
+evening), together. Mobile mechanics, garage repairs and servicing, and tyres come after. Built: window.MCLAUNCH.LIVE in index.html (customers: tiles,
 search, chips and footer show only live services; anything else shows "coming soon") and RECRUIT in "Join pages by
 trade" (partners: only the five launch trades can join; the other join pages go to Join the network, "Opening soon").
 To switch repairs on later: LIVE=null and RECRUIT=null. Repair pricing decision is no longer blocking launch.

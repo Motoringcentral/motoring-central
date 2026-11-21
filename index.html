@@ -1416,10 +1416,10 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="pdots" id="pdots"></div>
 <script>
 /* LAUNCH LINE-UP (21 Nov 2026): first launch is MOT, car and van sales (dealers, private and trade), mobile EV charging,
-   recovery and valeting. Repairs and servicing (mobile mechanics, garage repairs, auto electricians and locksmiths,
-   tyres, bodywork and alloys) come later. To switch a service on, add it to LIVE (customers) and RECRUIT in the
+   recovery, valeting, bodywork and alloys, and auto electricians and locksmiths (added 21 Nov). Repairs and servicing
+   (mobile mechanics, garage repairs) and tyres come later. To switch a service on, add it to LIVE (customers) and RECRUIT in the
    "Join pages by trade" script (partners). LIVE=null shows everything. */
-window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge'],LATER:{mobile:'Mobile mechanics',garage:'Garage repairs and servicing',autoelec:'Auto electricians and locksmiths',tyres:'Mobile tyres',body:'Bodywork and alloy wheels'}};
+window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LATER:{mobile:'Mobile mechanics',garage:'Garage repairs and servicing',autoelec:'Auto electricians and locksmiths',tyres:'Mobile tyres',body:'Bodywork and alloy wheels'}};
 (function(){var L=window.MCLAUNCH;if(!L.LIVE)return;function on(m){return !m||L.LIVE.indexOf(m)>-1||!L.LATER[m]}
  L.on=on;
  /* the services carousel: the garage picture becomes MOT; the rest that are not live yet are taken out */
@@ -1431,8 +1431,8 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge'],LATER:{mobile:'Mobil
  /* anything that tries to open a service that is not live yet shows "coming soon" instead */
  function soon(m){var d=document.getElementById('mc-soon');if(d)d.remove();d=document.createElement('div');d.id='mc-soon';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','soon-h');
   d.style.cssText='position:fixed;inset:0;z-index:9998;background:rgba(6,20,36,.85);display:flex;align-items:center;justify-content:center;padding:16px';
-  var SB='all:unset;cursor:pointer;display:inline-block;background:var(--accent);color:#06213a;font-weight:800;border-radius:20px;padding:9px 14px;font-size:.95rem;text-decoration:none',live=[['mot','MOT'],['valet','Full valet'],['recovery','Recovery'],['evcharge','EV charging']];
-  d.innerHTML='<div class="card" style="max-width:440px;width:100%;background:var(--surface);color:var(--ink)"><h2 id="soon-h" style="margin-top:0">'+(L.LATER[m]||'This service')+': coming soon</h2><p>We are opening in stages so every partner is checked properly. Repairs and servicing are next.</p><p style="margin:0 0 6px"><b>You can book now:</b></p><div style="display:flex;flex-wrap:wrap;gap:8px">'
+  var SB='all:unset;cursor:pointer;display:inline-block;background:var(--accent);color:#06213a;font-weight:800;border-radius:20px;padding:9px 14px;font-size:.95rem;text-decoration:none',live=[['mot','MOT'],['valet','Full valet'],['recovery','Recovery'],['evcharge','EV charging'],['body','Bodywork and alloys'],['autoelec','Auto electrician or locksmith']];
+  d.innerHTML='<div class="card" style="max-width:440px;width:100%;background:var(--surface);color:var(--ink)"><h2 id="soon-h" style="margin-top:0">'+(L.LATER[m]||'This service')+': coming soon</h2><p>We are opening in stages so every partner is checked properly. Mechanics and garage repairs are next.</p><p style="margin:0 0 6px"><b>You can book now:</b></p><div style="display:flex;flex-wrap:wrap;gap:8px">'
    +live.map(function(x){return '<button type="button" style="'+SB+'" data-soongo="'+x[0]+'">'+x[1]+'</button>'}).join('')+'<a style="'+SB+'" href="#cars" data-soonx="1">Buy a car</a><a style="'+SB+'" href="#vans" data-soonx="1">Buy a van</a></div>'
    +'<p style="margin:14px 0 0"><button type="button" style="'+SB+';background:transparent;color:var(--ink);border:2px solid var(--line)" data-soonx="1">Close</button></p></div>';
   document.body.appendChild(d);var c=d.querySelector('[data-soonx]');if(c)setTimeout(function(){d.querySelector('button').focus()},30)}
@@ -7146,7 +7146,7 @@ function make(host,opts){
  /* launch line-up: services that are not open yet are left out of the results, with one "coming soon" note */
  function LA(){var L=window.MCLAUNCH;return L&&L.LIVE&&L.on?L:null}
  function lon(m){var L=LA();return !L||L.on(m)}
- var SOON='<p class="qnote plain">Repairs and servicing (mechanics, garages, auto electricians, tyres and bodywork) are coming soon. Right now you can book an MOT, a full valet, recovery or EV charging, or buy a car or van.</p>';
+ var SOON='<p class="qnote plain">Mechanics, garage repairs and servicing, and mobile tyres are coming soon. Right now you can book an MOT, a full valet, recovery, EV charging, bodywork and alloy wheels, or an auto electrician or locksmith, or buy a car or van.</p>';
  function draw(force){var raw=I.value.trim(),q=words(raw),h='',i=0,cut=0;ITEMS=[];X.hidden=!raw;
   var reg=regOf(raw);
   if(!q.length&&!reg){if(force!==true&&document.activeElement!==I&&!raw){R.innerHTML='';return}
@@ -9412,7 +9412,7 @@ addEventListener('hashchange',function(){setTimeout(check,30)});setTimeout(check
    ['mot','dealer']. null shows every trade on Join the network. Trades: mot, garage, mobile, autoelec, tyres, body,
    valet, recovery, ev, dealer. */
 (function(){function $(i){return document.getElementById(i)}
-var RECRUIT=['mot','dealer','ev','recovery','valet'];
+var RECRUIT=['mot','dealer','ev','recovery','valet','body','autoelec'];
 var V=$('v-mech');if(!V)return;
 var hero=V.querySelector('.hero'),H1=hero.querySelector('h1'),P=hero.querySelector('p'),IMG=hero.querySelector('img.heroimg'),SW=hero.querySelector('.swl');
 var DEF={h:H1.textContent,p:P.textContent,img:IMG.getAttribute('src'),alt:IMG.getAttribute('alt'),sw:SW?SW.outerHTML:''};
@@ -9469,7 +9469,7 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
 /* recruiting phase: only show the trades being recruited */
 var ROLE={'#mot-station':'mot','#garage':'garage','#mobile-mechanic':'mobile','#auto-electrician':'autoelec','#tyres':'tyres','#bodyshop':'body','#valets':'valet','#recovery':'recovery','#evcharging':'ev','#dealers':'dealer'};
 function recruit(){if(!RECRUIT)return;[].forEach.call(document.querySelectorAll('#v-network .card.role, #v-network .rolepick a'),function(el){var a=el.matches('a')?el:el.querySelector('a.btn');var r=a&&ROLE[a.getAttribute('href')];if(r)el.hidden=RECRUIT.indexOf(r)<0});
- var net=$('v-network');if(net&&!$('mc-soonjoin')){var g=net.querySelector('.card.role');if(g){var n=document.createElement('div');n.className='card';n.id='mc-soonjoin';n.innerHTML='<h2 style="margin-top:0">Opening soon</h2><p style="margin:0">Garages, mobile mechanics, auto electricians and locksmiths, tyre fitters, body shops and alloy repairers join in the next stage. Garages that test MOTs can join now as an <a href="#mot-station">MOT test station</a>. Want to be first? <a href="#contact">Tell us</a> and we will contact you when it opens.</p>';g.parentNode.appendChild(n)}}}
+ var net=$('v-network');if(net&&!$('mc-soonjoin')){var g=net.querySelector('.card.role');if(g){var n=document.createElement('div');n.className='card';n.id='mc-soonjoin';n.innerHTML='<h2 style="margin-top:0">Opening soon</h2><p style="margin:0">Garages, mobile mechanics and tyre fitters join in the next stage. Garages that test MOTs can join now as an <a href="#mot-station">MOT test station</a>. Want to be first? <a href="#contact">Tell us</a> and we will contact you when it opens.</p>';g.parentNode.appendChild(n)}}}
 /* a join page for a trade that is not open yet sends people to Join the network */
 var OFFJOIN={'mechanics':1,'garage':1,'mobile-mechanic':1,'auto-electrician':1,'tyres':1,'bodyshop':1};
 function guardJoin(){if(!RECRUIT)return;var h=(location.hash||'').slice(1);if(!OFFJOIN[h])return;var r=ROLE['#'+h]||'garage';if(RECRUIT.indexOf(r)>-1)return;history.replaceState(null,'','#network');dispatchEvent(new HashChangeEvent('hashchange'));setTimeout(function(){var n=$('mc-soonjoin');if(n)n.scrollIntoView({behavior:'smooth',block:'center'})},400)}
