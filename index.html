@@ -1256,6 +1256,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 
   <div class="card unl" id="unlock" hidden></div>
 
+  <div class="card mc-form" id="mc-aereq" hidden></div>
   <div class="card" id="quote" hidden>
     <h2>Your fixed price</h2>
     <p class="sample" style="margin:0 0 8px" id="mechs-lead">Choose your mechanic. Each sets their own hourly rate.</p>
@@ -2751,7 +2752,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
   $('unlock').addEventListener('input',function(e){if(e.target.id==='unl-vrm')e.target.value=e.target.value.toUpperCase()});
   function render(r){
     car=r?pick(r):CARS[0];svc=null;var D=!!r&&det(r),m=window.GGmode;var sh2=document.querySelector('#svc-card h2');if(sh2)sh2.textContent=m==='mot'?'Which MOT do you need? Most cars are Class 4':m==='autoelec'&&window.GGsub==='lock'?'What do you need help with?':'What does it need?';var side=['recovery','evcharge','tyres','valet','body'].indexOf(m)>-1,U=$('unlock'),u=cu();
-    $('quote').hidden=true;$('job').hidden=true;if(window.GGmot)window.GGmot(false,null);$('svc-card').hidden=side;U.hidden=true;
+    $('quote').hidden=true;$('job').hidden=true;if(window.GGmot)window.GGmot(false,null);if(window.MCaeReq)window.MCaeReq.hide();$('svc-card').hidden=side;U.hidden=true;
     if(window.GGval)window.GGval(D&&m==='valet',car);if(window.GGbdy)window.GGbdy(D&&m==='body',car);if(window.GGrec)window.GGrec(m==='recovery',D?car:null);if(window.GGevc)window.GGevc(m==='evcharge',D?car:null);if(window.GGtyr)window.GGtyr(D&&m==='tyres',car);
     if(!D&&side&&m!=='recovery'&&m!=='evcharge'){U.innerHTML=unlockHtml(r,FROM[m]);U.hidden=false}
     var ev=car.fuel==='Electric',svg='<svg viewBox="0 0 92 52" aria-hidden="true"><path d="M6 36l6-14c2-4 6-6 10-6h30c5 0 9 2 12 6l10 8c4 1 6 3 6 6v2H6z" fill="var(--brand)"/><circle cx="26" cy="38" r="7" fill="var(--ink)"/><circle cx="68" cy="38" r="7" fill="var(--ink)"/></svg>';
@@ -2766,10 +2767,10 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
     var box=$('svc');box.innerHTML='';box.className='opts'+(m==='mot'||window.MCJOB?' motgrid':'');
     services(car).forEach(function(s){if(s.mk&&window.MCMOT&&window.MCMOT.group(s.mk)){var gh=document.createElement('h3');gh.className='motgh';gh.textContent=window.MCMOT.group(s.mk);box.appendChild(gh)}
       var b=document.createElement('button');b.type='button';b.className='opt';b.setAttribute('aria-pressed','false');b.setAttribute('data-sid',s.id);
-      b.innerHTML=s.mk&&window.MCMOT?window.MCMOT.tile(s.mk,D?null:fromPrice(s)):window.MCJOB?window.MCJOB.tile(s,D?null:fromPrice(s)):'<span>'+s.n+'<small>'+s.d+(D?'':'. <b class="fromp">From £'+fromPrice(s)+'</b>')+'</small></span>';
+      var aeq=m==='autoelec';b.innerHTML=s.mk&&window.MCMOT?window.MCMOT.tile(s.mk,D?null:fromPrice(s)):(window.MCJOB&&!aeq)?window.MCJOB.tile(s,D?null:fromPrice(s)):'<span>'+s.n+'<small>'+s.d+(aeq?'. <b class="fromp">Fixed quotes from local specialists</b>':D?'':'. <b class="fromp">From £'+fromPrice(s)+'</b>')+'</small></span>';
       b.addEventListener('click',function(){svc=s;window.GGsvc=s;[].forEach.call(box.querySelectorAll('.opt'),function(c){c.setAttribute('aria-pressed','false')});b.setAttribute('aria-pressed','true');
         if(D){quote();$('quote').scrollIntoView({behavior:'smooth',block:'nearest'})}
-        else{pendSvc=s.id;U.innerHTML=unlockHtml(r,s.mot?s.n+': MOT £'+fromPrice(s)+', the official maximum fee, with no extra booking fee. Book a free time straight from the test centre’s live diary.':s.n+' from £'+fromPrice(s)+'. The exact price depends on your engine and the parts it needs.');U.hidden=false;U.scrollIntoView({behavior:'smooth',block:'nearest'})}});
+        else{pendSvc=s.id;U.innerHTML=unlockHtml(r,window.GGmode==='autoelec'?s.n+': get fixed quotes from up to 3 local specialists, priced for your exact car. Nothing is booked until you accept one.':s.mot?s.n+': MOT £'+fromPrice(s)+', the official maximum fee, with no extra booking fee. Book a free time straight from the test centre’s live diary.':s.n+' from £'+fromPrice(s)+'. The exact price depends on your engine and the parts it needs.');U.hidden=false;U.scrollIntoView({behavior:'smooth',block:'nearest'})}});
       box.appendChild(b)});
     $('flow').hidden=false}
 
@@ -2778,6 +2779,8 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
     var gm=(window.GGmode==='garage'||window.GGmode==='mot');if(svc.mk&&$('mclass'))$('mclass').value=svc.mk;
     if(window.GGmot)window.GGmot(gm,gm?{name:svc.mot&&window.MCMOT?window.MCMOT.label():svc.n,mot:!!svc.mot,price:function(g){if(svc.mot)return window.MCMOT?window.MCMOT.price(g):g.fee;var s=0;svc.parts(car).forEach(function(p){s+=p[2][q]*p[3]});return s+Math.round(svc.hrs*g.r)}}:null);
     if(gm){$('quote').hidden=true;$('job').hidden=true;return}
+    if(window.GGmode==='autoelec'&&window.MCaeReq){$('quote').hidden=true;$('job').hidden=true;window.MCaeReq.show(svc,car,lastReg);return}
+    if(window.MCaeReq)window.MCaeReq.hide();
     drawMechs();
     var rows=svc.parts(car),sub=0,h='<tr><th>Item</th><th>Price</th></tr>';
     rows.forEach(function(p){var line=p[2][q]*p[3];sub+=line;h+='<tr><td>'+p[0]+'<small>'+p[1]+'</small></td><td>'+money(line)+'</td></tr>'});
@@ -3431,7 +3434,7 @@ window.GGbdy=function(on,c){$('bdy').hidden=!on;if(!on)return;car=c||null;var sz
 $('bqgo').addEventListener('click',function(){var pc=$('bpost').value.replace(/\s/g,''),ph=$('bph').files.length,e='';
 if(pay==='ins'&&!$('binsr').value.trim())e='Enter the name of your insurer.';else if(pc.length<5)e='Enter the postcode where the car is.';else if(ph<2)e='Add at least 2 photos of the damage.';else if(ph>6)e='Add no more than 6 photos.';else if(!picked.length)e='Choose at least one repairer to send your request to.';
 $('bq-err').textContent=e;if(e)return;var r=($('reg')||{}).value||'';
-$('bqdone').textContent='Quote request sent: '+$('bwhat').value.toLowerCase()+(r?' on '+r.toUpperCase():'')+', to '+picked.map(function(p){return p.n}).join(', ')+'. '+(pay==='ins'?'Marked as an insurance claim with '+$('binsr').value.trim()+'. ':'')+'You will get fixed prices within 24 hours.';$('bqdone').hidden=false;
+$('bqdone').textContent='Quote request sent: '+$('bwhat').value.toLowerCase()+(r?' on '+r.toUpperCase():'')+', to '+picked.map(function(p){return p.n}).join(', ')+'. '+(pay==='ins'?'Marked as an insurance claim with '+$('binsr').value.trim()+'. ':'')+'Repairers usually reply within 24 hours with a fixed price. Compare them and book in My account, under Your quotes.';$('bqdone').hidden=false;
 var rl=picked.filter(function(p){return p.real});if(rl.length&&window.MCbodyQuote)window.MCbodyQuote({partners:rl.map(function(p){return p.n}),what:$('bwhat').value,where:$('bwhere').value,post:$('bpost').value.trim().toUpperCase(),insurer:pay==='ins'?$('binsr').value.trim():'',note:(($('bdesc')||{}).value||'').trim(),claim:(($('bclaim')||{}).value||'').trim(),reg:r.toUpperCase(),files:[].slice.call($('bph').files,0,6),text:$('bqdone').textContent})});
 $('bgo').addEventListener('click',function(){var p=$('bapost').value.replace(/\s/g,'');if(p.length<5){$('ba-err').textContent='Enter the postcode where the car is.';return}$('ba-err').textContent='';var x=cur().x,n=+$('bwn').value;
 $('bdone').textContent='Booked: '+FIN[+$('bfin').value].toLowerCase()+', '+n+' wheel'+(n>1?'s':'')+', with '+x.n+($('bawhere').value==='shop'?' (their wheel centre)':' at your address')+', '+$('baday').value+' at '+$('baslot').value+'. Total '+money(total)+'.';$('bdone').hidden=false});
@@ -4535,7 +4538,7 @@ if(BK[b.id]&&!isCust()){e.preventDefault();e.stopImmediatePropagation();pending=
 document.addEventListener('submit',function(e){var f=e.target;if((f.id==='cd-enq'||f.id==='vd-enq')&&!isCust()){e.preventDefault();e.stopImmediatePropagation();pending={form:f};open('Create a free account or log in to message the dealer.')}},true);
 /* record bookings and enquiries on the account */
 window.GGrecBooking=function(item){var u=window.GGuser;if(u&&u.bookings)rec(u.bookings,item)};
-var DONE={mgo:['MOT','mdone'],tgo:['Tyres','tdone'],vgo:['Valet','vdone'],rgo:['Recovery','rdone'],ego:['EV charging','evc-done'],bgo:['Alloy wheels','bdone'],bqgo:['Bodywork quotes','bqdone']};
+var DONE={mgo:['MOT','mdone'],tgo:['Tyres','tdone'],vgo:['Valet','vdone'],rgo:['Recovery','rdone'],ego:['EV charging','evc-done'],bgo:['Alloy wheels','bdone']};
 function rec(list,item){var last=list[0];if(last&&last.text===item.text&&Date.now()-last.t<3000)return;if(window.GGuser&&list===window.GGuser.bookings&&!item.veh&&window.MCbookingVeh){var vh=window.MCbookingVeh();if(vh)item.veh=vh}list.unshift(item);var u=window.GGuser;if(window.MCsave&&u)window.MCsave(list===u.bookings?'booking':'enquiry',item.text||item.about,Object.assign({acct:u.email,customer:u.name,phone:u.phone},item));if(u&&list===u.bookings){u.det=u.det||{regs:[],left:2};u.det.left=2}}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('button');if(!b||!isCust())return;var u=window.GGuser;
 if(b.id==='book')setTimeout(function(){if($('job').hidden)return;var r=($('reg')||{}).value||'',sv=window.GGsvc&&window.GGsvc.n||'';rec(u.bookings,{kind:'Mechanic',svc:sv,text:(sv?sv+' booked':'Booked')+' with '+$('jobname').textContent+(r?' for '+r.toUpperCase():'')+'.',t:Date.now(),tc:true})},120);
@@ -5650,6 +5653,7 @@ function partnersOf(kind,text){var m;text=String(text||'');
  if(kind==='Valet'){m=/\), (.+?)(?: \(their premises\)| at your address)/.exec(text);return m?[m[1]]:[]}
  if(kind==='Alloy wheels'){m=/, with (.+?)(?: \(their wheel centre\)| at your address)/.exec(text);return m?[m[1]]:[]}
  if(kind==='Bodywork quotes')return [];
+ if(kind==='Bodywork'||kind==='Auto electrics'){m=/ with (.+?), [A-Z][a-z]+day /.exec(text);return m?[m[1]]:[]}
  m=/^Booked: (.+?)\. /.exec(text);return m?[m[1]]:[]}
 function sync(){var I=window.MCinbox?window.MCinbox():[];if(I.length===loadedInbox)return;loadedInbox=I.length;
  I.forEach(function(it){if(it.type!=='review')return;var d=it.data||{};if(!d.partner||REV.some(function(r){return r.t===(d.t||it.t)&&r.partner===d.partner}))return;
@@ -7855,7 +7859,8 @@ window.MCrepairGarages=function(){var sv=window.GGsvc&&window.GGsvc.n,known=wind
   .map(function(p){return{id:p.id,n:p.name,a:p.town||'',real:1,r:+p.rates.hour,fee:0}})};
 /* bodywork quote requests: photos go to private storage and one request goes to each approved repairer picked */
 var PHB='job-photos';
-window.MCbodyQuote=function(q){var u=window.GGuser;if(!sb||!u||!u.sbid)return;var paths=[];
+window.MCbodyQuote=function(q){window.MCquoteJob({kind:'body',service:q.what,summary:(q.note?q.note:'')+(q.insurer?(q.note?'. ':'')+'Insurance claim with '+q.insurer+(q.claim?', claim '+q.claim:''):''),partners:q.partners,files:q.files,details:{where:q.where,post:q.post,insurer:q.insurer||null,claim:q.claim||null}})};
+window.MCbodyQuoteOld=function(q){var u=window.GGuser;if(!sb||!u||!u.sbid)return;var paths=[];
  ready.then(function(){return Promise.all((q.files||[]).map(function(f,k){var path=u.sbid+'/'+Date.now()+'-'+k+(/\.png$/i.test(f.name)?'.png':/\.webp$/i.test(f.name)?'.webp':'.jpg');
   return sb.storage.from(PHB).upload(path,f,{contentType:f.type||'image/jpeg'}).then(function(r){if(!r.error)paths.push(path)})}))}).then(function(){
   var veh=window.MCbookingVeh?window.MCbookingVeh():null;
@@ -7895,7 +7900,7 @@ function detHtml(u){var p=u.role!=='customer',biz=p&&u.role!=='mechanic'||(p&&u.
   +'<p class="err" id="md-err" role="alert"></p><div class="dtools"><button class="btn sm" type="button" id="md-save">Save my details</button></div></div>'}
 function detMount(){var u=window.GGuser;if(!u||!u.sbid||u.role==='admin')return;var h=location.hash,box=u.role==='customer'?(h==='#account'&&$('acc-body')):(h==='#dashboard'&&$('dash-body'));if(!box||$('mc-mydet'))return;
  var d=document.createElement('div');d.innerHTML=detHtml(u);var c=d.firstChild;if(u.role==='customer'){var f=box.querySelector('.card');if(f&&f.nextSibling)box.insertBefore(c,f.nextSibling);else box.appendChild(c)}else box.appendChild(c)}
-(function(){var st=document.createElement('style');st.textContent='.mc-form label.f{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}.mc-form input[type=text],.mc-form input[type=email],.mc-form input[type=tel],.mc-form input[type=number],.mc-form input[type=date],.mc-form select,.mc-form textarea{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px}.mc-form input:focus-visible,.mc-form select:focus-visible,.mc-form textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.mc-form .err{color:#c62828;font-weight:600;font-size:.9rem;margin:8px 0 0}.mc-form .err:empty{display:none}';document.head.appendChild(st)})();
+(function(){var st=document.createElement('style');st.textContent='.mc-form label.f{display:block;font-weight:600;font-size:.9rem;margin:12px 0 4px}.mc-form input[type=text],.mc-form input[type=email],.mc-form input[type=tel],.mc-form input[type=number],.mc-form input[type=date],.mc-form select,.mc-form textarea{width:100%;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px}.mc-form input:focus-visible,.mc-form select:focus-visible,.mc-form textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.mc-form .err{color:#c62828;font-weight:600;font-size:.9rem;margin:8px 0 0}.mc-form .err:empty{display:none}#acc-body .mc-form .btn,#mc-aereq .btn{appearance:none;background:var(--accent);color:#06213a;border:0;border-radius:10px;padding:10px 14px;font:inherit;font-weight:800;cursor:pointer;text-decoration:none;display:inline-block}#acc-body .mc-form .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}#acc-body .mc-form .btn:disabled{opacity:.6}#acc-body .mc-form .dtools{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}';document.head.appendChild(st)})();
 setInterval(function(){try{detMount()}catch(e){}},1000);
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#md-save');if(!b||!sb)return;var u=window.GGuser;if(!u||!u.sbid)return;
  var n=$('md-name').value.trim(),t=$('md-tel').value.trim(),m=$('md-mail').value.trim().toLowerCase(),pc=$('md-post')?$('md-post').value.trim().toUpperCase():null,er=$('md-err'),msg='';
@@ -9141,6 +9146,79 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
   ready.then(function(){return sb.rpc('staff_add_reviewer',{p_email:m,p_name:n})}).then(function(r){t.disabled=false;if(r.error){var k=r.error.message;er.textContent=/no_account/.test(k)?'There is no account with that email yet. Ask them to create one first.':/is_partner/.test(k)?'That email is a partner or dealer account. Use a different email for staff.':/already_staff/.test(k)?'They are already on the team.':'Not added: '+k;return}
    TEAM.msg=n+' is now a reviewer. We have emailed them. They set up the two-step log-in at their first staff log-in.';teamPull()})}});
 setInterval(function(){try{teamDraw(false)}catch(e){}},1500);
+
+/* ---------- quotes on the website: bodywork, alloy damage, auto electricians and locksmiths ---------- */
+window.MCquoteJob=function(q){var u=window.GGuser;if(!sb||!u||!u.sbid)return Promise.resolve({ok:false});var ids=(q.partners||[]).map(partnerId).filter(Boolean),paths=[];
+ if(!ids.length)return Promise.resolve({ok:false,why:'sample'});
+ return ready.then(function(){return Promise.all((q.files||[]).map(function(f,k){var path=u.sbid+'/'+Date.now()+'-'+k+(/\.png$/i.test(f.name)?'.png':/\.webp$/i.test(f.name)?'.webp':'.jpg');
+  return sb.storage.from('job-photos').upload(path,f,{contentType:f.type||'image/jpeg'}).then(function(r){if(!r.error)paths.push(path)})}))}).then(function(){
+  var veh=window.MCbookingVeh?window.MCbookingVeh():null,det=Object.assign({},q.details||{},{photos:paths});
+  return sb.from('quote_jobs').insert({kind:q.kind,service:String(q.service||'').slice(0,200),summary:String(q.summary||'').slice(0,2000),vehicle:veh,details:det,partner_ids:ids})}).then(function(r){
+  if(r.error){toast('Your request was not sent. Check your connection and try again.',true);return{ok:false}}CQ.rows=null;CQ.at=0;return{ok:true,n:ids.length}}).catch(function(){toast('Your request was not sent. Check your connection and try again.',true);return{ok:false}})};
+/* auto electrician / locksmith request panel in the booking flow */
+var AER={svc:null,car:null,reg:'',pick:[]};
+window.MCaeReq={hide:function(){var b=$('mc-aereq');if(b)b.hidden=true},show:function(svc,car,reg){AER.svc=svc;AER.car=car;AER.reg=reg||'';AER.pick=[];aerDraw();var b=$('mc-aereq');if(b){b.hidden=false;b.scrollIntoView({behavior:'smooth',block:'nearest'})}}};
+function aerList(){var L=(window.MCdir&&window.MCdir.L&&window.MCdir.L.ae)||[];return L.slice().sort(function(a,b){return (b.real||0)-(a.real||0)})}
+function aerDraw(){var b=$('mc-aereq');if(!b||!AER.svc)return;var L=aerList(),lock=/^Locksmith/.test(AER.svc.d||'')||/key|lock/i.test(AER.svc.n);
+ b.innerHTML='<h2>Get fixed quotes</h2><p class="note" style="margin:0 0 6px"><b>'+E(AER.svc.n)+'</b>. Choose up to 3 specialists. Each sends a fixed price for your exact car, usually within a few hours. You compare them in My account and book the one you want.</p>'
+  +'<div class="opts" id="aer-list">'+L.map(function(x,i){var on=AER.pick.indexOf(x.n)>-1;return '<button type="button" class="opt" aria-pressed="'+(on?'true':'false')+'" data-aer="'+i+'"><span>'+E(x.n)+'<small>'+(x.real?'Approved partner':'Sample partner (preview)')+(x.r?' · '+'£'+(+x.r).toFixed(0)+' an hour labour':'')+'</small></span></button>'}).join('')+'</div>'
+  +'<label class="f" for="aer-where">Where?</label><select id="aer-where"><option value="mobile">Come to me</option><option value="shop">I will take it to them</option><option value="any">Either is fine</option></select>'
+  +'<label class="f" for="aer-post">Postcode where the car is</label><input type="text" id="aer-post" maxlength="10" autocomplete="postal-code" value="'+E((window.GGuser&&window.GGuser.post)||'')+'">'
+  +'<label class="f" for="aer-desc">'+(lock?'Tell them what happened (for example, keys locked in the boot, or no keys at all)':'Describe the problem in your own words')+'</label><textarea id="aer-desc" rows="3" maxlength="1000"></textarea>'
+  +(lock?'<p class="note" style="margin:6px 0 0">For keys, have your V5C logbook and photo ID ready. Locksmiths must check you own the car.</p>':'')
+  +'<p class="err" id="aer-err" role="alert"></p><div class="dtools"><button class="btn" type="button" id="aer-go">Send for quotes</button></div><p class="okmsg" id="aer-ok" hidden></p>'}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-aereq button');if(!t)return;var L=aerList();
+ if(t.dataset.aer!=null){var x=L[+t.dataset.aer],k=AER.pick.indexOf(x.n);if(k>-1)AER.pick.splice(k,1);else{if(AER.pick.length>=3){$('aer-err').textContent='You can ask up to 3 specialists.';return}AER.pick.push(x.n)}
+  [].forEach.call(document.querySelectorAll('#aer-list [data-aer]'),function(b){b.setAttribute('aria-pressed',AER.pick.indexOf(L[+b.dataset.aer].n)>-1?'true':'false')});$('aer-err').textContent='';return}
+ if(t.id==='aer-go'){var pc=$('aer-post').value.trim().toUpperCase(),ds=$('aer-desc').value.trim(),er=$('aer-err');
+  if(!AER.pick.length){er.textContent='Choose at least one specialist.';return}if(pc.replace(/\s/g,'').length<5){er.textContent='Enter the postcode where the car is.';return}if(ds.length<5){er.textContent='Tell them a little about the job.';return}
+  if(!realUser()){if(window.GGcustOpen)window.GGcustOpen('Create a free account or log in to get quotes.','new');return}
+  var real=AER.pick.filter(function(n){return window.MCisRealPartner&&window.MCisRealPartner(n)});
+  if(!real.length){er.textContent='The specialists you chose are samples for the preview, so they cannot get requests. Choose an approved partner.';return}
+  t.disabled=true;er.textContent='';window.MCquoteJob({kind:'autoelec',service:AER.svc.n,summary:ds,partners:real,details:{where:$('aer-where').value,post:pc}}).then(function(r){t.disabled=false;if(!r.ok)return;
+   var ok=$('aer-ok');ok.textContent='Request sent to '+r.n+' specialist'+(r.n===1?'':'s')+'. We will email you when quotes arrive. Compare and book them in My account, under Your quotes.';ok.hidden=false;t.hidden=true})}});
+/* customer: Your quotes (in My account) */
+var CQ={rows:null,at:0,uid:null,acc:null};
+function cqPull(){CQ.at=Date.now();ready.then(function(){return sb.from('quote_jobs').select('id,kind,service,summary,vehicle,status,booking_id,created_at,quote_offers(id,partner_id,partner_name,price,note,days,status,created_at)').order('created_at',{ascending:false}).limit(40)}).then(function(r){CQ.rows=r.error?[]:(r.data||[]);cqDraw(true)})}
+function cqHtml(){var R=CQ.rows||[];if(!R.length)return '';var today=new Date(),min=new Date(today.getFullYear(),today.getMonth(),today.getDate()+1);
+ return '<div class="card mc-form" id="mc-cq"><h2>Your quotes</h2><p class="note" style="margin:0 0 6px">Fixed prices from partners for bodywork, alloys, auto electrics and locksmith jobs. Accept one to book it.</p>'+R.map(function(j){var O=(j.quote_offers||[]).filter(function(o){return o.status!=='withdrawn'}).sort(function(a,b){return a.price-b.price}),reg=j.vehicle&&j.vehicle.reg;
+  var h='<div class="ac-row" style="display:block"><b>'+E(j.service)+(reg?' · '+E(String(reg).toUpperCase()):'')+'</b><small>Asked '+E(new Date(j.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}))+' · '+(j.status==='booked'?'<b>Booked</b>':j.status==='closed'?'Closed':O.length?O.length+' quote'+(O.length===1?'':'s'):'Waiting for quotes')+'</small>';
+  O.forEach(function(o){var op=CQ.acc===o.id;h+='<div style="border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0"><b>£'+(+o.price).toFixed(2)+'</b> · '+E(o.partner_name||'Partner')+(o.status==='accepted'?' · <b>booked</b>':o.status==='not_chosen'?' · not chosen':'')+(o.days!=null?'<small>Can start in '+o.days+' day'+(o.days===1?'':'s')+'</small>':'')+(o.note?'<small>“'+E(o.note)+'”</small>':'')
+   +(j.status==='open'&&o.status==='sent'?(op?'<label class="f" for="cq-day">Day you would like</label><input type="date" id="cq-day" min="'+ymd(min)+'" value="'+ymd(min)+'"><label class="f" for="cq-time">Time</label><select id="cq-time"><option>Morning</option><option>Afternoon</option><option>Any time</option></select><p class="note" style="margin:6px 0 0">Total £'+(+o.price+3).toFixed(2)+': the fixed price plus our £3.00 booking fee. The partner confirms the time with you.</p><p class="err" id="cq-err" role="alert"></p><div class="dtools"><button class="btn sm" type="button" data-cqgo="'+E(o.id)+'">Book for £'+(+o.price+3).toFixed(2)+'</button><button class="btn sm ghost" type="button" data-cqx="1">Not yet</button></div>':'<div class="dtools"><button class="btn sm" type="button" data-cqacc="'+E(o.id)+'">Accept and book</button></div>'):'')+'</div>'});
+  if(j.status==='open')h+='<div class="dtools"><button class="btn sm ghost" type="button" data-cqclose="'+E(j.id)+'">I no longer need this</button></div>';
+  return h+'</div>'}).join('')+'</div>'}
+function cqDraw(force){var u=window.GGuser;if(!u||!u.sbid||u.role!=='customer')return;if(CQ.uid!==u.sbid){CQ={rows:null,at:0,uid:u.sbid,acc:null}}if(location.hash!=='#account')return;if(CQ.rows===null){if(Date.now()-CQ.at>8000)cqPull();return}
+ var b=$('acc-body');if(!b)return;var old=$('mc-cq');if(old&&!force&&b.contains(old))return;var h=cqHtml();if(!h){if(old)old.remove();return}var d=document.createElement('div');d.innerHTML=h;var c=d.firstChild;
+ if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var f=b.querySelector('.card');if(f&&f.nextSibling)b.insertBefore(c,f.nextSibling);else b.appendChild(c)}}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-cq button');if(!t)return;var a=t.dataset;
+ if(a.cqacc){CQ.acc=a.cqacc;cqDraw(true);return}if(a.cqx){CQ.acc=null;cqDraw(true);return}
+ if(a.cqclose){t.disabled=true;ready.then(function(){return sb.rpc('close_quote_job',{p_job:a.cqclose})}).then(function(){cqPull()});return}
+ if(a.cqgo){var day=$('cq-day').value,tm=$('cq-time').value,er=$('cq-err');if(!day){er.textContent='Pick a day.';return}t.disabled=true;
+  ready.then(function(){return sb.rpc('accept_quote',{p_offer:a.cqgo,p_day:day,p_time:tm})}).then(function(r){t.disabled=false;if(r.error){var k=r.error.message;er.textContent=/bad_day/.test(k)?'Pick a day within the next 60 days.':/closed/.test(k)?'This quote can no longer be booked.':/partner_unavailable/.test(k)?'This partner is not taking bookings at the moment.':'Not booked. Check your connection and try again.';return}
+   CQ.acc=null;toast('Booked. The partner has been told and will confirm the time with you.');cqPull();if(window.MChub&&window.MChub.badge)try{window.MChub.badge()}catch(x){}})}});
+setInterval(function(){try{cqDraw(false)}catch(e){}},1500);
+/* partner: quote requests (bodywork and auto electric / locksmith partners) */
+var PQ={rows:null,at:0,uid:null,open:null};
+function pqShow(u){return u&&u.sbid&&u.status==='approved'&&(u.role==='body'||(u.role==='mechanic'&&u.sub==='autoelec'))}
+function pqPull(){PQ.at=Date.now();ready.then(function(){return sb.rpc('my_quote_jobs')}).then(function(r){PQ.rows=r.error?[]:(r.data||[]);pqDraw(true)})}
+function pqHtml(){var R=PQ.rows||[],todo=R.filter(function(x){return x.status==='open'&&!x.my_status}).length;
+ var h='<div class="card mc-form" id="mc-pq"><h2>Quote requests'+(todo?' <span class="sst">'+todo+' new</span>':'')+'</h2><p class="note" style="margin:0 0 6px">Customers ask up to 3 partners. Send a fixed price for the whole job: the customer sees it, compares and books. Their contact details come to you when they book you.</p>';
+ if(!R.length)return h+'<p class="note">No requests yet. They appear here and by email.</p></div>';
+ return h+R.map(function(x){var op=PQ.open===x.id,reg=x.vehicle&&x.vehicle.reg,v=x.vehicle||{},ph=x.photos||[];
+  return '<div class="job"><div><b>'+E(x.service)+(reg?' · '+E(String(reg).toUpperCase()):'')+'</b><small>'+E([v.make,v.model,v.year].filter(Boolean).join(' '))+(x.first_name?' · '+E(x.first_name):'')+' · '+E(x.place||'')+' · '+E(new Date(x.created_at).toLocaleDateString('en-GB',{day:'numeric',month:'short'}))+'</small>'+(x.summary?'<small>“'+E(x.summary)+'”</small>':'')+(x.insurer?'<small>Insurance claim: '+E(x.insurer)+'</small>':'')
+   +'<small><span class="sst">'+(x.chosen?'Booked you':x.status==='booked'?'Booked with another partner':x.status==='closed'?'Closed by the customer':x.my_status?'Your price: £'+(+x.my_price).toFixed(2):'Waiting for your price')+'</span></small>'
+   +(op&&x.status==='open'?'<label class="f" for="pq-price">Your fixed price for the whole job, including VAT (£)</label><input type="number" id="pq-price" min="1" step="0.01" value="'+(x.my_price?(+x.my_price).toFixed(2):'')+'"><label class="f" for="pq-days">Earliest you can do it (days from today)</label><input type="number" id="pq-days" min="0" max="60" value="'+(x.my_days!=null?x.my_days:1)+'"><label class="f" for="pq-note">Note for the customer (what is included)</label><textarea id="pq-note" rows="2" maxlength="800">'+E(x.my_note||'')+'</textarea><p class="note" style="margin:6px 0 0">The customer pays your price plus our booking fee. Your plan fee comes off your payout.</p><p class="err" id="pq-err" role="alert"></p>':'')
+   +'</div><div class="jb">'+(ph.length?'<button class="btn sm ghost" type="button" data-pqph="'+E(x.id)+'">Photos ('+ph.length+')</button>':'')+(x.status==='open'?(op?'<button class="btn sm" type="button" data-pqgo="'+E(x.id)+'">Send price</button><button class="btn sm ghost" type="button" data-pqx="1">Cancel</button>':'<button class="btn sm" type="button" data-pqopen="'+E(x.id)+'">'+(x.my_status?'Change price':'Send a price')+'</button>'):'')+'</div><div class="pqphs" id="pqph-'+E(x.id)+'" style="width:100%"></div></div>'}).join('')+'</div>'}
+function pqDraw(force){var u=window.GGuser;if(!pqShow(u)||location.hash!=='#dashboard')return;if(PQ.uid!==u.sbid){PQ={rows:null,at:0,uid:u.sbid,open:null}}var b=$('dash-body');if(!b)return;
+ if(PQ.rows===null){if(Date.now()-PQ.at>8000)pqPull();return}var old=$('mc-pq');if(old&&!force&&b.contains(old))return;if(old&&old.contains(document.activeElement)&&!force)return;
+ var d=document.createElement('div');d.innerHTML=pqHtml();var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var f=b.querySelector('.card');if(f&&f.nextSibling)b.insertBefore(c,f.nextSibling.nextSibling||null);else b.appendChild(c)}}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-pq button');if(!t)return;var a=t.dataset;
+ if(a.pqopen){PQ.open=a.pqopen;pqDraw(true);var p=$('pq-price');if(p)p.focus();return}if(a.pqx){PQ.open=null;pqDraw(true);return}
+ if(a.pqph){var x=(PQ.rows||[]).filter(function(r){return r.id===a.pqph})[0],box=$('pqph-'+a.pqph);if(!x||!box)return;if(box.innerHTML){box.innerHTML='';return}box.textContent='Loading photos…';
+  ready.then(function(){return sb.storage.from('job-photos').createSignedUrls(x.photos,3600)}).then(function(r){if(r.error||!r.data){box.textContent='The photos could not be opened.';return}box.innerHTML='';r.data.forEach(function(d){if(!d.signedUrl)return;var l=document.createElement('a');l.href=d.signedUrl;l.target='_blank';l.rel='noopener';var im=document.createElement('img');im.alt='Photo from the customer';im.src=d.signedUrl;im.style.cssText='width:110px;height:82px;object-fit:cover;border-radius:8px;margin:6px 6px 0 0;border:1px solid var(--line)';l.appendChild(im);box.appendChild(l)})});return}
+ if(a.pqgo){var pr=+$('pq-price').value,dy=$('pq-days').value===''?null:+$('pq-days').value,nt=$('pq-note').value,er=$('pq-err');if(!(pr>0)){er.textContent='Enter your price.';return}t.disabled=true;
+  ready.then(function(){return sb.rpc('send_quote',{p_job:a.pqgo,p_price:pr,p_note:nt,p_days:dy})}).then(function(r){t.disabled=false;if(r.error){er.textContent=/closed/.test(r.error.message)?'The customer has already booked or closed this request.':'Not sent. Check your connection and try again.';return}PQ.open=null;toast('Price sent. The customer has been emailed.');pqPull()})}});
+setInterval(function(){try{pqDraw(false)}catch(e){}},1500);
 
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */

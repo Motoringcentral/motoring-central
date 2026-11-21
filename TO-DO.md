@@ -69,7 +69,12 @@ charging, recovery, valeting, bodywork and alloys, and auto electricians and loc
 evening), together. Mobile mechanics, garage repairs and servicing, and tyres come after. Built: window.MCLAUNCH.LIVE in index.html (customers: tiles,
 search, chips and footer show only live services; anything else shows "coming soon") and RECRUIT in "Join pages by
 trade" (partners: only the five launch trades can join; the other join pages go to Join the network, "Opening soon").
-To switch repairs on later: LIVE=null and RECRUIT=null. Repair pricing decision is no longer blocking launch.
+To switch repairs on later: LIVE=null and RECRUIT=null.
+Quotes on the website (owner, 21 Nov): bodywork/alloy damage and ALL auto electrician and locksmith jobs are quote
+requests (tables quote_jobs, quote_offers). Customer picks up to 3 approved partners; partners send a fixed price on
+their dashboard ("Quote requests"); customer compares and books in My account ("Your quotes"); accept_quote makes the
+booking: price + £3 booking fee, partner payout = price less 5% + VAT (Pay as you go) or 0% (Pro). Contact details
+only after booking. Alloy refurb stays fixed price per wheel from the partner's own rates. Repair pricing decision is no longer blocking launch.
 
 SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fully ready)
 1. Build now: (a) test fixes DONE; (b) real partners in the remaining booking lists DONE (21 Nov night: garage repairs,
