@@ -8904,6 +8904,83 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  if(a.rssref){t.disabled=true;sb.rpc('staff_mark_refunded',{p_booking:a.rssref}).then(function(){rssPull()})}});
 setInterval(function(){try{rsMount();rsaDraw(false);rspDraw(false);rssDraw(false)}catch(e){}},1200);
 
+/* ---------- weekly payouts and self-billing invoices ----------
+   Partners see each week's paid jobs (Monday to Sunday), what customers paid, our fee and what they are paid, and
+   accept a self-billing agreement (we raise the invoice for their work on their behalf). Staff build each finished
+   week's payouts, pay them, and mark them paid; the partner is emailed. */
+var PO={wk:null,data:null,sb:undefined,busy:false},SPO={wk:null,rows:null,at:0};
+function mon(d){d=new Date(d.getFullYear(),d.getMonth(),d.getDate(),12);var w=(d.getDay()+6)%7;d.setDate(d.getDate()-w);return d}
+function ymd(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function wkLab(k){var a=new Date(k+'T12:00:00'),b=new Date(a);b.setDate(b.getDate()+6);var o={day:'numeric',month:'short'};return a.toLocaleDateString('en-GB',o)+' to '+b.toLocaleDateString('en-GB',Object.assign({year:'numeric'},o))}
+function weeks(n,skipCur){var out=[],d=mon(new Date());if(skipCur)d.setDate(d.getDate()-7);for(var i=0;i<n;i++){out.push(ymd(d));d.setDate(d.getDate()-7)}return out}
+function gbp(n){return '£'+(+n||0).toFixed(2)}
+var POST={due:'Due',paid:'Paid',held:'On hold'};
+function poLines(L){return '<table class="potbl"><thead><tr><th>Date</th><th>Job</th><th>Customer paid</th><th>Our fee</th><th>You are paid</th></tr></thead><tbody>'+(L.length?L.map(function(l){return '<tr><td>'+E(new Date(l.job_day+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}))+'</td><td>'+E(l.service||l.kind)+(l.vehicle?' · '+E(l.vehicle):'')+(l.status==='cancelled'?' <small>(cancelled, call-out paid)</small>':'')+'</td><td>'+gbp(l.customer_paid)+'</td><td>'+gbp(l.our_fee)+'</td><td><b>'+gbp(l.payout)+'</b></td></tr>'}).join(''):'<tr><td colspan="5">No paid jobs this week.</td></tr>')+'</tbody></table>'}
+function poSum(L){var t={c:0,f:0,p:0};L.forEach(function(l){t.c+=+l.customer_paid||0;t.f+=+l.our_fee||0;t.p+=+l.payout||0});return t}
+function poHtml(u){var W=weeks(10,false),wk=PO.wk||W[0],D=PO.data&&PO.data.week===wk?PO.data:null,sbj=PO.sb;
+ var h='<div class="card mc-form" id="mc-pay"><h2>Weekly payouts</h2><p class="note" style="margin:0 0 6px">Jobs paid through the website, Monday to Sunday. We pay you each week for the week before.</p>'
+  +'<label class="f" for="po-wk">Week</label><select id="po-wk">'+W.map(function(k,i){return '<option value="'+k+'"'+(k===wk?' selected':'')+'>'+wkLab(k)+(i===0?' (this week)':'')+'</option>'}).join('')+'</select>';
+ if(!D)h+='<p class="note">Loading…</p>';
+ else{var L=D.lines||[],t=poSum(L),P=D.payout;
+  h+='<div class="pokpi"><div><b>'+L.length+'</b>job'+(L.length===1?'':'s')+'</div><div><b>'+gbp(t.c)+'</b>customers paid</div><div><b>'+gbp(t.f)+'</b>our fees</div><div><b>'+gbp(t.p)+'</b>you are paid</div></div>'
+   +poLines(L)
+   +'<p class="note" style="margin:8px 0 0">'+(P?'Payout '+E(POST[P.status]||P.status)+(P.status==='paid'&&P.paid_at?' on '+E(new Date(P.paid_at).toLocaleDateString('en-GB'))+(P.paid_ref?' (ref '+E(P.paid_ref)+')':''):'')+'. Invoice '+E(P.invoice_no||''):wk===W[0]?'This week is not finished yet. Your payout is worked out after Sunday.':'Your payout for this week is being prepared.')+'</p>'
+   +'<div class="dtools"><button class="btn sm ghost" type="button" data-poprint="st">Print statement</button>'+(P&&P.sb_agreed?'<button class="btn sm ghost" type="button" data-poprint="inv">Print self-billing invoice</button>':'')+'</div>'}
+ h+='<h3 style="margin:16px 0 4px">Self-billing agreement</h3>';
+ if(sbj===undefined)h+='<p class="note">Loading…</p>';
+ else if(sbj&&sbj.agreed_at)h+='<p class="note" style="margin:0">Agreed on '+E(new Date(sbj.agreed_at).toLocaleDateString('en-GB'))+', until '+E(new Date(sbj.ends+'T12:00:00').toLocaleDateString('en-GB'))+'. '+(sbj.vat_number?'VAT number '+E(sbj.vat_number)+'.':'Not VAT registered.')+' We raise an invoice for your work each week, so you do not need to invoice us.</p><div class="dtools"><button class="btn sm ghost" type="button" data-posb="edit">Change VAT number or end the agreement</button></div>';
+ if(!(sbj&&sbj.agreed_at)||PO.sbEdit)h+='<div class="poagree"><p class="note" style="margin:0 0 6px">To be paid, agree that The Motoring Central raises an invoice for your work on your behalf each week (self-billing). You agree not to send us your own invoices for these jobs, to tell us if your VAT registration changes, and that the agreement lasts 12 months and renews when you agree again.</p>'
+  +'<label class="f" for="po-vat">VAT number (leave empty if you are not VAT registered)</label><input type="text" id="po-vat" maxlength="16" placeholder="GB123456789" value="'+E(sbj&&sbj.vat_number||'')+'">'
+  +'<label class="chk one" style="margin-top:8px"><input type="checkbox" id="po-ok"><span>I agree to self-billing on these terms.</span></label><p class="err" id="po-err" role="alert"></p>'
+  +'<div class="dtools"><button class="btn sm" type="button" data-posb="save">Save agreement</button>'+(sbj&&sbj.agreed_at?'<button class="btn sm ghost" type="button" data-posb="end">End the agreement</button>':'')+'</div></div>';
+ return h+'</div>'}
+function poLoad(u){if(PO.busy||!sb)return;PO.busy=true;var wk=PO.wk||weeks(1,false)[0];
+ Promise.all([ready.then(function(){return sb.rpc('my_week',{p_week:wk})}),PO.sb===undefined?sb.from('partners').select('self_billing').eq('id',u.sbid).maybeSingle():Promise.resolve(null)]).then(function(r){PO.busy=false;
+  if(r[0]&&!r[0].error&&r[0].data)PO.data=r[0].data;if(r[1]&&!r[1].error)PO.sb=r[1].data?r[1].data.self_billing:null;poDraw(true)},function(){PO.busy=false})}
+function poShow(u){return u&&u.sbid&&u.role!=='customer'&&u.role!=='admin'&&u.role!=='dealer'}
+function poDraw(force){var u=window.GGuser;if(!poShow(u)||location.hash!=='#dashboard')return;if(PO.uid!==u.sbid)PO={wk:null,data:null,sb:undefined,busy:false,uid:u.sbid};var b=$('dash-body');if(!b)return;var old=$('mc-pay');if(old&&!force&&b.contains(old))return;
+ if(!PO.data&&!PO.busy)poLoad(u);var d=document.createElement('div');d.innerHTML=poHtml(u);var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var det=$('mc-mydet');if(det&&b.contains(det))b.insertBefore(c,det);else b.appendChild(c)}}
+function invHtml(u,D,inv){var L=D.lines||[],t=poSum(L),P=D.payout||{},vat=P.vat_number,head=inv?'<h1>Self-billing invoice</h1>':'<h1>Payout statement</h1>';
+ var mot=0,oth=0;L.forEach(function(l){if(/^mot$/i.test(l.kind||''))mot+=+l.payout||0;else oth+=+l.payout||0});
+ var h=head+'<p><b>'+E(u.name||'')+'</b>'+(u.town?', '+E(u.town):'')+(vat?'<br>VAT number: '+E(vat):'')+'</p><p>'+(inv?'Invoice number: <b>'+E(P.invoice_no||'')+'</b><br>Invoice date: '+E(new Date(P.created_at||Date.now()).toLocaleDateString('en-GB'))+'<br>':'')+'Week: '+E(wkLab(D.week))+'</p>'
+  +(inv?'<p>Customer: The Motoring Central (company details to be added once registered)</p>':'')
+  +'<table><thead><tr><th>Date</th><th>Job</th><th>Customer paid</th><th>Our fee</th><th>Paid to you</th></tr></thead><tbody>'+L.map(function(l){return '<tr><td>'+E(l.job_day)+'</td><td>'+E(l.service||l.kind)+(l.vehicle?' · '+E(l.vehicle):'')+'</td><td>'+gbp(l.customer_paid)+'</td><td>'+gbp(l.our_fee)+'</td><td>'+gbp(l.payout)+'</td></tr>'}).join('')+'</tbody></table>'
+  +'<div class="kpi"><div><b>'+gbp(t.c)+'</b>customers paid</div><div><b>'+gbp(t.f)+'</b>our fees</div><div><b>'+gbp(t.p)+'</b>paid to you</div></div>';
+ if(inv){if(vat)h+='<table><tbody><tr><td>MOT tests (exempt from VAT)</td><td>'+gbp(mot)+'</td></tr><tr><td>Other work, net</td><td>'+gbp(oth/1.2)+'</td></tr><tr><td>VAT at 20% on other work</td><td>'+gbp(oth-oth/1.2)+'</td></tr><tr><th>Total</th><th>'+gbp(t.p)+'</th></tr></tbody></table>';
+  else h+='<p>Total: <b>'+gbp(t.p)+'</b>. No VAT: the supplier is not VAT registered.</p>';
+  h+='<p class="small">The VAT shown on this invoice is your output tax due to HMRC. This invoice was raised by The Motoring Central under a self-billing agreement with the supplier. Please do not send us an invoice for these jobs.</p>'}
+ else h+='<p class="small">'+(P.status==='paid'?'Paid on '+E(new Date(P.paid_at).toLocaleDateString('en-GB'))+(P.paid_ref?', reference '+E(P.paid_ref):'')+'.':'Not paid yet.')+' Our fee is shown on each job. Cancelled jobs are only paid where a call-out fee is due.</p>';
+ return h}
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='po-wk'){PO.wk=e.target.value;PO.data=null;poDraw(true)}});
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-pay button');if(!t||!sb)return;var u=window.GGuser;if(!poShow(u))return;
+ if(t.dataset.poprint){var inv=t.dataset.poprint==='inv',D=PO.data;if(!D)return;printWin(inv?'Self-billing invoice':'Payout statement',PCSS,function(){return invHtml(u,D,inv)});return}
+ var a=t.dataset.posb;if(a==='edit'){PO.sbEdit=true;poDraw(true);return}
+ if(a==='save'||a==='end'){var ok=a==='end'||($('po-ok')&&$('po-ok').checked),er=$('po-err');if(!ok){er.textContent='Tick the box to agree.';return}t.disabled=true;
+  ready.then(function(){return sb.rpc('set_self_billing',{p_agree:a==='save',p_vat:a==='save'?$('po-vat').value:''})}).then(function(r){t.disabled=false;if(r.error){er.textContent=/bad_vat/.test(r.error.message)?'That VAT number does not look right. It is GB followed by 9 digits.':'Not saved. Check your connection and try again.';return}
+   PO.sb=a==='save'?r.data:null;PO.sbEdit=false;toast(a==='save'?'Self-billing agreement saved.':'Self-billing agreement ended. We cannot pay you until you agree again.');poDraw(true)})}});
+/* staff */
+function spoHtml(){var W=weeks(8,true),wk=SPO.wk||W[0],R=SPO.rows,own=rssOwner();
+ var h='<div class="card mc-form" id="mc-spo"><h2>Weekly payouts</h2><p class="note" style="margin:0 0 6px">After each week ends, build the payouts, pay each partner by bank transfer (Stripe later), then mark it paid. The partner is emailed.</p>'
+  +'<label class="f" for="spo-wk">Week</label><select id="spo-wk">'+W.map(function(k){return '<option value="'+k+'"'+(k===wk?' selected':'')+'>'+wkLab(k)+'</option>'}).join('')+'</select>'
+  +'<div class="dtools">'+(own?'<button class="btn sm" type="button" data-spo="build">Build payouts for this week</button>':'')+'<button class="btn sm ghost" type="button" data-spo="re">Refresh</button></div>';
+ if(R===null)h+='<p class="note">Loading…</p>';
+ else if(!R.length)h+='<p class="note">No payouts for this week yet.'+(own?' Tap Build once the week has ended.':'')+'</p>';
+ else{var tot=0,due=0;R.forEach(function(x){tot+=+x.payout;if(x.status!=='paid')due+=+x.payout});
+  h+='<p class="note"><b>'+R.length+'</b> partner'+(R.length===1?'':'s')+' · total '+gbp(tot)+' · still to pay '+gbp(due)+'</p>'+R.map(function(x){return '<div class="job"><div><b>'+E(x.partner_name)+'</b><small>'+E(x.partner_email||'')+' · '+x.jobs+' job'+(x.jobs===1?'':'s')+' · invoice '+E(x.invoice_no||'')+(x.vat_number?' · VAT '+E(x.vat_number):'')+'</small><small>Customers paid '+gbp(x.customer_paid)+' · our fees '+gbp(x.our_fees)+' · <b>pay '+gbp(x.payout)+'</b></small><small><span class="sst">'+E(POST[x.status]||x.status)+'</span>'+(x.status==='paid'?' '+E(new Date(x.paid_at).toLocaleDateString('en-GB'))+(x.paid_ref?' · ref '+E(x.paid_ref):''):'')+(x.self_billing?'':' · <b>no self-billing agreement yet: do not pay until they agree</b>')+'</small></div>'
+   +(own?'<div class="jb">'+(x.status!=='paid'?'<input type="text" aria-label="Payment reference" placeholder="Payment ref" maxlength="60" id="spo-ref-'+E(x.id)+'" style="max-width:130px"><button class="btn sm" type="button" data-spopay="'+E(x.id)+'"'+(x.self_billing?'':' disabled')+'>Mark paid</button>'+(x.status==='due'?'<button class="btn sm ghost" type="button" data-spost="'+E(x.id)+':held">Hold</button>':'<button class="btn sm ghost" type="button" data-spost="'+E(x.id)+':due">Release</button>'):'<button class="btn sm ghost" type="button" data-spost="'+E(x.id)+':due">Undo paid</button>')+'</div>':'')+'</div>'}).join('')}
+ return h+'</div>'}
+function spoPull(){var wk=SPO.wk||weeks(1,true)[0];SPO.at=Date.now();ready.then(function(){return sb.rpc('staff_payouts',{p_week:wk})}).then(function(r){SPO.rows=r.error?[]:(r.data||[]);spoDraw(true)})}
+function spoDraw(force){if(!isStaff()||location.hash!=='#admin')return;var b=$('admin-body');if(!b)return;var old=$('mc-spo');if(old&&!force&&b.contains(old))return;if(SPO.rows===null&&Date.now()-SPO.at>5000)spoPull();
+ var d=document.createElement('div');d.innerHTML=spoHtml();var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var q=$('mc-rss')||$('mc-amot');if(q)q.parentNode.insertBefore(c,q.nextSibling);else b.appendChild(c)}}
+document.addEventListener('change',function(e){if(e.target&&e.target.id==='spo-wk'){SPO.wk=e.target.value;SPO.rows=null;SPO.at=0;spoDraw(true)}});
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-spo button');if(!t||!isStaff())return;var a=t.dataset;
+ if(a.spo==='re'){SPO.rows=null;spoPull();return}
+ if(a.spo==='build'){t.disabled=true;ready.then(function(){return sb.rpc('staff_build_payouts',{p_week:SPO.wk||weeks(1,true)[0]})}).then(function(r){t.disabled=false;if(r.error){toast(/week_not_finished/.test(r.error.message)?'That week has not finished yet.':'Not built: '+r.error.message,true);return}toast(r.data?r.data+' payout'+(r.data===1?'':'s')+' ready.':'No paid jobs that week.');spoPull()});return}
+ if(a.spopay){var ref=($('spo-ref-'+a.spopay)||{}).value||'';t.disabled=true;ready.then(function(){return sb.rpc('staff_set_payout',{p_id:a.spopay,p_status:'paid',p_ref:ref})}).then(function(r){if(r.error){t.disabled=false;toast('Not saved: '+r.error.message,true);return}toast('Marked paid. The partner has been emailed.');spoPull()});return}
+ if(a.spost){var q=a.spost.split(':');t.disabled=true;ready.then(function(){return sb.rpc('staff_set_payout',{p_id:q[0],p_status:q[1],p_ref:null})}).then(function(r){if(r.error){t.disabled=false;toast('Not saved: '+r.error.message,true);return}spoPull()})}});
+(function(){var st=document.createElement('style');st.textContent='.pokpi{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0}.pokpi div{flex:1 1 120px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:.85rem}.pokpi b{display:block;font-size:1.15rem}.potbl{width:100%;border-collapse:collapse;font-size:.88rem}.potbl th,.potbl td{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line);vertical-align:top}.poagree{margin-top:6px}';document.head.appendChild(st)})();
+setInterval(function(){try{poDraw(false);spoDraw(false)}catch(e){}},1200);
+
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;if(d&&d.dbDone)return;
