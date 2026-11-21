@@ -1414,6 +1414,37 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <a class="ptile" href="#vans"><img src="img/van-sales.webp" srcset="img/van-sales-800.webp 800w, img/van-sales.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Van forecourts with new and used vans" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Vans for sale</b><small>Vans and pickups from checked dealers</small></span><span class="pgo">Browse vehicles</span></span></a>
 </div>
 <div class="pdots" id="pdots"></div>
+<script>
+/* LAUNCH LINE-UP (21 Nov 2026): first launch is MOT, car and van sales (dealers, private and trade), mobile EV charging,
+   recovery and valeting. Repairs and servicing (mobile mechanics, garage repairs, auto electricians and locksmiths,
+   tyres, bodywork and alloys) come later. To switch a service on, add it to LIVE (customers) and RECRUIT in the
+   "Join pages by trade" script (partners). LIVE=null shows everything. */
+window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge'],LATER:{mobile:'Mobile mechanics',garage:'Garage repairs and servicing',autoelec:'Auto electricians and locksmiths',tyres:'Mobile tyres',body:'Bodywork and alloy wheels'}};
+(function(){var L=window.MCLAUNCH;if(!L.LIVE)return;function on(m){return !m||L.LIVE.indexOf(m)>-1||!L.LATER[m]}
+ L.on=on;
+ /* the services carousel: the garage picture becomes MOT; the rest that are not live yet are taken out */
+ var ps=document.getElementById('pstrip');if(ps){[].slice.call(ps.querySelectorAll('.ptile[data-svc]')).forEach(function(t){var m=t.getAttribute('data-svc');
+  if(m==='garage'){t.setAttribute('data-svc','mot');var b=t.querySelector('.pcap b'),sm=t.querySelector('.pcap small');if(b)b.textContent='MOT';if(sm)sm.textContent='Book your MOT online at an approved test centre near you';return}
+  if(!on(m))t.remove()});var f=ps.querySelector('.ptile');if(f&&!ps.querySelector('.ptile.on'))f.classList.add('on')}
+ function tidy(){[].forEach.call(document.querySelectorAll('.qk[data-svc],#modes .opt[data-m],.sitefoot a[data-svc]'),function(el){var m=el.getAttribute('data-svc')||el.getAttribute('data-m');if(on(m))return;var li=el.closest('li');(li||el).hidden=true})}
+ tidy();document.addEventListener('DOMContentLoaded',tidy);
+ /* anything that tries to open a service that is not live yet shows "coming soon" instead */
+ function soon(m){var d=document.getElementById('mc-soon');if(d)d.remove();d=document.createElement('div');d.id='mc-soon';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','soon-h');
+  d.style.cssText='position:fixed;inset:0;z-index:9998;background:rgba(6,20,36,.85);display:flex;align-items:center;justify-content:center;padding:16px';
+  var SB='all:unset;cursor:pointer;display:inline-block;background:var(--accent);color:#06213a;font-weight:800;border-radius:20px;padding:9px 14px;font-size:.95rem;text-decoration:none',live=[['mot','MOT'],['valet','Full valet'],['recovery','Recovery'],['evcharge','EV charging']];
+  d.innerHTML='<div class="card" style="max-width:440px;width:100%;background:var(--surface);color:var(--ink)"><h2 id="soon-h" style="margin-top:0">'+(L.LATER[m]||'This service')+': coming soon</h2><p>We are opening in stages so every partner is checked properly. Repairs and servicing are next.</p><p style="margin:0 0 6px"><b>You can book now:</b></p><div style="display:flex;flex-wrap:wrap;gap:8px">'
+   +live.map(function(x){return '<button type="button" style="'+SB+'" data-soongo="'+x[0]+'">'+x[1]+'</button>'}).join('')+'<a style="'+SB+'" href="#cars" data-soonx="1">Buy a car</a><a style="'+SB+'" href="#vans" data-soonx="1">Buy a van</a></div>'
+   +'<p style="margin:14px 0 0"><button type="button" style="'+SB+';background:transparent;color:var(--ink);border:2px solid var(--line)" data-soonx="1">Close</button></p></div>';
+  document.body.appendChild(d);var c=d.querySelector('[data-soonx]');if(c)setTimeout(function(){d.querySelector('button').focus()},30)}
+ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
+  var sx=t.closest('[data-soonx]');if(sx){var d=document.getElementById('mc-soon');if(d)d.remove();return}
+  var sg=t.closest('[data-soongo]');if(sg){var d2=document.getElementById('mc-soon');if(d2)d2.remove();var m2=sg.getAttribute('data-soongo');if(location.hash!=='#drivers'&&location.hash!==''&&location.hash!=='#')location.hash='drivers';setTimeout(function(){var q=document.querySelector('.qk[data-svc="'+m2+'"]');if(q)q.click()},120);return}
+  if(e.target.id==='mc-soon'){e.target.remove();return}
+  var el=t.closest('[data-svc],#modes .opt[data-m]');if(!el)return;var m=el.getAttribute('data-svc')||el.getAttribute('data-m');if(on(m))return;
+  e.preventDefault();e.stopImmediatePropagation();soon(m)},true);
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'){var d=document.getElementById('mc-soon');if(d)d.remove()}});
+})();
+</script>
 
 
 
@@ -7108,17 +7139,22 @@ var S={home:null};
 function make(host,opts){
  var id=opts.id,box=document.createElement('div');box.className='qwrap';
  box.innerHTML='<div class="qbox"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg><input type="search" id="'+id+'" placeholder="Type what you need…" aria-label="Search: type what you need" autocomplete="off" enterkeyhint="search"><button type="button" class="qx" aria-label="Clear" hidden>&times;</button></div>'+
-  '<div class="qchips"><button type="button" data-qc="service">Car service</button><button type="button" data-qc="mot">MOT</button><button type="button" data-qc="warning light">Warning light</button><button type="button" data-qc="wont start">Won’t start</button><button type="button" data-qc="tyre">Tyres</button><button type="button" data-qc="broken down">Broken down</button><button type="button" data-qc="locked out">Locked out</button>'+(opts.more?'<button type="button" data-qc="buy a car">Buy a car</button><button type="button" data-qc="my booking">My booking</button>':'')+'</div><div class="qres" aria-live="polite"></div>'+(opts.after||'');
+  '<div class="qchips">'+(window.MCLAUNCH&&window.MCLAUNCH.LIVE?'<button type="button" data-qc="mot">MOT</button><button type="button" data-qc="valet">Valet</button><button type="button" data-qc="broken down">Broken down</button><button type="button" data-qc="ev charging">EV out of charge</button><button type="button" data-qc="move my car">Move a car</button>':'<button type="button" data-qc="service">Car service</button><button type="button" data-qc="mot">MOT</button><button type="button" data-qc="warning light">Warning light</button><button type="button" data-qc="wont start">Won’t start</button><button type="button" data-qc="tyre">Tyres</button><button type="button" data-qc="broken down">Broken down</button><button type="button" data-qc="locked out">Locked out</button>')+(opts.more?'<button type="button" data-qc="buy a car">Buy a car</button><button type="button" data-qc="my booking">My booking</button>':'')+'</div><div class="qres" aria-live="polite"></div>'+(opts.after||'');
  if(opts.before)host.insertBefore(box,opts.before);else host.appendChild(box);
  var I=box.querySelector('input'),R=box.querySelector('.qres'),X=box.querySelector('.qx'),ITEMS=[],me={I:I,R:R,note:''};
  function row(i,title,sub,tag,cls,extra){ITEMS[i]=extra;return '<button type="button" class="qrow'+(cls==='decide'?' decide':'')+'" data-qi="'+i+'"><span><b>'+esc(title)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span><em class="'+(cls||'')+'">'+esc(tag)+'</em></button>'}
- function draw(force){var raw=I.value.trim(),q=words(raw),h='',i=0;ITEMS=[];X.hidden=!raw;
+ /* launch line-up: services that are not open yet are left out of the results, with one "coming soon" note */
+ function LA(){var L=window.MCLAUNCH;return L&&L.LIVE&&L.on?L:null}
+ function lon(m){var L=LA();return !L||L.on(m)}
+ var SOON='<p class="qnote plain">Repairs and servicing (mechanics, garages, auto electricians, tyres and bodywork) are coming soon. Right now you can book an MOT, a full valet, recovery or EV charging, or buy a car or van.</p>';
+ function draw(force){var raw=I.value.trim(),q=words(raw),h='',i=0,cut=0;ITEMS=[];X.hidden=!raw;
   var reg=regOf(raw);
   if(!q.length&&!reg){if(force!==true&&document.activeElement!==I&&!raw){R.innerHTML='';return}
    if(me.note)h+='<p class="qnote">'+esc(me.note)+'</p>';
+   if(LA()){h+='<p class="qh">Book now</p>';index().s.forEach(function(e){var t=e.x[2];if(lon(t.getAttribute('data-svc')))h+=row(i++,e.x[0],e.x[1],'Service','',{t:'s',x:e.x})});h+=SOON}else{
    h+='<p class="qh">Common problems</p>';[0,1,3,6,7,9].forEach(function(k){var x=P[k];h+=row(i++,x[0],x[1],'Problem','p',{t:'p',x:x})});
    h+=row(i++,'Not sure what’s wrong? We’ll help you work it out','Answer a few quick questions and we point you to the right job. No car knowledge needed.','Guide','decide',{t:'g'});
-   h+=row(i++,'Or let a garage or mechanic decide','Describe it in your own words. They check your car and tell you what it needs and the price.','Ask','',{t:'d'});
+   h+=row(i++,'Or let a garage or mechanic decide','Describe it in your own words. They check your car and tell you what it needs and the price.','Ask','',{t:'d'})}
    h+='<p class="qtip">You can also type or say a car to buy (“Ford Fiesta”, “automatic under £10,000”), a question (“can I cancel?”) or “my booking”.</p>';
    R.innerHTML=h;return}
   if(reg){h+=row(i++,'Is '+reg+' your registration?','Tap here, then tell us what the car needs. We use it to find the right parts and price.','Use','reg',{t:'r',reg:reg})}
@@ -7133,6 +7169,7 @@ function make(host,opts){
    vacancies(q,raw).forEach(function(v){if(v.s>0)hits.push({k:'v',s:v.s,m:v.m,x:v.x})})}
   X2.l.forEach(function(e){var s=score(q,e.hw),t=e.x[4]==='For the trade';if(shop&&!/^#(cars|vans)$/.test(e.x[2]))return;if(t)add('l',trade?s[0]*3+7:s[0]*3-3,s[1]+(trade?1:0),e.x);else add('l',s[0]*3+1,s[1],e.x)});
   V.hits.forEach(function(v){hits.push({k:'c',s:v.s,m:V.best,x:v})});
+  if(LA())hits=hits.filter(function(hh){var off=(hh.k==='p'&&!lon(hh.x[2]))||(hh.k==='s'&&!lon(hh.x[2].getAttribute('data-svc')))||hh.k==='j';if(off)cut++;return !off});
   hits.sort(function(a,b){return b.s-a.s});
   var top=hits.length?hits[0].s:0,bm=0,by={},order=[];hits.forEach(function(hh){if(hh.s>=top*0.45&&hh.m>bm)bm=hh.m});
   var floor=(q.length<=3&&hits.length&&hits[0].m>=bm)?bm:Math.max(1,bm-1);
@@ -7149,7 +7186,8 @@ function make(host,opts){
     else if(k==='v')h+=row(i++,x.t,[x.e,x.town,x.h].filter(Boolean).join(' · '),'Vacancy','v',{t:'v',x:x});
     else h+=row(i++,x[0],x[1],x[4]||'Go','',{t:'l',x:x})});
    if(k==='c')V.sum.forEach(function(sm){var what=(sm.label?sm.label+' ':'')+(sm.k==='cars'?'cars':'vans')+(sm.mcap?' up to '+gbp(sm.mcap)+' a month':sm.cap?' under '+gbp(sm.cap):'');h+=row(i++,(sm.n?'See all '+sm.n+' ':'Browse all ')+what,'Opens the '+(sm.k==='cars'?'cars':'vans')+' for sale, already filtered for you','Show','',{t:'cs',x:sm})})});
-  var repair=!shop&&!(reg&&!hits.length)&&(!first||first==='p'||first==='s'||first==='j');
+  var repair=!LA()&&!shop&&!(reg&&!hits.length)&&(!first||first==='p'||first==='s'||first==='j');
+  if(cut&&LA()&&!by.p&&!by.s)h+=SOON;
   if(shop&&!V.hits.length){h+='<p class="qnote plain">Nothing for sale matches that right now. New cars and vans are added all the time.</p>';if(!by.l){h+=row(i++,'See all cars for sale','Browse everything from local dealers','Go','',{t:'l',x:['','','#cars']});h+=row(i++,'See all vans for sale','Vans and light commercials','Go','',{t:'l',x:['','','#vans']})}}
   else if(!hits.length&&!reg)h+='<p class="qh">No exact match, and that is fine</p>';
   if(repair&&q.length){h+=row(i++,'Not sure? Answer a few quick questions','We help you work out what it needs, then show you the job to book.','Guide','decide',{t:'g'});
@@ -9374,7 +9412,7 @@ addEventListener('hashchange',function(){setTimeout(check,30)});setTimeout(check
    ['mot','dealer']. null shows every trade on Join the network. Trades: mot, garage, mobile, autoelec, tyres, body,
    valet, recovery, ev, dealer. */
 (function(){function $(i){return document.getElementById(i)}
-var RECRUIT=null;
+var RECRUIT=['mot','dealer','ev','recovery','valet'];
 var V=$('v-mech');if(!V)return;
 var hero=V.querySelector('.hero'),H1=hero.querySelector('h1'),P=hero.querySelector('p'),IMG=hero.querySelector('img.heroimg'),SW=hero.querySelector('.swl');
 var DEF={h:H1.textContent,p:P.textContent,img:IMG.getAttribute('src'),alt:IMG.getAttribute('alt'),sw:SW?SW.outerHTML:''};
@@ -9430,7 +9468,12 @@ var mw=$('motwk');if(mw)mw.addEventListener('input',motCalc);
 document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('[data-jump]');if(!a)return;e.preventDefault();var t=$(a.getAttribute('data-jump'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})});
 /* recruiting phase: only show the trades being recruited */
 var ROLE={'#mot-station':'mot','#garage':'garage','#mobile-mechanic':'mobile','#auto-electrician':'autoelec','#tyres':'tyres','#bodyshop':'body','#valets':'valet','#recovery':'recovery','#evcharging':'ev','#dealers':'dealer'};
-function recruit(){if(!RECRUIT)return;[].forEach.call(document.querySelectorAll('#v-network .card.role, #v-network .rolepick a'),function(el){var a=el.matches('a')?el:el.querySelector('a.btn');var r=a&&ROLE[a.getAttribute('href')];if(r)el.hidden=RECRUIT.indexOf(r)<0})}
+function recruit(){if(!RECRUIT)return;[].forEach.call(document.querySelectorAll('#v-network .card.role, #v-network .rolepick a'),function(el){var a=el.matches('a')?el:el.querySelector('a.btn');var r=a&&ROLE[a.getAttribute('href')];if(r)el.hidden=RECRUIT.indexOf(r)<0});
+ var net=$('v-network');if(net&&!$('mc-soonjoin')){var g=net.querySelector('.card.role');if(g){var n=document.createElement('div');n.className='card';n.id='mc-soonjoin';n.innerHTML='<h2 style="margin-top:0">Opening soon</h2><p style="margin:0">Garages, mobile mechanics, auto electricians and locksmiths, tyre fitters, body shops and alloy repairers join in the next stage. Garages that test MOTs can join now as an <a href="#mot-station">MOT test station</a>. Want to be first? <a href="#contact">Tell us</a> and we will contact you when it opens.</p>';g.parentNode.appendChild(n)}}}
+/* a join page for a trade that is not open yet sends people to Join the network */
+var OFFJOIN={'mechanics':1,'garage':1,'mobile-mechanic':1,'auto-electrician':1,'tyres':1,'bodyshop':1};
+function guardJoin(){if(!RECRUIT)return;var h=(location.hash||'').slice(1);if(!OFFJOIN[h])return;var r=ROLE['#'+h]||'garage';if(RECRUIT.indexOf(r)>-1)return;history.replaceState(null,'','#network');dispatchEvent(new HashChangeEvent('hashchange'));setTimeout(function(){var n=$('mc-soonjoin');if(n)n.scrollIntoView({behavior:'smooth',block:'center'})},400)}
+guardJoin();addEventListener('hashchange',guardJoin);
 recruit();
 addEventListener('hashchange',function(){last=null;setTimeout(setMode,0)});setMode();setTimeout(function(){last=null;setMode()},300);
 })();

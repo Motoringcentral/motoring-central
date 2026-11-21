@@ -64,6 +64,13 @@ Found in the end-to-end tests (21 Nov) and still to fix:
 partner dashboards; car and van messages card for partners who do not sell cars; EV job card said "Collect"; sign-up
 steps promised a video call; pretend booking alerts for real accounts.)
 
+LAUNCH LINE-UP (owner, 21 Nov 2026): first launch is MOT, car and van sales (dealers, private, trade), mobile EV
+charging, recovery and valeting, together. Repairs and servicing come after (mobile mechanics, garage repairs, auto
+electricians and locksmiths, tyres, bodywork and alloys). Built: window.MCLAUNCH.LIVE in index.html (customers: tiles,
+search, chips and footer show only live services; anything else shows "coming soon") and RECRUIT in "Join pages by
+trade" (partners: only the five launch trades can join; the other join pages go to Join the network, "Opening soon").
+To switch repairs on later: LIVE=null and RECRUIT=null. Repair pricing decision is no longer blocking launch.
+
 SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fully ready)
 1. Build now: (a) test fixes DONE; (b) real partners in the remaining booking lists DONE (21 Nov night: garage repairs,
    valeting centres, bodywork with photos sent to the repairers, alloys); (c) customers and partners change their own name, phone and email DONE (owner emailed if an approved
