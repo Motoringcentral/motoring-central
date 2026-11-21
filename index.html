@@ -3894,7 +3894,7 @@ var tot=0;u.jobs.forEach(function(j){if(j.state==='accepted')tot+=j.price});
 s+='</div><div class="card"><h2>Earnings</h2><div class="kpi"><div><b>'+m(tot)+'</b>accepted jobs</div><div><b>'+m(tot*0.06)+'</b>our fee (5% launch rate + VAT)</div><div><b>'+m(tot*0.94)+'</b>you receive</div></div><p class="note" style="margin:10px 0 0">Paid weekly. Sample figures.</p></div>';
 return s}
 function fmtD(s){return new Date(s+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
-function stLabel(u){return u.status==='approved'?'Approved (demo)':u.status==='rejected'?'Declined':u.status==='suspended'?'Suspended':'Pending review'}
+function stLabel(u){return u.status==='approved'?(u.sbid?'Approved':'Approved (demo)'):u.status==='rejected'?'Declined':u.status==='suspended'?'Suspended':'Pending review'}
 function docsMissing(u){return !!u.sbid&&(u.docs||[]).filter(function(d){return d&&((d.path&&d.path!=='failed')||(d.data&&!d.path))}).length<3}
 function pendingHtml(u){
 if(u.status==='pending'&&docsMissing(u))return '<div class="card" style="border-color:#b3261e"><b>One more step: upload your documents</b><p class="note" style="margin:6px 0 8px">We do not have your insurance certificates and photo ID yet, so we cannot check your application. Upload them here (PDF or photo, up to 5 MB each). Only you and our team can see them.</p>'+'<label class="up">Trade insurance certificate<input type="file" id="rs-doc1" accept="image/*,.pdf"></label><label class="f" for="rs-exp1" style="margin-top:8px">Trade insurance expiry date</label><input type="date" id="rs-exp1"><label class="up" style="margin-top:12px">Public liability insurance certificate<input type="file" id="rs-doc2" accept="image/*,.pdf"></label><label class="f" for="rs-exp2" style="margin-top:8px">Public liability expiry date</label><input type="date" id="rs-exp2"><label class="f" for="rs-idtype" style="margin-top:12px">ID type</label><select id="rs-idtype"><option>Passport</option><option>UK driving licence</option><option>National ID card</option></select><label class="up" style="margin-top:8px">Photo ID<input type="file" id="rs-doc3" accept="image/*,.pdf"></label><label class="f" for="rs-exp3" style="margin-top:8px">ID expiry date</label><input type="date" id="rs-exp3">'+'<p class="err" id="rs-err" role="alert"></p><button class="btn sm" type="button" id="rs-go">Send my documents</button></div>';
@@ -5294,6 +5294,8 @@ gm.addEventListener('change',function(){setTimeout(sync,0)});
 form.addEventListener('submit',function(e){var g=k()==='garage'||k()==='mot';if(!g||!gm.checked||!window.MCMOT)return;
  if(!Object.keys(window.MCMOT.read('gm')).length){e.preventDefault();e.stopImmediatePropagation();var er=$('gm-err');if(er)er.textContent='Tick at least one MOT class that you test.';var bx=$('g-motclasses');if(bx)bx.scrollIntoView({behavior:'smooth',block:'center'});var f=document.querySelector('#gm-list [data-motc]');if(f)f.focus()}},true);
 sync();
+/* the kind can also be set by a link (#mot-station) without a click, so check again when the page or step changes */
+addEventListener('hashchange',function(){setTimeout(sync,80)});form.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-pf]'))setTimeout(sync,0)},true);setTimeout(sync,700);
 })();
 </script>
 <script>
@@ -5599,7 +5601,7 @@ function sync(){var I=window.MCinbox?window.MCinbox():[];if(I.length===loadedInb
 var SAMPLE_T=['Turned up on time and explained everything clearly. Fair price.','Really easy to book and the work was done properly. Would use again.','Friendly, tidy and quick. Kept me updated throughout.','Great service from start to finish. No surprises on the bill.','Sorted the problem first time. Very happy.','Good communication and a fair price. Recommended.'],SAMPLE_N=['Alex P.','Jordan T.','Priya K.','Sam R.','Chris W.','Mo A.','Emma L.','Dave H.'];
 function sample(name){var h=hash(name),out=[],n=3;for(var i=0;i<n;i++)out.push({partner:name,stars:(h+i)%7===0?4:5,text:SAMPLE_T[(h+i*3)%SAMPLE_T.length],name:SAMPLE_N[(h+i*5)%SAMPLE_N.length],t:Date.now()-((h%20)+6+i*17)*864e5,sample:true});return out}
 function realOf(name){sync();var k=pname(name).toLowerCase();return REV.filter(function(r){return r.partner.toLowerCase()===k}).sort(function(a,b){return b.t-a.t})}
-function summary(name){var r=realOf(name),all=r.concat(sample(pname(name))),t=0;all.forEach(function(x){t+=x.stars});var h=hash(pname(name));return{avg:t/all.length,n:all.length+(r.length?0:0),count:r.length+18+h%140,list:all}}
+function summary(name){var real=!!(window.MCisRealPartner&&window.MCisRealPartner(pname(name))),r=realOf(name),all=real?r:r.concat(sample(pname(name))),t=0;all.forEach(function(x){t+=x.stars});var h=hash(pname(name));return{avg:all.length?t/all.length:0,n:all.length,count:real?r.length:r.length+18+h%140,list:all,isNew:real&&!r.length}} /* real partners never get sample reviews */
 function userOf(name){var k=pname(name).toLowerCase();return (window.GGusers||[]).filter(function(u){return u.role!=='admin'&&String(u.name||'').toLowerCase()===k})[0]}
 function av(name,cls){var u=userOf(name),nm=pname(name);if(u&&u.logo&&/^data:image\/png;base64,/.test(u.logo))return '<span class="pav '+(cls||'')+'"><img alt="" src="'+u.logo+'"></span>';
  var ini=nm.split(/\s+/).filter(function(w){return /[A-Za-z]/.test(w)}).slice(0,2).map(function(w){return w.charAt(0).toUpperCase()}).join(''),c=['#38BDF8','#FFD43B','#7ee2b8','#f9a8d4','#c4b5fd'][hash(nm)%5];
@@ -5607,7 +5609,7 @@ function av(name,cls){var u=userOf(name),nm=pname(name);if(u&&u.logo&&/^data:ima
 var TYPES={mobile:'Mobile mechanic',garage:'Garage',mot:'MOT test station',autoelec:'Auto electrician or locksmith',recovery:'Recovery',evcharge:'Mobile EV charging',tyres:'Mobile tyre fitter',valet:'Valeter',body:'Body shop'},ROLE={mechanic:'Mechanic or garage',recovery:'Recovery',evcharge:'Mobile EV charging',body:'Body shop',tyres:'Mobile tyre fitter',valet:'Valeter',dealer:'Dealer'};
 function openProfile(name,ctx){name=pname(name);if(!name)return;var u=userOf(name),S=summary(name),type=(ctx&&ctx.type)||(u?ROLE[u.role]:'')||'Partner',site=u&&window.MCbrand?window.MCbrand.link(u):'';
  var h='<div class="ph">'+av(name,'lg')+'<div><h2 id="prof-name">'+esc(name)+'</h2><div class="pmeta">'+esc(type)+(u&&u.town?', '+esc(u.town):ctx&&ctx.town?', '+esc(ctx.town):'')+'</div>'+site+'</div></div>'
- +'<div class="prate"><b>'+S.avg.toFixed(1)+'</b>'+stars(S.avg)+'<span class="pmeta">from '+S.count+' reviews</span></div>'
+ +(S.isNew?'<div class="prate"><b>New</b><span class="pmeta">New to The Motoring Central. No reviews yet.</span></div>':'<div class="prate"><b>'+S.avg.toFixed(1)+'</b>'+stars(S.avg)+'<span class="pmeta">from '+S.count+' reviews</span></div>')
  +'<div class="pchips"><span>✓ Insurance checked</span><span>✓ Photo ID checked</span><span>✓ Sets their own prices</span>'+(ctx&&ctx.detail?'<span>'+esc(ctx.detail)+'</span>':'')+'</div>'
  +'<p class="pmeta" style="margin:0">Every partner sends us their trade insurance, public liability insurance and photo ID before they can take a booking. The partner is responsible for the work and its warranty.</p>'
  +'<h3>What customers say</h3>';
@@ -5620,7 +5622,7 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  openProfile(n,{type:t.getAttribute('data-ptype')||'',detail:t.getAttribute('data-pdet')||''})},true);
 $('prof-dlg').addEventListener('click',function(e){if(e.target===this)this.close()});
 /* show a logo and a profile link on every partner a customer can choose */
-function rateTxt(name){var S=summary(name);return '<span class="st">★ '+S.avg.toFixed(1)+' ('+S.count+')</span>'}
+function rateTxt(name){var S=summary(name);return S.isNew?'<span class="st">New partner</span>':'<span class="st">★ '+S.avg.toFixed(1)+' ('+S.count+')</span>'}
 function decorate(){[].forEach.call(document.querySelectorAll('#v-cust .gar:not([data-dec])'),function(g){g.setAttribute('data-dec','1');var b=g.querySelector('b');if(!b)return;var n=pname(b.textContent);if(!n)return;
   g.classList.add('hasav');g.insertAdjacentHTML('afterbegin',av(n));var sm=g.querySelector('small'),det=sm?sm.textContent.split('. ')[0]:'';
   var p=document.createElement('button');p.type='button';p.className='garprof';p.setAttribute('data-prof',n);p.setAttribute('data-ptype',TYPES[window.GGmode]||'');p.setAttribute('data-pdet',det.length<40?det:'');p.innerHTML='<span>View profile and reviews</span>'+rateTxt(n);g.insertAdjacentElement('afterend',p)});
@@ -7747,6 +7749,7 @@ function dirApply(){var L=(window.MCdir&&window.MCdir.L)||{};DIR.forEach(functio
   if(p.role==='recovery')add('part',{b:+R.call||65,m:+R.mile||2.5,r:'New'})})}
 function dirLoad(){return sb.from('partner_directory').select('id,role,sub,name,town,rates,info').limit(2000).then(function(r){if(r.error)return;DIR=r.data||[];dirApply()})}
 function partnerId(n){n=low(n);if(!n)return null;var p=DIR.filter(function(x){return low(x.name)===n})[0];return p?p.id:null}
+window.MCisRealPartner=function(n){return !!partnerId(n)};
 ready.then(dirLoad).catch(function(){});
 /* ---------- live MOT diary (garage_busy, book_mot, my_online_diary, sync_own_diary) ---------- */
 function motBays(p){var i=p.info||{};if(Array.isArray(i.bays))return i.bays.some(function(b){return /MOT/i.test(b)});return (+i.motBays>0)||!!i.motOnly}
@@ -7892,7 +7895,8 @@ function supLine(t){return t.me==='user'?'<span style="min-width:0"><b>The Motor
 function allT(){function tm(t){return Date.parse(t.last?t.last.created_at:t.bk?t.bk.made_at:'')||0}return threads().concat(bthreads(),sthreads()).sort(function(a,b){return tm(b)-tm(a)})}
 function bkLine(t){var b=t.bk,v=b.vehicle||{},reg=String(v.reg||v.vrm||'').toUpperCase(),car=[v.make,v.model].filter(Boolean).join(' '),day=b.slot_day?dd(b.slot_day):'';
  var bits=[reg,car,day?'Booked for '+day:'Booked '+dd(b.made_at)].filter(Boolean).join(' · ');
- return '<span style="min-width:0"><b>'+E((b.service||b.kind||'Booking')+(/booking/i.test(b.service||b.kind||'')?'':' booking'))+'</b>'+(bits?'<small style="display:block;color:#5A6B82">'+E(bits)+'</small>':'')+'</span>'}
+ var nm=/^(recovery|ev charging)$/i.test(b.kind||'')?b.kind:(b.service||b.kind||'Booking');if(nm===b.kind&&b.service&&b.service!==b.kind&&!/^mobile ev/i.test(b.service))bits=[b.service,bits].filter(Boolean).join(' · ');
+ return '<span style="min-width:0"><b>'+E(nm+(/booking/i.test(nm)?'':' booking'))+'</b>'+(bits?'<small style="display:block;color:#5A6B82">'+E(bits)+'</small>':'')+'</span>'}
 function advLine(t){if(t.sup)return supLine(t);if(t.bk)return bkLine(t);var c=advByDb(t.advert_id);if(!c)return '<span style="min-width:0"><b>'+E(t.title||'Advert')+'</b></span>';
  var ph=c.photos&&c.photos[0],bits=[c.reg,c.price?'£'+Number(c.price).toLocaleString('en-GB'):'',c.miles!=null&&c.miles!==''?Number(c.miles).toLocaleString('en-GB')+' miles':''].filter(Boolean).join(' · ');
  return (ph?'<img src="'+E(ph)+'" alt="" style="width:64px;height:48px;object-fit:cover;border-radius:8px;flex:none">':'')+'<span style="min-width:0"><b>'+E(t.title||[c.year,c.make,c.model].filter(Boolean).join(' '))+'</b>'+(bits?'<small style="display:block;color:#5A6B82">'+E(bits)+'</small>':'')+'</span>'}

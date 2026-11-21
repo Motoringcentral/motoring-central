@@ -25,13 +25,24 @@ Follow-ups from the testing:
   live) is on the site for calls and WhatsApp. Once it is live: set up WhatsApp Business on it (verify with "Call me")
   and test the WhatsApp link. Opening hours agreed 21 Nov: Mon to Fri 8am to 6pm, Sat 9am to 1pm.
 - At launch: change the Supabase Site URL to https://motoringcentral.co.uk, and forward motoringcentral.com to it.
-Test accounts (real accounts, kept for testing until launch, then remove):
+Test accounts (real accounts, kept for testing until launch, then remove with their bookings):
 - Owner and staff log-in (Staff page, /#staff): the owner's Gmail address.
-- Test dealer "VIMS CARS": hello@motoringcentral.co.uk (Partner log in).
-- Test customer: the owner's Sky address (Customer log in).
-- No test garage or mechanic at the moment. To make one, apply with info@motoringcentral.co.uk and approve it.
+- Test dealer "VIMS CARS": hello@motoringcentral.co.uk (Partner log in). Test customer: the owner's Sky address.
+- Made by Claude for the end-to-end tests on 21 Nov (all arrive in the vimen@ mailbox; the owner has the password):
+  vimen+customer@ (customer "Test Customer"), vimen+recovery@ ("TEST Recovery Dartford"), vimen+ev@ ("TEST EV
+  Charging Dartford"), vimen+mot@ ("TEST MOT Station Dartford", using the real DVSA number 11423 of a Dartford
+  station, so remove it before any real MOT station there joins).
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
+
+Found in the end-to-end tests (21 Nov) and still to fix:
+- A link to /#dashboard (as in our emails) shows the log-in form for a moment-old saved session: the partner is logged
+  in but sees "Partner log in". Send them to the dashboard once the saved log-in is restored.
+- Real MOT station dashboard still shows sample cards ("Live jobs for you (sample)", "Earnings ... sample figures") and
+  a "Messages about cars and vans" card it does not need.
+- MOT station sign-up: the "Application received" steps are the general ones ("video call", "take your first job").
+- EV charging job card says "COLLECT" for the place the van goes to. "Booking alerts" in Messages are still kept in
+  the browser only. Customer MOT list shows sample garages with made-up distances next to real ones.
 Texts (SMS) are built too but need a Twilio account (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM). Not chosen yet.
 
 ### What the emails cover (built 19 Nov 2026)
@@ -361,6 +372,19 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026: partner documents fixed. With "Confirm email" on there is no log-in at sign-up, so documents were
+  never stored. They are now kept in the browser (IndexedDB, 7 days) and sent at the first log-in on that device;
+  otherwise the dashboard shows "One more step: upload your documents". Staff see "No documents uploaded yet" on an
+  application without them, and owners get a "Documents received" email (migration 20261121d).
+- 21 Nov 2026: end-to-end tests on the live preview with real test accounts, done through the site in a browser
+  (sign-up, documents, approval, booking with the preview payment, partner dashboard, emails). All three passed:
+  RECOVERY (price £65 + £2.40 x 3 miles = £72.20 + £3 fee; partner paid £67.87; on my way, arrived, done; real messages
+  both ways), EV CHARGING (£150 + £3; partner paid £141.00; all stages), MOT (station found by DVSA number, booked
+  Mon 23 Nov 10:00 from the live diary, £54.85, station paid £44.98, we keep £9.87; in the station's diary).
+  Fixed on the way: real MOT stations never appeared in the customer's garage list (the MOT bays column was not
+  loaded); the #mot-station link opened step 2 in garage mode; real partners were shown invented ratings and sample
+  reviews (now "New partner"); "Approved (demo)" on real partners; recovery emails said "Booking confirmed: Will not
+  start" (migration 20261121e).
 - 21 Nov 2026: chat with The Motoring Central team is real too (table support_messages, migration
   20261121c_support_messages.sql). Every logged-in customer and partner has a "The Motoring Central team" row in
   Messages. Staff see every conversation in their own Messages panel, grouped by person with name, phone, email and role,
