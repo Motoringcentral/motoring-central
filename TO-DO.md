@@ -74,7 +74,9 @@ SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fu
    (f) saved searches, price-drop alerts, saved cars in the account, staff tool to remove unfair reviews DONE
    (saved_items + daily 8am email "saved-alerts"; partner reviews now stored in partner_reviews; Staff "Reviews: hide
    unfair ones" for partner and dealer reviews, with a reason);
-   (g) two-step login for staff, add or remove reviewers.
+   (g) two-step login for staff, add or remove reviewers DONE (authenticator app code at every staff log-in;
+   owner adds reviewers from existing accounts on Staff > Staff tab; once someone has set up the app, the database
+   only gives staff access with the second step). ITEM 1 COMPLETE 21 Nov night.
 2. Owner decides: launch offer; repairs pricing.
 3. After company registration: Stripe and weekly payouts, bank, Vehicle Data Global, DVSA MOT history, ICO, solicitor,
    Supabase Pro, motoringcentral.co.uk pointed at the site, Twilio texts.

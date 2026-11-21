@@ -7727,9 +7727,32 @@ function staffSignIn(em,pw){return ready.then(function(){return sb.auth.signInWi
   if(r.error)throw r.error;var au=r.data.user;
   return sb.from('staff').select('level,name').eq('user_id',au.id).maybeSingle().then(function(s){
    if(s.error||!s.data){sb.auth.signOut().catch(function(){});throw{code:'invalid_credentials'}}
+   return mfaGate().then(function(){
    var L=U(),u=L.filter(function(x){return x.sbid===au.id&&x.role==='admin'})[0];if(!u){u={role:'admin',sbid:au.id,signins:[],fails:[]};L.push(u)}
    u.email=au.email;u.level=s.data.level;u.name=s.data.name||String(au.email).split('@')[0];u.status='approved';
-   return loadAllPartners().then(function(){cur=u;return u})})}).catch(function(e){throw fail(e)})}
+   return loadAllPartners().then(function(){cur=u;return u})})})}).catch(function(e){if(e&&e.code==='mfa_cancel')throw new Error('Two-step log-in was not finished, so you are not logged in.');throw fail(e)})}
+/* ---------- staff two-step log-in: an authenticator app code at every staff log-in ---------- */
+function mfaGate(){return sb.auth.mfa.getAuthenticatorAssuranceLevel().then(function(r){var d=(r&&r.data)||{};if(d.currentLevel==='aal2')return;
+ return sb.auth.mfa.listFactors().then(function(f){if(f.error)throw f.error;var all=(f.data&&f.data.all)||[],ok=all.filter(function(x){return x.factor_type==='totp'&&x.status==='verified'})[0];
+  if(ok)return mfaAsk(ok.id,null);
+  return Promise.all(all.filter(function(x){return x.status!=='verified'}).map(function(x){return sb.auth.mfa.unenroll({factorId:x.id})})).then(function(){
+   return sb.auth.mfa.enroll({factorType:'totp',friendlyName:'Motoring Central staff'})}).then(function(e){
+   /* if two-step log-in is switched off in the database settings, let the owner in and say so, rather than locking everyone out */
+   if(e.error){if(/not.?enabled|disabled|mfa_.*_not_enabled|422/i.test(String(e.error.code||'')+' '+String(e.error.message||'')+' '+String(e.error.status||''))){setTimeout(function(){toast('Two-step log-in is switched off in the database settings, so it was skipped. Turn on TOTP under Authentication, then log in again.',true)},1500);return}throw e.error}
+   return mfaAsk(e.data.id,e.data.totp)})})})}
+function mfaAsk(fid,totp){return new Promise(function(res,rej){var d=document.createElement('div');d.id='mc-mfa';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','mfa-h');
+ d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(6,20,36,.9);display:flex;align-items:center;justify-content:center;padding:16px';
+ var qr='';if(totp&&totp.qr_code){var q0=String(totp.qr_code);if(/^data:/.test(q0)){var ci=q0.indexOf(',');qr=/[<"\s]/.test(q0.slice(ci+1))?q0.slice(0,ci+1).replace(/;utf-?8/i,';charset=utf-8')+encodeURIComponent(q0.slice(ci+1)):q0}else qr='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(q0)}
+ d.innerHTML='<div class="card mc-form" style="max-width:420px;width:100%;max-height:92vh;overflow:auto;background:var(--surface,#fff)"><h2 id="mfa-h">'+(totp?'Set up your two-step log-in':'Enter your log-in code')+'</h2>'
+  +(totp?'<p class="note" style="margin:0 0 8px">Staff accounts need a second step. Open an authenticator app on your phone (Google Authenticator, Microsoft Authenticator or similar), add an account and scan this code.</p><img alt="QR code to scan with your authenticator app" style="display:block;width:200px;height:200px;margin:6px auto;background:#fff;padding:8px;border-radius:10px" id="mfa-qr"><p class="note" style="margin:4px 0 0">Cannot scan? Type this key into the app: <b style="word-break:break-all;font-family:monospace">'+E(totp.secret||'')+'</b></p>':'<p class="note" style="margin:0 0 8px">Open your authenticator app and type the 6-digit code for The Motoring Central.</p>')
+  +'<label class="f" for="mfa-code">6-digit code</label><input type="text" id="mfa-code" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]*"><p class="err" id="mfa-err" role="alert"></p>'
+  +'<div class="dtools"><button class="btn sm" type="button" id="mfa-go">'+(totp?'Turn on and log in':'Log in')+'</button><button class="btn sm ghost" type="button" id="mfa-x">Cancel</button></div></div>';
+ document.body.appendChild(d);var qi=d.querySelector('#mfa-qr');if(qi)qi.src=qr;var inp=d.querySelector('#mfa-code');setTimeout(function(){inp.focus()},50);
+ function close(){d.remove()}
+ d.querySelector('#mfa-x').onclick=function(){close();sb.auth.signOut().catch(function(){});rej({code:'mfa_cancel'})};
+ function go(){var c=inp.value.replace(/\D/g,''),er=d.querySelector('#mfa-err'),b=d.querySelector('#mfa-go');if(c.length!==6){er.textContent='Enter the 6 digits from your app.';return}b.disabled=true;er.textContent='';
+  sb.auth.mfa.challengeAndVerify({factorId:fid,code:c}).then(function(r){b.disabled=false;if(r.error){er.textContent='That code is not right, or it has just changed. Try the new code.';inp.value='';inp.focus();return}close();res()},function(){b.disabled=false;er.textContent='We could not check the code. Check your connection and try again.'})}
+ d.querySelector('#mfa-go').onclick=go;inp.addEventListener('keydown',function(e){if(e.key==='Enter')go()})})}
 function docUrl(path){return ready.then(function(){return sb.storage.from(BUCKET).createSignedUrl(path,600)}).then(function(r){if(r.error||!r.data)throw new Error('x');return r.data.signedUrl})}
 /* staff decisions (approve, reject, suspend, checklist, recommendation) are written back as they are made */
 function syncStaff(){var me=window.GGuser;if(!sb||!me||me.role!=='admin'||!me.sbid)return;
@@ -9060,6 +9083,26 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  var k=a.urvgo||a.urvshow;if(!k)return;var q=k.split(':'),hide=!!a.urvgo,why=hide?($('urv-why')||{}).value:'';t.disabled=true;
  ready.then(function(){return sb.rpc('staff_review_hide',{p_kind:q[0],p_id:+q[1],p_hide:hide,p_reason:why})}).then(function(r){if(r.error){t.disabled=false;toast('Not saved: '+r.error.message,true);return}URV.open=null;toast(hide?'Review hidden. It no longer shows on the site.':'Review shown again.');urvPull();prvPull()})});
 setInterval(function(){try{urvDraw(false)}catch(e){}},1500);
+
+/* ---------- owner: the real staff team (reviewers added from existing accounts) ---------- */
+var TEAM={rows:null,at:0,rm:null,msg:''};
+function teamPull(){TEAM.at=Date.now();ready.then(function(){return sb.rpc('staff_team')}).then(function(r){TEAM.rows=r.error?[]:(r.data||[]);teamDraw(true)})}
+function dt2(t){return new Date(t).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+function teamHtml(){var R=TEAM.rows;var h='<div class="card mc-form" id="mc-team"><h2>Staff team</h2><p class="note" style="margin:0 0 6px">Everyone on the team logs in with Staff log in and a code from an authenticator app (two-step log-in).</p>'+(TEAM.msg?'<p class="note"><b>'+E(TEAM.msg)+'</b></p>':'');
+ if(R===null)return h+'<p class="note">Loading…</p></div>';
+ h+=R.map(function(x){var me=window.GGuser&&x.user_id===window.GGuser.sbid,c=TEAM.rm===x.user_id;return '<div class="job"><div><b>'+E(x.name||x.email)+(me?' (you)':'')+'</b><small>'+(x.level==='owner'?'Owner':'Reviewer')+' · '+E(x.email)+'</small><small>Two-step log-in: '+(x.two_step?'<b>on</b>':'<b>not set up yet</b> (they set it up at their next log-in)')+'</small><small>Last log-in: '+(x.last_sign_in?dt2(x.last_sign_in):'never')+'</small>'+(x.recent_sign_ins&&x.recent_sign_ins.length?'<small>Recent: '+x.recent_sign_ins.slice(0,5).map(dt2).join(', ')+'</small>':'')+'</div>'
+  +(x.level==='reviewer'&&!me?'<div class="jb">'+(c?'<button class="btn sm" type="button" data-tmgo="'+E(x.user_id)+'">Remove now</button><button class="btn sm ghost" type="button" data-tmx="1">Keep</button>':'<button class="btn sm ghost" type="button" data-tmrm="'+E(x.user_id)+'">Remove</button>')+'</div>':'')+'</div>'}).join('');
+ return h+'<h3 style="margin:14px 0 4px">Add a reviewer</h3><p class="note" style="margin:0">Ask them to create a normal customer account with their work email first (Log in, then Create an account). Then add them here.</p><label class="f" for="tm-name">Their name</label><input type="text" id="tm-name" maxlength="80"><label class="f" for="tm-mail">Their account email</label><input type="email" id="tm-mail" maxlength="200"><p class="err" id="tm-err" role="alert"></p><div class="dtools"><button class="btn sm" type="button" data-tmadd="1">Add reviewer</button></div></div>'}
+function teamDraw(force){var u=window.GGuser;if(!isStaff()||!u||u.level!=='owner'||location.hash!=='#admin')return;var b=$('admin-body');if(!b)return;if(!b.querySelector('[data-tab="staff"][aria-pressed="true"]'))return;
+ [].forEach.call(b.querySelectorAll('.card'),function(c){if(c.id)return;var h=c.querySelector('h2');if(h&&/^(Staff|Add a reviewer)$/.test(h.textContent.trim()))c.remove()});var old=$('mc-team');if(old&&!force&&b.contains(old))return;if(TEAM.rows===null&&Date.now()-TEAM.at>5000)teamPull();
+ var d=document.createElement('div');d.innerHTML=teamHtml();var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else b.appendChild(c)}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-team button');if(!t||!isStaff())return;var a=t.dataset;
+ if(a.tmrm){TEAM.rm=a.tmrm;teamDraw(true);return}if(a.tmx){TEAM.rm=null;teamDraw(true);return}
+ if(a.tmgo){t.disabled=true;ready.then(function(){return sb.rpc('staff_remove',{p_user:a.tmgo})}).then(function(r){TEAM.rm=null;TEAM.msg=r.error?'Not removed: '+r.error.message:'Removed. They can no longer use the staff pages.';teamPull()});return}
+ if(a.tmadd){var n=$('tm-name').value.trim(),m=$('tm-mail').value.trim(),er=$('tm-err');if(n.length<2){er.textContent='Enter their name.';return}if(!/^\S+@\S+\.\S+$/.test(m)){er.textContent='Enter their account email.';return}t.disabled=true;
+  ready.then(function(){return sb.rpc('staff_add_reviewer',{p_email:m,p_name:n})}).then(function(r){t.disabled=false;if(r.error){var k=r.error.message;er.textContent=/no_account/.test(k)?'There is no account with that email yet. Ask them to create one first.':/is_partner/.test(k)?'That email is a partner or dealer account. Use a different email for staff.':/already_staff/.test(k)?'They are already on the team.':'Not added: '+k;return}
+   TEAM.msg=n+' is now a reviewer. We have emailed them. They set up the two-step log-in at their first staff log-in.';teamPull()})}});
+setInterval(function(){try{teamDraw(false)}catch(e){}},1500);
 
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
