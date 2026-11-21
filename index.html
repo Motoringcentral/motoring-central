@@ -2059,9 +2059,9 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <button class="btn" type="submit" id="dl-btn">Start my free 3 months</button>
 </form>
 <div class="card done" id="dl-ok" hidden>
-<div class="tick" aria-hidden="true">&#10003;</div><h2>Welcome to the network</h2><p id="dl-ref" style="margin:0 0 8px"></p>
-<p class="note" id="dl-oknote">You can now list cars and vans. Preview only, nobody was charged.</p>
-<button class="btn" id="dl-list" type="button">List a car now</button></div>
+<div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="dl-ref" style="margin:0 0 8px"></p>
+<p class="note" id="dl-oknote">We are checking your documents, usually within 2 working days. We will email you as soon as you are approved. You can then log in and list your cars and vans. Preview only, nobody was charged.</p>
+<button class="btn" id="dl-list" type="button" hidden>List a car now</button></div>
 <footer class="foot">&copy; The Motoring Central Ltd. Prices are for the preview and can be changed. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Jobs</a> <a href="#contact">Contact</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-vans" hidden>
@@ -3632,7 +3632,7 @@ function $(i){return document.getElementById(i)}
 function m(n){return '£'+n.toFixed(2)}
 function calc(){var c=+$('dl-cars').value,n=+$('dl-n').value;$('dl-carsv').textContent=c;$('dl-nv').textContent=n;var i=DPLANFOR(c),P=DPLAN(i),fr=Math.min(n,P.free),ex=n-fr;
 $('dl-sum').innerHTML='<tr><td>'+P.n+' plan<small>'+P.range+', billed monthly</small></td><td>'+m(P.price)+'</td></tr><tr><td>Vehicle history checks: '+P.checks+' a month<small>Finance, write-off and stolen. Extra checks £3.50 + VAT each</small></td><td>Included</td></tr><tr><td>Free premium ads: '+fr+' of '+P.free+'<small>Each runs 2 weeks or until sold</small></td><td>'+m(0)+'</td></tr><tr><td>Extra premium ads: '+ex+' x '+m(DEXTRA)+'</td><td>'+m(ex*DEXTRA)+'</td></tr><tr><td>VAT at 20%</td><td>'+m((P.price+ex*DEXTRA)*0.2)+'</td></tr><tr class="k"><td>Monthly total after your free 3 months, including VAT</td><td>'+m((P.price+ex*DEXTRA)*1.2)+'</td></tr>'}
-function plan(){var P=DPLAN(DPLANSEL());$('dl-plannote').textContent='First 3 months free. Then '+P.n+' plan: '+P.range+', '+m(P.price).replace('.00','')+' a month'+(P.free?', with '+P.free+' free premium ad'+(P.free>1?'s':'')+' a month (each runs 2 weeks or until sold).':'.')+' Extra premium ads are £5.00 + VAT each (usually £9.99 + VAT). '+DCHECKTXT(P);$('dl-btn').textContent='Start my free 3 months';$('dl-oknote').textContent='You can now list '+(P.max===Infinity?'as many cars and vans as you like':'up to '+P.max+' cars and vans')+'. Your first 3 months are free. Preview only, nobody was charged.'}
+function plan(){var P=DPLAN(DPLANSEL());$('dl-plannote').textContent='First 3 months free. Then '+P.n+' plan: '+P.range+', '+m(P.price).replace('.00','')+' a month'+(P.free?', with '+P.free+' free premium ad'+(P.free>1?'s':'')+' a month (each runs 2 weeks or until sold).':'.')+' Extra premium ads are £5.00 + VAT each (usually £9.99 + VAT). '+DCHECKTXT(P);$('dl-btn').textContent='Start my free 3 months';$('dl-oknote').textContent='We are checking your documents, usually within 2 working days. We will email you as soon as you are approved. You can then log in and list '+(P.max===Infinity?'as many cars and vans as you like':'up to '+P.max+' cars and vans')+'. Your first 3 months are free. Preview only, nobody was charged.'}
 $('dl-plan').addEventListener('change',plan);plan();$('dl-cars').addEventListener('input',calc);
 function slots(){var u=window.GGslots?window.GGslots():0;$('dl-slots').textContent=u+' advert'+(u===1?'':'s')+' on the banner right now'}
 $('dl-n').addEventListener('input',calc);calc();slots();
@@ -3649,7 +3649,7 @@ else if(!town)msg='Enter your town or city.';
 else if(!$('dl-chk').checked)msg='Please agree to the terms and membership.';
 $('dl-err').textContent=msg;if(msg)return;
 window.GGdealer={name:co,phone:t,town:town};
-$('dl-ref').textContent='Thanks '+n.split(' ')[0]+'. Your membership reference is DL-'+(Math.floor(Math.random()*90000)+10000)+'.';
+$('dl-ref').textContent='Thanks '+n.split(' ')[0]+'. Your application reference is DL-'+(Math.floor(Math.random()*90000)+10000)+'.';
 $('dl-form').hidden=true;$('dl-ok').hidden=false;$('dl-ok').scrollIntoView({behavior:'smooth',block:'start'})});
 $('dl-list').addEventListener('click',function(){location.hash='cars';setTimeout(function(){$('cars-add-btn').click()},150)});
 $('cars-join-btn').addEventListener('click',function(){location.hash='dealers'});
@@ -4321,7 +4321,7 @@ if(!e.make||!e.model)err='Enter the make and model.';else if(!(e.cost>0))err='En
 if(err){$('st-err').textContent=err;return false}
 var isNew=!e.id,o;if(isNew){if(e.fromTrade&&window.GGtradeApi){window.GGtradeApi.withdraw(e.fromTrade);delete e.fromTrade}e.id=stSeq++;o=e;u.stock.push(e)}else{o=stById(u,e.id);Object.keys(e).forEach(function(x){o[x]=e[x]})}
 if(o.ad)syncAd(o);
-if(keep)u.sedit=JSON.parse(JSON.stringify(o));else{u.sedit=null;u.smsg=(isNew?'Added ':'Saved ')+(o.reg||o.make+' '+o.model)+'.';window.GGdash()}
+if(keep)u.sedit=JSON.parse(JSON.stringify(o));else{u.sedit=null;u.smsg=(isNew?'Added ':'Saved ')+(o.reg||o.make+' '+o.model)+(isNew?' to your stock book':'')+'.'+(o.ad||o.status==='sold'?'':' It is not on the website yet. To advertise it, open it and press "Advertise on Motoring Central".');window.GGdash()}
 return true}
 function syncPrep(u){if(u.sedit.id){var o=stById(u,u.sedit.id);if(o)o.prep=JSON.parse(JSON.stringify(u.sedit.prep))}}
 function focusCard(id){var c=$(id);if(!c)return;c.scrollIntoView({block:'start',behavior:'smooth'});var f=c.querySelector('input:not([type=checkbox]),select');if(f)f.focus({preventScroll:true})}
@@ -4387,7 +4387,7 @@ if(a.ssave!=null){saveSt(u,false);return}
 if(a.sadv!=null){if(u.status!=='approved'){$('st-err').textContent='You can advertise once your documents have been verified.';return}if(!saveSt(u,true))return;v=stById(u,u.sedit.id);
 var k=v.kind==='Van'?'vans':'cars',api=apiFor(k),nid=1;api.list().forEach(function(c){if(c.id>=nid)nid=c.id+1});
 var ad={id:nid,make:v.make,model:v.model,variant:v.variant,year:+v.year,price:+v.price,miles:+v.miles,fuel:v.fuel,gear:v.gear,body:v.body,col:v.col,town:u.town,dealer:u.name,phone:u.phone,desc:'Prepared and ready to drive away. Ask us about part exchange and finance.',photos:(v.photos||[]).slice(0,30),mine:true,featured:false,fexp:0};if(k==='vans'){ad.pay=1000;ad.vat=true}
-api.add(ad);v.ad={k:k,id:nid};if(v.status==='prep')v.status='sale';u.sedit=JSON.parse(JSON.stringify(v));u.smsg=(u.rnote!=null?'Moved back to retail. The trade listing has been withdrawn'+(u.rnote?' and '+u.rnote+' pending offer'+(u.rnote===1?' was':'s were')+' declined':'')+'. ':'')+'Your advert is live in '+(k==='cars'?'Cars':'Light commercials')+'.';u.rnote=null;rd();return}
+api.add(ad);v.ad={k:k,id:nid};if(v.status==='prep')v.status='sale';u.sedit=JSON.parse(JSON.stringify(v));u.smsg=(u.rnote!=null?'Moved back to retail. The trade listing has been withdrawn'+(u.rnote?' and '+u.rnote+' pending offer'+(u.rnote===1?' was':'s were')+' declined':'')+'. ':'')+'Your advert has been sent to our team for checking. It appears in '+(k==='cars'?'Cars':'Light commercials')+' once it is approved.';u.rnote=null;rd();return}
 if(a.sview!=null){v=stById(u,u.sedit.id);if(v&&v.ad){var kk=v.ad.k,id=v.ad.id;location.hash=kk;setTimeout(function(){var ap=apiFor(kk);if(ap&&ap.open)ap.open(id)},150)}return}
 if(a.ssold!=null){var sp=+$('sl-p').value,sd=$('sl-d').value;if(!(sp>0)||!sd){$('st-err').textContent='Enter the sale price and date.';return}if(!saveSt(u,true))return;v=stById(u,u.sedit.id);if(v.trade&&window.GGtradeApi){window.GGtradeApi.withdraw(v.trade.id);v.trade=null}v.status='sold';v.sold={price:sp,date:sd};v.loc='Sold';dropAd(v);u.sedit=null;u.smsg=(v.reg||v.make+' '+v.model)+' marked as sold for '+gbp0(sp)+'. Profit '+gbp0(margin(v))+'.';rd();return}
 if(a.sunsold!=null){v=stById(u,u.sedit.id);v.status='sale';v.sold=null;v.loc='Forecourt';u.sedit=JSON.parse(JSON.stringify(v));rd();return}
