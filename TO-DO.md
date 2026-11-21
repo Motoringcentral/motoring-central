@@ -3,30 +3,32 @@
 This is the running list of work still to do before launch. When the owner asks
 "what is left to do?", answer from this file, and tick items off here as they are finished.
 
-## SATURDAY 21 NOV 2026: switch the emails on (owner, back in the UK, about 1 hour)
+## Emails are ON (set up and tested 21 Nov 2026)
 
-The email side is BUILT (19 Nov 2026) and waiting for these steps. Nothing is sent until step 3.
-1. Google Workspace (mailboxes): sign up at workspace.google.com/intl/en_uk, Business Starter, country United Kingdom,
-   domain motoringcentral.co.uk. At 123-reg > Manage DNS: Google's TXT verification record, MX smtp.google.com
-   (priority 1, delete 123-reg's old MX records), SPF TXT "v=spf1 include:_spf.google.com ~all", DMARC TXT on _dmarc
-   "v=DMARC1; p=none; rua=mailto:<your address>", then Gmail DKIM (google._domainkey). Add the free aliases info@,
-   bookings@, support@, partners@. Do NOT touch the A or CNAME records (they run the website).
-2. Resend (the site's emails): free account at resend.com, Domains > Add motoringcentral.co.uk (region Ireland), add
-   its records at 123-reg (they are on "send" and "resend._domainkey", so they do not clash with Google), press Verify.
-   API Keys > Create, "Sending access". Never paste the key in chat.
-3. Supabase > Edge Functions > Secrets: add RESEND_API_KEY (the key from step 2). From then on every email below is
-   sent within 2 minutes. Optional: NOTIFY_FROM (default "The Motoring Central <bookings@motoringcentral.co.uk>")
-   and NOTIFY_REPLY_TO (default support@motoringcentral.co.uk).
-4. Supabase > Authentication > Emails > SMTP Settings: Enable custom SMTP. Host smtp.resend.com, port 465,
-   username resend, password = the same Resend key, sender email noreply@motoringcentral.co.uk, sender name
-   The Motoring Central. Then Authentication > Emails > Templates: paste the files in supabase/email-templates
-   (Confirm signup, Reset password, Change email address, Magic link), subjects: "Confirm your email address",
-   "Reset your password", "Confirm your new email address", "Your log-in link".
-5. Supabase > Authentication > URL Configuration: Site URL https://preview.motoringcentral.co.uk, and under Redirect
-   URLs add https://preview.motoringcentral.co.uk/** (the password reset page needs it).
-6. Supabase > Authentication > Sign In / Providers > Email: turn "Confirm email" back ON.
-7. Test with Claude: forgotten password on the preview (Log in > "Forgotten your password?"), a new customer sign-up,
-   a partner application, approve it, an advert approved and declined, a buyer message, a quote.
+How it is set up (do not redo):
+- Google Workspace Business Starter: mailbox vimen@motoringcentral.co.uk, with free aliases support, bookings, hello,
+  privacy, info, partners, noreply and accounts. DNS at 123-reg: Google MX, SPF, DMARC (p=none, reports to vimen@)
+  and DKIM (google._domainkey) are all in place.
+- Resend: domain mail.motoringcentral.co.uk (Ireland), verified. The site's emails come from
+  bookings@mail.motoringcentral.co.uk (Supabase secret NOTIFY_FROM) and login emails from
+  noreply@mail.motoringcentral.co.uk (Supabase custom SMTP, smtp.resend.com). Replies go to support@motoringcentral.co.uk.
+- Supabase: RESEND_API_KEY and NOTIFY_FROM secrets set, custom SMTP on, the four email templates pasted, Site URL
+  https://preview.motoringcentral.co.uk, redirect URLs for preview, motoringcentral.co.uk and www, "Confirm email" on.
+- Tested and passed: forgotten password, customer sign-up, partner application and approval, dealer adverts approved
+  and declined, buyer message and viewing, quote.
+
+Follow-ups from the testing:
+- Google Admin > Apps > Gmail > Authenticate email: check it says "Authenticating email with DKIM". If not, press
+  "Start authentication" again (the DNS record is correct).
+- Customer account: a dealer's reply is hard to find after logging in. Make new replies obvious (owner asked 21 Nov).
+- Quote email subject reads badly when the job is "Not sure: please check and advise". Reword.
+- Dealer stock book: adding a vehicle and advertising it are two steps. Decide whether a new vehicle should go
+  straight to "sent for approval" unless the dealer keeps it private.
+- New real dealers get 5 sample vehicles in their stock book. Remove the samples for real accounts before launch.
+- Decide: history checks free during a dealer's free months, or keep £3.50 + VAT each (as the terms say now).
+- At launch: change the Supabase Site URL to https://motoringcentral.co.uk, and forward motoringcentral.com to it.
+- Test accounts made on 21 Nov (info@ garage "VIMS CARS", hello@ dealer "prestige motors", vimen@ customer, the BMW
+  and Ford adverts): remove before launch.
 Texts (SMS) are built too but need a Twilio account (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM). Not chosen yet.
 
 ### What the emails cover (built 19 Nov 2026)
@@ -356,6 +358,10 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 21 Nov 2026: emails switched on and tested end to end (Google Workspace mailboxes, Resend, Supabase). Fixed on the
+  way: dealer sign-up no longer says "You can now list cars and vans" before approval; the stock book's "Advertise on
+  Motoring Central" button now runs the vehicle history check (before, the database refused the advert and nothing
+  reached staff); adding to stock says the vehicle is not on the website yet.
 - 20 Nov 2026: MOT fixed in the intro, dealer and MOT station videos. It was spoken as three separate letters
   ("M. O. T.") and is now said smoothly as one word, "em-oh-tee", the way people say it. Only the lines with MOT
   were re-voiced (same voice, same speed); everything else is unchanged. Rule for future videos: write "MOT" as
