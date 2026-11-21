@@ -3397,7 +3397,8 @@ var p=$('vpost').value.replace(/\s/g,''),g=$('vwhere').value==='garage';
 if(p.length<5){$('val-err').textContent=g?'Enter your postcode to see garages near you.':'Enter the postcode where the car is.';return}
 $('val-err').textContent='';
 var where=cur().n+(g?' (their premises)':' at your address');
-$('vdone').textContent='Booked: full valet ('+NAMES[+$('vsz').value]+'), '+where+', '+$('vday').value+' at '+$('vslot').value+'. Total '+money(total)+'.';$('vdone').hidden=false})
+$('vdone').textContent='Booked: full valet ('+NAMES[+$('vsz').value]+'), '+where+', '+$('vday').value+' at '+$('vslot').value+'. Total '+money(total)+'.';$('vdone').hidden=false;
+var cx=cur();if(cx&&cx.real&&window.MCbookPriced){var tx=$('vdone').textContent;window.MCbookPriced('Valet',cx.n,{size:+$('vsz').value,where:g?'shop':'mobile',post:p,day:$('vday').value,slot:$('vslot').value},tx);if(window.GGrecBooking)window.GGrecBooking({kind:'Valet',text:tx,t:Date.now(),tc:true,dbDone:true})}})
 })();</script>
 <script>(function(){function $(i){return document.getElementById(i)}if(!$('bdy'))return;
 function money(n){return '£'+n.toFixed(2)}
@@ -3437,7 +3438,8 @@ $('bq-err').textContent=e;if(e)return;var r=($('reg')||{}).value||'';
 $('bqdone').textContent='Quote request sent: '+$('bwhat').value.toLowerCase()+(r?' on '+r.toUpperCase():'')+', to '+picked.map(function(p){return p.n}).join(', ')+'. '+(pay==='ins'?'Marked as an insurance claim with '+$('binsr').value.trim()+'. ':'')+'Repairers usually reply within 24 hours with a fixed price. Compare them and book in My account, under Your quotes.';$('bqdone').hidden=false;
 var rl=picked.filter(function(p){return p.real});if(rl.length&&window.MCbodyQuote)window.MCbodyQuote({partners:rl.map(function(p){return p.n}),what:$('bwhat').value,where:$('bwhere').value,post:$('bpost').value.trim().toUpperCase(),insurer:pay==='ins'?$('binsr').value.trim():'',note:(($('bdesc')||{}).value||'').trim(),claim:(($('bclaim')||{}).value||'').trim(),reg:r.toUpperCase(),files:[].slice.call($('bph').files,0,6),text:$('bqdone').textContent})});
 $('bgo').addEventListener('click',function(){var p=$('bapost').value.replace(/\s/g,'');if(p.length<5){$('ba-err').textContent='Enter the postcode where the car is.';return}$('ba-err').textContent='';var x=cur().x,n=+$('bwn').value;
-$('bdone').textContent='Booked: '+FIN[+$('bfin').value].toLowerCase()+', '+n+' wheel'+(n>1?'s':'')+', with '+x.n+($('bawhere').value==='shop'?' (their wheel centre)':' at your address')+', '+$('baday').value+' at '+$('baslot').value+'. Total '+money(total)+'.';$('bdone').hidden=false});
+$('bdone').textContent='Booked: '+FIN[+$('bfin').value].toLowerCase()+', '+n+' wheel'+(n>1?'s':'')+', with '+x.n+($('bawhere').value==='shop'?' (their wheel centre)':' at your address')+', '+$('baday').value+' at '+$('baslot').value+'. Total '+money(total)+'.';$('bdone').hidden=false;
+if(x&&x.real&&window.MCbookPriced){var tx=$('bdone').textContent;window.MCbookPriced('Alloy wheels',x.n,{finish:+$('bfin').value,wheels:n,where:$('bawhere').value==='shop'?'shop':'mobile',post:p,day:$('baday').value,slot:$('baslot').value},tx);if(window.GGrecBooking)window.GGrecBooking({kind:'Alloy wheels',text:tx,t:Date.now(),tc:true,dbDone:true})}});
 })();</script>
 <script>(function(){
 var d=document,rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -9219,6 +9221,11 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  if(a.pqgo){var pr=+$('pq-price').value,dy=$('pq-days').value===''?null:+$('pq-days').value,nt=$('pq-note').value,er=$('pq-err');if(!(pr>0)){er.textContent='Enter your price.';return}t.disabled=true;
   ready.then(function(){return sb.rpc('send_quote',{p_job:a.pqgo,p_price:pr,p_note:nt,p_days:dy})}).then(function(r){t.disabled=false;if(r.error){er.textContent=/closed/.test(r.error.message)?'The customer has already booked or closed this request.':'Not sent. Check your connection and try again.';return}PQ.open=null;toast('Price sent. The customer has been emailed.');pqPull()})}});
 setInterval(function(){try{pqDraw(false)}catch(e){}},1500);
+
+/* valet and alloy bookings with a real partner: the server works out the price from the partner's rates */
+window.MCbookPriced=function(kind,name,opts,text){var id=partnerId(name);if(!realUser()||!id)return;
+ ready.then(function(){return sb.rpc('book_priced',{p_kind:kind,p_partner:id,p_opts:opts,p_summary:text,p_vehicle:window.MCbookingVeh?window.MCbookingVeh():null,p_day:null})}).then(function(r){
+  if(r.error)toast(/not_offered/.test(r.error.message)?'That partner does not offer this. Choose another partner.':/partner_unavailable/.test(r.error.message)?'That partner is not taking bookings right now. Choose another.':'Your booking was not saved. Check your connection and try again.',true)},function(){toast('Your booking was not saved. Check your connection and try again.',true)})};
 
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
