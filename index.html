@@ -5695,7 +5695,7 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
   var u=window.GGuser,b=bookings().filter(function(x){return x.t===draft.bt})[0];if(!b)return;var pn=partnersOf(b.kind,b.text)[0],nm=$('rv-name').checked?u.name:'Customer',now=Date.now();
   var r={partner:pn,stars:draft.stars,text:String(draft.text||'').trim().slice(0,600),rec:draft.rec!==false,name:nm,t:now,bt:b.t,service:b.kind,acct:u.email};REV.push(r);b.review={stars:r.stars,text:r.text,t:now};
   var saved=window.MCsave?window.MCsave('review',r.stars+' stars for '+pn+' from '+u.name,{partner:pn,stars:r.stars,text:r.text,rec:r.rec,name:nm,t:now,bt:b.t,service:b.kind,acct:u.email,customer:u.name}):false;
-  done={partner:pn,stars:r.stars,saved:saved};sel=null;draft=null;page();window.scrollTo(0,0)}});
+  if(window.MCrevDb)window.MCrevDb.add(b,r);done={partner:pn,stars:r.stars,saved:saved};sel=null;draft=null;page();window.scrollTo(0,0)}});
 document.addEventListener('keydown',function(e){var t=e.target;if(!t.hasAttribute||!t.hasAttribute('data-star'))return;var n=+t.getAttribute('data-star');if(e.key==='ArrowRight'||e.key==='ArrowUp')n=Math.min(5,n+1);else if(e.key==='ArrowLeft'||e.key==='ArrowDown')n=Math.max(1,n-1);else return;e.preventDefault();var b=document.querySelector('#rev-body [data-star="'+n+'"]');if(b)b.click()});
 /* account page: a review button on every booking */
 function decoAccount(){var u=window.GGuser,body=$('acc-body');if(!isCust()||!body)return;var card=[].filter.call(body.querySelectorAll('.card'),function(c){var h=c.querySelector('h2');return h&&/Your bookings/.test(h.textContent)})[0];if(!card)return;
@@ -5721,7 +5721,12 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  if(t.hasAttribute('data-rvsend')){sent[t.getAttribute('data-rvsend')]=Date.now();redrawAdmin('Review request marked as sent. '+note);return}
  if(t.hasAttribute('data-rvall')){(window.MCreports.deals()||[]).forEach(function(d){if(d.type==='booking'&&d.partners.length&&!sent[d.t])sent[d.t]=Date.now()});redrawAdmin('Review requests marked as sent. '+note);return}
  if(window.MCdl){var rows=[['Date','Partner','Service','Stars','Would recommend','Review','Customer']];allReviews().forEach(function(r){rows.push([dateOnly(r.t),r.partner,r.service||'',r.stars,r.rec===false?'No':'Yes',r.text||'',r.name])});window.MCdl.save('Motoring-Central-reviews-'+new Date().toISOString().slice(0,10)+'.csv',window.MCdl.csv(rows))}});
-window.MCreview={partnersOf:partnersOf,page:page,admin:adminHtml,open:openProfile,real:function(name){var r=realOf(name),t=0;r.forEach(function(x){t+=x.stars});return{n:r.length,avg:r.length?t/r.length:0}},all:allReviews};
+function addDb(rows){var ids={};rows.forEach(function(x){ids[x.id]=1});REV=REV.filter(function(r){return !r.dbrev||ids[r.dbrev]});
+ rows.forEach(function(x){if(!x.partner_name||REV.some(function(r){return r.dbrev===x.id}))return;var t=Date.parse(x.created_at)||Date.now(),body=String(x.body||'');
+  var dup=REV.filter(function(r){return !r.dbrev&&low2(r.partner)===low2(x.partner_name)&&r.stars===x.rating&&String(r.text||'')===body&&Math.abs(r.t-t)<864e5})[0];if(dup){dup.dbrev=x.id;return}
+  REV.push({partner:x.partner_name,stars:x.rating,text:body,rec:x.recommend!==false,name:x.author_name||'Customer',t:t,service:x.service||'',dbrev:x.id})})}
+function low2(v){return String(v||'').trim().toLowerCase()}
+window.MCreview={addDb:addDb,partnersOf:partnersOf,page:page,admin:adminHtml,open:openProfile,real:function(name){var r=realOf(name),t=0;r.forEach(function(x){t+=x.stars});return{n:r.length,avg:r.length?t/r.length:0}},all:allReviews};
 if(location.hash==='#review')page();
 window.addEventListener('hashchange',function(){if(location.hash!=='#review'){done=null}});
 var wasCust=isCust();setInterval(function(){if(isCust()!==wasCust){wasCust=isCust();if(location.hash==='#review'){sel=null;done=null;page()}}},600);
@@ -6860,7 +6865,7 @@ function mount(kind){var k=K[kind],root=$(k.root);if(!root||root.querySelector('
   if(e.target.closest('[data-r="clear"]')){clear(kind);return}
   if(e.target.closest('[data-r="save"]')){saveSearch(kind);return}
   var sv=e.target.closest('[data-sv]');if(sv){var id=+sv.getAttribute('data-id'),it=SAVED.filter(function(x){return x.id===id})[0];if(!it)return;
-   if(sv.getAttribute('data-sv')==='del'){SAVED=SAVED.filter(function(x){return x.id!==id});keepSaved();sync(kind)}
+   if(sv.getAttribute('data-sv')==='del'){SAVED=SAVED.filter(function(x){return x.id!==id});keepSaved();sync(kind);if(window.MCsvDb)window.MCsvDb.delSearch(it)}
    else{var b=blank();Object.keys(it.st).forEach(function(f){if(f in b)b[f]=Array.isArray(it.st[f])?it.st[f].slice():it.st[f]});b.pc=ST[kind].pc||b.pc;b.more=ST[kind].more;ST[kind]=b;changed(kind);it.ids=run(kind).map(function(c){return c.id});keepSaved();sync(kind);var c2=$(kind+'-count');if(c2)c2.scrollIntoView({behavior:'smooth',block:'start'})}return}
   if(e.target.closest('[data-r="go"]')){var c=$(kind+'-count');if(c)c.scrollIntoView({behavior:'smooth',block:'start'})}});
  sync(kind)}
@@ -6914,14 +6919,15 @@ function changed(kind){save();sync(kind);var a=K[kind].api();if(a&&a.reset)a.res
 /* saved searches: kept on this device for now; email alerts need the shared database */
 var SAVED=[];try{SAVED=JSON.parse(localStorage.getItem('mc-saved')||'[]')||[]}catch(e){}
 function keepSaved(){try{localStorage.setItem('mc-saved',JSON.stringify(SAVED))}catch(e){}}
+window.MCsearchSaved={list:function(){return SAVED},merge:function(rows){var ch=false;rows.forEach(function(r){var have=SAVED.filter(function(x){return x.kind===r.kind&&same(x.st,r.st)})[0];if(have){if(have.dbid!==r.dbid){have.dbid=r.dbid;ch=true}return}SAVED.push({id:Date.now()+Math.floor(Math.random()*1e6),kind:r.kind,name:r.name,st:r.st,ids:all(r.kind).filter(function(c){return 1}).map(function(c){return c.id}),at:Date.now(),dbid:r.dbid});ch=true});if(ch){SAVED=SAVED.slice(0,20);keepSaved();['cars','vans'].forEach(function(k){try{sync(k)}catch(e){}})}},same:function(a,b){return same(a,b)}};
 function core(st){var o={};Object.keys(blank()).forEach(function(f){if(f!=='more'&&f!=='sort'&&f!=='pc')o[f]=Array.isArray(st[f])?st[f].slice().sort():st[f]});if(!o.dist)o.dist=0;return o}
 function same(a,b){return JSON.stringify(core(a))===JSON.stringify(core(b))}
 function matches(kind,st){var keep=ST[kind],b=blank();Object.keys(st).forEach(function(f){if(f in b)b[f]=st[f]});b.pc=keep.pc;ST[kind]=b;var l=all(kind).filter(function(c){return ok(kind,c)});ST[kind]=keep;return l}
 function saveSearch(kind){var act=active(kind);if(!act.length)return;if(SAVED.some(function(x){return x.kind===kind&&same(x.st,ST[kind])}))return;
- SAVED.unshift({id:Date.now(),kind:kind,name:act.map(function(x){return x[2]}).join(', '),st:core(ST[kind]),ids:run(kind).map(function(c){return c.id}),at:Date.now()});SAVED=SAVED.slice(0,12);keepSaved();sync(kind)}
+ var it={id:Date.now(),kind:kind,name:act.map(function(x){return x[2]}).join(', '),st:core(ST[kind]),ids:run(kind).map(function(c){return c.id}),at:Date.now()};SAVED.unshift(it);SAVED=SAVED.slice(0,12);keepSaved();sync(kind);if(window.MCsvDb)window.MCsvDb.addSearch(it)}
 function drawSaved(kind,q,act){var k=K[kind],mine=SAVED.filter(function(x){return x.kind===kind}),sb=q('save'),box=q('saved'),got=mine.some(function(x){return same(x.st,ST[kind])});
  sb.hidden=!act.length;sb.disabled=got;sb.innerHTML=got?'&#10003; Search saved':'&#9825; Save this search';
- box.innerHTML=mine.length?'<p class="flt-sh">Your saved searches <small>Kept on this device</small></p>'+mine.map(function(x){var l=matches(kind,x.st),fresh=l.filter(function(c){return x.ids.indexOf(c.id)<0}).length;
+ box.innerHTML=mine.length?'<p class="flt-sh">Your saved searches <small>'+(window.GGuser&&window.GGuser.sbid?'Saved to your account. We email you when new ones are listed':'Kept on this device. Log in to get email alerts')+'</small></p>'+mine.map(function(x){var l=matches(kind,x.st),fresh=l.filter(function(c){return x.ids.indexOf(c.id)<0}).length;
   return '<div class="flt-sv"><span><b>'+esc(x.name)+'</b><small>'+l.length+' '+(l.length===1?k.one:k.many)+' now'+(fresh?' <i>'+fresh+' new</i>':'')+'</small></span><button type="button" class="btn sm" data-sv="go" data-id="'+x.id+'">Show</button><button type="button" class="flt-svx" data-sv="del" data-id="'+x.id+'" aria-label="Remove saved search: '+esc(x.name)+'">&times;</button></div>'}).join(''):''}
 function clear(kind){var keep=ST[kind].more;ST[kind]=blank();ST[kind].more=keep;changed(kind)}
 function set(kind,o){var b=blank();b.more=ST[kind].more;b.pc=ST[kind].pc;Object.keys(o||{}).forEach(function(f){if(f in b&&o[f]!=null)b[f]=o[f]});ST[kind]=b;if(advCount(kind))b.more=true;changed(kind)}
@@ -7664,13 +7670,13 @@ function ms(s){var t=Date.parse(s);return isFinite(t)?t:Date.now()}
 /* build the site's own customer object from the database */
 function load(au){return Promise.all([
   sb.from('profiles').select('name,phone,postcode,news,terms_at,created_at').eq('id',au.id).maybeSingle(),
-  sb.from('bookings').select('kind,service,summary,vehicle,made_at').order('made_at',{ascending:false}).limit(200),
+  sb.from('bookings').select('id,kind,service,summary,vehicle,made_at,status').order('made_at',{ascending:false}).limit(200),
   sb.from('enquiries').select('about,message,made_at').order('made_at',{ascending:false}).limit(200)]).then(function(r){
   if(r[0].error)throw r[0].error;var md=au.user_metadata||{};if(!r[0].data&&md.kind==='partner'){sb.auth.signOut().catch(function(){});throw{code:'x_partner'}}var p=r[0].data||{},C=window.GGcustomers||[];
   var u=C.filter(function(x){return x.sbid===au.id})[0];if(!u){u={role:'customer',sbid:au.id};C.push(u)}
   u.email=au.email;u.name=p.name||md.name||String(au.email).split('@')[0];u.phone=p.phone||md.phone||'';u.post=p.postcode||md.postcode||'';
   u.news=!!p.news;u.joined=ms(p.created_at||au.created_at);u.tcAt=ms(p.terms_at||au.created_at);
-  u.bookings=(r[1].data||[]).map(function(b){var o={kind:b.kind,text:b.summary,t:ms(b.made_at),tc:true};if(b.service)o.svc=b.service;if(b.vehicle)o.veh=b.vehicle;return o});
+  u.bookings=(r[1].data||[]).map(function(b){var o={kind:b.kind,text:b.summary,t:ms(b.made_at),tc:true,dbid:b.id,dbst:b.status};if(b.service)o.svc=b.service;if(b.vehicle)o.veh=b.vehicle;return o});
   u.enquiries=(r[2].data||[]).map(function(q){return{text:q.message,about:q.about,t:ms(q.made_at)}});
   cur=u;return u})}
 function signUp(d,pw){return ready.then(function(){return sb.auth.signUp({email:d.email,password:pw,options:{emailRedirectTo:location.origin+'/',data:{name:d.name,phone:d.phone,postcode:d.post,news:!!d.news}}})}).then(function(r){
@@ -8352,7 +8358,7 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
 /* dealer reviews: written by buyers the dealer has replied to */
 var RV={},rvAt=0;
 function stars(n){var r=Math.round(n);return '<span class="stars" aria-label="'+n.toFixed(1)+' out of 5">'+'&#9733;'.repeat(r)+'<span style="opacity:.3">'+'&#9733;'.repeat(5-r)+'</span></span>'}
-function pullReviews(){if(!sb)return;rvAt=Date.now();var me=realUser()?window.GGuser.sbid:'';sb.from('dealer_reviews').select('id,dealer_id,author_name,rating,body,created_at'+(me?',author_id':'')).order('created_at',{ascending:false}).limit(3000).then(function(r){if(r.error)return;var R={};(r.data||[]).forEach(function(x){if(me&&x.author_id===me)x.mine=1;(R[x.dealer_id]=R[x.dealer_id]||[]).push(x)});RV=R;document.querySelectorAll('.mc-rv').forEach(function(b){b.removeAttribute('data-done')})})}
+function pullReviews(){if(!sb)return;rvAt=Date.now();var me=realUser()?window.GGuser.sbid:'';sb.from('dealer_reviews').select('id,dealer_id,author_name,rating,body,created_at'+(me?',author_id':'')).eq('hidden',false).order('created_at',{ascending:false}).limit(3000).then(function(r){if(r.error)return;var R={};(r.data||[]).forEach(function(x){if(me&&x.author_id===me)x.mine=1;(R[x.dealer_id]=R[x.dealer_id]||[]).push(x)});RV=R;document.querySelectorAll('.mc-rv').forEach(function(b){b.removeAttribute('data-done')})})}
 ready.then(pullReviews).catch(function(){});
 function revHtml(c){var L=RV[c.ownerId]||[];if(!L.length)return '';var av=L.reduce(function(a,x){return a+x.rating},0)/L.length;
  return '<div class="rvbox"><b>'+E(c.dealer||'This dealer')+'</b>: '+stars(av)+' <b>'+av.toFixed(1)+'</b> <span class="note">from '+L.length+' buyer review'+(L.length===1?'':'s')+'</span>'+
@@ -9000,6 +9006,60 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  if(t.dataset.jrpdf){var x=(JR.rows||[]).filter(function(r){return r.id===t.dataset.jrpdf})[0];if(!x)return;var w=window.open('','_blank');t.disabled=true;
   ready.then(function(){return sb.storage.from('job-records').createSignedUrl(x.pdf_path,600)}).then(function(r){t.disabled=false;if(r.error||!r.data){if(w)w.close();toast('The PDF could not be opened. Try again.',true);return}if(w)w.location=r.data.signedUrl;else location.href=r.data.signedUrl})}});
 setInterval(function(){try{jrDraw(false)}catch(e){}},1500);
+
+/* ---------- saved cars, vans and searches on the account (daily email: price drops and new matches) ---------- */
+var SV={rows:null,uid:null,at:0};
+function svPull(){var u=window.GGuser;SV.at=Date.now();ready.then(function(){return sb.from('saved_items').select('id,kind,advert_id,search,search_kind,name,alerts,last_price,created_at,adverts(id,kind,data,status)').order('created_at',{ascending:false}).limit(200)}).then(function(r){if(r.error||window.GGuser!==u)return;SV.rows=r.data||[];
+ SV.rows.forEach(function(x){if(x.kind==='advert'){var c=advByDb(x.advert_id);if(c&&!c.fav)c.fav=true}});
+ if(window.MCsearchSaved)window.MCsearchSaved.merge(SV.rows.filter(function(x){return x.kind==='search'}).map(function(x){return{kind:x.search_kind,name:x.name,st:x.search,dbid:x.id}}));
+ ['cars','vans'].forEach(function(k){var a=adApi(k);if(a&&a.render)try{a.render()}catch(e){}});svDraw(true)})}
+function svFav(c){if(!realUser()||!c||!c.dbid)return;var u=window.GGuser;
+ ready.then(function(){return c.fav?sb.from('saved_items').insert({kind:'advert',advert_id:c.dbid}):sb.from('saved_items').delete().eq('kind','advert').eq('advert_id',c.dbid)}).then(function(r){if(r.error&&r.error.code!=='23505'){toast('That was not saved to your account. Try again.',true);return}if(c.fav)toast('Saved. We will email you if the price drops.');SV.rows=null;SV.at=0})}
+window.MCsvDb={addSearch:function(it){if(!realUser())return;ready.then(function(){return sb.from('saved_items').insert({kind:'search',search:it.st,search_kind:it.kind,name:it.name}).select('id').single()}).then(function(r){if(!r.error&&r.data)it.dbid=r.data.id;SV.rows=null;SV.at=0})},
+ delSearch:function(it){if(!realUser()||!it)return;ready.then(function(){var q=sb.from('saved_items').delete().eq('kind','search');return it.dbid?q.eq('id',it.dbid):q.eq('search_kind',it.kind).eq('name',it.name)}).then(function(){SV.rows=null;SV.at=0})}};
+document.addEventListener('click',function(e){var t=e.target;if(!t.closest||!realUser())return;var a=curAd();
+ if(t.closest('#cd-fav,#vd-fav')&&a){var c0=a.c;setTimeout(function(){svFav(c0)},80);return}
+ var h=t.closest('[data-fav]');if(h){var k=/^#vans/.test(location.hash||'')?'vans':'cars',c=advBy(k,h.getAttribute('data-fav'));setTimeout(function(){svFav(c)},80)}},true);
+function svHtml(){var R=SV.rows||[],A=R.filter(function(x){return x.kind==='advert'&&x.adverts}),S=R.filter(function(x){return x.kind==='search'});if(!A.length&&!S.length)return '';
+ return '<div class="card mc-form" id="mc-sv"><h2>Saved cars, vans and searches</h2><p class="note" style="margin:0 0 6px">We email you once a day if a saved car or van drops in price, or new ones match a saved search.</p>'
+  +A.map(function(x){var d=x.adverts.data||{},live=x.adverts.status==='live',now=+d.price||0,was=+x.last_price||0;return '<div class="ac-row" style="display:block"><b>'+E([d.year,d.make,d.model].filter(Boolean).join(' '))+'</b><small>'+(live?'£'+now.toLocaleString('en-GB')+(was&&now<was?' · <b>down from £'+was.toLocaleString('en-GB')+'</b>':''):'No longer for sale')+(d.dealer?' · '+E(d.dealer):'')+'</small><div class="dtools">'+(live?'<a class="btn sm ghost" href="#'+E(x.adverts.kind)+'" data-svopen="'+E(x.adverts.kind)+':'+x.advert_id+'">View</a>':'')+'<button class="btn sm ghost" type="button" data-svalert="'+E(x.id)+'">'+(x.alerts?'Turn off price emails':'Turn on price emails')+'</button><button class="btn sm ghost" type="button" data-svdel="'+E(x.id)+'">Remove</button></div></div>'}).join('')
+  +S.map(function(x){return '<div class="ac-row" style="display:block"><b>Search: '+E(x.name||'saved search')+'</b><small>'+(x.search_kind==='vans'?'Vans':'Cars')+'</small><div class="dtools"><a class="btn sm ghost" href="#'+E(x.search_kind)+'">Open '+(x.search_kind==='vans'?'vans':'cars')+'</a><button class="btn sm ghost" type="button" data-svalert="'+E(x.id)+'">'+(x.alerts?'Turn off emails':'Turn on emails')+'</button><button class="btn sm ghost" type="button" data-svdel="'+E(x.id)+'">Remove</button></div></div>'}).join('')+'</div>'}
+function svDraw(force){var u=window.GGuser;if(!u||!u.sbid||u.role!=='customer')return;if(SV.uid!==u.sbid){SV={rows:null,uid:u.sbid,at:0}}if(SV.rows===null){if(Date.now()-SV.at>15000)svPull();return}
+ if(location.hash!=='#account')return;var b=$('acc-body');if(!b)return;var old=$('mc-sv');if(old&&!force&&b.contains(old))return;var h=svHtml();if(!h){if(old)old.remove();return}var d=document.createElement('div');d.innerHTML=h;var c=d.firstChild;
+ if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var j=$('mc-jr')||$('mc-mydet');if(j&&b.contains(j))b.insertBefore(c,j.nextSibling);else b.appendChild(c)}}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-sv [data-svdel],#mc-sv [data-svalert],#mc-sv [data-svopen]');if(!t)return;
+ if(t.dataset.svopen){var q=t.dataset.svopen.split(':'),c=advByDb(+q[1]),a=adApi(q[0]);if(c&&a&&a.open){e.preventDefault();location.hash=q[0];setTimeout(function(){try{a.open(c.id)}catch(x){}},300)}return}
+ var id=t.dataset.svdel||t.dataset.svalert,x=(SV.rows||[]).filter(function(r){return r.id===id})[0];if(!x)return;t.disabled=true;
+ var job=t.dataset.svdel?sb.from('saved_items').delete().eq('id',id):sb.from('saved_items').update({alerts:!x.alerts}).eq('id',id);
+ ready.then(function(){return job}).then(function(r){if(r.error){t.disabled=false;toast('Not saved. Try again.',true);return}
+  if(t.dataset.svdel){if(x.kind==='advert'){var c=advByDb(x.advert_id);if(c)c.fav=false}else if(window.MCsearchSaved){var L=window.MCsearchSaved.list();for(var i=L.length-1;i>=0;i--)if(L[i].dbid===id)L.splice(i,1);try{localStorage.setItem('mc-saved',JSON.stringify(L))}catch(z){}}}
+  SV.rows=null;SV.at=0;svPull()})});
+setInterval(function(){try{svDraw(false)}catch(e){}},1500);
+
+/* ---------- partner reviews kept on our system; staff hide unfair reviews ---------- */
+var PRV={at:0};
+function prvPull(){PRV.at=Date.now();ready.then(function(){return sb.from('partner_reviews').select('id,partner_name,author_name,rating,body,recommend,service,created_at,hidden').eq('hidden',false).order('created_at',{ascending:false}).limit(3000)}).then(function(r){if(!r.error&&window.MCreview&&window.MCreview.addDb)window.MCreview.addDb(r.data||[])})}
+ready.then(prvPull).catch(function(){});setInterval(function(){if(Date.now()-PRV.at>300000)try{prvPull()}catch(e){}},60000);
+window.MCrevDb={add:function(b,r){if(!realUser()||!b||!b.dbid)return;ready.then(function(){return sb.from('partner_reviews').insert({booking_id:b.dbid,rating:r.stars,body:r.text||null,recommend:r.rec!==false,author_name:r.name})}).then(function(x){
+ if(x.error&&x.error.code!=='23505')toast(/not_finished/.test(x.error.message)?'Your review is saved here. It will show on the partner\'s profile once they mark the job complete.':'Your review was not sent. Check your connection and try again.',!/not_finished/.test(x.error.message));else prvPull()})}};
+var URV={rows:null,at:0,open:null,tab:'partner'};
+function urvPull(){URV.at=Date.now();ready.then(function(){return Promise.all([sb.from('partner_reviews').select('id,partner_name,author_name,rating,body,service,created_at,hidden,hidden_reason').order('created_at',{ascending:false}).limit(200),sb.from('dealer_reviews').select('id,dealer_id,author_name,rating,body,created_at,hidden,hidden_reason').order('created_at',{ascending:false}).limit(200)])}).then(function(r){
+ var dn={};(window.GGusers||[]).forEach(function(u){if(u.sbid)dn[u.sbid]=u.name});URV.rows={partner:(r[0].data||[]),dealer:(r[1].data||[]).map(function(x){x.partner_name=dn[x.dealer_id]||'Dealer';return x})};urvDraw(true)})}
+function urvHtml(){var R=URV.rows,L=R?R[URV.tab]:null;
+ var h='<div class="card mc-form" id="mc-urv"><h2>Reviews: hide unfair ones</h2><p class="note" style="margin:0 0 6px">Hide a review that breaks the rules: abuse, personal details, fake or about the wrong business. Give the reason; it is kept with the review. Do not hide a review just because it is negative.</p>'
+  +'<div class="dtools"><button class="btn sm'+(URV.tab==='partner'?'':' ghost')+'" type="button" data-urvtab="partner">Partner reviews</button><button class="btn sm'+(URV.tab==='dealer'?'':' ghost')+'" type="button" data-urvtab="dealer">Dealer reviews</button><button class="btn sm ghost" type="button" data-urvre="1">Refresh</button></div>';
+ if(!L)return h+'<p class="note">Loading…</p></div>';if(!L.length)return h+'<p class="note">No reviews yet.</p></div>';
+ return h+L.map(function(x){var k=URV.tab+':'+x.id,op=URV.open===k;return '<div class="job"><div><b>'+E(x.partner_name||'')+' · '+'★'.repeat(x.rating)+'☆'.repeat(5-x.rating)+'</b><small>'+E(x.author_name||'Customer')+' · '+E(new Date(x.created_at).toLocaleDateString('en-GB'))+(x.service?' · '+E(x.service):'')+'</small>'+(x.body?'<small>“'+E(x.body)+'”</small>':'')+(x.hidden?'<small><span class="sst">Hidden</span> '+E(x.hidden_reason||'')+'</small>':'')
+  +(op?'<label class="f" for="urv-why">Reason for hiding</label><select id="urv-why"><option>Abusive or offensive language</option><option>Shares personal details</option><option>Looks fake or not a real customer</option><option>About a different business</option><option>Advertising or spam</option></select>':'')+'</div>'
+  +'<div class="jb">'+(x.hidden?'<button class="btn sm ghost" type="button" data-urvshow="'+E(k)+'">Show again</button>':op?'<button class="btn sm" type="button" data-urvgo="'+E(k)+'">Hide it</button><button class="btn sm ghost" type="button" data-urvx="1">Keep it</button>':'<button class="btn sm ghost" type="button" data-urvhide="'+E(k)+'">Hide…</button>')+'</div></div>'}).join('')+'</div>'}
+function urvDraw(force){if(!isStaff()||location.hash!=='#admin')return;var b=$('admin-body');if(!b)return;var old=$('mc-urv');if(old&&!force&&b.contains(old))return;if(URV.rows===null&&Date.now()-URV.at>5000)urvPull();
+ var d=document.createElement('div');d.innerHTML=urvHtml();var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var q=$('mc-spo')||$('mc-rss');if(q)q.parentNode.insertBefore(c,q.nextSibling);else b.appendChild(c)}}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-urv button');if(!t||!isStaff())return;var a=t.dataset;
+ if(a.urvtab){URV.tab=a.urvtab;URV.open=null;urvDraw(true);return}if(a.urvre){URV.rows=null;urvPull();return}if(a.urvx){URV.open=null;urvDraw(true);return}
+ if(a.urvhide){URV.open=a.urvhide;urvDraw(true);return}
+ var k=a.urvgo||a.urvshow;if(!k)return;var q=k.split(':'),hide=!!a.urvgo,why=hide?($('urv-why')||{}).value:'';t.disabled=true;
+ ready.then(function(){return sb.rpc('staff_review_hide',{p_kind:q[0],p_id:+q[1],p_hide:hide,p_reason:why})}).then(function(r){if(r.error){t.disabled=false;toast('Not saved: '+r.error.message,true);return}URV.open=null;toast(hide?'Review hidden. It no longer shows on the site.':'Review shown again.');urvPull();prvPull()})});
+setInterval(function(){try{urvDraw(false)}catch(e){}},1500);
 
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */

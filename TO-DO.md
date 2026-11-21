@@ -71,7 +71,9 @@ SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fu
    statements and self-billing invoices DONE (partner dashboard card + Staff "Weekly payouts"; ASK THE
    ACCOUNTANT to check the self-billing agreement wording and the VAT lines before the first real payout); (e) inspections, PDIs and service sheets saved against the booking DONE (table job_records, PDFs in
    private storage "job-records"; customers see them under "Your vehicle records" in My account);
-   (f) saved searches, price-drop alerts, saved cars in the account, staff tool to remove unfair reviews;
+   (f) saved searches, price-drop alerts, saved cars in the account, staff tool to remove unfair reviews DONE
+   (saved_items + daily 8am email "saved-alerts"; partner reviews now stored in partner_reviews; Staff "Reviews: hide
+   unfair ones" for partner and dealer reviews, with a reason);
    (g) two-step login for staff, add or remove reviewers.
 2. Owner decides: launch offer; repairs pricing.
 3. After company registration: Stripe and weekly payouts, bank, Vehicle Data Global, DVSA MOT history, ICO, solicitor,
