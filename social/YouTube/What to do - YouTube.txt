@@ -1,0 +1,8 @@
+YOUTUBE CHANNEL
+
+1. Sign in with a Google account (social@motoringcentral.co.uk works, as it is a Google Workspace address).
+2. Create a channel > use a custom name: The Motoring Central. Handle: @themotoringcentral
+3. Profile picture: "YouTube - profile picture (1080x1080).png"
+4. Banner: "YouTube - banner image (2560x1440).png" (the text sits in the middle, so it shows on phones, computers and TVs)
+5. Description: Everything your car needs, in one place. MOTs, servicing, repairs, tyres, recovery, EV charging and cars for sale from checked local UK businesses.
+6. Upload the four videos from the website's video folder (intro, dealer, MOT station, EV charging).

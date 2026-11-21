@@ -1,0 +1,8 @@
+X (TWITTER) - optional, least important
+
+1. Sign up with social@motoringcentral.co.uk. Username: themotoringcentral (or motoringcentraluk).
+2. Profile picture: "X - profile picture (1080x1080).png"
+3. Header: "X - header image (1500x500).png"
+4. Bio (147 of 160 characters):
+Everything your car needs, in one place. MOTs, servicing, repairs, tyres, recovery, EV charging and cars for sale from checked local UK businesses.
+5. Turn on two-step login.

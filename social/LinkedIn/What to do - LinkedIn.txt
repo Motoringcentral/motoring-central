@@ -1,0 +1,13 @@
+LINKEDIN COMPANY PAGE
+
+1. Log in to your personal LinkedIn account (a company page has to be created from one).
+2. Click "For Business" (top right) > Create a Company Page > Company.
+3. Name: The Motoring Central
+4. Industry: Technology, Information and Internet
+5. Company size: 0-1 employees
+6. Company type: Privately held (choose this once the company is registered)
+7. Logo: "LinkedIn - logo (1080x1080).png"
+8. Cover image: "LinkedIn - cover image (1128x191).png"
+9. Tagline (87 of 120 characters):
+The UK's network of independent motor traders. Everything your car needs, in one place.
+10. Website: leave empty until the site is live at motoringcentral.co.uk

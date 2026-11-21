@@ -13,6 +13,7 @@ const items=[
  ['facebook-cover-1640x624.png',1640,624,(k)=>banner(1640,624,1180,400,k,false),150],
  ['x-twitter-header-1500x500.png',1500,500,(k)=>banner(1500,500,1150,330,k,false),130],
  ['linkedin-cover-1128x191.png',1128,191,(k)=>banner(1128,191,1040,150,k,true),70],
+ ['google-cover-1080x608.png',1080,608,(k)=>banner(1080,608,940,460,k,false),100],
  ['youtube-banner-2560x1440.png',2560,1440,(k)=>banner(2560,1440,1500,400,k,true),160],
 ];
 (async()=>{const b=await chromium.launch();for(const it of items){const [f,w,h,html0,k0]=it;const p=await b.newPage({viewport:{width:w,height:h}});

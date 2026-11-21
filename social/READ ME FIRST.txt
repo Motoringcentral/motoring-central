@@ -1,0 +1,17 @@
+THE MOTORING CENTRAL - SOCIAL MEDIA KIT
+
+One folder per platform. Each folder has the images for that platform, already
+named and sized, and a "What to do" note with the steps and the text to paste in.
+
+Before you start:
+1. Add a free alias social@motoringcentral.co.uk in Google Admin and use it for every account.
+2. Use the same username everywhere: themotoringcentral (or motoringcentraluk if taken).
+3. Turn on two-step login on every account.
+
+Order: Facebook, Instagram, TikTok, LinkedIn, YouTube, then X (optional).
+Google Business Profile: read the note in its folder first.
+
+Hold off on paid adverts aimed at drivers until the site is live at
+motoringcentral.co.uk. Until then, post partner recruitment only.
+
+The folder "_originals (do not upload)" holds the master images. Ignore it.

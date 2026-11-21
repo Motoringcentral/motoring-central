@@ -1,0 +1,12 @@
+FACEBOOK PAGE
+
+1. Log in to your personal Facebook account (it is not shown on the Page).
+2. Menu > Pages > Create new Page.
+3. Page name: The Motoring Central
+4. Category: Automotive Service
+5. Bio: Everything your car needs, in one place. MOTs, repairs, tyres, recovery, EV charging and cars for sale from checked local UK businesses.
+6. Profile picture: "Facebook - profile picture (1080x1080).png"
+7. Cover photo: "Facebook - cover photo (1640x624).png"
+8. Contact: phone 020 8191 4290, email hello@motoringcentral.co.uk
+9. Website: leave empty until the site is live at motoringcentral.co.uk
+10. Turn on two-step login (Settings > Accounts Centre > Password and security).
