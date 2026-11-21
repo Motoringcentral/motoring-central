@@ -4261,7 +4261,7 @@ function daysIn(v){var end=v.sold?dfrom(v.sold.date):new Date();return v.inDate?
 function margin(v){return(v.sold?v.sold.price:(+v.price||0))-(+v.cost||0)-prepTot(v)}
 function stById(u,id){return u.stock.filter(function(v){return v.id===id})[0]}
 function apiFor(k){return k==='cars'?window.GGcars:window.GGvans}
-function seedStock(u){if(u&&u.sbid){u.stock=[];return} /* real dealers start with an empty stock book; the samples are only for the demo log-in */
+function seedStock(u){if(u&&u.sbid){u.stock=[];u.sfilter=u.sfilter||'all';u.ssort=u.ssort||'days';return} /* real dealers start with an empty stock book; the samples are only for the demo log-in */
 var own=[],regs=['YD19 KXF','YK20 VNA','LS18 HMP','YB68 WRT','YL19 DHE'];
 (window.GGcars?GGcars.list():[]).filter(owned).forEach(function(c){own.push({k:'cars',c:c})});
 (window.GGvans?GGvans.list():[]).filter(owned).forEach(function(c){own.push({k:'vans',c:c})});
@@ -4277,7 +4277,7 @@ function syncTrade(u){if(!window.GGtradeApi)return;u.stock.forEach(function(v){i
 if(!x||x.status==='withdrawn'){v.trade=null;v.tradeNote='';if(v.status==='trade')v.status='sale'}
 else if(x.status==='sold'){v.status='sold';v.sold={price:x.buyer?x.buyer.amount:x.price,date:iso(0)};v.loc='Sold';v.notes=(v.notes?v.notes+' ':'')+'Sold to the trade'+(x.buyer?': '+x.buyer.name:'')+'.';v.trade=null}});
 if(u.sedit&&u.sedit.id){var cur=stById(u,u.sedit.id);if(cur&&(!!cur.trade!==!!u.sedit.trade||cur.status!==u.sedit.status)){u.sedit.trade=cur.trade;u.sedit.status=cur.status;u.sedit.sold=cur.sold;u.sedit.tradeNote=cur.tradeNote}}}
-function stockHtml(u){if(!u.stock)seedStock(u);syncTrade(u);
+function stockHtml(u){if(!u.stock)seedStock(u);if(!u.sfilter)u.sfilter='all';if(!u.ssort)u.ssort='days';syncTrade(u);
 u.stock.forEach(function(v){if(v.ad){var a=apiFor(v.ad.k);if(!a||!a.list().some(function(c){return c.id===v.ad.id}))v.ad=null}});
 var live=u.stock.filter(function(v){return v.status!=='sold'}),val=0,pot=0,days=0,aged=0;
 live.forEach(function(v){val+=(+v.cost||0)+prepTot(v);pot+=margin(v);days+=daysIn(v);if(daysIn(v)>=60)aged++});
