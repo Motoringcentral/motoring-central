@@ -5044,11 +5044,11 @@ fill();draw();drawPost();window.GGjobs={refresh:function(){draw();drawPost()},co
 })();
 </script>
 <script>
-/* maps: OpenStreetMap through Leaflet, loaded only when a map is first needed. A = where the vehicle is, B = where it is going.
+/* maps: OpenStreetMap through Leaflet (our own copy in vendor/leaflet), loaded only when a map is first needed. A = where the vehicle is, B = where it is going.
    MCmap.show(el,{from,to,drag}) draws one; any <div data-jmap='{"f":[lat,lng],"t":[lat,lng]}'> on the page is drawn when it comes on screen. */
 window.MCmap=(function(){var P=null,KEEP={};
- function load(){if(P)return P;P=new Promise(function(res,rej){var c=document.createElement('link');c.rel='stylesheet';c.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';document.head.appendChild(c);
-  var j=document.createElement('script');j.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';j.onload=function(){window.L?res(window.L):rej()};j.onerror=function(){P=null;rej()};document.head.appendChild(j)});return P}
+ function load(){if(P)return P;P=new Promise(function(res,rej){var c=document.createElement('link');c.rel='stylesheet';c.href='vendor/leaflet/leaflet.css';document.head.appendChild(c);
+  var j=document.createElement('script');j.src='vendor/leaflet/leaflet.js';j.onload=function(){window.L?res(window.L):rej()};j.onerror=function(){P=null;rej()};document.head.appendChild(j)});return P}
  function pin(L,col,t){return L.divIcon({className:'',html:'<div class="mcpin" style="background:'+col+'"><span>'+t+'</span></div>',iconSize:[32,32],iconAnchor:[16,32]})}
  function show(el,o){return load().then(function(L){if(el._mcm){try{el._mcm.remove()}catch(e){}el._mcm=null}
   var m=L.map(el,{scrollWheelZoom:false,zoomControl:true});el._mcm=m;
