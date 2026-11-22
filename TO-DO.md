@@ -120,21 +120,31 @@ started moving MOT to 10% and was told NOT to: nothing was changed. Do not chang
 Sweep done: no old fee wording left on the site. The recovery and EV proposal PDFs (pitch/roadside.js) no longer offer
 "Pay as you go or Pro"; they show the one flat fee. VIDEOS are left for now: the owner will review them one by one at the
 end (slides match the site, spelling, voice). The EV video still gives the old fees and is switched off.
-DRIVING INSTRUCTORS: IN PROGRESS (22 Nov, evening). Owner's brief: learners book single lessons, blocks or intensive
-courses; instructor sets an hourly rate and block discounts; 10% + VAT from the instructor and NO booking fee for the
-learner; filters for manual / automatic and male / female / no preference; live diary like the MOT one; availability
-and everything else set from the dashboard. Checks decided by Claude: ADI badge (green) or trainee licence (pink,
-shown as "Trainee instructor"), driving instructor insurance, photo ID.
-- Database: supabase/migrations/20261122o_driving_instructors.sql. PART A IS APPLIED (role 'instructor', table
-  lesson_packs, find_instructors, lesson_slots, instructor_diary, block / unblock time, my_lesson_packs).
-  PART B IS NOT APPLIED YET (book_lesson, cancel_lesson, set_instructor_setup): the approval prompt timed out. Apply
-  those three functions from the file first.
-- Blocks: paid in full up front, first lesson booked then, the rest are hours in the learner's account. The instructor is
-  paid per lesson booked (each lesson is a bookings row worth its share of the block), not all at once.
-- Cancelling: learner free up to 48 hours before (hours go back, or a refund is due); later the instructor is still paid.
-- STILL TO BUILD in the page: the join page and application (use the join pages module), the instructor dashboard
-  (diary, prices and packages, availability, area, profile), the learner's search and booking page, My account hours.
-
+DRIVING INSTRUCTORS AND DRIVING LESSONS (built 22 Nov 2026, evening; tested end to end on preview)
+- Owner's brief: learners book single lessons, blocks or intensive courses; the instructor sets an hourly rate and block
+  discounts; 10% + VAT from the instructor and NO booking fee for the learner; filters for manual / automatic and
+  male / female / no preference; a live diary; availability and everything else set from the dashboard.
+- Checks (Claude's choice): ADI badge (green) or trainee licence (pink, shown as "Trainee instructor"), driving
+  instructor insurance, photo ID. Staff should check the badge number on the DVSA register before approving.
+- Instructor: join page #instructors (same two-step layout as the other trades), application, dashboard tabs Diary /
+  Money / Set-up / Tools. Set-up: prices and packages (hourly rates, lesson lengths, block discounts, intensive courses),
+  availability (weekly hours, gap between lessons, shortest notice), area, about you. Diary: next 4 weeks, lesson done,
+  cancel, block out time, pause new bookings, learners with hours left.
+- Learner: page #lessons (tile on the home page, link in the footer). Postcode, gearbox, instructor preference, what to
+  book; each instructor's options with prices; pick a day and time from the live diary; pay. My account card "Your
+  driving lessons": lessons coming up (cancel) and hours paid for (book next lesson).
+- Money: a block or course is paid in full up front and held as hours (table lesson_packs). Each lesson is a bookings row
+  worth its share of the block, so the instructor is paid per lesson booked (88%), in the normal weekly payouts.
+- Cancelling: learner free up to 48 hours before (hours go back, or a single lesson's refund is "due" for staff to pay);
+  later the instructor is still paid. Instructor cancels: learner loses nothing, instructor is not paid.
+- Code: database 20261122o / 20261122p; page module "driving lessons" (DL = learner page, DLA = account card, INS =
+  instructor card #mc-inst). Settings are in partners.details.inst and partners.rates {manual, auto}.
+- Tested: sign-up, approval, all set-up pages, search (gender filter), single 57.00 (we keep 6.84), block of 10 hours
+  361.00, intensive course listed, next lesson from the block, block-out, cancels from both sides, emails queued.
+- NOT done yet: an intensive course was listed but not bought in the test; moving a lesson (cancel and rebook for now);
+  refunding unused block hours (staff, by hand); the instructor adding a lesson for a learner themselves; reviews of
+  instructors; a "how it works" video; lessons in the site search box. Test accounts: vimen+twoinst@ (TEST Drive School
+  Dartford, approved) with three cancelled test lessons and one block for the test customer. Delete before launch.
 
 PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch rate are GONE.
 - Every partner job: flat 10% + VAT (we keep 12% of the partner's price). No monthly fee, no plans.
