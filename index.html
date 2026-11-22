@@ -8721,7 +8721,8 @@ function qrSvg(q,text){var x=q(0,'M');x.addData(text);x.make();var n=x.getModule
  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 '+(n+4)+' '+(n+4)+'" shape-rendering="crispEdges" role="img" aria-label="QR code"><rect x="-2" y="-2" width="'+(n+4)+'" height="'+(n+4)+'" fill="#fff"/><path d="'+d+'" fill="#000"/></svg>'}
 function printWin(title,css,build){var w=window.open('','_blank');if(!w){toast('Your browser blocked the print window. Allow pop-ups for this site, then try again.',true);return}
  w.document.write('<!DOCTYPE html><html lang="en-GB"><head><meta charset="utf-8"><title>'+E(title)+'</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>'+css+'</style></head><body><p style="font-family:Arial,sans-serif">Getting it ready…</p></body></html>');w.document.close();
- Promise.resolve().then(build).then(function(html){w.document.body.innerHTML=html;setTimeout(function(){try{w.focus();w.print()}catch(e){}},400)},function(){w.document.body.innerHTML='<p style="font-family:Arial,sans-serif">Sorry, this could not be made. Check your connection and try again.</p>'})}
+ Promise.resolve().then(build).then(function(html){w.document.body.innerHTML=html;var im=[].slice.call(w.document.images||[]),go=function(){setTimeout(function(){try{w.focus();w.print()}catch(e){}},300)};
+  Promise.race([Promise.all(im.map(function(i){return i.complete?1:new Promise(function(r){i.onload=i.onerror=r})})),new Promise(function(r){setTimeout(r,5000)})]).then(go,go)},function(){w.document.body.innerHTML='<p style="font-family:Arial,sans-serif">Sorry, this could not be made. Check your connection and try again.</p>'})}
 /* windscreen cards: A4, in colour (our blue theme), with the seller's logo and details */
 /* our website's blue theme: sky blue header, navy price and footer */
 var WSTHEME={bg:'#38BDF8',fg:'#0B1C35',acc:'#0B1C35',soft:'#E0F4FE',ft:'#0B1C35'};
