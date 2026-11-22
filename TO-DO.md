@@ -40,6 +40,9 @@ RECOVERY VIDEO (22 Nov 2026): video/recovery.mp4 (2 min 37, captions recovery.vt
 sign-up page; it opens on the banner. Same voice (Kokoro bf_emma). Plays when the page opens (muted with a "Tap for
 sound" button if the browser blocks sound, like the dealer video). Sources in tools/video/recovery (README there).
 - The owner has NOT yet listened to it: ask if the voice sounds natural enough.
+- Sound (dealer and recovery videos): browsers block sound until the visitor touches the page, and no site can
+  override that. The video tries with sound; if refused it plays silently with a big "Tap anywhere for sound" button, and
+  the FIRST tap, click or key press anywhere (the cookie banner counts) switches sound on and restarts it.
 - OUT OF DATE: the EV charging video still says "less 5% plus VAT during our launch. Or go Pro" (now flat 10% + VAT,
   no Pro). That line needs re-voicing. The intro, dealer and MOT videos do not mention the old fees.
 
