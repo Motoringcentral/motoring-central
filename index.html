@@ -1550,7 +1550,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <input type="range" id="avg" min="60" max="400" step="10" value="150">
 <p style="margin:14px 0 0">Estimated monthly take-home</p>
 <div class="big" id="est">£0</div>
-<p class="note">Example only, after our 5% launch fee and before tax, parts costs and expenses. Not a guarantee.</p>
+<p class="note">Example only, after our 10% + VAT fee and before tax, parts costs and expenses. Not a guarantee.</p>
 </div>
 
 <h2 class="sec" data-m="all mobile-mechanic garage auto-electrician">Where the money goes</h2>
@@ -2152,14 +2152,14 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <nav class="rolepick" aria-label="Choose how you join"><span>I am a:</span><a href="#mot-station">MOT test station</a><a href="#garage">Garage</a><a href="#mobile-mechanic">Mobile mechanic</a><a href="#auto-electrician">Auto electrician or locksmith</a><a href="#tyres">Tyre fitter</a><a href="#bodyshop">Body shop or alloys</a><a href="#valets">Valeter</a><a href="#recovery">Recovery company</a><a href="#evcharging">Mobile EV charging</a><a href="#dealers">Car or van dealer</a></nav>
 </div></section>
 <main>
-<div class="stats"><div><b>5%</b>launch fee on jobs</div><div><b>30 days</b>free for dealers</div><div><b>You</b>set your rates</div></div>
+<div class="stats"><div><b>10%</b>flat fee + VAT on jobs</div><div><b>30 days</b>free for dealers</div><div><b>You</b>set your rates</div></div>
 <section class="why why-p" aria-labelledby="why-p-h">
 <span class="wbadge">Why join us</span>
 <h2 id="why-p-h">More jobs. <span>Keep more of what you earn.</span></h2>
 <p class="wlead">Motoring Central sends pre-paid work to independent mechanics, garages, auto electricians, locksmiths, body shops, alloy wheel specialists, recovery companies, tyre fitters, mobile EV chargers, valeters and dealers. You stay your own boss.</p>
 <div class="wfee"><div><span>Other platforms charge up to</span><b class="old">20% + VAT</b><small>per job</small></div><div class="arrow" aria-hidden="true">&rarr;</div><div><span>With us, one flat fee</span><b>10%</b><small>+ VAT per job. No monthly fee</small></div></div>
 <div class="wgrid"><div class="wt"><span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 6.5A4 4 0 0 0 8.5 8v12M6 13h7M6 20h11"/></svg></span><div><b>Set your own prices</b><p>Your labour rate and your call-out. Customers see your price, not ours. MOTs are one fair price everywhere, and you keep all of it except a £5 booking fee.</p></div></div><div class="wt"><span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><circle cx="12" cy="12" r="2.8"/><path d="M6 9.5v5M18 9.5v5"/></svg></span><div><b>Paid up front, paid weekly</b><p>Customers pay when they book. No chasing invoices, payouts every week.</p></div></div><div class="wt"><span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4M7.5 14h3v3h-3z"/></svg></span><div><b>Free diary and stock tools</b><p>Run your whole workshop or forecourt with our booking diary and stock manager, free.</p></div></div><div class="wt"><span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7.5l9-4.5 9 4.5v9L12 21l-9-4.5z"/><path d="M3 7.5l9 4.5 9-4.5M12 12v9"/></svg></span><div><b>Parts sorted</b><p>The right parts for each car identified from the reg, ready to collect locally.</p></div></div><div class="wt"><span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-6 6.5-6s5.9 2.4 6.5 6"/><circle cx="17.5" cy="9" r="2.5"/><path d="M16 14.2c2.6.2 4.6 2.2 5.2 5"/></svg></span><div><b>A real partner team</b><p>A dedicated partner manager on a direct line helps you set up and sorts any problems.</p></div></div><div class="wt"><span class="wi" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7a4 4 0 0 1 7.7-1.5"/></svg></span><div><b>No lock-in</b><p>No sign-up fee. Switch plans or leave at the end of any month. Work with other platforms too.</p></div></div></div>
-<div class="wcta"><a class="wbtn" href="#roles-start">Choose how you join</a><span>Launch offer: 50% off for partners who join.</span></div>
+<div class="wcta"><a class="wbtn" href="#roles-start">Choose how you join</a><span>One flat fee. No monthly fee, no membership.</span></div>
 </section>
 <div class="card netwho"><b>Who you will work with</b><p>Motoring Central is run by a small UK team, not a faceless app. Every partner gets a dedicated partner manager on a direct line, 020 8191 4290, who helps you set up, answers questions and sorts out any problems with bookings. <a href="#about">Read who we are</a>.</p></div>
 <h2 class="sec" id="roles-start">Choose how you will join</h2>
@@ -2998,7 +2998,7 @@ window.MCSVC={cats:C,list:list,names:names,common:common,render:render,read:read
   function calc(){
     var j=+$('jobs').value,a=+$('avg').value;
     $('jv').textContent=j;$('av').textContent='£'+a;
-    $('est').textContent='£'+Math.round(j*a*0.94*4.33).toLocaleString('en-GB');
+    $('est').textContent='£'+Math.round(j*a*0.88*4.33).toLocaleString('en-GB');
     $('f1').textContent='£'+a.toFixed(2);$('f2').textContent='−£'+(a*0.12).toFixed(2);$('f3').textContent='£'+(a*0.88).toFixed(2)}
   $('jobs').addEventListener('input',calc);$('avg').addEventListener('input',calc);calc();
 
@@ -3202,7 +3202,7 @@ if(b.getAttribute('data-k')==='mot'){var mv=$('mot-vid');if(mv)setTimeout(functi
 <script>(function(){
 var v={drivers:'v-cust',cars:'v-cars',vans:'v-vans',network:'v-network',login:'v-login',dashboard:'v-dash',mechanics:'v-mech',recovery:'v-rec',tyres:'v-tyre',valets:'v-valet',dealers:'v-dealers',admin:'v-admin',staff:'v-staff',terms:'v-terms',account:'v-account',trade:'v-trade',about:'v-about',breakdown:'v-breakdown',evcharging:'v-evc',bodyshop:'v-body',jobs:'v-jobs',contact:'v-contact',complaints:'v-complaints',faq:'v-faq',privacy:'v-privacy',cookies:'v-cookies',review:'v-review'};
 var pub={drivers:1,cars:1,vans:1,terms:1,account:1,review:1,about:1,breakdown:1,jobs:1,contact:1,complaints:1,faq:1,privacy:1,cookies:1};
-var T_PUB='\uD83C\uDF89 Launch offer: 50% off our booking fee. Just \u00A33.00 per booking including VAT, usually \u00A35.99.';
+var T_PUB='\uD83C\uDF89 Compare fixed prices from local partners for free. You only pay when you book.';
 var T_NET='\uD83C\uDF89 Partners pay one flat fee of 10% plus VAT per job, with no monthly fee. Dealers get a 30-day free trial, and the first 30 dealers get 5 free premium ads a month and pay for 8 months and get 12. Monthly and fixed fees are plus VAT.';
 function $(i){return document.getElementById(i)}
 function show(){
