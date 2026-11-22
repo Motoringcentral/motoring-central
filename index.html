@@ -3282,6 +3282,8 @@ $('r-top').addEventListener('click',function(){$('r-apply').scrollIntoView({beha
 /* two-step sign-up: step 1 makes the account (email and password); step 2, signed in, shows the video and the application */
 function rjStarted(){var u=window.GGuser;return !!(u&&u.sbid&&u.role==='recovery'&&u.status==='started')}
 function rjDraw(){var on=rjStarted(),sent=!$('r-ok').hidden;$('rj-pub').hidden=on||sent;$('rj-in').hidden=!on;$('rj-pubm').hidden=on||sent;$('rj-app').hidden=!(on||sent);if(on&&!$('r-mail').value)$('r-mail').value=window.GGuser.email||'';
+ /* arriving signed in from the "confirm your email" link lands on the home page: take them to their application, once */
+ if(on){var h0=(location.hash||'').replace('#','');try{if(!sessionStorage.getItem('mc_rj_go')&&(h0===''||h0==='drivers'||h0==='login')){sessionStorage.setItem('mc_rj_go','1');location.hash='recovery'}}catch(e){}}
  if(!on){var v=$('rc-vid');if(v&&!v.paused)v.pause()}}
 setInterval(rjDraw,600);window.addEventListener('hashchange',rjDraw);
 $('r-start').addEventListener('submit',function(e){e.preventDefault();var em=$('rs1-mail').value.trim().toLowerCase(),pw=$('rs1-pass').value,er=$('rs1-err'),bt=this.querySelector('[type=submit]');
