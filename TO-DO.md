@@ -36,6 +36,15 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+MAPS (22 Nov 2026, tested on preview)
+- Recovery and EV forms: a map appears under "Where is the vehicle?" after a postcode is typed, after Use my location,
+  and after prices are shown (A = vehicle, B = drop-off). The customer can DRAG pin A to the exact spot; that pin then
+  replaces the postcode and is what the partner gets. Partner job cards show the same A / B map.
+- Leaflet 1.9.4 is our own copy in vendor/leaflet. Map pictures come from OpenStreetMap's free tile server: fine for
+  launch, NO guarantee of service and not meant for heavy use. If traffic grows, switch to a paid map provider
+  (one line: the tileLayer URL in the "maps" module, window.MCmap). Privacy page section 4 mentions maps and postcodes.
+- Not yet: live tracking of the truck, a map on the customer's booking in My account.
+
 PARTNER DASHBOARD TABS (22 Nov 2026, ALL partner types; tested on preview)
 - Every dashboard: header card, then tabs. Set-up is a menu of tiles; each opens its own page with "Back to set-up".
   Nothing but the header sits above the tabs. "Quick actions" is now "Tools and extras" on the Tools tab.
