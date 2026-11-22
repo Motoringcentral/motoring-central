@@ -114,6 +114,15 @@ PARTNER DASHBOARD TABS (22 Nov 2026, ALL partner types; tested on preview)
 - Tested with: recovery, EV, body, valet, auto electrician, MOT station, dealer. NOT tested (no test account): tyres,
   mobile mechanic, full garage, and the demo log-ins.
 
+FEES CONFIRMED BY THE OWNER (22 Nov 2026, evening): every service is 10% + VAT. Two exceptions, both to stay as they are:
+DEALERS (their own monthly plans) and MOT TESTS (official fee, we keep a flat 5 pounds, no booking fee on top). Claude
+started moving MOT to 10% and was told NOT to: nothing was changed. Do not change MOT pricing without being asked.
+Sweep done: no old fee wording left on the site. The recovery and EV proposal PDFs (pitch/roadside.js) no longer offer
+"Pay as you go or Pro"; they show the one flat fee. VIDEOS are left for now: the owner will review them one by one at the
+end (slides match the site, spelling, voice). The EV video still gives the old fees and is switched off.
+NEXT: build the DRIVING INSTRUCTOR section (owner). Questions were asked (what is booked, who sets the price, fees per
+lesson or per block, ADI badge check, manual / automatic); waiting for answers.
+
 PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch rate are GONE.
 - Every partner job: flat 10% + VAT (we keep 12% of the partner's price). No monthly fee, no plans.
 - Customer booking fee: 9.99 pounds including VAT (8.33 + 1.66 VAT) on every booking, replacing 3.00.

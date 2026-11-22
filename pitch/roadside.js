@@ -40,20 +40,19 @@ const pS=`<section class="page see">${K.head(tag)}
 const pG=K.protect(tag,F,5,T,K.INSP(o.before));
 const pP=K.platform(tag,F,6,T,{loop:o.loop});
 const p4=`<section class="page t3 t4">${K.head(tag)}
- <p class="kick">Plans and prices</p><h2>Two ways to work with us</h2>
- <table><tr><th>Plan</th><th>What you pay us</th><th>Best for</th></tr>
- <tr><td><b>Pay as you go</b></td><td><b>10% + VAT</b> of each job. No monthly fee and no joining fee. You only pay when you earn.</td><td>Fewer than about ${o.breakeven} jobs a month</td></tr>
- <tr class="hl"><td><b>Pro</b></td><td><b>£149 + VAT a month</b> and 0% per job: you keep everything you charge. Charged only once your documents are verified.</td><td>About ${o.breakeven} jobs a month or more</td></tr></table>
- <p class="note" style="margin-bottom:4mm">Switch plans or cancel at the end of any month. The driver pays a separate booking fee to us on top of your price. It never comes out of what you charge.</p>
- <div class="two" style="margin-bottom:4mm"><div><h3>Where the money goes, on Pay as you go</h3>
+ <p class="kick">What it costs</p><h2>One flat fee. No monthly fee.</h2>
+ <table><tr><th>What you pay us</th><th>When</th><th>What you never pay</th></tr>
+ <tr class="hl"><td><b>10% + VAT</b> of each job</td><td>Only on jobs you complete. You only pay when you earn.</td><td>No monthly fee, no membership and no joining fee.</td></tr></table>
+ <p class="note" style="margin-bottom:4mm">The driver pays a separate booking fee to us on top of your price. It never comes out of what you charge. You are paid every week.</p>
+ <div class="two" style="margin-bottom:4mm"><div><h3>Where the money goes</h3>
  <table><tr><th>${o.jobName}</th><th class="n">Amount</th></tr><tr><td>Job price the customer pays you</td><td class="n">${gbp(o.job)}</td></tr><tr><td>Our fee (10% + VAT)</td><td class="n">−${gbp(fee)}</td></tr><tr class="hl"><td>You keep</td><td class="n">${gbp(keep)}</td></tr></table></div>
  <div><h3>Example month: 20 jobs at ${gbp(o.job)}</h3>
- <table><tr><th>Plan</th><th class="n">You pay us</th></tr><tr><td>Pay as you go (10% + VAT of ${gbp(o.job*20)})</td><td class="n">${gbp(o.job*20*0.1)} + VAT</td></tr><tr class="hl"><td>Pro</td><td class="n">£149.00 + VAT</td></tr></table>
+ <table><tr><th>20 jobs</th><th class="n">Amount</th></tr><tr><td>Customers pay you</td><td class="n">${gbp(o.job*20)}</td></tr><tr><td>Our fee (10% + VAT)</td><td class="n">−${gbp(fee*20)}</td></tr><tr class="hl"><td>You keep</td><td class="n">${gbp(keep*20)}</td></tr></table>
  <p class="note">Example figures only, not a forecast or a guarantee.</p></div></div>
  <div class="two"><div><p class="kick">What you need to join</p><ul class="tick">${o.need.map(x=>'<li>'+x+'</li>').join('')}</ul></div>
  <div class="qa"><p class="kick">Common questions</p>${o.qa.map(q=>'<b>'+q[0]+'</b><p>'+q[1]+'</p>').join('')}</div></div>
  <div class="contact"><div><h2>Join the network</h2><p>Scan the code or go to <b>preview.motoringcentral.co.uk</b> and choose For partners, then ${o.pick}.</p>
  <p>Call <b>020 8191 4290</b> &nbsp;·&nbsp; Monday to Friday 8am to 6pm, Saturday 9am to 1pm</p><p>Email <b>partners@motoringcentral.co.uk</b></p></div><div class="qr">${K.qr(o.url)}</div></div>
  <div class="sign"><div>Your contact at The Motoring Central</div><div>Date</div></div>
- ${K.foot('Prices and terms are correct at 21 November 2026 and may change. Fees and Pro membership are plus VAT.',7,T)}</section>`;
+ ${K.foot('Prices and terms are correct at 22 November 2026 and may change. Our fee is plus VAT.',7,T)}</section>`;
 return K.doc('The Motoring Central: for '+o.aud,[p1,p2,p3,pS,pG,pP,p4])};
