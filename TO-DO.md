@@ -713,6 +713,10 @@ as "find the fault" still earns a fee on the repair:
 
 ### 4. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
+- Partner recruiting at launch (22 Nov 2026): tell Claude the launch date so app_settings.founding_top_until can be set to
+  three months after it (founding partners' first place ends then); point motoringcentral.co.uk at the live site so the
+  leaflet QR codes work; only then print leaflets and start the paid advert test (pitch/adverts/). Check phone numbers
+  against the TPS and Corporate TPS lists before calling, and do not email or text sole traders who have not asked.
 - FCA: get full permission for credit broking BEFORE finance is shown on the live site. Until it is granted, finance must be
   switched off on the live site (in index.html, in the script that starts "Car finance", set on:false). Showing finance prices
   to the public without authorisation is against the law.
@@ -761,6 +765,36 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 22 Nov 2026 (late): PARTNER RECRUITMENT PACK, READY BUT NOT TO BE ADVERTISED UNTIL THE COMPANY IS REGISTERED.
+  The owner decided: launch area is Dartford and about 15 miles; no paid adverts, posts or bulk leaflets until the
+  company is registered; until then the owner talks to local businesses himself for feedback and signs up the keen ones
+  on the preview site; a paid test of £300 to £500 on Facebook and Instagram once registered.
+  - Founding partners (migration 20261122w): the first 10 businesses APPROVED in each trade (not dealers, who keep their
+    own first-30 offer) get founder_no, a "Founding partner" badge on their listing and dashboard, and first place in
+    customers' results in their area. Join pages show "N of 10 places left". First place runs until the date in
+    app_settings key founding_top_until; while that is empty it stays on. The 10% + VAT fee is the same for everyone.
+  - Where an application came from: any link with ?src=something (or utm_source) is remembered for 60 days and saved
+    on the partner (partners.source). Staff see "Came from: ..." on each application. Leaflet codes use leaflet-<trade>,
+    the sign-up links for conversations use talk-<trade>, adverts use fb-<trade>.
+  - Security fix found on the way (migration 20261122v): anyone could have changed or deleted approved partners through
+    the public partner list. It is now read-only. Checked blocked.
+  - pitch/leaflets/: one-page A4 leaflet for each of eight trades and one PDF with all of them. "node leaflets.js" in
+    pitch/ rebuilds them. Their QR codes go to motoringcentral.co.uk, so they work only once the main address is live.
+    The MOT, recovery and EV proposals now mention the founding offer, and the dealer proposal no longer promises full
+    MOT history or mobile mechanics.
+  - pitch/adverts/: a square (1080 x 1080) and an upright (1080 x 1920) picture for each trade, and
+    The-Motoring-Central-Advert-Pack.pdf with the wording, links and test plan. "node adverts.js" rebuilds them.
+    The photos are cropped so the banner artwork's own claims (nationwide network and so on) do not appear.
+  - Sent to the owner and kept OUT of this public folder: the sign-up links sheet (QR codes to the preview site), the
+    recruitment guide (what to say, likely questions, emails to send, rules on calls and emails, the caution about the owner's employer), and
+    the contact list spreadsheet (all 854 MOT stations within 15 miles of Dartford from the DVSA list, 671 of them
+    independents, plus starter names for the other trades found by web search and not checked).
+  - New staff-only database function staff_mot_stations(list of postcode districts) (migration 20261122x), used to draw
+    up the MOT list. Staff could be given a "stations near a postcode" page later if wanted.
+  - Suggested question for the solicitor: may photo ID and insurance documents be collected from partners before the
+    company is registered and its data protection registration is in place? Until answered, early sign-ups create the
+    account and add documents later.
+  - Not done: short upright video cuts for adverts; contact lists for trades other than MOT are starters only.
 - 21 Nov 2026: MOT stations now pay a flat £5 booking fee per online MOT (was 18%), and the £99.99 joining fee is gone.
 - 21 Nov 2026 (morning): owner's decisions done. (1) Launch offer on the site stays as it is; the pitches stay at full
   price and the owner explains the offer in person. (2) History checks in a dealer's free months are a choice: pay
