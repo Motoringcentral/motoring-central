@@ -14,6 +14,18 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 #v-dash .dtabs button{all:unset;cursor:pointer;flex:1;text-align:center;padding:10px 14px;border-radius:10px;font-weight:700;color:var(--muted);white-space:nowrap}
 #v-dash .dtabs button[aria-pressed=true]{background:var(--brand);color:var(--brand-ink)}
 .mcmap{height:240px;border-radius:12px;border:2px solid var(--line);overflow:hidden;background:#dfe7ef;z-index:0;position:relative}.mcmap.sm{height:190px;margin:6px 0 8px}.mcmapw{margin:8px 0 0}.mcpin{width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center}.mcpin span{transform:rotate(45deg);color:#fff;font:700 14px/1 system-ui,sans-serif}.mcmap .leaflet-control-attribution{font-size:10px}
+.dlrow{margin:14px 0 0}.dll{display:block;font-weight:700;font-size:.92rem;margin:0 0 6px}.dlseg,.dldays,.dltimes{display:flex;gap:8px;flex-wrap:wrap}
+.dlseg button,.dldays button,.dltimes button{all:unset;box-sizing:border-box;cursor:pointer;padding:10px 16px;border-radius:12px;border:2px solid var(--line);font-weight:700;background:var(--surface);color:var(--ink);text-align:center}
+.dltimes button{min-width:74px;padding:10px 8px}.dlseg button[aria-pressed=true],.dldays button[aria-pressed=true],.dltimes button[aria-pressed=true]{background:var(--brand);border-color:var(--brand);color:var(--brand-ink)}
+.dlseg button:focus-visible,.dldays button:focus-visible,.dltimes button:focus-visible,.dlopt:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+#v-lessons #dl-go{margin-top:16px}.dlhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}.dlname{font-size:1.15rem}
+.dlbadge{font-size:.78rem;font-weight:700;border-radius:999px;padding:4px 10px;background:#DCFCE7;color:#14532D;white-space:nowrap}.dlbadge.pdi{background:#FCE7F3;color:#831843}
+.dlopts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:10px;margin-top:12px}
+.dlopt{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:2px;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--soft)}.dlopt:hover{border-color:var(--brand)}.dlopt span{font-size:1.25rem;font-weight:800;color:var(--brand)}.dlopt small{color:var(--muted)}
+.dlrowa{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid var(--line);padding:10px 0;flex-wrap:wrap}
+.insday{border-top:1px solid var(--line);padding:10px 0}.insdh{font-weight:800;margin:0 0 6px}.insrow{display:grid;grid-template-columns:128px 1fr auto;gap:10px;align-items:center;padding:8px 10px;border-radius:10px;background:var(--soft);margin:0 0 6px}.insrow.blk{opacity:.8}.insrow small{color:var(--muted)}.insb{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.insblk{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;align-items:end}.insline{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin:0 0 8px}.insline label{display:flex;flex-direction:column;gap:4px;font-weight:700;font-size:.85rem;flex:0 0 110px}.insline label.w{flex:1 1 200px}.insline input,.insline select{margin:0;width:100%;box-sizing:border-box}
+@media(max-width:560px){.insrow{grid-template-columns:1fr}.insb{justify-content:flex-start}}
 #mc-ptabs{scroll-margin-top:96px}#mc-ptabs .dtabs button.palert{background:#C62828;color:#fff}#mc-ptabs .dtabs button.palert[aria-pressed=true]{background:var(--brand);color:var(--brand-ink);box-shadow:inset 0 0 0 3px #C62828}.dtabs .ptn.red{background:#fff;color:#C62828}#mc-ptabs .dtabs button.palert[aria-pressed=true] .ptn.red{background:#C62828;color:#fff}#mc-ptabs .dtabs{flex-wrap:wrap;overflow:visible}#mc-ptabs .dtabs button{flex:1 1 auto}.dtabs .ptn{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:#FFD43B;color:#3a2a00;font-size:.78rem;line-height:20px;text-align:center;margin-left:4px}
 .psetg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:10px}
 .psett{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--surface);position:relative;min-height:74px}
@@ -1419,6 +1431,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <button type="button" class="ptile" data-svc="body"><img data-src="img/bodyshop.webp" data-srcset="img/bodyshop-800.webp 800w, img/bodyshop.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="A Motoring Central bodyshop and alloy refurb centre with a car being sprayed and alloy wheels on display" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Bodywork and alloy wheels</b><small>Dents, scratches, accident damage and scuffed alloy wheels</small></span><span class="pgo">Book this</span></span></button>
 <button type="button" class="ptile" data-svc="evcharge"><img data-src="img/ev-charging.webp" data-srcset="img/ev-charging-800.webp 800w, img/ev-charging.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Mobile EV charging vans charging electric cars" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Mobile EV charging</b><small>A charging van comes to you</small></span><span class="pgo">Book this</span></span></button>
 <button type="button" class="ptile" data-svc="recovery"><img data-src="img/vehicle-transport.webp" data-srcset="img/vehicle-transport-800.webp 800w, img/vehicle-transport.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Vehicle transport trucks and a recovery van" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Recovery and transport</b><small>Tow or move your car, any time</small></span><span class="pgo">Book this</span></span></button>
+<a class="ptile" href="#lessons"><img data-src="img/driving-lessons.webp" data-srcset="img/driving-lessons-800.webp 800w, img/driving-lessons.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="A learner driver&rsquo;s car with L plates" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Driving lessons</b><small>Choose your instructor and book online</small></span><span class="pgo">Find an instructor</span></span></a>
 <a class="ptile" href="#cars"><img src="img/car-sales.webp" srcset="img/car-sales-800.webp 800w, img/car-sales.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Car sales forecourts with new and used cars" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Cars for sale</b><small>Browse checked dealers near you</small></span><span class="pgo">Browse vehicles</span></span></a>
 <a class="ptile" href="#vans"><img src="img/van-sales.webp" srcset="img/van-sales-800.webp 800w, img/van-sales.webp 1400w" sizes="(max-width:700px) 100vw, 1040px" alt="Van forecourts with new and used vans" width="1400" height="788" loading="lazy" decoding="async"><span class="pcap"><span><b>Vans for sale</b><small>Vans and pickups from checked dealers</small></span><span class="pgo">Browse vehicles</span></span></a>
 </div>
@@ -1757,6 +1770,26 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <p class="note">We will be in touch by email once we have checked your documents.</p></div>
 </div>
 <footer class="foot">&copy; The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+</main></div>
+<div id="v-lessons" hidden>
+<section class="hero"><div class="in">
+<h1>Driving lessons: choose your instructor.</h1>
+<p>Checked local instructors. See the price, pick a time that suits you, and book online. No booking fee.</p>
+</div></section>
+<main>
+<div class="card" id="dl-find">
+<label class="f" for="dl-pc" style="margin-top:0">Your postcode (where you want to be picked up)</label><input id="dl-pc" maxlength="9" autocomplete="postal-code" style="text-transform:uppercase" placeholder="For example DA1 1DE">
+<div class="dlrow"><span class="dll">Gearbox</span><div class="dlseg" role="group" aria-label="Gearbox"><button type="button" data-dlt="manual" aria-pressed="true">Manual</button><button type="button" data-dlt="auto" aria-pressed="false">Automatic</button></div></div>
+<div class="dlrow"><span class="dll">Instructor</span><div class="dlseg" role="group" aria-label="Instructor"><button type="button" data-dlg="any" aria-pressed="true">No preference</button><button type="button" data-dlg="female" aria-pressed="false">Female</button><button type="button" data-dlg="male" aria-pressed="false">Male</button></div></div>
+<div class="dlrow"><span class="dll">What to book</span><div class="dlseg" role="group" aria-label="What to book"><button type="button" data-dlm="single" aria-pressed="true">A single lesson</button><button type="button" data-dlm="block" aria-pressed="false">A block of lessons</button><button type="button" data-dlm="intensive" aria-pressed="false">An intensive course</button></div></div>
+<p class="err" id="dl-err" role="alert"></p>
+<button class="btn" type="button" id="dl-go">Find instructors</button>
+<p class="note" style="margin:10px 0 0">Every instructor holds a DVSA instructor licence, which we check before they can take bookings, along with their insurance and ID.</p>
+</div>
+<div id="dl-res"></div>
+<div id="dl-book"></div>
+<div class="card done" id="dl-done" hidden></div>
+<footer class="foot">&copy; The Motoring Central. <a href="#instructors" style="color:inherit">Are you a driving instructor? Join the network</a> <a href="#terms" style="color:inherit">Terms and conditions</a></footer>
 </main></div>
 <div id="v-instr" hidden>
 <section class="hero"><div class="in">
@@ -3284,8 +3317,8 @@ if(b.getAttribute('data-k')==='mot'){var mv=$('mot-vid');if(mv)setTimeout(functi
 })();
 </script>
 <script>(function(){
-var v={drivers:'v-cust',cars:'v-cars',vans:'v-vans',network:'v-network',login:'v-login',dashboard:'v-dash',mechanics:'v-mech',recovery:'v-rec',tyres:'v-tyre',valets:'v-valet',dealers:'v-dealers',admin:'v-admin',staff:'v-staff',terms:'v-terms',account:'v-account',trade:'v-trade',about:'v-about',breakdown:'v-breakdown',evcharging:'v-evc',bodyshop:'v-body',instructors:'v-instr',jobs:'v-jobs',contact:'v-contact',complaints:'v-complaints',faq:'v-faq',privacy:'v-privacy',cookies:'v-cookies',review:'v-review'};
-var pub={drivers:1,cars:1,vans:1,terms:1,account:1,review:1,about:1,breakdown:1,jobs:1,contact:1,complaints:1,faq:1,privacy:1,cookies:1};
+var v={drivers:'v-cust',cars:'v-cars',vans:'v-vans',network:'v-network',login:'v-login',dashboard:'v-dash',mechanics:'v-mech',recovery:'v-rec',tyres:'v-tyre',valets:'v-valet',dealers:'v-dealers',admin:'v-admin',staff:'v-staff',terms:'v-terms',account:'v-account',trade:'v-trade',about:'v-about',breakdown:'v-breakdown',evcharging:'v-evc',bodyshop:'v-body',instructors:'v-instr',lessons:'v-lessons',jobs:'v-jobs',contact:'v-contact',complaints:'v-complaints',faq:'v-faq',privacy:'v-privacy',cookies:'v-cookies',review:'v-review'};
+var pub={drivers:1,cars:1,vans:1,terms:1,account:1,review:1,about:1,breakdown:1,jobs:1,contact:1,complaints:1,faq:1,privacy:1,cookies:1,lessons:1};
 var T_PUB='\uD83C\uDF89 Compare fixed prices from local partners for free. You only pay when you book.';
 var T_NET='\uD83C\uDF89 Partners pay one flat fee of 10% plus VAT per job, with no monthly fee. Dealers get a 30-day free trial, and the first 30 dealers get 5 free premium ads a month and pay for 8 months and get 12. Monthly and fixed fees are plus VAT.';
 function $(i){return document.getElementById(i)}
@@ -5018,7 +5051,7 @@ show(0);start()})();
 </script>
 <footer class="sitefoot" id="sitefoot"><div class="sfin">
 <div class="sfbrand"><b>The Motoring Central</b><span>Buy. Fix. Clean. Rescue.</span><p>A growing UK network of independent motor traders. Everything your vehicle needs, in one place.</p><a class="sfcta" href="#drivers" data-top="1">Book a service</a></div>
-<nav class="sfcols" aria-label="Site map"><div><h3>Book a service</h3><ul><li><a href="#drivers" data-svc="mobile">Mobile mechanic</a></li><li><a href="#drivers" data-svc="garage">Garage repairs</a></li><li><a href="#drivers" data-svc="mot">MOT</a></li><li><a href="#drivers" data-svc="autoelec">Auto electrician and locksmith</a></li><li><a href="#drivers" data-svc="tyres">Mobile tyres</a></li><li><a href="#drivers" data-svc="valet">Full valet</a></li><li><a href="#drivers" data-svc="body">Bodywork and alloy wheels</a></li><li><a href="#drivers" data-svc="recovery">Recovery</a></li><li><a href="#drivers" data-svc="evcharge">Mobile EV charging</a></li></ul></div><div><h3>Buy and cover</h3><ul><li><a href="#cars">Cars for sale</a></li><li><a href="#cars" data-sellcar="1">Sell a car or van</a></li><li><a href="#vans">Vans for sale</a></li><li><a href="#breakdown">Breakdown cover</a></li><li><a href="#account">My account</a></li></ul></div><div><h3>For the trade</h3><ul><li><a href="#network">Join the network</a></li><li><a href="#login">Partner log in</a></li><li><a href="#dashboard">Partner dashboard</a></li><li><a href="#trade">Trade cars and vans</a></li><li><a href="#jobs">Motor trade jobs</a></li><li><a href="#jobs" data-jobpost="1">Advertise a vacancy</a></li></ul></div><div><h3>Help and company</h3><ul><li><a href="#about">About us</a></li><li><a href="#contact">Contact us</a></li><li><a href="#faq">FAQs</a></li><li><a href="#terms">Terms and conditions</a></li><li><a href="#privacy">Privacy policy</a></li><li><a href="#cookies">Cookie notice</a></li></ul></div></nav></div><p class="sfcopy">&copy; The Motoring Central. Preview with sample data.</p></footer>
+<nav class="sfcols" aria-label="Site map"><div><h3>Book a service</h3><ul><li><a href="#drivers" data-svc="mobile">Mobile mechanic</a></li><li><a href="#drivers" data-svc="garage">Garage repairs</a></li><li><a href="#drivers" data-svc="mot">MOT</a></li><li><a href="#drivers" data-svc="autoelec">Auto electrician and locksmith</a></li><li><a href="#drivers" data-svc="tyres">Mobile tyres</a></li><li><a href="#drivers" data-svc="valet">Full valet</a></li><li><a href="#drivers" data-svc="body">Bodywork and alloy wheels</a></li><li><a href="#drivers" data-svc="recovery">Recovery</a></li><li><a href="#drivers" data-svc="evcharge">Mobile EV charging</a></li><li><a href="#lessons">Driving lessons</a></li></ul></div><div><h3>Buy and cover</h3><ul><li><a href="#cars">Cars for sale</a></li><li><a href="#cars" data-sellcar="1">Sell a car or van</a></li><li><a href="#vans">Vans for sale</a></li><li><a href="#breakdown">Breakdown cover</a></li><li><a href="#account">My account</a></li></ul></div><div><h3>For the trade</h3><ul><li><a href="#network">Join the network</a></li><li><a href="#login">Partner log in</a></li><li><a href="#dashboard">Partner dashboard</a></li><li><a href="#trade">Trade cars and vans</a></li><li><a href="#jobs">Motor trade jobs</a></li><li><a href="#jobs" data-jobpost="1">Advertise a vacancy</a></li></ul></div><div><h3>Help and company</h3><ul><li><a href="#about">About us</a></li><li><a href="#contact">Contact us</a></li><li><a href="#faq">FAQs</a></li><li><a href="#terms">Terms and conditions</a></li><li><a href="#privacy">Privacy policy</a></li><li><a href="#cookies">Cookie notice</a></li></ul></div></nav></div><p class="sfcopy">&copy; The Motoring Central. Preview with sample data.</p></footer>
 <button type="button" class="totop" id="totop" aria-label="Back to top" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <div class="ckbar" id="ckbar" role="region" aria-label="Cookie choice" hidden><div class="in"><p>We use essential cookies to make this site work. With your OK, we would also use analytics cookies to improve it. <a href="#cookies">Read our cookie notice</a></p><div class="bt"><button type="button" data-ck="essential">Essential only</button><button type="button" data-ck="all">Accept all</button></div></div></div>
 <script>
@@ -5273,9 +5306,11 @@ window.MCmap=(function(){var P=null,KEEP={};
 (function(){function $(i){return document.getElementById(i)}
 function E(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 var ST={tab:'',sub:''},last='',who='';
-function on(u){return !!u&&['recovery','evcharge','body','tyres','valet','mechanic','dealer'].indexOf(u.role)>-1}
+function on(u){return !!u&&['recovery','evcharge','body','tyres','valet','mechanic','dealer','instructor'].indexOf(u.role)>-1}
 var S_BRAND=['brand','Logo and website','Shown to customers next to your prices'],S_BILL=['billing','Self-billing agreement','Needed before we can pay you. Your VAT number'],S_DOCS=['docs','Documents','Insurance certificates and photo ID'],S_DET=['details','Your details','Business name, phone and email'];
 function cfg(u){var r=u.role;
+ if(r==='instructor')return {tabs:[['diary','Diary'],['money','Money'],['setup','Set-up'],['tools','Tools']],
+  secs:[['prices','Prices and packages','Your hourly rate, block discounts and intensive courses'],['hours','Availability','The days and hours learners can book'],['area','Area you cover','Your base postcode and how far you travel'],['about','About you','Shown to learners: your car and a few words'],S_BRAND,S_BILL,S_DOCS,S_DET],dt:function(){return null},rev:function(){return ['diary','']}};
  if(r==='dealer')return {tabs:[['stock','Stock'],['adverts','Adverts'],['messages','Messages'],['sales','Sales'],['setup','Set-up'],['tools','Tools']],
   secs:[['plan','Plan and billing','Your monthly plan, paying yearly and cancelling'],['brand','Logo and website','Shown on your adverts, showroom page and invoices'],S_DOCS,S_DET],
   dt:function(c){return c==='stock'||c==='sales'?'stock':c==='adverts'||c==='setup-plan'?'ads':c==='setup-brand'||c==='setup-docs'?'docs':null},
@@ -5288,7 +5323,8 @@ function cfg(u){var r=u.role;
  return {tabs:[['jobs','Jobs'],['money','Money'],['setup','Set-up'],['tools','Tools']],
   secs:[P].concat(road?[['hours','Opening hours','Your weekly hours, or open 24 hours'],['area',rec?'Area you cover':'Area and connectors',rec?'Your depot postcode and how far you travel':'Your base, how far you travel and the plugs you can charge']]:[]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),dt:function(){return null},rev:function(){return ['jobs','']}}}
 function hasSvc(u){try{return !!$('mc-svc-card')||!!(window.MCSVC&&window.MCSVC.card&&window.MCSVC.card(u))}catch(e){return false}}
-function done(u,k){var road=u.role==='recovery'||u.role==='evcharge',me=road&&window.MCrspMe?window.MCrspMe():null,d=me&&me.details||null;
+function done(u,k){if(u.role==='instructor'){var im=window.MCinstMe?window.MCinstMe():null,ii=im&&im.details&&im.details.inst;if(k==='prices')return !im?null:!!(im.rates&&(+im.rates.manual>0||+im.rates.auto>0));if(k==='hours')return !im?null:!!(ii&&ii.week&&ii.week.some(function(x){return x}));if(k==='area')return !im?null:!!(ii&&ii.lat!=null)}
+ var road=u.role==='recovery'||u.role==='evcharge',me=road&&window.MCrspMe?window.MCrspMe():null,d=me&&me.details||null;
  if(k==='prices')return u.role!=='recovery'||!me?null:!!(d&&d.trucks&&d.trucks.length);
  if(k==='hours')return !me?null:!!(d&&d.week&&d.week.length===7);
  if(k==='billing'){var sb=window.MCpoSb?window.MCpoSb():undefined;return sb===undefined||!u.sbid?null:!!(sb&&sb.agreed_at)}
@@ -5307,18 +5343,18 @@ function barHtml(u,C){var S=C.secs,todo=S.filter(function(x){return done(u,x[0])
  var c=S.filter(function(x){return x[0]===ST.sub})[0]||S[0];
  return h+'<div class="psubh"><button type="button" class="btn sm ghost" data-psub="">&lsaquo; Back to set-up</button><b>'+E(c[1])+'</b></div>'}
 function tagOf(el,u){if(el.id==='mc-ptabs'||el.getAttribute('data-pc')==='keep')return 'keep';var id=el.id,dl=u.role==='dealer';
- if(id==='mc-rsp'||id==='mc-pay')return 'inner';if(id==='mc-jobs'||id==='mc-pq')return 'jobs';if(id==='mc-mine')return dl?'adverts':'money';if(id==='brand-card')return 'setup-brand';if(id==='mc-mydet')return 'setup-details';
+ if(id==='mc-rsp'||id==='mc-pay'||id==='mc-inst')return 'inner';if(u.role==='instructor'&&id==='mc-jobs')return 'none';if(id==='mc-jobs'||id==='mc-pq')return 'jobs';if(id==='mc-mine')return dl?'adverts':'money';if(id==='brand-card')return 'setup-brand';if(id==='mc-mydet')return 'setup-details';
  if(id==='mc-svc-card')return 'setup-services';if(id==='mc-mott')return 'diary';if(id==='mc-dtools')return 'tools';if(id==='mc-stats')return 'adverts';if(id==='mc-inbox'||id==='mc-leads')return 'messages';if(id==='mc-invl')return 'sales';if(id==='mc-inv')return 'stock|sales';
  if(el.classList.contains('qa'))return 'tools';if(el.classList.contains('dtabs'))return 'none';var h=el.querySelector('h2'),t=h?h.textContent:'';
- if(/^Your rates/.test(t))return u.role==='recovery'&&u.sbid?'none':'setup-prices';if(/^Your documents/.test(t))return 'setup-docs';
+ if(/^Your rates/.test(t))return (u.role==='recovery'&&u.sbid)||u.role==='instructor'?'none':'setup-prices';if(/^Your documents/.test(t))return 'setup-docs';
  if(dl){if(/^Monthly plan|^Your plan/.test(t)||el.classList.contains('dtrial'))return 'setup-plan';return u.dtab==='ads'?'adverts':u.dtab==='docs'?'setup-docs':'stock'}
- if(u.role==='mechanic')return u.dtab==='diary'?'diary':u.dtab==='docs'?'setup-docs':'jobs';return 'jobs'}
+ if(u.role==='mechanic')return u.dtab==='diary'?'diary':u.dtab==='docs'?'setup-docs':'jobs';return u.role==='instructor'?'diary':'jobs'}
 function apply(){var u=window.GGuser,host=$('dash-body'),bar=$('mc-ptabs');if(!host||!bar||!on(u))return;load(u);
  var C=cfg(u),c=cur(u,C),bh=barHtml(u,C);if(bh!==last||!bar.firstChild){bar.innerHTML=bh;last=bh}
  [].slice.call(host.children).forEach(function(el){var k=tagOf(el,u),show;
   if(k!=='keep'&&(el.compareDocumentPosition(bar)&4))host.insertBefore(el,bar.nextSibling); /* nothing but the header sits above the tabs */
   if(k==='keep')show=true;
-  else if(k==='inner'){var I=el.querySelectorAll('[data-pcs]');show=!I.length&&c==='jobs';[].forEach.call(I,function(x){var v=x.getAttribute('data-pcs')===c;x.style.display=v?'':'none';if(v)show=true})}
+  else if(k==='inner'){var I=el.querySelectorAll('[data-pcs]');show=!I.length&&(c==='jobs'||c==='diary');[].forEach.call(I,function(x){var v=x.getAttribute('data-pcs')===c;x.style.display=v?'':'none';if(v)show=true})}
   else show=k.split('|').indexOf(c)>-1;
   el.style.display=show?'':'none'})}
 function set(tab,sub){var u=window.GGuser;if(!on(u))return;load(u);ST={tab:tab,sub:sub||''};save()}
@@ -9361,6 +9397,183 @@ function rspStmtHtml(u,m,L,printing){var mn=new Date(m+'-01T12:00:00').toLocaleD
  h+='<table class="st-t mt-tab"><thead><tr><th>Date</th><th>Job</th><th>Status</th><th>Your price</th><th>Paid to you</th></tr></thead><tbody>'+L.slice().reverse().map(function(b){var p=b.details&&b.details.price?+b.details.price.partner:0;
   return '<tr><td>'+E(dd(b.made_at))+'</td><td>'+E(b.kind)+(b.vehicle&&b.vehicle.reg?' · '+E(b.vehicle.reg):'')+'<br><small>'+E(b.customer_name||'')+'</small></td><td>'+E(RSST[b.status]||b.status)+'</td><td>'+m2r(p)+'</td><td>'+m2r(b.partner_payout)+'</td></tr>'}).join('')+'</tbody><tfoot><tr><td colspan="4"><b>Total</b></td><td><b>'+m2r(tot)+'</b></td></tr></tfoot></table>';
  return h+(printing?'<p class="small">Our fee is 10% + VAT per job. Cancelled jobs are paid only if you were already on your way (the call-out fee).</p>':'<p class="note" style="margin:6px 0 0">Payouts start once card payments are switched on. <button type="button" class="pv-link" data-rspprint="'+m+'">Print this statement</button></p>')}
+/* ---------- driving lessons (22 Nov 2026): the learner's search and booking page (#lessons), the hours a learner has paid
+   for (My account), and the instructor's diary and set-up (dashboard card #mc-inst, split into tabs with data-pcs).
+   Prices, free times and bookings all come from the database (find_instructors, lesson_slots, book_lesson), so the page
+   cannot change a price or take a time that is not free. ---------- */
+var DL={q:{trans:'manual',gender:'any',mode:'single'},geo:null,list:null,sel:null,slots:null,day:null,start:null,len:60,pack:null,busy:false};
+function dlT(m){return pad2(Math.floor(m/60))+':'+pad2(m%60)}
+function dlLen(l){return +l===60?'1 hour':+l===90?'1½ hours':'2 hours'}
+function dlDay(d,long){return new Date(d+'T12:00:00').toLocaleDateString('en-GB',long?{weekday:'long',day:'numeric',month:'long'}:{weekday:'short',day:'numeric',month:'short'})}
+function dlMoney(n){return '£'+(+n||0).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function dlGeo(pc){var v=String(pc||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(!/^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/.test(v))return Promise.resolve(null);
+ return fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(v)).then(function(r){return r.ok?r.json():null}).then(function(j){var g=j&&j.result;return g?{lat:g.latitude,lng:g.longitude,pc:g.postcode,area:g.admin_district||''}:null},function(){return null})}
+function dlSeg(){[['dlt','trans'],['dlg','gender'],['dlm','mode']].forEach(function(x){[].forEach.call(document.querySelectorAll('#v-lessons [data-'+x[0]+']'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-'+x[0])===DL.q[x[1]]))})})}
+/* what an instructor offers for the learner's choice: a list of things that can be bought */
+function dlOffers(x){var q=DL.q,r=+((x.rates||{})[q.trans])||0,o=[];if(!(r>0))return o;
+ if(q.mode==='single')(x.lens||[60]).forEach(function(l){o.push({mode:'single',len:+l,pay:Math.round(r*l/60*100)/100,t:dlLen(l),s:''})});
+ else if(q.mode==='block')(x.blocks||[]).forEach(function(b){var p=Math.round(r*b.h*(1-(+b.pct||0)/100)*100)/100;o.push({mode:'block',block_h:+b.h,pay:p,t:b.h+' hours',s:(+b.pct?b.pct+'% off. ':'')+dlMoney(p/b.h)+' an hour'})});
+ else (x.intensive||[]).forEach(function(c,i){if(c.trans&&c.trans!==q.trans)return;o.push({mode:'intensive',course:i,pay:+c.price,hours:+c.hours,t:c.name+', '+c.hours+' hours',s:dlMoney(c.price/c.hours)+' an hour'})});
+ return o}
+function dlResHtml(){var L=DL.list,q=DL.q;if(L===null)return '';
+ var what=q.mode==='single'?'single lessons':q.mode==='block'?'block bookings':'intensive courses';
+ if(!L.length)return '<div class="card"><b>No instructor covers that postcode yet'+(q.gender!=='any'||q.trans==='auto'?' with those choices':'')+'.</b><p class="note" style="margin:6px 0 0">Try '+(q.gender!=='any'?'“No preference” for the instructor, or ':'')+'the other gearbox. More instructors are joining every week.</p></div>';
+ var h='<div class="card"><h2 style="margin-top:0">'+L.length+' instructor'+(L.length===1?'':'s')+' near '+E(DL.geo.pc)+'</h2><p class="note" style="margin:0">'+(q.trans==='auto'?'Automatic':'Manual')+' · '+what+'. Prices are set by each instructor. There is no booking fee.</p></div>';
+ L.forEach(function(x,i){var O=dlOffers(x);
+  h+='<div class="card dlcard"><div class="dlhead"><div><b class="dlname">'+E(x.name)+'</b><div class="note" style="margin:2px 0 0">'+[x.gender==='female'?'Female instructor':x.gender==='male'?'Male instructor':'',x.car?E(x.car):'',x.miles!=null?'about '+x.miles+' mile'+(+x.miles===1?'':'s')+' away':''].filter(Boolean).join(' · ')+'</div></div>'
+   +'<span class="dlbadge'+(x.badge==='pdi'?' pdi':'')+'">'+(x.badge==='pdi'?'Trainee instructor':'Approved instructor (ADI)')+'</span></div>'
+   +(x.bio?'<p style="margin:8px 0 0">'+E(x.bio)+'</p>':'')
+   +(O.length?'<div class="dlopts">'+O.map(function(o,k){return '<button type="button" class="dlopt" data-dlpick="'+i+':'+k+'"><b>'+E(o.t)+'</b><span>'+dlMoney(o.pay)+'</span>'+(o.s?'<small>'+E(o.s)+'</small>':'')+'</button>'}).join('')+'</div>'
+     :'<p class="note" style="margin:8px 0 0">This instructor does not offer '+what+(q.mode==='single'?'':'. Try a single lesson')+'.</p>')
+   +(x.badge==='pdi'?'<p class="note" style="margin:8px 0 0">A trainee instructor holds a DVSA trainee licence and is working towards full approval. They are allowed to charge for lessons.</p>':'')+'</div>'});
+ return h}
+function dlBookHtml(){var S=DL.sel;if(!S)return '';var x=S.x,o=S.o,pk=o.mode==='pack';
+ var lens=(x.lens||[60]).map(Number).filter(function(l){return o.mode!=='pack'||l/60<=o.left+0.001}),need=o.mode!=='single';
+ var h='<div class="card" id="dl-panel"><h2 style="margin-top:0">'+(pk?'Book your next lesson':'Choose your '+(need?'first ':'')+'lesson time')+'</h2>'
+  +'<p style="margin:0 0 8px"><b>'+E(x.name)+'</b> · '+(pk?E(o.title)+': '+o.left+' hour'+(o.left===1?'':'s')+' left to book':E(o.t)+' · <b>'+dlMoney(o.pay)+'</b>')+'</p>';
+ if(need){h+='<div class="dlrow"><span class="dll">Lesson length</span><div class="dlseg">'+lens.map(function(l){return '<button type="button" data-dllen="'+l+'" aria-pressed="'+(DL.len===l)+'">'+dlLen(l)+'</button>'}).join('')+'</div></div>'}
+ if(DL.slots===null)h+='<p class="note">Looking at the diary…</p>';
+ else if(!DL.slots.length)h+='<p class="note"><b>No free times in the next 3 weeks for a lesson of this length.</b> Try a shorter lesson or another instructor.</p>';
+ else{h+='<p class="dll" style="margin:10px 0 6px">Day</p><div class="dldays">'+DL.slots.map(function(d){return '<button type="button" data-dlday="'+d.day+'" aria-pressed="'+(DL.day===d.day)+'">'+dlDay(d.day)+'</button>'}).join('')+'</div>';
+  var D=DL.slots.filter(function(d){return d.day===DL.day})[0];
+  if(D)h+='<p class="dll" style="margin:12px 0 6px">Start time, '+dlDay(D.day,true)+'</p><div class="dltimes">'+D.starts.map(function(s){return '<button type="button" data-dlstart="'+s+'" aria-pressed="'+(DL.start===s)+'">'+dlT(s)+'</button>'}).join('')+'</div>'}
+ h+='<label class="f" for="dl-pick">Where should the instructor pick you up? (house number and street)</label><input id="dl-pick" maxlength="160" value="'+E(DL.pick||'').replace(/"/g,'&quot;')+'">'
+  +'<p class="note" style="margin:8px 0 0">'+(pk?'Nothing to pay: this comes out of the hours you have already paid for.':o.mode==='single'?'You pay '+dlMoney(o.pay)+' now. No booking fee.':'You pay '+dlMoney(o.pay)+' now for all '+(o.block_h||o.hours)+' hours. You book this first lesson now and the rest from My account, whenever suits you. No booking fee.')
+  +' Free to cancel or move a lesson up to 48 hours before it starts.</p><p class="err" id="dl-berr" role="alert"></p>'
+  +'<div class="dtools"><button type="button" class="btn" id="dl-pay"'+(DL.start==null?' disabled':'')+'>'+(pk?'Book this lesson':'Book and pay '+dlMoney(o.pay))+'</button><button type="button" class="btn ghost" data-dlback>Back</button></div></div>';
+ return h}
+function dlDraw(){var r=$('dl-res'),b=$('dl-book');if(!r||!b)return;var pk=DL.sel&&DL.sel.o.mode==='pack';$('dl-find').hidden=!!pk;r.hidden=!!DL.sel;r.innerHTML=DL.sel?'':dlResHtml();
+ var keep=$('dl-pick');if(keep)DL.pick=keep.value;b.innerHTML=dlBookHtml();dlSeg()}
+function dlSlots(){var S=DL.sel;if(!S)return;DL.slots=null;DL.day=null;DL.start=null;dlDraw();
+ ready.then(function(){return sb.rpc('lesson_slots',{p_partner:S.x.id,p_from:null,p_days:21,p_len:DL.len})}).then(function(r){DL.slots=(r&&!r.error&&r.data)||[];if(DL.slots.length)DL.day=DL.slots[0].day;dlDraw();var p=$('dl-panel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'})})}
+function dlFind(){var er=$('dl-err'),bt=$('dl-go');er.textContent='';DL.sel=null;DL.list=null;$('dl-done').hidden=true;
+ bt.disabled=true;bt.textContent='Finding instructors…';
+ dlGeo($('dl-pc').value).then(function(g){if(!g){bt.disabled=false;bt.textContent='Find instructors';er.textContent='Enter your full postcode, for example DA1 1DE.';$('dl-pc').focus();return}
+  DL.geo=g;return ready.then(function(){return sb.rpc('find_instructors',{p_lat:g.lat,p_lng:g.lng,p_trans:DL.q.trans,p_gender:DL.q.gender})}).then(function(r){bt.disabled=false;bt.textContent='Find instructors';
+   if(r.error){er.textContent='We could not search just now. Check your connection and try again.';return}DL.list=r.data||[];dlDraw();$('dl-res').scrollIntoView({behavior:'smooth',block:'start'})})})}
+function dlPay(){var S=DL.sel,er=$('dl-berr'),pick=($('dl-pick').value||'').trim();if(!S||DL.busy)return;er.textContent='';
+ if(DL.start==null){er.textContent='Choose a day and a start time.';return}
+ if(pick.length<4){er.textContent='Tell the instructor where to pick you up.';$('dl-pick').focus();return}
+ var u=window.GGuser;if(!(u&&u.sbid&&u.role==='customer')){DL.pick=pick;if(u&&u.role!=='customer'){er.textContent='You are signed in as a partner. Log out and sign in with a customer account to book lessons.';return}
+  if(window.GGcustOpen)window.GGcustOpen('Log in or register free to book your lesson.','in',function(){setTimeout(dlPay,400)});return}
+ var o=S.o,body={partner:S.x.id,mode:o.mode,trans:DL.q.trans,len:DL.len,day:DL.day,start:DL.start,pickup:pick,pc:DL.geo?DL.geo.pc:''};
+ if(o.mode==='block')body.block_h=o.block_h;if(o.mode==='intensive')body.course=o.course;if(o.mode==='pack'){body.pack=o.pack;body.trans=o.trans}
+ function send(ref){DL.busy=true;var bt=$('dl-pay');if(bt){bt.disabled=true;bt.textContent='Booking…'}body.paid=ref||'';
+  sb.rpc('book_lesson',{p:body}).then(function(r){DL.busy=false;
+   if(r.error){var m=String(r.error.message||'');er=$('dl-berr');if(bt){bt.disabled=false;bt.textContent=o.mode==='pack'?'Book this lesson':'Book and pay '+dlMoney(o.pay)}
+    if(er)er.textContent=/slot_taken/.test(m)?'Sorry, that time has just been taken. Choose another time.':/not_enough_hours/.test(m)?'You do not have enough hours left for a lesson of that length.':/not_customer/.test(m)?'Sign in with a customer account to book lessons.':'We could not make that booking. Nothing has been taken. Please try again.';
+    if(/slot_taken/.test(m))dlSlots();return}
+   var d=r.data||{},dn=$('dl-done');DL.sel=null;DL.list=null;DL.pack=null;DLA.at=0;dlDraw();
+   dn.innerHTML='<div class="tick" aria-hidden="true">&#10003;</div><h2>Lesson booked</h2><p style="margin:0 0 8px">'+E(d.summary||'')+'</p><p style="margin:0 0 8px">Reference '+E(d.ref||'')+'.'+(+d.paid>0?' You paid '+dlMoney(d.paid)+'.':'')+(d.hours_left!=null?' You have <b>'+(+d.hours_left)+' hour'+(+d.hours_left===1?'':'s')+'</b> left to book.':'')+'</p><p class="note">We have emailed you the details. Your instructor will be in touch before the lesson. Bring your provisional licence. You can see, cancel or book more lessons in My account.</p><div class="dtools"><a class="btn" href="#account">Go to My account</a></div>';
+   dn.hidden=false;dn.scrollIntoView({behavior:'smooth',block:'start'})})}
+ if(o.mode==='pack'){send('');return}
+ if(window.GGpay)window.GGpay({amount:o.pay,desc:(o.mode==='single'?'Driving lesson':o.t)+' with '+S.x.name,sub:'Paid to The Motoring Central on behalf of your instructor. No booking fee.',onPaid:function(){send('GG'+Date.now().toString(36))}});else send('GG'+Date.now().toString(36))}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#v-lessons button');if(!t)return;var a=t.dataset;
+ if(a.dlt){DL.q.trans=a.dlt;dlSeg();if(DL.list)dlFind();return}
+ if(a.dlg){DL.q.gender=a.dlg;dlSeg();if(DL.list)dlFind();return}
+ if(a.dlm){DL.q.mode=a.dlm;dlSeg();if(DL.list){DL.sel=null;dlDraw()}return}
+ if(t.id==='dl-go'){dlFind();return}
+ if(a.dlpick){var p=a.dlpick.split(':'),x=DL.list[+p[0]],o=x&&dlOffers(x)[+p[1]];if(!o)return;DL.sel={x:x,o:o};DL.len=o.mode==='single'?o.len:(x.lens||[60]).map(Number)[0];dlSlots();return}
+ if(a.dllen){DL.len=+a.dllen;dlSlots();return}
+ if(a.dlday){DL.day=a.dlday;DL.start=null;dlDraw();return}
+ if(a.dlstart){DL.start=+a.dlstart;dlDraw();return}
+ if(a.dlback!=null){if(DL.sel&&DL.sel.o.mode==='pack'){DL.sel=null;DL.pack=null;location.hash='account';return}DL.sel=null;dlDraw();return}
+ if(t.id==='dl-pay'){dlPay();return}});
+document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target&&e.target.id==='dl-pc'){e.preventDefault();dlFind()}});
+/* arriving from My account to book against hours already paid for */
+function dlRoute(){if(location.hash!=='#lessons')return;if(DL.pack&&!DL.sel){var k=DL.pack;DL.geo=DL.geo||null;DL.sel={x:{id:k.partner,name:k.name,lens:k.lens||[60]},o:{mode:'pack',pack:k.id,left:+k.left,title:k.title,trans:k.trans}};DL.len=(k.lens||[60]).map(Number).filter(function(l){return l/60<=+k.left+0.001})[0]||60;$('dl-done').hidden=true;dlSlots()}else dlDraw()}
+window.addEventListener('hashchange',dlRoute);setTimeout(dlRoute,800);
+
+/* ----- My account: lessons coming up and hours left ----- */
+var DLA={uid:null,packs:null,rows:null,at:0};
+function dlaPull(){var u=window.GGuser;DLA.at=Date.now();Promise.all([sb.rpc('my_lesson_packs'),sb.from('bookings').select('id,summary,status,slot_day,slot_start,details,price_total').eq('kind','Driving lesson').eq('customer_id',u.sbid).order('slot_day',{ascending:true}).limit(60)]).then(function(r){if(!r[0].error)DLA.packs=r[0].data||[];if(!r[1].error)DLA.rows=r[1].data||[];dlaDraw(true)})}
+function dlaHtml(){var P=(DLA.packs||[]),today=new Date().toISOString().slice(0,10),R=(DLA.rows||[]).filter(function(b){return b.status==='confirmed'&&b.slot_day>=today});if(!P.length&&!R.length)return '';
+ var h='<div class="card" id="mc-dl"><h2>Your driving lessons</h2>';
+ if(R.length){h+='<h3 style="margin:8px 0 4px">Coming up</h3>'+R.map(function(b){var d=b.details||{},late=new Date(b.slot_day+'T'+dlT(b.slot_start)+':00').getTime()-Date.now()<48*36e5;
+  return '<div class="dlrowa"><div><b>'+dlDay(b.slot_day,true)+', '+dlT(b.slot_start)+'</b> · '+dlLen(d.len)+'<div class="note" style="margin:2px 0 0">'+E(String(b.summary||'').replace(/^Driving lesson \([^)]*\) /,''))+'</div></div><button type="button" class="btn sm ghost" data-dlcancel="'+b.id+'" data-late="'+(late?1:0)+'">Cancel</button></div>'}).join('')}
+ if(P.length){h+='<h3 style="margin:12px 0 4px">Hours you have paid for</h3>'+P.map(function(k,i){return '<div class="dlrowa"><div><b>'+E(k.title)+'</b> with '+E(k.name)+'<div class="note" style="margin:2px 0 0">'+(+k.left)+' of '+(+k.total)+' hours left to book · '+(k.trans==='auto'?'automatic':'manual')+'</div></div>'+(+k.left>=1?'<button type="button" class="btn sm" data-dlnext="'+i+'">Book next lesson</button>':'<span class="note">All booked</span>')+'</div>'}).join('')}
+ return h+'<p class="note" style="margin:10px 0 0">Free to cancel up to 48 hours before a lesson: the hours go back to your block, or a single lesson is refunded. After that the lesson is charged.</p></div>'}
+function dlaDraw(force){var u=window.GGuser;if(!u||!u.sbid||u.role!=='customer'||location.hash!=='#account')return;if(DLA.uid!==u.sbid)DLA={uid:u.sbid,packs:null,rows:null,at:0};
+ if(DLA.packs===null||Date.now()-DLA.at>30000){if(Date.now()-DLA.at>8000)dlaPull();if(DLA.packs===null)return}
+ var b=$('acc-body');if(!b)return;var old=$('mc-dl');if(old&&!force&&b.contains(old))return;var h=dlaHtml();if(!h){if(old)old.remove();return}var d=document.createElement('div');d.innerHTML=h;var c=d.firstChild;
+ if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else b.insertBefore(c,b.firstChild)}
+setInterval(function(){try{dlaDraw(false)}catch(e){}},1500);
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-dl button');if(!t)return;var a=t.dataset;
+ if(a.dlnext!=null){var k=(DLA.packs||[])[+a.dlnext];if(!k)return;DL.pack=k;DL.sel=null;location.hash='lessons';return}
+ if(a.dlcancel){var late=a.late==='1';if(!confirm(late?'This lesson starts in less than 48 hours, so it will still be charged. Cancel it anyway?':'Cancel this lesson? The hours go back to your block, or a single lesson is refunded.'))return;t.disabled=true;
+  sb.rpc('cancel_lesson',{p_booking:a.dlcancel,p_reason:null}).then(function(r){if(r.error){t.disabled=false;toast('That was not cancelled. Try again.',true);return}var d=r.data||{};toast(d.late?'Lesson cancelled. It was within 48 hours, so it is still charged.':+d.refund>0?'Lesson cancelled. We are refunding '+dlMoney(d.refund)+'.':'Lesson cancelled. The hours are back in your block.');dlaPull()})}});
+
+/* ----- the instructor's dashboard card: diary, prices and packages, availability, area, about ----- */
+var INS={uid:null,me:null,di:null,at:0,dirty:false};
+var INSD=[[1,'Monday'],[2,'Tuesday'],[3,'Wednesday'],[4,'Thursday'],[5,'Friday'],[6,'Saturday'],[0,'Sunday']];
+function insU(){var u=window.GGuser;return u&&u.sbid&&u.role==='instructor'?u:null}
+window.MCinstMe=function(){return INS.me};
+function insPull(){var u=insU();if(!u)return;INS.at=Date.now();Promise.all([sb.from('partners').select('details,rates,status').eq('id',u.sbid).maybeSingle(),sb.rpc('instructor_diary',{p_from:null,p_days:28})]).then(function(r){if(!r[0].error&&r[0].data)INS.me=r[0].data;if(!r[1].error)INS.di=r[1].data||{lessons:[],blocks:[],packs:[]};insDraw(!INS.dirty)})}
+['input','change'].forEach(function(ev){document.addEventListener(ev,function(e){var t=e.target;if(t&&t.closest&&t.closest('#mc-inst'))INS.dirty=true})});
+function insHtml(u){var me=INS.me||{},d=me.details||{},I=d.inst||{},R=me.rates||{},D=INS.di||{lessons:[],blocks:[],packs:[]},today=new Date().toISOString().slice(0,10);
+ var has=function(a,v){return (a||[]).map(String).indexOf(String(v))>-1},on=I.on!==false,noHours=!(I.week&&I.week.some(function(x){return x}));
+ var up=D.lessons.filter(function(l){return l.status!=='cancelled'&&l.day>=today}),days={};up.forEach(function(l){(days[l.day]=days[l.day]||[]).push({t:'l',s:l.start,x:l})});D.blocks.forEach(function(k){(days[k.day]=days[k.day]||[]).push({t:'b',s:k.start,x:k})});
+ var h='<div class="card" id="mc-inst">';
+ /* diary */
+ h+='<div data-pcs="diary"><h2>Your lesson diary</h2><div class="rsp-on'+(on&&!noHours?' is':'')+'"><div><b>'+(noHours?'Set your availability so learners can book you':on?'Learners can book you online':'You are not taking new bookings')+'</b><small>'+(noHours?'Go to Set-up, then Availability.':on?'They can only book times that are free in your diary, inside your hours.':'Lessons already booked stay in your diary.')+'</small></div>'
+  +(noHours?'<button type="button" class="btn sm" data-ptgo="setup:hours">Set availability</button>':'<button type="button" class="btn sm ghost" data-inson="'+(on?0:1)+'">'+(on?'Pause new bookings':'Take bookings again')+'</button>')+'</div>';
+ var keys=Object.keys(days).sort();
+ h+='<h3 class="mt-h">Next 4 weeks ('+up.length+' lesson'+(up.length===1?'':'s')+')</h3>'+(keys.length?keys.map(function(k){return '<div class="insday"><div class="insdh">'+dlDay(k,true)+(k===today?' <span class="rs-now">Today</span>':'')+'</div>'+days[k].sort(function(a,b){return a.s-b.s}).map(function(e){var x=e.x;
+    if(e.t==='b')return '<div class="insrow blk"><b>'+dlT(x.start)+' to '+dlT(x.start+x.dur)+'</b><span>Blocked out</span><button type="button" class="btn sm ghost" data-insunb="'+x.id+'">Remove</button></div>';
+    return '<div class="insrow"><b>'+dlT(x.start)+' to '+dlT(x.start+x.len)+'</b><span><b>'+E(x.name||'Learner')+'</b>'+(x.phone?' · <a href="tel:'+E(String(x.phone).replace(/\s/g,''))+'">'+E(x.phone)+'</a>':'')+'<br><small>'+(x.trans==='auto'?'Automatic':'Manual')+' · '+dlLen(x.len)+' · Pick-up: '+E(x.pickup||'to be agreed')+(x.pc?' '+E(x.pc):'')+(x.pack?' · '+E(x.pack):'')+' · you are paid '+dlMoney(x.payout)+' · ref '+E(x.ref)+'</small></span>'
+     +'<span class="insb">'+(x.status==='done'?'<span class="jst done">Done</span>':'<button type="button" class="btn sm" data-insdone="'+x.id+'">Lesson done</button><button type="button" class="btn sm ghost" data-inscancel="'+x.id+'">Cancel</button>')+'</span></div>'}).join('')+'</div>'}).join(''):'<p class="note">No lessons booked yet. New bookings appear here and we email you straight away.</p>');
+ h+='<h3 class="mt-h">Block out time</h3><p class="note" style="margin:0 0 6px">For holidays, your own pupils or anything else. Learners cannot book over it.</p><div class="insblk"><div><label class="f" for="ins-bd" style="margin-top:0">Day</label><input type="date" id="ins-bd" min="'+today+'"></div><div><label class="f" for="ins-bf" style="margin-top:0">From</label><input type="time" id="ins-bf" value="09:00"></div><div><label class="f" for="ins-bt" style="margin-top:0">To</label><input type="time" id="ins-bt" value="17:00"></div><button type="button" class="btn sm" data-insblock>Block out</button></div>';
+ if((D.packs||[]).length)h+='<h3 class="mt-h">Learners with hours still to book</h3>'+D.packs.map(function(k){return '<div class="insrow"><b>'+E(k.name||'Learner')+'</b><span>'+E(k.title)+'</span><span>'+(+k.left)+' of '+(+k.total)+' hours left</span></div>'}).join('');
+ h+='</div>';
+ /* prices and packages */
+ h+='<div data-pcs="setup-prices"><h3 class="mt-h">Your prices and packages</h3><p class="note" style="margin:0 0 8px">Learners see these prices and pay them in full. There is no booking fee on top. Our fee is 10% + VAT of each lesson.</p>'
+  +'<div class="two"><div><label class="chk"><input type="checkbox" id="ins-tm"'+(has(I.trans,'manual')?' checked':'')+'><span>I teach manual</span></label><label class="f" for="ins-rm">Manual: price per hour (£)</label><input type="number" id="ins-rm" min="0" max="200" step="0.5" value="'+(+R.manual||0)+'"></div>'
+  +'<div><label class="chk"><input type="checkbox" id="ins-ta"'+(has(I.trans,'auto')?' checked':'')+'><span>I teach automatic</span></label><label class="f" for="ins-ra">Automatic: price per hour (£)</label><input type="number" id="ins-ra" min="0" max="200" step="0.5" value="'+(+R.auto||0)+'"></div></div>'
+  +'<fieldset style="margin-top:12px"><legend>Lesson lengths you offer</legend><div class="checks">'+[60,90,120].map(function(l){return '<label class="chk"><input type="checkbox" data-inslen="'+l+'"'+(has(I.lens||[60,90,120],l)?' checked':'')+'><span>'+dlLen(l)+'</span></label>'}).join('')+'</div></fieldset>'
+  +'<h4 style="margin:14px 0 4px">Block bookings</h4><p class="note" style="margin:0 0 6px">The learner pays for all the hours up front and books them when it suits. Set the hours and the discount you give (0 for no discount).</p><div id="ins-blocks">'+(I.blocks&&I.blocks.length?I.blocks:[{h:10,pct:0}]).map(insBlockRow).join('')+'</div><button type="button" class="btn sm ghost" data-insaddb>Add another block</button>'
+  +'<h4 style="margin:14px 0 4px">Intensive courses</h4><p class="note" style="margin:0 0 6px">A set number of hours for one price, for example “Intensive week, 30 hours”. Leave empty if you do not offer them.</p><div id="ins-courses">'+(I.intensive||[]).map(insCourseRow).join('')+'</div><button type="button" class="btn sm ghost" data-insaddc>Add a course</button>'
+  +'<div class="dtools"><button type="button" class="btn sm" data-inssave="prices">Save prices and packages</button></div></div>';
+ /* availability */
+ h+='<div data-pcs="setup-hours"><h3 class="mt-h">Your availability</h3><p class="note" style="margin:0 0 6px">Tick the days you teach and set the hours. Learners can only book inside these hours, in times that are free in your diary.</p><table class="rsp-wk"><tbody>'
+  +INSD.map(function(x){var v=I.week?I.week[x[0]]:(x[0]===0?null:['08:00','18:00']);return '<tr><td><label class="chk"><input type="checkbox" data-inswon="'+x[0]+'"'+(v?' checked':'')+'><span>'+x[1]+'</span></label></td><td><input type="time" data-inswf="'+x[0]+'" value="'+(v?v[0]:'08:00')+'" aria-label="'+x[1]+' from"></td><td>to</td><td><input type="time" data-inswt="'+x[0]+'" value="'+(v?v[1]:'18:00')+'" aria-label="'+x[1]+' to"></td></tr>'}).join('')+'</tbody></table>'
+  +'<div class="two"><div><label class="f" for="ins-gap">Gap you need between lessons</label><select id="ins-gap">'+[0,15,30,45,60].map(function(g){return '<option value="'+g+'"'+((+I.gap||0)===g?' selected':'')+'>'+(g?g+' minutes':'No gap')+'</option>'}).join('')+'</select></div>'
+  +'<div><label class="f" for="ins-notice">Shortest notice for a new booking</label><select id="ins-notice">'+[[2,'2 hours'],[12,'12 hours'],[24,'1 day'],[48,'2 days'],[72,'3 days']].map(function(g){return '<option value="'+g[0]+'"'+((+I.notice||24)===g[0]?' selected':'')+'>'+g[1]+'</option>'}).join('')+'</select></div></div>'
+  +'<div class="dtools"><button type="button" class="btn sm" data-inssave="hours">Save availability</button></div></div>';
+ /* area */
+ h+='<div data-pcs="setup-area"><h3 class="mt-h">The area you cover</h3><div class="two"><div><label class="f" for="ins-pc">Your home or base postcode</label><input id="ins-pc" maxlength="9" style="text-transform:uppercase" value="'+E(d.post||'')+'"></div><div><label class="f" for="ins-rad">How far you travel to pick up</label><select id="ins-rad">'+[5,10,15,20,30].map(function(g){return '<option value="'+g+'"'+((+d.radius||10)===g?' selected':'')+'>'+g+' miles</option>'}).join('')+'</select></div></div><p class="note" style="margin:6px 0 0">Learners whose postcode is inside this distance can find you.</p><div class="dtools"><button type="button" class="btn sm" data-inssave="area">Save area</button></div></div>';
+ /* about */
+ h+='<div data-pcs="setup-about"><h3 class="mt-h">About you</h3><label class="f" for="ins-gender" style="margin-top:0">Learners can ask for a male or a female instructor. You are:</label><select id="ins-gender">'+[['male','Male'],['female','Female'],['none','I would rather not say']].map(function(g){return '<option value="'+g[0]+'"'+(I.gender===g[0]?' selected':'')+'>'+g[1]+'</option>'}).join('')+'</select>'
+  +'<label class="f" for="ins-car">Your tuition car</label><input id="ins-car" maxlength="60" value="'+E(I.car||'').replace(/"/g,'&quot;')+'"><label class="f" for="ins-bio">A few words for learners (optional)</label><textarea id="ins-bio" rows="3" maxlength="400" placeholder="For example: patient and friendly, 12 years teaching, nervous learners welcome.">'+E(I.bio||'')+'</textarea>'
+  +'<p class="note" style="margin:8px 0 0">Shown to learners as: <b>'+(I.badge==='pdi'?'Trainee instructor':'Approved instructor (ADI)')+'</b>. Licence number '+E(I.adi||'not given')+'. If you qualify or your badge changes, upload the new badge under Documents and tell us.</p><div class="dtools"><button type="button" class="btn sm" data-inssave="about">Save</button></div></div>';
+ return h+'</div>'}
+function insBlockRow(b){return '<div class="insline" data-insb><label>Hours<input type="number" min="2" max="60" step="1" data-k="h" value="'+(+b.h||10)+'"></label><label>Discount %<input type="number" min="0" max="50" step="1" data-k="pct" value="'+(+b.pct||0)+'"></label><button type="button" class="btn sm ghost" data-insdel>Remove</button></div>'}
+function insCourseRow(c){c=c||{};return '<div class="insline" data-insc><label class="w">Name<input type="text" maxlength="60" data-k="name" value="'+E(c.name||'Intensive course').replace(/"/g,'&quot;')+'"></label><label>Hours<input type="number" min="4" max="80" step="1" data-k="hours" value="'+(+c.hours||30)+'"></label><label>Price £<input type="number" min="0" max="5000" step="1" data-k="price" value="'+(+c.price||0)+'"></label><label>Gearbox<select data-k="trans"><option value="">Either</option><option value="manual"'+(c.trans==='manual'?' selected':'')+'>Manual</option><option value="auto"'+(c.trans==='auto'?' selected':'')+'>Automatic</option></select></label><button type="button" class="btn sm ghost" data-insdel>Remove</button></div>'}
+function insDraw(force){var u=insU(),host=$('dash-body'),old=$('mc-inst');if(!u||location.hash!=='#dashboard'||!host){if(old)old.remove();return}
+ if(INS.uid!==u.sbid){INS={uid:u.sbid,me:null,di:null,at:0,dirty:false}}if(Date.now()-INS.at>30000)insPull();if(!INS.me||!INS.di)return;if(old&&!force&&host.contains(old))return;if(old&&old.contains(document.activeElement)&&!force)return;
+ var d=document.createElement('div');d.innerHTML=insHtml(u);var c=d.firstChild;if(old&&host.contains(old))old.parentNode.replaceChild(c,old);else{var f=$('mc-ptabs')||host.querySelector('.card');if(f&&f.nextSibling)host.insertBefore(c,f.nextSibling);else host.appendChild(c)}}
+setInterval(function(){try{insDraw(false)}catch(e){}},1500);
+function insSave(p,msg,btn){if(btn)btn.disabled=true;return sb.rpc('set_instructor_setup',{p:p}).then(function(r){if(btn)btn.disabled=false;if(r.error){var m=String(r.error.message||'');toast(/choose_transmission/.test(m)?'Tick manual, automatic or both.':/choose_length/.test(m)?'Tick at least one lesson length.':'That was not saved. Try again.',true);return false}
+  INS.me=INS.me||{};INS.me.rates=r.data.rates;INS.me.details=r.data.details;INS.dirty=false;toast(msg);insDraw(true);return true})}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-inst button');if(!t||!insU())return;var a=t.dataset,q=function(s){return document.querySelector('#mc-inst '+s)};
+ if(a.inson!=null){insSave({inst:{on:a.inson==='1'}},a.inson==='1'?'Learners can book you again.':'New bookings are paused. Lessons already booked stay in your diary.',t);return}
+ if(a.insaddb!=null){$('ins-blocks').insertAdjacentHTML('beforeend',insBlockRow({h:20,pct:0}));INS.dirty=true;return}
+ if(a.insaddc!=null){$('ins-courses').insertAdjacentHTML('beforeend',insCourseRow({}));INS.dirty=true;return}
+ if(a.insdel!=null){t.closest('.insline').remove();INS.dirty=true;return}
+ if(a.inssave==='prices'){var tr=[];if($('ins-tm').checked)tr.push('manual');if($('ins-ta').checked)tr.push('auto');var rm=+$('ins-rm').value||0,ra=+$('ins-ra').value||0;
+  if(!tr.length){toast('Tick manual, automatic or both.',true);return}if((tr.indexOf('manual')>-1&&!(rm>0))||(tr.indexOf('auto')>-1&&!(ra>0))){toast('Enter a price per hour for each gearbox you teach.',true);return}
+  var lens=[].map.call(document.querySelectorAll('#mc-inst [data-inslen]:checked'),function(x){return +x.getAttribute('data-inslen')});
+  var rd=function(sel){return [].map.call(document.querySelectorAll('#mc-inst '+sel),function(row){var o={};[].forEach.call(row.querySelectorAll('[data-k]'),function(i){o[i.getAttribute('data-k')]=i.value});return o})};
+  var bl=rd('[data-insb]').filter(function(b){return +b.h>=2}).map(function(b){return {h:Math.round(+b.h),pct:Math.max(0,Math.min(50,+b.pct||0))}}),co=rd('[data-insc]').filter(function(c){return +c.hours>=4&&+c.price>0}).map(function(c){return {name:String(c.name||'Intensive course').trim(),hours:Math.round(+c.hours),price:+c.price,trans:c.trans||''}});
+  insSave({rates:{manual:tr.indexOf('manual')>-1?rm:0,auto:tr.indexOf('auto')>-1?ra:0},inst:{trans:tr,lens:lens,blocks:bl,intensive:co}},'Saved. Learners now see these prices.',t);return}
+ if(a.inssave==='hours'){var wk=[null,null,null,null,null,null,null],bad=false;for(var i=0;i<7;i++){var on=q('[data-inswon="'+i+'"]');if(!on||!on.checked)continue;var f=q('[data-inswf="'+i+'"]').value,to=q('[data-inswt="'+i+'"]').value;if(!/^\d\d:\d\d$/.test(f)||!/^\d\d:\d\d$/.test(to)||f>=to){bad=true;break}wk[i]=[f,to]}
+  if(bad){toast('Check the start and finish times. The finish must be after the start.',true);return}insSave({inst:{week:wk,gap:+$('ins-gap').value,notice:+$('ins-notice').value}},'Availability saved. Your diary is live.',t);return}
+ if(a.inssave==='area'){t.disabled=true;dlGeo($('ins-pc').value).then(function(g){if(!g){t.disabled=false;toast('We could not find that postcode. Check it and try again.',true);return}insSave({post:g.pc,radius:+$('ins-rad').value,inst:{lat:g.lat,lng:g.lng}},'Area saved.',t)});return}
+ if(a.inssave==='about'){insSave({inst:{gender:$('ins-gender').value,car:$('ins-car').value.trim(),bio:$('ins-bio').value.trim()}},'Saved.',t);return}
+ if(a.insblock!=null){var d=$('ins-bd').value,f2=$('ins-bf').value,t2=$('ins-bt').value,hm=function(s){var p=s.split(':');return +p[0]*60+ +p[1]};if(!d||!f2||!t2||hm(t2)<=hm(f2)){toast('Choose the day, and a finish time after the start.',true);return}t.disabled=true;
+  sb.rpc('block_lesson_time',{p_day:d,p_start:hm(f2),p_dur:Math.min(720,hm(t2)-hm(f2))}).then(function(r){t.disabled=false;if(r.error){toast('That was not saved. Try again.',true);return}INS.dirty=false;toast('Blocked out. Learners cannot book that time.');insPull()});return}
+ if(a.insunb){t.disabled=true;sb.rpc('unblock_lesson_time',{p_id:+a.insunb}).then(function(){INS.dirty=false;insPull()});return}
+ if(a.insdone){t.disabled=true;sb.from('bookings').update({status:'done'}).eq('id',a.insdone).then(function(r){if(r.error){t.disabled=false;toast('That was not saved. Try again.',true);return}INS.dirty=false;toast('Marked as done.');insPull()});return}
+ if(a.inscancel){if(!confirm('Cancel this lesson? The learner gets the hours back or a refund, and you are not paid for it.'))return;t.disabled=true;sb.rpc('cancel_lesson',{p_booking:a.inscancel,p_reason:null}).then(function(r){if(r.error){t.disabled=false;toast('That was not cancelled. Try again.',true);return}INS.dirty=false;toast('Lesson cancelled. The learner has been told.');insPull()})}});
 /* ---------- recovery: truck pictures, the partner's fleet and price list, extras with the customer's approval ---------- */
 function rkW(x,r){r=r||6;return '<circle cx="'+x+'" cy="47" r="'+r+'" fill="#0B1C35"/><circle cx="'+x+'" cy="47" r="'+(r*.38)+'" fill="#fff"/>'}
 function rkCar(x,y,w,c){var h=w*.34;return '<path d="M'+x+' '+y+'h'+w+'v-'+(h*.45)+'l-'+(w*.16)+'-'+(h*.08)+'l-'+(w*.14)+'-'+(h*.47)+'h-'+(w*.42)+'l-'+(w*.16)+' '+(h*.47)+'h-'+(w*.12)+'z" fill="'+(c||'#FFD43B')+'" stroke="#0B1C35" stroke-width="1"/><circle cx="'+(x+w*.22)+'" cy="'+y+'" r="'+(w*.09)+'" fill="#0B1C35"/><circle cx="'+(x+w*.78)+'" cy="'+y+'" r="'+(w*.09)+'" fill="#0B1C35"/>'}
