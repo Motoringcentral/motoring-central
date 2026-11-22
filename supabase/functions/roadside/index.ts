@@ -2,7 +2,9 @@
 // Locations come from postcodes.io (free, open data, no key). Prices are worked out here from each partner's own
 // rates, so a customer's page cannot change them. Bookings are written here with the customer's own account
 // (the function checks the customer's sign-in itself, so the gateway JWT check is off, like the other functions).
-//   POST {action:"quote", kind:"recovery"|"evcharge", from:{pc}|{lat,lng}, to:{pc}, opt:{when, winch, vtype, plug, need}}
+//   POST {action:"quote", kind:"recovery"|"evcharge", from:{pc}|{lat,lng}, to:{pc}, reg, opt:{when, winch, vtype, plug, need}}
+//   Recovery: the vehicle's weight comes from its registration (paid look-up, kept in vehicle_specs) or, with no record,
+//   a typical weight for its type. Only trucks whose payload can carry it are quoted.
 //   Partners with weekly hours ("automatic bookings") count as available in those hours, and never get more jobs
 //   at once than they have vans. With nobody free, "next" lists the next times someone can do it.
 //   POST {action:"book", ...same, partner:"<uuid>", vehicle:{...}, info:{...}, paid:"<payment ref>"} with the customer's sign-in
@@ -89,13 +91,44 @@ const TRUCK: Record<string, string> = { trailer: "4x4 and trailer", beaver: "3.5
 const EXTRA: Record<string, string> = { dollies: "Dollies (wheels locked or will not roll)", skates: "Skates / go-jacks", winch: "Winching (off the road or will not roll)", accident: "Accident damage or suspension damage", spill: "Fluid spill clean-up", nokeys: "No keys / steering lock", low: "Low or lowered vehicle", wait: "Waiting time (per 15 minutes)", storage: "Storage (per day)", ooh: "Out of hours (8pm to 7am)" };
 // which trucks can carry which vehicle
 const CAN: Record<string, string[]> = { car: ["trailer", "beaver", "spec", "slide75", "heavy", "transporter"], svan: ["trailer", "beaver", "slide75", "heavy"], lvan: ["slide75", "heavy"], "4x4": ["trailer", "beaver", "slide75", "heavy"], bike: ["bike", "trailer", "beaver", "slide75"], big: ["heavy"] };
+// what each kind of truck can carry (kg) when the partner has not said, and a typical weight when we have no record
+const PAYLOAD: Record<string, number> = { trailer: 2000, beaver: 1300, spec: 2000, slide75: 3000, heavy: 18000, transporter: 1700, bike: 400 };
+const EST_KG: Record<string, number> = { car: 1500, svan: 1700, lvan: 2300, "4x4": 2200, bike: 250, big: 5000 };
+// the weight on record for a registration (Vehicle Data Global, paid once and then kept in vehicle_specs)
+function scanKg(j: any, re: RegExp, lo: number, hi: number): { v: number; k: string } | null {
+  const q: any[] = [j]; let n = 0;
+  while (q.length && n++ < 6000) { const o = q.shift(); if (!o || typeof o !== "object") continue;
+    for (const k of Object.keys(o)) { const v = o[k]; if (v && typeof v === "object") { q.push(v); continue; }
+      if (re.test(k)) { const x = Math.round(Number(String(v).replace(/[^0-9.]/g, ""))); if (isFinite(x) && x >= lo && x <= hi) return { v: x, k }; } } }
+  return null;
+}
+async function specOf(db: any, reg: unknown): Promise<{ kerb_kg: number | null; gross_kg: number | null } | null> {
+  const r = String(reg || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); if (r.length < 2 || r.length > 8) return null;
+  try {
+    const { data } = await db.from("vehicle_specs").select("kerb_kg,gross_kg").eq("reg", r).maybeSingle(); if (data) return data;
+    const key = Deno.env.get("VDG_API_KEY"); if (!key) return null;
+    const ep = Deno.env.get("VDG_ENDPOINT") || "https://uk.api.vehicledataglobal.com/r2/lookup";
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 7000);
+    const res = await fetch(ep + "?packageName=" + encodeURIComponent(Deno.env.get("VDG_PACKAGE") || "VehicleDetails") + "&apiKey=" + encodeURIComponent(key) + "&vrm=" + encodeURIComponent(r), { signal: ctl.signal, headers: { Accept: "application/json" } });
+    clearTimeout(t); const j = await res.json().catch(() => null); if (!res.ok || !j) return null;
+    const kerb = scanKg(j, /kerb.?weight|mass.?in.?service|unladen.?weight/i, 80, 30000), gross = scanKg(j, /gross.?(vehicle.?)?weight|permissible.?mass|revenue.?weight/i, 100, 60000);
+    const row = { reg: r, kerb_kg: kerb ? kerb.v : null, gross_kg: gross ? gross.v : null, found: [kerb && kerb.k, gross && gross.k].filter(Boolean).join(",") || null };
+    await db.from("vehicle_specs").upsert(row);
+    return row;
+  } catch (_e) { return null; }
+}
+function weightOf(spec: any, vt: string) {
+  if (spec && spec.kerb_kg) return { kg: spec.kerb_kg, need: Math.round(spec.kerb_kg * 1.1), src: "record" };   // 10% for fuel and what is in it
+  if (spec && spec.gross_kg) return { kg: Math.round(spec.gross_kg * 0.8), need: Math.round(spec.gross_kg * 0.88), src: "record" };
+  const e = EST_KG[vt] || 1500; return { kg: e, need: Math.round(e * 1.1), src: "estimate" };
+}
 function vtypeOf(opt: any) { const v = String(opt.vtype || "car"); return v === "van" ? "svan" : CAN[v] ? v : "car"; }
 function rollsOf(opt: any) { const r = String(opt.rolls || (opt.winch ? "locked" : "yes")); return ["yes", "locked", "damage"].includes(r) ? r : "yes"; }
 function placeOf(opt: any) { const r = String(opt.place || (opt.winch ? "off" : "road")); return ["road", "park", "off"].includes(r) ? r : "road"; }
 function oohAt(t: number) { const u = ukAt(t); return u.min >= 20 * 60 || u.min < 7 * 60; }
 function fleetOf(p: any) {
   const d = p.details || {}, R = p.rates || {};
-  if (Array.isArray(d.trucks) && d.trucks.length) return d.trucks.map((x: any) => ({ type: String(x.type), call: Math.max(0, Number(x.call) || 0), mile: Math.max(0, Number(x.mile) || 0), incl: Math.max(0, Number(x.incl) || 0) }));
+  if (Array.isArray(d.trucks) && d.trucks.length) return d.trucks.map((x: any) => ({ type: String(x.type), call: Math.max(0, Number(x.call) || 0), mile: Math.max(0, Number(x.mile) || 0), incl: Math.max(0, Number(x.incl) || 0), payload: Math.max(0, Number(x.payload) || PAYLOAD[String(x.type)] || 0) }));
   return [{ type: "legacy", call: Math.max(0, Number(R.call) || 65), mile: Math.max(0, Number(R.mile) || 2.4), incl: 0 }];
 }
 function extrasOf(p: any): Record<string, number> {
@@ -110,6 +143,8 @@ function recoveryQuote(p: any, loaded: number, opt: any, T: number) {
   let trucks = fleetOf(p);
   if (!legacy) trucks = trucks.filter((x: any) => (CAN[vt] || []).includes(x.type) && !(x.type === "spec" && rolls === "damage") && !(x.type === "transporter" && rolls !== "yes"));
   if (!trucks.length) return null;
+  // only a truck that can carry the weight (the partner's own payload figure for each truck)
+  if (!legacy && opt._w && opt._w.need) { trucks = trucks.filter((x: any) => x.payload >= opt._w.need); if (!trucks.length) { opt._heavy = (opt._heavy || 0) + 1; return null; } }
   const inc: { code: string; label: string; price: number }[] = [], add = (k: string) => { if (E[k] != null && E[k] > 0 && !inc.some((x) => x.code === k)) inc.push({ code: k, label: EXTRA[k], price: E[k] }); };
   if (place === "off" || (legacy && opt.winch)) { if (E.winch == null) { if (!legacy) return null; } else add("winch"); }
   if (rolls === "locked") { if (E.dollies != null) add("dollies"); else if (E.skates != null) add("skates"); }
@@ -194,6 +229,7 @@ async function quote(db: any, b: any) {
   const from = await where(b.from); if (!from) return { ok: false, error: "bad_from" };
   let to: Pt | null = null;
   if (kind === "recovery") { to = await where(b.to); if (!to) return { ok: false, error: "bad_to" }; }
+  if (kind === "recovery") { opt._heavy = 0; opt._w = weightOf(await specOf(db, b.reg || (b.vehicle && b.vehicle.reg)), vtypeOf(opt)); }
   const P = await partners(db, kind), list: any[] = [], near: any[] = [];
   const now = opt.when === "now" || !opt.when, T = now ? Date.now() : Date.parse(opt.when);
   const J = await activeJobs(db, P.map((p: any) => p.id));
@@ -219,7 +255,9 @@ async function quote(db: any, b: any) {
       return { sample: true, name: s.n, town: s.t, price, total: r2(price + BOOKING_FEE), call: s.call, mile: s.mile, loaded, extraMiles: 0, winch: opt.winch && kind === "recovery" ? 25 : 0, eta: opt.when === "now" ? 35 + i * 10 : null, truck: kind === "recovery" ? "3.5t beavertail" : null, inc: [], possible: kind === "recovery" ? [{ code: "dollies", label: EXTRA.dollies, price: 30 }, { code: "spill", label: EXTRA.spill, price: 45 }, { code: "wait", label: EXTRA.wait, price: 15 }] : [] };
     });
   }
-  return { ok: true, kind, fee: BOOKING_FEE, from, to, loaded: to ? miles(from, to) : null, list, samples, next };
+  const weight = opt._w ? { kg: opt._w.kg, src: opt._w.src } : null, heavy = !list.length && !near.length && (opt._heavy || 0) > 0;
+  if (heavy) samples = [];
+  return { ok: true, kind, fee: BOOKING_FEE, from, to, loaded: to ? miles(from, to) : null, list, samples, next, weight, heavy };
 }
 
 Deno.serve(async (req) => {
@@ -267,7 +305,7 @@ Deno.serve(async (req) => {
     }
     const price = pick.price, rate = pick._q.rate, our = r2(BOOKING_FEE + price * rate), pay = r2(price * (1 - rate));
     const details = { from: q.from, to: q.to, loaded: pick.loaded, away: pick.away, eta: pick.eta, when, spot: clean(info.spot, 160), dest: clean(info.dest, 60), what: clean(info.what, 80),
-      winch: placeOf(opt) === "off", rolls: rollsOf(opt), place: placeOf(opt), leak: clean(opt.leak, 6), low: !!opt.low, vtype: vtypeOf(opt), truck: pick.truck || null, inc: pick.inc || [], possible: pick.possible || [], keys: clean(info.keys, 5), pass: Math.max(0, Math.min(8, Number(info.pass) || 0)), need: clean(opt.need, 20), plug: clean(opt.plug, 20), battery: clean(info.battery, 10), note: clean(info.note, 300),
+      winch: placeOf(opt) === "off", rolls: rollsOf(opt), place: placeOf(opt), leak: clean(opt.leak, 6), low: !!opt.low, vtype: vtypeOf(opt), weight: q.weight || null, truck: pick.truck || null, inc: pick.inc || [], possible: pick.possible || [], keys: clean(info.keys, 5), pass: Math.max(0, Math.min(8, Number(info.pass) || 0)), need: clean(opt.need, 20), plug: clean(opt.plug, 20), battery: clean(info.battery, 10), note: clean(info.note, 300),
       price: { call: pick.call, mile: pick.mile, loaded: pick.loaded, incl: pick.incl || 0, base: pick.base, extras: pick.inc || [], extraMiles: pick.extraMiles, winch: pick.winch, partner: price, fee: BOOKING_FEE, rate }, paid: clean(b.paid, 80) };
     const row = { customer_id: uid, kind, service: kind === "Recovery" ? (clean(info.what, 80) || "Recovery") : "Mobile EV charging", summary: summary.slice(0, 2000), vehicle: veh, status: "confirmed",
       made_at: new Date().toISOString(), partner_id: pick.id, partner_name: pick.name, price_total: r2(price + BOOKING_FEE), our_share: our, partner_payout: pay, paid: true, details };
