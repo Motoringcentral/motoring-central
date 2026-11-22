@@ -9376,7 +9376,7 @@ function bookClean(v,d){d=d||0;if(v==null)return null;var t=typeof v;if(t==='str
  var o={};Object.keys(v).slice(0,80).forEach(function(k){if(k.charAt(0)==='_')return;var c=bookClean(v[k],d+1);if(c!==null)o[k]=c});return o}
 function bookLoad(u){SBK={uid:u.sbid,ready:false,sig:'',busy:false};
  sb.from('dealer_books').select('stock').eq('partner_id',u.sbid).maybeSingle().then(function(r){if(window.GGuser!==u||r.error)return;
-  if(r.data&&Array.isArray(r.data.stock)){u.stock=r.data.stock;SBK.sig=JSON.stringify(bookClean(u.stock))}
+  if(r.data&&Array.isArray(r.data.stock)&&(r.data.stock.length||!(Array.isArray(u.stock)&&u.stock.length))){u.stock=r.data.stock;SBK.sig=JSON.stringify(bookClean(u.stock))}
   SBK.ready=true;var ae=document.activeElement;if(location.hash==='#dashboard'&&window.GGdash&&!(ae&&ae.closest&&ae.closest('#dash-body input,#dash-body textarea,#dash-body select')))window.GGdash()})}
 function bookTick(){var u=window.GGuser;if(!u||!u.sbid||u.role!=='dealer'||!SBK.ready||SBK.uid!==u.sbid||SBK.busy||!Array.isArray(u.stock))return;
  if(!u.sedit&&!SBK.noPhoto){var pend=null;u.stock.some(function(v){return (v.photos||[]).some(function(src,i){if(/^data:image\//.test(String(src))){pend=[v,i];return true}return false})});
