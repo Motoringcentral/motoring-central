@@ -9524,11 +9524,11 @@ function dlBookHtml(){var S=DL.sel;if(!S)return '';var x=S.x,o=S.o,pk=o.mode==='
   if(D)h+='<p class="dll" style="margin:12px 0 6px">Start time, '+dlDay(D.day,true)+'</p><div class="dltimes">'+D.starts.map(function(s){return '<button type="button" data-dlstart="'+s+'" aria-pressed="'+(DL.start===s)+'">'+dlT(s)+'</button>'}).join('')+'</div>'}
  h+='<label class="f" for="dl-pick">Where should the instructor pick you up? (house number and street)</label><input type="text" id="dl-pick" maxlength="160" value="'+E(DL.pick||'').replace(/"/g,'&quot;')+'">'
   +'<p class="note" style="margin:8px 0 0">'+(pk?'Nothing to pay: this comes out of the hours you have already paid for.':o.mode==='single'?'You pay '+dlMoney(o.pay)+' now. No booking fee.':'You pay '+dlMoney(o.pay)+' now for all '+(o.block_h||o.hours)+' hours. You book this first lesson now and the rest from My account, whenever suits you. No booking fee. These hours are sold at a package price, so they are not refunded as money: a cancelled lesson goes back to your hours to book again.')
-  +' Free to cancel or move a lesson up to 48 hours before it starts.</p><p class="err" id="dl-berr" role="alert"></p>'
+  +' Free to cancel or move a lesson up to 48 hours before it starts.</p><div class="tc"><input type="checkbox" id="tc-dl"'+(DL.tc?' checked':'')+'><label for="tc-dl">I understand my lessons are with the instructor or driving school I have chosen. They are responsible for the tuition and their car. <a href="#terms" data-tsec="tc-lessons">Read the terms</a></label></div><p class="err" id="dl-berr" role="alert"></p>'
   +'<div class="dtools"><button type="button" class="btn" id="dl-pay"'+(DL.start==null?' disabled':'')+'>'+(pk?'Book this lesson':'Book and pay '+dlMoney(o.pay))+'</button><button type="button" class="btn ghost" data-dlback>Back</button></div></div>';
  return h}
 function dlDraw(){var r=$('dl-res'),b=$('dl-book');if(!r||!b)return;var pk=DL.sel&&DL.sel.o.mode==='pack';$('dl-find').hidden=!!pk;r.hidden=!!DL.sel;r.innerHTML=DL.sel?'':dlResHtml();
- var keep=$('dl-pick');if(keep)DL.pick=keep.value;b.innerHTML=dlBookHtml();dlSeg()}
+ var keep=$('dl-pick');if(keep)DL.pick=keep.value;var tk=$('tc-dl');if(tk)DL.tc=tk.checked;b.innerHTML=dlBookHtml();dlSeg()}
 function dlSlots(){var S=DL.sel;if(!S)return;DL.slots=null;DL.day=null;DL.start=null;dlDraw();
  ready.then(function(){return sb.rpc('lesson_slots',{p_partner:S.x.id,p_from:null,p_days:21,p_len:DL.len})}).then(function(r){DL.slots=(r&&!r.error&&r.data)||[];if(DL.slots.length)DL.day=DL.slots[0].day;dlDraw();var p=$('dl-panel');if(p)p.scrollIntoView({behavior:'smooth',block:'start'})})}
 function dlFind(){var er=$('dl-err'),bt=$('dl-go');er.textContent='';DL.sel=null;DL.list=null;$('dl-done').hidden=true;
@@ -9539,6 +9539,7 @@ function dlFind(){var er=$('dl-err'),bt=$('dl-go');er.textContent='';DL.sel=null
 function dlPay(){var S=DL.sel,er=$('dl-berr'),pick=($('dl-pick').value||'').trim();if(!S||DL.busy)return;er.textContent='';
  if(DL.start==null){er.textContent='Choose a day and a start time.';return}
  if(pick.length<4){er.textContent='Tell the instructor where to pick you up.';$('dl-pick').focus();return}
+ var tcd=$('tc-dl');if(tcd&&!tcd.checked){er.textContent='Tick the box to confirm you understand who your lessons are with.';tcd.focus();return}
  var u=window.GGuser;if(!(u&&u.sbid&&u.role==='customer')){DL.pick=pick;if(u&&u.role!=='customer'){er.textContent='You are signed in as a partner. Log out and sign in with a customer account to book lessons.';return}
   if(window.GGcustOpen)window.GGcustOpen('Log in or register free to book your lesson.','in',function(){setTimeout(dlPay,400)});return}
  var o=S.o,body={partner:S.x.id,mode:o.mode,trans:DL.q.trans,len:DL.len,day:DL.day,start:DL.start,pickup:pick,pc:DL.geo?DL.geo.pc:''};
