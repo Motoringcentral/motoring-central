@@ -36,6 +36,17 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+WHERE WE STOPPED (22 Nov 2026, about 3am). Owner went to bed; pick up in the morning.
+NEXT: test the untested dealer features with a real dealer account (list under DEALER SALES INVOICING below:
+spreadsheet upload, stock feed, showroom page and website embed, trade listings, PDI, changing plan), and ask the
+owner to check a printed invoice by eye for the logo. Then: does he want a separate "Recently sold" page?
+Owner actions waiting: set up two-step log-in on his own staff account (Staff log in, scan the code); switch on
+leaked password protection in Supabase (Authentication > Passwords).
+Test accounts (password as before, not stored here): vimen+dealer2@ (TEST Trial Motors Gravesend: has a logo, invoice
+details, invoices INV-0001 to INV-0003, stock and 2 test adverts), vimen+dealer3@, vimen+body@, vimen+valet@,
+vimen+autoelec@, vimen+staff@ (reviewer), vimen+visitor@ (contact form). VIMS CARS is founding dealer no. 1; 29 left.
+Delete all TEST accounts, adverts and trial records before launch.
+
 DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
 - Stock vehicle > "Take a deposit or sell (invoice)". One record per sale: deposit receipt while money is owed, final
   sales invoice once paid in full (then locked; can only be cancelled with a reason). Numbers INV-0001... per dealer,
