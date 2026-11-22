@@ -49,6 +49,9 @@ DEALER LAUNCH OFFER (owner's decision, 22 Nov 2026), BUILT AND TESTED:
   cancellation confirmation. Dashboard shows the countdown, founding number, Pay yearly, Cancel and Keep my membership.
 - Site, terms (Fees, Yearly plans and founding dealers, Cancelling), FAQ, dealer video (slides, voice and captions)
   and dealer pitch PDF all updated.
+- Founding dealers also get 5 free premium ads a month from approval until 2 months after the trial ends. Cancelling
+  in the trial releases the founding place (lowest free number goes to the next dealer approved); Keep my membership
+  in the trial takes a free place again if one is left. Built and tested 22 Nov.
 - VIMS CARS is founding dealer no. 1 (owner's choice, 22 Nov, for testing); 29 founding places left. TEST Dealer
   Dartford has a fresh 30-day trial and no founding number. Before launch: delete the TEST dealer accounts (and their
   trial records) when the owner says go live.
