@@ -95,7 +95,7 @@ function placeOf(opt: any) { const r = String(opt.place || (opt.winch ? "off" : 
 function oohAt(t: number) { const u = ukAt(t); return u.min >= 20 * 60 || u.min < 7 * 60; }
 function fleetOf(p: any) {
   const d = p.details || {}, R = p.rates || {};
-  if (Array.isArray(d.fleet) && d.fleet.length) return d.fleet.map((x: any) => ({ type: String(x.type), call: Math.max(0, Number(x.call) || 0), mile: Math.max(0, Number(x.mile) || 0), incl: Math.max(0, Number(x.incl) || 0) }));
+  if (Array.isArray(d.trucks) && d.trucks.length) return d.trucks.map((x: any) => ({ type: String(x.type), call: Math.max(0, Number(x.call) || 0), mile: Math.max(0, Number(x.mile) || 0), incl: Math.max(0, Number(x.incl) || 0) }));
   return [{ type: "legacy", call: Math.max(0, Number(R.call) || 65), mile: Math.max(0, Number(R.mile) || 2.4), incl: 0 }];
 }
 function extrasOf(p: any): Record<string, number> {
@@ -106,7 +106,7 @@ function extrasOf(p: any): Record<string, number> {
 }
 // the cheapest suitable truck, the extras that are certain from the answers, and the rest "only if needed"
 function recoveryQuote(p: any, loaded: number, opt: any, T: number) {
-  const vt = vtypeOf(opt), rolls = rollsOf(opt), place = placeOf(opt), E = extrasOf(p), legacy = !(Array.isArray((p.details || {}).fleet) && (p.details || {}).fleet.length);
+  const vt = vtypeOf(opt), rolls = rollsOf(opt), place = placeOf(opt), E = extrasOf(p), legacy = !(Array.isArray((p.details || {}).trucks) && (p.details || {}).trucks.length);
   let trucks = fleetOf(p);
   if (!legacy) trucks = trucks.filter((x: any) => (CAN[vt] || []).includes(x.type) && !(x.type === "spec" && rolls === "damage") && !(x.type === "transporter" && rolls !== "yes"));
   if (!trucks.length) return null;
@@ -180,7 +180,7 @@ function covers(kind: string, p: any, q: any, opt: any) {
   if (kind === "evcharge" && opt.plug && !/not sure/i.test(opt.plug)) { const pl = arr(d.plugs); if (pl.length && !pl.some((x) => x.toLowerCase().includes(String(opt.plug).toLowerCase()))) return false; }
   if (kind === "recovery") {
     if (!q.rq) return false; // no suitable truck, or cannot winch
-    if (!(Array.isArray(d.fleet) && d.fleet.length)) {
+    if (!(Array.isArray(d.trucks) && d.trucks.length)) {
       if (opt.winch || placeOf(opt) === "off") { const ty = arr(d.types); if (ty.length && !ty.some((x) => /winch|flatbed/i.test(x))) return false; }
       if (vtypeOf(opt) === "bike") { const ty = arr(d.types); if (ty.length && !ty.some((x) => /flatbed|trailer|van/i.test(x))) return false; }
     }

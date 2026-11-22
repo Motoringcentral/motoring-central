@@ -37,7 +37,7 @@ begin
   end if;
   select min((y->>'call')::numeric), min((y->>'mile')::numeric) into mc, mm from jsonb_array_elements(f) y;
   update public.partners set
-    details = coalesce(details, '{}'::jsonb) || jsonb_build_object('fleet', f, 'extras', e,
+    details = coalesce(details, '{}'::jsonb) || jsonb_build_object('trucks', f, 'extras', e,
       'types', (select jsonb_agg(y->>'type') from jsonb_array_elements(f) y), 'vans', (select sum((y->>'n')::int) from jsonb_array_elements(f) y)),
     rates = coalesce(rates, '{}'::jsonb) || jsonb_build_object('call', mc, 'mile', mm, 'winch', coalesce((e->>'winch')::numeric, 0))
   where id = me.id;
