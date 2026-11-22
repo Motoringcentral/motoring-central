@@ -785,6 +785,9 @@ Option to consider: a soft launch taking quote requests only, before full bookin
   - pitch/adverts/: a square (1080 x 1080) and an upright (1080 x 1920) picture for each trade, and
     The-Motoring-Central-Advert-Pack.pdf with the wording, links and test plan. "node adverts.js" rebuilds them.
     The photos are cropped so the banner artwork's own claims (nationwide network and so on) do not appear.
+    Also a short upright video for each trade (<trade>-short.mp4, 22 to 26 seconds, same voice as the site videos):
+    three screens under a slowly zooming photo. Made by pitch/shorts.js (draws the screens) and pitch/shorts.py
+    (voice and video; needs the voice tools described in tools/video/README.md). Voice checked by speech recognition.
   - Sent to the owner and kept OUT of this public folder: the sign-up links sheet (QR codes to the preview site), the
     recruitment guide (what to say, likely questions, emails to send, rules on calls and emails, the caution about the owner's employer), and
     the contact list spreadsheet (all 854 MOT stations within 15 miles of Dartford from the DVSA list, 671 of them
@@ -794,7 +797,7 @@ Option to consider: a soft launch taking quote requests only, before full bookin
   - Suggested question for the solicitor: may photo ID and insurance documents be collected from partners before the
     company is registered and its data protection registration is in place? Until answered, early sign-ups create the
     account and add documents later.
-  - Not done: short upright video cuts for adverts; contact lists for trades other than MOT are starters only.
+  - Not done: contact lists for trades other than MOT are starters only.
 - 21 Nov 2026: MOT stations now pay a flat £5 booking fee per online MOT (was 18%), and the £99.99 joining fee is gone.
 - 21 Nov 2026 (morning): owner's decisions done. (1) Launch offer on the site stays as it is; the pitches stay at full
   price and the owner explains the offer in person. (2) History checks in a dealer's free months are a choice: pay

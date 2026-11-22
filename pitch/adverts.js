@@ -1,6 +1,7 @@
 /* Advert pictures and wording for recruiting partners (22 Nov 2026). NOT to be run as adverts until the company is registered.
    node adverts.js   makes, in adverts/: <trade>-square.jpg (1080 x 1080, feeds), <trade>-story.jpg (1080 x 1920, stories and reels)
                      and The-Motoring-Central-Advert-Pack.pdf with the wording, links and test plan.
+   The short videos (<trade>-short.mp4) are made by shorts.js and shorts.py.
    Wording and figures must match the leaflets (leaflets.js), the join pages and the terms. The photos are cropped so that
    none of the banner artwork's own claims (nationwide network and so on) appear in an advert. */
 const fs = require('fs'); const { chromium } = require('playwright'); const B = require('./build.js');
@@ -81,7 +82,7 @@ function plan() {
  <p class="lead">A picture in two shapes and the wording for each trade, plus a small paid test to see which trades answer.</p>
  <h2>The test</h2><table>
  <tr><td>When</td><td>Only after the company is registered and motoringcentral.co.uk opens the live site. Nothing here should be posted or paid for before then.</td></tr>
- <tr><td>Where</td><td>Facebook and Instagram, run from one Meta Ads account. Square picture for the feeds, upright picture for Stories and Reels.</td></tr>
+ <tr><td>Where</td><td>Facebook and Instagram, run from one Meta Ads account. Square picture for the feeds; upright picture or the short video (about 23 seconds, with voice) for Stories and Reels.</td></tr>
  <tr><td>Budget</td><td>&pound;300 to &pound;500 in total over 14 days. Suggested: four trades at &pound;7 a day each, which comes to &pound;392.</td></tr>
  <tr><td>Which trades first</td><td>MOT test stations, valeters, driving instructors, and body shops. Add the others once you see which of these work.</td></tr>
  <tr><td>Who sees them</td><td>People within 15 miles of Dartford. Narrow by job or interest where Meta offers it: business page admins, small business owners, and the trade itself (MOT testing, car valeting and detailing, driving instructor, body repair).</td></tr>
@@ -98,11 +99,12 @@ function tradePage(t, sq, st) {
   const link = SITE + '?src=fb-' + t.key + '#' + t.hash;
   return `<section class="page ap">${hd('Advert pack: ' + t.name.toLowerCase())}<p class="kick">${t.who}</p><h1>${t.name}</h1>
  <div class="pics"><div><img src="${sq}"><small>Square, 1080 &times; 1080. File: ${t.key}-square.jpg</small></div><div><img src="${st}"><small>Upright, 1080 &times; 1920. File: ${t.key}-story.jpg</small></div>
- <div class="copy"><div class="lab">Where each picture goes</div><b>Square:</b> Facebook and Instagram feeds.<br><b>Upright:</b> Stories and Reels. The top and bottom are left clear for the app&rsquo;s own buttons.<div class="lab">Who to show it to</div>${t.name}, within 15 miles of Dartford.</div></div>
+ <div class="copy"><div class="lab">Where each picture goes</div><b>Square:</b> Facebook and Instagram feeds.<br><b>Upright:</b> Stories and Reels. The top and bottom are left clear for the app&rsquo;s own buttons.<br><b>Video:</b> ${t.key}-short.mp4, the same message with a voice, for Stories and Reels.<div class="lab">Who to show it to</div>${t.name}, within 15 miles of Dartford.</div></div>
  <h2>Wording to paste in</h2><table><tr><td>Main text</td><td>${esc(t.text)}</td></tr><tr><td>Headline</td><td><b>${esc(t.head)}</b></td></tr><tr><td>Description</td><td>${esc(t.desc)}</td></tr><tr><td>Button</td><td>Sign up</td></tr><tr><td>Link</td><td><span class="mono">${link}</span></td></tr></table>
  <p class="note">Headline ${t.head.length} characters, description ${t.desc.length}, main text ${t.text.length}. Meta shows about the first 125 characters of the main text before &ldquo;See more&rdquo;, so the offer is in the first sentence.</p>${ft}</section>`;
 }
-(async () => {
+module.exports = { T, BASE, ST, FND, uri, SITE };
+if (require.main === module) (async () => {
   const out = __dirname + '/adverts'; fs.mkdirSync(out, { recursive: true }); const b = await chromium.launch(); const pages = [plan()];
   for (const t of T) {
     const p0 = await b.newPage(); const dim = await p0.evaluate(src => new Promise(r => { const i = new Image(); i.onload = () => r([i.naturalWidth, i.naturalHeight]); i.src = src; }), uri(t)); await p0.close();
