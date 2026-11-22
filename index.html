@@ -9451,7 +9451,7 @@ function ivEdHtml(u){var d=INV.ed,T=ivTot(d),S=u.inv||{},fin=d.status==='paid',c
  h+='<h3 class="sh">Payments received</h3><p class="note" style="margin:0 0 4px">Add the deposit first. Add each further payment as it comes in: cash, card, bank transfer, part exchange or finance.</p>';
  if(!d.payments.length)h+='<p class="note">No payments yet.</p>';
  d.payments.forEach(function(p,i){var k='payments.'+i+'.';h+='<div class="ivr">'+ivI(k+'date',p.date||ivToday(),'Date','date',' class="iva" style="flex-basis:140px"')+ivSel(k+'method',p.method||'cash',IVM)
-   +(p.method==='px'?ivI(k+'pxreg',p.pxreg,'PX registration',null,' class="iva" style="text-transform:uppercase"')+ivI(k+'pxveh',p.pxveh,'PX make and model')+ivI(k+'pxmiles',p.pxmiles,'PX mileage','number',' class="iva"')+ivI(k+'pxallow',p.pxallow,'Allowance £','number',' class="iva" step="0.01"')+ivI(k+'pxsettle',p.pxsettle,'Finance to settle £','number',' class="iva" step="0.01"')+'<span class="note">Credited: <b>'+ivG(p.amount)+'</b></span>'
+   +(p.method==='px'?ivI(k+'pxreg',p.pxreg,'PX registration',null,' class="iva" style="text-transform:uppercase"')+ivI(k+'pxveh',p.pxveh,'PX make and model')+ivI(k+'pxmiles',p.pxmiles,'PX mileage','number',' class="iva"')+ivI(k+'pxallow',p.pxallow,'Allowance £','number',' class="iva" step="0.01"')+ivI(k+'pxsettle',p.pxsettle,'Finance to settle £','number',' class="iva" step="0.01"')+'<span class="note">Credited: <b id="iv-cr-'+i+'">'+ivG(p.amount)+'</b></span>'
     :ivI(k+'amount',p.amount===''||p.amount==null?'':p.amount,'Amount £','number',' class="iva" step="0.01"')+(p.method==='finance'?ivI(k+'lender',p.lender,'Finance company')+ivI(k+'ref',p.ref,'Agreement number'):ivI(k+'ref',p.ref,p.method==='card'?'Card receipt or last 4 digits':p.method==='bacs'?'Bank reference':'Receipt number or note')))
    +'<button type="button" class="lnk" data-ivdel="payments.'+i+'">Remove</button></div>'});
  h+='<div class="dtools" style="margin-top:4px">'+IVM.map(function(o){return '<button class="btn sm ghost" type="button" data-ivpay="'+o[0]+'">+ '+E(o[1])+'</button>'}).join('')+'</div>';
@@ -9476,9 +9476,9 @@ function ivDraw(force){var u=window.GGuser;if(!u||!u.sbid||u.role!=='dealer'||lo
  if(!ol||force||!b.contains(ol)){var d2=document.createElement('div');d2.innerHTML=ivListHtml(u);var c2=d2.firstChild;if(ol&&b.contains(ol))ol.parentNode.replaceChild(c2,ol);else b.appendChild(c2)}}
 function ivSetPath(o,path,val){var p=path.split('.'),x=o;for(var i=0;i<p.length-1;i++){if(x[p[i]]==null)return;x=x[p[i]]}x[p[p.length-1]]=val}
 function ivRead(t){var d=INV.ed;if(!d||!t||!t.dataset)return;var f=t.dataset.ivf;if(!f)return;var num=/\.(amount|pxallow|pxsettle|miles|pxmiles)$/.test(f);ivSetPath(d,f,num?(t.value===''?'':+t.value):t.value);
- var m=/^payments\.(\d+)\.(pxallow|pxsettle)$/.exec(f);if(m){var p=d.payments[+m[1]];if(p)p.amount=ivNum(ivNum(p.pxallow)-ivNum(p.pxsettle))}}
+ var m=/^payments\.(\d+)\.(pxallow|pxsettle)$/.exec(f);if(m){var p=d.payments[+m[1]];if(p){p.amount=ivNum(ivNum(p.pxallow)-ivNum(p.pxsettle));var cr=$('iv-cr-'+m[1]);if(cr)cr.textContent=ivG(p.amount)}}}
 document.addEventListener('input',function(e){var t=e.target;if(!t||!t.closest||!t.closest('#mc-inv'))return;if(t.dataset.ivf){ivRead(t);var k=$('iv-tot');if(k)k.innerHTML=ivTotHtml(INV.ed)}});
-document.addEventListener('change',function(e){var t=e.target;if(!t||!t.closest||!t.closest('#mc-inv')||!t.dataset.ivf)return;ivRead(t);if(/\.(method|pxallow|pxsettle)$/.test(t.dataset.ivf))ivDraw(true)});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.closest||!t.closest('#mc-inv')||!t.dataset.ivf)return;ivRead(t);if(/\.method$/.test(t.dataset.ivf))ivDraw(true)});
 function ivAfter(u,row,note,was){var i=-1;INV.rows.forEach(function(x,k){if(x.id===row.id)i=k});if(i>-1)INV.rows[i]=row;else INV.rows.unshift(row);INV.ed=ivFrom(row);INV.msg=note;INV.voiding=false;
  var veh=0;(row.lines||[]).forEach(function(l){if(l.veh)veh+=ivNum(l.amount)});
  if(window.MCstockSale){if(row.status==='paid')window.MCstockSale(u,+row.stock_id,'sold',{price:veh||row.total,date:row.sale_date||ivToday(),inv:row.number});
