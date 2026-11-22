@@ -1797,7 +1797,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <footer class="foot">&copy; The Motoring Central. <a href="#instructors" style="color:inherit">Are you a driving instructor? Join the network</a> <a href="#terms" style="color:inherit">Terms and conditions</a></footer>
 </main></div>
 <div id="v-instr" hidden>
-<section class="hero"><div class="in">
+<section class="hero"><div class="in"><div class="dvbox"><video id="in-vid" controls playsinline preload="metadata" poster="video/instructors-poster.jpg" width="1280" height="720" aria-label="Video: how The Motoring Central works for driving instructors. How learners book, your prices and diary, moving and cancelling, reviews, payouts and joining."><source src="video/instructors.mp4?v=1" type="video/mp4"><track kind="captions" src="video/instructors.vtt?v=1" srclang="en" label="English"></video></div>
 <h1>Driving instructors: a full diary, paid up front.</h1>
 <p>Learners near you book and pay online, straight into your diary.</p>
 <a class="swl" href="#lessons">Looking for driving lessons? Find an instructor &rarr;</a>
@@ -5233,7 +5233,7 @@ var C=[
  {view:'v-evc',role:'evcharge',hash:'evcharging',form:'ev-form',ok:'ev-ok',mail:'ev-mail',pass:'ev-pass',calc:/^Where the money goes/,
   h1:'Mobile EV charging: get paid to rescue stranded EVs.',sub:'Out-of-charge rescues and booked top-ups, sent straight to your vans.',
   pts:['<b>You set the prices.</b> Your call-out charge and your price per mile. Customers see your price, not ours.',UP,FEE,WK,'<b>Work when you want.</b> One tap to go available, or set your hours, even 24/7.','<b>Cancelled after you set off?</b> You keep your call-out.']},
- {view:'v-instr',role:'instructor',hash:'instructors',form:'in-form',ok:'in-ok',mail:'in-mail',pass:'in-pass',calc:/^Where the money goes/,
+ {view:'v-instr',role:'instructor',hash:'instructors',form:'in-form',ok:'in-ok',mail:'in-mail',pass:'in-pass',calc:/^Where the money goes/,video:'in-vid',vmins:'2½',
   h1:'Driving instructors: a full diary, paid up front.',sub:'Learners near you choose you, pick a free time from your live diary, and pay online.',
   pts:['<b>You set your hourly rate,</b> and any discount you give for block bookings and intensive courses.','<b>Every lesson is paid up front.</b> No chasing learners for money, no cash in the car.',FEE,WK,'<b>A free live diary.</b> Set your hours once. Lessons drop straight in, and learners can only book when you are free.','<b>The learner pays no booking fee,</b> so your price is the price they see.']},
  {view:'v-dealers',role:'dealer',hash:'dealers',form:'dl-form',ok:'dl-ok',mail:'dl-mail',pass:'dl-pass',calc:/^Work out your cost/,video:'dl-vid',vmins:'2',cta:'Join: 30 days free',free:'Nothing is charged during your free trial.',apply:'Join the dealer network',

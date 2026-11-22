@@ -145,10 +145,27 @@ DRIVING INSTRUCTORS AND DRIVING LESSONS (built 22 Nov 2026, evening; tested end 
   instructor card #mc-inst). Settings are in partners.details.inst and partners.rates {manual, auto}.
 - Tested: sign-up, approval, all set-up pages, search (gender filter), single 57.00 (we keep 6.84), block of 10 hours
   361.00, intensive course listed, next lesson from the block, block-out, cancels from both sides, emails queued.
-- NOT done yet: an intensive course was listed but not bought in the test; moving a lesson (cancel and rebook for now);
-  refunding unused block hours (staff, by hand); the instructor adding a lesson for a learner themselves; reviews of
-  instructors; a "how it works" video; lessons in the site search box. Test accounts: vimen+twoinst@ (TEST Drive School
-  Dartford, approved) with three cancelled test lessons and one block for the test customer. Delete before launch.
+- SECOND PART (22 Nov 2026, late evening; owner's rules; database 20261122r and 20261122s; all tested on preview):
+  * Moving: the instructor moves a lesson from the diary (day + time); the learner is emailed and can cancel free for
+    48 hours after the change (single lesson refunded, block hours back to the block). The learner moves a lesson
+    themselves from My account if it is more than 48 hours away; inside 48 hours it is a request and the instructor
+    taps Accept or Decline in the diary.
+  * Block and intensive hours are NEVER refunded as money (owner's decision): cancelled lessons go back to the hours.
+    The terms keep the customer's legal rights and say we move the hours or refund if the instructor can no longer
+    teach. WORTH A SOLICITOR'S LOOK before launch (14-day cooling-off for things bought online).
+  * The instructor adds a lesson for one of their own learners: from paid hours (nothing to pay), or "learner pays":
+    the learner is emailed, pays in My account within 24 hours (or 2 hours before the lesson), otherwise the time is
+    released automatically (job "lesson-unpaid", every 20 minutes).
+  * Reviews: after a lesson is marked done the learner rates the instructor in My account (one review per
+    instructor). Stars, count and the latest comments show in the learner's search; the instructor sees them under
+    the diary. Staff can hide a review with the existing reviews tool. "Lesson done" only shows from the lesson day.
+  * "Driving lessons" in the home search box (and a quick button), plus "Teach driving? Join as an instructor".
+  * Instructor video: video/instructors.mp4 (2 min 18), shown in step 2 of the instructor join page (tap to play).
+    Sources in tools/video/instructors/.
+  * Bug fixed: the dashboard's general settings sync could overwrite an instructor's prices/profile with an old copy.
+- NOT done yet: buying an intensive course was not run in a test; a school still has one diary for all its
+  instructors. Test accounts: vimen+twoinst@ (TEST Drive School Dartford) with test lessons, one block and one 5-star
+  test review from the test customer. Delete before launch.
 
 PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch rate are GONE.
 - Every partner job: flat 10% + VAT (we keep 12% of the partner's price). No monthly fee, no plans.
