@@ -36,17 +36,23 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
-PARTNER DASHBOARD TABS (22 Nov 2026, recovery and EV charging only so far; tested on preview with both test accounts)
-- Tabs: Jobs (go available, jobs to do, booked jobs) / Money (monthly statement, results, weekly payouts) / Set-up /
-  Tools (inspection, help, trade stock, job adverts).
-- Set-up is a menu of tiles; each opens its own page with "Back to set-up": Fleet and prices, Opening hours, Area,
-  Logo and website, Self-billing agreement, Documents, Your details. Tiles show Done / To do for fleet, hours and
-  self-billing, and the Set-up tab shows how many are still to do.
-- How it works: module "partner dashboard tabs" (window.MCpt). Each card is given a tab by its id or heading (tagOf);
-  the big cards (#mc-rsp, #mc-pay) are split inside with data-pcs. Nothing is re-drawn on a tab press.
-- Recovery: the old "Your rates" card (one call-out and one price per mile) is hidden; fleet and prices replace it.
-- STILL TO DO: the Jobs tab shows the same jobs twice ("Jobs to do" and "Your booked jobs"): merge into one list.
-  Other partner types (body, valet, tyres, mobile mechanic) still have the long one-page dashboard: give them tabs too.
+PARTNER DASHBOARD TABS (22 Nov 2026, ALL partner types; tested on preview)
+- Every dashboard: header card, then tabs. Set-up is a menu of tiles; each opens its own page with "Back to set-up".
+  Nothing but the header sits above the tabs. "Quick actions" is now "Tools and extras" on the Tools tab.
+- Recovery / EV: Jobs, Money, Set-up (fleet or prices, opening hours, area, logo, self-billing, documents, details), Tools.
+  ONE job list now (call-outs card, with Vehicle inspection and Message customer buttons); "Your booked jobs" is off
+  for real recovery and EV accounts.
+- Body, valet, tyres: Jobs (quote requests + booked jobs), Money, Set-up (prices, logo, self-billing, documents, details), Tools.
+- Mechanics: Jobs, Diary, Money, Set-up (rates, services, logo, self-billing, documents, details), Tools.
+  MOT test stations open on Diary first.
+- Dealers: Stock, Adverts (stats, results, adverts), Messages, Sales (invoices), Set-up (plan and billing, logo,
+  documents, details), Tools (showroom, spreadsheet upload, website embed, stock feed, PDI, trade, job adverts).
+- Done / To do badges on fleet, hours and self-billing; the Set-up tab shows how many are still to do.
+- How it works: module "partner dashboard tabs" (window.MCpt: cfg per role, tagOf gives each card a tab, big cards are
+  split inside with data-pcs). Mechanics and dealers still draw from u.dtab; each tab asks for the dtab it needs.
+  The old .dtabs bar and the tab / section quick tiles are gone.
+- Tested with: recovery, EV, body, valet, auto electrician, MOT station, dealer. NOT tested (no test account): tyres,
+  mobile mechanic, full garage, and the demo log-ins.
 
 PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch rate are GONE.
 - Every partner job: flat 10% + VAT (we keep 12% of the partner's price). No monthly fee, no plans.
