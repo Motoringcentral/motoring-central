@@ -28,24 +28,24 @@ const p2=`<section class="page t2">${K.head(tag)}
  ${K.foot(F,2,T)}</section>`;
 const p3=`<section class="page">${K.head(tag)}
  <p class="kick">Plans and prices</p><h2>One monthly fee, by the size of your stock</h2>
- <p>Choose the plan that fits the number of cars and vans you advertise. Every plan includes the full set of dealer tools, your showroom page, photos on every advert and enquiries sent straight to you. All prices are plus VAT.</p>
- <table><tr><th>Plan</th><th>Cars and vans advertised</th><th class="n">History checks included a month</th><th class="n">Premium ads included a month</th><th class="n">Price a month</th></tr>
+ <p>Choose a plan by how many cars and vans you advertise. Every plan includes all the dealer tools and your showroom page. Prices are plus VAT.</p>
+ <table><tr><th>Plan</th><th>Vehicles</th><th class="n">History checks a month</th><th class="n">Premium ads a month</th><th class="n">Price a month</th></tr>
  <tr><td><b>Starter</b></td><td>Up to 10</td><td class="n">5</td><td class="n">0</td><td class="n"><b>£169</b> + VAT</td></tr>
  <tr><td><b>Standard</b></td><td>Up to 20</td><td class="n">10</td><td class="n">1</td><td class="n"><b>£229</b> + VAT</td></tr>
  <tr class="hl"><td><b>Plus</b></td><td>Up to 30</td><td class="n">15</td><td class="n">3</td><td class="n"><b>£299</b> + VAT</td></tr>
  <tr><td><b>Pro</b></td><td>Up to 50</td><td class="n">25</td><td class="n">4</td><td class="n"><b>£379</b> + VAT</td></tr>
  <tr><td><b>Premier</b></td><td>No limit</td><td class="n">25</td><td class="n">5</td><td class="n"><b>£449</b> + VAT</td></tr></table>
- <p class="note" style="margin-bottom:5mm">Plans are billed monthly. There is no long contract: you can cancel at the end of any month. Plus is our most popular plan.</p>
+ <div class="card yel" style="margin-bottom:3mm"><h3>Launch offer: try it free for 30 days</h3><p>Every plan starts with 30 days free, with 3 history checks. Cancel any time in the trial and pay nothing. Then monthly with one month&rsquo;s notice, or pay yearly: 9 months for 12. <b>Founding dealers (the first 30) pay 8 months for 12.</b></p></div>
  <div class="two" style="margin-bottom:5mm"><div><h3>Extras, only if you use them</h3>
  <table><tr><th>Extra</th><th class="n">Price</th></tr>
  <tr><td>Extra premium ad on the front-page banner, for 2 weeks or until the car sells</td><td class="n">£9.99 + VAT</td></tr>
  <tr><td>Extra vehicle history check, beyond those in your plan</td><td class="n">£3.50 + VAT</td></tr>
- <tr><td>Registration look-up to fill in an advert (or type the details in for free)</td><td class="n">10p + VAT</td></tr>
+ <tr><td>Registration look-up to fill in an advert (or type it in free)</td><td class="n">10p + VAT</td></tr>
  <tr><td>Trade to trade listing</td><td class="n">£9.99 + VAT</td></tr>
  <tr><td>Commission on a sale</td><td class="n">£0</td></tr></table></div>
  <div><h3>What is a premium ad?</h3><p>Your car or van appears in the revolving banner on the front page of the site, the first thing every visitor sees. Each premium ad runs for 2 weeks or until the vehicle sells, whichever comes first. The premium ads included in your plan are renewed every month.</p>
  <h3 style="margin-top:3mm">What is the history check?</h3><p>When you publish a vehicle we check it for outstanding finance, insurance write-off and stolen records. A clean result is a selling point on your advert. Stolen, scrapped and Category A or B vehicles cannot be listed.</p></div></div>
- <div class="card yel"><h3>What it means per car</h3><p>On the Plus plan, 30 vehicles advertised for £299 + VAT works out at under £10 + VAT a vehicle a month, with 15 history checks and three front-page premium ads included each month, and nothing more to pay when a car sells.</p></div>
+ <div class="card yel"><h3>What it means per car</h3><p>Plus: 30 vehicles for £299 + VAT is under £10 + VAT a vehicle a month, with 15 history checks and 3 premium ads, and nothing to pay when a car sells.</p></div>
  ${K.foot(F,3,T)}</section>`;
 const pS=`<section class="page see">${K.head(tag)}
  <p class="kick">See it</p><h2>Your stock book: every vehicle, its cost and its profit</h2>
@@ -71,10 +71,10 @@ const p4=`<section class="page t3">${K.head(tag)}
  <div class="qa"><p class="kick">Common questions</p>
  <b>Do you take a cut when I sell?</b><p>No. Never. You pay your monthly plan and nothing on the sale.</p>
  <b>Can I advertise vans as well as cars?</b><p>Yes. Cars and vans both count towards the same plan.</p>
- <b>Am I tied in?</b><p>No. Plans run month to month and you can cancel at the end of any month.</p>
+ <b>Am I tied in?</b><p>No long contract. Cancel any time in your free trial; after that, plans run month to month with one month&rsquo;s notice.</p>
  <b>Can I move plan as my stock changes?</b><p>Yes. Move up or down to match the stock you hold.</p></div></div>
  <div class="contact"><div><h2>Join the dealer network</h2><p>Scan the code or go to <b>preview.motoringcentral.co.uk</b> and choose For partners, then Car or van dealer.</p>
  <p>Call <b>020 8191 4290</b> &nbsp;·&nbsp; Monday to Friday 8am to 6pm, Saturday 9am to 1pm</p><p>Email <b>partners@motoringcentral.co.uk</b></p></div><div class="qr">${K.qr(URL)}</div></div>
  <div class="sign"><div>Your contact at The Motoring Central</div><div>Date</div></div>
- ${K.foot('Prices and terms are correct at 21 November 2026 and may change. All dealer prices are plus VAT.',7,T)}</section>`;
+ ${K.foot('Prices and terms are correct at 22 November 2026 and may change. All dealer prices are plus VAT.',7,T)}</section>`;
 return K.doc('The Motoring Central: for car and van dealers',[p1,p2,p3,pS,pG,pP,p4])};
