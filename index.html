@@ -6616,13 +6616,13 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
    and take people straight to the box that needs fixing */
 (function(){
 var FORMS={form:1,'t-form':1,'va-form':1,'r-form':1,'bs-form':1,'ev-form':1,'dl-form':1};
-var NAMES=['About you','Your work','Your documents','Your plan'];
+var NAMES=['About you','Your work','Your documents','Our fee'];
 function seen(e){return !!(e&&e.offsetParent!==null)}
 function build(f){if(f.querySelector('.pf-step'))return;var id=f.id,kids=[].slice.call(f.children),pw=-1,docs=-1,plan=-1;
  kids.forEach(function(c,i){var t=c.textContent.replace(/\s+/g,' ').trim();
-  if(pw<0&&c.tagName==='INPUT'&&c.type==='password')pw=i;
+  if(pw<0&&((c.tagName==='INPUT'&&c.type==='password')||(c.querySelector&&c.querySelector('input[type=password]'))))pw=i;
   if(docs<0&&c.tagName==='FIELDSET'&&/^Required: proof of trading/.test(t))docs=i;
-  if(c.tagName==='FIELDSET'&&/^Your plan/.test(t))plan=i});
+  if(c.tagName==='FIELDSET'&&/^(Your plan|Our fee)/.test(t))plan=i});
  if(pw<0||docs<0||plan<0||!(pw<docs&&docs<plan))return;
  var ready=document.createElement('div');ready.className='pf-ready';
  ready.innerHTML='<b>Before you start: this takes about 5 minutes</b>Have these ready. You can take the photos with your phone as you go.<ul><li>Your trade insurance certificate</li><li>Your public liability insurance certificate</li><li>Photo ID: a passport, driving licence or national ID card</li></ul>'+(id==='dl-form'?'Nothing is charged during your 30-day free trial.':'Nothing is charged until we have checked your documents.');
