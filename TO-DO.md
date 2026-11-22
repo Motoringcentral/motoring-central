@@ -36,6 +36,27 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
+- Stock vehicle > "Take a deposit or sell (invoice)". One record per sale: deposit receipt while money is owed, final
+  sales invoice once paid in full (then locked; can only be cancelled with a reason). Numbers INV-0001... per dealer,
+  never reused. Payments: cash, card, BACS, part exchange (allowance less finance settled), finance (lender,
+  agreement). Extra lines (warranty, road tax, delivery, admin fee...). VAT per line: margin scheme / 20% included /
+  none; not-VAT-registered dealers show no VAT. Dealer details (address, VAT no, company no, bank, FCA no, terms),
+  logo and two colours (pick, or "match my logo") print on it. Tables: dealer_invoices, dealer_books.
+- Deposit saved -> stock "Under deposit" + advert badge. Final -> stock Sold, advert shows SOLD, goes to the end of
+  the list, off the banner, stays 30 days or until the dealer takes it down. Part exchange is added to stock as
+  "In preparation" at its allowance. Cancel -> vehicle back For sale.
+- Fixed on the way (all affected real dealers): stock book stopped saving above ~30 KB (now its own table, photos go
+  to storage); vehicle numbers repeated after a reload; stock lost its link to its advert after a reload; logo was
+  never saved; dealers saw OTHER dealers' adverts as their own in "Your adverts"; sample results/enquiries/Facebook
+  boost cards and made-up view counts shown to real dealers; compare cars broken by the complaints tab (name clash);
+  log-in error messages (e.g. "tap the link in the email") never shown.
+- Tested: premium ads counter for a founding dealer (5 of 5 -> 4 of 5).
+- STILL TO TEST with a real dealer: spreadsheet upload, stock feed, showroom page and website embed, trade listings,
+  PDI, changing plan; the logo on a printed invoice by eye (the file loads; the print window now waits for it).
+- To decide / later: a separate "Recently sold" page; the server does not limit premium ads to the allowance (the
+  dashboard counts them; charging extras comes with Stripe); ask the accountant to check the invoice VAT wording.
+
 COMPLAINTS PROCEDURE AND CONTACT FORM (22 Nov 2026), BUILT AND TESTED:
 - The Contact page form never sent anything (old preview code). Fixed: every message is stored, you are emailed, and the
   sender gets an acknowledgement with a reference (MSG-00001). Topic "A problem or complaint" counts as a complaint.
