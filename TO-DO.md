@@ -48,6 +48,9 @@ PARTNER DASHBOARD TABS (22 Nov 2026, ALL partner types; tested on preview)
 - Dealers: Stock, Adverts (stats, results, adverts), Messages, Sales (invoices), Set-up (plan and billing, logo,
   documents, details), Tools (showroom, spreadsheet upload, website embed, stock feed, PDI, trade, job adverts).
 - Done / To do badges on fleet, hours and self-billing; the Set-up tab shows how many are still to do.
+- Dealers: the Messages tab turns RED with the number of conversations waiting (window.MCmsgNew). The leads card is on
+  the Messages tab too. A conversation only counts as read once it is open AND on screen (it used to be marked read as
+  soon as it was drawn, even when hidden).
 - How it works: module "partner dashboard tabs" (window.MCpt: cfg per role, tagOf gives each card a tab, big cards are
   split inside with data-pcs). Mechanics and dealers still draw from u.dtab; each tab asks for the dtab it needs.
   The old .dtabs bar and the tab / section quick tiles are gone.

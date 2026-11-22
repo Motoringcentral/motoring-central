@@ -5084,7 +5084,7 @@ function barHtml(u,C){var S=C.secs,todo=S.filter(function(x){return done(u,x[0])
  return h+'<div class="psubh"><button type="button" class="btn sm ghost" data-psub="">&lsaquo; Back to set-up</button><b>'+E(c[1])+'</b></div>'}
 function tagOf(el,u){if(el.id==='mc-ptabs'||el.getAttribute('data-pc')==='keep')return 'keep';var id=el.id,dl=u.role==='dealer';
  if(id==='mc-rsp'||id==='mc-pay')return 'inner';if(id==='mc-jobs'||id==='mc-pq')return 'jobs';if(id==='mc-mine')return dl?'adverts':'money';if(id==='brand-card')return 'setup-brand';if(id==='mc-mydet')return 'setup-details';
- if(id==='mc-svc-card')return 'setup-services';if(id==='mc-mott')return 'diary';if(id==='mc-dtools')return 'tools';if(id==='mc-stats')return 'adverts';if(id==='mc-inbox')return 'messages';if(id==='mc-invl')return 'sales';if(id==='mc-inv')return 'stock|sales';
+ if(id==='mc-svc-card')return 'setup-services';if(id==='mc-mott')return 'diary';if(id==='mc-dtools')return 'tools';if(id==='mc-stats')return 'adverts';if(id==='mc-inbox'||id==='mc-leads')return 'messages';if(id==='mc-invl')return 'sales';if(id==='mc-inv')return 'stock|sales';
  if(el.classList.contains('qa'))return 'tools';if(el.classList.contains('dtabs'))return 'none';var h=el.querySelector('h2'),t=h?h.textContent:'';
  if(/^Your rates/.test(t))return u.role==='recovery'&&u.sbid?'none':'setup-prices';if(/^Your documents/.test(t))return 'setup-docs';
  if(dl){if(/^Monthly plan|^Your plan/.test(t)||el.classList.contains('dtrial'))return 'setup-plan';return u.dtab==='ads'?'adverts':u.dtab==='docs'?'setup-docs':'stock'}
