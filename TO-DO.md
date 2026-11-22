@@ -36,6 +36,18 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+RECOVERY FLEET AND EXTRAS (built 22 Nov 2026, tested end to end on preview)
+- Partners pick their trucks from 7 pictures (spectacle lift, 3.5t beavertail, slide bed, 7.5t, heavy, 4x4 and trailer,
+  bike trailer) with call-out, price per mile and free miles for each, plus an extras price list (dollies, skates, winch,
+  accident, fluid spill, no keys, low car, waiting per 15 min, storage per day, out of hours 8pm to 7am).
+- The customer form now asks the vehicle type, whether it rolls, where it is, whether anything is leaking, whether the car is low.
+  The quote uses the cheapest suitable truck and includes the extras that are certain from the answers.
+- Other extras are listed as "only if needed on the day, and only with your approval". On the day the partner adds the
+  extra on the job card; the customer either signs on the partner's screen or approves online, then pays. One pending
+  extra at a time. Test: booking 0CDFBCB9 went from 94 to 169 pounds with two extras; the payout went up to match.
+- Terms updated (customer "Extras on the day", partner "Recovery prices and extras").
+- Test partner TEST Recovery Dartford (vimen+recovery@). Delete before launch.
+
 WHERE WE STOPPED (22 Nov 2026, about 3am). Owner went to bed; pick up in the morning.
 NEXT: test the untested dealer features with a real dealer account (list under DEALER SALES INVOICING below:
 spreadsheet upload, stock feed, showroom page and website embed, trade listings, PDI, changing plan), and ask the
