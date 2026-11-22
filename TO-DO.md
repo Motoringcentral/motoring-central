@@ -36,6 +36,13 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+RECOVERY VIDEO (22 Nov 2026): video/recovery.mp4 (2 min 37, captions recovery.vtt) replaces the banner on the recovery
+sign-up page; it opens on the banner. Same voice (Kokoro bf_emma). Plays when the page opens (muted with a "Tap for
+sound" button if the browser blocks sound, like the dealer video). Sources in tools/video/recovery (README there).
+- The owner has NOT yet listened to it: ask if the voice sounds natural enough.
+- OUT OF DATE: the EV charging video still says "less 5% plus VAT during our launch. Or go Pro" (now flat 10% + VAT,
+  no Pro). That line needs re-voicing. The intro, dealer and MOT videos do not mention the old fees.
+
 MAPS (22 Nov 2026, tested on preview)
 - Recovery and EV forms: a map appears under "Where is the vehicle?" after a postcode is typed, after Use my location,
   and after prices are shown (A = vehicle, B = drop-off). The customer can DRAG pin A to the exact spot; that pin then
