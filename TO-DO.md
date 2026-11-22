@@ -36,6 +36,24 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+DEALER LAUNCH OFFER (owner's decision, 22 Nov 2026), BUILT AND TESTED:
+- 30-day free trial from the day a dealer is approved, 3 vehicle history checks included; more checks £3.50 + VAT, or
+  list without one during the trial ("Not history checked").
+- One free trial per dealership: same email, phone number, or business name + town = no trial (pays from approval);
+  staff see "noTrial" on the application. The details are kept even if the account is deleted.
+- Cancel any time in the trial (nothing to pay). After the trial: monthly, ONE MONTH'S NOTICE. Yearly: no refund on a
+  change of mind, refund of unused months if we stop the service.
+- Yearly any time: pay for 9 months, get 12. Founding dealers = first 30 approved: pay for 8, get 12. The dealer page
+  shows how many founding places are left. Test dealers' founding places were cleared (30 of 30 left).
+- Emails: welcome with the trial end date and founding number; reminder 7 days before the trial ends (daily 9:20am);
+  cancellation confirmation. Dashboard shows the countdown, founding number, Pay yearly, Cancel and Keep my membership.
+- Site, terms (Fees, Yearly plans and founding dealers, Cancelling), FAQ, dealer video (slides, voice and captions)
+  and dealer pitch PDF all updated.
+- VIMS CARS and TEST Dealer Dartford were given a fresh 30-day trial and no founding number. Ask the owner whether
+  VIMS CARS should be founding dealer no. 1.
+- Not yet: nothing ends a membership automatically when ends_at passes, and nothing is charged; both come with Stripe.
+  Delete the TEST dealer accounts before launch so their trial records cannot block real dealers.
+
 END-TO-END TESTS OF THE PHONE-SESSION FEATURES (22 Nov, just after midnight): ALL PASS, after fixes.
 Test accounts added (password as for the other test accounts, not stored here): vimen+body@ (TEST Body and Alloys
 Dartford), vimen+valet@ (TEST Valeting Dartford), vimen+autoelec@ (TEST Auto Electrics and Keys Dartford), vimen+staff@
@@ -59,9 +77,8 @@ Before Stripe goes live: "paid" is set by the booking functions after the on-scr
 be set by Stripe's confirmation instead (MOT, EV, recovery, quotes, valet, alloys).
 
 WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
-- Launch offer: the site says dealers get their first 3 months free (then full price), and partners pay 5% (not 10%)
-  and Pro £74.50 (not £149). The owner described the offer as "sign up in the first 3 months: months 0-3 free,
-  months 3-6 half price". These are different: decide which is right, then the site, terms and FAQ follow.
+- Launch offer for dealers: DECIDED 22 Nov (see DEALER LAUNCH OFFER above). Partners: 5% (not 10%) and Pro £74.50
+  (not £149) unchanged.
 - Phone (Voipfone, 020 8191 4290): line works and diverts to the owner's mobile. Left for later: how business calls
   show on the mobile (Line Presentation in Services > My Numbers > Phone, or the Voipfone Mobile app), calling credit
   for the divert, and out-of-hours voicemail. WhatsApp Business on the number not set up yet.
