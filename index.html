@@ -3166,7 +3166,7 @@ function money(n){return '£'+n.toFixed(2)}
    Real garages: Supabase (garage_busy, book_mot). Sample garages: kept in this browser (mc-motdiary), so the
    demo garage (garage@demo.com) shows customers' MOT bookings in its diary. */
 var G=[{id:'s0',n:'Northside MOT Centre',a:'Unit 4, Mill Lane',k:0.8,fee:54.85,r:52,mb:2},{id:'s1',n:'Park Road Garage',a:'12 Park Road',k:1.6,fee:49.99,r:60,mb:1},{id:'s2',n:'Albion Motors',a:'Albion Industrial Estate',k:2.9,fee:54.85,r:68,mb:1},{id:'s3',n:'Greenway Auto Centre',a:'88 Greenway',k:4.2,fee:44.99,r:48,mb:1},{id:'s4',n:'Hilltop Tyres and MOT',a:'Hilltop Business Park',k:6.5,fee:54.85,r:58,mb:1},{id:'demo-kr',n:'Kirkstall Road Garage',a:'Kirkstall Road',k:3.4,fee:45,r:58,mb:1,demo:1}];
-var BOOKING=3,pick=null,info=null,BUSY={},LS='mc-motdiary',DOPEN=480,DLAST=1020,STEP=30,DUR=60;
+var BOOKING=9.99,pick=null,info=null,BUSY={},LS='mc-motdiary',DOPEN=480,DLAST=1020,STEP=30,DUR=60;
 var OLDT=['8:30am','10:00am','11:30am','1:00pm','2:30pm','4:00pm'];
 function P(g){return info?info.price(g):g.fee}
 function motMode(){return !!(info&&info.mot)}
@@ -3226,14 +3226,17 @@ if(p.length<5){$('mot-err').textContent='Enter your postcode to see garages near
 $('mot-err').textContent='';pick=null;$('mbook').hidden=true;$('mdone').hidden=true;
 var off=(hash(p)%7)/10,box=$('garages');box.innerHTML='';
 var GL=G.filter(function(g,i){if(!window.MCMOT)return !g.demo;if(g.demo)return !!(info&&info.mot)&&/^4/.test(cls().c);return info&&info.mot?window.MCMOT.tests(i):!window.MCMOT.motOnly(i)});
-if(info&&info.mot)GL=realList().concat(GL);else if(info&&window.MCrepairGarages)GL=window.MCrepairGarages().concat(GL);
+var RL=info&&info.mot?realList():info&&window.MCrepairGarages?window.MCrepairGarages():[];
+if(window.MCnear)RL=RL.filter(function(g){var q=window.MCnear.get(g.n,p,'site');g.mi=q.miles;return q.ok}).sort(function(a,b){return (a.mi||0)-(b.mi||0)});
+GL=RL.concat(GL);
 if(!GL.length){box.innerHTML='<p class="note">No partner garage near you tests this class yet. Try another postcode, or <a href="#contact">tell us</a> and we will find one.</p>'}
 GL.forEach(function(g){var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed','false');
 var mo=info&&info.mot,nx='';if(mo&&!g.real){var D=workDays();for(var i=0;i<D.length&&!nx;i++){var f=freeTimes(g,D[i]);if(f.length)nx=(i===0&&D[i]===dk(new Date())?'Today':dayLab(D[i]).split(' ')[0])+' '+tm(f[0])}}
-b.innerHTML='<b>'+esc(g.n)+'</b><span class="d">'+(g.real?'Approved partner':(g.k+off).toFixed(1)+' miles')+'</span><small>'+esc(g.a)+(g.a?'. ':'')+(mo&&window.MCMOT&&!g.real&&window.MCMOT.motOnly(G.indexOf(g))?'MOT test station. ':'')+(info&&!info.mot?money(g.r)+' per hour labour. ':'')+'Price '+money(P(g))+(mo?', no booking fee':'')+'</small>'+(mo?'<small class="mnext">'+(g.real?'Live diary: tap to see free times':nx?'Next free: '+nx:'No free times in the next 2 weeks')+'</small>':'');
+b.innerHTML='<b>'+esc(g.n)+'</b><span class="d">'+(g.real?'Approved partner'+(g.mi!=null?' · '+g.mi.toFixed(1)+' miles':''):(g.k+off).toFixed(1)+' miles')+'</span><small>'+esc(g.a)+(g.a?'. ':'')+(mo&&window.MCMOT&&!g.real&&window.MCMOT.motOnly(G.indexOf(g))?'MOT test station. ':'')+(info&&!info.mot?money(g.r)+' per hour labour. ':'')+'Price '+money(P(g))+(mo?', no booking fee':'')+'</small>'+(mo?'<small class="mnext">'+(g.real?'Live diary: tap to see free times':nx?'Next free: '+nx:'No free times in the next 2 weeks')+'</small>':'');
 b.addEventListener('click',function(){choose(g,b,box)});
 box.appendChild(b)})}
 $('mfind').addEventListener('click',find);
+document.addEventListener('mc-near',function(){try{if($('garages').children.length&&$('mbook').hidden&&$('garages').offsetParent)find()}catch(e){}});
 $('mpost').addEventListener('keydown',function(e){if(e.key==='Enter')find()});
 $('mday').addEventListener('change',fillTimes);
 function finish(text,t,viaDb){$('mdone').textContent=text;$('mdone').hidden=false;$('mbook').hidden=true;msgLive('');
@@ -3597,20 +3600,30 @@ var MOB=[{n:'Shine On Mobile',p:[79,99,129,149]},{n:'Gleam Team',p:[69,89,115,13
 var SITES=[{n:'Sparkle Valet Centre',k:0.9,p:[75,95,125,145]},{n:'Northside Car Care',k:2.3,p:[65,85,110,130]},{n:'Park Road Detailing',k:4.1,p:[85,105,135,160]}];window.MCdir.reg('vsite',SITES);
 var days=$('vday');for(var n=1;n<=7;n++){var x=new Date();x.setDate(x.getDate()+n);if(x.getDay()===0)continue;var o=document.createElement('option');o.textContent=x.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});o.value=x.getFullYear()+'-'+('0'+(x.getMonth()+1)).slice(-2)+'-'+('0'+x.getDate()).slice(-2);days.appendChild(o)}
 function realFirst(a){a.sort(function(x,y){return (y.real||0)-(x.real||0)})}
-function cur(){var g=$('vwhere').value==='garage',l=g?SITES:MOB,k=$('vsite').selectedIndex;return l[k<0?0:k]}
+/* approved valeters are only offered inside their area (window.MCnear); the days and times follow the days they work */
+function lst(){var g=$('vwhere').value==='garage',pc=$('vpost').value;return (g?SITES:MOB).filter(function(x){if(!x.real||!window.MCnear)return true;var q=window.MCnear.get(x.n,pc,g?'site':'mobile');x.mi=q.miles;x.wk=q.week;return q.ok})}
+function cur(){var l=lst(),k=$('vsite').selectedIndex;return l[k<0?0:Math.min(k,l.length-1)]}
+function hm(t){var m=/^(\d+):(\d\d)(am|pm)$/.exec(String(t).trim());if(!m)return 0;var h=+m[1]%12+(m[3]==='pm'?12:0);return h*60+ +m[2]}
+function hm2(t){var a=String(t||'').split(':');return +a[0]*60+ +a[1]}
+function vslots(x){var wk=x&&x.real&&x.wk&&x.wk.length===7?x.wk:null,sl=$('vslot'),dv=$('vday').value,w=wk&&dv?wk[new Date(dv+'T12:00:00').getDay()]:null,first=null;
+ [].forEach.call(sl.options,function(o){var t=hm(o.textContent),ok=!w||(t>=hm2(w[0])&&t+120<=hm2(w[1]));o.disabled=!ok;o.hidden=!ok;if(ok&&first==null)first=o.index});if(sl.selectedIndex<0||sl.options[sl.selectedIndex].disabled)sl.selectedIndex=first==null?0:first}
+function vdays(x){var wk=x&&x.real&&x.wk&&x.wk.length===7?x.wk:null,key=wk?JSON.stringify(wk):'std';if(vdays.k!==key){vdays.k=key;var sel=$('vday'),keep=sel.value;sel.innerHTML='';
+  for(var n=1;n<=(wk?14:7);n++){var d=new Date();d.setDate(d.getDate()+n);if(wk?!wk[d.getDay()]:d.getDay()===0)continue;var o=document.createElement('option');o.textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});o.value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);sel.appendChild(o)}
+  if(keep)sel.value=keep;if(sel.selectedIndex<0)sel.selectedIndex=0}vslots(x)}
 function opts(){
-var g=$('vwhere').value==='garage',s=$('vsite'),pc=$('vpost').value.replace(/\s/g,''),i=+$('vsz').value,prev=s.selectedIndex,l=g?SITES:MOB,off=(hash(pc)%7)/10;realFirst(SITES);realFirst(MOB);
+var g=$('vwhere').value==='garage',s=$('vsite'),pc=$('vpost').value.replace(/\s/g,''),i=+$('vsz').value,prev=s.selectedIndex,l,off=(hash(pc)%7)/10;realFirst(SITES);realFirst(MOB);l=lst();
 s.innerHTML='';
-l.forEach(function(x){var o=document.createElement('option');o.textContent=x.n+(x.real?', approved partner':g&&pc.length>=5?', '+(x.k+off).toFixed(1)+' miles':'')+': '+money(x.p[i]);s.appendChild(o)});
+l.forEach(function(x){var o=document.createElement('option');o.textContent=x.n+(x.real?', approved partner'+(x.mi!=null?', '+x.mi.toFixed(1)+' miles':''):g&&pc.length>=5?', '+(x.k+off).toFixed(1)+' miles':'')+': '+money(x.p[i]);s.appendChild(o)});
 if(prev>-1&&prev<l.length)s.selectedIndex=prev}
 function draw(){
 var i=+$('vsz').value,g=$('vwhere').value==='garage';
 opts();
-var x=cur(),price=x.p[i];total=price+BOOKING;
+var x=cur();if(!x){$('vtbl').innerHTML='<tr><td>No valeter covers this postcode yet'+(g?' at their own premises':'')+'.<small>Check the postcode, or try the other choice under &ldquo;Where should it be done?&rdquo;.</small></td><td></td></tr>';$('vgo').disabled=true;return}$('vgo').disabled=false;vdays(x);var price=x.p[i];total=price+BOOKING;
 $('vtbl').innerHTML=row('Full valet',x.n+', '+NAMES[i]+' vehicle, '+(g?'at their premises':'at your door'),price)+row('Booking fee','Includes £1.66 VAT',BOOKING)+'<tr class="t"><td>Total</td><td>'+money(total)+'</td></tr>'}
 window.GGval=function(on,c){$('val').hidden=!on;if(on){if(c&&c.vsize!==undefined)$('vsz').value=String(c.vsize);$('vdone').hidden=true;draw();$('val').scrollIntoView({behavior:'smooth',block:'nearest'})}};
 ['vsz','vwhere','vsite'].forEach(function(id){$(id).addEventListener('change',draw)});
-$('vpost').addEventListener('input',function(){draw()});
+$('vpost').addEventListener('input',function(){draw()});$('vday').addEventListener('change',function(){vslots(cur())});
+document.addEventListener('mc-near',function(){try{if(!$('val').hidden)draw()}catch(e){}});
 $('vgo').addEventListener('click',function(){
 var p=$('vpost').value.replace(/\s/g,''),g=$('vwhere').value==='garage';
 if(p.length<5){$('val-err').textContent=g?'Enter your postcode to see garages near you.':'Enter the postcode where the car is.';return}
@@ -3623,7 +3636,7 @@ var cx=cur();if(cx&&cx.real&&window.MCbookPriced){var tx=$('vdone').textContent;
 function money(n){return '£'+n.toFixed(2)}
 function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
 function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%97;return h}
-var BOOKING=3,total=0,car=null,pay='self',picked=[];
+var BOOKING=9.99,total=0,car=null,pay='self',picked=[];
 var REP=[{n:'Smart Fix Mobile',mob:1,ins:0,rt:'4.9',from:95,acc:'Mobile scratch and scuff repair'},{n:'Dent Doctor PDR',mob:1,ins:0,rt:'4.8',from:70,acc:'Dents removed without repainting'},{n:'Kirkstall Body Centre',mob:0,ins:1,rt:'4.8',from:180,acc:'BS 10125 Kitemark (the UK body repair standard)'},{n:'Northside Accident Repair',mob:0,ins:1,rt:'4.7',from:220,acc:'Manufacturer approved'},{n:'Park Lane Paint and Panel',mob:0,ins:0,rt:'4.9',from:150,acc:'Independent body shop'}];window.MCdir.reg('rep',REP);
 var WHL=[{n:'Alloy Angels Mobile',mob:1,p:[65,null,85,45],rt:'4.9'},{n:'Rim Rescue Mobile',mob:1,p:[59,null,79,39],rt:'4.7'},{n:'Leeds Wheel Centre',mob:0,k:1.4,p:[75,110,95,50],rt:'4.8'},{n:'Diamond Cut Co.',mob:0,k:3.2,p:[80,99,100,55],rt:'4.9'}];window.MCdir.reg('whl',WHL);
 var FIN=['Standard refurb','Diamond cut refurb','Colour change','Kerb damage repair'];
@@ -3633,23 +3646,33 @@ function job(){return document.querySelector('#bjob [aria-pressed="true"]').getA
 [].forEach.call(document.querySelectorAll('#bpay .opt'),function(b){b.addEventListener('click',function(){pay=b.getAttribute('data-p');[].forEach.call(document.querySelectorAll('#bpay .opt'),function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});$('bins').hidden=pay!=='ins';picked=[];drawReps()})});
 function drawReps(){var w=$('bwhere').value,what=$('bwhat').selectedIndex,big=what>=5,box=$('breps'),pc=$('bpost').value.replace(/\s/g,''),off=(hash(pc)%7)/10;
 $('bwnote').textContent=big&&w!=='shop'?'Resprays, rust and accident repairs are done at a body shop, so only body shops are shown.':pay==='ins'?'Insurance claims are repaired by insurance-approved body shops.':'';
-REP.sort(function(x,y){return (y.real||0)-(x.real||0)});var L=REP.filter(function(r){if(pay==='ins'&&!r.ins)return false;if((big||pay==='ins')&&r.mob)return false;if(w==='mobile'&&!r.mob&&!r.both)return false;if(w==='shop'&&r.mob)return false;if(what===1&&r.n!=='Dent Doctor PDR'&&r.mob)return false;return true});
+REP.sort(function(x,y){return (y.real||0)-(x.real||0)});var L=REP.filter(function(r){if(pay==='ins'&&!r.ins)return false;if((big||pay==='ins')&&r.mob)return false;if(w==='mobile'&&!r.mob&&!r.both)return false;if(w==='shop'&&r.mob)return false;if(what===1&&r.n!=='Dent Doctor PDR'&&r.mob)return false;
+ if(r.real&&window.MCnear){var qm=window.MCnear.get(r.n,$('bpost').value,'mobile'),qs=window.MCnear.get(r.n,$('bpost').value,'site');r.mi=qm.miles;if(!((r.mob||r.both)&&w!=='shop'&&qm.ok)&&!(!r.mob&&w!=='mobile'&&qs.ok))return false}return true});
 picked=picked.filter(function(p){return L.indexOf(p)>-1});box.innerHTML='';
-if(!L.length){box.innerHTML='<p class="note" style="margin:0">No repairers match. Try &ldquo;Show me both&rdquo;.</p>';return}
+if(!L.length){box.innerHTML='<p class="note" style="margin:0">'+(pc.length<5?'Enter your postcode to see repairers near you.':'No repairers match here yet. Try &ldquo;Show me both&rdquo;, or check the postcode.')+'</p>';return}
 L.forEach(function(r,i){var b=document.createElement('button');b.type='button';b.className='gar';b.setAttribute('aria-pressed',picked.indexOf(r)>-1?'true':'false');
-b.innerHTML='<b>'+H(r.n)+(r.ins?' <span class="apbadge">Insurance approved</span>':'')+'</b><span class="d">'+(r.from==null?'Quote from your photos':'from '+money(r.from))+'</span><small>'+(r.real?'Approved partner':r.rt+' rating')+'. '+(r.both?'Comes to you or at their body shop':r.mob?'Comes to you':'Body shop'+(pc.length>=5&&!r.real?', '+(1+i*0.8+off).toFixed(1)+' miles':''))+'. '+H(r.acc)+'</small>';
+b.innerHTML='<b>'+H(r.n)+(r.ins?' <span class="apbadge">Insurance approved</span>':'')+'</b><span class="d">'+(r.from==null?'Quote from your photos':'from '+money(r.from))+'</span><small>'+(r.real?'Approved partner'+(r.mi!=null?', '+r.mi.toFixed(1)+' miles':''):r.rt+' rating')+'. '+(r.both?'Comes to you or at their body shop':r.mob?'Comes to you':'Body shop'+(pc.length>=5&&!r.real?', '+(1+i*0.8+off).toFixed(1)+' miles':''))+'. '+H(r.acc)+'</small>';
 b.addEventListener('click',function(){var k=picked.indexOf(r);if(k>-1)picked.splice(k,1);else{if(picked.length>=3){$('bq-err').textContent='You can send your request to up to 3 repairers.';return}picked.push(r)}$('bq-err').textContent='';drawReps()});box.appendChild(b)})}
 ['bwhere','bwhat'].forEach(function(id){$(id).addEventListener('change',drawReps)});$('bpost').addEventListener('input',drawReps);
 $('bph').addEventListener('change',function(){var p=$('bphp');p.innerHTML='';[].slice.call(this.files,0,6).forEach(function(f){var r=new FileReader();r.onload=function(){var im=document.createElement('img');im.src=r.result;im.alt='';p.appendChild(im)};r.readAsDataURL(f)})});
-function cur(){var g=$('bawhere').value==='shop',f=+$('bfin').value,L=WHL.filter(function(w){return (g?!w.mob:w.mob)&&w.p[f]!=null});var k=$('basite').selectedIndex;return{L:L,x:L[k<0?0:Math.min(k,L.length-1)]}}
+function wl(){var g=$('bawhere').value==='shop',f=+$('bfin').value,pc=$('bapost').value;return WHL.filter(function(w){if(!((g?!w.mob:w.mob)&&w.p[f]!=null))return false;if(!w.real||!window.MCnear)return true;var q=window.MCnear.get(w.n,pc,g?'site':'mobile');w.mi=q.miles;w.wk=q.week;return q.ok})}
+function hm(t){var m=/^(\d+):(\d\d)(am|pm)$/.exec(String(t).trim());if(!m)return 0;var h=+m[1]%12+(m[3]==='pm'?12:0);return h*60+ +m[2]}
+function hm2(t){var a=String(t||'').split(':');return +a[0]*60+ +a[1]}
+function bslots(x){var wk=x&&x.real&&x.wk&&x.wk.length===7?x.wk:null,sl=$('baslot'),dv=$('baday').value,w=wk&&dv?wk[new Date(dv+'T12:00:00').getDay()]:null,first=null;
+ [].forEach.call(sl.options,function(o){var t=hm(o.textContent),ok=!w||(t>=hm2(w[0])&&t+120<=hm2(w[1]));o.disabled=!ok;o.hidden=!ok;if(ok&&first==null)first=o.index});if(sl.selectedIndex<0||sl.options[sl.selectedIndex].disabled)sl.selectedIndex=first==null?0:first}
+function bdays(x){var wk=x&&x.real&&x.wk&&x.wk.length===7?x.wk:null,key=wk?JSON.stringify(wk):'std';if(bdays.k!==key){bdays.k=key;var sel=$('baday'),keep=sel.value;sel.innerHTML='';
+  for(var n=1;n<=(wk?16:10);n++){var d=new Date();d.setDate(d.getDate()+n);if(wk?!wk[d.getDay()]:d.getDay()===0)continue;var o=document.createElement('option');o.textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'});o.value=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2);sel.appendChild(o)}
+  if(keep)sel.value=keep;if(sel.selectedIndex<0)sel.selectedIndex=0}bslots(x)}
+function cur(){var g=$('bawhere').value==='shop',f=+$('bfin').value,L=wl();var k=$('basite').selectedIndex;return{L:L,x:L[k<0?0:Math.min(k,L.length-1)]}}
 function opts(){var g=$('bawhere').value==='shop',f=+$('bfin').value,s=$('basite'),prev=s.selectedIndex,pc=$('bapost').value.replace(/\s/g,''),off=(hash(pc)%7)/10;
 if(f===1&&!g){$('bawhere').value='shop';g=true;$('banote').textContent='Diamond cutting needs a lathe, so it is done at a wheel centre.'}else $('banote').textContent=g?'Centres remove the tyre, refurbish the wheel and refit and balance it. Usually same day.':'Done on your drive in about 2 to 3 hours a wheel. Tyres stay on the wheel.';
-WHL.sort(function(x,y){return (y.real||0)-(x.real||0)});var L=WHL.filter(function(w){return (g?!w.mob:w.mob)&&w.p[f]!=null});s.innerHTML='';
-L.forEach(function(w){var o=document.createElement('option');o.textContent=w.n+(w.real?', approved partner':g&&pc.length>=5?', '+(w.k+off).toFixed(1)+' miles':'')+': '+money(w.p[f])+' a wheel'+(w.real?'':' ('+w.rt+')');s.appendChild(o)});if(prev>-1&&prev<L.length)s.selectedIndex=prev}
-function draw(){if(job()!=='alloy')return;opts();var c=cur(),x=c.x,f=+$('bfin').value,n=+$('bwn').value;if(!x)return;var price=x.p[f]*n;total=price+BOOKING;
+WHL.sort(function(x,y){return (y.real||0)-(x.real||0)});var L=wl();s.innerHTML='';
+L.forEach(function(w){var o=document.createElement('option');o.textContent=w.n+(w.real?', approved partner'+(w.mi!=null?', '+w.mi.toFixed(1)+' miles':''):g&&pc.length>=5?', '+(w.k+off).toFixed(1)+' miles':'')+': '+money(w.p[f])+' a wheel'+(w.real?'':' ('+w.rt+')');s.appendChild(o)});if(prev>-1&&prev<L.length)s.selectedIndex=prev}
+function draw(){if(job()!=='alloy')return;opts();var c=cur(),x=c.x,f=+$('bfin').value,n=+$('bwn').value;if(!x){$('btbl').innerHTML='<tr><td>No wheel specialist covers this postcode yet for this finish.<small>Check the postcode, or try the other choice under &ldquo;Where&rdquo;.</small></td><td></td></tr>';$('bgo').disabled=true;return}$('bgo').disabled=false;bdays(x);var price=x.p[f]*n;total=price+BOOKING;
 $('btbl').innerHTML='<tr><td>'+FIN[f]+'<small>'+H(x.n)+', '+n+' wheel'+(n>1?'s':'')+' at '+money(x.p[f])+' each, '+($('bawhere').value==='shop'?'at their wheel centre':'at your door')+'</small></td><td>'+money(price)+'</td></tr><tr><td>Booking fee<small>Includes £1.66 VAT</small></td><td>'+money(BOOKING)+'</td></tr><tr class="t"><td>Total</td><td>'+money(total)+'</td></tr>';
 $('bainc').textContent=f===3?'Repairs kerb scuffs on the wheel rim and repaints the repaired area. Deep cracks or buckled wheels need a wheel centre.':'Includes removing kerb damage, filling, priming, painting and lacquer. Cracked or buckled wheels are checked first and may need straightening at extra cost.'}
-['bwn','bfin','bawhere','basite'].forEach(function(id){$(id).addEventListener('change',draw)});$('bapost').addEventListener('input',draw);
+['bwn','bfin','bawhere','basite'].forEach(function(id){$(id).addEventListener('change',draw)});$('bapost').addEventListener('input',draw);$('baday').addEventListener('change',function(){bslots(cur().x)});
+document.addEventListener('mc-near',function(){try{if(!$('bdy').hidden){drawReps();draw()}}catch(e){}});
 window.GGbdy=function(on,c){$('bdy').hidden=!on;if(!on)return;car=c||null;var sz=c&&c.tyre?(String(c.tyre).match(/R\s?(\d{2})/)||[])[1]:null;$('bwsize').textContent=sz?'Your wheels are '+sz+' inch, from your full vehicle check.'+(+sz>=19?' Wheels of 19 inch and over may cost more.':''):'';$('bqdone').hidden=true;$('bdone').hidden=true;drawReps();draw();$('bdy').scrollIntoView({behavior:'smooth',block:'nearest'})};
 $('bqgo').addEventListener('click',function(){var pc=$('bpost').value.replace(/\s/g,''),ph=$('bph').files.length,e='';
 if(pay==='ins'&&!$('binsr').value.trim())e='Enter the name of your insurer.';else if(pc.length<5)e='Enter the postcode where the car is.';else if(ph<2)e='Add at least 2 photos of the damage.';else if(ph>6)e='Add no more than 6 photos.';else if(!picked.length)e='Choose at least one repairer to send your request to.';
@@ -4109,9 +4132,9 @@ var FORMS=[
 {form:'form',ok:'ok',err:'merr',pass:'m-pass',mail:'mail',role:'mechanic',p:'m',get:function(){var kk=document.querySelector('input[name=kind]:checked').value,mo=kk==='mot',g=kk==='garage'||mo,ae=kk==='autoelec';if(mo)kk='garage';return{svcs:mo||ae?null:window.MCSVC.read($('svcs')),name:g?$('gname').value.trim():(ae&&$('ae-biz').value.trim()?$('ae-biz').value.trim():$('name').value.trim()),phone:$('tel').value.trim(),town:$('post').value.trim(),sub:kk,motOnly:mo,vts:($('g-motclasses')&&!$('g-motclasses').hidden)?($('gvts').value||'').toUpperCase().replace(/\s/g,''):null,vtsCheck:window.MCvtsLast||null,aeWhere:ae?$('ae-where').value:null,bays:g?(mo?0:Math.min(12,Math.max(1,Math.round(+$('gbays').value)||1))):0,motBays:g&&$('gmot').checked?Math.min(6,Math.max(1,Math.round(+$('gmotbays').value)||1)):0,rates:{hour:+$('m-rate').value,mot:g?+$('g-motfee').value:null,motc:g&&$('gmot').checked&&window.MCMOT?window.MCMOT.read('gm'):null}}}},
 {form:'r-form',ok:'r-ok',err:'r-err',pass:'r-pass',mail:'r-mail',role:'recovery',p:'r',get:function(){return{name:$('r-co').value.trim(),phone:$('r-tel').value.trim(),town:$('r-post').value.trim(),post:$('r-post').value.trim().toUpperCase(),radius:RSRAD($('r-rad').value),fleet:$('r-fleet').value,avail:$('r-avail').value,types:RSCHK('r-types'),svcs:RSCHK('r-svcs'),rates:{call:+$('r-call').value,mile:+$('r-mile').value}}}},
 {form:'ev-form',ok:'ev-ok',err:'ev-err',pass:'ev-pass',mail:'ev-mail',role:'evcharge',p:'ev',get:function(){return{name:$('ev-co').value.trim(),phone:$('ev-tel').value.trim(),town:$('ev-post').value.trim(),post:$('ev-post').value.trim().toUpperCase(),radius:RSRAD($('ev-rad').value),fleet:$('ev-fleet').value,avail:$('ev-avail').value,kit:RSCHK('ev-types'),plugs:RSCHK('ev-plugs').map(function(x){return x.replace(/ \(with adapter\)/,'')}),svcs:RSCHK('ev-svcs'),rates:{call:+$('ev-call').value,mile:+$('ev-mile').value}}}},
-{form:'bs-form',ok:'bs-ok',err:'bs-err',pass:'bs-pass',mail:'bs-mail',role:'body',p:'bs',get:function(){var k=document.querySelector('input[name=bs-kind]:checked').value,ap=document.querySelector('input[name=bs-appr]:checked').value==='yes',b=$('bs-dobody').checked,a=$('bs-doalloy').checked;return{name:$('bs-co').value.trim(),phone:$('bs-tel').value.trim(),town:$('bs-post').value.trim(),sub:({mobile:'mobile',shop:'workshop',both:'mobile and workshop'}[k])+(b&&a?', bodywork and alloys':b?', bodywork':', alloys')+(ap?', insurance approved':''),approved:ap,insurers:ap?$('bs-insurers').value.trim():'',rates:{hour:b?+$('bs-hour').value:0,wheel:a?+$('bs-wheel').value:0,dcut:a&&k!=='mobile'?+$('bs-dcut').value:0,col:a?+$('bs-col').value||0:0,kerb:a?+$('bs-kerb').value||0:0}}}},
+{form:'bs-form',ok:'bs-ok',err:'bs-err',pass:'bs-pass',mail:'bs-mail',role:'body',p:'bs',get:function(){var k=document.querySelector('input[name=bs-kind]:checked').value,ap=document.querySelector('input[name=bs-appr]:checked').value==='yes',b=$('bs-dobody').checked,a=$('bs-doalloy').checked;return{name:$('bs-co').value.trim(),phone:$('bs-tel').value.trim(),town:$('bs-post').value.trim(),radius:parseInt($('bs-rad').value,10)||10,sub:({mobile:'mobile',shop:'workshop',both:'mobile and workshop'}[k])+(b&&a?', bodywork and alloys':b?', bodywork':', alloys')+(ap?', insurance approved':''),approved:ap,insurers:ap?$('bs-insurers').value.trim():'',rates:{hour:b?+$('bs-hour').value:0,wheel:a?+$('bs-wheel').value:0,dcut:a&&k!=='mobile'?+$('bs-dcut').value:0,col:a?+$('bs-col').value||0:0,kerb:a?+$('bs-kerb').value||0:0}}}},
 {form:'t-form',ok:'t-ok',err:'t-err',pass:'t-pass',mail:'t-mail',role:'tyres',p:'t',get:function(){return{name:$('t-co').value.trim(),phone:$('t-tel').value.trim(),town:$('t-post').value.trim(),rates:{fit:+$('t-fit').value,punc:+$('t-punc').value}}}},
-{form:'va-form',ok:'va-ok',err:'va-err',pass:'va-pass',mail:'va-mail',role:'valet',p:'va',get:function(){var vm=[].map.call(document.querySelectorAll('#va-modes input:checked'),function(x){return x.value}),mo=vm.some(function(x){return /^Mobile/.test(x)}),pr=vm.some(function(x){return /premises/.test(x)});return{sub:mo&&pr?'mobile and own premises':pr?'own premises':'mobile',name:$('va-co').value.trim(),phone:$('va-tel').value.trim(),town:$('va-post').value.trim(),rates:{p:[0,1,2,3].map(function(k){return +$('va-p'+k).value})}}}},
+{form:'va-form',ok:'va-ok',err:'va-err',pass:'va-pass',mail:'va-mail',role:'valet',p:'va',get:function(){var vm=[].map.call(document.querySelectorAll('#va-modes input:checked'),function(x){return x.value}),mo=vm.some(function(x){return /^Mobile/.test(x)}),pr=vm.some(function(x){return /premises/.test(x)});return{sub:mo&&pr?'mobile and own premises':pr?'own premises':'mobile',name:$('va-co').value.trim(),phone:$('va-tel').value.trim(),town:$('va-post').value.trim(),radius:parseInt($('va-rad').value,10)||10,rates:{p:[0,1,2,3].map(function(k){return +$('va-p'+k).value})}}}},
 {form:'in-form',ok:'in-ok',err:'in-err',pass:'in-pass',mail:'in-mail',role:'instructor',p:'in',docNames:['ADI badge','Instructor insurance'],get:function(){var tr=[];if($('in-tm').checked)tr.push('manual');if($('in-ta').checked)tr.push('auto');var G=window.MCinGeo||{},bl=[];[[10,'in-b10'],[20,'in-b20']].forEach(function(x){var v=+$(x[1]).value;if(v>=0)bl.push({h:x[0],pct:Math.min(50,v||0)})});
  return{name:$('in-co').value.trim(),contact:$('in-name').value.trim(),phone:$('in-tel').value.trim(),town:$('in-post').value.trim().toUpperCase(),post:$('in-post').value.trim().toUpperCase(),radius:+$('in-rad').value||10,rates:{manual:tr.indexOf('manual')>-1?+$('in-rm').value||0:0,auto:tr.indexOf('auto')>-1?+$('in-ra').value||0:0},
   inst:{trans:tr,gender:$('in-gender').value,badge:$('in-badge').value,adi:$('in-adi').value.replace(/[^0-9A-Za-z]/g,''),car:$('in-car').value.trim(),lens:[60,90,120],blocks:bl,intensive:[],week:[null,['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['09:00','14:00']],gap:15,notice:24,on:true,lat:G.lat,lng:G.lng}}}},
@@ -4160,7 +4183,7 @@ var s='<div class="planbox"><div><span class="note">Our fee</span><b>10% + VAT p
 return s+'</div>'+(u.planmsg?'<p class="dmsg" role="status">'+esc(u.planmsg)+'</p>':'')}
 function ratesHtml(u){var r=u.rates||{},f='';
 function num(id,label,val,step){return '<div><label class="f" for="'+id+'" style="margin-top:0">'+label+'</label><input type="number" id="'+id+'" min="0" step="'+(step||1)+'" value="'+val+'"></div>'}
-if(u.role==='mechanic')f='<div class="rg">'+num('dr-hour','Labour rate per hour (£)',r.hour)+'</div>'+(u.sub==='garage'&&window.MCMOT?window.MCMOT.ratesHtml(u):'');
+if(u.role==='mechanic')f='<div class="rg"'+(u.motOnly?' hidden':'')+'>'+num('dr-hour','Labour rate per hour (£)',r.hour)+'</div>'+(u.sub==='garage'&&window.MCMOT?window.MCMOT.ratesHtml(u):'');
 if(u.role==='recovery')f='<div class="rg">'+num('dr-call','Call-out fee (£)',r.call)+num('dr-mile','Price per mile (£)',r.mile,0.1)+'</div>';
 if(u.role==='evcharge')f='<div class="rg">'+num('dr-call','Fixed charge per call-out (£)',r.call)+num('dr-mile','Extra per mile outside your area (£)',r.mile,0.1)+'</div>';
 if(u.role==='body')f='<div class="rg">'+num('dr-hour','Body labour per hour (£)',r.hour||0)+num('dr-wheel','Standard refurb per wheel (£)',r.wheel||0)+num('dr-dcut','Diamond cut per wheel (£)',r.dcut||0)+num('dr-col','Colour change per wheel (£)',r.col||0)+num('dr-kerb','Kerb damage repair per wheel (£)',r.kerb||0)+'</div><p class="note" style="margin:8px 0 0">Bodywork is quoted job by job from the customer\'s photos. Leave a rate at 0 for work you do not offer.</p>';
@@ -5366,14 +5389,15 @@ function cfg(u){var r=u.role;
   dt:function(c){return c==='stock'||c==='sales'?'stock':c==='adverts'||c==='setup-plan'?'ads':c==='setup-brand'||c==='setup-docs'?'docs':null},
   rev:function(d){return d==='ads'?['adverts','']:d==='docs'?['setup','docs']:['stock','']}};
  if(r==='mechanic'){var mot=!!u.motOnly,T=[['jobs','Jobs'],['diary','Diary'],['money','Money'],['setup','Set-up'],['tools','Tools']];if(mot)T=[T[1],T[0],T[2],T[3],T[4]];
-  return {tabs:T,secs:[['prices',mot?'MOT classes you test':'Rates and prices',mot?'The classes you test and what you are paid':u.sub==='garage'?'Your labour rate and the MOT classes you test':'Your labour rate']].concat(mot||!hasSvc(u)?[]:[['services','Services you offer','The jobs customers can find you for']]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),
+  return {tabs:T,secs:[['prices',mot?'MOT classes you test':'Rates and prices',mot?'The classes you test and what you are paid':u.sub==='garage'?'Your labour rate and the MOT classes you test':'Your labour rate']].concat(mot||!hasSvc(u)?[]:[['services','Services you offer','The jobs customers can find you for']]).concat([['area','Area you cover',u.sub==='garage'?'Your postcode, so customers nearby can find you':'Your postcode and how far you travel']]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),
   dt:function(c){return c==='diary'?'diary':c==='setup-brand'||c==='setup-docs'?'docs':'jobs'},
   rev:function(d){return d==='diary'?['diary','']:d==='docs'?['setup','docs']:['jobs','']}};}
  var rec=r==='recovery',road=rec||r==='evcharge',P=rec?['prices','Fleet and prices','Your trucks, call-out, price per mile and extras']:r==='evcharge'?['prices','Your prices','Your call-out charge and price per mile']:['prices','Your prices',r==='body'?'Labour rate and alloy wheel prices':r==='valet'?'Your price for each size of car':'Your fitting and repair prices'];
  return {tabs:[['jobs','Jobs'],['money','Money'],['setup','Set-up'],['tools','Tools']],
-  secs:[P].concat(road?[['hours','Opening hours','Your weekly hours, or open 24 hours'],['area',rec?'Area you cover':'Area and connectors',rec?'Your depot postcode and how far you travel':'Your base, how far you travel and the plugs you can charge']]:[]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),dt:function(){return null},rev:function(){return ['jobs','']}}}
+  secs:[P].concat(road?[['hours','Opening hours','Your weekly hours, or open 24 hours'],['area',rec?'Area you cover':'Area and connectors',rec?'Your depot postcode and how far you travel':'Your base, how far you travel and the plugs you can charge']]:[['area','Area and working days','Your postcode, how far you travel and the days you work']]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),dt:function(){return null},rev:function(){return ['jobs','']}}}
 function hasSvc(u){try{return !!$('mc-svc-card')||!!(window.MCSVC&&window.MCSVC.card&&window.MCSVC.card(u))}catch(e){return false}}
-function done(u,k){if(u.role==='instructor'){var im=window.MCinstMe?window.MCinstMe():null,ii=im&&im.details&&im.details.inst;if(k==='prices')return !im?null:!!(im.rates&&(+im.rates.manual>0||+im.rates.auto>0));if(k==='hours')return !im?null:!!(ii&&ii.week&&ii.week.some(function(x){return x}));if(k==='area')return !im?null:!!(ii&&ii.lat!=null)}
+function done(u,k){if(k==='area'&&/^(mechanic|valet|body|tyres)$/.test(u.role)){var am=window.MCareaMe?window.MCareaMe():undefined;return am===undefined?null:!!am}
+ if(u.role==='instructor'){var im=window.MCinstMe?window.MCinstMe():null,ii=im&&im.details&&im.details.inst;if(k==='prices')return !im?null:!!(im.rates&&(+im.rates.manual>0||+im.rates.auto>0));if(k==='hours')return !im?null:!!(ii&&ii.week&&ii.week.some(function(x){return x}));if(k==='area')return !im?null:!!(ii&&ii.lat!=null)}
  var road=u.role==='recovery'||u.role==='evcharge',me=road&&window.MCrspMe?window.MCrspMe():null,d=me&&me.details||null;
  if(k==='prices')return u.role!=='recovery'||!me?null:!!(d&&d.trucks&&d.trucks.length);
  if(k==='hours')return !me?null:!!(d&&d.week&&d.week.length===7);
@@ -5394,7 +5418,7 @@ function barHtml(u,C){var S=C.secs,todo=S.filter(function(x){return done(u,x[0])
  return h+'<div class="psubh"><button type="button" class="btn sm ghost" data-psub="">&lsaquo; Back to set-up</button><b>'+E(c[1])+'</b></div>'}
 function tagOf(el,u){if(el.id==='mc-ptabs'||el.getAttribute('data-pc')==='keep')return 'keep';var id=el.id,dl=u.role==='dealer';
  if(id==='mc-rsp'||id==='mc-pay'||id==='mc-inst')return 'inner';if(u.role==='instructor'&&id==='mc-jobs')return 'none';if(id==='mc-jobs'||id==='mc-pq')return 'jobs';if(id==='mc-mine')return dl?'adverts':'money';if(id==='brand-card')return 'setup-brand';if(id==='mc-mydet')return 'setup-details';
- if(id==='mc-svc-card')return 'setup-services';if(id==='mc-mott')return 'diary';if(id==='mc-dtools')return 'tools';if(id==='mc-stats')return 'adverts';if(id==='mc-inbox'||id==='mc-leads')return 'messages';if(id==='mc-invl')return 'sales';if(id==='mc-inv')return 'stock|sales';
+ if(id==='mc-svc-card')return 'setup-services';if(id==='mc-area')return 'setup-area';if(id==='mc-mott')return 'diary';if(id==='mc-dtools')return 'tools';if(id==='mc-stats')return 'adverts';if(id==='mc-inbox'||id==='mc-leads')return 'messages';if(id==='mc-invl')return 'sales';if(id==='mc-inv')return 'stock|sales';
  if(el.classList.contains('qa'))return 'tools';if(el.classList.contains('dtabs'))return 'none';var h=el.querySelector('h2'),t=h?h.textContent:'';
  if(/^Your rates/.test(t))return (u.role==='recovery'&&u.sbid)||u.role==='instructor'?'none':'setup-prices';if(/^Your documents/.test(t))return 'setup-docs';
  if(dl){if(/^Monthly plan|^Your plan/.test(t)||el.classList.contains('dtrial'))return 'setup-plan';return u.dtab==='ads'?'adverts':u.dtab==='docs'?'setup-docs':'stock'}
@@ -8251,6 +8275,7 @@ function partnerStart(em,pw,role,pg){return ready.then(function(){return sb.auth
 function partnerApply(d,files){var u=window.GGuser,det=slim(d)||{};try{if(JSON.stringify(det).length>6000)det={}}catch(e){det={}}var rates=slim(d.rates)||{};
  return ready.then(function(){return sb.rpc('submit_application',{p_name:d.name||'',p_phone:d.phone||'',p_town:d.town||'',p_website:d.website||null,p_sub:d.sub||null,p_rates:rates,p_details:det})}).then(function(r){
   if(r.error)throw r.error;d.sbid=u.sbid;sigs[u.sbid]=sigOf(d);cur=d;var bad=false;
+  if(/^(mechanic|valet|body|tyres)$/.test(u.role||d.role||''))try{dlGeo(d.town).then(function(g){if(g)sb.rpc('set_work_area',{p:{post:g.pc,lat:g.lat,lng:g.lng,radius:+d.radius||10,week:[null,['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','18:00']]}})})}catch(e){}
   return files.reduce(function(p,f,i){return p.then(function(){return f?putDoc(u.sbid,i+1,f,d.docs[i]).catch(function(){bad=true}):null})},Promise.resolve()).then(function(){return{id:u.sbid,session:true,docsFailed:bad}})}).catch(function(e){throw fail(e)})}
 function partnerSignIn(em,pw){return ready.then(function(){return sb.auth.signInWithPassword({email:em,password:pw})}).then(function(r){
   if(r.error)throw r.error;return loadPartner(r.data.user).then(function(u){if(!u){sb.auth.signOut().catch(function(){});throw{code:'x_not_partner'}}cur=u;return u})}).catch(function(e){throw fail(e)})}
@@ -9802,6 +9827,48 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  if(a.rssgo){var amt=Math.round(+$('rss-amt').value*100)/100;t.disabled=true;sb.rpc('staff_cancel_roadside',{p_booking:a.rssgo,p_reason:$('rss-why').value,p_refund:amt}).then(function(r){if(r.error){t.disabled=false;toast('Not cancelled: '+r.error.message,true);return}RSS.open=null;toast('Cancelled. Refund marked as due.');rssPull()});return}
  if(a.rssref){t.disabled=true;sb.rpc('staff_mark_refunded',{p_booking:a.rssref}).then(function(){rssPull()})}});
 
+/* ---------- "near you" (22 Nov 2026): approved MOT stations, garages, valeters, body shops and auto electricians are only
+   offered to customers inside their area. window.MCnear.get(name, postcode, 'mobile'|'site') answers from partners_near();
+   'mobile' = the partner travels to the customer (inside the partner's own radius), 'site' = the customer goes to them
+   (up to 25 miles). The booking forms redraw when the answer for a postcode arrives (event "mc-near"). ---------- */
+var NEAR={maps:{},busy:{},bad:{}};
+function nearPc(v){v=String(v||'').toUpperCase().replace(/[^A-Z0-9]/g,'');return /^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/.test(v)?v:''}
+function nearLoad(pc){if(NEAR.busy[pc]||NEAR.bad[pc])return;NEAR.busy[pc]=1;
+ dlGeo(pc).then(function(g){if(!g){NEAR.bad[pc]=1;NEAR.busy[pc]=0;return}return ready.then(function(){return sb.rpc('partners_near',{p_lat:g.lat,p_lng:g.lng})}).then(function(r){NEAR.busy[pc]=0;if(!r||r.error)return;var m={};(r.data||[]).forEach(function(x){m[x.id]=x});NEAR.maps[pc]=m;try{document.dispatchEvent(new Event('mc-near'))}catch(e){}})},function(){NEAR.busy[pc]=0})}
+window.MCnear={get:function(name,pc,mode){var id=partnerId(name);if(!id)return{ok:true};pc=nearPc(pc);if(!pc)return{ok:false,why:'pc'};var M=NEAR.maps[pc];if(!M){nearLoad(pc);return{ok:false,why:'wait'}}
+ var m=M[id];if(!m)return{ok:false,why:'far'};return{ok:+m.miles<=(mode==='mobile'?(+m.radius||10):25),miles:+m.miles,week:m.week||null}}};
+/* the partner's own "Area" page (dashboard card #mc-area, Set-up > Area) */
+var AR={uid:null,me:undefined,town:'',at:0,dirty:false};
+function arU(){var u=window.GGuser;return u&&u.sbid&&/^(mechanic|valet|body|tyres)$/.test(u.role)?u:null}
+window.MCareaMe=function(){var u=arU();return u&&AR.uid===u.sbid?AR.me:undefined};
+function arMobile(u){var s=String(u.sub||'').toLowerCase();return u.role==='valet'?s!=='own premises':u.role==='body'?/mobile/.test(s):u.role==='tyres'?true:u.sub==='mobile'||(u.sub==='autoelec'&&u.aeWhere!=='Workshop only')}
+function arSite(u){var s=String(u.sub||'').toLowerCase();return u.role==='valet'?/premises/.test(s):u.role==='body'?/workshop/.test(s):u.role==='tyres'?false:u.sub==='garage'||(u.sub==='autoelec'&&u.aeWhere!=='Mobile only')}
+function arHours(u){return u.role==='valet'||u.role==='body'||u.role==='tyres'}
+function arPull(){var u=arU();if(!u)return;AR.at=Date.now();sb.from('partners').select('details,town').eq('id',u.sbid).maybeSingle().then(function(r){if(r.error||!r.data)return;var d=r.data.details||{};AR.me=d.area&&d.area.lat!=null?d.area:null;AR.town=r.data.town||'';arDraw(!AR.dirty)})}
+['input','change'].forEach(function(ev){document.addEventListener(ev,function(e){var t=e.target;if(t&&t.closest&&t.closest('#mc-area'))AR.dirty=true})});
+function arHtml(u){var A=AR.me||{},mob=arMobile(u),site=arSite(u),wk=A.week&&A.week.length===7?A.week:null,pc=A.post||(nearPc(AR.town)?AR.town:'');
+ var h='<div class="card" id="mc-area"><h2>'+(arHours(u)?'Your area and working days':'The area you cover')+'</h2><p class="note" style="margin:0 0 8px">Customers are only shown partners who cover their postcode, so this decides who can find and book you.</p>'
+  +(AR.me?'':'<div class="rsp-on"><div><b>Customers cannot find you yet</b><small>Check the postcode below and save. It takes a minute.</small></div></div>')
+  +'<div class="two"><div><label class="f" for="ar-pc" style="margin-top:0">'+(site?'Postcode of your premises':'Your base postcode')+'</label><input type="text" id="ar-pc" maxlength="9" style="text-transform:uppercase" autocomplete="postal-code" value="'+E(pc)+'"></div>'
+  +(mob?'<div><label class="f" for="ar-rad" style="margin-top:0">How far you travel to customers</label><select id="ar-rad">'+[5,10,15,20,30,50].map(function(g){return '<option value="'+g+'"'+((+A.radius||10)===g?' selected':'')+'>'+g+' miles</option>'}).join('')+'</select></div>':'')+'</div>'
+  +'<p class="note" style="margin:6px 0 0">'+(mob&&site?'Mobile jobs come from customers inside that distance. Customers who bring their vehicle to you can find you up to 25 miles away.':mob?'You are offered to customers whose postcode is inside that distance.':'Customers up to 25 miles away can find you, nearest first.')+'</p>';
+ if(arHours(u))h+='<h3 class="mt-h">The days and hours you work</h3><p class="note" style="margin:0 0 6px">Customers can only choose days you work, and start times inside these hours.</p><table class="rsp-wk"><tbody>'
+  +INSD.map(function(x){var v=wk?wk[x[0]]:(x[0]===0?null:['08:00','18:00']);return '<tr><td><label class="chk"><input type="checkbox" data-arwon="'+x[0]+'"'+(v?' checked':'')+'><span>'+x[1]+'</span></label></td><td><input type="time" data-arwf="'+x[0]+'" value="'+(v?v[0]:'08:00')+'" aria-label="'+x[1]+' from"></td><td>to</td><td><input type="time" data-arwt="'+x[0]+'" value="'+(v?v[1]:'18:00')+'" aria-label="'+x[1]+' to"></td></tr>'}).join('')+'</tbody></table>';
+ return h+'<div class="dtools"><button type="button" class="btn sm" data-arsave>Save</button></div></div>'}
+function arDraw(force){var u=arU(),host=$('dash-body'),old=$('mc-area'),warn=$('mc-areawarn');if(!u||location.hash!=='#dashboard'||!host||u.status!=='approved'){if(old)old.remove();if(warn)warn.remove();return}
+ if(AR.uid!==u.sbid)AR={uid:u.sbid,me:undefined,town:'',at:0,dirty:false};if(Date.now()-AR.at>45000)arPull();if(AR.me===undefined)return;
+ var bar=$('mc-ptabs');if(AR.me===null&&bar&&!(warn&&host.contains(warn))){var w=document.createElement('div');w.className='card';w.id='mc-areawarn';w.setAttribute('data-pc','keep');w.innerHTML='<div class="rsp-on" style="margin:0"><div><b>Customers cannot find you yet</b><small>Tell us your postcode'+(arMobile(u)?' and how far you travel':'')+', so we only show you to customers you can reach.</small></div><button type="button" class="btn sm" data-ptgo="setup:area">Set my area</button></div>';bar.parentNode.insertBefore(w,bar)}
+ else if(AR.me&&warn)warn.remove();
+ if(old&&!force&&host.contains(old))return;if(old&&old.contains(document.activeElement)&&!force)return;
+ var d=document.createElement('div');d.innerHTML=arHtml(u);var c=d.firstChild;if(old&&host.contains(old))old.parentNode.replaceChild(c,old);else host.appendChild(c)}
+setInterval(function(){try{arDraw(false)}catch(e){}},1500);
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-area [data-arsave]');if(!t)return;var u=arU();if(!u)return;var q=function(s){return document.querySelector('#mc-area '+s)},body={};
+ if($('ar-rad'))body.radius=+$('ar-rad').value;
+ if(arHours(u)){var wk=[null,null,null,null,null,null,null],bad=false,any=false;for(var i=0;i<7;i++){var on=q('[data-arwon="'+i+'"]');if(!on||!on.checked)continue;var f=q('[data-arwf="'+i+'"]').value,to=q('[data-arwt="'+i+'"]').value;if(!/^\d\d:\d\d$/.test(f)||!/^\d\d:\d\d$/.test(to)||f>=to){bad=true;break}wk[i]=[f,to];any=true}
+  if(bad){toast('Check the start and finish times. The finish must be after the start.',true);return}if(!any){toast('Tick at least one day you work.',true);return}body.week=wk}
+ t.disabled=true;dlGeo($('ar-pc').value).then(function(g){if(!g){t.disabled=false;toast('We could not find that postcode. Enter your full postcode, for example DA1 1DE.',true);return}body.post=g.pc;body.lat=g.lat;body.lng=g.lng;
+  return sb.rpc('set_work_area',{p:body}).then(function(r){t.disabled=false;if(r.error){toast('That was not saved. Try again.',true);return}AR.me=r.data;AR.dirty=false;toast('Saved. Customers near you can now find you.');arDraw(true);if(window.MCpt)window.MCpt.apply()})})});
+
 /* staff: driving lessons, the other services' bookings, and every refund that is due (admin pages "les", "oth", "ref").
    The admin page shows each box only on its own page (#admin-body[data-at]); window.MCadmCounts feeds its numbers. */
 var STB={les:null,oth:null,ref:null,at:{},cat:0,open:null,flt:'up',err:''},STBG={les:'lessons',oth:'other',ref:'refunds'};
@@ -10051,15 +10118,22 @@ window.MCquoteJob=function(q){var u=window.GGuser;if(!sb||!u||!u.sbid)return Pro
 /* auto electrician / locksmith request panel in the booking flow */
 var AER={svc:null,car:null,reg:'',pick:[]};
 window.MCaeReq={hide:function(){var b=$('mc-aereq');if(b)b.hidden=true},show:function(svc,car,reg){AER.svc=svc;AER.car=car;AER.reg=reg||'';AER.pick=[];aerDraw();var b=$('mc-aereq');if(b){b.hidden=false;b.scrollIntoView({behavior:'smooth',block:'nearest'})}}};
-function aerList(){var L=(window.MCdir&&window.MCdir.L&&window.MCdir.L.ae)||[];return L.slice().sort(function(a,b){return (b.real||0)-(a.real||0)})}
-function aerDraw(){var b=$('mc-aereq');if(!b||!AER.svc)return;var L=aerList(),lock=/^Locksmith/.test(AER.svc.d||'')||/key|lock/i.test(AER.svc.n);
+function aerList(){var L=((window.MCdir&&window.MCdir.L&&window.MCdir.L.ae)||[]).slice().sort(function(a,b){return (b.real||0)-(a.real||0)}),pc=($('aer-post')||{}).value||'',w=($('aer-where')||{}).value||'mobile';
+ if(!window.MCnear)return L;return L.filter(function(x){if(!x.real)return true;var qm=window.MCnear.get(x.n,pc,'mobile'),qs=window.MCnear.get(x.n,pc,'site');x.mi=qm.miles;return (w!=='shop'&&qm.ok)||(w!=='mobile'&&qs.ok)})}
+function aerItems(){var L=aerList();AER.pick=AER.pick.filter(function(n){return L.some(function(x){return x.n===n})});var pc=(($('aer-post')||{}).value||'').replace(/\s/g,'');
+ return L.map(function(x,i){var on=AER.pick.indexOf(x.n)>-1;return '<button type="button" class="opt" aria-pressed="'+(on?'true':'false')+'" data-aer="'+i+'"><span>'+E(x.n)+'<small>'+(x.real?'Approved partner'+(x.mi!=null?' · '+x.mi.toFixed(1)+' miles':''):'Sample partner (preview)')+(x.r?' · '+'£'+(+x.r).toFixed(0)+' an hour labour':'')+'</small></span></button>'}).join('')
+  +(L.some(function(x){return x.real})?'':'<p class="note" style="margin:6px 0 0">'+(pc.length<5?'Enter your postcode to see the approved specialists who cover you.':'No approved specialist covers this postcode yet.')+'</p>')}
+function aerDraw(){var b=$('mc-aereq');if(!b||!AER.svc)return;var lock=/^Locksmith/.test(AER.svc.d||'')||/key|lock/i.test(AER.svc.n),kp=($('aer-post')||{}).value,kw=($('aer-where')||{}).value;
  b.innerHTML='<h2>Get fixed quotes</h2><p class="note" style="margin:0 0 6px"><b>'+E(AER.svc.n)+'</b>. Choose up to 3 specialists. Each sends a fixed price for your exact car, usually within a few hours. You compare them in My account and book the one you want.</p>'
-  +'<div class="opts" id="aer-list">'+L.map(function(x,i){var on=AER.pick.indexOf(x.n)>-1;return '<button type="button" class="opt" aria-pressed="'+(on?'true':'false')+'" data-aer="'+i+'"><span>'+E(x.n)+'<small>'+(x.real?'Approved partner':'Sample partner (preview)')+(x.r?' · '+'£'+(+x.r).toFixed(0)+' an hour labour':'')+'</small></span></button>'}).join('')+'</div>'
   +'<label class="f" for="aer-where">Where?</label><select id="aer-where"><option value="mobile">Come to me</option><option value="shop">I will take it to them</option><option value="any">Either is fine</option></select>'
-  +'<label class="f" for="aer-post">Postcode where the car is</label><input type="text" id="aer-post" maxlength="10" autocomplete="postal-code" value="'+E((window.GGuser&&window.GGuser.post)||'')+'">'
+  +'<label class="f" for="aer-post">Postcode where the car is</label><input type="text" id="aer-post" maxlength="10" autocomplete="postal-code" value="'+E(kp!=null?kp:((window.GGuser&&window.GGuser.post)||''))+'">'
+  +'<p class="f" style="margin-bottom:4px">Specialists who cover you</p><div class="opts" id="aer-list"></div>'
   +'<label class="f" for="aer-desc">'+(lock?'Tell them what happened (for example, keys locked in the boot, or no keys at all)':'Describe the problem in your own words')+'</label><textarea id="aer-desc" rows="3" maxlength="1000"></textarea>'
   +(lock?'<p class="note" style="margin:6px 0 0">For keys, have your V5C logbook and photo ID ready. Locksmiths must check you own the car.</p>':'')
-  +'<p class="err" id="aer-err" role="alert"></p><div class="dtools"><button class="btn" type="button" id="aer-go">Send for quotes</button></div><p class="okmsg" id="aer-ok" hidden></p>'}
+  +'<p class="err" id="aer-err" role="alert"></p><div class="dtools"><button class="btn" type="button" id="aer-go">Send for quotes</button></div><p class="okmsg" id="aer-ok" hidden></p>';
+ if(kw)$('aer-where').value=kw;$('aer-list').innerHTML=aerItems()}
+function aerRelist(){var l=$('aer-list');if(l&&$('mc-aereq')&&!$('mc-aereq').hidden)l.innerHTML=aerItems()}
+document.addEventListener('input',function(e){if(e.target&&e.target.id==='aer-post')aerRelist()});document.addEventListener('change',function(e){if(e.target&&e.target.id==='aer-where')aerRelist()});document.addEventListener('mc-near',aerRelist);
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-aereq button');if(!t)return;var L=aerList();
  if(t.dataset.aer!=null){var x=L[+t.dataset.aer],k=AER.pick.indexOf(x.n);if(k>-1)AER.pick.splice(k,1);else{if(AER.pick.length>=3){$('aer-err').textContent='You can ask up to 3 specialists.';return}AER.pick.push(x.n)}
   [].forEach.call(document.querySelectorAll('#aer-list [data-aer]'),function(b){b.setAttribute('aria-pressed',AER.pick.indexOf(L[+b.dataset.aer].n)>-1?'true':'false')});$('aer-err').textContent='';return}
