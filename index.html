@@ -13,7 +13,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 #v-dash .dtabs{display:flex;gap:6px;margin:0 0 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;overflow-x:auto}
 #v-dash .dtabs button{all:unset;cursor:pointer;flex:1;text-align:center;padding:10px 14px;border-radius:10px;font-weight:700;color:var(--muted);white-space:nowrap}
 #v-dash .dtabs button[aria-pressed=true]{background:var(--brand);color:var(--brand-ink)}
-#mc-ptabs{scroll-margin-top:96px}#mc-ptabs .dtabs{flex-wrap:wrap;overflow:visible}#mc-ptabs .dtabs button{flex:1 1 auto}.dtabs .ptn{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:#FFD43B;color:#3a2a00;font-size:.78rem;line-height:20px;text-align:center;margin-left:4px}
+#mc-ptabs{scroll-margin-top:96px}#mc-ptabs .dtabs button.palert{background:#C62828;color:#fff}#mc-ptabs .dtabs button.palert[aria-pressed=true]{background:var(--brand);color:var(--brand-ink);box-shadow:inset 0 0 0 3px #C62828}.dtabs .ptn.red{background:#fff;color:#C62828}#mc-ptabs .dtabs button.palert[aria-pressed=true] .ptn.red{background:#C62828;color:#fff}#mc-ptabs .dtabs{flex-wrap:wrap;overflow:visible}#mc-ptabs .dtabs button{flex:1 1 auto}.dtabs .ptn{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:#FFD43B;color:#3a2a00;font-size:.78rem;line-height:20px;text-align:center;margin-left:4px}
 .psetg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:10px}
 .psett{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--surface);position:relative;min-height:74px}
 .psett:hover{border-color:var(--brand)}.psett:focus-visible{outline:3px solid var(--brand);outline-offset:2px}.psett b{font-size:1.02rem;padding-right:64px}.psett small{color:var(--muted);line-height:1.35}
@@ -5075,8 +5075,8 @@ function cur(u,C){if(!C.tabs.some(function(x){return x[0]===ST.tab}))ST={tab:C.t
 /* called while the dashboard is being built: make u.dtab and the tab agree */
 function sync(u){load(u);var C=cfg(u),want=C.dt(cur(u,C));if(u.dtab==null||!want){if(want)u.dtab=want;else if(u.dtab==null)u.dtab=C.rev('x')[0]==='stock'?'stock':'jobs';return}
  if(u.dtab!==want){var r=C.rev(u.dtab);ST={tab:r[0],sub:r[1]};save()}}
-function barHtml(u,C){var S=C.secs,todo=S.filter(function(x){return done(u,x[0])===false}).length;
- var h='<div class="dtabs" role="group" aria-label="Dashboard sections">'+C.tabs.map(function(x){return '<button type="button" data-ptab="'+x[0]+'" aria-pressed="'+(ST.tab===x[0])+'">'+x[1]+(x[0]==='setup'&&todo?' <span class="ptn">'+todo+'</span>':'')+'</button>'}).join('')+'</div>';
+function barHtml(u,C){var S=C.secs,todo=S.filter(function(x){return done(u,x[0])===false}).length,nm=u.sbid&&window.MCmsgNew?window.MCmsgNew():0;
+ var h='<div class="dtabs" role="group" aria-label="Dashboard sections">'+C.tabs.map(function(x){var al=x[0]==='messages'&&nm>0;return '<button type="button" data-ptab="'+x[0]+'" aria-pressed="'+(ST.tab===x[0])+'"'+(al?' class="palert" aria-label="Messages, '+nm+' waiting"':'')+'>'+x[1]+(x[0]==='setup'&&todo?' <span class="ptn">'+todo+'</span>':'')+(al?' <span class="ptn red">'+nm+'</span>':'')+'</button>'}).join('')+'</div>';
  if(ST.tab!=='setup')return h;
  if(!ST.sub)return h+'<div class="card pset"><h2>Set-up</h2><p class="note" style="margin:0 0 10px">Choose what you want to set up or change.</p><div class="psetg">'+S.map(function(x){var ok=done(u,x[0]);
   return '<button type="button" class="psett" data-psub="'+x[0]+'"><b>'+E(x[1])+'</b><small>'+E(x[2])+'</small>'+(ok===null?'':'<span class="psb '+(ok?'ok':'todo')+'">'+(ok?'Done':'To do')+'</span>')+'</button>'}).join('')+'</div></div>';
@@ -8280,6 +8280,7 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
   (th.sup?sb.from('support_messages').insert({user_id:th.sup.user_id,from_role:th.me,body:txt}).then(function(r){if(r.error)throw r.error;pullBk()}):th.bk?sb.from('booking_messages').insert({booking_id:th.bk.id,from_role:th.me,body:txt}).then(function(r){if(r.error)throw r.error;pullBk()}):sendMsg({advert_id:th.advert_id,buyer_id:th.buyer_id,from_role:th.me,kind:'msg',body:txt})).then(function(){DRAFT[k]='';var x=$('pm-ta');if(x)x.value='';seen(k);pmDraw()},function(x){s.disabled=false;if(er)er.textContent=(x&&x.code==='P0001'&&x.message)||'Your message was not sent. Check your connection and try again.'})}});
 document.addEventListener('input',function(e){if(e.target.id==='pm-ta'&&PM.key)DRAFT[PM.key]=e.target.value});
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&PM.open){PM.open=false;pmDraw()}});
+window.MCmsgNew=function(){try{return threads().filter(function(t){return t.unread}).length}catch(e){return 0}};
 function inboxHtml(){var L=threads(),n=L.filter(function(t){return t.unread}).length;
  var h='<div class="card mx" id="mc-inbox"><h2>Messages about cars and vans'+(n?' <span class="mx-n">'+n+' new</span>':'')+'</h2>';
  if(!L.length)return h+'<p class="note" style="margin:0">No messages yet. When a buyer messages you about an advert, or you message a seller, it appears here.</p></div>';
