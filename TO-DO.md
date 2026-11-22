@@ -55,7 +55,10 @@ DEALER LAUNCH OFFER (owner's decision, 22 Nov 2026), BUILT AND TESTED:
   list without one during the trial ("Not history checked").
 - One free trial per dealership: same email, phone number, or business name + town = no trial (pays from approval);
   staff see "noTrial" on the application. The details are kept even if the account is deleted.
-- Cancel any time in the trial (nothing to pay). After the trial: monthly, ONE MONTH'S NOTICE. Yearly: no refund on a
+- Cancel any time in the trial (nothing to pay). Cancelling in the trial is INSTANT (owner, 22 Nov): the account is
+  suspended at once, adverts are taken down, the founding place is released and the trial counts as used; one
+  "free trial cancelled" email (no "account paused" email). If an owner reinstates them, they start a paid plan.
+  After the trial: monthly, ONE MONTH'S NOTICE. Yearly: no refund on a
   change of mind, refund of unused months if we stop the service.
 - Yearly any time: pay for 9 months, get 12. Founding dealers = first 30 approved: pay for 8, get 12. The dealer page
   shows how many founding places are left. Test dealers' founding places were cleared (30 of 30 left).
