@@ -5057,12 +5057,13 @@ function cfg(u){var r=u.role;
   dt:function(c){return c==='stock'||c==='sales'?'stock':c==='adverts'||c==='setup-plan'?'ads':c==='setup-brand'||c==='setup-docs'?'docs':null},
   rev:function(d){return d==='ads'?['adverts','']:d==='docs'?['setup','docs']:['stock','']}};
  if(r==='mechanic'){var mot=!!u.motOnly,T=[['jobs','Jobs'],['diary','Diary'],['money','Money'],['setup','Set-up'],['tools','Tools']];if(mot)T=[T[1],T[0],T[2],T[3],T[4]];
-  return {tabs:T,secs:[['prices',mot?'MOT classes you test':'Rates and prices',mot?'The classes you test and what you are paid':u.sub==='garage'?'Your labour rate and the MOT classes you test':'Your labour rate']].concat(mot?[]:[['services','Services you offer','The jobs customers can find you for']]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),
+  return {tabs:T,secs:[['prices',mot?'MOT classes you test':'Rates and prices',mot?'The classes you test and what you are paid':u.sub==='garage'?'Your labour rate and the MOT classes you test':'Your labour rate']].concat(mot||!hasSvc(u)?[]:[['services','Services you offer','The jobs customers can find you for']]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),
   dt:function(c){return c==='diary'?'diary':c==='setup-brand'||c==='setup-docs'?'docs':'jobs'},
   rev:function(d){return d==='diary'?['diary','']:d==='docs'?['setup','docs']:['jobs','']}};}
  var rec=r==='recovery',road=rec||r==='evcharge',P=rec?['prices','Fleet and prices','Your trucks, call-out, price per mile and extras']:r==='evcharge'?['prices','Your prices','Your call-out charge and price per mile']:['prices','Your prices',r==='body'?'Labour rate and alloy wheel prices':r==='valet'?'Your price for each size of car':'Your fitting and repair prices'];
  return {tabs:[['jobs','Jobs'],['money','Money'],['setup','Set-up'],['tools','Tools']],
   secs:[P].concat(road?[['hours','Opening hours','Your weekly hours, or open 24 hours'],['area',rec?'Area you cover':'Area and connectors',rec?'Your depot postcode and how far you travel':'Your base, how far you travel and the plugs you can charge']]:[]).concat([S_BRAND,S_BILL,S_DOCS,S_DET]),dt:function(){return null},rev:function(){return ['jobs','']}}}
+function hasSvc(u){try{return !!$('mc-svc-card')||!!(window.MCSVC&&window.MCSVC.card&&window.MCSVC.card(u))}catch(e){return false}}
 function done(u,k){var road=u.role==='recovery'||u.role==='evcharge',me=road&&window.MCrspMe?window.MCrspMe():null,d=me&&me.details||null;
  if(k==='prices')return u.role!=='recovery'||!me?null:!!(d&&d.trucks&&d.trucks.length);
  if(k==='hours')return !me?null:!!(d&&d.week&&d.week.length===7);
@@ -5090,7 +5091,8 @@ function tagOf(el,u){if(el.id==='mc-ptabs'||el.getAttribute('data-pc')==='keep')
  if(u.role==='mechanic')return u.dtab==='diary'?'diary':u.dtab==='docs'?'setup-docs':'jobs';return 'jobs'}
 function apply(){var u=window.GGuser,host=$('dash-body'),bar=$('mc-ptabs');if(!host||!bar||!on(u))return;load(u);
  var C=cfg(u),c=cur(u,C),bh=barHtml(u,C);if(bh!==last||!bar.firstChild){bar.innerHTML=bh;last=bh}
- [].forEach.call(host.children,function(el){var k=tagOf(el,u),show;
+ [].slice.call(host.children).forEach(function(el){var k=tagOf(el,u),show;
+  if(k!=='keep'&&(el.compareDocumentPosition(bar)&4))host.insertBefore(el,bar.nextSibling); /* nothing but the header sits above the tabs */
   if(k==='keep')show=true;
   else if(k==='inner'){var I=el.querySelectorAll('[data-pcs]');show=!I.length&&c==='jobs';[].forEach.call(I,function(x){var v=x.getAttribute('data-pcs')===c;x.style.display=v?'':'none';if(v)show=true})}
   else show=k.split('|').indexOf(c)>-1;
