@@ -3647,7 +3647,7 @@ l.forEach(function(c){var a=document.createElement('article');a.className='lcard
 a.innerHTML='<div class="limg">'+pic(c)+pills(c)+(c.photos&&c.photos.length>1?'<span class="pcount">'+c.photos.length+' photos</span>':'')+'<button type="button" class="heart" data-fav="'+c.id+'" aria-pressed="'+(c.fav?'true':'false')+'" aria-label="Save this car">'+(c.fav?'&#9829;':'&#9825;')+'</button></div><div class="lbody"><div class="lprice">'+price(c)+'</div>'+incv(c)+(window.MCfin?MCfin.card(c):'')+'<div class="ltitle">'+esc(c.make+' '+c.model)+'</div><div class="lvar">'+esc(c.variant)+'</div><div class="lspecs"><span>'+c.year+'</span><span>'+Number(c.miles).toLocaleString('en-GB')+' miles</span><span>'+esc(c.fuel)+'</span><span>'+esc(c.gear)+'</span><span>'+esc(c.body)+'</span></div><div class="lmeta"><span><b>'+esc(c.dealer)+'</b>, '+esc(c.town)+(window.MCflt&&MCflt.away('cars',c)?'<small class="laway">'+MCflt.away('cars',c)+'</small>':'')+'</span><button type="button" class="btn sm" data-view="'+c.id+'">View details</button></div></div>';
 box.appendChild(a)})}
 function byId(id){for(var i=0;i<CARS.length;i++)if(CARS[i].id===id)return CARS[i]}
-function pills(c){var a=window.MChist?window.MChist.pill(c):'';if(c.private)a+='<span class="badge pv">'+(c.business?'Business sale':'Private sale')+'</span>';if(c.featured&&c.fexp>Date.now())a+='<span class="badge fb">&#9733; Featured</span>';if(owns(c)&&c.waiting)a+='<span class="badge" style="background:#587080">Banner queue #'+(waitList().indexOf(c)+1)+'</span>';if(c.badge)a+='<span class="badge">'+esc(c.badge)+'</span>';return a?'<div class="pills">'+a+'</div>':''}
+function pills(c){var a=window.MChist?window.MChist.pill(c):'';if(c.sale==='sold')a+='<span class="badge sd">Sold</span>';else if(c.sale==='deposit')a+='<span class="badge dp">Under deposit</span>';if(c.private)a+='<span class="badge pv">'+(c.business?'Business sale':'Private sale')+'</span>';if(c.featured&&c.fexp>Date.now()&&c.sale!=='sold')a+='<span class="badge fb">&#9733; Featured</span>';if(owns(c)&&c.waiting)a+='<span class="badge" style="background:#587080">Banner queue #'+(waitList().indexOf(c)+1)+'</span>';if(c.badge)a+='<span class="badge">'+esc(c.badge)+'</span>';return a?'<div class="pills">'+a+'</div>':''}
 
 $('cars-list').addEventListener('click',function(e){
 var f=e.target.closest('[data-fav]');
@@ -3668,7 +3668,7 @@ d.innerHTML='<button type="button" class="btn ghost sm" id="cd-back" style="marg
 +'<h2 style="font-size:1.05rem;margin:6px 0">About this car</h2><p style="margin:0 0 12px">'+esc(c.desc||'No description added.')+'</p>'
 +(window.MChist?window.MChist.box(c):'')+(c.private&&window.MCpriv?window.MCpriv.notice('car',c.business):'')
 +'<div class="card" style="margin:0"><b>'+esc(c.dealer)+'</b><div class="note">'+esc(c.town)+'</div>'
-+(c.private&&!c.phone?'<p class="note" style="margin:8px 0 0">This seller takes messages through the site. Send one below.</p>':'<button type="button" class="btn ghost sm" id="cd-show" style="margin-top:8px">Show phone number</button> <span id="cd-num" hidden><b>'+esc(c.phone||'')+'</b></span>')
++(c.sale==='sold'?'<p style="margin:8px 0 0;background:var(--soft);border-radius:10px;padding:8px 12px"><b>This vehicle has been sold.</b> Ask the dealer about similar stock.</p>':c.sale==='deposit'?'<p style="margin:8px 0 0;background:var(--soft);border-radius:10px;padding:8px 12px"><b>Under deposit.</b> A buyer has left a deposit on this vehicle. You can still ask the dealer to tell you if it becomes available.</p>':'')+(c.private&&!c.phone?'<p class="note" style="margin:8px 0 0">This seller takes messages through the site. Send one below.</p>':'<button type="button" class="btn ghost sm" id="cd-show" style="margin-top:8px">Show phone number</button> <span id="cd-num" hidden><b>'+esc(c.phone||'')+'</b></span>')
 +'<form id="cd-enq" novalidate data-ad="'+c.id+'" data-k="cars"><label class="f" for="en-n">Your name</label><input type="text" id="en-n"><label class="f" for="en-p">Your phone</label><input type="tel" id="en-p"><label class="f" for="en-m">Message</label><textarea id="en-m">Hi, is this car still available?</textarea><div class="tc"><input type="checkbox" id="tc-en"><label for="tc-en">'+(c.private?'I understand '+(c.business?'this vehicle is sold by a business that is not a dealer':'this is a private sale')+'. Any purchase is made with the seller, not Motoring Central, and there is no dealer warranty. <a href="#terms" data-tsec="tc-private">Read the terms</a>':'I understand any purchase is made with the dealer, not Motoring Central. The dealer is responsible for this car, its condition and any warranty. <a href="#terms" data-tsec="tc-sales">Read the terms</a>')+'</label></div><p class="err" id="en-err" role="alert"></p><button class="btn block" type="submit">'+(c.private?'Message seller':'Message dealer')+'</button></form><p class="okmsg" id="en-ok" hidden></p></div>'+(window.MCsales?window.MCsales.detail(c,'cars',owns(c)):'')
 +'<div class="dlv" data-dlv="car:'+c.id+'"></div>'+'<p style="margin:14px 0 0"><button type="button" class="btn ghost sm" id="cd-insp">Book a mobile mechanic to inspect this car</button></p>'
 +'<p style="margin:8px 0 0"><button type="button" class="btn ghost sm" id="cd-fav">'+(c.fav?'Saved. Tap to remove':'Save this car')+'</button>'+(owns(c)?(window.MCpdiBtn&&!c.private?' '+window.MCpdiBtn('cars:'+c.id,1):'')+' <button type="button" class="btn ghost sm" id="cd-sold">Mark as sold</button> <button type="button" class="btn ghost sm" id="cd-del">Remove my listing</button>':'')+(owns(c)&&c.waiting?' <span class="note">On the banner waiting list: number '+(waitList().indexOf(c)+1)+'.</span> <button type="button" class="btn ghost sm" id="cd-leave">Leave waiting list</button>':'')+(owns(c)&&!c.waiting&&!(c.featured&&c.fexp>Date.now())?' <button type="button" class="btn ghost sm" id="cd-feature">Make it a premium ad'+(c.private?' · £14.99':'')+'</button>':'')+(c.private&&!owns(c)?' <button type="button" class="pv-link" data-pvrep="1">Report this advert</button>':'')+'</p></div></div>';
@@ -3722,7 +3722,7 @@ var CAP=Infinity;
 var curFr=0;
 var fi=0,fpause=false,rmo=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function openFeat(c){if(c.van&&window.GGvans){location.hash='vans';window.GGvans.open(c.id)}else{location.hash='cars';openCar(c.id)}}
-function actF(){var n=Date.now();return CARS.concat(window.GGvans?window.GGvans.list():[]).filter(function(c){var ok=c.featured&&c.fexp>n;if(ok&&c.fr==null)c.fr=curFr+Math.random()*(1-curFr);return ok}).sort(function(a,b){return a.fr-b.fr})}
+function actF(){var n=Date.now();return CARS.concat(window.GGvans?window.GGvans.list():[]).filter(function(c){var ok=c.featured&&c.fexp>n&&c.sale!=='sold';if(ok&&c.fr==null)c.fr=curFr+Math.random()*(1-curFr);return ok}).sort(function(a,b){return a.fr-b.fr})}
 function drawBanner(d){
 var box=$('feat');if(!box)return;var l=actF();
 if(!l.length){box.hidden=true;box.innerHTML='';return}
@@ -3821,7 +3821,7 @@ function uniq(k){var r=[];VANS.forEach(function(c){if(r.indexOf(c[k])<0)r.push(c
 function refreshFilters(){if(window.MCflt)window.MCflt.refresh('vans')}
 function filtered(){return window.MCflt?window.MCflt.run('vans',VANS):VANS.slice().sort(function(a,b){return b.id-a.id})}
 function byId(id){for(var i=0;i<VANS.length;i++)if(VANS[i].id===id)return VANS[i]}
-function pills(c){var a=window.MChist?window.MChist.pill(c):'';if(c.private)a+='<span class="badge pv">'+(c.business?'Business sale':'Private sale')+'</span>';if(c.featured&&c.fexp>Date.now())a+='<span class="badge fb">&#9733; Featured</span>';if(c.badge)a+='<span class="badge">'+esc(c.badge)+'</span>';return a?'<div class="pills">'+a+'</div>':''}
+function pills(c){var a=window.MChist?window.MChist.pill(c):'';if(c.sale==='sold')a+='<span class="badge sd">Sold</span>';else if(c.sale==='deposit')a+='<span class="badge dp">Under deposit</span>';if(c.private)a+='<span class="badge pv">'+(c.business?'Business sale':'Private sale')+'</span>';if(c.featured&&c.fexp>Date.now()&&c.sale!=='sold')a+='<span class="badge fb">&#9733; Featured</span>';if(c.badge)a+='<span class="badge">'+esc(c.badge)+'</span>';return a?'<div class="pills">'+a+'</div>':''}
 function render(){
 var l=filtered(),box=$('vans-list');
 $('vans-count').textContent=l.length+(l.length===1?' van found':' vans found');
@@ -3846,7 +3846,7 @@ d.innerHTML='<button type="button" class="btn ghost sm" id="vd-back" style="marg
 +'<h2 style="font-size:1.05rem;margin:6px 0">About this van</h2><p style="margin:0 0 12px">'+esc(c.desc||'No description added.')+'</p>'
 +(window.MChist?window.MChist.box(c):'')+(c.private&&window.MCpriv?window.MCpriv.notice('van',c.business):'')
 +'<div class="card" style="margin:0"><b>'+esc(c.dealer)+'</b><div class="note">'+esc(c.town)+'</div>'
-+(c.private&&!c.phone?'<p class="note" style="margin:8px 0 0">This seller takes messages through the site. Send one below.</p>':'<button type="button" class="btn ghost sm" id="vd-show" style="margin-top:8px">Show phone number</button> <span id="vd-num" hidden><b>'+esc(c.phone||'')+'</b></span>')
++(c.sale==='sold'?'<p style="margin:8px 0 0;background:var(--soft);border-radius:10px;padding:8px 12px"><b>This vehicle has been sold.</b> Ask the dealer about similar stock.</p>':c.sale==='deposit'?'<p style="margin:8px 0 0;background:var(--soft);border-radius:10px;padding:8px 12px"><b>Under deposit.</b> A buyer has left a deposit on this vehicle. You can still ask the dealer to tell you if it becomes available.</p>':'')+(c.private&&!c.phone?'<p class="note" style="margin:8px 0 0">This seller takes messages through the site. Send one below.</p>':'<button type="button" class="btn ghost sm" id="vd-show" style="margin-top:8px">Show phone number</button> <span id="vd-num" hidden><b>'+esc(c.phone||'')+'</b></span>')
 +'<form id="vd-enq" novalidate data-ad="'+c.id+'" data-k="vans"><label class="f" for="ven-n">Your name</label><input type="text" id="ven-n"><label class="f" for="ven-p">Your phone</label><input type="tel" id="ven-p"><label class="f" for="ven-m">Message</label><textarea id="ven-m">Hi, is this van still available?</textarea><div class="tc"><input type="checkbox" id="tc-ven"><label for="tc-ven">'+(c.private?'I understand '+(c.business?'this vehicle is sold by a business that is not a dealer':'this is a private sale')+'. Any purchase is made with the seller, not Motoring Central, and there is no dealer warranty. <a href="#terms" data-tsec="tc-private">Read the terms</a>':'I understand any purchase is made with the dealer, not Motoring Central. The dealer is responsible for this van, its condition and any warranty. <a href="#terms" data-tsec="tc-sales">Read the terms</a>')+'</label></div><p class="err" id="ven-err" role="alert"></p><button class="btn block" type="submit">'+(c.private?'Message seller':'Message dealer')+'</button></form><p class="okmsg" id="ven-ok" hidden></p></div>'+(window.MCsales?window.MCsales.detail(c,'vans',owns(c)):'')
 +'<div class="dlv" data-dlv="van:'+c.id+'"></div>'+'<p style="margin:14px 0 0"><button type="button" class="btn ghost sm" id="vd-insp">Book a mobile mechanic to inspect this van</button></p>'
 +'<p style="margin:8px 0 0"><button type="button" class="btn ghost sm" id="vd-fav">'+(c.fav?'Saved. Tap to remove':'Save this van')+'</button>'+(owns(c)?(window.MCpdiBtn&&!c.private?' '+window.MCpdiBtn('vans:'+c.id,1):'')+' <button type="button" class="btn ghost sm" id="vd-sold">Mark as sold</button> <button type="button" class="btn ghost sm" id="vd-del">Remove my listing</button>':'')+(owns(c)&&!(c.featured&&c.fexp>Date.now())?' <button type="button" class="btn ghost sm" id="vd-feature">Make it a premium ad'+(c.private?' · £14.99':'')+'</button>':'')+(c.private&&!owns(c)?' <button type="button" class="pv-link" data-pvrep="1">Report this advert</button>':'')+'</p></div></div>';
@@ -4375,7 +4375,7 @@ for(i=0;i<u.bays.length;i++){b.bay=i;if(!clash(u,b))break}
 b.id=bkSeq++;u.diary.push(b);u.dmsg='Accepted job added to your diary: '+dayLabel(k)+' at '+hm(st)+'.'}
 
 /* ===== Dealer stock management ===== */
-var STATUSES=[['prep','In preparation'],['sale','For sale'],['reserved','Reserved'],['trade','On trade'],['sold','Sold']];
+var STATUSES=[['prep','In preparation'],['sale','For sale'],['reserved','Under deposit'],['trade','On trade'],['sold','Sold']];
 var CBODY=['Hatchback','Saloon','SUV','Estate'],VBODY=['Small van','Medium van','Large van','Crew van','Pickup'],SCOL=['White','Silver','Grey','Black','Blue','Red','Green','Yellow','Orange'],SFUEL=['Petrol','Diesel','Hybrid','Electric'];
 var stSeq=1;
 function gbp0(n){return(n<0?'-':'')+'£'+Math.abs(Math.round(n)).toLocaleString('en-GB')}
@@ -4400,8 +4400,21 @@ function syncTrade(u){if(!window.GGtradeApi)return;u.stock.forEach(function(v){i
 if(!x||x.status==='withdrawn'){v.trade=null;v.tradeNote='';if(v.status==='trade')v.status='sale'}
 else if(x.status==='sold'){v.status='sold';v.sold={price:x.buyer?x.buyer.amount:x.price,date:iso(0)};v.loc='Sold';v.notes=(v.notes?v.notes+' ':'')+'Sold to the trade'+(x.buyer?': '+x.buyer.name:'')+'.';v.trade=null}});
 if(u.sedit&&u.sedit.id){var cur=stById(u,u.sedit.id);if(cur&&(!!cur.trade!==!!u.sedit.trade||cur.status!==u.sedit.status)){u.sedit.trade=cur.trade;u.sedit.status=cur.status;u.sedit.sold=cur.sold;u.sedit.tradeNote=cur.tradeNote}}}
+function nreg(x){return String(x||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
+function adOf(v){if(!v||!v.ad)return null;var a=apiFor(v.ad.k);return a?a.list().filter(function(c){return c.id===v.ad.id||(v.ad.db&&c.dbid===v.ad.db)})[0]||null:null}
+function setSale(v,state){var c=adOf(v);if(c){if(state){c.sale=state;if(state==='sold'){c.soldAt=Date.now();c.featured=false;c.waiting=false}else delete c.soldAt}else{delete c.sale;delete c.soldAt}}if(window.GGbanner)window.GGbanner()}
+window.MCstockSale=function(u,id,state,info){var v=stById(u,id);if(!v)return null;
+ if(state==='deposit'){if(v.status!=='sold')v.status='reserved';setSale(v,'deposit')}
+ else if(state==='sold'){if(v.trade&&window.GGtradeApi){window.GGtradeApi.withdraw(v.trade.id);v.trade=null}v.status='sold';v.sold={price:+(info&&info.price)||+v.price||0,date:(info&&info.date)||iso(0)};v.loc='Sold';setSale(v,'sold')}
+ else if(!info||info.revert){if(v.status==='reserved'||v.status==='sold'){v.status='sale';v.sold=null;if(v.loc==='Sold')v.loc='Forecourt'}setSale(v,null)}
+ if(info&&info.inv)v.inv=info.inv;else if(!state&&(!info||info.clear))delete v.inv;return v};
+window.MCstockAdd=function(u,o){if(!u.stock)seedStock(u);u.stock.forEach(function(v){if(v.id>=stSeq)stSeq=v.id+1});o.id=stSeq++;o.notes=o.notes||'';o.prep=o.prep||[];u.stock.push(o);return o};
+window.MCstockGet=function(u,id){return stById(u,id)};
 function stockHtml(u){if(!u.stock)seedStock(u);if(!u.sfilter)u.sfilter='all';if(!u.ssort)u.ssort='days';syncTrade(u);
-u.stock.forEach(function(v){if(v.ad){var a=apiFor(v.ad.k);if(!a||!a.list().some(function(c){return c.id===v.ad.id}))v.ad=null}});
+u.stock.forEach(function(v){if(v.id>=stSeq)stSeq=v.id+1});
+u.stock.forEach(function(v){if(!v.ad)return;var a=apiFor(v.ad.k),L=a?a.list():[],c=adOf(v);
+ if(!c&&u.sbid&&nreg(v.reg))c=L.filter(function(x){return x.dbid&&x.ownerId===u.sbid&&nreg(x.reg)===nreg(v.reg)})[0]||null;
+ if(c){v.ad.id=c.id;if(c.dbid)v.ad.db=c.dbid}else if(!u.sbid||window.MCownAds)v.ad=null});
 var live=u.stock.filter(function(v){return v.status!=='sold'}),val=0,pot=0,days=0,aged=0;
 live.forEach(function(v){val+=(+v.cost||0)+prepTot(v);pot+=margin(v);days+=daysIn(v);if(daysIn(v)>=60)aged++});
 var mon=iso(0).slice(0,7),sold=u.stock.filter(function(v){return v.sold&&v.sold.date.slice(0,7)===mon}),rev=0,gp=0;sold.forEach(function(v){rev+=v.sold.price;gp+=margin(v)});
@@ -4456,7 +4469,9 @@ s+='<div class="swapbox" id="tp-box"><h3 class="sh" style="margin-top:0">Move to
 +'<label class="swapack" for="tp-ack"><input type="checkbox" id="tp-ack"><span>I confirm this vehicle is sold as seen to the trade, with no warranty, and I have listed every fault I know about.</span></label>'
 +'<p class="note err" id="tp-err" role="alert"></p><div class="dtools"><button class="btn sm swapgo" type="button" data-stgo>Move to trade now</button><button class="btn sm ghost" type="button" data-stcancel>Cancel</button></div></div>'}
 s+='<p class="note err" id="st-err" role="alert"></p><div class="dtools"><button class="btn sm" type="button" data-ssave>'+(isNew?'Add to stock':'Save changes')+'</button>';
+if(!isNew&&!e.trade)s+='<button class="btn sm" type="button" data-sinv>'+(e.inv?'Open invoice '+esc(e.inv):e.status==='sold'?'Create invoice':'Take a deposit or sell (invoice)')+'</button>';
 if(!isNew&&e.status!=='sold'&&!e.trade)s+=e.ad?'<button class="btn sm ghost" type="button" data-sview>View advert</button>':'<button class="btn sm ghost" type="button" data-sadv>Advertise on Motoring Central</button>';
+if(!isNew&&e.status==='sold'&&e.ad)s+='<button class="btn sm ghost" type="button" data-sview>View advert (shows Sold)</button><button class="btn sm ghost" type="button" data-sdown>Take advert down</button>';
 if(!isNew&&e.status!=='sold')s+=e.trade?'<button class="btn sm swapgo" type="button" data-sretail>Move back to retail</button><button class="btn sm ghost" type="button" data-stview>View trade listing</button>':'<button class="btn sm ghost" type="button" data-strade'+(u.tpanel?' aria-expanded="true"':'')+'>Move to trade</button>';
 return s+'<button class="btn sm ghost" type="button" data-sclose>Close</button>'+(!isNew?'<button class="btn sm ghost danger" type="button" data-sdel>Delete</button>':'')+'</div></div>'}
 function readSt(u){var e=u.sedit;if(!e||!$('st-make'))return;function g(id){var x=$(id);return x?x.value:null}function n(id){var v=g(id);return v===''||v==null?'':+v}
@@ -4541,8 +4556,10 @@ var nid=1;api.list().forEach(function(c){if(c.id>=nid)nid=c.id+1});var wo0=chk&&
 var ad={id:nid,reg:reg0,wo:wo0,chk:chk||undefined,make:v.make,model:v.model,variant:v.variant,year:+v.year,price:+v.price,miles:+v.miles,fuel:v.fuel,gear:v.gear,body:v.body,col:v.col,town:u.town,dealer:u.name,phone:u.phone,desc:'Prepared and ready to drive away. Ask us about part exchange and finance.',photos:(v.photos||[]).slice(0,30),mine:true,featured:false,fexp:0};if(k==='vans'){ad.pay=1000;ad.vat=true}
 api.add(ad);v.ad={k:k,id:nid};if(v.status==='prep')v.status='sale';u.sedit=JSON.parse(JSON.stringify(v));u.smsg=(u.rnote!=null?'Moved back to retail. The trade listing has been withdrawn'+(u.rnote?' and '+u.rnote+' pending offer'+(u.rnote===1?' was':'s were')+' declined':'')+'. ':'')+'Your advert has been sent to our team for checking. It appears in '+(k==='cars'?'Cars':'Light commercials')+' once it is approved.';u.rnote=null;rd()});return}
 if(a.sview!=null){v=stById(u,u.sedit.id);if(v&&v.ad){var kk=v.ad.k,id=v.ad.id;location.hash=kk;setTimeout(function(){var ap=apiFor(kk);if(ap&&ap.open)ap.open(id)},150)}return}
-if(a.ssold!=null){var sp=+$('sl-p').value,sd=$('sl-d').value;if(!(sp>0)||!sd){$('st-err').textContent='Enter the sale price and date.';return}if(!saveSt(u,true))return;v=stById(u,u.sedit.id);if(v.trade&&window.GGtradeApi){window.GGtradeApi.withdraw(v.trade.id);v.trade=null}v.status='sold';v.sold={price:sp,date:sd};v.loc='Sold';dropAd(v);u.sedit=null;u.smsg=(v.reg||v.make+' '+v.model)+' marked as sold for '+gbp0(sp)+'. Profit '+gbp0(margin(v))+'.';rd();return}
-if(a.sunsold!=null){v=stById(u,u.sedit.id);v.status='sale';v.sold=null;v.loc='Forecourt';u.sedit=JSON.parse(JSON.stringify(v));rd();return}
+if(a.ssold!=null){var sp=+$('sl-p').value,sd=$('sl-d').value;if(!(sp>0)||!sd){$('st-err').textContent='Enter the sale price and date.';return}if(!saveSt(u,true))return;v=stById(u,u.sedit.id);if(v.trade&&window.GGtradeApi){window.GGtradeApi.withdraw(v.trade.id);v.trade=null}v.status='sold';v.sold={price:sp,date:sd};v.loc='Sold';var hadAd=!!adOf(v);setSale(v,'sold');u.sedit=null;u.smsg=(v.reg||v.make+' '+v.model)+' marked as sold for '+gbp0(sp)+'. Profit '+gbp0(margin(v))+'.'+(hadAd?' Its advert now shows Sold and stays on the website until you take it down.':'');rd();return}
+if(a.sdown!=null){v=stById(u,u.sedit.id);if(v){dropAd(v);u.sedit=JSON.parse(JSON.stringify(v));u.smsg='The advert has been taken down.'}rd();return}
+if(a.sinv!=null){if(!saveSt(u,true))return;if(window.MCinv)window.MCinv.open(u,u.sedit.id);return}
+if(a.sunsold!=null){v=stById(u,u.sedit.id);v.status='sale';v.sold=null;v.loc='Forecourt';setSale(v,null);u.sedit=JSON.parse(JSON.stringify(v));rd();return}
 if(a.sdel!=null){if(!t.getAttribute('data-armed')){t.setAttribute('data-armed','1');t.textContent='Tap again to confirm';return}v=stById(u,u.sedit.id);if(v)dropAd(v);u.stock=u.stock.filter(function(x){return x.id!==u.sedit.id});u.smsg='Vehicle removed from stock.';u.sedit=null;rd();return}
 });
 B.addEventListener('input',function(ev){var u=window.GGuser;if(!u)return;
@@ -5715,18 +5732,18 @@ function wire(p,onLogo){var f=$(p+'-logo');if(!f)return;f.addEventListener('chan
  var form=inp.closest('form');if(form)form.addEventListener('submit',function(e){var w=$(p+'-web');if(w&&w.offsetParent&&site(w.value)===null){e.preventDefault();e.stopImmediatePropagation();$(p+'-brerr').textContent='Enter a full website address, like www.yourbusiness.co.uk, or leave it empty.';w.focus()}},true)});
 window.MCbrand={
  read:function(p,d){var w=$(p+'-web');d.website=w?site(w.value)||'':'';if(cache[p])d.logo=cache[p]},
- logo:function(u){return u&&u.logo&&/^data:image\/png;base64,/.test(u.logo)?'<img class="brandlogo" alt="'+esc(u.name)+' logo" src="'+u.logo+'">':''},
+ logo:function(u){var src=u&&u.logo&&/^data:image\/png;base64,/.test(u.logo)?u.logo:u&&u.logoUrl&&/^https:\/\//.test(u.logoUrl)?u.logoUrl:'';return src?'<img class="brandlogo" alt="'+esc(u.name)+' logo" src="'+esc(src)+'">':''},
  link:function(u){var v=u&&site(u.website);return v?'<a class="brandlink" href="'+esc(v)+'" target="_blank" rel="noopener noreferrer nofollow">'+esc(v.replace(/^https?:\/\//i,'').replace(/\/$/,''))+'</a>':''},
  admin:function(u){var l=this.logo(u),k=this.link(u);return (l||k)?'<div style="display:flex;gap:12px;align-items:center;margin-top:10px"><span class="note">Logo and website:</span>'+(l?l.replace('brandlogo','brandlogo sm'):'<span class="note">no logo</span>')+(k||'<span class="note">no website</span>')+'</div>':(u.website===undefined&&!u.logo?'':'')},
  card:function(u){if(!u||u.role==='admin'||u.role==='customer')return '';
-  return '<div class="card" id="brand-card"><h2>Your logo and website</h2><p class="note" style="margin:0 0 8px">Shown on your profile so customers recognise your business.</p><div class="bprev" id="db-logoprev">'+(this.logo(u)||'<span class="note">No logo yet.</span>')+'</div>'
-  +'<label class="up" style="margin-top:10px">'+(u.logo?'Change logo':'Add your logo')+' (PNG or JPG)<input type="file" id="db-logo" accept="image/png,image/jpeg,image/webp"></label>'
+  return '<div class="card" id="brand-card"><h2>Your logo and website</h2><p class="note" style="margin:0 0 8px">Shown on your profile and printed on your invoices, so customers recognise your business.</p><div class="bprev" id="db-logoprev">'+(this.logo(u)||'<span class="note">No logo yet.</span>')+'</div>'
+  +'<label class="up" style="margin-top:10px">'+(u.logo||u.logoUrl?'Change logo':'Add your logo')+' (PNG or JPG)<input type="file" id="db-logo" accept="image/png,image/jpeg,image/webp"></label>'
   +'<label class="f" for="db-web" style="margin-top:10px">Website</label><input type="text" id="db-web" inputmode="url" autocomplete="url" placeholder="www.yourbusiness.co.uk" value="'+esc((u.website||'').replace(/^https?:\/\//i,''))+'"><p class="branderr" id="db-brerr" role="alert"></p>'
-  +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn sm" type="button" id="db-brsave">Save</button>'+(u.logo?'<button class="btn sm ghost" type="button" id="db-brdel">Remove logo</button>':'')+'<span class="note" id="db-brmsg" role="status">'+esc(u.brmsg||'')+'</span></div></div>'},
+  +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><button class="btn sm" type="button" id="db-brsave">Save</button>'+(u.logo||u.logoUrl?'<button class="btn sm ghost" type="button" id="db-brdel">Remove logo</button>':'')+'<span class="note" id="db-brmsg" role="status">'+esc(u.brmsg||'')+'</span></div></div>'},
  bind:function(u){if(!$('brand-card'))return;u.brmsg='';delete cache.db;wire('db');
   $('db-brsave').onclick=function(){var v=site($('db-web').value);if(v===null){$('db-brerr').textContent='Enter a full website address, like www.yourbusiness.co.uk, or leave it empty.';$('db-web').focus();return}
-   u.website=v;if(cache.db)u.logo=cache.db;u.brmsg='Saved.';if(window.GGdash)window.GGdash();var b=$('db-brsave');if(b)b.focus()};
-  var del=$('db-brdel');if(del)del.onclick=function(){delete u.logo;u.brmsg='Logo removed.';if(window.GGdash)window.GGdash()}}};
+   u.website=v;if(cache.db){u.logo=cache.db;if(u.sbid&&window.MCdb&&window.MCdb.upLogo)window.MCdb.upLogo(cache.db).then(function(url){if(url)u.logoUrl=url})}u.brmsg='Saved.';if(window.GGdash)window.GGdash();var b=$('db-brsave');if(b)b.focus()};
+  var del=$('db-brdel');if(del)del.onclick=function(){delete u.logo;delete u.logoUrl;u.brmsg='Logo removed.';if(window.GGdash)window.GGdash()}}};
 })();
 </script>
 <script>
@@ -6549,7 +6566,7 @@ window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(funct
 .mx-n{background:#C62828;color:#fff;border-radius:999px;font-size:.75rem;padding:2px 8px;vertical-align:middle;margin-left:6px}.mx-t{border-top:1px solid var(--line);padding:8px 0}.mx-t summary{cursor:pointer;list-style:none}.mx-t summary b{display:block}.mx-t summary small{color:var(--muted)}.mx-t.new summary b::after{content:" \2022 new";color:#C62828;font-size:.8rem}.mx-m{background:var(--soft);border-radius:10px;padding:8px 10px;margin:8px 0;max-width:92%}.mx-m.me{margin-left:auto;background:rgba(59,183,255,.15)}.mx-m small{color:var(--muted);font-size:.75rem}.mx-m p{margin:2px 0 0}.mx-act{margin-top:6px}.mx-r{display:flex;gap:8px;align-items:flex-end;margin-top:6px}.mx-r textarea{flex:1;min-width:0}.mot{margin-top:12px}.mot-l{list-style:none;margin:8px 0 0;padding:0}.mot-l>li{border-top:1px solid var(--line);padding:6px 0}.mot-r{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.mot-b{font-weight:800;font-size:.75rem;border-radius:6px;padding:2px 8px;color:#fff}.mot-b.p{background:#1F7A4D}.mot-b.f{background:#C62828}.mot-l details{margin-top:4px;font-size:.88rem}.mot-l details ul{margin:4px 0 0;padding-left:18px}.mot-l li.f{color:#C62828}.mot-warn{background:#FDECEA;color:#5F1212;border-radius:8px;padding:8px 10px;margin:8px 0 0}.mcnight .mot-warn{background:#3A1515;color:#FFDCDC}.showroom{margin-bottom:12px;border:2px solid #FFD43B}.sr-n{font-size:1.2rem}.sr-box{border:1px solid var(--line);border-radius:12px;padding:10px 12px}.sr-box input{width:100%;font-size:.85rem}.bulk-l{list-style:none;padding:0;margin:10px 0 0;font-size:.9rem}.bulk-l li{border-top:1px solid var(--line);padding:6px 0}.bulk-l li.x{color:var(--muted)}.bulk-l li.ok b{color:#1F7A4D}
 .dg-open{margin-top:6px}.dg{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:8px}.dg-f{border:0;padding:0;margin:10px 0 0}.dg-f legend{font-weight:700;font-size:.9rem;margin-bottom:6px}.dg-chips{display:flex;flex-wrap:wrap;gap:6px}.linkbtn{background:none;border:0;padding:0;color:inherit;text-decoration:underline;font:inherit;cursor:pointer}
 .regfind{display:flex;gap:8px;align-items:stretch}.regfind input{flex:1;min-width:0}.regfind .btn{flex:none;min-width:74px}
-.badge.wo,.mcnight .badge.wo{background:#C62828!important;color:#fff!important;font-weight:800;border:0}.badge.hc,.mcnight .badge.hc{background:#1F7A4D!important;color:#fff!important;border:0}.badge.fn,.mcnight .badge.fn{background:#B26A00!important;color:#fff!important;border:0}
+.ivr{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:6px 0}.ivr input,.ivr select{flex:1 1 130px;min-width:0;margin:0}.ivr .ivd{flex:3 1 240px}.ivr .iva{flex:0 1 120px}.badge.sd,.mcnight .badge.sd{background:#0B1C35!important;color:#FFD43B!important;font-weight:800;border:0;letter-spacing:.04em;text-transform:uppercase}.badge.dp,.mcnight .badge.dp{background:#B26A00!important;color:#fff!important;font-weight:800;border:0}.badge.wo,.mcnight .badge.wo{background:#C62828!important;color:#fff!important;font-weight:800;border:0}.badge.hc,.mcnight .badge.hc{background:#1F7A4D!important;color:#fff!important;border:0}.badge.fn,.mcnight .badge.fn{background:#B26A00!important;color:#fff!important;border:0}
 .wo-box{border:2px solid #C62828;background:#FDECEA;color:#5F1212;border-radius:12px;padding:12px 14px;margin:0 0 12px}.wo-box b{font-size:1.05rem;color:#B71C1C}.wo-box p{margin:6px 0 0}.mcnight .wo-box{background:#3A1515;color:#FFDCDC}.mcnight .wo-box b{color:#FF8A80}
 .hc-box{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:0 0 12px}.hc-box.ok{border-color:#1F7A4D}.hc-box ul{list-style:none;margin:8px 0;padding:0}.hc-box li{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-top:1px solid var(--line)}.hc-box li.ok b{color:#1F7A4D}.hc-box li.x b{color:#C62828}.hc-box li.u b{color:var(--muted)}.mcnight .hc-box li.ok b{color:#6FD39B}.mcnight .hc-box li.x b{color:#FF8A80}
 .pv-note{border:2px solid #FFD43B;background:var(--soft);border-radius:14px;padding:12px 14px;margin:12px 0;font-size:.92rem;line-height:1.45;color:var(--ink)}
@@ -6912,6 +6929,7 @@ function engBucket(e){return !e?'':e<=1.0?'1.0':e<=1.4?'1.4':e<=1.9?'1.9':'2.0'}
 /* does this vehicle pass every filter, apart from the one named in skip? */
 function ok(kind,c,skip){var s=ST[kind];
  if(c.private&&c.exp&&c.exp<Date.now())return false;
+ if(c.sale==='sold'&&c.soldAt&&Date.now()-c.soldAt>30*864e5&&!(window.GGuser&&window.GGuser.sbid&&c.ownerId===window.GGuser.sbid))return false;
  if(skip!=='seller'&&s.seller&&(s.seller==='private')!==!!c.private)return false;
  if(skip!=='wo'&&s.wo==='hide'&&window.MChist&&window.MChist.isWO(c))return false;
  if(skip!=='ulez'&&s.ulez==='yes'&&ulezOf(kind,c)!=='yes')return false;
@@ -6936,7 +6954,7 @@ function ok(kind,c,skip){var s=ST[kind];
  return true}
 function all(kind){var a=K[kind].api();return a?a.list():[]}
 function run(kind,list){var s=ST[kind],l=(list||all(kind)).filter(function(c){return ok(kind,c)}),near=here(kind);
- l.sort(function(a,b){return s.sort==='pl'?cost(kind,a)-cost(kind,b):s.sort==='ph'?cost(kind,b)-cost(kind,a):s.sort==='mi'?a.miles-b.miles:s.sort==='yr'?(b.year-a.year)||(b.id-a.id):s.sort==='pay'?(b.pay||0)-(a.pay||0):s.sort==='near'&&near?((away(kind,a)==null?1e9:away(kind,a))-(away(kind,b)==null?1e9:away(kind,b)))||(b.id-a.id):b.id-a.id});return l}
+ l.sort(function(a,b){return s.sort==='pl'?cost(kind,a)-cost(kind,b):s.sort==='ph'?cost(kind,b)-cost(kind,a):s.sort==='mi'?a.miles-b.miles:s.sort==='yr'?(b.year-a.year)||(b.id-a.id):s.sort==='pay'?(b.pay||0)-(a.pay||0):s.sort==='near'&&near?((away(kind,a)==null?1e9:away(kind,a))-(away(kind,b)==null?1e9:away(kind,b)))||(b.id-a.id):b.id-a.id});var so=l.filter(function(c){return c.sale==='sold'});return so.length?l.filter(function(c){return c.sale!=='sold'}).concat(so):l}
 function tally(kind,field,skip){var n={};all(kind).forEach(function(c){if(!ok(kind,c,skip))return;var v=typeof field==='function'?field(c):c[field];if(v===''||v==null||v===0)return;n[v]=(n[v]||0)+1});return n}
 
 /* ---------- drawing ---------- */
@@ -8036,7 +8054,7 @@ function slimBig(v,depth){depth=depth||0;if(v==null)return null;var t=typeof v;
  if(Array.isArray(v))return v.slice(0,300).map(function(x){return slimBig(x,depth+1)});
  var o={};Object.keys(v).slice(0,80).forEach(function(k){if(depth===0&&/^(email|pass|password|role|sub|name|phone|town|website|plan|rates|status|docs|joined|submitted|level|sbid|reject|suspend|ck|rec|jobs|dtab|dview|det|rejecting|restored|reviewedAt|logo|signins|fails|motAgreed)$/.test(k))return;if(k.charAt(0)==='_')return;var c=slimBig(v[k],depth+1);if(c!==null&&c!=='')o[k]=c});return o}
 function syncSettings(){var u=window.GGuser;if(!sb||!u||!u.sbid||u.role==='customer'||u.role==='admin')return;
- var body;try{body={p_rates:slim(u.rates)||{},p_details:slimBig(u)||{},p_plan:u.plan||'payg'}}catch(e){return}var s=JSON.stringify(body);if(s.length>30000)return;
+ var body;try{body={p_rates:slim(u.rates)||{},p_details:slimBig(u)||{},p_plan:u.plan||'payg'};if(u.role==='dealer'&&BK.ready&&BK.uid===u.sbid)delete body.p_details.stock}catch(e){return}var s=JSON.stringify(body);if(s.length>30000)return;
  if(setSig[u.sbid]===undefined){setSig[u.sbid]=s;return}if(setSig[u.sbid]===s)return;setSig[u.sbid]=s;clearTimeout(setT);
  setT=setTimeout(function(){sb.rpc('save_partner_settings',body).then(function(r){if(r.error){setSig[u.sbid]='';toast('Your changes were not saved. Check your connection and try again.',true)}})},1200)}
 /* ---------- quote requests and quotes ---------- */
@@ -8088,8 +8106,8 @@ function history(kind,reg,payment){return ready.then(function(){return sb.functi
 /* ---------- keep everything fresh ---------- */
 var lastWho='',ticks=0;
 setInterval(function(){var u=window.GGuser,who=u&&u.sbid?u.sbid+u.role:'';ticks++;
- if(who!==lastWho){lastWho=who;adOwner();if(!who){qPut([]);return}bkSt={};pullBookings();pullQuotes();return}
- if(!who||document.hidden)return;pushStatuses();syncSettings();adSync();if(ticks%8===0){pullBookings();pullQuotes()}},3000);
+ if(who!==lastWho){lastWho=who;adOwner();if(!who){qPut([]);return}bkSt={};pullBookings();pullQuotes();if(u.role==='dealer')bookLoad(u);return}
+ if(!who||document.hidden)return;pushStatuses();syncSettings();adSync();bookTick();if(ticks%8===0){pullBookings();pullQuotes()}},3000);
 /* ---------- car and van sales: buyer messages, viewings, MOT history, showroom, bulk upload, sample switch ---------- */
 function E(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
 function gbp(n){return '£'+(+n).toFixed(2)}
@@ -8354,9 +8372,9 @@ function markReview(c,st,note){if(!c)return;if(!('_b0' in c))c._b0=c.badge;
  else{delete c.review;delete c.rnote;c.badge=c._b0;if(c.badge===undefined)delete c.badge}}
 function rerender(){adOwner();if(window.GGbanner)window.GGbanner();if(window.GGrerender)try{window.GGrerender()}catch(e){}}
 function pullOwn(){if(!realUser())return;var u=window.GGuser;
- sb.from('adverts').select('id,owner_id,kind,data,status,review_note,check_id,vehicle_checks(id,status,summary,source,created_at)').eq('owner_id',u.sbid).neq('status','removed').limit(300).then(function(r){if(r.error||!r.data||window.GGuser!==u)return;var ch=0;
+ sb.from('adverts').select('id,owner_id,kind,data,status,review_note,check_id,vehicle_checks(id,status,summary,source,created_at)').eq('owner_id',u.sbid).neq('status','removed').limit(300).then(function(r){if(r.error||!r.data||window.GGuser!==u)return;var ch=0;window.MCownAds=1;
   r.data.forEach(function(row){var c=advByDb(row.id);
-   if(!c){var api=adApi(row.kind);if(!api||!row.data)return;c=row.data;delete c.chk;c.id=row.id;c.dbid=row.id;c.ownerId=row.owner_id;c.chk=chkOf(row.vehicle_checks);markReview(c,row.status,row.review_note);adSig[row.id]=JSON.stringify(adClean(c));adAdd[row.kind](c);ch=1}
+   window.MCownAds=1;if(!c){var api=adApi(row.kind);if(!api||!row.data)return;c=row.data;delete c.chk;c.id=row.id;c.dbid=row.id;c.ownerId=row.owner_id;c.chk=chkOf(row.vehicle_checks);markReview(c,row.status,row.review_note);adSig[row.id]=JSON.stringify(adClean(c));adAdd[row.kind](c);ch=1}
    else if((c.review||'live')!==row.status||(c.rnote||'')!==(row.review_note||'')&&row.status==='declined'){markReview(c,row.status,row.review_note);ch=1}
    var was=REVSEEN[row.id];if(was!==row.status){REVSEEN[row.id]=row.status;revKeep();
     if(was==='pending'&&row.status==='live')toast('Good news: your advert for '+adTitle(c)+' has been approved and is now live.');
@@ -9350,6 +9368,187 @@ setInterval(function(){try{pqDraw(false)}catch(e){}},1500);
 window.MCbookPriced=function(kind,name,opts,text){var id=partnerId(name);if(!realUser()||!id)return;
  ready.then(function(){return sb.rpc('book_priced',{p_kind:kind,p_partner:id,p_opts:opts,p_summary:text,p_vehicle:window.MCbookingVeh?window.MCbookingVeh():null,p_day:/^\d{4}-\d\d-\d\d$/.test(opts.day||'')?opts.day:null})}).then(function(r){
   if(r.error)toast(/not_offered/.test(r.error.message)?'That partner does not offer this. Choose another partner.':/partner_unavailable/.test(r.error.message)?'That partner is not taking bookings right now. Choose another.':'Your booking was not saved. Check your connection and try again.',true)},function(){toast('Your booking was not saved. Check your connection and try again.',true)})};
+
+/* ---------- dealer stock book: its own row in the database (settings stop saving above about 30 KB) ---------- */
+var BK={uid:null,ready:false,sig:'',busy:false};
+function bookClean(v,d){d=d||0;if(v==null)return null;var t=typeof v;if(t==='string')return /^data:/.test(v)?null:v.slice(0,2000);if(t==='number')return isFinite(v)?v:null;if(t==='boolean')return v;if(t!=='object'||d>6)return null;
+ if(Array.isArray(v))return v.slice(0,600).map(function(x){return bookClean(x,d+1)}).filter(function(x){return x!==null});
+ var o={};Object.keys(v).slice(0,80).forEach(function(k){if(k.charAt(0)==='_')return;var c=bookClean(v[k],d+1);if(c!==null)o[k]=c});return o}
+function bookLoad(u){BK={uid:u.sbid,ready:false,sig:'',busy:false};
+ sb.from('dealer_books').select('stock').eq('partner_id',u.sbid).maybeSingle().then(function(r){if(window.GGuser!==u||r.error)return;
+  if(r.data&&Array.isArray(r.data.stock)){u.stock=r.data.stock;BK.sig=JSON.stringify(bookClean(u.stock))}
+  BK.ready=true;var ae=document.activeElement;if(location.hash==='#dashboard'&&window.GGdash&&!(ae&&ae.closest&&ae.closest('#dash-body input,#dash-body textarea,#dash-body select')))window.GGdash()})}
+function bookTick(){var u=window.GGuser;if(!u||!u.sbid||u.role!=='dealer'||!BK.ready||BK.uid!==u.sbid||BK.busy||!Array.isArray(u.stock))return;
+ if(!u.sedit&&!BK.noPhoto){var pend=null;u.stock.some(function(v){return (v.photos||[]).some(function(src,i){if(/^data:image\//.test(String(src))){pend=[v,i];return true}return false})});
+  if(pend){BK.busy=true;var path=u.sbid+'/st-'+Date.now()+'.jpg';
+   sb.storage.from('advert-photos').upload(path,blobOf(pend[0].photos[pend[1]]),{contentType:'image/jpeg'}).then(function(r){BK.busy=false;if(r.error){BK.fail=(BK.fail||0)+1;if(BK.fail>2)BK.noPhoto=true;return}
+    pend[0].photos[pend[1]]=sb.storage.from('advert-photos').getPublicUrl(path).data.publicUrl},function(){BK.busy=false;BK.noPhoto=true});return}}
+ var s=JSON.stringify(bookClean(u.stock));if(s===BK.sig)return;
+ if(s.length>780000){if(!BK.warned){BK.warned=1;toast('Your stock book is too big to save. Delete some old sold vehicles.',true)}return}
+ BK.busy=true;var was=BK.sig;BK.sig=s;
+ sb.from('dealer_books').upsert({partner_id:u.sbid,stock:JSON.parse(s),updated_at:new Date().toISOString()}).then(function(r){BK.busy=false;if(r.error){BK.sig=was;if(!BK.told){BK.told=1;toast('Your stock changes were not saved. Check your connection.',true)}}else BK.told=0},function(){BK.busy=false;BK.sig=was})}
+window.MCdb.upLogo=function(dataUrl){var u=window.GGuser;if(!sb||!u||!u.sbid)return Promise.resolve('');var path=u.sbid+'/logo-'+Date.now()+'.png';
+ return ready.then(function(){return sb.storage.from('advert-photos').upload(path,blobOf(dataUrl),{contentType:'image/png'})}).then(function(r){return r.error?'':sb.storage.from('advert-photos').getPublicUrl(path).data.publicUrl},function(){return ''})};
+
+/* ---------- dealer sales invoices: deposit receipt, then the final invoice once paid in full ---------- */
+var INV={rows:null,at:0,uid:null,ed:null,msg:'',set:false,pend:null,voiding:false};
+var IVM=[['cash','Cash'],['card','Card'],['bacs','Bank transfer (BACS)'],['px','Part exchange'],['finance','Finance']];
+var IVV=[['margin','Margin scheme (no VAT shown)'],['std','Standard rate 20% (price includes VAT)'],['none','No VAT']];
+var IVST={draft:'Draft',deposit:'Deposit taken',paid:'Paid in full',cancelled:'Cancelled'};
+function ivNum(n){return Math.round((+n||0)*100)/100}
+function ivG(n){return '£'+ivNum(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function ivD(t){if(!t)return '';var d=new Date(/^\d{4}-\d\d-\d\d$/.test(t)?t+'T12:00:00':t);return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
+function ivToday(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+function ivTot(d){var t=0,p=0;(d.lines||[]).forEach(function(l){t+=ivNum(l.amount)});(d.payments||[]).forEach(function(x){p+=ivNum(x.amount)});return{t:ivNum(t),p:ivNum(p),b:ivNum(t-p)}}
+function ivSeller(u){var s=u.inv||{};return{name:u.name||'',addr:s.addr||u.town||'',phone:u.phone||'',email:u.email||'',web:u.website||'',vatReg:!!s.vatReg,vat:s.vat||'',co:s.co||'',fca:s.fca||'',bankName:s.bankName||'',bankSort:s.bankSort||'',bankAcc:s.bankAcc||'',terms:s.terms||'',logo:u.logoUrl||''}}
+function ivFrom(x){return JSON.parse(JSON.stringify({id:x.id,number:x.number,status:x.status,stock_id:x.stock_id,advert_id:x.advert_id,vehicle:x.vehicle||{},customer:x.customer||{},lines:x.lines||[],payments:x.payments||[],notes:x.notes||'',seller:x.seller||{},total:x.total,paid:x.paid,finalised_at:x.finalised_at,sale_date:x.sale_date,created_at:x.created_at,cancel_reason:x.cancel_reason||''}))}
+function ivPull(u){INV.at=Date.now();ready.then(function(){return sb.from('dealer_invoices').select('*').order('seq',{ascending:false}).limit(300)}).then(function(r){if(window.GGuser!==u)return;INV.rows=r.error?[]:(r.data||[]);
+ if(INV.pend!=null){var p=INV.pend;INV.pend=null;window.MCinv.open(u,p)}else ivDraw(true)})}
+window.MCinv={open:function(u,stockId){if(!realUser()||u.role!=='dealer'){toast('Invoices are saved to your dealer account. Log in with your own dealer account to use them.',true);return}
+  if(INV.uid!==u.sbid)INV={rows:null,at:0,uid:u.sbid,ed:null,msg:'',set:false,pend:null,voiding:false};
+  if(INV.rows===null){INV.pend=stockId;ivPull(u);return}
+  var v=window.MCstockGet?window.MCstockGet(u,stockId):null;if(!v)return;var ex=INV.rows.filter(function(x){return +x.stock_id===+stockId&&x.status!=='cancelled'})[0];
+  if(ex)INV.ed=ivFrom(ex);
+  else{var def=(u.inv&&u.inv.vatReg)?'margin':'none';
+   INV.ed={id:null,number:'',status:'draft',stock_id:stockId,advert_id:(v.ad&&v.ad.db)||null,vehicle:{reg:v.reg||'',make:v.make||'',model:v.model||'',variant:v.variant||'',year:v.year||'',miles:v.miles||'',col:v.col||'',fuel:v.fuel||'',gear:v.gear||'',vin:v.vin||'',firstReg:''},customer:{name:'',addr:'',phone:'',email:''},
+    lines:[{d:[v.year,v.make,v.model,v.variant].filter(Boolean).join(' ')+(v.reg?' ('+v.reg+')':''),amount:(v.sold&&v.sold.price)||+v.price||0,vat:def,veh:1}],payments:[],notes:''}}
+  INV.msg='';INV.voiding=false;INV.set=!u.inv;ivDraw(true);setTimeout(function(){var c=$('mc-inv');if(c)c.scrollIntoView({behavior:'smooth',block:'start'})},120)}};
+function ivI(path,val,ph,type,extra){return '<input type="'+(type||'text')+'" data-ivf="'+path+'" value="'+E(val==null?'':val)+'" placeholder="'+E(ph||'')+'" aria-label="'+E(ph||path)+'"'+(extra||'')+'>'}
+function ivSel(path,val,opts){return '<select data-ivf="'+path+'" aria-label="'+E(path)+'">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===val?' selected':'')+'>'+E(o[1])+'</option>'}).join('')+'</select>'}
+function ivF(id,label,html){return '<div><label class="f">'+label+'</label>'+html+'</div>'}
+function ivPayTxt(p){var m=(IVM.filter(function(o){return o[0]===p.method})[0]||[0,p.method||''])[1];
+ if(p.method==='px')return m+': '+[p.pxreg,p.pxveh,p.pxmiles?Number(p.pxmiles).toLocaleString('en-GB')+' miles':''].filter(Boolean).join(', ')+(ivNum(p.pxallow)?'. Allowance '+ivG(p.pxallow):'')+(ivNum(p.pxsettle)?', less finance settled '+ivG(p.pxsettle):'');
+ if(p.method==='finance')return m+(p.lender?': '+p.lender:'')+(p.ref?', agreement '+p.ref:'');
+ return m+(p.ref?': '+p.ref:'')}
+function ivTotHtml(d){var T=ivTot(d);return '<div><b>'+ivG(T.t)+'</b>invoice total</div><div><b>'+ivG(T.p)+'</b>paid so far</div><div><b>'+(T.b>0?ivG(T.b):T.t>0&&T.b<=0?'Paid in full':ivG(0))+'</b>'+(T.b>0?'still to pay':T.b<0?'overpaid by '+ivG(-T.b):'balance')+'</div>'}
+function ivEdHtml(u){var d=INV.ed,T=ivTot(d),S=u.inv||{},fin=d.status==='paid',can=d.status==='cancelled',v=d.vehicle||{},c=d.customer||{};
+ var h='<div class="card mc-form" id="mc-inv"><div class="dhead"><h2 style="margin:0">'+(fin?'Sales invoice ':can?'Cancelled invoice ':d.id?(T.p>0?'Deposit taken ':'Draft sale '):'New sale')+E(d.number||'')+'</h2><button class="btn sm ghost" type="button" data-ivx="close">Close</button></div>';
+ h+='<p class="note" style="margin:6px 0"><b>'+E([v.reg,v.year,v.make,v.model,v.variant].filter(Boolean).join(' '))+'</b>'+(d.id?' · '+E(IVST[d.status]||d.status):'')+'</p>';
+ if(INV.msg)h+='<p class="dmsg" role="status" style="margin:0 0 8px">'+E(INV.msg)+'</p>';
+ if(fin||can){
+  h+='<p class="note" style="margin:0 0 6px">'+(fin?'Finalised on '+E(ivD(d.finalised_at||d.sale_date))+'. A final invoice cannot be edited: cancel it and raise a new one if something is wrong.':'Cancelled'+(d.cancel_reason?': '+E(d.cancel_reason):'')+'.')+'</p>'
+   +'<p class="note" style="margin:0"><b>Customer:</b> '+E(c.name||'')+(c.phone?' · '+E(c.phone):'')+'</p>'
+   +d.lines.map(function(l){return '<div class="prow"><span>'+E(l.d)+'</span><b>'+ivG(l.amount)+'</b></div>'}).join('')
+   +'<h3 class="sh">Payments</h3>'+(d.payments.length?d.payments.map(function(p){return '<div class="prow"><span>'+E(ivD(p.date))+' · '+E(ivPayTxt(p))+'</span><b>'+ivG(p.amount)+'</b></div>'}).join(''):'<p class="note">None.</p>')
+   +'<div class="kpi" style="margin-top:10px">'+ivTotHtml(d)+'</div><p class="err" id="iv-err" role="alert"></p><div class="dtools"><button class="btn sm" type="button" data-ivx="print">Print '+(fin?'invoice':'copy')+'</button>'
+   +(fin?(INV.voiding?'<input type="text" id="iv-why" maxlength="300" placeholder="Reason for cancelling" style="max-width:260px"><button class="btn sm ghost danger" type="button" data-ivx="voidgo">Cancel this invoice now</button><button class="btn sm ghost" type="button" data-ivx="voidno">Keep it</button>':'<button class="btn sm ghost" type="button" data-ivx="void">Cancel this invoice</button>'):'')+'</div></div>';
+  return h}
+ h+='<details class="dt-more"'+(INV.set?' open':'')+'><summary><b>Your details on invoices</b> '+(u.inv?'':'<span class="sst">Fill these in first</span>')+'</summary>'
+  +'<p class="note" style="margin:6px 0">These appear on every invoice and receipt, with your business name, phone, email and logo'+(u.logoUrl?'':' (add your logo under Adverts and plan, Your logo and website)')+'.</p>'
+  +'<label class="f">Business address</label><input type="text" data-ivs="addr" maxlength="280" value="'+E(S.addr||'')+'" placeholder="Unit 1, Example Road, Dartford, DA1 1AA">'
+  +'<label class="chk one" style="margin-top:8px"><input type="checkbox" data-ivs="vatReg"'+(S.vatReg?' checked':'')+'><span>My business is VAT registered</span></label>'
+  +'<div class="rg">'+ivF('','VAT number (if registered)','<input type="text" data-ivs="vat" maxlength="16" value="'+E(S.vat||'')+'" placeholder="GB123456789">')+ivF('','Company number (if a limited company)','<input type="text" data-ivs="co" maxlength="12" value="'+E(S.co||'')+'">')+'</div>'
+  +'<div class="rg">'+ivF('','Bank account name','<input type="text" data-ivs="bankName" maxlength="80" value="'+E(S.bankName||'')+'">')+ivF('','Sort code','<input type="text" data-ivs="bankSort" maxlength="10" value="'+E(S.bankSort||'')+'" placeholder="00-00-00">')+ivF('','Account number','<input type="text" data-ivs="bankAcc" maxlength="12" value="'+E(S.bankAcc||'')+'">')+'</div>'
+  +'<div class="rg">'+ivF('','FCA number (only if you arrange finance)','<input type="text" data-ivs="fca" maxlength="12" value="'+E(S.fca||'')+'">')+'</div>'
+  +'<label class="f">Your terms, printed at the bottom (up to 300 characters)</label><textarea data-ivs="terms" rows="2" maxlength="300" placeholder="e.g. Deposits are refundable within 48 hours. The vehicle remains our property until paid for in full.">'+E(S.terms||'')+'</textarea>'
+  +'<div class="dtools"><button class="btn sm ghost" type="button" data-ivx="set">Save my details</button></div></details>';
+ h+='<h3 class="sh">Customer</h3><div class="rg">'+ivF('','Full name',ivI('customer.name',c.name,'Customer name'))+ivF('','Phone',ivI('customer.phone',c.phone,'Phone','tel'))+'</div>'
+  +'<div class="rg">'+ivF('','Address',ivI('customer.addr',c.addr,'House, street, town, postcode'))+ivF('','Email',ivI('customer.email',c.email,'Email','email'))+'</div>';
+ h+='<h3 class="sh">Vehicle</h3><div class="rg">'+ivF('','Mileage at sale',ivI('vehicle.miles',v.miles,'Mileage','number'))+ivF('','VIN (chassis number)',ivI('vehicle.vin',v.vin,'VIN',null,' maxlength="20" style="text-transform:uppercase"'))+ivF('','Date first registered',ivI('vehicle.firstReg',v.firstReg,'','date'))+'</div>';
+ h+='<h3 class="sh">What the customer is buying</h3><p class="note" style="margin:0 0 4px">Prices are what the customer pays. Add any extras as their own lines.</p>';
+ d.lines.forEach(function(l,i){h+='<div class="ivr">'+ivI('lines.'+i+'.d',l.d,'Description',null,' class="ivd" maxlength="200"')+ivI('lines.'+i+'.amount',l.amount===''||l.amount==null?'':l.amount,'£','number',' class="iva" step="0.01"')+(S.vatReg?ivSel('lines.'+i+'.vat',l.vat||'none',IVV):'')+(l.veh?'':'<button type="button" class="lnk" data-ivdel="lines.'+i+'">Remove</button>')+'</div>'});
+ h+='<div class="dtools" style="margin-top:4px">'+['Warranty','Road tax','Delivery','Admin fee','Accessories','Other'].map(function(n){return '<button class="btn sm ghost" type="button" data-ivadd="'+n+'">+ '+n+'</button>'}).join('')+'</div>';
+ h+='<h3 class="sh">Payments received</h3><p class="note" style="margin:0 0 4px">Add the deposit first. Add each further payment as it comes in: cash, card, bank transfer, part exchange or finance.</p>';
+ if(!d.payments.length)h+='<p class="note">No payments yet.</p>';
+ d.payments.forEach(function(p,i){var k='payments.'+i+'.';h+='<div class="ivr">'+ivI(k+'date',p.date||ivToday(),'Date','date',' class="iva" style="flex-basis:140px"')+ivSel(k+'method',p.method||'cash',IVM)
+   +(p.method==='px'?ivI(k+'pxreg',p.pxreg,'PX registration',null,' class="iva" style="text-transform:uppercase"')+ivI(k+'pxveh',p.pxveh,'PX make and model')+ivI(k+'pxmiles',p.pxmiles,'PX mileage','number',' class="iva"')+ivI(k+'pxallow',p.pxallow,'Allowance £','number',' class="iva" step="0.01"')+ivI(k+'pxsettle',p.pxsettle,'Finance to settle £','number',' class="iva" step="0.01"')+'<span class="note">Credited: <b>'+ivG(p.amount)+'</b></span>'
+    :ivI(k+'amount',p.amount===''||p.amount==null?'':p.amount,'Amount £','number',' class="iva" step="0.01"')+(p.method==='finance'?ivI(k+'lender',p.lender,'Finance company')+ivI(k+'ref',p.ref,'Agreement number'):ivI(k+'ref',p.ref,p.method==='card'?'Card receipt or last 4 digits':p.method==='bacs'?'Bank reference':'Receipt number or note')))
+   +'<button type="button" class="lnk" data-ivdel="payments.'+i+'">Remove</button></div>'});
+ h+='<div class="dtools" style="margin-top:4px">'+IVM.map(function(o){return '<button class="btn sm ghost" type="button" data-ivpay="'+o[0]+'">+ '+E(o[1])+'</button>'}).join('')+'</div>';
+ h+='<div class="kpi" id="iv-tot" style="margin-top:12px">'+ivTotHtml(d)+'</div>';
+ h+='<label class="f">Notes on the invoice (optional)</label><textarea data-ivf="notes" rows="2" maxlength="2000" placeholder="e.g. Sold with 12 months MOT and 2 keys. Collection on Saturday.">'+E(d.notes||'')+'</textarea>';
+ h+='<p class="err" id="iv-err" role="alert"></p><div class="dtools"><button class="btn sm" type="button" data-ivx="save">'+(d.id?'Save changes':T.p>0?'Save and take deposit':'Save')+'</button>'
+  +(d.id&&T.p>0?'<button class="btn sm ghost" type="button" data-ivx="print">Print deposit receipt</button>':d.id?'<button class="btn sm ghost" type="button" data-ivx="print">Print pro forma</button>':'')
+  +'<button class="btn sm'+(T.t>0&&T.b<=0?'':' ghost')+'" type="button" data-ivx="final">Paid in full: finalise invoice</button>'
+  +(d.id?(INV.voiding?'<input type="text" id="iv-why" maxlength="300" placeholder="Reason for cancelling" style="max-width:240px"><button class="btn sm ghost danger" type="button" data-ivx="voidgo">Cancel the sale now</button><button class="btn sm ghost" type="button" data-ivx="voidno">Keep it</button>':'<button class="btn sm ghost danger" type="button" data-ivx="void">Cancel the sale</button>'):'')+'</div>'
+  +'<p class="note" style="margin:8px 0 0">Taking a deposit marks the vehicle <b>Under deposit</b> in your stock and on its advert. Finalising marks it <b>Sold</b>: the advert shows Sold and stays up until you take it down.</p></div>';
+ return h}
+function ivListHtml(u){var R=INV.rows||[];var h='<div class="card" id="mc-invl"><h2>Sales invoices</h2><p class="note" style="margin:0 0 6px">Open a vehicle in your stock and tap <b>Take a deposit or sell (invoice)</b> to start one. Invoice numbers run in order and are never reused.</p>';
+ if(!R.length)return h+'<p class="note">No invoices yet.</p></div>';
+ return h+R.map(function(x){var v=x.vehicle||{},c=x.customer||{};return '<div class="job"><div><b>'+E(x.number)+' · '+E(c.name||'No name')+'</b><small>'+E([v.reg,v.make,v.model].filter(Boolean).join(' '))+' · '+E(ivD(x.sale_date||x.created_at))+'</small><small><span class="sst">'+E(IVST[x.status]||x.status)+'</span> Total '+ivG(x.total)+' · paid '+ivG(x.paid)+(x.status!=='cancelled'&&x.total-x.paid>0?' · <b>'+ivG(x.total-x.paid)+' to pay</b>':'')+'</small></div><div class="jb"><button class="btn sm ghost" type="button" data-ivopen="'+E(x.id)+'">Open</button></div></div>'}).join('')+'</div>'}
+function ivDraw(force){var u=window.GGuser;if(!u||!u.sbid||u.role!=='dealer'||location.hash!=='#dashboard')return;if(INV.uid!==u.sbid)INV={rows:null,at:0,uid:u.sbid,ed:null,msg:'',set:false,pend:null,voiding:false};var b=$('dash-body');if(!b)return;
+ if(INV.rows===null){if(Date.now()-INV.at>8000)ivPull(u);return}
+ var onStock=(u.dtab||'stock')==='stock',old=$('mc-inv'),ol=$('mc-invl');
+ if(INV.ed){if(!old||force||!b.contains(old)){if(old&&!force&&old.contains(document.activeElement))return;var d=document.createElement('div');d.innerHTML=ivEdHtml(u);var c=d.firstChild;
+   if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else{var an=b.querySelector('.dtabs');while(an&&an.parentNode!==b)an=an.parentNode;b.insertBefore(c,an?an.nextSibling:b.firstChild)}}}
+ else if(old)old.remove();
+ if(!onStock){if(ol)ol.remove();return}
+ if(!ol||force||!b.contains(ol)){var d2=document.createElement('div');d2.innerHTML=ivListHtml(u);var c2=d2.firstChild;if(ol&&b.contains(ol))ol.parentNode.replaceChild(c2,ol);else b.appendChild(c2)}}
+function ivSetPath(o,path,val){var p=path.split('.'),x=o;for(var i=0;i<p.length-1;i++){if(x[p[i]]==null)return;x=x[p[i]]}x[p[p.length-1]]=val}
+function ivRead(t){var d=INV.ed;if(!d||!t||!t.dataset)return;var f=t.dataset.ivf;if(!f)return;var num=/\.(amount|pxallow|pxsettle|miles|pxmiles)$/.test(f);ivSetPath(d,f,num?(t.value===''?'':+t.value):t.value);
+ var m=/^payments\.(\d+)\.(pxallow|pxsettle)$/.exec(f);if(m){var p=d.payments[+m[1]];if(p)p.amount=ivNum(ivNum(p.pxallow)-ivNum(p.pxsettle))}}
+document.addEventListener('input',function(e){var t=e.target;if(!t||!t.closest||!t.closest('#mc-inv'))return;if(t.dataset.ivf){ivRead(t);var k=$('iv-tot');if(k)k.innerHTML=ivTotHtml(INV.ed)}});
+document.addEventListener('change',function(e){var t=e.target;if(!t||!t.closest||!t.closest('#mc-inv')||!t.dataset.ivf)return;ivRead(t);if(/\.(method|pxallow|pxsettle)$/.test(t.dataset.ivf))ivDraw(true)});
+function ivAfter(u,row,note,was){var i=-1;INV.rows.forEach(function(x,k){if(x.id===row.id)i=k});if(i>-1)INV.rows[i]=row;else INV.rows.unshift(row);INV.ed=ivFrom(row);INV.msg=note;INV.voiding=false;
+ var veh=0;(row.lines||[]).forEach(function(l){if(l.veh)veh+=ivNum(l.amount)});
+ if(window.MCstockSale){if(row.status==='paid')window.MCstockSale(u,+row.stock_id,'sold',{price:veh||row.total,date:row.sale_date||ivToday(),inv:row.number});
+  else if(row.status==='deposit')window.MCstockSale(u,+row.stock_id,'deposit',{inv:row.number});
+  else if(row.status==='cancelled')window.MCstockSale(u,+row.stock_id,null,{revert:was==='deposit'||was==='paid',clear:1});
+  else window.MCstockSale(u,+row.stock_id,null,{revert:was==='deposit',inv:row.number})}
+ if(u.sedit&&window.MCstockGet){var sv=window.MCstockGet(u,u.sedit.id);if(sv)u.sedit=JSON.parse(JSON.stringify(sv))}
+ if(window.GGdash)window.GGdash();ivDraw(true)}
+function ivSave(u,final){var d=INV.ed,er=$('iv-err');[].forEach.call(document.querySelectorAll('#mc-inv [data-ivf]'),ivRead);
+ d.lines=d.lines.filter(function(l){return l.veh||String(l.d||'').trim()||ivNum(l.amount)});d.payments=d.payments.filter(function(p){return ivNum(p.amount)!==0});var T=ivTot(d);
+ if(!String(d.customer.name||'').trim()){er.textContent='Enter the customer’s name.';return}
+ if(T.t<=0){er.textContent='Enter the vehicle price.';return}
+ if(d.lines.some(function(l){return ivNum(l.amount)&&!String(l.d||'').trim()})){er.textContent='Give every line a description.';return}
+ if(T.p>T.t){er.textContent='The payments add up to '+ivG(T.p)+', which is more than the invoice total of '+ivG(T.t)+'. Check the amounts.';return}
+ if(final&&T.b>0){er.textContent='There is still '+ivG(T.b)+' to pay. Add the final payment first, then finalise.';return}
+ if(final&&!String(d.customer.addr||'').trim()){er.textContent='Enter the customer’s address: it must be on the final invoice.';return}
+ if(final&&!(u.inv&&u.inv.addr)){INV.set=true;ivDraw(true);$('iv-err').textContent='Fill in your business address under “Your details on invoices” first: it must be on the invoice.';return}
+ er.textContent='';var btns=document.querySelectorAll('#mc-inv button');[].forEach.call(btns,function(b){b.disabled=true});
+ var row={stock_id:d.stock_id,advert_id:d.advert_id||null,vehicle:d.vehicle,customer:d.customer,seller:ivSeller(u),notes:String(d.notes||'').slice(0,2000),
+  lines:d.lines.map(function(l){var o={d:String(l.d||'').slice(0,200),amount:ivNum(l.amount),vat:u.inv&&u.inv.vatReg?(l.vat||'none'):'none'};if(l.veh)o.veh=1;return o}),
+  payments:d.payments.map(function(p){var o={date:p.date||ivToday(),method:p.method||'cash',amount:ivNum(p.amount),ref:String(p.ref||'').slice(0,80)};if(p.method==='px'){o.pxreg=String(p.pxreg||'').toUpperCase().slice(0,10);o.pxveh=String(p.pxveh||'').slice(0,80);o.pxmiles=+p.pxmiles||0;o.pxallow=ivNum(p.pxallow);o.pxsettle=ivNum(p.pxsettle)}if(p.method==='finance')o.lender=String(p.lender||'').slice(0,80);return o})};
+ function fail(e){[].forEach.call(document.querySelectorAll('#mc-inv button'),function(b){b.disabled=false});var m=e&&e.code==='P0001'&&e.message?e.message+'.':'Not saved. Check your connection and try again.';var x=$('iv-err');if(x)x.textContent=m}
+ var q=d.id?sb.from('dealer_invoices').update(Object.assign({status:final?'paid':'draft'},row)).eq('id',d.id).select('*').single()
+  :sb.from('dealer_invoices').insert(Object.assign({status:'draft'},row)).select('*').single().then(function(r){if(r.error||!final)return r;return sb.from('dealer_invoices').update({status:'paid'}).eq('id',r.data.id).select('*').single().then(function(r2){return r2.error?r:r2})});
+ ready.then(function(){return q}).then(function(r){if(r.error||!r.data){fail(r.error);return}var x=r.data,was=d.status;
+  if(x.status==='paid'&&was!=='paid'&&window.MCstockAdd){x.payments.forEach(function(p){if(p.method!=='px'||!p.pxreg)return;var w=String(p.pxveh||'').trim().split(/\s+/);
+    window.MCstockAdd(u,{kind:'Car',reg:p.pxreg,make:w[0]||'',model:w.slice(1).join(' '),variant:'',year:'',miles:+p.pxmiles||0,fuel:'',gear:'',body:'',col:'',cost:ivNum(p.pxallow)||ivNum(p.amount),price:'',inDate:ivToday(),loc:'Forecourt',status:'prep',prep:[],notes:'Part exchange taken against invoice '+x.number+'.'})})}
+  ivAfter(u,x,x.status==='paid'?'Invoice '+x.number+' is final. The vehicle is marked Sold'+(x.payments.some(function(p){return p.method==='px'&&p.pxreg})?', and the part exchange has been added to your stock as In preparation':'')+'.':x.status==='deposit'?'Saved as '+x.number+'. Deposit of '+ivG(x.paid)+' recorded: the vehicle is now Under deposit.':'Saved as '+x.number+'.',was)},fail)}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-inv button,#mc-invl button');if(!t)return;var u=window.GGuser;if(!u||!u.sbid||u.role!=='dealer')return;var a=t.dataset,d=INV.ed;
+ if(a.ivopen){var r=(INV.rows||[]).filter(function(x){return x.id===a.ivopen})[0];if(r){INV.ed=ivFrom(r);INV.msg='';INV.voiding=false;ivDraw(true);var c=$('mc-inv');if(c)c.scrollIntoView({behavior:'smooth',block:'start'})}return}
+ if(!d)return;
+ if(a.ivadd){d.lines.push({d:a.ivadd==='Other'?'':a.ivadd==='Warranty'?'Warranty: 3 months':a.ivadd==='Road tax'?'Road tax (vehicle excise duty)':a.ivadd,amount:'',vat:a.ivadd==='Road tax'?'none':u.inv&&u.inv.vatReg?'std':'none'});ivDraw(true);var L=document.querySelectorAll('#mc-inv [data-ivf^="lines."][data-ivf$=".d"]');if(L.length)L[L.length-1].focus();return}
+ if(a.ivpay){var T=ivTot(d);d.payments.push({date:ivToday(),method:a.ivpay,amount:a.ivpay==='px'?0:(d.payments.length&&T.b>0?T.b:''),ref:''});ivDraw(true);return}
+ if(a.ivdel){var p=a.ivdel.split('.');d[p[0]].splice(+p[1],1);ivDraw(true);return}
+ var x=a.ivx;if(!x)return;
+ if(x==='close'){INV.ed=null;INV.msg='';ivDraw(true);return}
+ if(x==='set'){var S=u.inv||{};[].forEach.call(document.querySelectorAll('#mc-inv [data-ivs]'),function(i){S[i.dataset.ivs]=i.type==='checkbox'?i.checked:String(i.value||'').trim().slice(0,300)});
+  if(S.vatReg&&!/^(GB)?\d{9}(\d{3})?$/i.test(String(S.vat||'').replace(/\s/g,''))){$('iv-err').textContent='Enter your VAT number: GB followed by 9 digits.';return}
+  if(S.vat)S.vat=S.vat.toUpperCase().replace(/\s/g,'');if(S.vat&&!/^GB/.test(S.vat))S.vat='GB'+S.vat;u.inv=S;INV.set=false;if(!S.vatReg)d.lines.forEach(function(l){l.vat='none'});else d.lines.forEach(function(l){if(l.veh&&(!l.vat||l.vat==='none'))l.vat='margin'});INV.msg='Your details are saved.';ivDraw(true);return}
+ if(x==='save'){ivSave(u,false);return}
+ if(x==='final'){ivSave(u,true);return}
+ if(x==='print'){[].forEach.call(document.querySelectorAll('#mc-inv [data-ivf]'),ivRead);var row=(INV.rows||[]).filter(function(q){return q.id===d.id})[0];if(!row)return;printWin((row.status==='paid'?'Invoice ':'Receipt ')+row.number,IVCSS,function(){return ivDoc(row)});return}
+ if(x==='void'){INV.voiding=true;ivDraw(true);var w=$('iv-why');if(w)w.focus();return}
+ if(x==='voidno'){INV.voiding=false;ivDraw(true);return}
+ if(x==='voidgo'){var why=($('iv-why')||{}).value||'';if(why.trim().length<3){$('iv-err').textContent='Give a short reason, for your records.';return}t.disabled=true;
+  ready.then(function(){return sb.from('dealer_invoices').update({status:'cancelled',cancel_reason:why.trim().slice(0,300)}).eq('id',d.id).select('*').single()}).then(function(r){if(r.error||!r.data){t.disabled=false;$('iv-err').textContent=r.error&&r.error.code==='P0001'?r.error.message+'.':'Not cancelled. Check your connection and try again.';return}
+   var wasSt=d.status;ivAfter(u,r.data,(wasSt==='deposit'||wasSt==='paid'?'Cancelled. The vehicle is back For sale.':'Cancelled.')+(+r.data.paid>0?' Remember to refund the '+ivG(r.data.paid)+' you were paid, if it is due back.':''),wasSt)})}});
+setInterval(function(){try{ivDraw(false)}catch(e){}},1500);
+var IVCSS='@page{size:A4;margin:14mm}body{font-family:Arial,Helvetica,sans-serif;color:#111;font-size:10.5pt;line-height:1.4}h1{font-size:19pt;margin:0;letter-spacing:.02em}.top{display:flex;justify-content:space-between;gap:10mm;align-items:flex-start;border-bottom:2px solid #111;padding-bottom:4mm;margin-bottom:5mm}.top img{max-height:24mm;max-width:60mm;display:block;margin-bottom:2mm}.sel{text-align:right;font-size:9.5pt}.sel b{font-size:12.5pt}.meta{display:flex;justify-content:space-between;align-items:flex-end;gap:8mm}.meta td{border:0;padding:.6mm 2mm .6mm 0}.two{display:flex;gap:6mm;margin:4mm 0}.two>div{flex:1;border:1px solid #bbb;border-radius:2mm;padding:3mm}.two h3{margin:0 0 1.5mm;font-size:8.5pt;text-transform:uppercase;letter-spacing:.06em;color:#555}table{border-collapse:collapse}table.g{width:100%;margin-top:3mm}table.g th,table.g td{text-align:left;border-bottom:1px solid #ccc;padding:2mm 1.5mm;vertical-align:top}table.g th{background:#f0f0f0;font-size:9pt}.n{text-align:right!important;white-space:nowrap}.tot{margin:3mm 0 0 auto}.tot td{padding:1mm 1.5mm}.tot .big td{font-size:13pt;font-weight:700;border-top:2px solid #111}.small{font-size:8.5pt;color:#444}.box{border:1px solid #bbb;border-radius:2mm;padding:3mm;margin-top:4mm}.sig{display:flex;gap:10mm;margin-top:14mm}.sig div{flex:1;border-top:1px solid #111;padding-top:1.5mm;font-size:9pt}.void{color:#b00020;border:2px solid #b00020;display:inline-block;padding:1mm 3mm;font-weight:700;margin-top:2mm}';
+function ivDoc(x){var S=x.seller||{},c=x.customer||{},v=x.vehicle||{},fin=x.status==='paid',can=x.status==='cancelled',bal=ivNum(x.total-x.paid),title=fin||can&&x.finalised_at?'Sales invoice':+x.paid>0?'Deposit receipt':'Pro forma invoice';
+ var std=0,mar=false;(x.lines||[]).forEach(function(l){if(l.vat==='std')std+=ivNum(l.amount);if(l.vat==='margin')mar=true});var showVat=S.vatReg&&(std>0||mar);
+ function nl(s){return E(String(s||'')).replace(/,\s*/g,'<br>')}
+ var h='<div class="top"><div>'+(S.logo&&/^https:\/\//.test(S.logo)?'<img src="'+E(S.logo)+'" alt="">':'')+'<h1>'+E(title.toUpperCase())+'</h1>'+(can?'<div class="void">CANCELLED'+(x.cancel_reason?': '+E(x.cancel_reason):'')+'</div>':'')+'</div>'
+  +'<div class="sel"><b>'+E(S.name||'')+'</b><br>'+nl(S.addr)+(S.phone?'<br>'+E(S.phone):'')+(S.email?'<br>'+E(S.email):'')+(S.web?'<br>'+E(String(S.web).replace(/^https?:\/\//,'')):'')+(S.vatReg&&S.vat?'<br>VAT number: '+E(S.vat):'')+'</div></div>';
+ h+='<div class="meta"><table><tr><td>'+(fin?'Invoice':'Reference')+' number</td><td><b>'+E(x.number)+'</b></td></tr><tr><td>'+(fin?'Invoice date (tax point)':'Date')+'</td><td><b>'+E(ivD(fin?(x.sale_date||x.finalised_at):new Date().toISOString()))+'</b></td></tr><tr><td>Stock number</td><td><b>'+E(x.stock_id==null?'':x.stock_id)+'</b></td></tr></table></div>';
+ h+='<div class="two"><div><h3>Customer</h3><b>'+E(c.name||'')+'</b><br>'+nl(c.addr)+(c.phone?'<br>'+E(c.phone):'')+(c.email?'<br>'+E(c.email):'')+'</div>'
+  +'<div><h3>Vehicle</h3><b>'+E(String(v.reg||'').toUpperCase())+'</b> '+E([v.year,v.make,v.model,v.variant].filter(Boolean).join(' '))+'<br>'+[v.col?'Colour: '+E(v.col):'',v.fuel?E(v.fuel):'',v.gear?E(v.gear):''].filter(Boolean).join(' · ')+'<br>Mileage: '+(v.miles!==''&&v.miles!=null?Number(v.miles).toLocaleString('en-GB'):'not recorded')+(v.vin?'<br>VIN: '+E(String(v.vin).toUpperCase()):'')+(v.firstReg?'<br>First registered: '+E(ivD(v.firstReg)):'')+'</div></div>';
+ h+='<table class="g"><thead><tr><th>Description</th>'+(showVat?'<th>VAT</th>':'')+'<th class="n">Amount</th></tr></thead><tbody>'+(x.lines||[]).map(function(l){return '<tr><td>'+E(l.d)+'</td>'+(showVat?'<td>'+(l.vat==='std'?'20% (included)':l.vat==='margin'?'Margin scheme':'No VAT')+'</td>':'')+'<td class="n">'+ivG(l.amount)+'</td></tr>'}).join('')+'</tbody></table>';
+ h+='<table class="tot">'+(S.vatReg&&std>0?'<tr><td>Standard-rated items, net</td><td class="n">'+ivG(std/1.2)+'</td></tr><tr><td>VAT at 20%</td><td class="n">'+ivG(std-std/1.2)+'</td></tr>':'')+'<tr class="big"><td>Total</td><td class="n">'+ivG(x.total)+'</td></tr></table>';
+ if(S.vatReg&&mar)h+='<p class="small">Margin scheme: second-hand goods. The VAT on margin scheme items is not shown separately and cannot be reclaimed by the buyer.</p>';
+ if(!S.vatReg)h+='<p class="small">The seller is not VAT registered. No VAT has been charged.</p>';
+ h+='<table class="g"><thead><tr><th>Payments received</th><th>How</th><th class="n">Amount</th></tr></thead><tbody>'+((x.payments||[]).length?(x.payments||[]).map(function(p){return '<tr><td>'+E(ivD(p.date))+'</td><td>'+E(ivPayTxt(p))+'</td><td class="n">'+ivG(p.amount)+'</td></tr>'}).join(''):'<tr><td colspan="3">None yet.</td></tr>')+'</tbody></table>';
+ h+='<table class="tot"><tr><td>Total paid</td><td class="n">'+ivG(x.paid)+'</td></tr><tr class="big"><td>'+(bal>0?'Balance to pay':'PAID IN FULL')+'</td><td class="n">'+(bal>0?ivG(bal):'')+'</td></tr></table>';
+ if(bal>0&&!can&&S.bankAcc)h+='<div class="box"><b>Pay by bank transfer</b><br>Account name: '+E(S.bankName||S.name||'')+' · Sort code: '+E(S.bankSort||'')+' · Account number: '+E(S.bankAcc)+'<br>Reference: '+E(x.number)+(v.reg?' '+E(String(v.reg).toUpperCase().replace(/\s/g,'')):'')+'</div>';
+ if(!fin&&!can&&+x.paid>0)h+='<p class="small">This receipt confirms a deposit of '+ivG(x.paid)+' on the vehicle above, which is now reserved for the customer. The final invoice is issued when the balance is paid.</p>';
+ if(x.notes)h+='<div class="box"><b>Notes</b><br>'+E(x.notes).replace(/\n/g,'<br>')+'</div>';
+ if(S.terms)h+='<p class="small" style="margin-top:4mm"><b>Terms:</b> '+E(S.terms)+'</p>';
+ h+='<div class="sig"><div>Customer signature and date</div><div>For '+E(S.name||'the seller')+', signature and date</div></div>';
+ h+='<p class="small" style="margin-top:6mm">'+[S.name?E(S.name):'',S.co?'Company number '+E(S.co):'',S.vatReg&&S.vat?'VAT number '+E(S.vat):'',S.fca?'Authorised and regulated by the Financial Conduct Authority, number '+E(S.fca):''].filter(Boolean).join(' · ')+'</p>';
+ return h}
 
 window.MCsales={detail:detail,pull:pullMsgs};
 /* bookings and messages are written to the account as they are made */
