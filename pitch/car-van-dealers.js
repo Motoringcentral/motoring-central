@@ -35,7 +35,7 @@ const p3=`<section class="page">${K.head(tag)}
  <tr class="hl"><td><b>Plus</b></td><td>Up to 30</td><td class="n">15</td><td class="n">3</td><td class="n"><b>£299</b> + VAT</td></tr>
  <tr><td><b>Pro</b></td><td>Up to 50</td><td class="n">25</td><td class="n">4</td><td class="n"><b>£379</b> + VAT</td></tr>
  <tr><td><b>Premier</b></td><td>No limit</td><td class="n">25</td><td class="n">5</td><td class="n"><b>£449</b> + VAT</td></tr></table>
- <div class="card yel" style="margin-bottom:3mm"><h3>Launch offer: try it free for 30 days</h3><p>Every plan starts with 30 days free, with 3 history checks. Cancel any time in the trial and pay nothing. Then monthly with one month&rsquo;s notice, or pay yearly: 9 months for 12. <b>Founding dealers (the first 30) pay 8 months for 12.</b></p></div>
+ <div class="card yel" style="margin-bottom:3mm"><h3>Launch offer: try it free for 30 days</h3><p>Every plan starts with 30 days free, with 3 history checks. Cancel any time in the trial and pay nothing. Then monthly with one month&rsquo;s notice, or pay yearly: 9 months for 12. <b>Founding dealers (the first 30) also get 5 free premium ads a month for the trial plus 2 months, and pay 8 months for 12.</b></p></div>
  <div class="two" style="margin-bottom:5mm"><div><h3>Extras, only if you use them</h3>
  <table><tr><th>Extra</th><th class="n">Price</th></tr>
  <tr><td>Extra premium ad on the front-page banner, for 2 weeks or until the car sells</td><td class="n">£9.99 + VAT</td></tr>
