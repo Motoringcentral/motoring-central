@@ -124,6 +124,10 @@ DRIVING INSTRUCTORS AND DRIVING LESSONS (built 22 Nov 2026, evening; tested end 
 - Owner's brief: learners book single lessons, blocks or intensive courses; the instructor sets an hourly rate and block
   discounts; 10% + VAT from the instructor and NO booking fee for the learner; filters for manual / automatic and
   male / female / no preference; a live diary; availability and everything else set from the dashboard.
+- Driving schools (added later the same evening): "Male / Female / Both: a driving school with male and female
+  instructors" on the join form and in Set-up > About you. A "both" school shows in male and in female searches; the
+  learner's choice is saved on the booking (details.want) and shown in the diary ("asked for a female instructor").
+  Tested on preview.
 - Checks (Claude's choice): ADI badge (green) or trainee licence (pink, shown as "Trainee instructor"), driving
   instructor insurance, photo ID. Staff should check the badge number on the DVSA register before approving.
 - Instructor: join page #instructors (same two-step layout as the other trades), application, dashboard tabs Diary /
