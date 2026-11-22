@@ -47,6 +47,13 @@ details, invoices INV-0001 to INV-0003, stock and 2 test adverts), vimen+dealer3
 vimen+autoelec@, vimen+staff@ (reviewer), vimen+visitor@ (contact form). VIMS CARS is founding dealer no. 1; 29 left.
 Delete all TEST accounts, adverts and trial records before launch.
 
+- Registration look-ups are FREE to dealers (owner, 22 Nov; 10p charge removed everywhere). Our cost until the free
+  sources are connected: a few pence per Vehicle Data Global look-up (each reg cached so it is not paid for twice).
+  After company registration: apply for the DVLA Vehicle Enquiry Service API (free; make, colour, fuel, year, engine,
+  tax and MOT status, NO model/variant/gearbox/body) and the DVSA MOT History API (free; adds model for cars that have
+  had an MOT). Plan: DVLA + DVSA first, Vehicle Data Global only when those come back incomplete (new cars, variant).
+  Check whether a sole trader could apply sooner.
+
 DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
 - Stock vehicle > "Take a deposit or sell (invoice)". One record per sale: deposit receipt while money is owed, final
   sales invoice once paid in full (then locked; can only be cancelled with a reason). Numbers INV-0001... per dealer,
