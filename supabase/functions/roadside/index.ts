@@ -14,8 +14,8 @@ function cors(req: Request) {
   const ok = ORIGINS.includes(o) || /^http:\/\/localhost(:\d+)?$/.test(o);
   return { "Access-Control-Allow-Origin": ok ? o : ORIGINS[0], "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type", "Access-Control-Allow-Methods": "POST, OPTIONS", "Vary": "Origin" };
 }
-const BOOKING_FEE = 3; // customer's booking fee, includes VAT (launch offer, usually £5.99)
-const DEFAULT_RATE = 0.06; // our fee on pay as you go: 5% + VAT
+const BOOKING_FEE = 9.99; // customer's booking fee, includes VAT (£8.33 + VAT)
+const DEFAULT_RATE = 0.12; // our flat fee on every job: 10% + VAT
 const SAMPLES: Record<string, any[]> = {
   recovery: [{ n: "Swift Recovery", t: "Leeds", call: 65, mile: 2.4 }, { n: "Highway Rescue 24h", t: "Wakefield", call: 75, mile: 2.2 }, { n: "Metro Tow and Transport", t: "Bradford", call: 60, mile: 3.1 }],
   evcharge: [{ n: "ChargeUp Mobile", t: "Leeds", call: 95, mile: 1.8 }, { n: "Volt Rescue 24/7", t: "Manchester", call: 110, mile: 1.5 }, { n: "PlugIn Roadside", t: "Sheffield", call: 89, mile: 2.2 }],
@@ -135,7 +135,7 @@ function priceFor(kind: string, p: any, from: Pt, to: Pt | null, opt: any, T?: n
     extraMiles = rad == null ? 0 : Math.max(0, d0 - rad);
     price = call + mile * extraMiles;
   }
-  const rate = p.plan === "pro" && p.details && p.details.proActive ? 0 : DEFAULT_RATE;
+  const rate = DEFAULT_RATE;
   return { d0, rad, call: rq ? rq.call : r2(call), mile: rq ? rq.mile : r2(mile), loaded, extraMiles, winch: r2(winch), price: r2(price), rate, rq };
 }
 // ---- automatic bookings: weekly hours (UK time) and how many jobs at once ----

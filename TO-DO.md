@@ -36,6 +36,16 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch rate are GONE.
+- Every partner job: flat 10% + VAT (we keep 12% of the partner's price). No monthly fee, no plans.
+- Customer booking fee: 9.99 pounds including VAT (8.33 + 1.66 VAT) on every booking, replacing 3.00.
+- Done everywhere: join pages (one "Simple pricing" card, calculators at 88% / 12%), sign-up forms, dashboards, terms,
+  FAQ, banners, recovery and EV (roadside function v9), valet / alloys / quotes (migration 20261122l). Old bookings keep
+  the fee they were made with.
+- NOT changed: MOT tests (official fee, we keep 5 pounds, no booking fee on top) and dealer plans. Ask the owner if MOTs
+  should change too.
+- Recovery / EV opening hours: "Open 24 hours, 7 days a week" button and a 24h button per day; own hours still work.
+
 RECOVERY FLEET AND EXTRAS (built 22 Nov 2026, tested end to end on preview)
 - Partners pick their trucks from 7 pictures (spectacle lift, 3.5t beavertail, slide bed, 7.5t, heavy, 4x4 and trailer,
   bike trailer) with call-out, price per mile and free miles for each, plus an extras price list (dollies, skates, winch,
@@ -154,7 +164,7 @@ Before Stripe goes live: "paid" is set by the booking functions after the on-scr
 be set by Stripe's confirmation instead (MOT, EV, recovery, quotes, valet, alloys).
 
 WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
-- Launch offer for dealers: DECIDED 22 Nov (see DEALER LAUNCH OFFER above). Partners: 5% (not 10%) and Pro £74.50
+- Launch offer for dealers: DECIDED 22 Nov (see DEALER LAUNCH OFFER above). Partners: SUPERSEDED, now flat 10% + VAT and no Pro (see PARTNER FEES CHANGED). Was: 5% (not 10%) and Pro £74.50
   (not £149) unchanged.
 - Phone (Voipfone, 020 8191 4290): line works and diverts to the owner's mobile. Left for later: how business calls
   show on the mobile (Line Presentation in Services > My Numbers > Phone, or the Voipfone Mobile app), calling credit
