@@ -53,6 +53,9 @@ Delete all TEST accounts, adverts and trial records before launch.
   tax and MOT status, NO model/variant/gearbox/body) and the DVSA MOT History API (free; adds model for cars that have
   had an MOT). Plan: DVLA + DVSA first, Vehicle Data Global only when those come back incomplete (new cars, variant).
   Check whether a sole trader could apply sooner.
+  DVLA VES default limit is 2 requests/second (~7,200/hour): enough to launch. When connecting it, build: a queue
+  that paces spreadsheet uploads at 2/second; one shared server-side cache per registration (fetched once for
+  everyone); on "too many requests", wait and retry or fall back to the paid look-up. Ask DVLA for more if needed.
 
 DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
 - Stock vehicle > "Take a deposit or sell (invoice)". One record per sale: deposit receipt while money is owed, final
