@@ -5100,7 +5100,7 @@ function apply(){var u=window.GGuser,host=$('dash-body'),bar=$('mc-ptabs');if(!h
 function set(tab,sub){var u=window.GGuser;if(!on(u))return;load(u);ST={tab:tab,sub:sub||''};save()}
 function go(tab,sub){var u=window.GGuser;if(!on(u))return;set(tab,sub);var C=cfg(u),want=C.dt(cur(u,C));
  if(want&&u.dtab!==want){u.dtab=want;u.dedit=null;u.sedit=null;if(window.GGdash)window.GGdash()}
- apply();var b=$('mc-ptabs');if(b&&b.getBoundingClientRect().top<0)b.scrollIntoView({block:'start'})}
+ apply();if(tab==='messages'&&window.MCmsgSeeOpen)setTimeout(function(){try{window.MCmsgSeeOpen();apply()}catch(e){}},1500);var b=$('mc-ptabs');if(b&&b.getBoundingClientRect().top<0)b.scrollIntoView({block:'start'})}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-ptab],[data-psub],[data-ptgo]');if(!t||!on(window.GGuser))return;
  if(t.hasAttribute('data-ptab'))go(t.getAttribute('data-ptab'),'');
  else if(t.hasAttribute('data-psub'))go('setup',t.getAttribute('data-psub'));
@@ -8294,7 +8294,9 @@ function drawInbox(force){if(!realUser())return;var u=window.GGuser;if(u.role!==
  var old=$('mc-inbox');if(old&&!force)return;if(old&&old.contains(document.activeElement))return;
  var d=document.createElement('div');d.innerHTML=inboxHtml();var card=d.firstChild;
  if(old)old.parentNode.replaceChild(card,old);else{var first=u.role==='customer'?host.firstChild:host.children[1]||null;host.insertBefore(card,first)}}
-document.addEventListener('toggle',function(e){var t=e.target;if(!t.matches||!t.matches('details.mx-t'))return;var k=t.getAttribute('data-tk');OPEN[k]=t.open;if(t.open){seen(k);t.classList.remove('new')}},true);
+document.addEventListener('toggle',function(e){var t=e.target;if(!t.matches||!t.matches('details.mx-t'))return;var k=t.getAttribute('data-tk');OPEN[k]=t.open;if(t.open&&t.offsetParent!==null){seen(k);t.classList.remove('new')}},true);
+/* a conversation only counts as read once it is open AND on screen (the dashboard tabs can hide this card) */
+window.MCmsgSeeOpen=function(){[].forEach.call(document.querySelectorAll('#mc-inbox details.mx-t[open]'),function(t){if(t.offsetParent!==null)seen(t.getAttribute('data-tk'))})};
 document.addEventListener('input',function(e){var k=e.target.getAttribute&&e.target.getAttribute('data-mxd');if(k)DRAFT[k]=e.target.value});
 document.addEventListener('click',function(e){var t=e.target;if(!t.closest)return;
  var s=t.closest('[data-mxs]');if(s){var k=s.getAttribute('data-mxs'),ta=document.querySelector('[data-mxd="'+k+'"]'),er=document.querySelector('[data-mxe="'+k+'"]'),txt=(ta&&ta.value||'').trim(),th=threads().filter(function(x){return x.key===k})[0];if(!txt||!th)return;s.disabled=true;
