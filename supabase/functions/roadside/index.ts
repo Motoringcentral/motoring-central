@@ -84,20 +84,59 @@ async function partners(db: any, kind: string) {
   return list.filter((p: any) => p.base_lat != null);
 }
 
-function priceFor(kind: string, p: any, from: Pt, to: Pt | null, opt: any) {
+// ---- recovery: trucks, extras and the customer's answers ----
+const TRUCK: Record<string, string> = { trailer: "4x4 and trailer", beaver: "3.5t beavertail", spec: "3.5t spectacle / under-lift", slide75: "7.5t slide-bed", heavy: "Heavy recovery", transporter: "Car transporter", bike: "Motorbike recovery", legacy: "Recovery truck" };
+const EXTRA: Record<string, string> = { dollies: "Dollies (wheels locked or will not roll)", skates: "Skates / go-jacks", winch: "Winching (off the road or will not roll)", accident: "Accident damage or suspension damage", spill: "Fluid spill clean-up", nokeys: "No keys / steering lock", low: "Low or lowered vehicle", wait: "Waiting time (per 15 minutes)", storage: "Storage (per day)", ooh: "Out of hours (8pm to 7am)" };
+// which trucks can carry which vehicle
+const CAN: Record<string, string[]> = { car: ["trailer", "beaver", "spec", "slide75", "heavy", "transporter"], svan: ["trailer", "beaver", "slide75", "heavy"], lvan: ["slide75", "heavy"], "4x4": ["trailer", "beaver", "slide75", "heavy"], bike: ["bike", "trailer", "beaver", "slide75"], big: ["heavy"] };
+function vtypeOf(opt: any) { const v = String(opt.vtype || "car"); return v === "van" ? "svan" : CAN[v] ? v : "car"; }
+function rollsOf(opt: any) { const r = String(opt.rolls || (opt.winch ? "locked" : "yes")); return ["yes", "locked", "damage"].includes(r) ? r : "yes"; }
+function placeOf(opt: any) { const r = String(opt.place || (opt.winch ? "off" : "road")); return ["road", "park", "off"].includes(r) ? r : "road"; }
+function oohAt(t: number) { const u = ukAt(t); return u.min >= 20 * 60 || u.min < 7 * 60; }
+function fleetOf(p: any) {
+  const d = p.details || {}, R = p.rates || {};
+  if (Array.isArray(d.fleet) && d.fleet.length) return d.fleet.map((x: any) => ({ type: String(x.type), call: Math.max(0, Number(x.call) || 0), mile: Math.max(0, Number(x.mile) || 0), incl: Math.max(0, Number(x.incl) || 0) }));
+  return [{ type: "legacy", call: Math.max(0, Number(R.call) || 65), mile: Math.max(0, Number(R.mile) || 2.4), incl: 0 }];
+}
+function extrasOf(p: any): Record<string, number> {
+  const d = p.details || {}, R = p.rates || {}, e: Record<string, number> = {};
+  if (d.extras && typeof d.extras === "object") { for (const k of Object.keys(EXTRA)) if (typeof d.extras[k] === "number" && d.extras[k] >= 0) e[k] = d.extras[k]; }
+  else if (Number(R.winch) > 0) e.winch = Number(R.winch);
+  return e;
+}
+// the cheapest suitable truck, the extras that are certain from the answers, and the rest "only if needed"
+function recoveryQuote(p: any, loaded: number, opt: any, T: number) {
+  const vt = vtypeOf(opt), rolls = rollsOf(opt), place = placeOf(opt), E = extrasOf(p), legacy = !(Array.isArray((p.details || {}).fleet) && (p.details || {}).fleet.length);
+  let trucks = fleetOf(p);
+  if (!legacy) trucks = trucks.filter((x: any) => (CAN[vt] || []).includes(x.type) && !(x.type === "spec" && rolls === "damage") && !(x.type === "transporter" && rolls !== "yes"));
+  if (!trucks.length) return null;
+  const inc: { code: string; label: string; price: number }[] = [], add = (k: string) => { if (E[k] != null && E[k] > 0 && !inc.some((x) => x.code === k)) inc.push({ code: k, label: EXTRA[k], price: E[k] }); };
+  if (place === "off" || (legacy && opt.winch)) { if (E.winch == null) { if (!legacy) return null; } else add("winch"); }
+  if (rolls === "locked") { if (E.dollies != null) add("dollies"); else if (E.skates != null) add("skates"); }
+  if (rolls === "damage") { if (E.accident != null) add("accident"); else if (E.dollies != null) add("dollies"); }
+  if (opt.leak === "yes") add("spill");
+  if (opt.keys === "no" && rolls === "yes") add("nokeys");
+  if (opt.low) add("low");
+  if (isFinite(T) && oohAt(T)) add("ooh");
+  const priced = trucks.map((x: any) => ({ x, base: r2(x.call + x.mile * Math.max(0, loaded - x.incl)) })).sort((a: any, b: any) => a.base - b.base)[0];
+  const extra = r2(inc.reduce((n, x) => n + x.price, 0));
+  const possible = Object.keys(EXTRA).filter((k) => E[k] != null && E[k] > 0 && !inc.some((x) => x.code === k) && k !== "ooh").map((k) => ({ code: k, label: EXTRA[k], price: r2(E[k]) }));
+  return { truck: priced.x.type, truckLabel: TRUCK[priced.x.type] || "Recovery truck", call: r2(priced.x.call), mile: r2(priced.x.mile), incl: priced.x.incl, base: priced.base, inc, extra, possible, price: r2(priced.base + extra) };
+}
+function priceFor(kind: string, p: any, from: Pt, to: Pt | null, opt: any, T?: number) {
   const R = p.rates || {}, call = Math.max(0, Number(R.call) || (kind === "recovery" ? 65 : 95)), mile = Math.max(0, Number(R.mile) || (kind === "recovery" ? 2.4 : 1.5));
   const base = { lat: p.base_lat, lng: p.base_lng }, d0 = miles(base, from), rad = radiusOf(p.details);
-  let price = 0, loaded = 0, extraMiles = 0, winch = 0;
+  let price = 0, loaded = 0, extraMiles = 0, winch = 0, rq: any = null;
   if (kind === "recovery") {
     loaded = to ? miles(from, to) : 0;
-    winch = opt.winch ? Math.max(0, Number(R.winch) || 0) : 0;
-    price = call + mile * loaded + winch;
+    rq = recoveryQuote(p, loaded, opt, T == null ? Date.now() : T);
+    if (rq) { price = rq.price; winch = (rq.inc.find((x: any) => x.code === "winch") || { price: 0 }).price; }
   } else {
     extraMiles = rad == null ? 0 : Math.max(0, d0 - rad);
     price = call + mile * extraMiles;
   }
   const rate = p.plan === "pro" && p.details && p.details.proActive ? 0 : DEFAULT_RATE;
-  return { d0, rad, call: r2(call), mile: r2(mile), loaded, extraMiles, winch: r2(winch), price: r2(price), rate };
+  return { d0, rad, call: rq ? rq.call : r2(call), mile: rq ? rq.mile : r2(mile), loaded, extraMiles, winch: r2(winch), price: r2(price), rate, rq };
 }
 // ---- automatic bookings: weekly hours (UK time) and how many jobs at once ----
 const DOW: Record<string, number> = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
@@ -139,8 +178,13 @@ function covers(kind: string, p: any, q: any, opt: any) {
   if (q.rad != null && q.d0 > q.rad + (kind === "evcharge" ? 40 : 0)) return false;
   const d = p.details || {};
   if (kind === "evcharge" && opt.plug && !/not sure/i.test(opt.plug)) { const pl = arr(d.plugs); if (pl.length && !pl.some((x) => x.toLowerCase().includes(String(opt.plug).toLowerCase()))) return false; }
-  if (kind === "recovery" && opt.winch) { const ty = arr(d.types); if (ty.length && !ty.some((x) => /winch|flatbed/i.test(x))) return false; }
-  if (kind === "recovery" && opt.vtype === "bike") { const ty = arr(d.types); if (ty.length && !ty.some((x) => /flatbed|trailer|van/i.test(x))) return false; }
+  if (kind === "recovery") {
+    if (!q.rq) return false; // no suitable truck, or cannot winch
+    if (!(Array.isArray(d.fleet) && d.fleet.length)) {
+      if (opt.winch || placeOf(opt) === "off") { const ty = arr(d.types); if (ty.length && !ty.some((x) => /winch|flatbed/i.test(x))) return false; }
+      if (vtypeOf(opt) === "bike") { const ty = arr(d.types); if (ty.length && !ty.some((x) => /flatbed|trailer|van/i.test(x))) return false; }
+    }
+  }
   return true;
 }
 const eta = (d0: number) => Math.max(20, Math.round((15 + d0 / 35 * 60) / 5) * 5);
@@ -154,10 +198,10 @@ async function quote(db: any, b: any) {
   const now = opt.when === "now" || !opt.when, T = now ? Date.now() : Date.parse(opt.when);
   const J = await activeJobs(db, P.map((p: any) => p.id));
   for (const p of P) {
-    const q = priceFor(kind, p, from, to, opt);
+    const q = priceFor(kind, p, from, to, opt, T);
     if (!covers(kind, p, q, opt)) continue;
     if (!isFinite(T) || !timeOk(kind, p, J[p.id], T, now)) { near.push(p); continue; }
-    list.push({ id: p.id, name: p.name, town: p.town || "", price: q.price, total: r2(q.price + BOOKING_FEE), call: q.call, mile: q.mile, loaded: q.loaded, extraMiles: q.extraMiles, winch: q.winch, away: q.d0, eta: opt.when === "now" ? eta(q.d0) : null, kit: arr((p.details || {}).kit).slice(0, 3), _q: q, _p: p });
+    list.push({ id: p.id, name: p.name, town: p.town || "", price: q.price, total: r2(q.price + BOOKING_FEE), call: q.call, mile: q.mile, loaded: q.loaded, extraMiles: q.extraMiles, winch: q.winch, away: q.d0, eta: opt.when === "now" ? eta(q.d0) : null, kit: arr((p.details || {}).kit).slice(0, 3), truck: q.rq ? q.rq.truckLabel : null, base: q.rq ? q.rq.base : null, incl: q.rq ? q.rq.incl : 0, inc: q.rq ? q.rq.inc : [], possible: q.rq ? q.rq.possible : [], _q: q, _p: p });
   }
   list.sort((a, b2) => a.price - b2.price || a.away - b2.away);
   // nobody free at that time but someone covers the place: offer the next times they can do (in their hours, a van free)
@@ -172,7 +216,7 @@ async function quote(db: any, b: any) {
   if (!list.length && !near.length && Deno.env.get("ROADSIDE_SAMPLES") !== "0") {
     samples = SAMPLES[kind].map((s, i) => {
       const loaded = to ? miles(from, to) : 0, price = r2(kind === "recovery" ? s.call + s.mile * loaded + (opt.winch ? 25 : 0) : s.call);
-      return { sample: true, name: s.n, town: s.t, price, total: r2(price + BOOKING_FEE), call: s.call, mile: s.mile, loaded, extraMiles: 0, winch: opt.winch && kind === "recovery" ? 25 : 0, eta: opt.when === "now" ? 35 + i * 10 : null };
+      return { sample: true, name: s.n, town: s.t, price, total: r2(price + BOOKING_FEE), call: s.call, mile: s.mile, loaded, extraMiles: 0, winch: opt.winch && kind === "recovery" ? 25 : 0, eta: opt.when === "now" ? 35 + i * 10 : null, truck: kind === "recovery" ? "3.5t beavertail" : null, inc: [], possible: kind === "recovery" ? [{ code: "dollies", label: EXTRA.dollies, price: 30 }, { code: "spill", label: EXTRA.spill, price: 45 }, { code: "wait", label: EXTRA.wait, price: 15 }] : [] };
     });
   }
   return { ok: true, kind, fee: BOOKING_FEE, from, to, loaded: to ? miles(from, to) : null, list, samples, next };
@@ -213,7 +257,8 @@ Deno.serve(async (req) => {
     let summary = "";
     if (kind === "Recovery") {
       summary = "Recovery: " + (clean(info.what, 80) || "Breakdown") + ". Collect from " + fromTxt + ", take to " + q.to.label + (clean(info.dest, 60) ? " (" + clean(info.dest, 60) + ")" : "") + ", " + pick.loaded + " miles. " +
-        (opt.winch ? "Will not roll: needs winching. " : "") + (info.keys === "no" ? "No keys with the vehicle. " : "") + (Number(info.pass) > 0 ? Number(info.pass) + " passenger(s) need a lift. " : "") +
+        (pick.truck ? "Truck: " + pick.truck + ". " : "") + ((({ locked: "Will not roll: wheels locked. ", damage: "Accident or suspension damage: will not roll. " } as any)[rollsOf(opt)]) || "") + (placeOf(opt) === "off" ? "Off the road: needs winching. " : placeOf(opt) === "park" ? "In a multi-storey or underground car park. " : "") +
+        (opt.leak === "yes" ? "Leaking fluids. " : "") + (opt.low ? "Low or lowered vehicle. " : "") + (info.keys === "no" ? "No keys with the vehicle. " : "") + (Number(info.pass) > 0 ? Number(info.pass) + " passenger(s) need a lift. " : "") +
         (when === "now" ? "Needed now." : "Booked for " + whenTxt + ".");
     } else {
       const NEED: Record<string, string> = { rescue: "Out of charge: enough to reach a charge point", home: "Out of charge: enough to get home", booked: "Booked top-up" };
@@ -222,8 +267,8 @@ Deno.serve(async (req) => {
     }
     const price = pick.price, rate = pick._q.rate, our = r2(BOOKING_FEE + price * rate), pay = r2(price * (1 - rate));
     const details = { from: q.from, to: q.to, loaded: pick.loaded, away: pick.away, eta: pick.eta, when, spot: clean(info.spot, 160), dest: clean(info.dest, 60), what: clean(info.what, 80),
-      winch: !!opt.winch, keys: clean(info.keys, 5), pass: Math.max(0, Math.min(8, Number(info.pass) || 0)), need: clean(opt.need, 20), plug: clean(opt.plug, 20), battery: clean(info.battery, 10), note: clean(info.note, 300),
-      price: { call: pick.call, mile: pick.mile, loaded: pick.loaded, extraMiles: pick.extraMiles, winch: pick.winch, partner: price, fee: BOOKING_FEE, rate }, paid: clean(b.paid, 80) };
+      winch: placeOf(opt) === "off", rolls: rollsOf(opt), place: placeOf(opt), leak: clean(opt.leak, 6), low: !!opt.low, vtype: vtypeOf(opt), truck: pick.truck || null, inc: pick.inc || [], possible: pick.possible || [], keys: clean(info.keys, 5), pass: Math.max(0, Math.min(8, Number(info.pass) || 0)), need: clean(opt.need, 20), plug: clean(opt.plug, 20), battery: clean(info.battery, 10), note: clean(info.note, 300),
+      price: { call: pick.call, mile: pick.mile, loaded: pick.loaded, incl: pick.incl || 0, base: pick.base, extras: pick.inc || [], extraMiles: pick.extraMiles, winch: pick.winch, partner: price, fee: BOOKING_FEE, rate }, paid: clean(b.paid, 80) };
     const row = { customer_id: uid, kind, service: kind === "Recovery" ? (clean(info.what, 80) || "Recovery") : "Mobile EV charging", summary: summary.slice(0, 2000), vehicle: veh, status: "confirmed",
       made_at: new Date().toISOString(), partner_id: pick.id, partner_name: pick.name, price_total: r2(price + BOOKING_FEE), our_share: our, partner_payout: pay, paid: true, details };
     const { data: ins, error } = await db.from("bookings").insert(row).select("id").single();
