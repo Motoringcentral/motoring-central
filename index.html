@@ -4477,7 +4477,7 @@ return s+'<button class="btn sm ghost" type="button" data-sclose>Close</button>'
 function readSt(u){var e=u.sedit;if(!e||!$('st-make'))return;function g(id){var x=$(id);return x?x.value:null}function n(id){var v=g(id);return v===''||v==null?'':+v}
 e.kind=g('st-kind');e.reg=g('st-reg').trim().toUpperCase().replace(/\s+/g,' ');e.make=g('st-make').trim();e.model=g('st-model').trim();e.variant=g('st-variant').trim();e.year=n('st-year');e.miles=n('st-miles');e.fuel=g('st-fuel');e.gear=g('st-gear');e.body=g('st-body');e.col=g('st-col');e.loc=g('st-loc').trim();e.cost=n('st-cost');e.inDate=g('st-in');e.price=n('st-price');e.mot=g('st-mot');if($('st-status'))e.status=g('st-status');e.notes=g('st-notes').trim()}
 function syncAd(v){if(!v.ad)return;var a=apiFor(v.ad.k),c=a&&a.list().filter(function(x){return x.id===v.ad.id})[0];if(!c)return;
-c.make=v.make;c.model=v.model;c.variant=v.variant;c.year=+v.year;c.price=+v.price;c.miles=+v.miles;c.fuel=v.fuel;c.gear=v.gear;c.body=v.body;c.col=v.col;c.photos=(v.photos||[]).slice(0,30);a.reset()}
+c.make=v.make;c.model=v.model;c.variant=v.variant;c.year=+v.year;c.price=+v.price;c.miles=+v.miles;c.fuel=v.fuel;c.gear=v.gear;c.body=v.body;c.col=v.col;c.photos=(v.photos||[]).slice(0,30);if(v.status==='reserved')c.sale='deposit';else if(v.status!=='sold'&&c.sale){delete c.sale;delete c.soldAt}a.reset()}
 function dropAd(v){if(!v.ad)return;var a=apiFor(v.ad.k);if(a)a.act(v.ad.id,'remove');v.ad=null;if(window.GGbanner)window.GGbanner()}
 function saveSt(u,keep){readSt(u);var e=u.sedit,err='';
 if(!e.make||!e.model)err='Enter the make and model.';else if(!(e.cost>0))err='Enter what you paid for the vehicle.';else if(!(e.price>0))err='Enter the retail price.';else if(!e.inDate)err='Enter the date you bought it.';
