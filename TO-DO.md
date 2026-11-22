@@ -120,8 +120,21 @@ started moving MOT to 10% and was told NOT to: nothing was changed. Do not chang
 Sweep done: no old fee wording left on the site. The recovery and EV proposal PDFs (pitch/roadside.js) no longer offer
 "Pay as you go or Pro"; they show the one flat fee. VIDEOS are left for now: the owner will review them one by one at the
 end (slides match the site, spelling, voice). The EV video still gives the old fees and is switched off.
-NEXT: build the DRIVING INSTRUCTOR section (owner). Questions were asked (what is booked, who sets the price, fees per
-lesson or per block, ADI badge check, manual / automatic); waiting for answers.
+DRIVING INSTRUCTORS: IN PROGRESS (22 Nov, evening). Owner's brief: learners book single lessons, blocks or intensive
+courses; instructor sets an hourly rate and block discounts; 10% + VAT from the instructor and NO booking fee for the
+learner; filters for manual / automatic and male / female / no preference; live diary like the MOT one; availability
+and everything else set from the dashboard. Checks decided by Claude: ADI badge (green) or trainee licence (pink,
+shown as "Trainee instructor"), driving instructor insurance, photo ID.
+- Database: supabase/migrations/20261122o_driving_instructors.sql. PART A IS APPLIED (role 'instructor', table
+  lesson_packs, find_instructors, lesson_slots, instructor_diary, block / unblock time, my_lesson_packs).
+  PART B IS NOT APPLIED YET (book_lesson, cancel_lesson, set_instructor_setup): the approval prompt timed out. Apply
+  those three functions from the file first.
+- Blocks: paid in full up front, first lesson booked then, the rest are hours in the learner's account. The instructor is
+  paid per lesson booked (each lesson is a bookings row worth its share of the block), not all at once.
+- Cancelling: learner free up to 48 hours before (hours go back, or a refund is due); later the instructor is still paid.
+- STILL TO BUILD in the page: the join page and application (use the join pages module), the instructor dashboard
+  (diary, prices and packages, availability, area, profile), the learner's search and booking page, My account hours.
+
 
 PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch rate are GONE.
 - Every partner job: flat 10% + VAT (we keep 12% of the partner's price). No monthly fee, no plans.
