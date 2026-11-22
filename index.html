@@ -3220,7 +3220,8 @@ if(b.getAttribute('data-k')==='mot'){var mv=$('mot-vid');if(mv)setTimeout(functi
  /* 19 Nov 2026: never play silently. If the browser will not start it with sound, show a big "Play with sound" button
     instead of playing muted (a muted autoplay looked like a video with no sound). */
  function ask(){V.pause();S.textContent='\u25B6 Play with sound';S.hidden=false}
- window.MCmotVid=function(sound){V.currentTime=0;V.muted=false;V.volume=1;if(!sound){ask();return}S.hidden=true;var p=V.play();if(p&&p.catch)p.catch(ask)};
+ window.MCmotVid=function(sound){V.currentTime=0;V.muted=false;V.volume=1;sound=false; /* 22 Nov 2026: tap to play. It sits in the application, which is hidden until the business has registered */
+  if(!sound){ask();return}S.hidden=true;var p=V.play();if(p&&p.catch)p.catch(ask)};
  S.addEventListener('click',function(){V.muted=false;V.volume=1;S.hidden=true;var p=V.play();if(p&&p.catch)p.catch(function(){S.hidden=false})});
  V.addEventListener('play',function(){if(V.muted)V.muted=false;S.hidden=true});
  V.addEventListener('volumechange',function(){if(!V.muted)S.hidden=true});
@@ -10190,7 +10191,7 @@ function setMode(){var m=mode();if(!m||V.hidden&&m===last)return;if(m===last&&V.
    last frame, and the picture shown whenever it is not playing. Browsers only let a video start by itself with the sound
    off unless the visitor has just tapped, so then a big "Tap for sound" button shows. */
 var HV=null,HB=null,HW=null;
-function heroVid(on){
+function heroVid(on){on=false; /* 22 Nov 2026: no video on the public join page any more; the MOT video is in the application (step 2), tap to play */
  if(on&&!HW){HW=document.createElement('div');HW.className='mvw herovid';
   HW.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/mot-station-poster.jpg" width="1280" height="720" aria-label="Video: The Motoring Central MOT network. Online MOT booking and the live diary for MOT test stations."><source src="video/mot-station.mp4?v=2" type="video/mp4"><track kind="captions" src="video/mot-station.vtt?v=2" srclang="en" label="English" default></video>';
   IMG.parentNode.insertBefore(HW,IMG.nextSibling);HV=HW.querySelector('video');HB=HW.querySelector('.msnd');
