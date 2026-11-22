@@ -71,8 +71,8 @@ const page = (css, body) => `<!doctype html><html lang="en-GB"><head><meta chars
 const square = (t, dim) => page(SQ, `<div class="ad">${photo(t, dim)}<div class="pan"><div class="tx"><div class="kick">${t.who}</div><h1${t.sm ? ' class="sm"' : ''}>${t.h}</h1><div class="line">${t.line}</div></div></div><div class="bt"><div class="pill">${t.pill === FND ? FNDS : t.pill}</div>${url}</div></div>`);
 const story = (t, dim) => page(ST, `<div class="ad">${brand}${photo(t, dim)}<div class="tx"><div class="kick">${t.who}</div><h1${t.sm ? ' class="sm"' : ''}>${t.h}</h1><div class="line">${t.line}</div><ul>${t.ticks.map(x => '<li>' + x + '</li>').join('')}</ul><div class="pill">${t.pill}</div></div></div>`);
 const PCSS = `.ap h1{font-size:24pt}.ap h2{font-size:14pt;margin-top:5mm}.ap table{font-size:10.2pt}.ap td:first-child{width:22%;font-weight:700}
-.ap .pics{display:grid;grid-template-columns:84mm 47.25mm 1fr;gap:6mm;align-items:start;margin:2mm 0 6mm}.ap .pics img{width:100%;display:block;border-radius:2mm;border:.6pt solid #C9D3E0}
-.ap .pics small{display:block;font-size:7.6pt;color:#5A6B82;margin-top:1mm}.ap .copy{border:.8pt solid #C9D3E0;border-radius:2.6mm;padding:3.4mm 3.8mm;font-size:10pt;line-height:1.45}
+.ap .pics{display:grid;grid-template-columns:70mm 39.4mm 1fr;gap:6mm;align-items:start;margin:2mm 0 6mm}.ap .pics img{width:100%;display:block;border-radius:2mm;border:.6pt solid #C9D3E0}
+.ap .pics small{display:block;font-size:7.6pt;color:#5A6B82;margin-top:1mm}.ap .copy{border:.8pt solid #C9D3E0;border-radius:2.6mm;padding:3.4mm 3.8mm;font-size:9.2pt;line-height:1.42}
 .ap .lab{font-size:7.6pt;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#0B6FA4;margin:3mm 0 .8mm}.ap .lab:first-child{margin-top:0}.ap .mono{font-size:8.4pt;word-break:break-all;color:#22344D}`;
 const hd = tag => `<div class="hd"><div class="brand"><div class="lg">${B.LOGO}</div><div><b>The Motoring Central</b><small>Buy. Fix. Clean. Rescue.</small></div></div><div class="tag">${tag}</div></div>`;
 const ft = `<div class="ft"><span>The Motoring Central &nbsp;&middot;&nbsp; advert pack &nbsp;&middot;&nbsp; not to be used until the company is registered</span><span>22 November 2026</span></div>`;
@@ -83,12 +83,12 @@ function plan() {
  <h2>The test</h2><table>
  <tr><td>When</td><td>Only after the company is registered and motoringcentral.co.uk opens the live site. Nothing here should be posted or paid for before then.</td></tr>
  <tr><td>Where</td><td>Facebook and Instagram, run from one Meta Ads account. Square picture for the feeds; upright picture or the short video (about 23 seconds, with voice) for Stories and Reels.</td></tr>
- <tr><td>Budget</td><td>&pound;300 to &pound;500 in total over 14 days. Suggested: four trades at &pound;7 a day each, which comes to &pound;392.</td></tr>
+ <tr><td>Budget</td><td>&pound;300 to &pound;500 in total over 14 days. Suggested: four trades at &pound;7 a day each (&pound;392).</td></tr>
  <tr><td>Which trades first</td><td>MOT test stations, valeters, driving instructors, and body shops. Add the others once you see which of these work.</td></tr>
  <tr><td>Who sees them</td><td>People within 15 miles of Dartford. Narrow by job or interest where Meta offers it: business page admins, small business owners, and the trade itself (MOT testing, car valeting and detailing, driving instructor, body repair).</td></tr>
  <tr><td>How to judge it</td><td>Each link carries a tag (for example fb-valet), so the staff page shows &ldquo;Came from&rdquo; on every application. Divide the spend by the registrations. After 5 days, pause any advert with none and move its money to the best one.</td></tr></table>
  <h2>Things to know before you press go</h2><ul class="tick">
- <li>Meta may ask whether the advert is about <b>employment</b>. Recruiting independent businesses is not a job advert, but if Meta classes it that way it limits who you can aim at (no age or narrow postcode choices). A 15-mile circle still works.</li>
+ <li>Meta may ask whether the advert is about <b>employment</b>. This is not a job advert, but if Meta treats it as one you cannot aim by age or narrow postcode. A 15-mile circle still works.</li>
  <li>Keep to the wording here. It matches the leaflets, the site and the terms. Do not add promises about how much work a partner will get.</li>
  <li>Reply to every comment and message within a day. Early replies are what other businesses read.</li></ul>
  <h2>Free places to post once you are live</h2><ul class="tick">
