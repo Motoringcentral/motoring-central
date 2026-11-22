@@ -13,6 +13,13 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 #v-dash .dtabs{display:flex;gap:6px;margin:0 0 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;overflow-x:auto}
 #v-dash .dtabs button{all:unset;cursor:pointer;flex:1;text-align:center;padding:10px 14px;border-radius:10px;font-weight:700;color:var(--muted);white-space:nowrap}
 #v-dash .dtabs button[aria-pressed=true]{background:var(--brand);color:var(--brand-ink)}
+#mc-ptabs{scroll-margin-top:96px}.dtabs .ptn{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:#FFD43B;color:#3a2a00;font-size:.78rem;line-height:20px;text-align:center;margin-left:4px}
+.psetg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:10px}
+.psett{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--surface);position:relative;min-height:74px}
+.psett:hover{border-color:var(--brand)}.psett:focus-visible{outline:3px solid var(--brand);outline-offset:2px}.psett b{font-size:1.02rem;padding-right:64px}.psett small{color:var(--muted);line-height:1.35}
+.psb{position:absolute;top:12px;right:12px;font-size:.75rem;font-weight:700;border-radius:10px;padding:2px 8px}.psb.ok{background:#DCFCE7;color:#14532D}.psb.todo{background:#FFF4CC;color:#3a2a00}
+.psubh{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}.psubh b{font-size:1.15rem}
+#dash-body [data-pcs]>h3:first-child,#dash-body [data-pcs]>h3.mt-h:first-child{margin-top:0}
 #v-dash .dtabs button:focus-visible,#v-dash .dweek button:focus-visible,#v-dash .seg button:focus-visible,#v-dash .steps button:focus-visible,#v-dash .chips button:focus-visible,#v-dash .lnk:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
 #v-dash .dhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 #v-dash .dnav{display:flex;gap:6px}
@@ -4558,7 +4565,8 @@ if(u.role==='dealer')body=t==='stock'?stockHtml(u):t==='docs'?docsHtml(u):dealer
 else if(u.role==='mechanic')body=t==='diary'?diaryHtml(u)+res:t==='docs'?brand+docsHtml(u):jobsHtml(u)+res+ratesHtml(u)+(window.MCqreqCard?window.MCqreqCard(u):'')+(window.MCSVC?window.MCSVC.card(u):'');
 else body=((u.sbid&&(u.role==='recovery'||u.role==='evcharge'))?'':jobsHtml(u))+res+ratesHtml(u)+brand+docsHtml(u);
 if(u.role==='dealer'){top=res;if(t==='docs')body=brand+body}
-$('dash-body').innerHTML=head(u)+pendingHtml(u)+(window.MCjobs?window.MCjobs(u):(window.MChub?window.MChub.partnerCard(u):''))+(window.GGquick?window.GGquick(u):'')+top+tb+body;if(window.MCbrand)window.MCbrand.bind(u);bind(u)};
+var PT=window.MCpt&&window.MCpt.on(u),keep=function(x){return PT?x.replace('<div class="card"','<div class="card" data-pc="keep"'):x};
+$('dash-body').innerHTML=keep(head(u))+keep(pendingHtml(u))+(PT?window.MCpt.bar(u):'')+(window.MCjobs?window.MCjobs(u):(window.MChub?window.MChub.partnerCard(u):''))+(window.GGquick?window.GGquick(u):'')+top+tb+body;if(window.MCbrand)window.MCbrand.bind(u);bind(u)};
 chrome();if(window.GGroute)GGroute();
 })();</script>
 <script>(function(){
@@ -5035,6 +5043,57 @@ fill();draw();drawPost();window.GGjobs={refresh:function(){draw();drawPost()},co
 })();
 </script>
 <script>
+/* partner dashboard tabs (recovery and EV charging): Jobs, Money, Set-up (a menu that opens one section at a time), Tools.
+   Each card on the dashboard belongs to one tab; the big cards are split inside with data-pcs. Nothing is re-drawn when
+   a tab is pressed, so anything typed and not yet saved stays where it is. */
+(function(){function $(i){return document.getElementById(i)}
+function E(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+var ST={tab:'jobs',sub:''},last='';try{var s0=JSON.parse(sessionStorage.getItem('mc_ptab')||'null');if(s0&&s0.tab)ST={tab:String(s0.tab),sub:String(s0.sub||'')}}catch(e){}
+function on(u){return !!u&&(u.role==='recovery'||u.role==='evcharge')}
+function secs(u){var rec=u.role==='recovery';return [
+ ['prices',rec?'Fleet and prices':'Your prices',rec?'Your trucks, call-out, price per mile and extras':'Your call-out charge and price per mile'],
+ ['hours','Opening hours','Your weekly hours, or open 24 hours'],
+ ['area',rec?'Area you cover':'Area and connectors',rec?'Your depot postcode and how far you travel':'Your base, how far you travel and the plugs you can charge'],
+ ['brand','Logo and website','Shown to customers next to your prices'],
+ ['billing','Self-billing agreement','Needed before we can pay you. Your VAT number'],
+ ['docs','Documents','Insurance certificates and photo ID'],
+ ['details','Your details','Business name, phone and email']]}
+var TABS=[['jobs','Jobs'],['money','Money'],['setup','Set-up'],['tools','Tools']];
+function done(u,k){var me=window.MCrspMe?window.MCrspMe():null,d=me&&me.details||null;
+ if(k==='prices')return u.role!=='recovery'||!me?null:!!(d&&d.trucks&&d.trucks.length);
+ if(k==='hours')return !me?null:!!(d&&d.week&&d.week.length===7);
+ if(k==='billing'){var sb=window.MCpoSb?window.MCpoSb():undefined;return sb===undefined?null:!!(sb&&sb.agreed_at)}
+ return null}
+function barHtml(u){var S=secs(u),todo=S.filter(function(x){return done(u,x[0])===false}).length;
+ var h='<div class="dtabs" role="group" aria-label="Dashboard sections">'+TABS.map(function(x){return '<button type="button" data-ptab="'+x[0]+'" aria-pressed="'+(ST.tab===x[0])+'">'+x[1]+(x[0]==='setup'&&todo?' <span class="ptn">'+todo+'</span>':'')+'</button>'}).join('')+'</div>';
+ if(ST.tab!=='setup')return h;
+ if(!ST.sub)return h+'<div class="card pset"><h2>Set-up</h2><p class="note" style="margin:0 0 10px">Choose what you want to set up or change.</p><div class="psetg">'+S.map(function(x){var ok=done(u,x[0]);
+  return '<button type="button" class="psett" data-psub="'+x[0]+'"><b>'+E(x[1])+'</b><small>'+E(x[2])+'</small>'+(ok===null?'':'<span class="psb '+(ok?'ok':'todo')+'">'+(ok?'Done':'To do')+'</span>')+'</button>'}).join('')+'</div></div>';
+ var c=S.filter(function(x){return x[0]===ST.sub})[0]||S[0];
+ return h+'<div class="psubh"><button type="button" class="btn sm ghost" data-psub="">&lsaquo; Back to set-up</button><b>'+E(c[1])+'</b></div>'}
+function tagOf(el,u){if(el.id==='mc-ptabs'||el.getAttribute('data-pc')==='keep')return 'keep';var id=el.id;
+ if(id==='mc-rsp'||id==='mc-pay')return 'inner';if(id==='mc-jobs')return 'jobs';if(id==='mc-mine')return 'money';if(id==='brand-card')return 'setup-brand';if(id==='mc-mydet')return 'setup-details';
+ if(el.classList.contains('qa'))return 'tools';var h=el.querySelector('h2'),t=h?h.textContent:'';
+ if(/^Your rates/.test(t))return u.role==='recovery'&&u.sbid?'none':'setup-prices';if(/^Your documents/.test(t))return 'setup-docs';return 'jobs'}
+function cur(u){if(ST.tab!=='setup')return ST.tab;if(ST.sub&&!secs(u).some(function(x){return x[0]===ST.sub}))ST.sub='';return ST.sub?'setup-'+ST.sub:'setup-menu'}
+function apply(){var u=window.GGuser,host=$('dash-body'),bar=$('mc-ptabs');if(!host||!bar||!on(u))return;
+ if(!TABS.some(function(x){return x[0]===ST.tab}))ST.tab='jobs';var c=cur(u),bh=barHtml(u);if(bh!==last||!bar.firstChild){bar.innerHTML=bh;last=bh}
+ [].forEach.call(host.children,function(el){var k=tagOf(el,u),show;
+  if(k==='keep')show=true;
+  else if(k==='inner'){var I=el.querySelectorAll('[data-pcs]');show=!I.length&&c==='jobs';[].forEach.call(I,function(x){var v=x.getAttribute('data-pcs')===c;x.style.display=v?'':'none';if(v)show=true})}
+  else show=k===c;
+  el.style.display=show?'':'none'})}
+function go(tab,sub){ST={tab:tab,sub:sub||''};try{sessionStorage.setItem('mc_ptab',JSON.stringify(ST))}catch(e){}apply();var b=$('mc-ptabs');if(b&&b.getBoundingClientRect().top<0)b.scrollIntoView({block:'start'})}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-ptab],[data-psub],[data-ptgo]');if(!t||!on(window.GGuser))return;
+ if(t.hasAttribute('data-ptab'))go(t.getAttribute('data-ptab'),'');
+ else if(t.hasAttribute('data-psub'))go('setup',t.getAttribute('data-psub'));
+ else{var g=t.getAttribute('data-ptgo').split(':');go(g[0],g[1])}});
+var host0=$('dash-body'),tick=0;if(host0&&window.MutationObserver)new MutationObserver(function(){if(tick)return;tick=1;setTimeout(function(){tick=0;try{apply()}catch(e){}},0)}).observe(host0,{childList:true,subtree:true});
+setInterval(function(){if(location.hash==='#dashboard')try{apply()}catch(e){}},2000);
+window.MCpt={on:on,bar:function(){last='';return '<div id="mc-ptabs" data-pc="keep"></div>'},apply:apply,go:go};
+})();
+</script>
+<script>
 /* partner dashboard: one-click shortcuts to every partner service */
 (function(){function $(i){return document.getElementById(i)}
 var IC={job:'<path d="M4 8h16v11H4zM9 8V5h6v3M4 13h16"/>',car:'<path d="M3 15v-3l2-5h14l2 5v3M5 15h14M7 18v-3M17 18v-3"/>',search:'<circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/>',cal:'<rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 10h16M8 3v4M16 3v4"/>',pound:'<path d="M15 7a3.5 3.5 0 0 0-6.5 2v4c0 2-1 3.500-2.500 4H17M7 12.500h7"/>',doc:'<path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/>',plus:'<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',mega:'<path d="M4 10v4h3l7 4V6l-7 4zM17 9a4 4 0 0 1 0 6"/>',help:'<circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.700.400-1 .900-1 1.700M12 17h.01"/>',offer:'<path d="M4 12l8-8h8v8l-8 8zM15.500 8.500h.01"/>'};
@@ -5043,6 +5102,7 @@ window.GGquick=function(u){if(!u||u.role==='customer'||u.role==='admin')return '
 /* everyday work first (usability pass 19 Nov 2026), then the extras */
 if(u.role==='dealer'){h+=tile('tab:stock','plus','Add or manage stock','Your cars and vans');h+=tile('tab:ads','mega','Adverts and plan','Premium ads and Facebook boost');h+=tile('pdi','doc','Pre-delivery inspection','Hand over a sold vehicle');h+=tile('tab:docs','doc','My documents','Insurance and ID')}
 else if(u.role==='mechanic'){h+=tile('tab:diary','cal','Booking diary','Today’s jobs and bays');h+=tile('tab:jobs','pound','Jobs and rates','Your prices and work');h+=tile('tab:docs','doc','My documents','Insurance and ID')}
+else if(u.role==='recovery'||u.role==='evcharge'){}
 else{h+=tile('sec:job','cal','My jobs','Booked and completed work');h+=tile('sec:rate','pound','My rates','Set your own prices');h+=tile('sec:document','doc','My documents','Insurance and ID')}
 if(u.role!=='dealer')h+=tile('inspect','car','Vehicle inspection','Record damage before you start work');
 if(u.role==='mechanic'&&u.sub!=='autoelec')h+=tile('service','doc','Vehicle service sheet','Interim, Full or Major service checklist');
@@ -5053,7 +5113,7 @@ h+=tile('trade-offers','offer','My trade offers','Offers made and received');
 if(u.role==='dealer')h+=tile('tab:stock','offer','Move stock to trade or retail','One click from each vehicle');
 h+=tile('job','job','Post a job advert','£9.99 + VAT, live for 90 days',1);
 h+=tile('jobs','search','See all vacancies','Work in the motor trade');
-return '<div class="card qa"><h2>Quick actions</h2><p class="note">Everything you can do as a partner, one click away.</p><div class="qagrid">'+h+'</div></div>'};
+var tb2=u.role==='recovery'||u.role==='evcharge';return '<div class="card qa"><h2>'+(tb2?'Tools and extras':'Quick actions')+'</h2><p class="note">'+(tb2?'Vehicle inspections, help, trade stock and job adverts.':'Everything you can do as a partner, one click away.')+'</p><div class="qagrid">'+h+'</div></div>'};
 function later(f){setTimeout(f,260)}
 function scrollTo(el){if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-qa]');if(!t)return;var a=t.getAttribute('data-qa'),u=window.GGuser;
@@ -9004,7 +9064,7 @@ document.addEventListener('input',function(e){var t=e.target;if(t&&t.closest&&t.
 var WKN=[[1,'Monday'],[2,'Tuesday'],[3,'Wednesday'],[4,'Thursday'],[5,'Friday'],[6,'Saturday'],[0,'Sunday']];
 function autoHtml(u,d){var rec=u.role==='recovery',w=d.week&&d.week.length===7?d.week:null,mins=+d.mins||(rec?120:60),vans=+d.vans||1;
  var mo=[30,45,60,90,120,180,240].map(function(m){return '<option value="'+m+'"'+(m===mins?' selected':'')+'>'+(m<60?m+' minutes':m/60+(m===60?' hour':' hours'))+'</option>'}).join('');
- return '<h3 class="mt-h">Automatic bookings</h3>'
+ return '<h3 class="mt-h">Opening hours and automatic bookings</h3>'
   +'<label class="chk one"><input type="checkbox" id="rsp-auto"'+(d.auto===true?' checked':'')+'><span><b>Take bookings automatically in my hours.</b> In your hours you are available for jobs needed now without pressing anything. Customers can book a set time only when you are open, and we never book more jobs at once than you have '+(rec?'trucks':'vans')+'.</span></label>'
   +'<div class="wk24bar"><button class="btn sm" type="button" data-wk24="all">Open 24 hours, 7 days a week</button><span class="note">One press if you never close. Or set your own hours for each day below.</span></div>'
   +'<table class="rsp-wk"><tbody>'+WKN.map(function(x){var v=w?w[x[0]]:(x[0]===0?null:['08:00','20:00']);return '<tr><td><label class="chk"><input type="checkbox" data-wkon="'+x[0]+'"'+(v?' checked':'')+'><span>'+x[1]+'</span></label></td><td><input type="time" data-wkf="'+x[0]+'" value="'+E(v?v[0]:'08:00')+'" aria-label="'+x[1]+' from"></td><td>to</td><td><input type="time" data-wkt="'+x[0]+'" value="'+E(v?(v[1]==='24:00'?'23:59':v[1]):'20:00')+'" aria-label="'+x[1]+' to"></td><td class="wk24c"><button class="btn sm ghost" type="button" data-wk24="'+x[0]+'" aria-pressed="'+(!!(v&&v[0]==='00:00'&&v[1]==='24:00'))+'" aria-label="'+x[1]+': open 24 hours">24h</button></td></tr>'}).join('')+'</tbody></table>'
@@ -9017,20 +9077,21 @@ function rspHtml(u){var me=RSP.me||{},d=me.details||{},R=me.rates||{},man=me.onl
  var opt=function(v,l){return '<option value="'+v+'"'+(String(rad)===String(v)?' selected':'')+'>'+l+'</option>'};
  var TY=rec?['Flatbed','Wheel-lift','Truck with winch','Van or trailer']:['Type 2','CCS','CHAdeMO'],have=rec?(d.types||[]):(d.plugs||[]);
  var mo='';for(var i=0;i<6;i++){var dd2=new Date();dd2.setDate(1);dd2.setMonth(dd2.getMonth()-i);var mv=dd2.getFullYear()+'-'+pad2(dd2.getMonth()+1);mo+='<option value="'+mv+'"'+(RSP.stmt&&RSP.stmt.m===mv?' selected':'')+'>'+dd2.toLocaleDateString('en-GB',{month:'long',year:'numeric'})+'</option>'}
- return '<div class="card" id="mc-rsp"><h2>'+(rec?'Recovery call-outs':'Charging call-outs')+'</h2>'+(rec&&!(d.trucks&&d.trucks.length)?'<p class="dmsg" style="margin:0 0 10px;background:#FFF4CC;color:#3a2a00"><b>Set up your fleet and prices</b> so customers get an accurate price for every job. <a href="#rsp-fleet" onclick="var e=document.getElementById(\'rsp-fleet\');if(e)e.scrollIntoView({behavior:\'smooth\'});return false">Set it up now</a></p>':'')
+ return '<div class="card" id="mc-rsp"><div data-pcs="jobs"><h2>'+(rec?'Recovery call-outs':'Charging call-outs')+'</h2>'+(rec&&!(d.trucks&&d.trucks.length)?'<p class="dmsg" style="margin:0 0 10px;background:#FFF4CC;color:#3a2a00"><b>Set up your fleet and prices</b> so customers get an accurate price for every job. <button type="button" class="pv-link" data-ptgo="setup:prices">Set it up now</button></p>':'')
   +'<div class="rsp-on'+(on?' is':'')+'"><div><b>'+(on?'You are taking call-outs now':'You are not taking call-outs now')+'</b><small>'+(man?'Until '+E(new Date(me.online_until).toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'}))+'. Customers who need help now can book you.':wk?'Automatic bookings: you are open until '+E(String(wk).replace('24:00','midnight'))+'. Customers who need help now can book you.':'Customers can still book you for a set time'+(d.auto===true?' in your hours':'')+'. Go available to get jobs that are needed now.')+'</small></div>'
   +(man?'<button type="button" class="btn sm ghost" data-rspon="0">Stop</button>':wk?'<span class="note" style="margin:0">Change your hours below to stop.</span>':'<span class="rsp-hrs"><button type="button" class="btn sm" data-rspon="4">Available 4 hours</button><button type="button" class="btn sm" data-rspon="12">12 hours</button><button type="button" class="btn sm" data-rspon="24">24 hours</button></span>')+'</div>'
-  +'<h3 class="mt-h">Jobs to do ('+open.length+')</h3>'+(open.length?open.map(rspJob).join(''):'<p class="note">No jobs right now. New bookings appear here, and we email you straight away.</p>')
-  +autoHtml(u,d)
-  +'<h3 class="mt-h">Your area and equipment</h3><div class="two"><div><label class="f" for="rsp-pc">Depot postcode</label><input id="rsp-pc" value="'+E(d.post||me.base_pc||u.town||'')+'" maxlength="9" style="text-transform:uppercase"></div><div><label class="f" for="rsp-rad">How far you travel</label><select id="rsp-rad">'+opt(10,'10 miles')+opt(15,'15 miles')+opt(20,'20 miles')+opt(30,'30 miles')+opt(50,'50 miles')+opt(75,'75 miles')+opt(100,'100 miles')+opt('','Nationwide')+'</select></div></div>'
+  +'<h3 class="mt-h">Jobs to do ('+open.length+')</h3>'+(open.length?open.map(rspJob).join(''):'<p class="note">No jobs right now. New bookings appear here, and we email you straight away.</p>')+'</div>'
+  +'<div data-pcs="setup-hours">'+autoHtml(u,d)+'</div>'
+  +'<div data-pcs="setup-area"><h3 class="mt-h">'+(rec?'The area you cover':'Your area and connectors')+'</h3><div class="two"><div><label class="f" for="rsp-pc">Depot postcode</label><input id="rsp-pc" value="'+E(d.post||me.base_pc||u.town||'')+'" maxlength="9" style="text-transform:uppercase"></div><div><label class="f" for="rsp-rad">How far you travel</label><select id="rsp-rad">'+opt(10,'10 miles')+opt(15,'15 miles')+opt(20,'20 miles')+opt(30,'30 miles')+opt(50,'50 miles')+opt(75,'75 miles')+opt(100,'100 miles')+opt('','Nationwide')+'</select></div></div>'
   +'<p class="note" style="margin:6px 0 0">'+(rec?'Customers are quoted from your fleet and prices below: the call-out and price per mile of your cheapest truck that can do the job, plus any extras their answers make certain.':'Your price is your call-out charge, plus your price per mile for any miles beyond your area (up to 40 miles more). Set them in Your rates.')+'</p>'
   +(rec?'':'<fieldset style="margin-top:8px"><legend>Connectors you can charge</legend><div class="checks">'+TY.map(function(x){return '<label class="chk"><input type="checkbox" data-rspty value="'+E(x)+'"'+(have.indexOf(x)>-1?' checked':'')+'><span>'+E(x)+'</span></label>'}).join('')+'</div></fieldset>')
-  +'<div class="dtools"><button type="button" class="btn sm" data-rspsave>Save '+(rec?'area':'area and equipment')+'</button></div>'+(rec?fleetHtml(me):'')
-  +'<h3 class="mt-h">Monthly statement</h3><div class="mr-row"><select id="rsp-month" aria-label="Month">'+mo+'</select><button type="button" class="btn sm ghost" data-rspstmt>Show statement</button></div><div id="rsp-st">'+(RSP.stmt?RSP.stmt.html:'')+'</div></div>'}
+  +'<div class="dtools"><button type="button" class="btn sm" data-rspsave>Save '+(rec?'area':'area and connectors')+'</button></div></div>'+(rec?'<div data-pcs="setup-prices">'+fleetHtml(me)+'</div>':'')
+  +'<div data-pcs="money"><h3 class="mt-h">Monthly statement</h3><div class="mr-row"><select id="rsp-month" aria-label="Month">'+mo+'</select><button type="button" class="btn sm ghost" data-rspstmt>Show statement</button></div><div id="rsp-st">'+(RSP.stmt?RSP.stmt.html:'')+'</div></div></div>'}
 function rspDraw(force){var u=rsU(),host=$('dash-body'),old=$('mc-rsp');if(!u||location.hash!=='#dashboard'||!host){if(old)old.remove();return}
- if(!realUser()){if(!old){var dm=document.createElement('div');dm.innerHTML='<div class="card" id="mc-rsp"><h2>Call-outs</h2><p class="note">With a real partner account you go available for call-outs here, set your area and equipment, see each job with the pickup and drop-off on a map, and print a monthly statement. This demo account cannot take real bookings.</p></div>';var f0=host.querySelector('.card');if(f0&&f0.nextSibling)host.insertBefore(dm.firstChild,f0.nextSibling);else host.appendChild(dm.firstChild)}return}
+ if(!realUser()){if(!old){var dm=document.createElement('div');dm.innerHTML='<div class="card" id="mc-rsp"><h2>Call-outs</h2><p class="note">With a real partner account you go available for call-outs here, set your area and equipment, see each job with the pickup and drop-off on a map, and print a monthly statement. This demo account cannot take real bookings.</p></div>';var f0=$('mc-ptabs')||host.querySelector('.card');if(f0&&f0.nextSibling)host.insertBefore(dm.firstChild,f0.nextSibling);else host.appendChild(dm.firstChild)}return}
  if(Date.now()-RSP.at>25000)rspPull();if(RSP.jobs===null&&!RSP.me)return;if(old&&!force&&host.contains(old))return;if(old&&old.contains(document.activeElement)&&!force)return;
- var d=document.createElement('div');d.innerHTML=rspHtml(u);var c=d.firstChild;if(old&&host.contains(old))old.parentNode.replaceChild(c,old);else{var f=host.querySelector('.card');if(f&&f.nextSibling)host.insertBefore(c,f.nextSibling);else host.appendChild(c)}}
+ var d=document.createElement('div');d.innerHTML=rspHtml(u);var c=d.firstChild;if(old&&host.contains(old))old.parentNode.replaceChild(c,old);else{var f=$('mc-ptabs')||host.querySelector('.card');if(f&&f.nextSibling)host.insertBefore(c,f.nextSibling);else host.appendChild(c)}}
+window.MCrspMe=function(){return RSP.me};
 function rspStmt(u,m){return sb.rpc('my_roadside_jobs',{p_from:m+'-01T00:00:00Z'}).then(function(r){if(r.error)throw r.error;return (r.data||[]).filter(function(b){return String(b.made_at).slice(0,7)===m})})}
 function rspStmtHtml(u,m,L,printing){var mn=new Date(m+'-01T12:00:00').toLocaleDateString('en-GB',{month:'long',year:'numeric'}),paid=L.filter(function(b){return +b.partner_payout>0}),tot=paid.reduce(function(a,b){return a+(+b.partner_payout||0)},0),fees=paid.reduce(function(a,b){return a+Math.max(0,(+b.price_total||0)-RS_FEE-(+b.partner_payout||0))},0);
  var h=(printing?'<h1>Statement: '+E(mn)+'</h1><p>'+E(u.name||'')+'</p>':'')+'<div class="kpi"><div><b>'+L.filter(function(b){return b.status!=='cancelled'}).length+'</b>jobs</div><div><b>'+m2r(fees)+'</b>our fee</div><div><b>'+m2r(tot)+'</b>paid to you</div></div>';
@@ -9175,7 +9236,7 @@ var POST={due:'Due',paid:'Paid',held:'On hold'};
 function poLines(L){return '<table class="potbl"><thead><tr><th>Date</th><th>Job</th><th>Customer paid</th><th>Our fee</th><th>You are paid</th></tr></thead><tbody>'+(L.length?L.map(function(l){return '<tr><td>'+E(new Date(l.job_day+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'}))+'</td><td>'+E(l.service||l.kind)+(l.vehicle?' · '+E(l.vehicle):'')+(l.status==='cancelled'?' <small>(cancelled, call-out paid)</small>':'')+'</td><td>'+gbp(l.customer_paid)+'</td><td>'+gbp(l.our_fee)+'</td><td><b>'+gbp(l.payout)+'</b></td></tr>'}).join(''):'<tr><td colspan="5">No paid jobs this week.</td></tr>')+'</tbody></table>'}
 function poSum(L){var t={c:0,f:0,p:0};L.forEach(function(l){t.c+=+l.customer_paid||0;t.f+=+l.our_fee||0;t.p+=+l.payout||0});return t}
 function poHtml(u){var W=weeks(10,false),wk=PO.wk||W[0],D=PO.data&&PO.data.week===wk?PO.data:null,sbj=PO.sb;
- var h='<div class="card mc-form" id="mc-pay"><h2>Weekly payouts</h2><p class="note" style="margin:0 0 6px">Jobs paid through the website, Monday to Sunday. We pay you each week for the week before.</p>'
+ var h='<div class="card mc-form" id="mc-pay"><div data-pcs="money"><h2>Weekly payouts</h2><p class="note" style="margin:0 0 6px">Jobs paid through the website, Monday to Sunday. We pay you each week for the week before.</p>'
   +'<label class="f" for="po-wk">Week</label><select id="po-wk">'+W.map(function(k,i){return '<option value="'+k+'"'+(k===wk?' selected':'')+'>'+wkLab(k)+(i===0?' (this week)':'')+'</option>'}).join('')+'</select>';
  if(!D)h+='<p class="note">Loading…</p>';
  else{var L=D.lines||[],t=poSum(L),P=D.payout;
@@ -9183,14 +9244,15 @@ function poHtml(u){var W=weeks(10,false),wk=PO.wk||W[0],D=PO.data&&PO.data.week=
    +poLines(L)
    +'<p class="note" style="margin:8px 0 0">'+(P?'Payout '+E(POST[P.status]||P.status)+(P.status==='paid'&&P.paid_at?' on '+E(new Date(P.paid_at).toLocaleDateString('en-GB'))+(P.paid_ref?' (ref '+E(P.paid_ref)+')':''):'')+'. Invoice '+E(P.invoice_no||''):wk===W[0]?'This week is not finished yet. Your payout is worked out after Sunday.':'Your payout for this week is being prepared.')+'</p>'
    +'<div class="dtools"><button class="btn sm ghost" type="button" data-poprint="st">Print statement</button>'+(P&&P.sb_agreed?'<button class="btn sm ghost" type="button" data-poprint="inv">Print self-billing invoice</button>':'')+'</div>'}
- h+='<h3 style="margin:16px 0 4px">Self-billing agreement</h3>';
+ h+='</div><div data-pcs="setup-billing"><h3 class="posbh" style="margin:16px 0 4px">Self-billing agreement</h3>';
  if(sbj===undefined)h+='<p class="note">Loading…</p>';
  else if(sbj&&sbj.agreed_at)h+='<p class="note" style="margin:0">Agreed on '+E(new Date(sbj.agreed_at).toLocaleDateString('en-GB'))+', until '+E(new Date(sbj.ends+'T12:00:00').toLocaleDateString('en-GB'))+'. '+(sbj.vat_number?'VAT number '+E(sbj.vat_number)+'.':'Not VAT registered.')+' We raise an invoice for your work each week, so you do not need to invoice us.</p><div class="dtools"><button class="btn sm ghost" type="button" data-posb="edit">Change VAT number or end the agreement</button></div>';
  if(!(sbj&&sbj.agreed_at)||PO.sbEdit)h+='<div class="poagree"><p class="note" style="margin:0 0 6px">To be paid, agree that The Motoring Central raises an invoice for your work on your behalf each week (self-billing). You agree not to send us your own invoices for these jobs, to tell us if your VAT registration changes, and that the agreement lasts 12 months and renews when you agree again.</p>'
   +'<label class="f" for="po-vat">VAT number (leave empty if you are not VAT registered)</label><input type="text" id="po-vat" maxlength="16" placeholder="GB123456789" value="'+E(sbj&&sbj.vat_number||'')+'">'
   +'<label class="chk one" style="margin-top:8px"><input type="checkbox" id="po-ok"><span>I agree to self-billing on these terms.</span></label><p class="err" id="po-err" role="alert"></p>'
   +'<div class="dtools"><button class="btn sm" type="button" data-posb="save">Save agreement</button>'+(sbj&&sbj.agreed_at?'<button class="btn sm ghost" type="button" data-posb="end">End the agreement</button>':'')+'</div></div>';
- return h+'</div>'}
+ return h+'</div></div>'}
+window.MCpoSb=function(){return PO.sb};
 function poLoad(u){if(PO.busy||!sb)return;PO.busy=true;var wk=PO.wk||weeks(1,false)[0];
  Promise.all([ready.then(function(){return sb.rpc('my_week',{p_week:wk})}),PO.sb===undefined?sb.from('partners').select('self_billing').eq('id',u.sbid).maybeSingle():Promise.resolve(null)]).then(function(r){PO.busy=false;
   if(r[0]&&!r[0].error&&r[0].data)PO.data=r[0].data;if(r[1]&&!r[1].error)PO.sb=r[1].data?r[1].data.self_billing:null;poDraw(true)},function(){PO.busy=false})}
