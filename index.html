@@ -9753,7 +9753,8 @@ window.MCsales={detail:detail,pull:pullMsgs};
  /* browsers only allow sound once the visitor has touched the page. Try with sound; if that is refused, play silently and
     switch the sound on (from the start) at the very first tap, click or key press anywhere on the page. */
  function start(){v.muted=false;var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;wait=true;var q=v.play();if(q&&q.catch)q.catch(function(){});if(sn)sn.hidden=false})}
- function sound(e){if(!wait||pg.hidden)return;if(e&&e.target===v)return;wait=false;v.muted=false;if(sn)sn.hidden=true;try{v.currentTime=0}catch(x){}var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;wait=true;if(sn)sn.hidden=false;v.play().catch(function(){})})}
+ function sound(e){if(!wait||pg.hidden)return;if(e&&e.target===v&&e.type==='click')e.preventDefault(); /* a tap on the video itself switches sound on too, without also pausing it */
+  wait=false;v.muted=false;v.volume=1;if(sn)sn.hidden=true;try{v.currentTime=0}catch(x){}var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;wait=true;if(sn)sn.hidden=false;v.play().catch(function(){})})}
  ['click','touchend','keydown'].forEach(function(n){document.addEventListener(n,sound,true)});
  function check(){var on=!pg.hidden;if(on&&!was){was=true;try{v.currentTime=0}catch(e){}start()}else if(!on&&was){was=false;wait=false;v.pause();if(sn)sn.hidden=true}}
  new MutationObserver(check).observe(pg,{attributes:true,attributeFilter:['hidden']});check();
