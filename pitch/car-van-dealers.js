@@ -40,7 +40,6 @@ const p3=`<section class="page">${K.head(tag)}
  <table><tr><th>Extra</th><th class="n">Price</th></tr>
  <tr><td>Extra premium ad on the front-page banner, for 2 weeks or until the car sells</td><td class="n">£9.99 + VAT</td></tr>
  <tr><td>Extra vehicle history check, beyond those in your plan</td><td class="n">£3.50 + VAT</td></tr>
- <tr><td>Registration look-up to fill in an advert (or type it in free)</td><td class="n">10p + VAT</td></tr>
  <tr><td>Trade to trade listing</td><td class="n">£9.99 + VAT</td></tr>
  <tr><td>Commission on a sale</td><td class="n">£0</td></tr></table></div>
  <div><h3>What is a premium ad?</h3><p>Your car or van appears in the revolving banner on the front page of the site, the first thing every visitor sees. Each premium ad runs for 2 weeks or until the vehicle sells, whichever comes first. The premium ads included in your plan are renewed every month.</p>
