@@ -8294,7 +8294,7 @@ function drawInbox(force){if(!realUser())return;var u=window.GGuser;if(u.role!==
  var old=$('mc-inbox');if(old&&!force)return;if(old&&old.contains(document.activeElement))return;
  var d=document.createElement('div');d.innerHTML=inboxHtml();var card=d.firstChild;
  if(old)old.parentNode.replaceChild(card,old);else{var first=u.role==='customer'?host.firstChild:host.children[1]||null;host.insertBefore(card,first)}}
-document.addEventListener('toggle',function(e){var t=e.target;if(!t.matches||!t.matches('details.mx-t'))return;var k=t.getAttribute('data-tk');OPEN[k]=t.open;if(t.open&&t.offsetParent!==null){seen(k);t.classList.remove('new')}},true);
+document.addEventListener('toggle',function(e){var t=e.target;if(!t.matches||!t.matches('details.mx-t'))return;var k=t.getAttribute('data-tk');OPEN[k]=t.open;if(t.open)setTimeout(function(){if(t.open&&t.offsetParent!==null){seen(k);t.classList.remove('new')}},600)},true);
 /* a conversation only counts as read once it is open AND on screen (the dashboard tabs can hide this card) */
 window.MCmsgSeeOpen=function(){[].forEach.call(document.querySelectorAll('#mc-inbox details.mx-t[open]'),function(t){if(t.offsetParent!==null)seen(t.getAttribute('data-tk'))})};
 document.addEventListener('input',function(e){var k=e.target.getAttribute&&e.target.getAttribute('data-mxd');if(k)DRAFT[k]=e.target.value});
