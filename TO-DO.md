@@ -120,6 +120,25 @@ started moving MOT to 10% and was told NOT to: nothing was changed. Do not chang
 Sweep done: no old fee wording left on the site. The recovery and EV proposal PDFs (pitch/roadside.js) no longer offer
 "Pay as you go or Pro"; they show the one flat fee. VIDEOS are left for now: the owner will review them one by one at the
 end (slides match the site, spelling, voice). The EV video still gives the old fees and is switched off.
+TERMS BROUGHT UP TO DATE AND BRIEFS FOR THE ADVISERS (22 Nov 2026, late night):
+- Terms: driving lessons moved out of the recovery section into their own section 8 (with who can book, blocks, moving
+  and cancelling, lessons the instructor adds, reviews); the sections after it renumbered (buying 9, partner terms 10,
+  dealer terms 11, trade 12, jobs 13, premium ads 14, complaints 15) and the cross-references fixed; who we list and
+  what we check now includes MOT stations, EV charging and instructors; "Partners near you"; partner listing, area and
+  availability; recovery payload and the kept call-out; dealer look-ups tidied (they are free); text messages put in
+  [brackets] because they are not switched on. Privacy: learners aged 17, reviews shown with a first name, postcode
+  look-ups for finding partners. Lesson bookings now have the same "who your booking is with" tick box as every other
+  service. A scan of the whole page found no old fee wording.
+- Three documents were made for the owner to send out (a brief for the solicitor with the full legal text as
+  appendices, a brief for the accountant, and a declaration and proposal for the owner's employer). They are NOT in
+  this repository, on purpose. To re-make them, ask Claude.
+- BIGGEST OPEN QUESTION for both advisers: the terms say the customer's contract is with the partner and we only take
+  payment for them, but the weekly "self-billing invoice" treats the partner as supplying their work to us. One of the
+  two has to change once the accountant and solicitor have answered. Do not change either before then.
+- Also waiting on advice: whether the 9.99 booking fee must be inside the headline price; the 14-day cancellation
+  right against our cancellation rules and the no-refund rule for lesson blocks; learners under 18; whether holding
+  partners' money needs a regulated provider; the breakdown cover page and the (switched-off) car finance example.
+
 FULL TEST AND VIDEO REVIEW (owner asked, 22 Nov 2026, late night). What was run and what it found:
 - Customer bookings run end to end and paid, with the money split checked in the database: recovery (job 96.00, partner
   84.48), EV charging (150.00, partner 132.00), MOT (54.85, station 49.85, no booking fee), valet (99.00, partner 87.12),
