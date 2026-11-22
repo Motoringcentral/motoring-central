@@ -36,6 +36,20 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+COMPLAINTS PROCEDURE AND CONTACT FORM (22 Nov 2026), BUILT AND TESTED:
+- The Contact page form never sent anything (old preview code). Fixed: every message is stored, you are emailed, and the
+  sender gets an acknowledgement with a reference (MSG-00001). Topic "A problem or complaint" counts as a complaint.
+- New Complaints page (#complaints, linked in every footer) with its own form, who to contact first, timescales
+  (reference straight away, contact within [2 working days], full response within [14 days], final within [8 weeks]),
+  review by the owner, outside help (Citizens Advice, chargeback / Section 75, Motor Ombudsman, small claims, ICO).
+- Complaints get a CMP- reference and response dates; staff track them in Staff > Messages and complaints (statuses,
+  notes, history with who did what). Weekday 8:40am email to owners when a complaint is due within 2 days or overdue.
+- Terms: 13. Premium ads and the front-page banner (shared rotation, about 4 seconds each, order shuffled, no
+  guaranteed position or views, we may change the layout, no refunds for rotation; refund or re-run only if it never
+  appeared because of our fault). 14. Complaints procedure. Partners and dealers must reply to a passed-on complaint
+  within [5 working days].
+- To confirm with the solicitor: the timescales in [brackets], ADR scheme membership, record keeping period.
+
 DEALER LAUNCH OFFER (owner's decision, 22 Nov 2026), BUILT AND TESTED:
 - 30-day free trial from the day a dealer is approved, 3 vehicle history checks included; more checks £3.50 + VAT, or
   list without one during the trial ("Not history checked").
