@@ -1101,7 +1101,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 html.embed header,html.embed .banner,html.embed footer,html.embed .foot,html.embed .ckbar,html.embed .sfcols,html.embed #findbtn,html.embed .chatfab,html.embed .mcchat,html.embed #mc-cmpbar,html.embed .launch,html.embed #hub-btn,html.embed #v-cars>.hero,html.embed #v-vans>.hero,html.embed [data-srall],html.embed #cars-add-btn,html.embed #vans-add-btn,html.embed [data-sellcar],html.embed .flt-clear,html.embed [data-fltclear]{display:none!important}
 html.embed main{padding-top:12px}
 .mvw{position:relative}.msnd{all:unset;cursor:pointer;position:absolute;z-index:2;left:50%;top:12px;transform:translateX(-50%);background:#FFD43B;color:#0B1C35;font-weight:800;padding:10px 16px;border-radius:999px;box-shadow:0 6px 16px rgba(0,0,0,.35)}.msnd:focus-visible{outline:3px solid #fff;outline-offset:2px}
-.dvhero{text-align:center}.dvbox{position:relative;max-width:900px;margin:0 auto 14px}.dvbox video{width:100%;height:auto;border-radius:14px;display:block;background:#071630;box-shadow:0 8px 28px rgba(0,0,0,.35)}.dvsound{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;background:#FFD43B;color:#0B1C35;border:3px solid #fff;border-radius:999px;padding:16px 28px;font-weight:800;font-size:1.2rem;cursor:pointer;white-space:nowrap;box-shadow:0 10px 34px rgba(0,0,0,.55);animation:dvpulse 1.6s ease-in-out infinite}@keyframes dvpulse{50%{box-shadow:0 10px 34px rgba(0,0,0,.55),0 0 0 14px rgba(255,212,59,.28)}}@media (prefers-reduced-motion:reduce){.dvsound{animation:none}}.dvid video{width:100%;height:auto;border-radius:12px;display:block;background:#071630}
+.dvhero{text-align:center}.rjpts{list-style:none;margin:14px 0 18px;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:10px 22px;max-width:860px}.rjpts li{position:relative;padding-left:34px;line-height:1.4;color:#E6EEF8}.rjpts li b{color:#fff}.rjpts li:before{content:'';position:absolute;left:0;top:1px;width:24px;height:24px;border-radius:50%;background:#FFD43B url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%230B1C35' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}.rjfree{display:inline-block;margin-left:12px;color:#C9D6E8;font-size:.95rem}.dvbox{position:relative;max-width:900px;margin:0 auto 14px}.dvbox video{width:100%;height:auto;border-radius:14px;display:block;background:#071630;box-shadow:0 8px 28px rgba(0,0,0,.35)}.dvsound{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;background:#FFD43B;color:#0B1C35;border:3px solid #fff;border-radius:999px;padding:16px 28px;font-weight:800;font-size:1.2rem;cursor:pointer;white-space:nowrap;box-shadow:0 10px 34px rgba(0,0,0,.55);animation:dvpulse 1.6s ease-in-out infinite}@keyframes dvpulse{50%{box-shadow:0 10px 34px rgba(0,0,0,.55),0 0 0 14px rgba(255,212,59,.28)}}@media (prefers-reduced-motion:reduce){.dvsound{animation:none}}.dvid video{width:100%;height:auto;border-radius:12px;display:block;background:#071630}
 html.embed .embed-by{display:block!important}
 </style>
 <script>try{if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.classList.add('embed')}catch(e){}</script>
@@ -1677,17 +1677,41 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 </div>
 <div id="v-rec" hidden>
 <section class="hero"><div class="in">
-<h1>Recovery companies: more jobs, paid fast.</h1>
-<p>Join our network. Get breakdown, accident and vehicle transport jobs sent straight to your drivers.</p>
-<button class="cta" id="r-top" type="button">Apply to join</button>
+<div id="rj-pub">
+<h1>Recovery companies: more jobs, paid before you set off.</h1>
+<p>Breakdown, accident and transport jobs sent straight to your drivers. Your trucks, your prices.</p>
+<ul class="rjpts">
+<li><b>You set the prices.</b> Your call-out, your price per mile. Customers see your price, not ours.</li>
+<li><b>Every job is paid up front.</b> The customer pays when they book. No chasing, no bad debts.</li>
+<li><b>One flat fee: 10% + VAT.</b> No monthly fee, no membership, no joining fee.</li>
+<li><b>Paid every week,</b> straight to your bank.</li>
+<li><b>Work when you want.</b> One tap to go available, or set your hours, even 24/7.</li>
+<li><b>Cancelled after you set off?</b> You keep your call-out.</li>
+</ul>
+<button class="cta" id="r-top" type="button">Apply to join</button><span class="rjfree">Free to join. It takes about five minutes.</span>
 <br><a class="swl" href="#drivers">Need a recovery? Book as a driver &rarr;</a>
-<div class="dvbox" style="margin-top:16px"><video id="rc-vid" controls playsinline preload="metadata" poster="video/recovery-poster.jpg" width="1280" height="720" aria-label="Video: how The Motoring Central works for recovery companies. How customers book, setting your prices, extras, payouts and joining."><source src="video/recovery.mp4?v=3" type="video/mp4"><track kind="captions" src="video/recovery.vtt?v=3" srclang="en" label="English"></video><button type="button" class="dvsound" id="rc-snd" hidden>&#128266; Tap anywhere for sound</button></div>
-<p class="note" style="color:#C9D6E8;margin:6px 0 0">About 2&frac12; minutes: how customers book, your prices, payouts and joining. Captions are available in the player.</p></div></section>
+</div>
+<div id="rj-in" hidden>
+<h1>Welcome. One more step.</h1>
+<p>Watch how it works (about 2&frac12; minutes), then send us your application below.</p>
+<div class="dvbox"><video id="rc-vid" controls playsinline preload="metadata" poster="video/recovery-poster.jpg" width="1280" height="720" aria-label="Video: how The Motoring Central works for recovery companies. How customers book, setting your prices, extras, payouts and joining."><source src="video/recovery.mp4?v=3" type="video/mp4"><track kind="captions" src="video/recovery.vtt?v=3" srclang="en" label="English"></video></div>
+<p class="note" style="color:#C9D6E8;margin:6px 0 0">Tap the video to play it. Captions are available in the player.</p>
+</div>
+</div></section>
 <main>
+<div id="rj-pubm">
+<h2 class="sec" id="r-apply" style="margin-top:6px">Apply to join</h2>
+<form class="card" id="r-start" novalidate>
+<p style="margin:0 0 4px"><b>Step 1 of 2: create your account.</b></p><p class="note" style="margin:0 0 10px">Then you will see exactly how it works and send us your application.</p>
+<div class="two"><div><label class="f" for="rs1-mail" style="margin-top:0">Work email</label><input type="email" id="rs1-mail" autocomplete="email"></div><div><label class="f" for="rs1-pass" style="margin-top:0">Create a password (8+ characters)</label><input type="password" id="rs1-pass" autocomplete="new-password"></div></div>
+<p class="err" id="rs1-err" role="alert"></p>
+<button class="btn" type="submit">Create my account and continue</button>
+<p class="note" style="margin:10px 0 0">Already started? <a href="#login">Log in</a> to carry on. By continuing you agree to our <a href="#terms">terms</a> and <a href="#privacy">privacy policy</a>.</p>
+</form>
+<div class="card done" id="rs1-ok" hidden><div class="tick" aria-hidden="true">&#10003;</div><h2>Check your email</h2><p id="rs1-okp" style="margin:0"></p></div>
 <div class="stats"><div><b>10%</b>flat fee + VAT</div><div><b>24/7</b>jobs when you want them</div><div><b>Weekly</b>payouts</div></div>
-<div class="card rate-ad"><b>You set your own rates.</b> No peanuts: you are paid exactly what you charge, less a flat 10% fee plus VAT. Customers see your price before they choose you, so you never get squeezed.</div>
-<h2 class="sec">Why join</h2>
-<div class="grid3">
+<h2 class="sec" hidden>Why join</h2>
+<div class="grid3" hidden>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/></svg><b>Jobs sent to you</b><br><small>Drivers book and pay up front. No chasing.</small></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><b>Automatic bookings</b><br><small>Set your weekly hours once. Bookings come in by themselves, and never more at once than you have vans.</small></div>
 <div class="card"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s7-6 7-11a7 7 0 0 0-14 0c0 5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><b>Your area</b><br><small>Choose how far you will travel.</small></div>
@@ -1706,12 +1730,14 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <div class="card plan pro"><b class="pn">One flat fee</b><div class="pp">10% <small>+ VAT per completed job</small></div><ul class="perks"><li><b>No monthly fee, no membership and no sign-up fee</b></li><li>Only pay when you earn</li><li>The customer pays a separate &pound;9.99 booking fee, so it never comes out of your price</li><li>Paid weekly, straight to your bank</li></ul></div>
 </div>
 <p class="note">Example: a &pound;150 job costs you &pound;15 plus VAT (&pound;18 in total). You keep &pound;132.</p>
-<h2 class="sec" id="r-apply">Apply to join</h2>
+</div>
+<div id="rj-app" hidden>
+<h2 class="sec" id="r-apply2">Step 2 of 2: your application</h2>
 <form class="card" id="r-form" novalidate>
 <label class="f" for="r-co" style="margin-top:0">Company name</label><input type="text" id="r-co" autocomplete="organization">
 <div class="two"><div><label class="f" for="r-name">Contact name</label><input type="text" id="r-name" autocomplete="name"></div><div><label class="f" for="r-tel">Dispatch phone</label><input type="tel" id="r-tel" autocomplete="tel"></div></div>
-<label class="f" for="r-mail">Email</label><input type="email" id="r-mail" autocomplete="email">
-<label class="f" for="r-pass">Create a password (8+ characters)</label><input type="password" id="r-pass" autocomplete="new-password">
+<div id="r-acct" hidden><label class="f" for="r-mail">Email</label><input type="email" id="r-mail" autocomplete="email">
+<label class="f" for="r-pass">Create a password (8+ characters)</label><input type="password" id="r-pass" autocomplete="new-password"></div>
 <div class="two"><div><label class="f" for="r-post">Depot postcode</label><input type="text" id="r-post" autocomplete="postal-code"></div><div><label class="f" for="r-rad">Coverage area</label><select id="r-rad"><option>15 miles</option><option selected>30 miles</option><option>50 miles</option><option>Nationwide</option></select></div></div>
 <div class="two"><div><label class="f" for="r-fleet">Trucks in your fleet</label><select id="r-fleet"><option>1</option><option selected>2 to 5</option><option>6 to 20</option><option>20+</option></select></div><div><label class="f" for="r-avail">Availability</label><select id="r-avail"><option selected>24/7</option><option>Daytime</option><option>Nights and weekends</option></select></div></div>
 <fieldset><legend>Your rates</legend><div class="two"><div><label class="f" for="r-call" style="margin-top:0">Call-out fee (£)</label><input type="number" id="r-call" min="0" step="1" value="65"></div><div><label class="f" for="r-mile" style="margin-top:0">Price per mile (£)</label><input type="number" id="r-mile" min="0" step="0.1" value="2.4"></div></div><p class="note" id="r-ex"></p></fieldset>
@@ -1736,6 +1762,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="r-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to agree your coverage area</li><li>Insurance and licence checks</li><li>Go live and receive your first recovery</li></ol>
 <p class="note">We will be in touch by email once we have checked your documents.</p></div>
+</div>
 <footer class="foot">&copy; The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-evc" hidden>
@@ -3219,6 +3246,7 @@ function show(){
 var h=(location.hash||'').replace('#','');if(/^(mot-station|mobile-mechanic|garage|auto-electrician)$/.test(h))h='mechanics';if(!v[h])h='drivers';
 if(h==='dashboard'&&!window.GGuser){location.hash='login';return}
 if(h==='dashboard'&&window.GGuser.role==='customer'){location.hash='account';return}
+if(h==='dashboard'&&window.GGuser.status==='started'){location.hash=({recovery:'recovery'})[window.GGuser.role]||'network';return}
 if(h==='account'&&!(window.GGuser&&window.GGuser.role==='customer')){location.hash='drivers';if(window.GGcustOpen)setTimeout(function(){window.GGcustOpen('Log in to see your account.','in')},50);return}
 if(h==='dashboard'&&window.GGuser.role==='admin'){location.hash='admin';return}
 if(h==='admin'&&(!window.GGuser||window.GGuser.role!=='admin')){location.hash='drivers';return}
@@ -3250,7 +3278,19 @@ fill('r-types',['Flatbed','Wheel-lift','Truck with winch','Van or trailer']);
 fill('r-svcs',['Breakdown recovery','Accident recovery','Vehicle transport','Motorway recovery','Roadside jump start','Tyre change','Off-road winching']);
 function calc(){var a=+$('r-avg').value;$('r-av').textContent='£'+a;$('r-f1').textContent='£'+a.toFixed(2);$('r-f2').textContent='−£'+(a*0.12).toFixed(2);$('r-f3').textContent='£'+(a*0.88).toFixed(2)}
 $('r-avg').addEventListener('input',calc);calc();
-$('r-top').addEventListener('click',function(){$('r-apply').scrollIntoView({behavior:'smooth'});$('r-co').focus({preventScroll:true})});
+$('r-top').addEventListener('click',function(){$('r-apply').scrollIntoView({behavior:'smooth'});$('rs1-mail').focus({preventScroll:true})});
+/* two-step sign-up: step 1 makes the account (email and password); step 2, signed in, shows the video and the application */
+function rjStarted(){var u=window.GGuser;return !!(u&&u.sbid&&u.role==='recovery'&&u.status==='started')}
+function rjDraw(){var on=rjStarted(),sent=!$('r-ok').hidden;$('rj-pub').hidden=on||sent;$('rj-in').hidden=!on;$('rj-pubm').hidden=on||sent;$('rj-app').hidden=!(on||sent);if(on&&!$('r-mail').value)$('r-mail').value=window.GGuser.email||'';
+ if(!on){var v=$('rc-vid');if(v&&!v.paused)v.pause()}}
+setInterval(rjDraw,600);window.addEventListener('hashchange',rjDraw);
+$('r-start').addEventListener('submit',function(e){e.preventDefault();var em=$('rs1-mail').value.trim().toLowerCase(),pw=$('rs1-pass').value,er=$('rs1-err'),bt=this.querySelector('[type=submit]');
+ var msg=!/^\S+@\S+\.\S+$/.test(em)?'Enter a valid email address.':pw.length<8?'Create a password of at least 8 characters.':(!window.MCdb||!window.MCdb.partnerStart)?'Sign-up is not available right now. Please try again in a moment.':'';
+ er.textContent=msg;if(msg)return;bt.disabled=true;er.textContent='Creating your account. Please wait…';
+ window.MCdb.partnerStart(em,pw,'recovery').then(function(r){bt.disabled=false;er.textContent='';
+  if(r.session===false){$('r-start').hidden=true;$('rs1-ok').hidden=false;$('rs1-okp').textContent='We have sent an email to '+em+'. Tap the link in it, then use Partner log in to carry on with your application.';return}
+  if(window.GGsetUser)window.GGsetUser(r.user);rjDraw();window.scrollTo({top:0,behavior:'smooth'})},
+ function(x){bt.disabled=false;er.textContent=(x&&x.message)||'We could not create your account. Check your connection and try again.'})});
 $('r-form').addEventListener('submit',function(e){
 e.preventDefault();
 var co=$('r-co').value.trim(),n=$('r-name').value.trim(),t=$('r-tel').value.replace(/\D/g,''),m=$('r-mail').value.trim(),p=$('r-post').value.replace(/\s/g,'');
@@ -3965,15 +4005,16 @@ return out}
 FORMS.forEach(function(f){
 $(f.form).addEventListener('submit',function(){
 var ok=$(f.ok);if(ok.hidden)return;
-var pw=$(f.pass).value,em=$(f.mail).value.trim().toLowerCase(),msg=docsMsg(f.p)||(pw.length<8?'Create a password of at least 8 characters.':(exists(em)?'That email already has an account. Log in instead.':''));
+var su=window.GGuser&&window.GGuser.sbid&&window.GGuser.status==='started'&&window.GGuser.role===f.role?window.GGuser:null;
+var pw=$(f.pass).value,em=su?su.email:$(f.mail).value.trim().toLowerCase(),msg=docsMsg(f.p)||(su?'':(pw.length<8?'Create a password of at least 8 characters.':(exists(em)?'That email already has an account. Log in instead.':'')));
 if(msg){ok.hidden=true;$(f.form).hidden=false;$(f.err).textContent=msg;return}
 var d=f.get();if(window.MCbrand)window.MCbrand.read(f.p,d);d.email=em;d.pass=pw;d.role=f.role;d.status='pending';d.joined=Date.now();d.docs=[{name:'Trade insurance',file:$(f.p+'-doc1').files[0].name,exp:$(f.p+'-exp1').value},{name:'Public liability insurance',file:$(f.p+'-doc2').files[0].name,exp:$(f.p+'-exp2').value},{name:'Photo ID',idtype:$(f.p+'-idtype').value,file:$(f.p+'-doc3').files[0].name,exp:$(f.p+'-exp3').value}];
 d.submitted=Date.now();var pl=$(f.form).querySelector('input[name="plan-'+f.p+'"]:checked');if(f.role==='dealer')d.plan=String(DPLANSEL());else d.plan=pl?pl.value:'payg';d.proActive=false;if(d.role==='mechanic'&&d.motOnly){d.plan='mot';d.joinFee=window.MCmotJoin?window.MCmotJoin(d.submitted).fee:0}
 var fls=[0,1,2].map(function(i){var fl=$(f.p+'-doc'+(i+1)).files[0];d.docs[i].type=fl.type;d.docs[i].size=fl.size;readData(fl).then(function(x){d.docs[i].data=x});return fl});
-function finish(live){USERS.push(d);if(window.MCsave)window.MCsave('partner application',d.name+' applied to join as '+(ROLES[d.role]||d.role),{name:d.name,email:d.email,phone:d.phone,town:d.town,website:d.website,hasLogo:!!d.logo,role:d.role,sub:d.sub,motOnly:!!d.motOnly,aeWhere:d.aeWhere,bays:d.bays,motBays:d.motBays,plan:d.plan,rates:d.rates,submitted:d.submitted||Date.now(),documents:(d.docs||[]).map(function(x){return{name:x.name,file:x.file,exp:x.exp,idtype:x.idtype,size:x.size}})});if(live!==false)setUser(d);
+function finish(live){if(su){var ix=USERS.indexOf(su);if(ix>-1)USERS.splice(ix,1)}USERS.push(d);if(window.MCsave)window.MCsave('partner application',d.name+' applied to join as '+(ROLES[d.role]||d.role),{name:d.name,email:d.email,phone:d.phone,town:d.town,website:d.website,hasLogo:!!d.logo,role:d.role,sub:d.sub,motOnly:!!d.motOnly,aeWhere:d.aeWhere,bays:d.bays,motBays:d.motBays,plan:d.plan,rates:d.rates,submitted:d.submitted||Date.now(),documents:(d.docs||[]).map(function(x){return{name:x.name,file:x.file,exp:x.exp,idtype:x.idtype,size:x.size}})});if(live!==false)setUser(d);
 ok.insertAdjacentHTML('beforeend',live===false?'<p class="note" style="margin-top:12px"><b>One more step.</b> We have sent an email to '+em.replace(/[<>&"]/g,'')+'. Tap the link in it, then use Partner log in. Your documents are sent to us when you first log in on this device. If you log in on another device, your dashboard will ask you to upload them again.</p>':'<button class="btn" type="button" data-go="dashboard" style="margin-top:12px">Go to my dashboard</button>')}
 if(window.MCdb&&window.MCdb.on){delete d.pass;var fm=$(f.form),sb2=fm.querySelector('[type=submit]'),er=$(f.err);ok.hidden=true;fm.hidden=false;er.textContent='Sending your application. Please wait…';if(sb2)sb2.disabled=true;
-window.MCdb.partnerSignUp(d,pw,fls).then(function(r){if(sb2)sb2.disabled=false;er.textContent='';fm.hidden=true;ok.hidden=false;finish(r.session);
+(su?window.MCdb.partnerApply(d,fls):window.MCdb.partnerSignUp(d,pw,fls)).then(function(r){if(sb2)sb2.disabled=false;er.textContent='';fm.hidden=true;ok.hidden=false;finish(r.session);
 if(r.session===false&&window.MCdocStash)Promise.all(fls.map(readData)).then(function(xs){window.MCdocStash.put(em,d.docs.map(function(x,i){return{name:x.name,idtype:x.idtype,file:x.file,exp:x.exp,type:x.type,size:x.size,data:xs[i]}}))});
 if(r.docsFailed)ok.insertAdjacentHTML('beforeend','<p class="note" style="margin-top:10px"><b>One of your documents did not upload.</b> Please contact us so we can sort it out.</p>');ok.scrollIntoView({block:'center'})},
 function(e){if(sb2)sb2.disabled=false;er.textContent=e.message});return}
@@ -4150,14 +4191,15 @@ $('dv-close').addEventListener('click',function(){$('docview').close()});
 window.GGadmin=function(){
 var list=USERS.filter(function(u){return u.role!=='admin'&&(!adm.role||u.role===adm.role)});
 function by(s){return list.filter(function(u){return u.status===s})}
-var pend=by('pending').sort(function(a,b){return (a.submitted||0)-(b.submitted||0)}),appr=by('approved'),rej=by('rejected').concat(by('suspended'));
+var pend=by('pending').sort(function(a,b){return (a.submitted||0)-(b.submitted||0)}),appr=by('approved'),rej=by('rejected').concat(by('suspended')),strt=by('started').sort(function(a,b){return (b.joined||0)-(a.joined||0)});
 var exp=appr.filter(function(u){return (u.docs||[]).some(function(d){return dleft(d.exp)<=30})});
 var s='<div class="card" style="padding:12px 18px"><b>Your access:</b> '+(owner()?'Owner. You can approve, reject, suspend and reinstate partners.':'Reviewer. You can view documents, complete the checklist and recommend a decision. An owner makes the final decision.')+'</div>'+(adm.msg?'<div class="toast" role="status">'+esc(adm.msg)+'</div>':'')
 +'<div class="card"><div class="kpi"><div><b>'+pend.length+'</b>waiting for review</div><div><b>'+appr.length+'</b>approved</div><div><b>'+exp.length+'</b>documents expiring</div></div>'
 +'<label class="f" for="ad-role">Show</label><select id="ad-role"><option value="">All partner types</option>'+['mechanic','recovery','evcharge','body','tyres','valet','dealer'].map(function(r){return '<option value="'+r+'"'+(adm.role===r?' selected':'')+'>'+ROLES[r]+'</option>'}).join('')+'</select>'
-+'<div class="atabs" role="group" aria-label="Sections">'+[['pending','Pending ('+pend.length+')'],['approved','Approved ('+appr.length+')'],['declined','Declined or suspended ('+rej.length+')'],['cust','Customers ('+(window.MCadminCount?window.MCadminCount():0)+')'],['stats','Views and clicks'],['prep','Partner reports'],['rev','Reviews'],['mot','MOT bookings'],['cmp','Messages and complaints'],['log','Activity log'],['fb','Facebook feed']].concat(owner()?[['staff','Staff']]:[]).map(function(t){return '<button type="button" data-tab="'+t[0]+'" aria-pressed="'+(adm.tab===t[0]?'true':'false')+'">'+t[1]+'</button>'}).join('')+'</div></div>';
++'<div class="atabs" role="group" aria-label="Sections">'+[['pending','Pending ('+pend.length+')'],['approved','Approved ('+appr.length+')'],['declined','Declined or suspended ('+rej.length+')'],['started','Started, not finished ('+strt.length+')'],['cust','Customers ('+(window.MCadminCount?window.MCadminCount():0)+')'],['stats','Views and clicks'],['prep','Partner reports'],['rev','Reviews'],['mot','MOT bookings'],['cmp','Messages and complaints'],['log','Activity log'],['fb','Facebook feed']].concat(owner()?[['staff','Staff']]:[]).map(function(t){return '<button type="button" data-tab="'+t[0]+'" aria-pressed="'+(adm.tab===t[0]?'true':'false')+'">'+t[1]+'</button>'}).join('')+'</div></div>';
 if(adm.tab==='pending')s+=pend.length?pend.map(appCard).join(''):'<div class="card">No applications are waiting.</div>';
 if(adm.tab==='approved'){s+='<div class="card"><h2>Approved partners</h2>';appr.forEach(function(u){var soon=(u.docs||[]).some(function(d){return dleft(d.exp)<=30});s+=simpleRow(u,(soon?'<button class="btn sm ghost" type="button" data-remind="'+esc(u.email)+'">Send renewal reminder</button>':'')+'<button class="btn sm ghost" type="button" data-susp="'+esc(u.email)+'">Suspend</button><button class="btn sm ghost" type="button" data-view="'+esc(u.email)+':0">View documents</button>')+motAgreedBox(u)});if(!appr.length)s+='<p class="note">None yet.</p>';s+='</div>'}
+if(adm.tab==='started'){s+='<div class="card"><h2>Started, not finished</h2><p class="note" style="margin:0 0 8px">These businesses registered with an email and a password but have not sent their application yet. We email them one reminder after a day. A call or a personal email often gets them over the line.</p>';strt.forEach(function(u){s+='<div style="border-top:1px solid var(--line);padding:10px 0"><b>'+esc(u.email)+'</b><br><span class="note">'+esc(ROLES[u.role]||u.role)+' · registered '+(u.joined?new Date(u.joined).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'')+'</span> <a class="btn sm ghost" href="mailto:'+esc(u.email)+'?subject='+encodeURIComponent('Your application to join The Motoring Central')+'">Email them</a></div>'});if(!strt.length)s+='<p class="note">Nobody is part-way through right now.</p>';s+='</div>'}
 if(adm.tab==='declined'){s+='<div class="card"><h2>Declined or suspended</h2>';rej.forEach(function(u){s+=simpleRow(u,u.status==='suspended'?'<button class="btn sm" type="button" data-reinst="'+esc(u.email)+'">Reinstate</button>':'')});if(!rej.length)s+='<p class="note">None.</p>';s+='</div>'}
 if((adm.tab==='cust'||adm.tab==='stats'||adm.tab==='prep'||adm.tab==='rev')&&window.MCadminTab)s+='<div id="mc-atab">'+window.MCadminTab(adm.tab)+'</div>';
 if(adm.tab==='fb')s+=fbFeedHtml();
@@ -7956,6 +7998,15 @@ function partnerSignUp(d,pw,files){var det=slim(d)||{};try{if(JSON.stringify(det
   if(!r.data.session)return{id:au.id,session:false};
   cur=d;var bad=false;
   return files.reduce(function(p,f,i){return p.then(function(){return f?putDoc(au.id,i+1,f,d.docs[i]).catch(function(){bad=true}):null})},Promise.resolve()).then(function(){return{id:au.id,session:true,docsFailed:bad}})}).catch(function(e){throw fail(e)})}
+/* two-step sign-up: register (status 'started'), then send the application */
+function partnerStart(em,pw,role){return ready.then(function(){return sb.auth.signUp({email:em,password:pw,options:{emailRedirectTo:location.origin+'/',data:{kind:'partner',role:role,stage:'started',name:'',phone:'',town:''}}})}).then(function(r){
+  if(r.error)throw r.error;var au=r.data&&r.data.user;if(!au)throw{};if(au.identities&&!au.identities.length)throw{code:'user_already_exists'};
+  if(!r.data.session)return{session:false};
+  return loadPartner(au).then(function(u){if(!u)throw{};cur=u;return{session:true,user:u}})}).catch(function(e){throw fail(e)})}
+function partnerApply(d,files){var u=window.GGuser,det=slim(d)||{};try{if(JSON.stringify(det).length>6000)det={}}catch(e){det={}}var rates=slim(d.rates)||{};
+ return ready.then(function(){return sb.rpc('submit_application',{p_name:d.name||'',p_phone:d.phone||'',p_town:d.town||'',p_website:d.website||null,p_sub:d.sub||null,p_rates:rates,p_details:det})}).then(function(r){
+  if(r.error)throw r.error;d.sbid=u.sbid;sigs[u.sbid]=sigOf(d);cur=d;var bad=false;
+  return files.reduce(function(p,f,i){return p.then(function(){return f?putDoc(u.sbid,i+1,f,d.docs[i]).catch(function(){bad=true}):null})},Promise.resolve()).then(function(){return{id:u.sbid,session:true,docsFailed:bad}})}).catch(function(e){throw fail(e)})}
 function partnerSignIn(em,pw){return ready.then(function(){return sb.auth.signInWithPassword({email:em,password:pw})}).then(function(r){
   if(r.error)throw r.error;return loadPartner(r.data.user).then(function(u){if(!u){sb.auth.signOut().catch(function(){});throw{code:'x_not_partner'}}cur=u;return u})}).catch(function(e){throw fail(e)})}
 function staffSignIn(em,pw){return ready.then(function(){return sb.auth.signInWithPassword({email:em,password:pw})}).then(function(r){
@@ -8016,7 +8067,7 @@ wrapFn('GGadmin',syncStaff);wrapFn('GGdash',function(){syncPartner();syncSetting
 document.addEventListener('change',function(e){if(e.target.closest&&e.target.closest('#admin-body'))setTimeout(syncStaff,0)});
 /* if the site logs someone out by itself (for example the staff time-out), end the database session too */
 setInterval(function(){if(cur&&!window.GGuser){cur=null;if(sb)sb.auth.signOut().catch(function(){})}},4000);
-window.MCdb={on:true,history:history,live:function(){var u=window.GGuser;return !!(sb&&u&&u.sbid)},signUp:signUp,signIn:signIn,partnerSignUp:partnerSignUp,partnerSignIn:partnerSignIn,staffSignIn:staffSignIn,docUrl:docUrl,dealer:function(fn){return ready.then(function(){return sb.rpc(fn)})},foundingLeft:function(){return ready.then(function(){return sb.rpc('founding_places_left')})},contact:function(o){return ready.then(function(){return sb.rpc('send_contact',{p_name:o.name,p_email:o.email,p_phone:o.phone||'',p_topic:o.topic||'',p_reference:o.reference||'',p_message:o.message,p_complaint:!!o.complaint,p_about:o.about||''})})}};
+window.MCdb={on:true,history:history,live:function(){var u=window.GGuser;return !!(sb&&u&&u.sbid)},signUp:signUp,signIn:signIn,partnerSignUp:partnerSignUp,partnerStart:partnerStart,partnerApply:partnerApply,partnerSignIn:partnerSignIn,staffSignIn:staffSignIn,docUrl:docUrl,dealer:function(fn){return ready.then(function(){return sb.rpc(fn)})},foundingLeft:function(){return ready.then(function(){return sb.rpc('founding_places_left')})},contact:function(o){return ready.then(function(){return sb.rpc('send_contact',{p_name:o.name,p_email:o.email,p_phone:o.phone||'',p_topic:o.topic||'',p_reference:o.reference||'',p_message:o.message,p_complaint:!!o.complaint,p_about:o.about||''})})}};
 (function(){var e=document.getElementById('dl-found-n');if(!e)return;window.MCdb.foundingLeft().then(function(r){if(r&&!r.error&&r.data!=null)e.innerHTML=r.data>0?'<b>'+r.data+' of 30 founding places left.</b>':'All 30 founding places have now gone.'},function(){})})();
 /* stay logged in when the page is opened again, and finish the "confirm your email" link */
 ready.then(function(){return sb.auth.getSession()}).then(function(r){
@@ -9749,7 +9800,7 @@ function ivDoc(x){var S=x.seller||{},c=x.customer||{},v=x.vehicle||{},fin=x.stat
 
 window.MCsales={detail:detail,pull:pullMsgs};
 /* dealer join page: the video plays as soon as the page opens (with sound if the browser allows, otherwise muted with a tap-for-sound button) */
-[['dl-vid','v-dealers','dl-snd'],['rc-vid','v-rec','rc-snd']].forEach(function(q){var v=document.getElementById(q[0]),pg=document.getElementById(q[1]),sn=document.getElementById(q[2]);if(!v||!pg)return;var was=false,wait=false;
+[['dl-vid','v-dealers','dl-snd']].forEach(function(q){var v=document.getElementById(q[0]),pg=document.getElementById(q[1]),sn=document.getElementById(q[2]);if(!v||!pg)return;var was=false,wait=false;
  /* browsers only allow sound once the visitor has touched the page. Try with sound; if that is refused, play silently and
     switch the sound on (from the start) at the very first tap, click or key press anywhere on the page. */
  function start(){v.muted=false;var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;wait=true;var q=v.play();if(q&&q.catch)q.catch(function(){});if(sn)sn.hidden=false})}
