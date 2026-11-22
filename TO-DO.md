@@ -45,6 +45,10 @@ PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch 
 - NOT changed: MOT tests (official fee, we keep 5 pounds, no booking fee on top) and dealer plans. Ask the owner if MOTs
   should change too.
 - Recovery / EV opening hours: "Open 24 hours, 7 days a week" button and a 24h button per day; own hours still work.
+- Tested on preview 22 Nov: recovery booking 137891C7, job 61.00 + fee 9.99 = 70.99; we keep 17.31, partner 53.68. Valet,
+  alloys and quote bookings use the same new figures in the database but were NOT re-run in the browser.
+- Fixed on the way: hours table and truck cards now fit on a phone. The truck cards had been sharing style names
+  (.flt) with the car search filters; they are now .rkf. Always check for a name already in use.
 
 RECOVERY FLEET AND EXTRAS (built 22 Nov 2026, tested end to end on preview)
 - Partners pick their trucks from 7 pictures (spectacle lift, 3.5t beavertail, slide bed, 7.5t, heavy, 4x4 and trailer,
