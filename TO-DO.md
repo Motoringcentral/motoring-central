@@ -36,6 +36,28 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+END-TO-END TESTS OF THE PHONE-SESSION FEATURES (22 Nov, just after midnight): ALL PASS, after fixes.
+Test accounts added (password as for the other test accounts, not stored here): vimen+body@ (TEST Body and Alloys
+Dartford), vimen+valet@ (TEST Valeting Dartford), vimen+autoelec@ (TEST Auto Electrics and Keys Dartford), vimen+staff@
+(Test Reviewer, staff, two-step set up; the authenticator key is only in the test scratchpad).
+- Bodywork quote (2 photos) -> partner sees photos, sends £180 -> customer pays £183 -> we keep £13.80, partner £169.20. OK
+- Locksmith quote "Lost keys" -> £165 -> customer pays £168 -> £12.90 / £155.10. OK
+- Valet Medium £99 -> £102 (£8.94 / £93.06); alloys diamond cut x4 £396 -> £399 (£26.76 / £372.24). OK
+- Inspection saved to the valet booking with its PDF; customer sees it in My account and the PDF opens. OK
+- Weekly payouts: self-billing agreed, week built, marked paid, partner emailed, invoice prints. OK
+- Saved car + saved search: price-drop and new-match email correct, sent once (no repeat next day). OK
+- Staff two-step: setup with QR/key, wrong code refused, code needed at each log-in, password alone gets no staff data. OK
+Fixed while testing: partner's quote note was silently lost (two boxes shared one id); accepting a quote now takes the
+card payment first; quote, valet and alloy bookings saved as unpaid (now paid, like MOT/EV/recovery); valet and alloy
+job day was not saved as a date; payouts now count paid jobs only; partner job cards showed the booking time, not the
+job day; reviewers could build payouts and mark them paid through the database (now owner only); "Can start in 0 days"
+now "today"; lockouts can be booked for today; PDF tool now served from our own site (inspections, PDIs); small date
+and wording tidy-ups in emails and invoices.
+OWNER ACTION: your owner staff account has NOT set up two-step log-in yet, so your password alone opens the staff
+side. Use Staff log in once and scan the code with an authenticator app (Google or Microsoft Authenticator).
+Before Stripe goes live: "paid" is set by the booking functions after the on-screen card step; with real Stripe it must
+be set by Stripe's confirmation instead (MOT, EV, recovery, quotes, valet, alloys).
+
 WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
 - Launch offer: the site says dealers get their first 3 months free (then full price), and partners pay 5% (not 10%)
   and Pro £74.50 (not £149). The owner described the offer as "sign up in the first 3 months: months 0-3 free,
