@@ -4,7 +4,7 @@ module.exports=K=>require('./roadside.js')(K,{aud:'mobile EV charging companies'
  list:'electric car charging, recovery, MOTs, servicing and repairs, tyres, valeting, bodywork, and cars and vans for sale',
  who2:'Drivers come to us for everything their car needs. So when an electric car runs out of charge, they find you here, see your price and book you in a couple of minutes.',
  vision1:'A driver with a flat battery should not be left guessing who can help or what it will cost. And mobile charging operators deserve a steady flow of fairly priced work for the vans they have invested in.',
- why:'We are signing up our founding mobile charging partners now, area by area. Every electric car driver who runs out of charge in your area will be shown the companies on our network that cover it. We would like yours to be one of the first they see.',
+ why:'We are signing up our founding mobile charging partners now, area by area. Every electric car driver who runs out of charge in your area will be shown the companies on our network that cover it. We would like yours to be one of the first they see. The first 10 mobile charging companies we approve get a <b>&ldquo;Founding partner&rdquo; badge</b> and <b>first place in customers&rsquo; results</b> in their area for three months after launch.',
  cards:[['Call-outs sent to you','Drivers find you on the site, see your price and book. The job lands on your dashboard and we email you straight away.'],
   ['You set your rates','Your own fixed charge per call-out, and your own price per mile for jobs outside your area. Change them whenever you like.'],
   ['Paid before you set off','Every job is paid in full when it is booked. Nothing to collect at the roadside.'],

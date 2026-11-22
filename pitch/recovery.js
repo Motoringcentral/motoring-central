@@ -4,7 +4,7 @@ module.exports=K=>require('./roadside.js')(K,{aud:'recovery and vehicle transpor
  list:'recovery and transport, MOTs, servicing and repairs, tyres, valeting, bodywork, electric car charging, and cars and vans for sale',
  who2:'When a driver breaks down, has an accident or needs a vehicle moved, they tell us where it is and where it needs to go. They see each company that covers the area with its full price, and they book the one they want.',
  vision1:'A driver at the roadside should not have to ring round for a price. And good recovery operators deserve fair work at their own rates, not jobs handed down for whatever is left after everyone else has taken a cut.',
- why:'We are signing up our founding recovery partners now, area by area. Every driver who needs a recovery in your area will be shown the companies on our network that cover it. We would like yours to be one of the first they see.',
+ why:'We are signing up our founding recovery partners now, area by area. Every driver who needs a recovery in your area will be shown the companies on our network that cover it. We would like yours to be one of the first they see. The first 10 recovery companies we approve get a <b>&ldquo;Founding partner&rdquo; badge</b> and <b>first place in customers&rsquo; results</b> in their area for three months after launch.',
  cards:[['Jobs sent to you','Drivers find you on the site, see your price and book. The job lands on your dashboard and we email you straight away.'],
   ['You set your rates','Your own call-out fee, your own price per mile, and an extra for winching if you charge one. Change them whenever you like.'],
   ['Paid before you set off','Every job is paid in full when it is booked. No chasing at the roadside and no unpaid invoices.'],

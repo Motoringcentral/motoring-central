@@ -12,7 +12,7 @@ const p1=`<section class="page"><div class="cover">
  <div><p class="kick">Our vision</p><h2>Fair for drivers. Fair for the trade.</h2>
  <p>Finding a garage you can trust should not be guesswork. And good local businesses deserve a fair way to find customers without giving away a big slice of every job.</p>
  <p>So we built one place where drivers see the price first and choose who they want, and where independent motor traders keep more of what they earn. We want to be the UK's network of trusted, independent motor traders.</p></div></div>
- <div class="card sky" style="margin-top:5mm"><h3>Why we are talking to you</h3><p>We are signing up our founding MOT test stations now, area by area. Every driver who needs an MOT near you will be sent to the stations on our network. We would like yours to be one of the first they see.</p></div>
+ <div class="card sky" style="margin-top:5mm"><h3>Why we are talking to you</h3><p>We are signing up our founding MOT test stations now, area by area. Every driver who needs an MOT near you will be sent to the stations on our network. We would like yours to be one of the first they see. The first 10 MOT stations we approve get a <b>&ldquo;Founding partner&rdquo; badge</b> and <b>first place in customers&rsquo; results</b> in their area for three months after launch.</p></div>
  ${K.foot(F,1,T)}</section>`;
 const p2=`<section class="page t1">${K.head(tag)}
  <p class="kick">What we offer</p><h2>Everything your test station gets</h2>
