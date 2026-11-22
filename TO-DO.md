@@ -36,6 +36,33 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+TWO-STEP SIGN-UP (22 Nov 2026, RECOVERY ONLY so far; tested end to end on preview)
+- Owner's idea: keep how the trade side works away from customers. The public join page is now a short pitch (six
+  points, the fee, "Apply to join") with Step 1: email and password only. Step 2, signed in: the video (tap to play) and
+  the application form. The dealer page still has its video in public.
+- Database: partner status 'started' (registered, not applied). submit_application() moves it to 'pending'.
+  Emails: welcome on registering (+ note to owners), "application received" (+ owners) when sent, ONE reminder after
+  24 hours (cron started-reminders, 10:10 daily). Staff page tab "Started, not finished" lists the leads.
+- Supabase "Confirm email" is ON, so after Step 1 they must tap the link in the email, then they land on their
+  application. A 'started' account that opens the dashboard is sent back to the application.
+- NEXT (owner asked): the same pattern for every other partner type (mechanics, MOT, tyres, valeting, body, EV, dealers).
+  The pieces are general (MCdb.partnerStart / partnerApply, the FORMS submit already handles a 'started' user); each page
+  needs its pitch, Step 1 card and the join-page map in the router ({recovery:'recovery'}).
+- Test account: vimen+rectwo1@ (TEST Two Step Recovery, pending). Delete before launch.
+- BUG FIXED on the way: the join forms for ALL partner types had stopped splitting into 4 steps since the "Your plan"
+  box was renamed "Our fee" that morning. Fixed and checked on all seven forms.
+
+TRUCK PAYLOAD AND VEHICLE WEIGHT (22 Nov 2026, tested on preview)
+- Every truck has "Max payload (kg)" (starting figures: beavertail 1300, spectacle 2000, 7.5t 3000, trailer 2000,
+  heavy 18000, transporter 1700, bike 400; the partner can change them). Only trucks that can carry the vehicle's weight
+  plus 10% are quoted. The customer sees the weight used; the job card shows it.
+- Weight comes from the registration (Vehicle Data Global, kept in table vehicle_specs so each reg is paid for once) or,
+  with no record, a typical weight for the type (car 1500, small van 1700, large van 2300, 4x4 2200, bike 250, big 5000).
+- OWNER ACTION: real weights are NOT on yet. The look-up key is only in Vercel. Add it in Supabase > Edge Functions >
+  Secrets as VDG_API_KEY (the same key). Until then every weight is the typical one. After adding it, test with a real
+  registration and check the row in vehicle_specs ("found" shows which fields were read).
+- Note: with the typical car weight (1500 kg + 10%), a beavertail left at 1300 kg is not offered for cars.
+
 RECOVERY VIDEO (22 Nov 2026): video/recovery.mp4 (2 min 27, captions recovery.vtt) replaces the banner on the recovery
 sign-up page; it opens on the banner. Same voice (Kokoro bf_emma). Plays when the page opens (muted with a "Tap for
 sound" button if the browser blocks sound, like the dealer video). Sources in tools/video/recovery (README there).
