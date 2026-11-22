@@ -36,6 +36,18 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
+PARTNER DASHBOARD TABS (22 Nov 2026, recovery and EV charging only so far; tested on preview with both test accounts)
+- Tabs: Jobs (go available, jobs to do, booked jobs) / Money (monthly statement, results, weekly payouts) / Set-up /
+  Tools (inspection, help, trade stock, job adverts).
+- Set-up is a menu of tiles; each opens its own page with "Back to set-up": Fleet and prices, Opening hours, Area,
+  Logo and website, Self-billing agreement, Documents, Your details. Tiles show Done / To do for fleet, hours and
+  self-billing, and the Set-up tab shows how many are still to do.
+- How it works: module "partner dashboard tabs" (window.MCpt). Each card is given a tab by its id or heading (tagOf);
+  the big cards (#mc-rsp, #mc-pay) are split inside with data-pcs. Nothing is re-drawn on a tab press.
+- Recovery: the old "Your rates" card (one call-out and one price per mile) is hidden; fleet and prices replace it.
+- STILL TO DO: the Jobs tab shows the same jobs twice ("Jobs to do" and "Your booked jobs"): merge into one list.
+  Other partner types (body, valet, tyres, mobile mechanic) still have the long one-page dashboard: give them tabs too.
+
 PARTNER FEES CHANGED (owner, 22 Nov 2026): the Pro membership and the 5% launch rate are GONE.
 - Every partner job: flat 10% + VAT (we keep 12% of the partner's price). No monthly fee, no plans.
 - Customer booking fee: 9.99 pounds including VAT (8.33 + 1.66 VAT) on every booking, replacing 3.00.
