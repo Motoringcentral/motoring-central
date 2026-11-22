@@ -12,7 +12,7 @@ import { createClient } from "npm:@supabase/supabase-js@2";
 const ORIGINS = ["https://preview.motoringcentral.co.uk", "https://motoringcentral.co.uk", "https://www.motoringcentral.co.uk"];
 const ALLOW = [5, 10, 15, 25, 25]; // history checks included each month in dealer plans Starter..Premier
 const EXTRA = 3.5;                 // price of an extra check for a dealer, + VAT
-const TRIAL_DAYS = 92;             // dealers' free first 3 months: checks are not included
+const TRIAL_CHECKS = 3;            // history checks included in a dealer's 30-day free trial (trial_ends on partners)
 
 function cors(req: Request) {
   const o = req.headers.get("origin") || "";
@@ -154,7 +154,7 @@ Deno.serve(async (req) => {
   if (reg.length < 2 || reg.length > 8) return out({ ok: false, error: "bad_reg" }, 400);
   const payment = typeof b.payment === "string" ? b.payment.slice(0, 100) : "";
 
-  const { data: p } = await db.from("partners").select("role,status,plan,created_at").eq("id", user.id).maybeSingle();
+  const { data: p } = await db.from("partners").select("role,status,plan,trial_ends").eq("id", user.id).maybeSingle();
   const trade = !!p;
   if (p && p.status !== "approved") return out({ ok: false, error: "not_approved" }, 403);
 
@@ -172,15 +172,19 @@ Deno.serve(async (req) => {
   // Who pays for this check?
   let paid = "";
   if (trade) {
-    const trial = p.created_at && Date.now() - Date.parse(p.created_at) < TRIAL_DAYS * 864e5;
-    if (!trial && p.role === "dealer") {
+    const trial = p.role === "dealer" && !!p.trial_ends && Date.now() < Date.parse(p.trial_ends);
+    if (trial) {
+      const { count: usedT } = await db.from("vehicle_checks").select("id", { count: "exact", head: true })
+        .eq("owner_id", user.id).eq("paid", "trial");
+      if ((usedT || 0) < TRIAL_CHECKS) paid = "trial";
+    } else if (p.role === "dealer") {
       const i = Math.max(0, Math.min(ALLOW.length - 1, parseInt(String(p.plan), 10) || 0));
       const m = new Date(); m.setUTCDate(1); m.setUTCHours(0, 0, 0, 0);
       const { count: used } = await db.from("vehicle_checks").select("id", { count: "exact", head: true })
         .eq("owner_id", user.id).eq("paid", "allowance").gte("created_at", m.toISOString());
       if ((used || 0) < ALLOW[i]) paid = "allowance";
     }
-    if (!paid && !payment) return out({ ok: false, need: "payment", why: trial ? "trial" : "allowance", price: EXTRA });
+    if (!paid && !payment) return out({ ok: false, need: "payment", why: trial ? "trial" : "allowance", price: EXTRA, included: trial ? TRIAL_CHECKS : undefined });
   } else if (!payment) {
     return out({ ok: false, need: "payment", why: "private" });
   }
