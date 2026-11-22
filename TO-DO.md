@@ -36,10 +36,12 @@ Test accounts (real accounts, kept for testing until launch, then remove with th
 - The demo log-ins on the site are pretend accounts kept in the browser. They cannot send real messages or emails
   and they do not see real applications or adverts.
 
-RECOVERY VIDEO (22 Nov 2026): video/recovery.mp4 (2 min 37, captions recovery.vtt) replaces the banner on the recovery
+RECOVERY VIDEO (22 Nov 2026): video/recovery.mp4 (2 min 27, captions recovery.vtt) replaces the banner on the recovery
 sign-up page; it opens on the banner. Same voice (Kokoro bf_emma). Plays when the page opens (muted with a "Tap for
 sound" button if the browser blocks sound, like the dealer video). Sources in tools/video/recovery (README there).
-- The owner has NOT yet listened to it: ask if the voice sounds natural enough.
+- Owner heard stray sounds ("trucks-er", "what is it-e"): FIXED 22 Nov by voicing each line in one go and checking every
+  line with speech recognition (tools/video/recovery/check-voice.py). Now 2 min 27. The other videos were made the old
+  way (sentence by sentence) and have NOT been checked with the tool yet.
 - Sound (dealer and recovery videos): browsers block sound until the visitor touches the page, and no site can
   override that. The video tries with sound; if refused it plays silently with a big "Tap anywhere for sound" button, and
   the FIRST tap, click or key press anywhere (the cookie banner counts) switches sound on and restarts it.

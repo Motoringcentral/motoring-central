@@ -1,27 +1,26 @@
-import re, json, subprocess, numpy as np, soundfile as sf, sys
+import json, subprocess, numpy as np, soundfile as sf, sys
 from kokoro_onnx import Kokoro
-S=sys.argv[1]
-k=Kokoro("model/kokoro-v1.0.onnx","model/voices-v1.0.bin")
-SR=48000
+# Each line of the script is voiced IN ONE GO. Voicing short sentences on their own made the voice add a stray sound
+# at the end ("trucks-er", "it-e"). The pauses the voice leaves between sentences are then lengthened a little.
+S=sys.argv[1]; k=Kokoro("model/kokoro-v1.0.onnx","model/voices-v1.0.bin"); SR=48000
 def trim(a,thr=0.004):
     i=np.where(np.abs(a)>thr)[0]; return a[i[0]:i[-1]+1] if len(i) else a
-def gap_after(s,nxt):
-    w=len(s.split())
-    if s.endswith('?'): return 0.55            # let a question hang
-    if w<=3: return 0.34                       # short, punchy lines run together
-    if nxt and len(nxt.split())<=3: return 0.40
-    return 0.50
-def synth(text):
-    parts=[p for p in re.split(r'(?<=[.?!])\s+',text) if p]; out=[]
-    for i,p in enumerate(parts):
-        sp=0.97 if len(p.split())>12 else 0.99   # a touch slower on long sentences, as a person would
-        a,sr=k.create(p,voice="bf_emma",speed=sp,lang="en-gb"); a=trim(a)
-        f=int(0.012*sr); a[:f]*=np.linspace(0,1,f); a[-f:]*=np.linspace(1,0,f); out.append(a)
-        if i<len(parts)-1: out.append(np.zeros(int(gap_after(p,parts[i+1])*sr),dtype=np.float32))
-    a=np.concatenate(out); sf.write(S+"/tmp24.wav",a,sr)
-    subprocess.run(["ffmpeg","-y","-loglevel","error","-i",S+"/tmp24.wav","-ar",str(SR),"-af","aresample=resampler=soxr",S+"/tmp48.wav"],check=True)
-    b,_=sf.read(S+"/tmp48.wav",dtype="float32"); return b
+def stretch(a,sr,thr=0.008,find=0.18,want=0.46):
+    q=np.abs(a)<thr; out=[]; i=0; n=len(a); last=0
+    while i<n:
+        if q[i]:
+            j=i
+            while j<n and q[j]: j+=1
+            L=(j-i)/sr
+            if L>=find and L<want and i>0 and j<n:
+                mid=(i+j)//2; out.append(a[last:mid]); out.append(np.zeros(int((want-L)*sr),dtype=np.float32)); last=mid
+            i=j
+        else: i+=1
+    out.append(a[last:]); return np.concatenate(out)
 cues=json.load(open(S+"/script.json")); durs=[]
 for i,c in enumerate(cues):
-    a=synth(c["say"]); sf.write(f"{S}/cue{i:02d}.wav",a,SR); durs.append(round(len(a)/SR,3)); print(i,durs[-1],flush=True)
-json.dump(durs,open(S+"/durs.json","w")); print("total voice",sum(durs))
+    a,sr=k.create(c["say"],voice="bf_emma",speed=0.97,lang="en-gb"); a=stretch(trim(a),sr)
+    sf.write(S+"/tmp24.wav",a,sr)
+    subprocess.run(["ffmpeg","-y","-loglevel","error","-i",S+"/tmp24.wav","-ar",str(SR),"-af","aresample=resampler=soxr",f"{S}/cue{i:02d}.wav"],check=True)
+    b,_=sf.read(f"{S}/cue{i:02d}.wav",dtype="float32"); durs.append(round(len(b)/SR,3)); print(i,durs[-1],flush=True)
+json.dump(durs,open(S+"/durs.json","w")); print("total voice",round(sum(durs),1))

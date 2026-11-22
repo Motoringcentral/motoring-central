@@ -31,7 +31,7 @@ for i,s in enumerate(starts):
     a,_=sf.read(f'cue{i:02d}.wav',dtype='float32'); audio[int(s*SR):int(s*SR)+len(a)]+=a
 pk=np.max(np.abs(audio)); audio=audio*(0.89/pk); sf.write('voice_full.wav',audio[:int(total*SR)],SR)
 ff=subprocess.Popen(['ffmpeg','-y','-loglevel','error','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','-','-i','voice_full.wav',
-  '-c:v','libx264','-preset','slow','-crf','21','-pix_fmt','yuv420p','-profile:v','high','-g','50','-c:a','aac','-b:a','128k','-ac','1','-movflags','+faststart','-shortest','recovery.mp4'],stdin=subprocess.PIPE)
+  '-c:v','libx264','-preset','slow','-crf','24','-pix_fmt','yuv420p','-profile:v','high','-g','50','-af','volume=4.5dB,alimiter=limit=0.94:level=false','-c:a','aac','-b:a','128k','-ac','1','-movflags','+faststart','-shortest','recovery.mp4'],stdin=subprocess.PIPE)
 n=int(total*FPS); ei=0
 for f in range(n):
     tt=f/FPS
