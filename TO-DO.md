@@ -120,6 +120,37 @@ started moving MOT to 10% and was told NOT to: nothing was changed. Do not chang
 Sweep done: no old fee wording left on the site. The recovery and EV proposal PDFs (pitch/roadside.js) no longer offer
 "Pay as you go or Pro"; they show the one flat fee. VIDEOS are left for now: the owner will review them one by one at the
 end (slides match the site, spelling, voice). The EV video still gives the old fees and is switched off.
+FULL TEST AND VIDEO REVIEW (owner asked, 22 Nov 2026, late night). What was run and what it found:
+- Customer bookings run end to end and paid, with the money split checked in the database: recovery (job 96.00, partner
+  84.48), EV charging (150.00, partner 132.00), MOT (54.85, station 49.85, no booking fee), valet (99.00, partner 87.12),
+  alloy wheels (396.00 + 9.99), bodywork quote (180.00 quote, customer pays 189.99), driving lessons (earlier the same
+  day). Every page loads with no errors. Partner price changes reach the customer at once.
+- FIXED: alloy wheel bookings showed and charged the old 3.00 booking fee (the database already recorded 9.99).
+- FIXED (the big one): approved MOT stations, valeters, body shops and auto electricians were offered to every customer
+  in the country. Now matched by distance (database 20261122u, window.MCnear in the page): mobile work inside the
+  partner's own travel distance, work at the partner's premises up to 25 miles, nearest first, with the miles shown.
+  New Set-up page "Area you cover" / "Area and working days" for mechanic, valet, body and tyres partners (postcode,
+  how far they travel, and for valet and body the days and hours they work, which now limit the days and times a
+  customer can pick). A partner with no area is not offered and sees a "Customers cannot find you yet" banner. New
+  applications are placed on the map automatically from their postcode. The four test partners have areas set.
+- FIXED: some text boxes had no styling (landmark, destination and registration on the recovery and EV forms, the depot
+  postcode). MOT-only stations no longer see a labour rate.
+- NOT BUILT, for the owner to decide: (1) an approved partner cannot upload a renewed insurance certificate (the
+  Documents page only lists them); (2) a valeter or body shop cannot change "mobile / premises / both" after signing
+  up; (3) the sample (made-up) partners still show next to real ones until the pre-launch clean-up.
+- Driving lessons banner: the owner's photo (img/driving-lessons.webp wide version for the home slideshow,
+  img/driving-instructors-poster.webp the full picture). The photo said "TheMotoringCentral.co.uk" and had a QR code
+  that did not scan: the copies used on the site and video say MotoringCentral.co.uk and carry a working QR code to
+  the lessons page. The owner's original file is untouched (ask before using it anywhere as it is).
+- VIDEOS: all six checked for screens, facts and voice. Sources and the method are in tools/video/README.md.
+  * Intro tour: RE-MADE (showed the old site: car servicing, mechanics, tyres, the 3.00 fee; no driving lessons).
+  * Dealer: RE-MADE (end slide said "3 months free"; promised MOT history and a mobile mechanic inspection).
+  * MOT station: RE-MADE (a slide still said "You keep 82%, 44.98" while the voice said 49.85).
+  * EV charging: RE-MADE and switched back on in step 2 of the EV join page (it had the old 5% / Pro fees).
+  * Recovery: voice and facts fine; the fleet picture now shows the max payload box.
+  * Instructors: opens on the owner's photo.
+  Voice: every line checked with speech recognition; no stray sounds in any of the six.
+
 ADMIN PAGE IN CATEGORIES (owner, 22 Nov 2026, night): "messy, each approval process in its own category, easy to train
 someone new". Now: To do (front page with counts) / Partners (applications, approved, declined, started) / Adverts (to
 approve, reported, Facebook feed) / Bookings (MOT, recovery and EV) / Payouts / Customers (messages and complaints,

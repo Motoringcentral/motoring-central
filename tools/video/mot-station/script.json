@@ -1,0 +1,89 @@
+[
+{
+"say": "MOT test stations, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+"cap": "MOT test stations, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+"b": [
+0.12
+]
+},
+{
+"say": "Drivers book their MOT with us online, at any time of the day or night. They enter their postcode, and they see the test stations near them, with the times that are free.",
+"cap": "Drivers book their MOT with us online, at any time of the day or night. They enter their postcode, and they see the test stations near them, with the times that are free.",
+"b": [
+0.3,
+0.6
+]
+},
+{
+"say": "Every station charges the same price, the official maximum fee for the class. So there's no price war and no undercutting, and customers choose you for your location, your reviews, and your free times.",
+"cap": "Every station charges the same price, the official maximum fee for the class. So there's no price war and no undercutting, and customers choose you for your location, your reviews, and your free times.",
+"b": [
+0.2,
+0.5
+]
+},
+{
+"say": "They pick a time straight from your live diary, and they pay in full when they book. The booking drops into your MOT bay, with the customer, the vehicle and the registration.",
+"cap": "They pick a time straight from your live diary, and they pay in full when they book. The booking drops into your MOT bay, with the customer, the vehicle and the registration.",
+"b": [
+0.25,
+0.6
+]
+},
+{
+"say": "You set the days and the times you test, and the classes you test. Add your walk-ins and phone bookings to the same diary, and those times close online, so you're never double booked.",
+"cap": "You set the days and the times you test, and the classes you test. Add your walk-ins and phone bookings to the same diary, and those times close online, so you're never double booked.",
+"b": [
+0.2,
+0.5,
+0.8
+]
+},
+{
+"say": "If a customer needs a different time, you just move the booking in your diary, and we let them know straight away.",
+"cap": "If a customer needs a different time, you just move the booking in your diary, and we let them know straight away.",
+"b": [
+0.3,
+0.7
+]
+},
+{
+"say": "So, what do you earn? We pay you the official fee, less a flat five pounds for each test. That's forty-nine pounds eighty-five for every car MOT. There's no monthly fee, no commission, and no contract.",
+"cap": "So, what do you earn? We pay you the official fee, less a flat £5 for each test. That's £49.85 for every car MOT. There's no monthly fee, no commission, and no contract.",
+"b": [
+0.14,
+0.3,
+0.5,
+0.72,
+0.8,
+0.88
+]
+},
+{
+"say": "Every MOT is paid for up front, so there are fewer no-shows, and no payments to chase. You're paid every week, straight to your bank, and your statement shows every test.",
+"cap": "Every MOT is paid for up front, so there are fewer no-shows, and no payments to chase. You're paid every week, straight to your bank, and your statement shows every test.",
+"b": [
+0.3,
+0.62
+]
+},
+{
+"say": "Joining takes about five minutes. Tick the MOT classes you test, add your DVSA test station number, and upload your insurance and photo ID. We check your documents, and your diary goes live.",
+"cap": "Joining takes about five minutes. Tick the MOT classes you test, add your DVSA test station number, and upload your insurance and photo ID. We check your documents, and your diary goes live.",
+"b": [
+0.2,
+0.38,
+0.62,
+0.82
+]
+},
+{
+"say": "Your bays, your times, and paid every week. Join the network today, at motoring central dot co dot uk.",
+"cap": "Your bays, your times, and paid every week. Join the network today, at motoringcentral.co.uk.",
+"b": [
+0.14,
+0.28,
+0.5
+]
+}
+]

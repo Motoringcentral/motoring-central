@@ -1,0 +1,87 @@
+[
+{
+"say": "Welcome to The Motoring Central. Everything your car needs, in one place. Here's a quick tour.",
+"cap": "Welcome to The Motoring Central. Everything your car needs, in one place. Here's a quick tour.",
+"b": [
+0.3,
+0.7
+]
+},
+{
+"say": "Start on the front page. Type what you need in your own words, or tap one of the quick buttons, like MOT, valet, or broken down.",
+"cap": "Start on the front page. Type what you need in your own words, or tap one of the quick buttons, like MOT, valet, or broken down.",
+"b": [
+0.2,
+0.55
+]
+},
+{
+"say": "You can book an MOT at a test station near you, a full valet at your door, bodywork and alloy wheel repairs, or an auto electrician or locksmith.",
+"cap": "You can book an MOT at a test station near you, a full valet at your door, bodywork and alloy wheel repairs, or an auto electrician or locksmith.",
+"b": [
+0.08,
+0.32,
+0.55,
+0.78
+]
+},
+{
+"say": "If you've broken down, or your electric car is out of charge, tell us where you are. You'll see who can come, how soon, and the full price.",
+"cap": "If you've broken down, or your electric car is out of charge, tell us where you are. You'll see who can come, how soon, and the full price.",
+"b": [
+0.35,
+0.62
+]
+},
+{
+"say": "Learning to drive? Choose your instructor, pick a lesson time that suits you, and book online.",
+"cap": "Learning to drive? Choose your instructor, pick a lesson time that suits you, and book online.",
+"b": [
+0.25,
+0.5,
+0.8
+]
+},
+{
+"say": "Every booking follows the same simple steps. Enter your registration, so we know your exact car, then compare checked local partners near you, and choose the one you want.",
+"cap": "Every booking follows the same simple steps. Enter your registration, so we know your exact car, then compare checked local partners near you, and choose the one you want.",
+"b": [
+0.28,
+0.55,
+0.85
+]
+},
+{
+"say": "You see the full price before you book, and you pay securely online.",
+"cap": "You see the full price before you book, and you pay securely online.",
+"b": [
+0.3,
+0.65
+]
+},
+{
+"say": "Looking for your next car or van? Search by make, price and mileage, and message the dealer directly. You can compare RAC breakdown cover too.",
+"cap": "Looking for your next car or van? Search by make, price and mileage, and message the dealer directly. You can compare RAC breakdown cover too.",
+"b": [
+0.25,
+0.5,
+0.75
+]
+},
+{
+"say": "Your bookings, your quotes and your messages are all in one place, in My account. And if you need a hand, you can message our team, because you're always dealing with real people.",
+"cap": "Your bookings, your quotes and your messages are all in one place, in My account. And if you need a hand, you can message our team, because you're always dealing with real people.",
+"b": [
+0.25,
+0.6
+]
+},
+{
+"say": "The Motoring Central. Buy, fix, clean, rescue. Type what you need, and let's get started.",
+"cap": "The Motoring Central. Buy, fix, clean, rescue. Type what you need, and let's get started.",
+"b": [
+0.25,
+0.6
+]
+}
+]

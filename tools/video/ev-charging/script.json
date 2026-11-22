@@ -1,0 +1,100 @@
+[
+{
+"say": "Mobile EV charging companies, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+"cap": "Mobile EV charging companies, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+"b": [
+0.12
+]
+},
+{
+"say": "It starts with a driver whose electric car has run out of charge. They tell us where the car is, by postcode, or by dropping a pin on the map, and how much charge they have left.",
+"cap": "It starts with a driver whose electric car has run out of charge. They tell us where the car is, by postcode, or by dropping a pin on the map, and how much charge they have left.",
+"b": [
+0.4,
+0.75
+]
+},
+{
+"say": "Then they see your company and your price, and they pay online, there and then. It isn't only rescues, because drivers also book top-ups at home or at work, so you can fill your quiet hours with planned jobs.",
+"cap": "Then they see your company and your price, and they pay online, there and then. It isn't only rescues, because drivers also book top-ups at home or at work, so you can fill your quiet hours with planned jobs.",
+"b": [
+0.25,
+0.55
+]
+},
+{
+"say": "You set your own call-out charge, and a price per mile for jobs outside your usual area. The customer sees your price, not ours.",
+"cap": "You set your own call-out charge, and a price per mile for jobs outside your usual area. The customer sees your price, not ours.",
+"b": [
+0.2,
+0.45,
+0.75
+]
+},
+{
+"say": "You tell us where you're based, how far you travel, and which connectors you can charge. So we only send you jobs you can actually do.",
+"cap": "You tell us where you're based, how far you travel, and which connectors you can charge. So we only send you jobs you can actually do.",
+"b": [
+0.2,
+0.4,
+0.7
+]
+},
+{
+"say": "You choose when you work. Go available with one tap, or set your weekly hours once, even twenty-four hours a day, and the bookings come in by themselves. We never book more jobs at once than you have vans.",
+"cap": "You choose when you work. Go available with one tap, or set your weekly hours once, even twenty-four hours a day, and the bookings come in by themselves. We never book more jobs at once than you have vans.",
+"b": [
+0.18,
+0.35,
+0.75
+]
+},
+{
+"say": "Every job lands on your dashboard, with the customer's name and number, the location on a map, the plug type and the battery level. Tap “I'm on my way”, and the driver is kept up to date.",
+"cap": "Every job lands on your dashboard, with the customer's name and number, the location on a map, the plug type and the battery level. Tap “I'm on my way”, and the driver is kept up to date.",
+"b": [
+0.25,
+0.45,
+0.75
+]
+},
+{
+"say": "So, what does it cost? One flat fee. Ten percent plus VAT, and only on jobs you complete. No monthly fee, no membership, and no joining fee. On a hundred and fifty pound call-out, you keep a hundred and thirty-two.",
+"cap": "So, what does it cost? One flat fee. 10% plus VAT, and only on jobs you complete. No monthly fee, no membership, and no joining fee. On a £150 call-out, you keep £132.",
+"b": [
+0.12,
+0.2,
+0.42,
+0.5,
+0.57,
+0.7
+]
+},
+{
+"say": "You're paid every week, straight to your bank, and we raise the invoice for you. And if a driver cancels after you've set off, you still keep your call-out.",
+"cap": "You're paid every week, straight to your bank, and we raise the invoice for you. And if a driver cancels after you've set off, you still keep your call-out.",
+"b": [
+0.3,
+0.6
+]
+},
+{
+"say": "Joining takes about five minutes. Tell us about your company, upload your insurance and photo ID, and set your prices and your area. We check your documents, and you're ready to go.",
+"cap": "Joining takes about five minutes. Tell us about your company, upload your insurance and photo ID, and set your prices and your area. We check your documents, and you're ready to go.",
+"b": [
+0.2,
+0.35,
+0.6,
+0.8
+]
+},
+{
+"say": "Your vans, your prices, and paid every week. Join the network today, at motoring central dot co dot uk.",
+"cap": "Your vans, your prices, and paid every week. Join the network today, at motoringcentral.co.uk.",
+"b": [
+0.14,
+0.28,
+0.5
+]
+}
+]

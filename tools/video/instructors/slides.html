@@ -1,35 +1,5 @@
-<!doctype html><html><head><meta charset="utf-8"><style>
-@font-face{font-family:Outfit;src:url(node_modules/@fontsource-variable/outfit/files/outfit-latin-wght-normal.woff2);font-weight:100 900}
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{width:1280px;height:720px;overflow:hidden;background:#071630}
-body{font-family:Inter,system-ui,sans-serif;color:#fff}
-.s{position:absolute;inset:0;display:none;background:radial-gradient(110% 80% at 85% 0%,#12345f 0%,#0B1C35 46%,#071630 100%)}
-.s.on{display:flex}
-.two{align-items:center;padding:0 56px;gap:44px}
-.L{flex:1;min-width:0}.R{flex:0 0 610px;display:flex;flex-direction:column;gap:16px;align-items:stretch;justify-content:center;min-width:0}
-.eye{font:800 14px/1 Inter;letter-spacing:.2em;text-transform:uppercase;color:#38BDF8;margin-bottom:16px}
-h1{font:800 48px/1.08 Outfit,Inter;letter-spacing:-.01em}h1 b{color:#FFD43B;font-weight:800}
-ul{list-style:none;margin-top:26px;display:flex;flex-direction:column;gap:14px}
-li{font:500 21px/1.3 Inter;color:#E6EEF8;display:flex;gap:12px;align-items:flex-start}
-li:before{content:"";flex:0 0 22px;height:22px;margin-top:3px;border-radius:50%;background:#38BDF8 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4 8-9' fill='none' stroke='%230B1C35' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/16px no-repeat}
-.shot{border-radius:16px;overflow:hidden;border:2px solid #2A4E8A;box-shadow:0 22px 50px rgba(0,0,0,.5);background:#0B1C35}
-.shot img{display:block;width:100%}
-[data-b]{visibility:hidden}.swap{display:grid}.swap>*{grid-area:1/1;align-self:center}
-.c{flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 80px}
-.big{font:900 132px/1 Outfit;color:#FFD43B;letter-spacing:-.02em;margin:6px 0 4px}
-.sub{font:600 26px/1.3 Inter;color:#E6EEF8}
-.chips{display:flex;gap:14px;margin-top:30px}.chip{font:700 21px/1 Inter;padding:14px 22px;border-radius:999px;border:2px solid #2A4E8A;background:#10294f}
-.ex{margin-top:30px;display:flex;align-items:center;gap:22px;font:600 24px/1.2 Inter;color:#E6EEF8}.ex .bx{padding:16px 26px;border-radius:16px;background:#10294f;border:2px solid #2A4E8A}.ex b{display:block;font:800 40px/1.1 Outfit;color:#fff}.ex .k b{color:#FFD43B}.ex .ar{font:800 34px/1 Outfit;color:#38BDF8}
-.cards{display:flex;gap:22px;margin-top:38px}.cd{flex:1;width:330px;padding:28px 24px;border-radius:18px;background:#10294f;border:2px solid #2A4E8A;text-align:left}.cd svg{width:46px;height:46px;stroke:#38BDF8;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.cd b{display:block;font:800 25px/1.15 Outfit;margin:14px 0 8px}.cd p{font:500 18px/1.4 Inter;color:#C9D6E8}
-.steps{display:flex;flex-direction:column;gap:14px}.st{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:14px;background:#10294f;border:2px solid #2A4E8A;font:600 22px/1.25 Inter}.st i{flex:0 0 40px;height:40px;border-radius:50%;background:#FFD43B;color:#0B1C35;font:800 20px/40px Outfit;text-align:center;font-style:normal}
-#s0{background:#000}#s0 img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-#s0 .lt{position:absolute;left:0;right:0;bottom:0;padding:70px 64px 34px;background:linear-gradient(transparent,rgba(7,22,48,.92) 55%);}
-#s0 .lt .eye{margin-bottom:10px}#s0 .lt h1{font-size:44px}
-.logo{width:92px;height:92px;border-radius:24px;margin-bottom:26px;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-.url{font:800 40px/1 Outfit;color:#FFD43B;margin-top:18px}.tag{font:600 21px/1.3 Inter;color:#C9D6E8;margin-top:20px}
-.stack{position:relative}.stack .shot+.shot{margin-top:16px}
-</style></head><body>
-<section class="s" id="s0"><img src="banner.webp"><div class="lt" data-b="1"><div class="eye">For driving instructors</div><h1>How it works, and <b>what's in it for you</b></h1></div></section>
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../common/slides.css"></head><body>
+<section class="s pf" id="s0"><img class="bg" src="poster.png"><img class="poster" src="poster.png"><div class="ttl" data-b="1"><div class="eye">For driving instructors</div><h1>How it works, and <b>what's in it for you</b></h1></div></section>
 <section class="s two" id="s1"><div class="L"><div class="eye">How learners book</div><h1>A learner looks for lessons <b>near them</b></h1><ul><li data-b=1>Their postcode</li><li data-b=2>Manual or automatic</li><li data-b=3>A male or a female instructor, if they prefer</li></ul></div><div class="R"><div class="shot"><img src="c1.png"></div></div></section>
 <section class="s two" id="s2"><div class="L"><div class="eye">What they see</div><h1>You, your prices and <b>your&nbsp;reviews</b></h1><ul><li data-b=1>A single lesson</li><li data-b=2>A block of hours</li><li data-b=3>An intensive course</li></ul></div><div class="R"><div class="shot"><img src="c2.png"></div></div></section>
 <section class="s two" id="s3"><div class="L"><div class="eye">Booked and paid</div><h1>A free time from your <b>live diary</b></h1><ul><li data-b=1>Paid online, there and then</li><li data-b=2>No booking fee for the learner</li><li data-b=2>Your price is the price they see</li></ul></div><div class="R"><div class="shot"><img src="c3.png"></div></div></section>
@@ -42,8 +12,5 @@ li:before{content:"";flex:0 0 22px;height:22px;margin-top:3px;border-radius:50%;
 <section class="s c" id="s10"><div class="eye">What it costs</div><div class="sub" data-b="1">One flat fee</div><div class="big" data-b="2">10% + VAT</div><div class="sub" data-b="2">only on lessons you give</div><div class="chips"><div class="chip" data-b="3">No monthly fee</div><div class="chip" data-b="4">No membership</div><div class="chip" data-b="5">No joining fee</div></div><div class="ex" data-b="6"><div class="bx">On a lesson of<b>£40</b></div><div class="ar">→</div><div class="bx k">you keep<b>£35.20</b></div></div></section>
 <section class="s c" id="s11"><div class="eye">Getting paid</div><h1>Paid <b>every week</b></h1><div class="cards"><div class="cd" data-b="0"><svg viewBox="0 0 24 24"><path d="M3 10l9-6 9 6M5 10v8M19 10v8M9 10v8M15 10v8M3 20h18"/></svg><b>Straight to your bank</b><p>Every week, for the lessons you have given</p></div><div class="cd" data-b="1"><svg viewBox="0 0 24 24"><path d="M7 3h8l4 4v14H7zM14 3v5h5M10 13h6M10 17h6"/></svg><b>We raise the invoice</b><p>Your statement shows every lesson</p></div><div class="cd" data-b="2"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/></svg><b>No cash in the car</b><p>And no chasing learners for money</p></div></div></section>
 <section class="s two" id="s12"><div class="L"><div class="eye">Joining</div><h1>Live in about <b>five minutes</b></h1></div><div class="R"><div class="steps"><div class="st" data-b="1"><i>1</i>Tell us about yourself</div><div class="st" data-b="2"><i>2</i>Upload your badge, insurance and photo ID</div><div class="st" data-b="3"><i>3</i>Set your prices and your hours</div><div class="st" data-b="4"><i>4</i>We check your documents, and you're ready to go</div></div></div></section>
-<section class="s c" id="s13"><img class="logo" src="favicon.svg"><h1 style="font-size:58px"><span data-b="0">Your diary.</span> <span data-b="1">Your prices.</span> <b data-b="2">Paid every week.</b></h1><div class="tag" data-b="3">Join the network today</div><div class="url" data-b="3">motoringcentral.co.uk</div></section>
-<script>
-function show(i,b){document.querySelectorAll('.s').forEach(function(s,k){s.classList.toggle('on',k===i)});document.querySelectorAll('#s'+i+' [data-b]').forEach(function(e){var u=e.getAttribute('data-u');e.style.visibility=(+e.getAttribute('data-b')<=b&&(u==null||b<=+u))?'visible':'hidden'})}
-function builds(i){var m=0;document.querySelectorAll('#s'+i+' [data-b]').forEach(function(e){m=Math.max(m,+e.getAttribute('data-b'))});return m}
-</script></body></html>
+<section class="s c" id="s13"><img class="logo" src="../common/favicon.svg"><h1 style="font-size:58px"><span data-b="0">Your diary.</span> <span data-b="1">Your prices.</span> <b data-b="2">Paid every week.</b></h1><div class="tag" data-b="3">Join the network today</div><div class="url" data-b="3">motoringcentral.co.uk</div></section>
+<script src="../common/slides.js"></script></body></html>

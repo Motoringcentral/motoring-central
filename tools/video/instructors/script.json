@@ -1,16 +1,126 @@
 [
-{"say":"Driving instructors, welcome to The Motoring Central. This is how it works, and what's in it for you.","cap":"Driving instructors, welcome to The Motoring Central. This is how it works, and what's in it for you."},
-{"say":"It starts with a learner looking for lessons near them. They enter their postcode, choose manual or automatic, and say whether they'd prefer a male or a female instructor.","cap":"It starts with a learner looking for lessons near them. They enter their postcode, choose manual or automatic, and say whether they'd prefer a male or a female instructor."},
-{"say":"Then they see you, with your prices, your car, and your reviews. They can book a single lesson, a block of hours, or an intensive course.","cap":"Then they see you, with your prices, your car, and your reviews. They can book a single lesson, a block of hours, or an intensive course."},
-{"say":"They pick a free time, straight from your live diary, and pay online there and then. There's no booking fee for the learner, so your price is the price they see.","cap":"They pick a free time, straight from your live diary, and pay online there and then. There's no booking fee for the learner, so your price is the price they see."},
-{"say":"You set your own hourly rate, for manual, for automatic, or for both. You choose the discount you give on block bookings, and the price of any intensive course you offer.","cap":"You set your own hourly rate, for manual, for automatic, or for both. You choose the discount you give on block bookings, and the price of any intensive course you offer."},
-{"say":"You set your working hours once, with the gap you need between lessons, and how much notice you want. If you're on holiday, or teaching your own pupils, you block the time out, and nobody can book over it.","cap":"You set your working hours once, with the gap you need between lessons, and how much notice you want. If you're on holiday, or teaching your own pupils, you block the time out, and nobody can book over it."},
-{"say":"Every lesson drops straight into your diary, with the learner's name, their phone number, and the pick-up address. You can add a lesson for a learner yourself, and move one when you've both agreed a new time.","cap":"Every lesson drops straight into your diary, with the learner's name, their phone number, and the pick-up address. You can add a lesson for a learner yourself, and move one when you've both agreed a new time."},
-{"say":"Learners can move or cancel free of charge, up to forty-eight hours before a lesson. After that, a move is your decision, and if they cancel late, or don't turn up, you are still paid.","cap":"Learners can move or cancel free of charge, up to 48 hours before a lesson. After that, a move is your decision, and if they cancel late, or don't turn up, you are still paid."},
-{"say":"Block hours are paid for up front, and they are not refunded as money. Your learner simply books them whenever you are both free.","cap":"Block hours are paid for up front, and they are not refunded as money. Your learner simply books them whenever you are both free."},
-{"say":"After a lesson, your learner can leave a star rating and a few words. Good reviews show on your profile, and help the next learner choose you.","cap":"After a lesson, your learner can leave a star rating and a few words. Good reviews show on your profile, and help the next learner choose you."},
-{"say":"So, what does it cost? One flat fee. Ten percent plus VAT, and only on lessons you give. No monthly fee, no membership, and no joining fee. On a forty pound lesson, you keep thirty-five pounds twenty.","cap":"So, what does it cost? One flat fee. 10% plus VAT, and only on lessons you give. No monthly fee, no membership, and no joining fee. On a £40 lesson, you keep £35.20."},
-{"say":"You're paid every week, straight to your bank, and we raise the invoice for you. There's no cash in the car, and no chasing learners for money.","cap":"You're paid every week, straight to your bank, and we raise the invoice for you. There's no cash in the car, and no chasing learners for money."},
-{"say":"Joining takes about five minutes. Tell us about yourself, upload your instructor badge, your insurance and photo ID, and set your prices and your hours. We check your documents, and you're ready to go.","cap":"Joining takes about five minutes. Tell us about yourself, upload your instructor badge, your insurance and photo ID, and set your prices and your hours. We check your documents, and you're ready to go."},
-{"say":"Your diary, your prices, and paid every week. Join the network today, at motoring central dot co dot uk.","cap":"Your diary, your prices, and paid every week. Join the network today, at motoringcentral.co.uk."}
+{
+"say": "Driving instructors, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+"cap": "Driving instructors, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+"b": [
+0.12
+]
+},
+{
+"say": "It starts with a learner looking for lessons near them. They enter their postcode, choose manual or automatic, and say whether they'd prefer a male or a female instructor.",
+"cap": "It starts with a learner looking for lessons near them. They enter their postcode, choose manual or automatic, and say whether they'd prefer a male or a female instructor.",
+"b": [
+0.38,
+0.55,
+0.78
+]
+},
+{
+"say": "Then they see you, with your prices, your car, and your reviews. They can book a single lesson, a block of hours, or an intensive course.",
+"cap": "Then they see you, with your prices, your car, and your reviews. They can book a single lesson, a block of hours, or an intensive course.",
+"b": [
+0.5,
+0.66,
+0.84
+]
+},
+{
+"say": "They pick a free time, straight from your live diary, and pay online there and then. There's no booking fee for the learner, so your price is the price they see.",
+"cap": "They pick a free time, straight from your live diary, and pay online there and then. There's no booking fee for the learner, so your price is the price they see.",
+"b": [
+0.5,
+0.62
+]
+},
+{
+"say": "You set your own hourly rate, for manual, for automatic, or for both. You choose the discount you give on block bookings, and the price of any intensive course you offer.",
+"cap": "You set your own hourly rate, for manual, for automatic, or for both. You choose the discount you give on block bookings, and the price of any intensive course you offer.",
+"b": [
+0.15,
+0.5,
+0.78
+]
+},
+{
+"say": "You set your working hours once, with the gap you need between lessons, and how much notice you want. If you're on holiday, or teaching your own pupils, you block the time out, and nobody can book over it.",
+"cap": "You set your working hours once, with the gap you need between lessons, and how much notice you want. If you're on holiday, or teaching your own pupils, you block the time out, and nobody can book over it.",
+"b": [
+0.2,
+0.6
+]
+},
+{
+"say": "Every lesson drops straight into your diary, with the learner's name, their phone number, and the pick-up address. You can add a lesson for a learner yourself, and move one when you've both agreed a new time.",
+"cap": "Every lesson drops straight into your diary, with the learner's name, their phone number, and the pick-up address. You can add a lesson for a learner yourself, and move one when you've both agreed a new time.",
+"b": [
+0.3,
+0.56,
+0.78
+]
+},
+{
+"say": "Learners can move or cancel free of charge, up to forty-eight hours before a lesson. After that, a move is your decision, and if they cancel late, or don't turn up, you are still paid.",
+"cap": "Learners can move or cancel free of charge, up to 48 hours before a lesson. After that, a move is your decision, and if they cancel late, or don't turn up, you are still paid.",
+"b": [
+0.1,
+0.5,
+0.7
+]
+},
+{
+"say": "Block hours are paid for up front, and they are not refunded as money. Your learner simply books them whenever you are both free.",
+"cap": "Block hours are paid for up front, and they are not refunded as money. Your learner simply books them whenever you are both free.",
+"b": [
+0.4,
+0.62
+]
+},
+{
+"say": "After a lesson, your learner can leave a star rating and a few words. Good reviews show on your profile, and help the next learner choose you.",
+"cap": "After a lesson, your learner can leave a star rating and a few words. Good reviews show on your profile, and help the next learner choose you.",
+"b": [
+0.2,
+0.55,
+0.75
+]
+},
+{
+"say": "So, what does it cost? One flat fee. Ten percent plus VAT, and only on lessons you give. No monthly fee, no membership, and no joining fee. On a forty pound lesson, you keep thirty-five pounds twenty.",
+"cap": "So, what does it cost? One flat fee. 10% plus VAT, and only on lessons you give. No monthly fee, no membership, and no joining fee. On a £40 lesson, you keep £35.20.",
+"b": [
+0.12,
+0.2,
+0.42,
+0.5,
+0.57,
+0.7
+]
+},
+{
+"say": "You're paid every week, straight to your bank, and we raise the invoice for you. There's no cash in the car, and no chasing learners for money.",
+"cap": "You're paid every week, straight to your bank, and we raise the invoice for you. There's no cash in the car, and no chasing learners for money.",
+"b": [
+0.3,
+0.62
+]
+},
+{
+"say": "Joining takes about five minutes. Tell us about yourself, upload your instructor badge, your insurance and photo ID, and set your prices and your hours. We check your documents, and you're ready to go.",
+"cap": "Joining takes about five minutes. Tell us about yourself, upload your instructor badge, your insurance and photo ID, and set your prices and your hours. We check your documents, and you're ready to go.",
+"b": [
+0.2,
+0.32,
+0.62,
+0.8
+]
+},
+{
+"say": "Your diary, your prices, and paid every week. Join the network today, at motoring central dot co dot uk.",
+"cap": "Your diary, your prices, and paid every week. Join the network today, at motoringcentral.co.uk.",
+"b": [
+0.14,
+0.28,
+0.5
+]
+}
 ]
