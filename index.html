@@ -13,6 +13,7 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 #v-dash .dtabs{display:flex;gap:6px;margin:0 0 14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px;overflow-x:auto}
 #v-dash .dtabs button{all:unset;cursor:pointer;flex:1;text-align:center;padding:10px 14px;border-radius:10px;font-weight:700;color:var(--muted);white-space:nowrap}
 #v-dash .dtabs button[aria-pressed=true]{background:var(--brand);color:var(--brand-ink)}
+.mcmap{height:240px;border-radius:12px;border:2px solid var(--line);overflow:hidden;background:#dfe7ef;z-index:0;position:relative}.mcmap.sm{height:190px;margin:6px 0 8px}.mcmapw{margin:8px 0 0}.mcpin{width:32px;height:32px;border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.45);display:flex;align-items:center;justify-content:center}.mcpin span{transform:rotate(45deg);color:#fff;font:700 14px/1 system-ui,sans-serif}.mcmap .leaflet-control-attribution{font-size:10px}
 #mc-ptabs{scroll-margin-top:96px}#mc-ptabs .dtabs button.palert{background:#C62828;color:#fff}#mc-ptabs .dtabs button.palert[aria-pressed=true]{background:var(--brand);color:var(--brand-ink);box-shadow:inset 0 0 0 3px #C62828}.dtabs .ptn.red{background:#fff;color:#C62828}#mc-ptabs .dtabs button.palert[aria-pressed=true] .ptn.red{background:#C62828;color:#fff}#mc-ptabs .dtabs{flex-wrap:wrap;overflow:visible}#mc-ptabs .dtabs button{flex:1 1 auto}.dtabs .ptn{display:inline-block;min-width:20px;padding:0 6px;border-radius:10px;background:#FFD43B;color:#3a2a00;font-size:.78rem;line-height:20px;text-align:center;margin-left:4px}
 .psetg{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:10px}
 .psett{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--surface);position:relative;min-height:74px}
@@ -5043,6 +5044,28 @@ fill();draw();drawPost();window.GGjobs={refresh:function(){draw();drawPost()},co
 })();
 </script>
 <script>
+/* maps: OpenStreetMap through Leaflet, loaded only when a map is first needed. A = where the vehicle is, B = where it is going.
+   MCmap.show(el,{from,to,drag}) draws one; any <div data-jmap='{"f":[lat,lng],"t":[lat,lng]}'> on the page is drawn when it comes on screen. */
+window.MCmap=(function(){var P=null,KEEP={};
+ function load(){if(P)return P;P=new Promise(function(res,rej){var c=document.createElement('link');c.rel='stylesheet';c.href='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';document.head.appendChild(c);
+  var j=document.createElement('script');j.src='https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';j.onload=function(){window.L?res(window.L):rej()};j.onerror=function(){P=null;rej()};document.head.appendChild(j)});return P}
+ function pin(L,col,t){return L.divIcon({className:'',html:'<div class="mcpin" style="background:'+col+'"><span>'+t+'</span></div>',iconSize:[32,32],iconAnchor:[16,32]})}
+ function show(el,o){return load().then(function(L){if(el._mcm){try{el._mcm.remove()}catch(e){}el._mcm=null}
+  var m=L.map(el,{scrollWheelZoom:false,zoomControl:true});el._mcm=m;
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors'}).addTo(m);
+  var a=L.marker([o.from.lat,o.from.lng],{icon:pin(L,'#C62828','A'),draggable:!!o.drag,title:o.drag?'Drag me to where the vehicle is':'Where the vehicle is',zIndexOffset:500}).addTo(m);
+  if(o.drag)a.on('dragend',function(){var ll=a.getLatLng();o.drag({lat:Math.round(ll.lat*1e5)/1e5,lng:Math.round(ll.lng*1e5)/1e5})});
+  if(o.to){L.marker([o.to.lat,o.to.lng],{icon:pin(L,'#0B1C35','B'),title:'Where it is going'}).addTo(m);L.polyline([[o.from.lat,o.from.lng],[o.to.lat,o.to.lng]],{color:'#0B1C35',weight:3,dashArray:'6 8',opacity:.7}).addTo(m);m.fitBounds([[o.from.lat,o.from.lng],[o.to.lat,o.to.lng]],{padding:[36,36],maxZoom:16})}
+  else m.setView([o.from.lat,o.from.lng],o.zoom||16);
+  setTimeout(function(){try{m.invalidateSize()}catch(e){}},250);return m})}
+ function scan(){[].forEach.call(document.querySelectorAll('[data-jmap]'),function(el){if(el._mcm||el.offsetParent===null)return;var k=el.getAttribute('data-jmap'),old=KEEP[k];
+  if(old&&old!==el&&old._mcm){el.parentNode.replaceChild(old,el);try{old._mcm.invalidateSize()}catch(e){}return} /* the card was redrawn: put the live map back, do not load it again */
+  if(el.getAttribute('data-jbusy'))return;el.setAttribute('data-jbusy','1');var d;try{d=JSON.parse(k)}catch(e){return}if(!d||!d.f)return;
+  show(el,{from:{lat:d.f[0],lng:d.f[1]},to:d.t?{lat:d.t[0],lng:d.t[1]}:null}).then(function(){KEEP[k]=el},function(){el.removeAttribute('data-jbusy');el.style.display='none'})})}
+ setInterval(function(){try{scan()}catch(e){}},1200);
+ return {show:show,scan:scan}})();
+</script>
+<script>
 /* partner dashboard tabs, for every partner type. Each type gets its own tabs (cfg), and Set-up is a menu that opens one
    section at a time. Each card on the dashboard belongs to one tab (tagOf); the big cards are split inside with data-pcs.
    Mechanics and dealers still draw part of the page from u.dtab, so a tab can ask for the dtab it needs (dt). */
@@ -8933,7 +8956,7 @@ function pad2(n){return ('0'+n).slice(-2)}
 function laterOpts(){var o='',d=new Date();d.setMinutes(0,0,0);for(var i=1;i<=14*24;i++){d=new Date(d.getTime()+36e5);var h=d.getHours();if(h<7||h>20)continue;o+='<option value="'+d.toISOString()+'">'+d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+', '+pad2(h)+':00</option>'}return o}
 function whenTxt(iso){var d=new Date(iso);return d.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+' at '+pad2(d.getHours())+':'+pad2(d.getMinutes())}
 var SAFE='<div class="rs-safe"><b>Stay safe.</b> On a motorway, leave by the left-hand doors, get behind the barrier and away from the traffic. If you are in danger, or on a smart motorway with no hard shoulder, call 999. If you can, call National Highways on 0300 123 5000.</div>';
-function locHtml(p){return '<label class="f2" for="'+p+'-from">Where is the vehicle?</label><div class="rs-loc"><input id="'+p+'-from" class="mp" maxlength="9" placeholder="Postcode, e.g. LS1 4AP" autocomplete="postal-code"><button type="button" class="btn ghost sm" data-rsgps="'+p+'">📍 Use my location</button></div><p class="note rs-gpsn" id="'+p+'-gpsn" role="status"></p>'
+function locHtml(p){return '<label class="f2" for="'+p+'-from">Where is the vehicle?</label><div class="rs-loc"><input id="'+p+'-from" class="mp" maxlength="9" placeholder="Postcode, e.g. LS1 4AP" autocomplete="postal-code"><button type="button" class="btn ghost sm" data-rsgps="'+p+'">📍 Use my location</button></div><p class="note rs-gpsn" id="'+p+'-gpsn" role="status"></p><div class="mcmapw" id="'+p+'-mapw" hidden><div class="mcmap" id="'+p+'-map"></div><p class="note" id="'+p+'-mapn" role="status" style="margin:4px 0 0"></p></div>'
  +'<label class="f2" for="'+p+'-spot">Exact spot or landmark (optional)</label><input id="'+p+'-spot" maxlength="160" placeholder="e.g. M62 eastbound after junction 27, hard shoulder" style="width:100%">'}
 function whenHtml(p){return '<label class="f2" for="'+p+'-when">When?</label><select id="'+p+'-when"><option value="now">Now: as soon as possible</option><option value="later">Book a time</option></select><select id="'+p+'-at" hidden style="margin-top:8px">'+laterOpts()+'</select>'}
 function recHtml(){return '<h2>Vehicle recovery</h2><p style="margin:0;color:var(--muted)">Tell us where the vehicle is and where it needs to go. You see each company’s full price before you book.</p>'+SAFE+locHtml('rs')
@@ -8965,17 +8988,25 @@ function rsDest(){var d=$('rdest'),u=window.GGuser;if(!d)return;var home=d.value
 window.GGrec=function(on,car){rsMount();var c=$('rec');c.hidden=!on;if(!on)return;RSCAR.rec=car||null;if(car&&car.reg&&!$('rs-reg').value)$('rs-reg').value=car.reg;if(car&&/van/i.test(car.body||'')&&$('rs-vtype').value==='car')$('rs-vtype').value='svan';rsReset('rs');rsDest();c.scrollIntoView({behavior:'smooth',block:'nearest'})};
 window.GGevc=function(on,car){rsMount();var c=$('evc');c.hidden=!on;if(!on)return;RSCAR.evc=car||null;$('evc-ice').hidden=!(car&&car.fuel&&!/electric|plug/i.test(car.fuel));if(car&&car.reg&&!$('ev-reg').value)$('ev-reg').value=car.reg;rsReset('ev');c.scrollIntoView({behavior:'smooth',block:'nearest'})};
 var GPS={rs:null,ev:null};
+/* the map under "Where is the vehicle?": pin A can be dragged to the exact spot, which then replaces the postcode */
+function rsMap(p,from,to){var w=$(p+'-mapw'),el=$(p+'-map'),n=$(p+'-mapn');if(!w||!el||!window.MCmap||!from||from.lat==null)return;w.hidden=false;
+ n.textContent='A is where we will send them. Not quite right? Drag the pin to exactly where the vehicle is.'+(to?' B is where it is going.':'');
+ window.MCmap.show(el,{from:from,to:to&&to.lat!=null?to:null,zoom:17,drag:function(ll){GPS[p]={lat:ll.lat,lng:ll.lng,acc:0,pin:true};$(p+'-from').value='';$(p+'-gpsn').textContent='Using the pin you placed on the map. Add the exact spot below if you can.';
+  var had=!!RS[p==='rs'?'rec':'evc'];rsReset(p);n.textContent='Pin moved.'+(had?' Tap '+(p==='rs'?'Get recovery prices':'Get charging prices')+' again to update the price.':'')}}).then(null,function(){w.hidden=true})}
+function rsMapPc(p){var v=($(p+'-from').value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(!/^[A-Z]{1,2}[0-9][A-Z0-9]?[0-9][A-Z]{2}$/.test(v)||GPS[p])return;
+ fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(v)).then(function(r){return r.ok?r.json():null}).then(function(j){var g=j&&j.result;if(!g||GPS[p])return;if(($(p+'-from').value||'').toUpperCase().replace(/[^A-Z0-9]/g,'')!==v)return;rsMap(p,{lat:g.latitude,lng:g.longitude})},function(){})}
+document.addEventListener('change',function(e){var t=e.target;if(t&&(t.id==='rs-from'||t.id==='ev-from'))rsMapPc(t.id.slice(0,2))});
 function rsReset(p){var k=p==='rs'?'rec':'evc';RS[k]=null;var box=$(p==='rs'?'rprov':'evc-prov'),bk=$(p==='rs'?'rbook':'evc-book'),dn=$(p==='rs'?'rdone':'evc-done');if(box)box.innerHTML='';if(bk)bk.hidden=true;if(dn)dn.hidden=true;var s=$(p+'-sum');if(s)s.textContent=''}
 document.addEventListener('change',function(e){var t=e.target;if(!t||!t.id)return;
  if(t.id==='rdest'){rsDest();rsReset('rs');return}
  if(t.id==='rs-when'||t.id==='ev-when'){var p=t.id.slice(0,2);$(p+'-at').hidden=t.value!=='later';rsReset(p);return}
  if(/^(rs-|ev-|evc-|rdrop|rwhy)/.test(t.id)&&!/^tc-/.test(t.id)){var q=/^(ev-|evc-)/.test(t.id)?'ev':'rs';if(t.id!=='rs-reg'&&t.id!=='ev-reg')rsReset(q)}});
-document.addEventListener('input',function(e){var t=e.target;if(t&&(t.id==='rs-from'||t.id==='ev-from')){var p=t.id.slice(0,2);if(GPS[p]){GPS[p]=null;$(p+'-gpsn').textContent=''}}});
+document.addEventListener('input',function(e){var t=e.target;if(t&&(t.id==='rs-from'||t.id==='ev-from')){var p=t.id.slice(0,2);if(GPS[p]){GPS[p]=null;$(p+'-gpsn').textContent=''}var mw=$(p+'-mapw');if(mw)mw.hidden=true}});
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-rsgps]');if(!b)return;var p=b.getAttribute('data-rsgps'),n=$(p+'-gpsn');
  if(!navigator.geolocation){n.textContent='Your browser cannot share your location. Type the postcode instead.';return}
  n.textContent='Finding where you are…';b.disabled=true;
  navigator.geolocation.getCurrentPosition(function(pos){b.disabled=false;GPS[p]={lat:Math.round(pos.coords.latitude*1e5)/1e5,lng:Math.round(pos.coords.longitude*1e5)/1e5,acc:Math.round(pos.coords.accuracy||0)};$(p+'-from').value='';
-  n.textContent='Using your location'+(GPS[p].acc?' (to within about '+GPS[p].acc+' metres)':'')+'. Add the exact spot below if you can.';rsReset(p)},
+  n.textContent='Using your location'+(GPS[p].acc?' (to within about '+GPS[p].acc+' metres)':'')+'. Add the exact spot below if you can.';rsReset(p);rsMap(p,GPS[p])},
   function(err){b.disabled=false;n.textContent=err&&err.code===1?'You did not allow location. Type the postcode instead.':'We could not get your location. Type the postcode instead.'},{enableHighAccuracy:true,timeout:15000,maximumAge:60000})});
 function rsReq(p){var rec=p==='rs',err=$(rec?'rec-err':'evc-err'),from=GPS[p]?{lat:GPS[p].lat,lng:GPS[p].lng}:{pc:$(p+'-from').value.trim().toUpperCase()};
  if(!GPS[p]&&!pcOk(from.pc)){err.textContent='Enter the full postcode where the vehicle is, or tap Use my location.';$(p+'-from').focus();return null}
@@ -9003,7 +9034,7 @@ function rsFind(p){var rec=p==='rs',b=rsReq(p);if(!b)return;var k=rec?'rec':'evc
  RS[k]={req:b,when:b.opt.when,pick:null};$(rec?'rbook':'evc-book').hidden=true;$(rec?'rdone':'evc-done').hidden=true;btn.disabled=true;btn.textContent='Finding companies near you…';box.innerHTML='';
  rsCall(b).then(function(res){btn.disabled=false;btn.textContent=rec?'Get recovery prices':'Get charging prices';
   if(!res||!res.ok){$(rec?'rec-err':'evc-err').textContent=res&&res.error==='bad_from'?'We could not find that place. Check the postcode, or tap Use my location.':res&&res.error==='bad_to'?'We could not find the postcode to take it to. Check it and try again.':'We could not get prices just now. Check your connection and try again. If you are in danger, call 999.';return}
-  RS[k].res=res;rsList(p,res)},function(){btn.disabled=false;btn.textContent=rec?'Get recovery prices':'Get charging prices';$(rec?'rec-err':'evc-err').textContent='We could not get prices just now. Check your connection and try again.'})}
+  RS[k].res=res;rsList(p,res);if(res.from)rsMap(p,res.from,res.to)},function(){btn.disabled=false;btn.textContent=rec?'Get recovery prices':'Get charging prices';$(rec?'rec-err':'evc-err').textContent='We could not get prices just now. Check your connection and try again.'})}
 document.addEventListener('click',function(e){var t=e.target;if(!t||!t.id)return;if(t.id==='rfind')rsFind('rs');else if(t.id==='evc-find')rsFind('ev')});
 /* plug pictures: tapping one sets the hidden plug list and asks for prices again */
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-plug]');if(!b)return;var sel=$('evc-plug');if(!sel)return;
@@ -9068,6 +9099,7 @@ function rspJob(b){var d=b.details||{},v=b.vehicle||{},f=d.from,t=d.to,nx=NX[b.s
   +'<p>'+(v.reg?'<span class="jplate">'+E(v.reg)+'</span> ':'')+E([v.make,v.model].filter(Boolean).join(' '))+(v.type&&v.type!=='car'?' ('+E(v.type)+')':'')+'</p>'
   +(f?'<p class="rsj-l"><span>'+(rec?'Collect':'Location')+'</span>'+E(f.label)+(d.spot?' · '+E(d.spot):'')+' <a href="'+mapU(f)+'" target="_blank" rel="noopener">Map</a></p>':'')
   +(rec&&t?'<p class="rsj-l"><span>Take to</span>'+E(t.label)+(d.dest?' · '+E(d.dest):'')+' ('+E(d.loaded)+' miles) <a href="'+dirU(f,t)+'" target="_blank" rel="noopener">Directions</a></p>':'')
+  +(f&&f.lat!=null?'<div class="mcmap sm" data-jmap=\''+JSON.stringify({f:[+f.lat,+f.lng],t:rec&&t&&t.lat!=null?[+t.lat,+t.lng]:null})+'\' aria-label="Map: A is the vehicle'+(rec&&t?', B is where it is going':'')+'"></div>':'')
   +'<p class="note" style="margin:4px 0">'+E(rec?[d.what,d.rolls==='locked'?'Will not roll: wheels locked':d.rolls==='damage'?'Accident or suspension damage':'',d.place==='off'?'Off the road: needs winching':d.place==='park'?'Multi-storey or underground car park':d.winch?'Needs winching':'',d.leak==='yes'?'Leaking fluids':d.leak==='unsure'?'May be leaking fluids':'',d.low?'Low or lowered':'',d.keys==='no'?'No keys':'',d.pass?d.pass+' passenger(s)':''].filter(Boolean).join(' · '):['Plug: '+(d.plug||'not sure'),d.battery!==''&&d.battery!=null?'Battery about '+d.battery+'%':''].filter(Boolean).join(' · '))+'</p>'
   +(rec?jobXHtml(b):'')+'<p class="note" style="margin:0 0 6px">You are paid '+m2r(b.partner_payout)+' · Ref '+E(String(b.id).slice(0,8).toUpperCase())+'</p>'
   +'<div class="rsj-b">'+(nx?'<button type="button" class="btn sm" data-rspst="'+E(b.id)+':'+nx[0]+'">'+nx[1]+'</button>':'')+(hubT(b.id)?'<button type="button" class="btn sm ghost" data-hubinsp="'+hubT(b.id)+'">Vehicle inspection</button><button type="button" class="btn sm ghost" data-hubchat="'+hubT(b.id)+'">Message customer</button>':'')+(b.status==='confirmed'?'<button type="button" class="btn sm ghost" data-rspdec="'+E(b.id)+'">I can’t do this job</button>':'')+'</div></div>'}
