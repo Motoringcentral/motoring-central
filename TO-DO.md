@@ -126,8 +126,20 @@ approve, reported, Facebook feed) / Bookings (MOT, recovery and EV) / Payouts / 
 customer list, review requests, hide a review) / Reports (views, partner reports, activity log) / Team and settings
 (owners only: staff, sample cars switch). Every page has a "What to do here" line (HELP in GGadmin). The boxes other
 code adds to the page are shown only on their own page by CSS (#admin-body[data-at]). Tested as the test reviewer;
-the owner's view (Team and settings, approve buttons) was NOT seen: ask the owner to look. Not there yet: a page for
-driving lesson bookings, refunds due in one list, a count on Messages and complaints.
+the owner's view (Team and settings, approve buttons) was NOT seen: ask the owner to look.
+ADDED the same night (database 20261122t; module STB in the page):
+- Bookings > Driving lessons (coming up / done / cancelled / all; an owner can cancel a lesson for both sides: the learner
+  gets the money or the hours back, the instructor is not paid, both are emailed) and Bookings > Valet, bodywork and
+  others (read only: valets, alloys, bodywork quotes, auto electricians and locksmiths).
+- Money > Refunds due: every booking of any kind with a refund owed, oldest first, with the customer's contact details
+  and payment reference. An owner taps "Mark refunded" after refunding the card. Real refunds still need Stripe.
+- Front page: "To do today" now has live numbers for messages and complaints waiting (and how many complaints are
+  past their reply date) and refunds due; a second box "Look something up" for the booking pages and the customer list.
+  The numbers come from staff_counts() once a minute.
+- Tested as the test reviewer, and the owner-only buttons by switching the page to the owner's view in the test (the
+  server allows any staff member). The real owner log-in was still not seen. Two test refunds (95.00) are left as due.
+- Not there: cancelling a valet / bodywork / auto electrician booking from the admin page (only MOT, recovery, EV and
+  lessons can be cancelled by staff).
 
 DRIVING INSTRUCTORS AND DRIVING LESSONS (built 22 Nov 2026, evening; tested end to end on preview)
 - Owner's brief: learners book single lessons, blocks or intensive courses; the instructor sets an hourly rate and block
