@@ -48,9 +48,15 @@ TWO-STEP SIGN-UP (22 Nov 2026, RECOVERY ONLY so far; tested end to end on previe
 - REFERENCE PAGE (owner, 22 Nov): the recovery join page is the model for the others. Three things only: the bullet
   points in the header, then the account box ("Apply to join") and the calculator ("Where the money goes") side by
   side (stacked on a phone). No stats row, no second fee box. Headings inside .rjcol need the dark colour rule.
-- NEXT (owner asked): the same pattern for every other partner type (mechanics, MOT, tyres, valeting, body, EV, dealers).
-  The pieces are general (MCdb.partnerStart / partnerApply, the FORMS submit already handles a 'started' user); each page
-  needs its pitch, Step 1 card and the join-page map in the router ({recovery:'recovery'}).
+- DONE 22 Nov for EVERY partner type: module "Join pages for every partner type" (config list C: bullet points, role,
+  form ids, which heading is the calculator). It rebuilds each page when it loads; the old public sections are kept in
+  the page inside a hidden .rj-old box. Recovery is still written out by hand. window.MCjoinHash(u) is the page a
+  'started' account is sent to (mechanics remember which page they joined from in details.joinPage).
+  Tested step 1 and step 2: valeting (full application sent), MOT station, dealer. Looked at: body, EV, auto electrician.
+  NOT seen live: mobile mechanic, garage, tyres (closed for launch by RECRUIT; their pages redirect to Opening soon).
+- Videos: no video on any public join page now. Dealer video and MOT video are in step 2, tap to play. The EV video is
+  switched OFF everywhere (it still gives the old 5% / Pro fees): re-voice that line, then add video:'...' to its config.
+- Test accounts made: vimen+twovalet@ (pending), vimen+twomot@ and vimen+twodealer@ (started). Delete before launch.
 - Test account: vimen+rectwo1@ (TEST Two Step Recovery, pending). Delete before launch.
 - BUG FIXED on the way: the join forms for ALL partner types had stopped splitting into 4 steps since the "Your plan"
   box was renamed "Our fee" that morning. Fixed and checked on all seven forms.
