@@ -120,6 +120,15 @@ started moving MOT to 10% and was told NOT to: nothing was changed. Do not chang
 Sweep done: no old fee wording left on the site. The recovery and EV proposal PDFs (pitch/roadside.js) no longer offer
 "Pay as you go or Pro"; they show the one flat fee. VIDEOS are left for now: the owner will review them one by one at the
 end (slides match the site, spelling, voice). The EV video still gives the old fees and is switched off.
+ADMIN PAGE IN CATEGORIES (owner, 22 Nov 2026, night): "messy, each approval process in its own category, easy to train
+someone new". Now: To do (front page with counts) / Partners (applications, approved, declined, started) / Adverts (to
+approve, reported, Facebook feed) / Bookings (MOT, recovery and EV) / Payouts / Customers (messages and complaints,
+customer list, review requests, hide a review) / Reports (views, partner reports, activity log) / Team and settings
+(owners only: staff, sample cars switch). Every page has a "What to do here" line (HELP in GGadmin). The boxes other
+code adds to the page are shown only on their own page by CSS (#admin-body[data-at]). Tested as the test reviewer;
+the owner's view (Team and settings, approve buttons) was NOT seen: ask the owner to look. Not there yet: a page for
+driving lesson bookings, refunds due in one list, a count on Messages and complaints.
+
 DRIVING INSTRUCTORS AND DRIVING LESSONS (built 22 Nov 2026, evening; tested end to end on preview)
 - Owner's brief: learners book single lessons, blocks or intensive courses; the instructor sets an hourly rate and block
   discounts; 10% + VAT from the instructor and NO booking fee for the learner; filters for manual / automatic and
