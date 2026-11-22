@@ -45,6 +45,9 @@ TWO-STEP SIGN-UP (22 Nov 2026, RECOVERY ONLY so far; tested end to end on previe
   24 hours (cron started-reminders, 10:10 daily). Staff page tab "Started, not finished" lists the leads.
 - Supabase "Confirm email" is ON, so after Step 1 they must tap the link in the email, then they land on their
   application. A 'started' account that opens the dashboard is sent back to the application.
+- REFERENCE PAGE (owner, 22 Nov): the recovery join page is the model for the others. Three things only: the bullet
+  points in the header, then the account box ("Apply to join") and the calculator ("Where the money goes") side by
+  side (stacked on a phone). No stats row, no second fee box. Headings inside .rjcol need the dark colour rule.
 - NEXT (owner asked): the same pattern for every other partner type (mechanics, MOT, tyres, valeting, body, EV, dealers).
   The pieces are general (MCdb.partnerStart / partnerApply, the FORMS submit already handles a 'started' user); each page
   needs its pitch, Step 1 card and the join-page map in the router ({recovery:'recovery'}).
