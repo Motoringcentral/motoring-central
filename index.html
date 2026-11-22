@@ -1101,7 +1101,7 @@ window.DPLANSEL=function(){var e=document.getElementById('dl-plan');return e?+e.
 html.embed header,html.embed .banner,html.embed footer,html.embed .foot,html.embed .ckbar,html.embed .sfcols,html.embed #findbtn,html.embed .chatfab,html.embed .mcchat,html.embed #mc-cmpbar,html.embed .launch,html.embed #hub-btn,html.embed #v-cars>.hero,html.embed #v-vans>.hero,html.embed [data-srall],html.embed #cars-add-btn,html.embed #vans-add-btn,html.embed [data-sellcar],html.embed .flt-clear,html.embed [data-fltclear]{display:none!important}
 html.embed main{padding-top:12px}
 .mvw{position:relative}.msnd{all:unset;cursor:pointer;position:absolute;z-index:2;left:50%;top:12px;transform:translateX(-50%);background:#FFD43B;color:#0B1C35;font-weight:800;padding:10px 16px;border-radius:999px;box-shadow:0 6px 16px rgba(0,0,0,.35)}.msnd:focus-visible{outline:3px solid #fff;outline-offset:2px}
-.dvhero{text-align:center}.dvbox{position:relative;max-width:900px;margin:0 auto 14px}.dvbox video{width:100%;height:auto;border-radius:14px;display:block;background:#071630;box-shadow:0 8px 28px rgba(0,0,0,.35)}.dvsound{position:absolute;left:12px;bottom:56px;z-index:2;background:#FFD43B;color:#0B1C35;border:0;border-radius:999px;padding:10px 16px;font-weight:800;font-size:.95rem;cursor:pointer}.dvid video{width:100%;height:auto;border-radius:12px;display:block;background:#071630}
+.dvhero{text-align:center}.dvbox{position:relative;max-width:900px;margin:0 auto 14px}.dvbox video{width:100%;height:auto;border-radius:14px;display:block;background:#071630;box-shadow:0 8px 28px rgba(0,0,0,.35)}.dvsound{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;background:#FFD43B;color:#0B1C35;border:3px solid #fff;border-radius:999px;padding:16px 28px;font-weight:800;font-size:1.2rem;cursor:pointer;white-space:nowrap;box-shadow:0 10px 34px rgba(0,0,0,.55);animation:dvpulse 1.6s ease-in-out infinite}@keyframes dvpulse{50%{box-shadow:0 10px 34px rgba(0,0,0,.55),0 0 0 14px rgba(255,212,59,.28)}}@media (prefers-reduced-motion:reduce){.dvsound{animation:none}}.dvid video{width:100%;height:auto;border-radius:12px;display:block;background:#071630}
 html.embed .embed-by{display:block!important}
 </style>
 <script>try{if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.classList.add('embed')}catch(e){}</script>
@@ -1681,7 +1681,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <p>Join our network. Get breakdown, accident and vehicle transport jobs sent straight to your drivers.</p>
 <button class="cta" id="r-top" type="button">Apply to join</button>
 <br><a class="swl" href="#drivers">Need a recovery? Book as a driver &rarr;</a>
-<div class="dvbox" style="margin-top:16px"><video id="rc-vid" controls playsinline preload="metadata" poster="video/recovery-poster.jpg" width="1280" height="720" aria-label="Video: how The Motoring Central works for recovery companies. How customers book, setting your prices, extras, payouts and joining."><source src="video/recovery.mp4?v=1" type="video/mp4"><track kind="captions" src="video/recovery.vtt?v=1" srclang="en" label="English"></video><button type="button" class="dvsound" id="rc-snd" hidden>&#128266; Tap for sound</button></div>
+<div class="dvbox" style="margin-top:16px"><video id="rc-vid" controls playsinline preload="metadata" poster="video/recovery-poster.jpg" width="1280" height="720" aria-label="Video: how The Motoring Central works for recovery companies. How customers book, setting your prices, extras, payouts and joining."><source src="video/recovery.mp4?v=2" type="video/mp4"><track kind="captions" src="video/recovery.vtt?v=1" srclang="en" label="English"></video><button type="button" class="dvsound" id="rc-snd" hidden>&#128266; Tap anywhere for sound</button></div>
 <p class="note" style="color:#C9D6E8;margin:6px 0 0">About 2&frac12; minutes: how customers book, your prices, payouts and joining. Captions are available in the player.</p></div></section>
 <main>
 <div class="stats"><div><b>10%</b>flat fee + VAT</div><div><b>24/7</b>jobs when you want them</div><div><b>Weekly</b>payouts</div></div>
@@ -2063,7 +2063,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <div id="v-dealers" hidden>
 <section class="hero"><div class="in dvhero">
 <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Sell more cars. Try it free for 30 days.</h1>
-<div class="dvbox"><video id="dl-vid" controls playsinline autoplay preload="auto" poster="video/dealer-poster.jpg" width="1280" height="720" aria-label="Video: what dealers need to join The Motoring Central and what they get."><source src="video/dealer.mp4?v=3" type="video/mp4"><track kind="captions" src="video/dealer.vtt?v=3" srclang="en" label="English"></video><button type="button" class="dvsound" id="dl-snd" hidden>&#128266; Tap for sound</button></div>
+<div class="dvbox"><video id="dl-vid" controls playsinline autoplay preload="auto" poster="video/dealer-poster.jpg" width="1280" height="720" aria-label="Video: what dealers need to join The Motoring Central and what they get."><source src="video/dealer.mp4?v=3" type="video/mp4"><track kind="captions" src="video/dealer.vtt?v=3" srclang="en" label="English"></video><button type="button" class="dvsound" id="dl-snd" hidden>&#128266; Tap anywhere for sound</button></div>
 <button class="cta" id="dl-top" type="button">Join the network: 30 days free</button>
 <br><a class="swl" href="#cars">Browse cars for sale &rarr;</a></div></section>
 <main>
@@ -9749,12 +9749,15 @@ function ivDoc(x){var S=x.seller||{},c=x.customer||{},v=x.vehicle||{},fin=x.stat
 
 window.MCsales={detail:detail,pull:pullMsgs};
 /* dealer join page: the video plays as soon as the page opens (with sound if the browser allows, otherwise muted with a tap-for-sound button) */
-[['dl-vid','v-dealers','dl-snd'],['rc-vid','v-rec','rc-snd']].forEach(function(q){var v=document.getElementById(q[0]),pg=document.getElementById(q[1]),sn=document.getElementById(q[2]);if(!v||!pg)return;var was=false;
- function start(){v.muted=false;var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;var q=v.play();if(q&&q.catch)q.catch(function(){});if(sn)sn.hidden=false})}
- function check(){var on=!pg.hidden;if(on&&!was){was=true;try{v.currentTime=0}catch(e){}start()}else if(!on&&was){was=false;v.pause();if(sn)sn.hidden=true}}
+[['dl-vid','v-dealers','dl-snd'],['rc-vid','v-rec','rc-snd']].forEach(function(q){var v=document.getElementById(q[0]),pg=document.getElementById(q[1]),sn=document.getElementById(q[2]);if(!v||!pg)return;var was=false,wait=false;
+ /* browsers only allow sound once the visitor has touched the page. Try with sound; if that is refused, play silently and
+    switch the sound on (from the start) at the very first tap, click or key press anywhere on the page. */
+ function start(){v.muted=false;var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;wait=true;var q=v.play();if(q&&q.catch)q.catch(function(){});if(sn)sn.hidden=false})}
+ function sound(e){if(!wait||pg.hidden)return;if(e&&e.target===v)return;wait=false;v.muted=false;if(sn)sn.hidden=true;try{v.currentTime=0}catch(x){}var p=v.play();if(p&&p.catch)p.catch(function(){v.muted=true;wait=true;if(sn)sn.hidden=false;v.play().catch(function(){})})}
+ ['click','touchend','keydown'].forEach(function(n){document.addEventListener(n,sound,true)});
+ function check(){var on=!pg.hidden;if(on&&!was){was=true;try{v.currentTime=0}catch(e){}start()}else if(!on&&was){was=false;wait=false;v.pause();if(sn)sn.hidden=true}}
  new MutationObserver(check).observe(pg,{attributes:true,attributeFilter:['hidden']});check();
- if(sn)sn.addEventListener('click',function(){v.muted=false;sn.hidden=true;try{v.currentTime=0}catch(e){}v.play()});
- v.addEventListener('volumechange',function(){if(!v.muted&&sn)sn.hidden=true})});
+ v.addEventListener('volumechange',function(){if(!v.muted){wait=false;if(sn)sn.hidden=true}})});
 /* bookings and messages are written to the account as they are made */
 function keep(type,d){var row,tb;if(d&&d.dbDone)return;
  if(type==='booking'){tb='bookings';var pn=d.partner||'';try{if(!pn&&window.MCreview&&window.MCreview.partnersOf)pn=window.MCreview.partnersOf(d.kind,d.text)[0]||''}catch(e){}row={kind:String(d.kind||'').slice(0,60),service:d.svc?String(d.svc).slice(0,200):null,summary:String(d.text||'Booking').slice(0,2000),vehicle:d.veh||null,made_at:new Date(d.t||Date.now()).toISOString(),partner_name:pn?String(pn).slice(0,160):null,partner_id:partnerId(pn)}}
