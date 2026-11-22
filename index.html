@@ -4412,7 +4412,8 @@ window.MCstockAdd=function(u,o){if(!u.stock)seedStock(u);u.stock.forEach(functio
 window.MCstockGet=function(u,id){return stById(u,id)};
 function stockHtml(u){if(!u.stock)seedStock(u);if(!u.sfilter)u.sfilter='all';if(!u.ssort)u.ssort='days';syncTrade(u);
 u.stock.forEach(function(v){if(v.id>=stSeq)stSeq=v.id+1});
-u.stock.forEach(function(v){if(!v.ad)return;var a=apiFor(v.ad.k),L=a?a.list():[],c=adOf(v);
+u.stock.forEach(function(v){if(!v.ad&&u.sbid&&nreg(v.reg)&&!v.trade){['cars','vans'].some(function(k){var ap=apiFor(k),m=ap?ap.list().filter(function(x){return x.dbid&&x.ownerId===u.sbid&&nreg(x.reg)===nreg(v.reg)})[0]:null;if(m){v.ad={k:k,id:m.id,db:m.dbid};if(v.status==='sold'&&m.sale!=='sold'){m.sale='sold';m.soldAt=m.soldAt||Date.now()}else if(v.status==='reserved'&&!m.sale)m.sale='deposit'}return !!m})}
+ if(!v.ad)return;var a=apiFor(v.ad.k),L=a?a.list():[],c=adOf(v);
  if(!c&&u.sbid&&nreg(v.reg))c=L.filter(function(x){return x.dbid&&x.ownerId===u.sbid&&nreg(x.reg)===nreg(v.reg)})[0]||null;
  if(c){v.ad.id=c.id;if(c.dbid)v.ad.db=c.dbid}else if(!u.sbid||window.MCownAds)v.ad=null});
 var live=u.stock.filter(function(v){return v.status!=='sold'}),val=0,pot=0,days=0,aged=0;
