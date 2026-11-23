@@ -767,6 +767,23 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 23 Nov 2026: EV CHARGING HAS A PRICE PER kWh. A charging company now sets three prices: its call-out, its price per kWh of
+  charge, and its price per mile outside its area (join form, and Set-up > Your prices). The customer chooses how many kWh
+  they want when they book (5 to 60; 10 is suggested for a rescue, 20 to get home, 30 for a booked top-up) and sees each
+  part of the price. Price = call-out + kWh x price per kWh + extra miles x price per mile, plus our 9.99 booking fee.
+  The server works it out (roadside function v11). A company that has not set a price per kWh charges its call-out only,
+  as before. The company's job card shows "Charge paid for: N kWh". Tested on the live preview: 150 call-out + 20 kWh at
+  0.85 = 167, customer paid 176.99, company paid 146.96.
+  - Terms: the customer section now says how the EV price is made up. One sentence is in [square brackets] for the owner
+    and solicitor to confirm: a refund for charge paid for but not delivered.
+  - Updated to match: EV join page, EV video (two lines re-voiced, three slides, video/ev-charging.mp4), EV proposal, EV
+    leaflet, EV advert picture and short advert video, the EV demo, tools/video/README.md.
+  - Not built: adding more charge on the day (it is a new booking), and measuring what was really delivered.
+  - Found on the way: the worked examples on the mechanic, recovery, tyre, valet and EV join forms still said partners
+    keep 94%. They now say 88%, the same as everywhere else.
+- 23 Nov 2026: WINDSCREEN CARD FITS ONE A4 PAGE. The card's contents were about 22mm taller than the page, so the QR code and
+  phone number at the bottom were cut off. The card is now never taller than the printed page (also with wider printer
+  margins); the photo takes the height left over, and a description that does not fit ends on a whole line.
 - 23 Nov 2026: TRY-IT DEMO FOR EACH TRADE. A business owner can open the dashboard they would get, with a sample business
   and sample jobs, without an account. Eight trades: MOT stations, valeters, driving instructors, body shops and alloy
   wheels, auto electricians and locksmiths, car and van dealers, recovery, mobile EV charging.

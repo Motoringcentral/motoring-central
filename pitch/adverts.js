@@ -37,8 +37,8 @@ const T = [
     text: 'Recovery operators near Dartford: breakdown, accident and transport jobs sent straight to your drivers and paid before you set off. Your trucks, your prices. 10% + VAT per job, nothing monthly. The first 10 we approve get first place in local results for 3 months.',
     head: 'More jobs, paid before you set off', desc: 'Your trucks, your prices' },
   { key: 'evcharge', hash: 'evcharging', name: 'Mobile EV charging companies', img: 'ev-charging.webp', box: [80, 170, 640, 450], who: 'For mobile EV charging companies',
-    h: 'Get paid to rescue <em>stranded EVs.</em>', line: 'Out-of-charge rescues and booked top-ups, sent to your vans.', ticks: ['Your call-out, your price per mile', 'One flat fee: 10% + VAT', 'Paid every week'], pill: FND,
-    text: 'Mobile EV charging companies: out-of-charge rescues and booked top-ups sent straight to your vans, paid up front. Your call-out charge and your price per mile. 10% + VAT per job, nothing monthly.',
+    h: 'Get paid to rescue <em>stranded EVs.</em>', line: 'Out-of-charge rescues and booked top-ups, sent to your vans.', ticks: ['Your call-out, price per kWh and per mile', 'One flat fee: 10% + VAT', 'Paid every week'], pill: FND,
+    text: 'Mobile EV charging companies: out-of-charge rescues and booked top-ups sent straight to your vans, paid up front. Your call-out charge, your price per kWh and your price per mile. 10% + VAT per job, nothing monthly.',
     head: 'Get paid to rescue stranded EVs', desc: 'Paid up front, every job' }];
 const BASE = `*{box-sizing:border-box}html,body{margin:0;padding:0}body{font-family:Inter,Arial,sans-serif;background:#0B1C35;color:#fff;-webkit-font-smoothing:antialiased}
 .ad{position:relative;overflow:hidden;background:#0B1C35}

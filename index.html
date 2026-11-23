@@ -1860,7 +1860,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <footer class="foot">&copy; The Motoring Central. Earnings figures are examples only. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a></footer>
 </main></div>
 <div id="v-evc" hidden>
-<section class="hero"><div class="in"><div class="dvbox"><video id="ev-vid" controls playsinline preload="metadata" poster="video/ev-charging-poster.jpg?v=3" width="1280" height="720" aria-label="Video: how The Motoring Central works for mobile EV charging companies. How customers book, your prices and area, automatic bookings, payouts and joining."><source src="video/ev-charging.mp4?v=3" type="video/mp4"><track kind="captions" src="video/ev-charging.vtt?v=3" srclang="en" label="English"></video></div>
+<section class="hero"><div class="in"><div class="dvbox"><video id="ev-vid" controls playsinline preload="metadata" poster="video/ev-charging-poster.jpg?v=3" width="1280" height="720" aria-label="Video: how The Motoring Central works for mobile EV charging companies. How customers book, your prices and area, automatic bookings, payouts and joining."><source src="video/ev-charging.mp4?v=4" type="video/mp4"><track kind="captions" src="video/ev-charging.vtt?v=4" srclang="en" label="English"></video></div>
 <h1>Mobile EV charging: get paid to rescue stranded EVs.</h1>
 <p>Join our network. Get out-of-charge call-outs and booked top-ups sent straight to your vans.</p>
 <button class="cta" id="ev-top" type="button">Apply to join</button>
@@ -10846,7 +10846,7 @@ setInterval(tick,500);tick();addEventListener('hashchange',function(){setTimeout
 return; /* 22 Nov 2026: the join pages no longer show a video in public (see the join pages module). This video also still gives the old fees, so it is not shown at all until it is re-voiced. */
 var V=$('v-evc');if(!V)return;var IMG=V.querySelector('img.heroimg');if(!IMG)return;var W=null,HV=null,HB=null;
 function build(){W=document.createElement('div');W.className='mvw herovid';
- W.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/ev-charging-poster.jpg" width="1280" height="720" aria-label="Video: why mobile EV charging companies join The Motoring Central, and how automatic bookings work."><source src="video/ev-charging.mp4?v=2" type="video/mp4"><track kind="captions" src="video/ev-charging.vtt?v=2" srclang="en" label="English" default></video>';
+ W.innerHTML='<button type="button" class="msnd" hidden>\uD83D\uDD0A Tap for sound</button><video playsinline controls preload="auto" poster="video/ev-charging-poster.jpg" width="1280" height="720" aria-label="Video: why mobile EV charging companies join The Motoring Central, and how automatic bookings work."><source src="video/ev-charging.mp4?v=4" type="video/mp4"><track kind="captions" src="video/ev-charging.vtt?v=4" srclang="en" label="English" default></video>';
  IMG.parentNode.insertBefore(W,IMG.nextSibling);HV=W.querySelector('video');HB=W.querySelector('.msnd');
  HB.addEventListener('click',function(){HV.muted=false;HV.volume=1;HB.hidden=true;if(HV.currentTime>4||HV.ended)HV.currentTime=0;HV.play().catch(function(){HB.hidden=false})});
  HV.addEventListener('volumechange',function(){if(!HV.muted)HB.hidden=true});

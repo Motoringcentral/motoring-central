@@ -28,4 +28,5 @@ for sample names), the fonts, the voice model and the speech recogniser. To chan
 
 Facts every video must match: partners pay 10% + VAT per job and nothing monthly; customers pay a 9.99 booking fee
 (not on MOTs or driving lessons); MOT stations are paid the official fee less a flat 5 pounds (49.85 for a car);
-dealers pay a monthly plan from 169 + VAT with 30 days free and no commission; payouts are weekly.
+dealers pay a monthly plan from 169 + VAT with 30 days free and no commission; payouts are weekly; an EV charging job is the
+company's call-out + its price per kWh x the kWh the customer chooses + its price per mile outside its area.

@@ -7,8 +7,8 @@
 ]
 },
 {
-"say": "It starts with a driver whose electric car has run out of charge. They tell us where the car is, by postcode, or by dropping a pin on the map, and how much charge they have left.",
-"cap": "It starts with a driver whose electric car has run out of charge. They tell us where the car is, by postcode, or by dropping a pin on the map, and how much charge they have left.",
+"say": "It starts with a driver whose electric car has run out of charge. They tell us where the car is, by postcode, or by dropping a pin on the map, and how much charge they want.",
+"cap": "It starts with a driver whose electric car has run out of charge. They tell us where the car is, by postcode, or by dropping a pin on the map, and how much charge they want.",
 "b": [
 0.4,
 0.75
@@ -23,12 +23,13 @@
 ]
 },
 {
-"say": "You set your own call-out charge, and a price per mile for jobs outside your usual area. The customer sees your price, not ours.",
-"cap": "You set your own call-out charge, and a price per mile for jobs outside your usual area. The customer sees your price, not ours.",
+"say": "You set three prices. Your call-out charge, your price for each kilowatt hour of charge, and a price per mile for jobs outside your usual area. The customer sees your price, not ours.",
+"cap": "You set three prices. Your call-out charge, your price for each kWh of charge, and a price per mile for jobs outside your usual area. The customer sees your price, not ours.",
 "b": [
-0.2,
-0.45,
-0.75
+0.12,
+0.32,
+0.55,
+0.82
 ]
 },
 {
