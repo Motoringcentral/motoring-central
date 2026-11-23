@@ -264,12 +264,31 @@ RECOVERY FLEET AND EXTRAS (built 22 Nov 2026, tested end to end on preview)
 - Terms updated (customer "Extras on the day", partner "Recovery prices and extras").
 - Test partner TEST Recovery Dartford (vimen+recovery@). Delete before launch.
 
-WHERE WE STOPPED (22 Nov 2026, about 3am). Owner went to bed; pick up in the morning.
-NEXT: test the untested dealer features with a real dealer account (list under DEALER SALES INVOICING below:
-spreadsheet upload, stock feed, showroom page and website embed, trade listings, PDI, changing plan), and ask the
-owner to check a printed invoice by eye for the logo. Then: does he want a separate "Recently sold" page?
-Owner actions waiting: set up two-step log-in on his own staff account (Staff log in, scan the code); switch on
-leaked password protection in Supabase (Authentication > Passwords).
+WHERE WE STOPPED (23 Nov 2026, about 3.15am). Owner went to bed; pick up when he is up. Everything is on GitHub and live
+on the preview site.
+DONE ON 22 TO 23 NOV (details under "Done"): the partner recruitment pack; the demo for each trade, which is now sent on
+request and locked (its content comes from the server, only to a valid link); the windscreen card fits A4; EV charging
+has a price per kWh; recovery extras go to the customer in one request.
+FOR THE OWNER TO DECIDE OR DO:
+- Old demo copy on GitHub: either send the request to GitHub Support (he has it as a file, Request-to-GitHub-Support.txt)
+  or leave it until the repository is made private at launch (needs Vercel's paid plan first: see "Before launch").
+- Demo: "Request a demo" still shows in the partner menu, join pages and FAQ. Say if it should be reachable only from
+  the links he emails. Each demo is sent by hand from the admin page; it could send itself the moment they ask.
+- Two TEST demo requests (DEM-00001 valet, DEM-00003 dealer) are in the admin list. No delete button: they go with the
+  other test data before launch.
+- Still waiting from before: two-step log-in on his own staff account; leaked password protection in Supabase
+  (Authentication > Passwords); VDG_API_KEY; the DVLA key; the RAC decision; company registration; Stripe.
+NEXT FOR CLAUDE: test the untested dealer features with a real dealer account (list under DEALER SALES INVOICING below:
+spreadsheet upload, stock feed, showroom page and website embed, trade listings, PDI, changing plan). The solicitor and
+accountant briefs do not yet mention: the EV price per kWh, the EV refund sentence in [square brackets], and the privacy
+line about demo requests. Ask whether he wants a separate "Recently sold" page, and to check a printed invoice for the logo.
+PRIVATE FILES ARE NOT ON GITHUB (the repository is public): the recruitment guide, links sheet, contact list, adviser
+briefs, RAC paper and the working files they are made from. The owner was sent them on 23 Nov as one zip,
+"The-Motoring-Central-Private-Working-Files-23-Nov-2026.zip". If this session's working space is empty, ask him for it.
+The demo kit lives in the database (see tools/demo-kit.js); a copy is in that zip.
+TESTS: scripts are in tools/e2e. Nothing secret is stored there: give the test password in MC_TEST_PW, the test staff
+two-step secret in MC_STAFF_TOTP and a staff demo link in MC_DEMO_LINK. If those are lost, reset the test accounts'
+passwords and the test staff two-step log-in in the database. Emails from the site are sending again (seen 23 Nov).
 Test accounts (password as before, not stored here): vimen+dealer2@ (TEST Trial Motors Gravesend: has a logo, invoice
 details, invoices INV-0001 to INV-0003, stock and 2 test adverts), vimen+dealer3@, vimen+body@, vimen+valet@,
 vimen+autoelec@, vimen+staff@ (reviewer), vimen+visitor@ (contact form). VIMS CARS is founding dealer no. 1; 29 left.

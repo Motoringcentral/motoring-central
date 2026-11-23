@@ -1,10 +1,10 @@
 const {chromium}=require('playwright');
-const SITE='https://preview.motoringcentral.co.uk/';
-exports.PW=process.env.MC_TEST_PW;
+const SITE=process.env.SITE||'https://preview.motoringcentral.co.uk/';
+exports.PW=process.env.MC_TEST_PW; // the test accounts' password: never stored in this (public) repository
 exports.DIR=__dirname;
 exports.open=async function(opts){const b=await chromium.launch();const ctx=await b.newContext(Object.assign({viewport:{width:1280,height:900},deviceScaleFactor:1},opts||{}));
- await ctx.route('**/*',r=>{const u=r.request().url();return /preview\.motoringcentral\.co\.uk|supabase\.co/.test(u)?r.continue():r.abort()});
- const p=await ctx.newPage();p.errs=[];p.on('pageerror',e=>p.errs.push(String(e).slice(0,200)));
+ await ctx.route('**/*',r=>{const u=r.request().url();return /localhost:8765|preview\.motoringcentral\.co\.uk|supabase\.co|cdnjs\.cloudflare\.com|tile\.openstreetmap\.org|api\.postcodes\.io/.test(u)?r.continue():r.abort()});
+ const p=await ctx.newPage();p.errs=[];p.on('pageerror',e=>p.errs.push(String(e.stack||e).slice(0,600)));
  p.go=async h=>{await p.goto(SITE+'#'+h,{waitUntil:'domcontentloaded'});await p.waitForTimeout(2500);const ck=await p.$('.ckbar button');if(ck&&await ck.isVisible())await ck.click().catch(()=>{})};
  p.shot=n=>p.screenshot({path:__dirname+'/'+n+'.png'});
  p.next=async(form,label)=>{const btn=p.locator('#'+form+' button:visible',{hasText:label}).first();await btn.click();await p.waitForTimeout(500)};

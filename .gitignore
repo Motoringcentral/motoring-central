@@ -8,3 +8,9 @@ node_modules
 /js/demo.js
 /demo-kit*.js
 /kit/
+
+# tests: working links and secrets written while testing are never committed
+/tools/e2e/*.txt
+/tools/e2e/state-*.json
+/tools/e2e/*.png
+!/tools/e2e/test-*.png
