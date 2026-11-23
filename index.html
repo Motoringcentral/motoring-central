@@ -8325,7 +8325,7 @@ function dWrap(real){var auth=Object.create(real.auth);
   functions:{invoke:function(n,o){if(!DEMO)return real.functions.invoke(n,o);var f=DEMO.fn&&DEMO.fn[n],r;try{r=f?f((o&&o.body)||{},DEMO):null}catch(e){r=null}dSave();dTell('fn.'+n,{body:dCopy(o&&o.body)});return Promise.resolve(f?dOk(dCopy(r)):{data:null,error:{message:'Not available in the demo.'}})}},
   channel:function(){return real.channel.apply(real,arguments)},removeChannel:function(){return real.removeChannel.apply(real,arguments)}}}
 function dStop(){DEMO=null;cur=null;try{sessionStorage.removeItem(DKEY)}catch(e){}if(window.MCdemoGuide)try{window.MCdemoGuide.close()}catch(e){}document.documentElement.classList.remove('mc-demo-on')}
-function dKit(){return new Promise(function(res,rej){if(window.MCdemoMake){res();return}var s=document.createElement('script');s.src='js/demo.js?v=1';s.onload=function(){window.MCdemoMake?res():rej(new Error('demo'))};s.onerror=function(){rej(new Error('offline'))};document.head.appendChild(s)})}
+function dKit(){return new Promise(function(res,rej){if(window.MCdemoMake){res();return}var s=document.createElement('script');s.src='js/demo.js?v=2';s.onload=function(){window.MCdemoMake?res():rej(new Error('demo'))};s.onerror=function(){rej(new Error('offline'))};document.head.appendChild(s)})}
 function dOpen(key,saved){var pack=window.MCdemoMake(key);if(!pack)return false;DEMO=pack;DEMO.key=key;DEMO.done=(saved&&saved.done)||{};
  if(saved&&saved.t){DEMO.tables=saved.t;DEMO.x=saved.x||DEMO.x;DSEQ=saved.seq||0;if(DEMO.resume)try{DEMO.resume(DEMO)}catch(e){}}
  else try{/* a fresh demo: forget what an earlier demo of the same business left in this browser (job progress, inspections) */

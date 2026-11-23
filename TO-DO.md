@@ -713,6 +713,8 @@ as "find the fault" still earns a fee on the repair:
 
 ### 4. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
+- Try-it demo (23 Nov 2026): it can stay on at launch, because it uses no real data. The older "Demo logins" box on the
+  partner log-in page is a different thing (preview only) and should still be removed.
 - Partner recruiting at launch (22 Nov 2026): tell Claude the launch date so app_settings.founding_top_until can be set to
   three months after it (founding partners' first place ends then); point motoringcentral.co.uk at the live site so the
   leaflet QR codes work; only then print leaflets and start the paid advert test (pitch/adverts/). Check phone numbers
@@ -765,6 +767,31 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 23 Nov 2026: TRY-IT DEMO FOR EACH TRADE. A business owner can open the dashboard they would get, with a sample business
+  and sample jobs, without an account. Eight trades: MOT stations, valeters, driving instructors, body shops and alloy
+  wheels, auto electricians and locksmiths, car and van dealers, recovery, mobile EV charging.
+  - Where: "Try the demo" in the partner menu (page #demo), a "Try the demo first" button on each join page, the footer,
+    the FAQ and the site search. Direct links: #demo-mot, #demo-valet, #demo-instructor, #demo-body, #demo-autoelec,
+    #demo-dealer, #demo-recovery, #demo-evcharge (add ?src=... before the # to keep the "Came from" tag).
+  - What it is: the REAL dashboard code. While a demo is open, every call the dashboard makes to the database is answered
+    from sample data kept in the visitor's own browser, so nothing is read from or written to the real database, no
+    emails go out and no files are uploaded. Checked: no calls to the database during any demo. A real log-in is not
+    affected, and logging in or signing up for real always leaves the demo first.
+  - The guide: a panel (a column on the left on a computer, a button at the bottom on a phone) with six tasks for the
+    trade. "Show me where" opens the right page and highlights the thing to press; each task ticks itself off when it is
+    done. It ends with "Join the network", which goes to that trade's join page. "Start again" resets it.
+  - Touches worth knowing: in the body shop and electrician demos the sample customer accepts the first price sent, about
+    9 seconds later, and the paid job appears; in the MOT demo today's first MOT is always at a time that has passed, so
+    "Tested" can be pressed at any hour; "Your results" is hidden in a demo because it counts real visitors.
+  - Files: the engine is in index.html (search for "Try-it demo"); the sample businesses, jobs and guide steps are in
+    js/demo.js. IF A DASHBOARD FEATURE CHANGES, CHECK THE DEMO STILL MATCHES (ask Claude: it re-runs every step for all
+    eight trades). Fees shown must stay: 10% + VAT (partner keeps 88%), 9.99 booking fee except MOTs and lessons, MOT
+    stations 49.85 per car.
+  - The links sheet for conversations now has a second page of demo codes, and the recruitment guide says when to show
+    the demo (both sent to the owner, not kept here). "node leaflets.js links DIR" in pitch/ rebuilds the sheet.
+  - Not in the demo: garages, mobile mechanics and tyre fitters (not opening at launch); what the customer sees when they
+    book; real emails and payments. A message typed into "Chat to The Motoring Central" inside a demo is not sent, and
+    the demo says so.
 - 22 Nov 2026 (late): PARTNER RECRUITMENT PACK, READY BUT NOT TO BE ADVERTISED UNTIL THE COMPANY IS REGISTERED.
   The owner decided: launch area is Dartford and about 15 miles; no paid adverts, posts or bulk leaflets until the
   company is registered; until then the owner talks to local businesses himself for feedback and signs up the keen ones

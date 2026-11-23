@@ -1,7 +1,8 @@
 /* One-page A4 leaflets for recruiting partners, one for each trade open at launch (22 Nov 2026).
    node leaflets.js            makes The-Motoring-Central-Leaflet-<Trade>.pdf and one file with all of them, in leaflets/
-   node leaflets.js links DIR  also makes a "sign-up links" sheet in DIR, whose QR codes open the preview site (for
-                               conversations before the main address is live)
+   node leaflets.js links DIR  also makes a "sign-up and demo links" sheet in DIR (two pages), whose QR codes open the
+                               preview site: the join page and the try-it demo for each trade (for conversations
+                               before the main address is live)
    Wording and figures must match the join pages and the terms: 10% + VAT per job, weekly payouts, MOT stations paid the
    official fee less 5 pounds, dealers from 169 + VAT with 30 days free, and the founding partner offer. */
 const fs = require('fs'); const { chromium } = require('playwright'); const B = require('./build.js');
@@ -71,6 +72,14 @@ function links() {
  <p class="note" style="margin-top:6mm">The leaflets carry the main address, motoringcentral.co.uk, which will work once the site is launched. Until then, use these.</p>
  <div class="ft"><span>The Motoring Central &nbsp;&middot;&nbsp; internal use</span><span>22 November 2026</span></div></section>`;
 }
+function demos() {
+  return `<section class="page links">${`<div class="hd"><div class="brand"><div class="lg">${B.LOGO}</div><div><b>The Motoring Central</b><small>Buy. Fix. Clean. Rescue.</small></div></div><div class="tag">Demo links for conversations</div></div>`}
+ <p class="kick">Let them try it</p><h1>Demo for each trade</h1>
+ <p class="lead">Show the code or send the link. It opens the dashboard for that trade with a sample business and sample jobs, and a step-by-step guide. There is no sign-up, and nothing they do is saved or sent.</p>
+ <div class="grid">${T.map(t => { const u = PREVIEW + '?src=talk-' + t.key + '#demo-' + t.key; return `<div class="q">${B.qr(u)}<b>${t.who.replace(/^For /, '').replace(/^./, c => c.toUpperCase())}</b><small>${u}</small></div>`; }).join('')}</div>
+ <p class="note" style="margin-top:6mm">When they have looked round, the guide ends with &ldquo;Join the network&rdquo;, which takes them to the sign-up page for their trade. Anyone who then registers is still marked as coming from a conversation. All the demos are also at preview.motoringcentral.co.uk/#demo.</p>
+ <div class="ft"><span>The Motoring Central &nbsp;&middot;&nbsp; internal use</span><span>23 November 2026</span></div></section>`;
+}
 (async () => {
   const b = await chromium.launch(); const out = __dirname + '/leaflets'; fs.mkdirSync(out, { recursive: true }); const pages = [];
   const doc = (title, body) => B.doc(title, [body]).replace('</style>', CSS + '</style>');
@@ -82,6 +91,6 @@ function links() {
   }
   for (const t of T) { const pg = leaflet(t); pages.push(pg); await make(doc('The Motoring Central: ' + t.who.toLowerCase(), pg), out + '/The-Motoring-Central-Leaflet-' + t.file + '.pdf', process.argv[3] ? process.argv[3] + '/leaflet-' + t.key + '.png' : null); }
   await make(doc('The Motoring Central: leaflets', pages.join('')), out + '/The-Motoring-Central-Leaflets-All-Trades.pdf', null);
-  if (process.argv[2] === 'links' && process.argv[3]) await make(doc('Sign-up links', links()), process.argv[3] + '/Sign-up-links-for-conversations.pdf', process.argv[3] + '/links.png');
+  if (process.argv[2] === 'links' && process.argv[3]) await make(doc('Sign-up and demo links', links() + demos()), process.argv[3] + '/Sign-up-and-demo-links-for-conversations.pdf', process.argv[3] + '/links.png');
   await b.close();
 })();
