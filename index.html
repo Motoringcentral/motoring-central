@@ -8283,9 +8283,10 @@ function toast(m,bad){var t=$('mctoast');if(!t)return;t.textContent=m;t.classNam
    A visitor can open the real partner dashboard for any trade without an account. While a demo is open, every call the
    dashboard makes to the database is answered here from sample data held in the visitor's own browser (DEMO.tables),
    so NOTHING is read from or written to the real database, no emails go out and no files are uploaded. The sample
-   business, jobs and step-by-step guide for each trade are in js/demo.js, loaded only when a demo starts. */
+   business, jobs and step-by-step guide for each trade are NOT in this page or in any file on the site: the server hands
+   them over only to a visitor whose personal demo link is right and has not ended (see dKit below). */
 var DEMO=null,DKEY='mc-demo',DSEQ=0,
- DPASS_T={partner_directory:1,app_settings:1},DPASS_R={founding_places_left:1,founding_places:1,partners_near:1,find_instructors:1,lesson_slots:1,check_vts:1,send_contact:1,request_demo:1,demo_open:1};
+ DPASS_T={partner_directory:1,app_settings:1},DPASS_R={founding_places_left:1,founding_places:1,partners_near:1,find_instructors:1,lesson_slots:1,check_vts:1,send_contact:1,request_demo:1,demo_kit:1};
 function dOk(d){return{data:d===undefined?null:d,error:null}}
 function dCopy(x){return x==null?x:JSON.parse(JSON.stringify(x))}
 function dSave(){if(!DEMO)return;try{sessionStorage.setItem(DKEY,JSON.stringify({key:DEMO.key,t:DEMO.tables,x:DEMO.x||{},done:DEMO.done||{},seq:DSEQ}))}catch(e){}}
@@ -8340,7 +8341,17 @@ function dWrap(real){var auth=Object.create(real.auth);
   functions:{invoke:function(n,o){if(!DEMO)return real.functions.invoke(n,o);var f=DEMO.fn&&DEMO.fn[n],r;try{r=f?f((o&&o.body)||{},DEMO):null}catch(e){r=null}dSave();dTell('fn.'+n,{body:dCopy(o&&o.body)});return Promise.resolve(f?dOk(dCopy(r)):{data:null,error:{message:'Not available in the demo.'}})}},
   channel:function(){return real.channel.apply(real,arguments)},removeChannel:function(){return real.removeChannel.apply(real,arguments)}}}
 function dStop(){DEMO=null;cur=null;try{sessionStorage.removeItem(DKEY)}catch(e){}if(window.MCdemoGuide)try{window.MCdemoGuide.close()}catch(e){}document.documentElement.classList.remove('mc-demo-on')}
-function dKit(){return new Promise(function(res,rej){if(window.MCdemoMake){res();return}var s=document.createElement('script');s.src='js/demo.js?v=7';s.onload=function(){window.MCdemoMake?res():rej(new Error('demo'))};s.onerror=function(){rej(new Error('offline'))};document.head.appendChild(s)})}
+/* The demo's content (sample businesses, jobs and the guide) is kept in the database. The server gives it only to a
+   personal link that is right and has not ended, and only the part for that link's trade (a staff link gets them all).
+   It is asked for again on every page load, so a link that has been stopped stops working. Nothing held in the browser
+   can open a demo on its own. */
+var DKIT={code:'',info:null};
+function dHas(key){try{return !!window.MCdemoMake&&window.MCdemoList().indexOf(key)>-1}catch(e){return false}}
+function dKit(code,resume){if(!code)return Promise.reject(new Error('bad_link'));if(window.MCdemoMake&&DKIT.code===code)return Promise.resolve(DKIT.info);
+ return sb.rpc('demo_kit',{p_code:code,p_resume:!!resume}).then(function(r){if(r.error)throw new Error(/bad_link/.test(r.error.message||'')?'bad_link':'offline');
+  var d=r.data||{};if(d.ended)return{ended:true,trade:d.trade};if(!d.kit)throw new Error('offline');
+  var el=document.createElement('script');el.textContent=d.kit;document.head.appendChild(el);el.remove();if(!window.MCdemoMake)throw new Error('offline');
+  DKIT.code=code;DKIT.info={trade:d.trade,name:d.name,ends_at:d.ends_at};return DKIT.info})}
 function dOpen(key,saved){var pack=window.MCdemoMake(key);if(!pack)return false;DEMO=pack;DEMO.key=key;DEMO.done=(saved&&saved.done)||{};
  if(saved&&saved.t){DEMO.tables=saved.t;DEMO.x=saved.x||DEMO.x;DSEQ=saved.seq||0;if(DEMO.resume)try{DEMO.resume(DEMO)}catch(e){}}
  else try{/* a fresh demo: forget what an earlier demo of the same business left in this browser (job progress, inspections) */
@@ -8355,10 +8366,15 @@ function dEnter(){return loadPartner({id:DEMO.uid}).then(function(u){if(!u||!win
 var DOK={};try{DOK=JSON.parse(sessionStorage.getItem('mc-demo-ok')||'{}')||{}}catch(e){}
 function dokSave(){try{sessionStorage.setItem('mc-demo-ok',JSON.stringify(DOK))}catch(e){}}
 window.MCdemo={on:function(){return DEMO?DEMO.key:''},all:function(){return !!DOK.all},
- start:function(key){var u=window.GGuser;if(!(DOK.all||DOK[key])){location.hash='demo-'+key;return Promise.resolve(false)}
-  if(u&&!u.demo){if(!confirm('You are logged in as '+(u.name||u.email||'a user')+'. Log out and open the demo?'))return Promise.resolve(false);var lo=$('logout');if(lo)lo.click()}
-  if(DEMO)dStop();if(window.GGsetUser&&window.GGuser)window.GGsetUser(null);
-  return Promise.all([ready,dKit()]).then(function(){if(!dOpen(key))throw new Error('demo');return dEnter()}).then(function(){return true},function(){dStop();toast('The demo could not be opened. Check your connection and try again.',true);return false})},
+ start:function(key){
+  var get=dHas(key)?Promise.resolve('ok'):DOK.code&&(DOK.all||DOK[key])?ready.then(function(){return dKit(DOK.code,true)}).then(function(d){if(!d||d.ended){DOK={};dokSave();return 'no'}return dHas(key)?'ok':'no'},function(e){if(e&&e.message==='bad_link'){DOK={};dokSave();return 'no'}return 'offline'}):Promise.resolve('no');
+  return get.then(function(st){
+   if(st==='offline'){toast('The demo could not be opened. Check your connection and try again.',true);return false}
+   if(st!=='ok'){location.hash='demo-'+key;try{dqDraw()}catch(e){}return false}
+   var u=window.GGuser;
+   if(u&&!u.demo){if(!confirm('You are logged in as '+(u.name||u.email||'a user')+'. Log out and open the demo?'))return false;var lo=$('logout');if(lo)lo.click()}
+   if(DEMO)dStop();if(window.GGsetUser&&window.GGuser)window.GGsetUser(null);
+   return ready.then(function(){if(!dOpen(key))throw new Error('demo');return dEnter()}).then(function(){return true},function(){dStop();toast('The demo could not be opened. Check your connection and try again.',true);return false})})},
  restart:function(){var k=DEMO&&DEMO.key;if(!k)return;try{sessionStorage.removeItem(DKEY)}catch(e){}return window.MCdemo.start(k)},
  stop:function(to){dStop();if(window.GGsetUser)window.GGsetUser(null);location.hash=to||'demo';if(window.GGrerender)window.GGrerender()},
  state:function(){return DEMO},save:dSave,tell:dTell,
@@ -8369,7 +8385,14 @@ var ready=new Promise(function(res,rej){var s=document.createElement('script');s
   /* a demo that was open before the page was reloaded carries on, before anything else is fetched */
   var sv=null;try{sv=JSON.parse(sessionStorage.getItem(DKEY)||'null')}catch(e){}
   if(!sv||!sv.key){res(sb);return}
-  dKit().then(function(){if(dOpen(sv.key,sv))setTimeout(function(){dEnter().catch(function(){dStop()})},0);res(sb)},function(){try{sessionStorage.removeItem(DKEY)}catch(e){}res(sb)})};
+  function drop(){try{sessionStorage.removeItem(DKEY)}catch(e){}}
+  function back(t){location.hash='demo';setTimeout(function(){try{dqDraw();dqNote(t,true)}catch(e){}},0)}
+  if(!DOK.code){drop();res(sb);return}
+  /* the server is asked again: a link that has been stopped or has ended does not carry on */
+  dKit(DOK.code,true).then(function(d){
+   if(d&&!d.ended&&dHas(sv.key)&&dOpen(sv.key,sv))setTimeout(function(){dEnter().catch(function(){dStop()})},0);
+   else{drop();DOK={};dokSave();back('That demo link has ended. Ask for a new one below and we will send it.')}res(sb)},
+   function(e){if(e&&e.message==='bad_link'){drop();DOK={};dokSave();back('That demo link has ended. Ask for a new one below and we will send it.')}else back('Your demo could not be opened. Check your connection and reload the page.');res(sb)})};
  s.onerror=function(){rej(new Error('offline'))};document.head.appendChild(s)});
 ready.catch(function(){});
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-demo]');if(!t||t.disabled)return;e.preventDefault();var k=t.getAttribute('data-demo'),was=t.textContent;t.disabled=true;t.textContent='Opening…';
@@ -8379,17 +8402,24 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
 var DQT={mot:'MOT test stations',valet:'valeters',instructor:'driving instructors',body:'body shops and alloy wheel refurbishers',autoelec:'auto electricians and locksmiths',dealer:'car and van dealers',recovery:'recovery companies',evcharge:'mobile EV charging companies'};
 function dqNote(t,warn){var m=$('dq-msg');if(!m)return;m.hidden=!t;m.textContent=t||'';m.style.borderLeftColor=warn?'#c62828':''}
 function dqDraw(){var m=/^#demo-([a-z]+)$/.exec(location.hash||''),k=m&&DQT[m[1]]?m[1]:'',sel=$('dq-trade'),h=$('dq-h1'),all=$('dq-all'),bk=$('dq-back'),card=$('dq-card');if(!sel)return;
- if(k&&!sel.__set){sel.value=k}if(h)h.textContent=DOK.all?'Show the dashboard.':k?'Request a demo for '+DQT[k]+'.':'See the dashboard before you join.';
- if(all)all.hidden=!DOK.all;var mine=!DOK.all&&Object.keys(DQT).filter(function(x){return DOK[x]})[0];
+ if(k&&!sel.__set){sel.value=k}if(h)h.textContent=DOK.all&&DOK.code?'Show the dashboard.':k?'Request a demo for '+DQT[k]+'.':'See the dashboard before you join.';
+ var okc=!!DOK.code;if(all)all.hidden=!(okc&&DOK.all);var mine=okc&&!DOK.all&&Object.keys(DQT).filter(function(x){return DOK[x]})[0];
  if(bk){bk.hidden=!mine;if(mine&&bk.getAttribute('data-k')!==mine){bk.setAttribute('data-k',mine);bk.innerHTML='<p><b>Your demo for '+E(DQT[mine])+' is ready.</b></p><button type="button" class="dmbtn" data-demo="'+mine+'">Open it again</button>'}}
  if(card){var t=card.querySelector('h2');if(t)t.textContent=mine?'Ask to see another trade':'Request a demo'}}
-function demoHash(){dqDraw();var m=/^#mydemo-([a-f0-9]{12})$/i.exec(location.hash||'');if(!m)return;var code=m[1].toLowerCase();dqNote('Opening your demo…');
- ready.then(function(){return sb.rpc('demo_open',{p_code:code})}).then(function(r){
-  if(r.error){dqNote(/bad_link/.test(r.error.message||'')?'That demo link is not right. Check the link in your email, or ask for a demo below.':'Your demo could not be opened. Check your connection and try the link again.',true);return}
-  var d=r.data||{};if(d.ended){dqNote('That demo link has ended. Ask for a new one below and we will send it.',true);var sel=$('dq-trade');if(sel&&DQT[d.trade])sel.value=d.trade;return}
-  if(d.trade==='all'){DOK={all:1,code:code};dokSave();dqNote('');if(DEMO){dStop();if(window.GGsetUser)window.GGsetUser(null)}location.hash='demo';dqDraw();return}
+function demoHash(){dqDraw();var m=/^#mydemo-([a-f0-9]{12})$/i.exec(location.hash||'');
+ /* back on this page after a reload: ask the server whether the link kept in this tab is still good before offering the demo again */
+ if(!m){if(DOK.code&&!window.MCdemoMake&&!DKIT.asking&&/^#demo/.test(location.hash||'')){DKIT.asking=1;ready.then(function(){return dKit(DOK.code,true)}).then(function(d){DKIT.asking=0;if(!d||d.ended){DOK={};dokSave()}dqDraw()},function(e){DKIT.asking=0;if(e&&e.message==='bad_link'){DOK={};dokSave();dqDraw()}})}return}
+ var code=m[1].toLowerCase();
+ /* a second link in the same page: start clean, so two demos' content never mix */
+ if(DKIT.code&&DKIT.code!==code){dStop();DOK={};dokSave();location.reload();return}
+ dqNote('Opening your demo…');
+ ready.then(function(){return dKit(code,false)}).then(function(d){
+  if(d.ended){dqNote('That demo link has ended. Ask for a new one below and we will send it.',true);var sel=$('dq-trade');if(sel&&DQT[d.trade])sel.value=d.trade;if(DOK.code===code){DOK={};dokSave();dqDraw()}return}
+  DOK={code:code};if(d.trade==='all')DOK.all=1;else DOK[d.trade]=1;dokSave();dqNote('');
+  if(d.trade==='all'){if(DEMO){dStop();if(window.GGsetUser)window.GGsetUser(null)}location.hash='demo';dqDraw();return}
   if(!DQT[d.trade]){dqNote('That demo link is not right. Ask for a demo below.',true);return}
-  DOK={code:code};DOK[d.trade]=1;dokSave();dqNote('');window.MCdemo.start(d.trade)},function(){dqNote('Your demo could not be opened. Check your connection and try the link again.',true)})}
+  window.MCdemo.start(d.trade)},
+  function(e){dqNote(e&&e.message==='bad_link'?'That demo link is not right. Check the link in your email, or ask for a demo below.':'Your demo could not be opened. Check your connection and try the link again.',true)})}
 window.addEventListener('hashchange',demoHash);demoHash();
 (function(){var f=$('dq-form');if(!f)return;$('dq-trade').addEventListener('change',function(){this.__set=1});
  f.addEventListener('submit',function(e){e.preventDefault();var er=$('dq-err'),go=$('dq-go'),v=function(i){return $(i).value.trim()},tr=$('dq-trade').value,biz=v('dq-biz'),nm=v('dq-name'),em=v('dq-mail');

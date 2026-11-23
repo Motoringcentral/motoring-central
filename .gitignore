@@ -3,3 +3,8 @@ Thumbs.db
 .vercel
 node_modules
 .env
+
+# the demo kit lives in the database, never in this (public) repository: see tools/demo-kit.js
+/js/demo.js
+/demo-kit*.js
+/kit/

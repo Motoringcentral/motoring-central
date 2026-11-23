@@ -768,6 +768,26 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 23 Nov 2026: THE DEMO CANNOT BE OPENED WITHOUT A VALID LINK ANY MORE. Before, the demo's sample businesses and guide were
+  a public file on the site (js/demo.js) and the "has a link" check was made in the visitor's browser, so a technical
+  person could get in. Now:
+  - The demo's content (the "demo kit") is kept in the database, not on the site and not in this repository. The server
+    hands it over only to a personal link that is right and has not ended, and only the part for that link's trade (a
+    valeter's link carries the valeter demo and nothing else; a staff link carries all eight).
+  - The server is asked again every time the page loads, so "Stop their link" on the admin page takes effect at once.
+  - Tested: the old file is gone (404); changing the browser's saved flags does nothing; asking the server with a made-up
+    link, or for the kit without a key, is refused; the tables cannot be read. With a valid link all eight demos open and
+    every guide step still finds its place.
+  - TO CHANGE THE DEMO (sample jobs, guide steps): it is no longer a file to edit. See the top of tools/demo-kit.js: a
+    one-time key is switched on in the database for 15 minutes, the tool fetches the kit, you edit it, the tool puts it
+    back. NEVER commit the kit to the repository (.gitignore blocks js/demo.js). Database: private.demo_kit,
+    public.demo_kit(code, resume), demo_kit_get / demo_kit_put (refused without a key);
+    supabase/migrations/20261123d_demo_kit_from_server.sql.
+  - What is still open, and is the owner's decision: the repository on GitHub is public, and its HISTORY still holds the
+    old demo file and the old version of the site where the demo was open to everyone. Someone technical could download
+    that old version and run it on their own computer. Making the repository private closes this (see the note under
+    "Before launch"). Also true of every website: the page's own code can be read by anyone, and a business that was
+    sent a link can keep what it was shown.
 - 23 Nov 2026: THE DEMO IS NOW ON REQUEST. The try-it demo is no longer open to everyone.
   - A business asks on the "Request a demo" page (#demo, or #demo-<trade> with the trade already chosen): type of
     business, business name, their name, email, and optionally phone, town and a note. "Try the demo" in the partner
@@ -783,9 +803,8 @@ Option to consider: a soft launch taking quote requests only, before full bookin
     be replaced).
   - Tested with the real database: request, the three emails (to us, the acknowledgement, the demo link), sending from
     the admin page, opening the link, reloading, leaving and coming back, a wrong link, and the staff link.
-  - Honest limit: the demo runs in the visitor's browser on sample data, so someone technical could still find a way
-    in. It holds no real customer, partner or price data, so nothing is exposed; the point of the request step is to get
-    the business's details and see who is interested.
+  - (The limit noted here at first, that someone technical could still get in, was closed the same day: see the entry
+    above.)
   - Code: supabase/migrations/20261123b_demo_requests.sql and 20261123c_demo_own_link.sql (table demo_requests;
     request_demo, demo_open, staff_demo_requests, staff_demo_send, staff_demo_set, staff_demo_own). index.html: search
     for "Request a demo" (the page and form) and "staff: demo requests" (the admin page). The email button wording is in
@@ -805,7 +824,7 @@ Option to consider: a soft launch taking quote requests only, before full bookin
     223.52 (88% of each extra), all correct.
   - Code: supabase/migrations/20261123a_extras_in_one_request.sql (request_extras, sign_extras, withdraw_extras,
     decide_extras; each request shares a "batch"). index.html: jobXHtml, xPicked, cxHtml. The recovery demo has a new guide
-    step for it (js/demo.js). The older one-at-a-time functions are still in the database but the site no longer uses them.
+    step for it (in the demo kit). The older one-at-a-time functions are still in the database but the site no longer uses them.
   - The terms did not need changing: they already say an extra is only added once the customer approves and pays.
 - 23 Nov 2026: EV CHARGING HAS A PRICE PER kWh. A charging company now sets three prices: its call-out, its price per kWh of
   charge, and its price per mile outside its area (join form, and Set-up > Your prices). The customer chooses how many kWh
@@ -841,7 +860,7 @@ Option to consider: a soft launch taking quote requests only, before full bookin
     9 seconds later, and the paid job appears; in the MOT demo today's first MOT is always at a time that has passed, so
     "Tested" can be pressed at any hour; "Your results" is hidden in a demo because it counts real visitors.
   - Files: the engine is in index.html (search for "Try-it demo"); the sample businesses, jobs and guide steps are in
-    js/demo.js. IF A DASHBOARD FEATURE CHANGES, CHECK THE DEMO STILL MATCHES (ask Claude: it re-runs every step for all
+    the demo kit, which since 23 Nov is kept in the database (see tools/demo-kit.js), not in js/demo.js. IF A DASHBOARD FEATURE CHANGES, CHECK THE DEMO STILL MATCHES (ask Claude: it re-runs every step for all
     eight trades). Fees shown must stay: 10% + VAT (partner keeps 88%), 9.99 booking fee except MOTs and lessons, MOT
     stations 49.85 per car.
   - The links sheet for conversations now has a second page of demo codes, and the recruitment guide says when to show
