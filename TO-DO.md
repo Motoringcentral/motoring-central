@@ -789,9 +789,10 @@ Option to consider: a soft launch taking quote requests only, before full bookin
     public.demo_kit(code, resume), demo_kit_get / demo_kit_put (refused without a key);
     supabase/migrations/20261123d_demo_kit_from_server.sql.
   - The old demo file was also taken out of this repository's public history (23 Nov, the owner's choice): the last 10
-    commits were rewritten without js/demo.js and nothing else in them changed. Limit: GitHub can keep the old commits
-    reachable for a while by anyone who has their exact IDs. Only GitHub Support can clear that, or making the repository
-    private (see "Before launch").
+    commits were rewritten without js/demo.js and nothing else in them changed. Limit, checked the same day: GitHub still serves
+    the old file to anyone who asks for it by an old commit's exact ID, and the repository's public activity feed lists
+    some of those IDs, so an expert could still fetch it. Only GitHub Support can clear that (the owner has a draft
+    request), or making the repository private (see "Before launch").
   - Also true of every website: the page's own code can be read by anyone, and a business that was sent a link can keep
     what it was shown.
 - 23 Nov 2026: THE DEMO IS NOW ON REQUEST. The try-it demo is no longer open to everyone.
