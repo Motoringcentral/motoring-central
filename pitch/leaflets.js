@@ -1,8 +1,9 @@
 /* One-page A4 leaflets for recruiting partners, one for each trade open at launch (22 Nov 2026).
    node leaflets.js            makes The-Motoring-Central-Leaflet-<Trade>.pdf and one file with all of them, in leaflets/
    node leaflets.js links DIR  also makes a "sign-up and demo links" sheet in DIR (two pages), whose QR codes open the
-                               preview site: the join page and the try-it demo for each trade (for conversations
-                               before the main address is live)
+                               preview site: the join page and the Request a demo page for each trade (for emails and
+                               conversations before the main address is live). The demo itself opens only from a
+                               personal link that staff send from the admin page.
    Wording and figures must match the join pages and the terms: 10% + VAT per job, weekly payouts, MOT stations paid the
    official fee less 5 pounds, dealers from 169 + VAT with 30 days free, and the founding partner offer. */
 const fs = require('fs'); const { chromium } = require('playwright'); const B = require('./build.js');
@@ -73,11 +74,11 @@ function links() {
  <div class="ft"><span>The Motoring Central &nbsp;&middot;&nbsp; internal use</span><span>22 November 2026</span></div></section>`;
 }
 function demos() {
-  return `<section class="page links">${`<div class="hd"><div class="brand"><div class="lg">${B.LOGO}</div><div><b>The Motoring Central</b><small>Buy. Fix. Clean. Rescue.</small></div></div><div class="tag">Demo links for conversations</div></div>`}
- <p class="kick">Let them try it</p><h1>Demo for each trade</h1>
- <p class="lead">Show the code or send the link. It opens the dashboard for that trade with a sample business and sample jobs, and a step-by-step guide. There is no sign-up, and nothing they do is saved or sent.</p>
- <div class="grid">${T.map(t => { const u = PREVIEW + '?src=talk-' + t.key + '#demo-' + t.key; return `<div class="q">${B.qr(u)}<b>${t.who.replace(/^For /, '').replace(/^./, c => c.toUpperCase())}</b><small>${u}</small></div>`; }).join('')}</div>
- <p class="note" style="margin-top:6mm">When they have looked round, the guide ends with &ldquo;Join the network&rdquo;, which takes them to the sign-up page for their trade. Anyone who then registers is still marked as coming from a conversation. All the demos are also at preview.motoringcentral.co.uk/#demo.</p>
+  return `<section class="page links">${`<div class="hd"><div class="brand"><div class="lg">${B.LOGO}</div><div><b>The Motoring Central</b><small>Buy. Fix. Clean. Rescue.</small></div></div><div class="tag">Request-a-demo links</div></div>`}
+ <p class="kick">Let them ask to try it</p><h1>Request a demo: a link for each trade</h1>
+ <p class="lead">Email the link, or show the code. It opens the Request a demo page with their trade already chosen. They fill in their details, the request appears on your admin page (Partners, then Demo requests), and you send them their own demo link from there.</p>
+ <div class="grid">${T.map(t => { const u = PREVIEW + '?src=email-' + t.key + '#demo-' + t.key; return `<div class="q">${B.qr(u)}<b>${t.who.replace(/^For /, '').replace(/^./, c => c.toUpperCase())}</b><small>${u}</small></div>`; }).join('')}</div>
+ <p class="note" style="margin-top:6mm">The demo itself is not open to the public. Each business gets a personal link that works for 30 days, and the admin page shows whether they have opened it. To show the demo in person, use your own link: admin page, Partners, Demo requests, &ldquo;Show a demo in person&rdquo;.</p>
  <div class="ft"><span>The Motoring Central &nbsp;&middot;&nbsp; internal use</span><span>23 November 2026</span></div></section>`;
 }
 (async () => {

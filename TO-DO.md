@@ -713,7 +713,8 @@ as "find the fault" still earns a fee on the repair:
 
 ### 4. Go-live checklist (for later, when the site is ready)
 Owner (business and legal):
-- Try-it demo (23 Nov 2026): it can stay on at launch, because it uses no real data. The older "Demo logins" box on the
+- Try-it demo (23 Nov 2026): it can stay on at launch, because it uses no real data. Since 23 Nov it opens only from a
+  personal link sent from the admin page (see "THE DEMO IS NOW ON REQUEST" under Done). The older "Demo logins" box on the
   partner log-in page is a different thing (preview only) and should still be removed.
 - Partner recruiting at launch (22 Nov 2026): tell Claude the launch date so app_settings.founding_top_until can be set to
   three months after it (founding partners' first place ends then); point motoringcentral.co.uk at the live site so the
@@ -767,6 +768,30 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 23 Nov 2026: THE DEMO IS NOW ON REQUEST. The try-it demo is no longer open to everyone.
+  - A business asks on the "Request a demo" page (#demo, or #demo-<trade> with the trade already chosen): type of
+    business, business name, their name, email, and optionally phone, town and a note. "Try the demo" in the partner
+    menu, the join pages, the FAQ and the search now say "Request a demo" and lead to this form.
+  - We are emailed about each request, and it shows on the admin page: Partners > Demo requests (also on the To do list,
+    with a count). "Send the demo" emails the business a personal link for its trade (#mydemo-<code>). The link works for
+    30 days. The page shows whether it has been opened and how many times. Also: send again, copy the link, make the link
+    without emailing, stop the link, close and reopen.
+  - A personal link opens that one trade only. The server checks the link before the demo opens; a wrong or ended link
+    shows a message and the request form.
+  - The same admin page lists the eight request links to email to businesses (each with a Copy button), and gives each
+    member of staff a link of their own that opens all eight demos, for showing someone in person (works for a year, can
+    be replaced).
+  - Tested with the real database: request, the three emails (to us, the acknowledgement, the demo link), sending from
+    the admin page, opening the link, reloading, leaving and coming back, a wrong link, and the staff link.
+  - Honest limit: the demo runs in the visitor's browser on sample data, so someone technical could still find a way
+    in. It holds no real customer, partner or price data, so nothing is exposed; the point of the request step is to get
+    the business's details and see who is interested.
+  - Code: supabase/migrations/20261123b_demo_requests.sql and 20261123c_demo_own_link.sql (table demo_requests;
+    request_demo, demo_open, staff_demo_requests, staff_demo_send, staff_demo_set, staff_demo_own). index.html: search
+    for "Request a demo" (the page and form) and "staff: demo requests" (the admin page). The email button wording is in
+    supabase/functions/notify (v5). The links sheet is made by pitch/leaflets.js (page 2).
+  - For the solicitor: the privacy policy now says we keep a business's name, email and phone when it asks for a demo,
+    and whether the demo was opened. Demo requests marked TEST must be deleted before launch with the other test data.
 - 23 Nov 2026: RECOVERY EXTRAS GO TO THE CUSTOMER IN ONE REQUEST. On a job, the driver taps "Add extras", ticks everything
   that is needed from the price list the customer saw when booking (with a number for waiting time and storage, and up to
   two "something else" lines with their own price), gives one reason, and sends them together. The customer gets one email

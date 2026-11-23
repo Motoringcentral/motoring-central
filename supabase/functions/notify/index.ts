@@ -21,6 +21,7 @@ function cors(req: Request) {
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]!));
 
 function buttonText(link: string) {
+  if (/#mydemo-/.test(link)) return "Open your demo";
   if (/#dashboard/.test(link)) return "Open your dashboard";
   if (/#account/.test(link)) return "Open your account";
   if (/#review/.test(link)) return "Leave a review";
@@ -49,7 +50,7 @@ function html(subject: string, body: string, link: string | null) {
 <div style="font-size:15px;line-height:1.55;white-space:pre-line">${esc(body)}</div></td></tr>
 ${btn}
 <tr><td style="background:#F7FAFD;border-top:1px solid #E3ECF5;padding:14px 24px;font-size:12px;line-height:1.5;color:#5A6B82">
-You are getting this email because of your account or booking with The Motoring Central. Questions? Just reply to this email.<br>
+You are getting this email because of your account, booking or request with The Motoring Central. Questions? Just reply to this email.<br>
 <a href="${esc(site)}" style="color:#0B1C35">${esc(site.replace(/^https:\/\//, ""))}</a></td></tr>
 </table></td></tr></table></body></html>`;
 }
