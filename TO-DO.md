@@ -767,6 +767,21 @@ Building:
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
 ## Done
+- 23 Nov 2026: RECOVERY EXTRAS GO TO THE CUSTOMER IN ONE REQUEST. On a job, the driver taps "Add extras", ticks everything
+  that is needed from the price list the customer saw when booking (with a number for waiting time and storage, and up to
+  two "something else" lines with their own price), gives one reason, and sends them together. The customer gets one email
+  and one card in My account showing each extra, the total and the reason. They can untick anything they do not agree
+  to, then approve and pay once; or say no to all of it. With the customer beside them, the driver can have them sign once
+  on the driver's phone for the whole list, and the customer then pays once. Only one request can be waiting on a job at a
+  time: to change it, withdraw it and send a new one. Extras the customer unticked show as "Declined by the customer" on
+  the driver's job.
+  - Tested with the real database on a test job: 4 extras sent (123.00), customer unticked one and paid 93.00; then 2 more
+    signed on a phone-sized screen and paid (65.00). Booking went from 105.99 to 263.99 and the company's pay from 84.48 to
+    223.52 (88% of each extra), all correct.
+  - Code: supabase/migrations/20261123a_extras_in_one_request.sql (request_extras, sign_extras, withdraw_extras,
+    decide_extras; each request shares a "batch"). index.html: jobXHtml, xPicked, cxHtml. The recovery demo has a new guide
+    step for it (js/demo.js). The older one-at-a-time functions are still in the database but the site no longer uses them.
+  - The terms did not need changing: they already say an extra is only added once the customer approves and pays.
 - 23 Nov 2026: EV CHARGING HAS A PRICE PER kWh. A charging company now sets three prices: its call-out, its price per kWh of
   charge, and its price per mile outside its area (join form, and Set-up > Your prices). The customer chooses how many kWh
   they want when they book (5 to 60; 10 is suggested for a rescue, 20 to get home, 30 for a booked top-up) and sees each
