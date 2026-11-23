@@ -764,6 +764,11 @@ Building:
   and add https://motoringcentral.co.uk/** under "Redirect URLs". Until this is done, every customer who taps the
   "confirm your email" link is sent to localhost:3000 (a dead page). Then test a fresh sign-up from start to finish.
 - Point motoringcentral.co.uk (123-reg) at the site, then test everything on a phone
+- Make the GitHub repository private (it is public now). This hides the site's code and all of its history. It needs
+  Vercel's paid plan first: on Vercel's free plan a private repository only publishes changes made by the account
+  owner, so Claude's updates would stop reaching the site; and the free plan is for non-commercial sites, so a business
+  site needs the paid plan anyway. Order: move Vercel to the paid plan, then GitHub > the repository > Settings >
+  General > Danger Zone > Change visibility > Private, then ask Claude to publish a small change to check it still works.
 
 Option to consider: a soft launch taking quote requests only, before full booking and payments.
 
@@ -783,11 +788,12 @@ Option to consider: a soft launch taking quote requests only, before full bookin
     back. NEVER commit the kit to the repository (.gitignore blocks js/demo.js). Database: private.demo_kit,
     public.demo_kit(code, resume), demo_kit_get / demo_kit_put (refused without a key);
     supabase/migrations/20261123d_demo_kit_from_server.sql.
-  - What is still open, and is the owner's decision: the repository on GitHub is public, and its HISTORY still holds the
-    old demo file and the old version of the site where the demo was open to everyone. Someone technical could download
-    that old version and run it on their own computer. Making the repository private closes this (see the note under
-    "Before launch"). Also true of every website: the page's own code can be read by anyone, and a business that was
-    sent a link can keep what it was shown.
+  - The old demo file was also taken out of this repository's public history (23 Nov, the owner's choice): the last 10
+    commits were rewritten without js/demo.js and nothing else in them changed. Limit: GitHub can keep the old commits
+    reachable for a while by anyone who has their exact IDs. Only GitHub Support can clear that, or making the repository
+    private (see "Before launch").
+  - Also true of every website: the page's own code can be read by anyone, and a business that was sent a link can keep
+    what it was shown.
 - 23 Nov 2026: THE DEMO IS NOW ON REQUEST. The try-it demo is no longer open to everyone.
   - A business asks on the "Request a demo" page (#demo, or #demo-<trade> with the trade already chosen): type of
     business, business name, their name, email, and optionally phone, town and a note. "Try the demo" in the partner
