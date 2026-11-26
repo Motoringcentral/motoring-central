@@ -9009,13 +9009,16 @@ function motSample(c){var yr=+c.year||2018,first=yr+3,now=new Date().getFullYear
  return {sample:true,tests:T}}
 /* warnings from an MOT history: mileage that went down between tests, an advertised mileage below the last MOT
    reading (both signs of clocking), and an outstanding safety recall */
-function motCheck(M,adMiles){var T=((M&&M.tests)||[]).slice().sort(function(a,b){return a.date<b.date?1:-1}),o={tests:T,drop:null,below:null,recall:!!(M&&M.recall==='yes')};
+function motMake(x){x=String(x||'').toLowerCase().replace(/[^a-z]/g,'');return {vw:'volkswagen',merc:'mercedesbenz',mercedes:'mercedesbenz',chevy:'chevrolet',landrover:'landrover',rangerover:'landrover'}[x]||x}
+function motCheck(M,adMiles,adMake){var T=((M&&M.tests)||[]).slice().sort(function(a,b){return a.date<b.date?1:-1}),o={tests:T,drop:null,below:null,recall:!!(M&&M.recall==='yes'),none:!!(M&&!M.sample&&!T.length&&!M.make),other:null};
+ /* the registration belongs to a different make from the one advertised (a mistyped or false registration) */
+ var a=motMake(adMake),b=motMake(M&&M.make);if(a&&b&&a.indexOf(b.slice(0,4))!==0&&b.indexOf(a.slice(0,4))!==0)o.other=[M.make,M.model].filter(Boolean).join(' ');
  for(var i=0;i<T.length-1;i++){if(T[i].miles&&T[i+1].miles&&T[i].miles<T[i+1].miles-50){o.drop={from:T[i+1],to:T[i]};break}}
  var lastM=T.filter(function(t){return t.miles})[0],am=+adMiles;if(lastM&&am>0&&am<lastM.miles-100)o.below={ad:am,mot:lastM.miles,date:lastM.date};
  o.last=lastM||null;return o}
 window.MCmotCheck=motCheck;
-function motHtml(M,c){var K=motCheck(M,c&&c.miles),T=K.tests,rc=K.recall?'<p class="mot-warn">The DVSA records an outstanding safety recall on this vehicle. Ask the seller whether the recall work has been done, or check with the manufacturer.</p>':'';
- if(!T.length)return '<div class="card mot"><b>MOT history</b><p class="note" style="margin:6px 0 0">No MOT tests on record. '+(M.due?'Its first MOT is due by '+dd(M.due)+'.':'Vehicles do not need an MOT until they are 3 years old.')+'</p>'+rc+(M.sample?'':'<p class="note" style="margin:6px 0 0">From the DVSA MOT history service. Contains public sector information licensed under the Open Government Licence v3.0.</p>')+'</div>';
+function motHtml(M,c){var K=motCheck(M,c&&c.miles,c&&c.make),T=K.tests,rc=(K.other?'<p class="mot-warn">The DVSA&rsquo;s MOT record for this registration is for a '+E(K.other)+', not a '+E(c.make)+'. Ask the seller about it before you buy.</p>':'')+(K.recall?'<p class="mot-warn">The DVSA records an outstanding safety recall on this vehicle. Ask the seller whether the recall work has been done, or check with the manufacturer.</p>':'');
+ if(!T.length)return '<div class="card mot"><b>MOT history</b><p class="note" style="margin:6px 0 0">'+(K.none?'The DVSA has no MOT record for this registration.':'No MOT tests on record. '+(M.due?'Its first MOT is due by '+dd(M.due)+'.':'Vehicles do not need an MOT until they are 3 years old.'))+'</p>'+rc+(M.sample?'':'<p class="note" style="margin:6px 0 0">From the DVSA MOT history service. Contains public sector information licensed under the Open Government Licence v3.0.</p>')+'</div>';
  var lastPass=T.filter(function(t){return t.result==='pass'&&t.expiry})[0],drop=!!K.drop;
  var h='<div class="card mot"><b>MOT history</b>'+(lastPass?'<p class="note" style="margin:4px 0 0">'+(new Date(lastPass.expiry)>new Date()?'MOT valid until '+dd(lastPass.expiry):'MOT expired on '+dd(lastPass.expiry))+' · '+T.length+' test'+(T.length>1?'s':'')+' on record</p>':'')+
   (drop?'<p class="mot-warn">The recorded mileage went down between two tests. Ask the seller about it before you buy.</p>':'')+
@@ -9142,16 +9145,17 @@ function chkLine(v){if(Array.isArray(v))v=v[0];var s=v&&v.summary||{},a=[];if(!v
  return 'History check: '+(a.length?a.join(', '):'clear')}
 /* MOT check on each advert waiting for approval (needs the DVSA key; until then it says so) */
 var ADQM={};
-function adqMotLine(reg,mi){var r=ADQM[reg];if(!reg)return 'MOT check: no registration';if(!r)return 'MOT check: looking it up…';
+function adqMotLine(reg,mi,mk){var r=ADQM[reg];if(!reg)return 'MOT check: no registration';if(!r)return 'MOT check: looking it up…';
  if(r.error==='not_configured')return 'MOT check: not connected yet (waiting for the DVSA key).';if(!r.ok)return 'MOT check: not available just now.';
- var K=window.MCmotCheck?window.MCmotCheck(r.mot,mi):{tests:[]},W=[];if(!K.tests.length)return 'MOT check: no MOT tests on record'+(r.mot&&r.mot.recall==='yes'?'. <b style="color:#c0392b">&#9888; Outstanding safety recall</b>':'')+'.';
+ var K=window.MCmotCheck?window.MCmotCheck(r.mot,mi,mk):{tests:[]},W=[];if(K.other)W.push('The registration belongs to a '+E(K.other)+', not a '+E(mk));
+ if(!K.tests.length)return (K.none?'MOT check: <b style="color:#c0392b">&#9888; the DVSA has no record of this registration. Check it is typed correctly.</b>':'MOT check: no MOT tests yet'+(r.mot&&r.mot.due?', first MOT due by '+E(dd(r.mot.due)):''))+(K.recall?' <b style="color:#c0392b">&#9888; Outstanding safety recall.</b>':'')+(W.length?' <b style="color:#c0392b">&#9888; '+W[0]+'.</b>':'');
  if(K.drop)W.push('Mileage went down between the MOTs on '+E(dd(K.drop.from.date))+' and '+E(dd(K.drop.to.date)));
  if(K.below)W.push('Advert says '+Number(K.below.ad).toLocaleString('en-GB')+' miles, the MOT on '+E(dd(K.below.date))+' recorded '+Number(K.below.mot).toLocaleString('en-GB'));
  if(K.recall)W.push('Outstanding safety recall');
  return 'MOT check: '+K.tests.length+' test'+(K.tests.length===1?'':'s')+(K.last?', last reading '+Number(K.last.miles).toLocaleString('en-GB')+' miles on '+E(dd(K.last.date)):'')+'. '+(W.length?W.map(function(w){return '<b style="color:#c0392b">&#9888; '+w+'.</b>'}).join(' '):'Mileage looks consistent.')}
 function adqMot(){[].forEach.call(document.querySelectorAll('[data-adqmot]:not([data-asked])'),function(el){el.setAttribute('data-asked','1');var q=el.getAttribute('data-adqmot').split('|'),reg=q[0],mi=+q[1]||0;if(!reg||ADQM[reg])return;
   ready.then(function(){return sb.functions.invoke('mot-history',{body:{reg:reg},region:'eu-west-2'})}).then(function(r){var d=r&&r.data;if(!d&&r&&r.error&&r.error.context&&r.error.context.json)return r.error.context.json().catch(function(){return null});return d}).then(function(d){ADQM[reg]=d||{ok:false};
-   [].forEach.call(document.querySelectorAll('[data-adqmot^="'+reg+'|"]'),function(x){x.innerHTML=adqMotLine(reg,+x.getAttribute('data-adqmot').split('|')[1]||0)})},function(){ADQM[reg]={ok:false}})})}
+   [].forEach.call(document.querySelectorAll('[data-adqmot^="'+reg+'|"]'),function(x){var q2=x.getAttribute('data-adqmot').split('|');x.innerHTML=adqMotLine(reg,+q2[1]||0,q2[2]||'')})},function(){ADQM[reg]={ok:false}})})}
 function queueHtml(){var me=window.GGuser,L=ADQ||[];
  var h='<div class="card" id="mc-adq"><h2>Adverts waiting for approval'+(L.length?' <span class="mx-n">'+L.length+'</span>':'')+'</h2>';
  if(me.level==='owner')h+='<label style="display:flex;gap:8px;align-items:flex-start;margin:0 0 6px"><input type="checkbox" data-adauto style="width:20px;height:20px;flex:none"'+(autoOn?' checked':'')+'><span><b>Approve adverts automatically</b> when our checks find nothing wrong.<br><span class="note">Adverts with any warning below still come here for a person to check.</span></span></label>';
@@ -9165,7 +9169,7 @@ function queueHtml(){var me=window.GGuser,L=ADQ||[];
    '<div class="note" style="margin:2px 0">'+E(d.reg||'')+' · '+(d.price?'£'+Number(d.price).toLocaleString('en-GB'):'no price')+' · '+(d.miles!=null?Number(d.miles).toLocaleString('en-GB')+' miles':'')+' · '+E([d.fuel,d.gear,d.col].filter(Boolean).join(', '))+'</div>'+
    '<div class="note" style="margin:2px 0">'+(d.private?'Private seller':'Dealer: '+E(d.dealer||''))+(d.phone?' · '+E(d.phone):'')+(d.town?' · '+E(d.town):'')+' · sent '+E(dt(x.created_at))+'</div>'+
    '<div class="note" style="margin:2px 0">'+E(chkLine(x.vehicle_checks))+'</div>'+
-   '<div class="note adq-mot" style="margin:2px 0" data-adqmot="'+E(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''))+'|'+(+d.miles||0)+'">'+adqMotLine(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''),+d.miles||0)+'</div>'+
+   '<div class="note adq-mot" style="margin:2px 0" data-adqmot="'+E(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''))+'|'+(+d.miles||0)+'|'+E(d.make||'')+'">'+adqMotLine(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''),+d.miles||0,d.make||'')+'</div>'+
    '<div style="margin:6px 0">'+(F.length?F.map(function(f){return '<span class="badge" style="position:static;display:inline-block;margin:0 4px 4px 0;background:#c0392b">&#9888; '+E(f)+'</span>'}).join(''):'<span class="badge" style="position:static;display:inline-block;background:#2e7d32">&#10003; Our checks found nothing wrong</span>')+'</div>'+
    '<details><summary>Description</summary><p style="white-space:pre-wrap;margin:6px 0">'+E(d.desc||'(none)')+'</p></details>'+
    '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px"><button type="button" class="btn sm" data-adok="'+x.id+'">&#10003; Approve</button>'+
