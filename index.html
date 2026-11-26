@@ -8773,6 +8773,12 @@ function adPhotos(c){var u=window.GGuser,P=Array.isArray(c.photos)?c.photos:[];
 function adSave(k,c){var u=window.GGuser;c._saving=1;regExtras(c);if(c.chk&&c.chk.none){c.nochk=true;if(c.chk.wo&&!c.wo)c.wo=c.chk.wo;c.chk=undefined}
  adPhotos(c).then(function(){var d=adClean(c);return sb.from('adverts').insert({kind:k,data:d,check_id:c.chk&&c.chk.id||null,expires_at:c.exp?new Date(c.exp).toISOString():null}).select('id,status')}).then(function(r){c._saving=0;
   if(r.error||!r.data||!r.data[0])throw r.error||new Error('x');var st=r.data[0].status;c.dbid=r.data[0].id;c.ownerId=u.sbid;markReview(c,st,'');REVSEEN[c.dbid]=st;revKeep();adSig[c.dbid]=JSON.stringify(adClean(c));rerender();toast(st==='live'?'Your advert is saved and live.':'Your advert is saved and sent to our team for approval. It goes live once approved, usually within a few hours.')}).catch(function(e){c._saving=0;var m=e&&e.code==='P0001'&&e.message?String(e.message):'';toast(m?'Your advert was not published: '+m+'.':'Your advert was not saved, so other people cannot see it yet. Check your connection and add it again.',true)})}
+/* a dealer at the limit of their plan is told before filling in a new advert (the database also refuses it) */
+function planFull(){var u=window.GGuser;if(!realUser()||!u||u.role!=='dealer'||u.demo||!window.DPLAN)return null;var P=window.DPLAN(u.plan),n=0;
+ ['cars','vans'].forEach(function(k){var api=adApi(k);if(api)n+=api.list().filter(function(c){return c.dbid&&c.ownerId===u.sbid}).length});return n>=P.max?{P:P,n:n}:null}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#cars-add-btn,#vans-add-btn');if(!b)return;var f=planFull();if(!f)return;
+ e.preventDefault();e.stopImmediatePropagation();
+ if(confirm('Your '+f.P.n+' plan allows '+f.P.max+' adverts and you have '+f.n+' (sold cars still showing count until you take them down).\n\nMove to a bigger plan now?')){location.hash='dashboard';setTimeout(function(){try{window.MCpt.go('setup','plan')}catch(x){}setTimeout(function(){var d=document.querySelector('.dlchg');if(d){d.open=true;d.scrollIntoView({behavior:'smooth',block:'center'})}},600)},400)}},true);
 var adAdd={};
 ['cars','vans'].forEach(function(k){var api=adApi(k);if(!api||api.__sb)return;api.__sb=1;var add0=api.add,act0=api.act;adAdd[k]=function(c){add0.call(api,c)};
  api.add=function(c){add0.call(api,c);var u=window.GGuser;if(sb&&u&&u.sbid&&c&&!c.dbid&&!c._saving)adSave(k,c)};

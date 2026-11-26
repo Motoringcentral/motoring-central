@@ -367,6 +367,9 @@ DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
     adverts, new price from the next bill (or after the trial); a smaller plan needs the adverts to fit; yearly payers
     move down only at renewal. The dealer and the owners are emailed. The admin application card shows the plan.
     Database: supabase/migrations/20261126b_dealer_plans.sql and 20261126c_dealer_plan_name_fix.sql.
+  - ADVERT LIMIT ENFORCED (26 Nov): a dealer can have only as many adverts (live or waiting for approval) as their plan
+    allows. "List a car/van" says so and offers Change plan; the database refuses the extra advert too (trigger
+    adverts_a_plan_limit, migration 20261126e). Sold cars still showing count until taken down. Tested.
   - TRADE LISTINGS ARE NOT BUILT. "Sell a trade car or van", "Browse trade stock" and trade offers only exist in the
     visitor's browser: nothing is saved and other dealers cannot see a listing. The listings shown are samples. Trade
     sales are in the launch line-up, so they need building in the database (listings, offers, minimum price, 5 free a
