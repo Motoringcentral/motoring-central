@@ -7265,7 +7265,7 @@ function open(){var u=window.GGuser,k=want;build();
  if(u&&u.role!=='customer'){var ok=$(k+'-ok');if(ok){ok.textContent=u.role==='dealer'?'You are logged in as a dealer. Use the List button to add your stock.':'Private adverts are for private sellers. Log out of your partner account and use a customer account to sell your own vehicle.';ok.hidden=false}return}
  if(!u){pend=true;if(window.GGcustOpen)window.GGcustOpen('Create a free account to sell your car or van. It takes a minute.','new');return}
  place(k);var r=card.querySelector('[name="ps-type"][value="'+k+'"]');if(r&&!r.checked){r.checked=true;card._typed()}
- var cr=getC();if(cr){var rr=card.querySelector('[name="ps-type"][value="'+cr.kind+'"]');if(rr&&!rr.checked){rr.checked=true;card._typed()}card._stage(cr.chk?'C':'B');if(cr.chk&&$('ps-make')&&!$('ps-make').value){var fb=$('ps-regfind');if(fb)setTimeout(function(){fb.click()},50)}}else card._stage('A');
+ var cr=getC();if(cr){var rr=card.querySelector('[name="ps-type"][value="'+cr.kind+'"]');if(rr&&!rr.checked){rr.checked=true;card._typed()}card._stage(cr.chk?'C':'B');if(cr.chk&&$('ps-make')&&!$('ps-make').value){var tries=0;(function refill(){var fb=$('ps-regfind');if(fb)fb.click();else if(++tries<15)setTimeout(refill,300)})()}}else card._stage('A');
  card.hidden=false;var t=$('ps-town');if(t&&!t.value&&u.town)t.value=u.town;card.scrollIntoView({behavior:'smooth',block:'start'})}
 function start(k){want=k==='van'||k==='vans'?'vans':'cars';if((location.hash||'')!=='#'+want){location.hash=want;setTimeout(open,200)}else open()}
 document.addEventListener('click',function(e){if(!e.target.closest)return;
