@@ -561,9 +561,10 @@ garage payout statement, and an unsubscribe link for marketing emails (only serv
      "Automatic stock feed" (needs a CSV file at a web address; the spreadsheet template works if it is online).
    - Tell Claude anything that looks wrong.
 3. When real stock is listed: admin page > "Sample cars and vans" > Hide.
-4. Apply for the free DVSA MOT history API in the company name (Claude can draft the answers). When DVSA emails the
-   credentials, add DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY, DVSA_TOKEN_URL in Supabase > Edge Functions >
-   Secrets. Never paste them in chat.
+4. DVSA MOT history API: APPLIED FOR by the owner on 26 Nov 2026 (as The Motoring Central). The site is READY for it.
+   When the DVSA emails the credentials, add DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY and DVSA_TOKEN_URL in
+   Supabase > Edge Functions > Secrets (never in chat), then open the admin page: "Connected services" on the To do page
+   should say MOT history "Connected" (tap "Check again"; it re-checks at most every 10 minutes). Tell Claude to test it.
 5. Email Vehicle Data Global: the package name for the VDI Check; whether VAT is added to £2.34 to £3.00; written OK
    to show a history check summary on an advert for its whole life.
 6. Ask the accountant: VAT when we collect the partner's price on their behalf (we charge VAT only on our own fee),
@@ -666,10 +667,17 @@ To switch real history checks on (needs real card payments first, or private sel
   - Dealers: upload stock from a CSV (reg, price, mileage, plus optional columns), each car looked up and history
     checked; add photos afterwards from the advert page ("Add photos").
   - Dealer showroom page: ?dealer=<id>#cars, with a Share button; link shown on the dealer dashboard.
-  - MOT history on adverts (Supabase function "mot-history", London; only for regs of live adverts; kept for a day).
-    Sample MOT history shows on sample cars. NEEDS: apply for the free DVSA MOT history API in the company name, then add
-    DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY and DVSA_TOKEN_URL in Supabase > Edge Functions > Secrets.
-    DVSA revokes an API key that is not used for 90 days.
+  - MOT history on adverts (Supabase function "mot-history", London; kept for a day). Live adverts for anyone; adverts
+    waiting for approval for staff and the seller only. Sample MOT history shows on sample cars. Waiting for the DVSA
+    key (applied for 26 Nov; see item 4 of the owner's list). DVSA revokes an API key that is not used for 90 days.
+    Made ready on 26 Nov: recalls read correctly ("Yes"/"No"/"Unknown"; before, every vehicle would have shown a recall);
+    first MOT due date for new vehicles; buyers warned when the mileage went down between tests, when the advert's
+    mileage is below the last MOT reading, and about an outstanding safety recall; an "MOT check" line on each advert
+    waiting for approval (staff); a "Connected services" panel on the admin To do page (DVLA, Vehicle Data Global,
+    DVSA); private sellers' Find fills the MODEL from the MOT record (mode "vehicle", logged in, 20 a day each, counted
+    in mot_lookups, migration 20261126i). Tested without the key: all show "waiting for the DVSA key" and nothing breaks.
+    Note: automatic advert approval cannot wait for the MOT check (it happens when the advert is saved), so a clocked
+    car could go live automatically; buyers still see the warning on the advert.
 
 Owner to do in the Supabase dashboard:
 - Authentication > URL Configuration: set "Site URL" to https://preview.motoringcentral.co.uk (the live address at launch).
