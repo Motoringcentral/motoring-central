@@ -315,8 +315,13 @@ Delete all TEST accounts, adverts and trial records before launch.
   26 Nov (owner: "do both"):
   - FREE LOOK-UPS (DVLA only, ?basic=1) for MOT bookings, the customer's "My garage" and the MOT reminder "Find it for
     me". They show the make, year, fuel, colour, engine size and MOT, but no model or gearbox ("Not known" on an MOT
-    booking). Garage, mobile mechanic, auto electrician and locksmith bookings, dealers and sellers still use the paid
-    source too, because the mechanic needs the model for parts. If the DVLA fails, the paid source answers instead.
+    booking). Garage, mobile mechanic, auto electrician and locksmith bookings and dealers still use the paid source
+    too, because the mechanic needs the model for parts. If the DVLA fails, the paid source answers instead.
+  - PRIVATE SELLERS (26 Nov, owner asked): "Sell your car or van" Find now uses the free DVLA look-up too. It fills the
+    make, year, fuel, colour and car or van; the seller types the model and version and chooses the gearbox and body
+    type (from the V5C). Gearbox and body start unchosen and must be picked before publishing. Also fixed: coming back
+    to a paid, checked advert later now fills the details in again (it used to leave them empty). Tested on the live
+    preview with FV16WDY: only the free look-up was asked. Dealer listing forms still use the full look-up.
   - MY GARAGE: each saved vehicle shows its MOT (overdue, due soon, first MOT) and vehicle tax (taxed with due date, due
     soon, untaxed with a GOV.UK link, SORN), read again from the DVLA once a day. The home page line warns too.
   - The "remind me" box in My garage was only saved in the browser, so no reminders were ever sent from it. It now sets
