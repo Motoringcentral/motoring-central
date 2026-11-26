@@ -9010,7 +9010,7 @@ function motSample(c){var yr=+c.year||2018,first=yr+3,now=new Date().getFullYear
 /* warnings from an MOT history: mileage that went down between tests, an advertised mileage below the last MOT
    reading (both signs of clocking), and an outstanding safety recall */
 function motMake(x){x=String(x||'').toLowerCase().replace(/[^a-z]/g,'');return {vw:'volkswagen',merc:'mercedesbenz',mercedes:'mercedesbenz',chevy:'chevrolet',landrover:'landrover',rangerover:'landrover'}[x]||x}
-function motCheck(M,adMiles,adMake){var T=((M&&M.tests)||[]).slice().sort(function(a,b){return a.date<b.date?1:-1}),o={tests:T,drop:null,below:null,recall:!!(M&&M.recall==='yes'),none:!!(M&&!M.sample&&!T.length&&!M.make),other:null};
+function motCheck(M,adMiles,adMake){var T=((M&&M.tests)||[]).slice().sort(function(a,b){var x=a.at||a.date,y=b.at||b.date;return x<y?1:x>y?-1:0}),o={tests:T,drop:null,below:null,recall:!!(M&&M.recall==='yes'),none:!!(M&&!M.sample&&!T.length&&!M.make),other:null};
  /* the registration belongs to a different make from the one advertised (a mistyped or false registration) */
  var a=motMake(adMake),b=motMake(M&&M.make);if(a&&b&&a.indexOf(b.slice(0,4))!==0&&b.indexOf(a.slice(0,4))!==0)o.other=[M.make,M.model].filter(Boolean).join(' ');
  for(var i=0;i<T.length-1;i++){if(T[i].miles&&T[i+1].miles&&T[i].miles<T[i+1].miles-50){o.drop={from:T[i+1],to:T[i]};break}}

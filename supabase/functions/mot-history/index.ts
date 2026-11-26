@@ -49,7 +49,7 @@ function shapeOf(j: any) {
     const d = Array.isArray(t.defects) ? t.defects : [];
     const pick = (re: RegExp) => d.filter((x: any) => re.test(String(x.type || ""))).map((x: any) => String(x.text || "").slice(0, 200)).slice(0, 30);
     return {
-      date: day(t.completedDate) || "", result: /pass/i.test(String(t.testResult || "")) ? "pass" : "fail",
+      date: day(t.completedDate) || "", at: String(t.completedDate || "").slice(0, 25), result: /pass/i.test(String(t.testResult || "")) ? "pass" : "fail",
       miles: miles(t.odometerValue, t.odometerUnit), expiry: day(t.expiryDate),
       fail: pick(/fail|major|dangerous|prs/i), minor: pick(/^minor$/i), adv: pick(/advisory|user entered/i),
     };
