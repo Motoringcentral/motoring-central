@@ -306,6 +306,13 @@ Delete all TEST accounts, adverts and trial records before launch.
   DVLA VES API: KEY RECEIVED and added by the owner on 26 Nov 2026, in Vercel > Settings > Environment Variables as
   DVLA_API_KEY (all environments). The look-up (api/vrm.js) asks the DVLA and Vehicle Data Global at once and joins the
   answers. A new key, or a changed one, only works after the site is published again.
+  TESTED ON THE LIVE PREVIEW, 26 Nov: it is a LIVE key (not a test key). FV16WDY came back from the DVLA as a 2016 black
+  Ford diesel, MOT expired 14 Jun 2026, untaxed; BJ24JUC as a 2024 Ford van, first MOT due Mar 2027. Joined with Vehicle
+  Data Global it gave Fiesta Zetec TDCi, manual, hatchback. The dealer "Add a vehicle" form filled in from it. Made-up
+  plates are "not found". Answers in under a second.
+  What the DVLA adds that we did not have: road tax status and due date, the official MOT status, gross weight, Euro
+  status, the date of the latest logbook (V5C). These are in the look-up answer but NOT SHOWN anywhere on the site yet.
+  To save money: pages that do not need the model could ask the DVLA only (?basic=1, free). Owner to decide.
   Was: after company registration, apply for the DVLA Vehicle Enquiry Service API (free; make, colour, fuel, year, engine,
   tax and MOT status, NO model/variant/gearbox/body) and the DVSA MOT History API (free; adds model for cars that have
   had an MOT). Plan: DVLA + DVSA first, Vehicle Data Global only when those come back incomplete (new cars, variant).
