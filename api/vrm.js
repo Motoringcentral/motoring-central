@@ -252,7 +252,9 @@ module.exports = async (req, res) => {
   const usePaid = !!vdgKey && (!dvlaKey || debug || q.get('basic') !== '1') && !PAID.over(ip);
   if (!dvlaKey && !usePaid) return send(res, 429, { ok: false, error: 'too_many' });
   if (usePaid) PAID.add(ip);
-  const [D, P] = await Promise.all([dvlaKey ? askDvla(reg, dvlaKey) : null, usePaid ? askVdg(reg, vdgKey) : null]);
+  let [D, P] = await Promise.all([dvlaKey ? askDvla(reg, dvlaKey) : null, usePaid ? askVdg(reg, vdgKey) : null]);
+  // a basic look-up whose DVLA answer failed (not "not found"): ask the paid source instead, so the page still works
+  if (!P && D && D.error && vdgKey && !PAID.over(ip)) { PAID.add(ip); P = await askVdg(reg, vdgKey); }
   if (debug && P && P.raw) return send(res, 200, { ok: true, raw: P.raw, dvla: D && (D.raw || D) });
   const d = D && D.raw ? shapeDvla(reg, D.raw) : null;
   const p = P && P.raw ? shapeVdg(reg, P.raw) : null;
@@ -263,7 +265,7 @@ module.exports = async (req, res) => {
   if (out) {
     out.src = [d ? 'dvla' : '', p ? 'paid' : ''].filter(Boolean).join('+');
     // an answer with every source that was asked is kept for a day; a partial one is not kept
-    const whole = (!dvlaKey || d) && (!usePaid || p);
+    const whole = (!dvlaKey || d) && (!usePaid || p) && !(D && D.error);
     return send(res, 200, Object.assign({ ok: true, data: out }, notes), whole ? 'public, s-maxage=86400' : 'no-store');
   }
   // no answer: "not found" only when every source that answered said so

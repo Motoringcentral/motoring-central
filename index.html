@@ -987,7 +987,7 @@ body.hubon #totop{bottom:78px}
 #mc-garage .plate2{background:#FFD43B;color:#0B1C35;font:800 1.05rem var(--fh);padding:6px 10px;border-radius:6px;letter-spacing:.04em;white-space:nowrap}
 #mc-garage .vi{flex:1;min-width:180px}#mc-garage .vi small{display:block;color:var(--muted)}
 #mc-garage .due{display:inline-block;border-radius:20px;padding:2px 10px;font-size:.78rem;font-weight:800;margin-top:4px;background:#7ee2b8;color:#06202e}
-#mc-garage .due.soon{background:#FFD43B}#mc-garage .due.late{background:#ff9d94}
+#mc-garage .due.soon{background:#FFD43B}#mc-garage .due.late{background:#ff9d94}#mc-garage .due.off{background:var(--soft);color:var(--ink)}#mc-garage .dues{display:flex;gap:6px;flex-wrap:wrap}#mc-garage .vi small.tx{color:var(--ink);margin-top:4px}#mc-garage .vi small.tx a{font-weight:700}#mc-garage .vi small.chk{font-size:.75rem;margin-top:4px}
 #mc-garage .gadd{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
 #mc-garage .gadd input{flex:1;min-width:150px;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--soft);color:var(--ink);font:700 1rem var(--fb);text-transform:uppercase}
 #mc-garage .gadd input::placeholder{text-transform:none;font-weight:500;color:var(--muted)}
@@ -2998,7 +2998,7 @@ html.mc-demo-on #mc-mine{display:none!important}
   function vrmGo(){var f=$('unl-vrm');if(!f)return;var r=f.value.replace(/\s/g,'').toUpperCase();
     if(r.length<5){$('unl-err').textContent='Enter a full registration, for example AB12 CDE.';f.focus();return}
     var e=$('unl-err'),go=$('unl-go'),M=window.MCvrm;e.textContent='Checking '+fmt(r)+'\u2026';if(go)go.disabled=true;
-    (M&&M.ready?M.ready(r):Promise.resolve('off')).then(function(st){if(go)go.disabled=false;
+    (M&&M.ready?M.ready(r,{basic:window.GGmode==='mot'}):Promise.resolve('off')).then(function(st){if(go)go.disabled=false;
       if(st==='error'){e.textContent='Our vehicle check is not working right now. Please try again in a minute.';f.focus();return}
       if(st==='none'){e.textContent='We could not find that registration. Please check it and try again.';f.focus();return}
       e.textContent='';lastReg=r;unlock()})}
@@ -5737,22 +5737,24 @@ function sampleLookup(r){var py=plateYear(r);if(!py)return null;var h=0;for(var 
  var due=new Date(py.year+3,py.late?8:2,1),now=new Date();while(due<now)due.setFullYear(due.getFullYear()+1);due.setDate(1+h%27);
  o.mot=due.toISOString().slice(0,10);o.firstMot=new Date(py.year+3,0,1)>now;o.sample=!KNOWN[r];return o}
 /* live look-up through /api/vrm (Vehicle Data Global). Until VDG_API_KEY is set in Vercel, the sample data above is used. */
-var LIVE={},liveOn=null,probe=null;
+var LIVE={},FULL={},liveOn=null,probe=null;
 function nreg(r){return String(r||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
 function checkLive(){if(probe)return probe;if(location.protocol==='file:'||!window.fetch){liveOn=false;return probe=Promise.resolve(false)}
  probe=fetch('/api/vrm?probe=1',{headers:{Accept:'application/json'}}).then(function(r){return r.ok?r.json():{}}).then(function(j){liveOn=!!(j&&j.live);return liveOn},function(){liveOn=false;return false});return probe}
 function motText(v){if(!v.mot)return 'Not available';var d=new Date(v.mot+'T12:00:00');if(isNaN(d))return 'Not available';var t=d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
  if(v.firstMot)return 'First MOT due '+d.toLocaleDateString('en-GB',{month:'short',year:'numeric'});return (d<new Date()?'Expired ':'Valid to ')+t}
-/* resolves to 'live' (found), 'none' (no such vehicle), 'off' (live look-ups not switched on) or 'error' */
-function ready(r){r=nreg(r);if(LIVE[r]!==undefined)return Promise.resolve(LIVE[r]?'live':'none');
+/* resolves to 'live' (found), 'none' (no such vehicle), 'off' (live look-ups not switched on) or 'error'.
+   opt.basic: the page does not need the model, gearbox or body, so only the DVLA is asked (free). A later full look-up
+   of the same registration asks again, so the model can be filled in. */
+function ready(r,opt){r=nreg(r);var basic=!!(opt&&opt.basic);if(LIVE[r]!==undefined&&(basic||FULL[r]))return Promise.resolve(LIVE[r]?'live':'none');
  return checkLive().then(function(on){if(!on)return 'off';
-  return fetch('/api/vrm?reg='+encodeURIComponent(r),{headers:{Accept:'application/json'}}).then(function(res){
+  return fetch('/api/vrm?reg='+encodeURIComponent(r)+(basic?'&basic=1':''),{headers:{Accept:'application/json'}}).then(function(res){
    return res.json().catch(function(){return {}}).then(function(j){
-    if(res.ok&&j.ok&&j.data){var v=j.data;if(!v.kind)v.kind=/van|pickup|panel|lcv/i.test(v.body||'')?'Van':'Car';v.motText=motText(v);v.live=true;v.sample=false;LIVE[r]=v;return 'live'}
-    if(res.status===404&&j.error==='not_found'){LIVE[r]=null;return 'none'}
+    if(res.ok&&j.ok&&j.data){var v=j.data;if(!v.kind)v.kind=/van|pickup|panel|lcv/i.test(v.body||'')?'Van':'Car';v.motText=motText(v);v.live=true;v.sample=false;LIVE[r]=v;if(!basic)FULL[r]=1;return 'live'}
+    if(res.status===404&&j.error==='not_found'){LIVE[r]=null;if(!basic)FULL[r]=1;return 'none'}
     if(res.status===400)return 'none';
     if(res.status===503){liveOn=false;return 'off'}
-    return 'error'})},function(){return 'error'})})}
+    return LIVE[r]?'live':'error'})},function(){return LIVE[r]?'live':'error'})})}
 function live(r){return ready(r)}
 function lookup(r){r=nreg(r);if(LIVE[r]!==undefined){var v=LIVE[r];if(!v)return null;var o={};Object.keys(v).forEach(function(k){o[k]=v[k]});var py=plateYear(r);if(!o.year&&py)o.year=py.year;return o}return sampleLookup(r)}
 checkLive();
@@ -6515,36 +6517,58 @@ function mine(){var u=window.GGuser;if(!isCust())return null;var k=String(u.emai
 function plate(r){r=String(r||'').toUpperCase().replace(/[^A-Z0-9]/g,'');return r.length>4?r.slice(0,4)+' '+r.slice(4):r}
 function days(d){return Math.ceil((new Date(d+'T23:59:59')-new Date())/864e5)}
 function nice(d){return new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
+/* vehicle tax, from the DVLA. Tax does not pass to a new keeper, so this is only shown for the customer's own vehicles */
+var TAXURL='https://www.gov.uk/vehicle-tax';
+function taxHtml(v){var t=String(v.tax||'').toLowerCase(),go=' <a href="'+TAXURL+'" target="_blank" rel="noopener">Tax it on GOV.UK</a>';if(!t)return '';
+ if(t==='sorn')return '<span class="due off">SORN: declared off the road</span>';
+ if(t==='untaxed')return '<span class="due late">Untaxed</span><small class="tx">It must be taxed before it is driven or kept on a public road.'+go+'</small>';
+ if(t==='taxed'&&v.taxDue){var n=days(v.taxDue);if(n<0)return '<span class="due late">Tax was due '+nice(v.taxDue)+'</span><small class="tx">'+go+'</small>';
+  return '<span class="due'+(n<=30?' soon':'')+'">'+(n<=30?'Tax due in '+n+' day'+(n===1?'':'s'):'Tax due '+nice(v.taxDue))+'</span>'+(n<=30?'<small class="tx">'+go+'</small>':'')}
+ if(t.indexOf('not taxed')===0)return '<span class="due off">Not taxed for road use</span>';
+ return t==='taxed'?'<span class="due">Taxed</span>':''}
+function checkedHtml(v){if(!v.at)return '';var d=new Date(v.at),today=new Date().toDateString()===d.toDateString();return '<small class="chk">MOT and tax checked with the DVLA '+(today?'today':'on '+d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}))+'</small>'}
 function dueHtml(v){if(!v.mot)return '<span class="due">MOT date not known yet</span>';var n=days(v.mot);return '<span class="due'+(n<0?' late':n<=30?' soon':'')+'">'+(n<0?'MOT overdue by '+(-n)+' day'+(n===-1?'':'s'):n<=30?'MOT due in '+n+' day'+(n===1?'':'s'):'MOT in date')+'</span>'}
 var gerr='';
-function garageHtml(){var g=mine();if(!g)return '';var h='<div class="card" id="mc-garage"><h2>My garage</h2><p class="note" style="margin:0 0 6px">Save your vehicles and we will remind you before each MOT is due. Booking is quicker too, because we already know your car.</p>';
+function garageHtml(){var g=mine();if(!g)return '';var h='<div class="card" id="mc-garage"><h2>My garage</h2><p class="note" style="margin:0 0 6px">Save your vehicles and we will remind you before each MOT and vehicle tax is due. Booking is quicker too, because we already know your car.</p>';
  if(!g.v.length)h+='<p class="note">No vehicles saved yet. Add your registration below.</p>';
- g.v.forEach(function(v,i){h+='<div class="veh"><span class="plate2">'+esc(v.reg)+'</span><div class="vi"><b>'+esc(v.make+' '+v.model)+'</b><small>'+esc([v.year,v.fuel,v.col].filter(Boolean).join(', '))+'</small>'+(v.mot?'<small>MOT due '+nice(v.mot)+'</small>':'')+dueHtml(v)+'</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn" data-gbook="mot:'+i+'">Book MOT</button><button type="button" class="btn ghost" data-gbook="mobile:'+i+'">Book a service</button><button type="button" class="btn ghost" data-gdel="'+i+'" aria-label="Remove '+esc(v.reg)+'">Remove</button></div></div>'});
+ g.v.forEach(function(v,i){h+='<div class="veh"><span class="plate2">'+esc(v.reg)+'</span><div class="vi"><b>'+esc(v.make+' '+v.model)+'</b><small>'+esc([v.year,v.fuel,v.col].filter(Boolean).join(', '))+'</small>'+(v.mot?'<small>'+(v.firstMot?'First MOT due ':'MOT due ')+nice(v.mot)+'</small>':'')+'<span class="dues">'+dueHtml(v)+taxHtml(v)+'</span>'+checkedHtml(v)+'</div><div style="display:flex;gap:6px;flex-wrap:wrap"><button type="button" class="btn" data-gbook="mot:'+i+'">Book MOT</button><button type="button" class="btn ghost" data-gbook="mobile:'+i+'">Book a service</button><button type="button" class="btn ghost" data-gdel="'+i+'" aria-label="Remove '+esc(v.reg)+'">Remove</button></div></div>'});
  h+='<label class="f" for="g-reg" style="display:block;font-weight:700;margin:12px 0 4px">Add a vehicle</label><div class="gadd"><input type="text" id="g-reg" maxlength="8" placeholder="Registration, e.g. LM19 XYZ" autocomplete="off"><button type="button" class="btn" id="g-add">Add vehicle</button></div><p class="gerr" id="g-err" role="alert">'+esc(gerr)+'</p>'
- +'<label class="chk1"><input type="checkbox" id="g-rem"'+(g.rem?' checked':'')+'><span>Remind me by email and text 4 weeks and 1 week before each MOT is due</span></label>'
+ +'<label class="chk1"><input type="checkbox" id="g-rem"'+(g.rem?' checked':'')+'><span>Remind me by email 4 weeks and 1 week before each MOT and vehicle tax is due</span></label>'
  +(window.MCvrm&&window.MCvrm.isLive&&window.MCvrm.isLive()?'':'<p class="note" style="margin:8px 0 0;font-size:.78rem">Preview: vehicle details and MOT dates are sample data. The live site reads them from the official DVLA and DVSA records.</p>')+'</div>';gerr='';return h}
 function drawGarage(){var body=$('acc-body');if(!body||!isCust()||location.hash!=='#account')return;var old=$('mc-garage'),html=garageHtml();
- if(old){old.outerHTML=html}else{var anchor=$('hub-acct')||body.querySelector('.card');if(anchor)anchor.insertAdjacentHTML('afterend',html)}}
+ if(old){old.outerHTML=html}else{var anchor=$('hub-acct')||body.querySelector('.card');if(anchor)anchor.insertAdjacentHTML('afterend',html)}refreshGarage()}
+/* once a day, read each saved vehicle's MOT and tax again from the DVLA (free), and pass the dates on to its reminder */
+var GR=0,TRIED={},REMT={};
+function keepFacts(v,d){if(d.mot)v.mot=d.mot;v.firstMot=!!d.firstMot;v.tax=d.tax||'';v.taxDue=d.taxDue||'';v.motStatus=d.motStatus||'';if(!v.col&&d.col)v.col=d.col;v.at=Date.now()}
+function remSave(v,asked){var g=mine();if(!g||!g.rem||!window.MCrem)return;if(!asked&&REMT[v.reg]&&Date.now()-REMT[v.reg]<36e5)return;REMT[v.reg]=Date.now();
+ window.MCrem.save(v,!!v.remOn).then(function(x){if(x==='ok'&&!v.remOn){v.remOn=1;gsave()}})}
+function refreshGarage(){var g=mine(),M=window.MCvrm;if(GR||!g||!g.v.length||!M||!M.ready||!(M.isLive&&M.isLive()))return;var now=Date.now();
+ var todo=g.v.filter(function(v){return (!v.at||now-v.at>20*36e5)&&!(TRIED[v.reg]&&now-TRIED[v.reg]<36e5)});
+ g.v.forEach(function(v){if(!v.remOn&&todo.indexOf(v)<0)remSave(v)});if(!todo.length)return;GR=1;
+ todo.reduce(function(p,v){return p.then(function(){var r=v.reg.replace(/\s/g,'');TRIED[v.reg]=Date.now();return M.ready(r,{basic:true}).then(function(st){var d=st==='live'?M.lookup(r):null;if(d){keepFacts(v,d);remSave(v)}})})},Promise.resolve())
+  .then(function(){GR=0;gsave();drawGarage();paintCar()},function(){GR=0})}
 if($('acc-body'))new MutationObserver(function(){if(!$('mc-garage'))try{drawGarage()}catch(e){}}).observe($('acc-body'),{childList:true});
 function addVeh(){var raw0=String(($('g-reg')||{}).value||'').toUpperCase().replace(/[^A-Z0-9]/g,''),M=window.MCvrm;
- if(raw0.length>=5&&M&&M.ready){var ab=$('g-add');if(ab)ab.disabled=true;M.ready(raw0).then(function(st){if(ab)ab.disabled=false;
+ if(raw0.length>=5&&M&&M.ready){var ab=$('g-add');if(ab)ab.disabled=true;M.ready(raw0,{basic:true}).then(function(st){if(ab)ab.disabled=false;
   if(st==='error'){gerr='Our vehicle check is not working right now. Please try again in a minute.';drawGarage();var i=$('g-reg');if(i)i.focus();return}addVeh2()});return}
  addVeh2()}
 function addVeh2(){var inp=$('g-reg'),raw=String(inp.value||'').toUpperCase().replace(/[^A-Z0-9]/g,''),g=mine(),o=raw.length>=5&&window.MCvrm?window.MCvrm.lookup(raw):null;
  if(!o){gerr='Enter a full UK registration, for example LM19 XYZ.';drawGarage();$('g-reg').focus();return}
  if(g.v.some(function(v){return v.reg.replace(/\s/g,'')===raw})){gerr='That vehicle is already in your garage.';drawGarage();$('g-reg').focus();return}
  if(g.v.length>=6){gerr='You can save up to 6 vehicles.';drawGarage();return}
- g.v.push({reg:plate(raw),make:o.make||'',model:o.model||'',year:o.year||'',fuel:o.fuel||'',col:o.col||o.colour||'',mot:o.mot});gsave();drawGarage();paintCar();var b=document.querySelector('#mc-garage .veh:last-of-type .btn');if(b)b.focus()}
+ var nv={reg:plate(raw),make:o.make||'',model:o.model||'',year:o.year||'',fuel:o.fuel||'',col:o.col||o.colour||'',mot:o.mot};if(o.live)keepFacts(nv,o);g.v.push(nv);gsave();remSave(nv,true);drawGarage();paintCar();var b=document.querySelector('#mc-garage .veh:last-of-type .btn');if(b)b.focus()}
 function book(mode,v){window.GGgarageReg=v.reg;if(location.hash!=='#drivers')location.hash='drivers';setTimeout(function(){var t=document.querySelector('.qk[data-svc="'+mode+'"]');if(t)t.click()},250)}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#g-add,[data-gdel],[data-gbook],#near-carbook');if(!t)return;var g=mine();if(!g)return;
  if(t.id==='g-add'){addVeh();return}
  if(t.id==='near-carbook'){book('mot',g.v[0]);return}
- if(t.hasAttribute('data-gdel')){g.v.splice(+t.getAttribute('data-gdel'),1);gsave();drawGarage();paintCar();var r=$('g-reg');if(r)r.focus();return}
+ if(t.hasAttribute('data-gdel')){var gone=g.v.splice(+t.getAttribute('data-gdel'),1)[0];if(gone&&window.MCrem)window.MCrem.drop([gone.reg]);gsave();drawGarage();paintCar();var r=$('g-reg');if(r)r.focus();return}
  var p=t.getAttribute('data-gbook').split(':');book(p[0],g.v[+p[1]])});
-document.addEventListener('change',function(e){if(e.target.id==='g-rem'){var g=mine();if(g){g.rem=e.target.checked;gsave()}}});
+document.addEventListener('change',function(e){if(e.target.id==='g-rem'){var g=mine();if(!g)return;g.rem=e.target.checked;
+ if(g.rem)g.v.forEach(function(v){v.remOn=0;remSave(v,true)});else{g.v.forEach(function(v){v.remOn=0});if(window.MCrem)window.MCrem.drop(g.v.map(function(v){return v.reg}))}gsave()}});
 document.addEventListener('keydown',function(e){if(e.key==='Enter'&&e.target.id==='g-reg'){e.preventDefault();addVeh()}});
 function paintCar(){var el=$('near-car');if(!el)return;var g=isCust()?mine():null,v=g&&g.v.slice().sort(function(a,b){return days(a.mot)-days(b.mot)})[0];
- if(!v){el.hidden=true;return}var n=days(v.mot);el.hidden=false;el.innerHTML='Your '+esc(v.make+' '+v.model)+' ('+esc(v.reg)+'): '+(!v.mot?'MOT date not known yet':n<0?'<b>MOT overdue</b>':'MOT due '+nice(v.mot)+(n<=30?' <b>('+n+' days)</b>':''))+'.<button type="button" id="near-carbook">Book MOT</button>';
+ if(!v){el.hidden=true;return}var n=days(v.mot),t=String(v.tax||'').toLowerCase(),tn=v.taxDue?days(v.taxDue):null,tx=t==='untaxed'?' <b>Untaxed.</b>':t==='taxed'&&tn!=null&&tn<=30?(tn<0?' <b>Tax was due '+nice(v.taxDue)+'.</b>':' <b>Tax due in '+tn+' day'+(tn===1?'':'s')+'.</b>'):'';
+ el.hidden=false;el.innerHTML='Your '+esc((v.make+' '+v.model).trim())+' ('+esc(v.reg)+'): '+(!v.mot?'MOT date not known yet':n<0?'<b>MOT overdue</b>':'MOT due '+nice(v.mot)+(n<=30?' <b>('+n+' days)</b>':''))+'.'+tx+'<button type="button" id="near-carbook">Book MOT</button>';
  if(g.v[0]!==v){g.v.splice(g.v.indexOf(v),1);g.v.unshift(v)}}
 /* fill the saved registration and postcode into the booking steps */
 function fillReg(){var r=window.GGgarageReg||'';if(!r)return;var el=$('unl-vrm');if(el&&el.offsetParent&&!el.value&&!el.getAttribute('data-pf')){el.setAttribute('data-pf','1');el.value=r;el.dispatchEvent(new Event('input',{bubbles:true}))}}
@@ -9449,7 +9473,7 @@ function remHtml(id,inCard){var u=window.GGuser,em=u&&u.role==='customer'&&u.ema
 function nreg(r){return String(r||'').toUpperCase().replace(/[^A-Z0-9]/g,'')}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.mr-find');if(!b)return;var f=b.closest('form'),reg=nreg(f.querySelector('.mr-reg').value),hint=f.querySelector('.mr-hint'),M=window.MCvrm;
  if(reg.length<2){f.querySelector('.mr-err').textContent='Enter the registration first.';return}b.disabled=true;b.textContent='Looking…';
- (M&&M.checkLive?M.checkLive():Promise.resolve(false)).then(function(on){if(!on)return 'off';return M.ready(reg)}).then(function(st){b.disabled=false;b.textContent='Find it for me';var d=st==='live'?M.lookup(reg):null;
+ (M&&M.checkLive?M.checkLive():Promise.resolve(false)).then(function(on){if(!on)return 'off';return M.ready(reg,{basic:true})}).then(function(st){b.disabled=false;b.textContent='Find it for me';var d=st==='live'?M.lookup(reg):null;
   if(d&&d.mot){f.querySelector('.mr-due').value=String(d.mot).slice(0,10);hint.textContent=(d.make?[d.make,d.model].filter(Boolean).join(' ')+': ':'')+(d.firstMot?'first MOT due ':'MOT due ')+dd(d.mot)+'. Check it is right.'}
   else hint.innerHTML=(st==='none'?'We could not find that registration. ':'We could not look it up just now. ')+'Check the date free on <a href="https://www.gov.uk/check-mot-history" target="_blank" rel="noopener">GOV.UK</a> and type it in.'},function(){b.disabled=false;b.textContent='Find it for me'})});
 document.addEventListener('submit',function(e){var f=e.target;if(!f.classList||!f.classList.contains('mr-f'))return;e.preventDefault();var er=f.querySelector('.mr-err'),ok=f.querySelector('.mr-ok'),btn=f.querySelector('button[type=submit]');
@@ -9462,11 +9486,20 @@ document.addEventListener('submit',function(e){var f=e.target;if(!f.classList||!
   f.querySelector('.mr-reg').value='';f.querySelector('.mr-due').value='';remAt=0;drawRemList()},function(){btn.disabled=false;er.textContent='That did not save. Check your connection and try again.'})});
 var REM=null,remAt=0;
 function drawRemList(){var u=window.GGuser;[].forEach.call(document.querySelectorAll('.motrem .mr-list'),function(box){if(!realUser()){box.innerHTML='';return}
- if(!REM||Date.now()-remAt>60000){remAt=Date.now();sb.from('mot_reminders').select('id,reg,due,stopped').eq('user_id',u.sbid).order('due').then(function(r){if(r.error)return;REM=r.data||[];drawRemList()});if(!REM)return}
- var h=REM.filter(function(x){return !x.stopped}).map(function(x){return '<li><b>'+E(x.reg)+'</b> MOT due '+E(dd(x.due))+' <button type="button" class="pv-link" data-mrdel="'+x.id+'">Stop</button></li>'}).join('');box.innerHTML=h?'<p class="note" style="margin:10px 0 4px">Your reminders</p><ul class="mr-ul">'+h+'</ul>':''})}
+ if(!REM||Date.now()-remAt>60000){remAt=Date.now();sb.from('mot_reminders').select('id,reg,due,tax_due,stopped').eq('user_id',u.sbid).order('due').then(function(r){if(r.error)return;REM=r.data||[];drawRemList()});if(!REM)return}
+ var h=REM.filter(function(x){return !x.stopped}).map(function(x){return '<li><b>'+E(x.reg)+'</b> '+[x.due?'MOT due '+E(dd(x.due)):'',x.tax_due?'tax due '+E(dd(x.tax_due)):''].filter(Boolean).join(', ')+' <button type="button" class="pv-link" data-mrdel="'+x.id+'">Stop</button></li>'}).join('');box.innerHTML=h?'<p class="note" style="margin:10px 0 4px">Your reminders</p><ul class="mr-ul">'+h+'</ul>':''})}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-mrdel]');if(!b||!realUser())return;b.disabled=true;sb.from('mot_reminders').delete().eq('id',+b.getAttribute('data-mrdel')).then(function(r){if(r.error){b.disabled=false;toast('That did not work. Try again.',true);return}remAt=0;REM=null;toast('Reminder stopped.');drawRemList()})});
+/* "My garage": one reminder per saved vehicle, for its MOT and its vehicle tax. Made when the customer asks (the box
+   is ticked when they add a vehicle, or they tick it). auto: the page is only passing on dates it read from the DVLA,
+   so a reminder is never made or restarted that way. A reminder the customer stopped from an email stays stopped. */
+window.MCrem={
+ save:function(v,auto){var u=window.GGuser;if(!realUser()||u.role!=='customer'||u.demo)return Promise.resolve(null);var reg=nreg(v.reg);
+  return ready.then(function(){return auto?null:sb.from('mot_reminders').select('stopped').eq('user_id',u.sbid).eq('reg',reg).maybeSingle()}).then(function(x){var stopped=!!(x&&x.data&&x.data.stopped);
+   return sb.rpc('add_mot_reminder',{p_reg:reg,p_email:u.email,p_due:v.mot||null,p_tax_due:v.taxDue||null,p_auto:!!(auto||stopped)})}).then(function(r){remAt=0;REM=null;drawRemList();return r&&!r.error?r.data:null},function(){return null})},
+ drop:function(regs){var u=window.GGuser;regs=(regs||[]).map(nreg).filter(Boolean);if(!realUser()||u.role!=='customer'||!regs.length)return Promise.resolve();
+  return ready.then(function(){return sb.from('mot_reminders').delete().eq('user_id',u.sbid).in('reg',regs)}).then(function(){remAt=0;REM=null;drawRemList()},function(){})}};
 (function(){var tok=null;try{tok=new URLSearchParams(location.search).get('motstop')}catch(e){}if(!tok||!/^[0-9a-f-]{36}$/i.test(tok))return;
- ready.then(function(){return sb.rpc('stop_mot_reminder',{p_token:tok})}).then(function(r){toast(r&&r.data?'MOT reminders stopped for that vehicle.':'Those reminders were already stopped.');try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}})})();
+ ready.then(function(){return sb.rpc('stop_mot_reminder',{p_token:tok})}).then(function(r){toast(r&&r.data?'Reminders stopped for that vehicle.':'Those reminders were already stopped.');try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}})})();
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-mrhome]');if(!b)return;if(!$('mr-home'))$('mr-promo').insertAdjacentHTML('afterend',remHtml('mr-home',false));var r=document.querySelector('#mr-home .mr-reg');if(r){r.focus();r.scrollIntoView({behavior:'smooth',block:'center'})}});
 function placeRem(){var m=$('mot');if(m&&!$('mr-mot'))m.insertAdjacentHTML('beforeend',remHtml('mr-mot',true));
  var u=window.GGuser,ab=$('acc-body');if(ab&&u&&u.role==='customer'&&location.hash==='#account'&&ab.firstChild&&!$('mr-acc'))ab.insertAdjacentHTML('beforeend',remHtml('mr-acc',false));
