@@ -499,7 +499,7 @@ async function makePdf(){
  const need=h=>{if(y+h>282){doc.addPage();y=16}};
  // header
  doc.setFillColor(...SKY);doc.rect(0,0,W,34,'F');doc.setFillColor(...NAVY);doc.rect(0,34,W,2.5,'F');doc.setFillColor(...YEL);doc.rect(0,34,50,2.5,'F');
- const logo=await logoPng();if(logo)doc.addImage(logo,'PNG',M,6,22,22);
+ const logo=await logoPng();if(logo)doc.addImage(logo,'PNG',M,6,22,22,undefined,'FAST');
  doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');doc.setFontSize(7);doc.text('T H E',M+26,11);
  doc.setFontSize(17);doc.text('MOTORING',M+26,18);doc.setFillColor(...NAVY);doc.roundedRect(M+26,20.5,30,6.5,1.2,1.2,'F');doc.setTextColor(255,255,255);doc.setFontSize(8.5);doc.text('C E N T R A L',M+28.5,25.1);
  doc.setTextColor(...NAVY);doc.setFontSize(15);doc.text('Pre-work Vehicle Inspection',W-M,16,{align:'right'});
@@ -511,7 +511,7 @@ async function makePdf(){
  H('Customer & vehicle');kv([['Registration',(S.f.vrm||'').toUpperCase()],['Mileage',S.f.mileage],['Make & model',S.f.make],['Colour',S.f.colour],['Year',S.f.year],['Fuel type',S.f.fuelT],['Gearbox',S.f.gear],['Customer',S.f.cname],['Phone',S.f.cphone],['Fuel / charge',S.seg.fuel]]);
  // damage
  H('Existing damage',60);
- const dimg=await svgPng();need(92);const top=y;doc.addImage(dimg,'PNG',M,y,50,90);
+ const dimg=await svgPng();need(92);const top=y;doc.addImage(dimg,'PNG',M,y,50,90,undefined,'FAST');
  let ly=y+3;const lx=M+56;doc.setFontSize(9);
  if(!S.dmg.length){doc.setFont('helvetica','bold');doc.setTextColor(...NAVY);doc.text(S.f.nodamage?'No visible damage found on the bodywork.':'No damage recorded.',lx,ly)}
  S.dmg.forEach((d,i)=>{if(ly>top+86&&ly+6>282){doc.addPage();ly=16}doc.setFillColor(...hex(COLORS[d.type]));doc.circle(lx+2.5,ly-1.2,2.6,'F');doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7.5);doc.text(String(i+1),lx+2.5,ly,{align:'center'});doc.setTextColor(...NAVY);doc.setFontSize(9);const line=`${d.where} – ${d.type}${d.size?' – '+d.size:''}`;doc.text(line,lx+7,ly);if(d.note){doc.setFont('helvetica','normal');doc.setTextColor(...MUT);const nl=doc.splitTextToSize(d.note,W-M-lx-7);doc.text(nl,lx+7,ly+4.5);ly+=4.5*nl.length}ly+=7});
@@ -522,7 +522,7 @@ async function makePdf(){
  if(S.f.notes){H('Notes');doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(...NAVY);const nl=doc.splitTextToSize(S.f.notes,W-2*M);nl.forEach(l=>{need(5);doc.text(l,M,y);y+=4.6});y+=3}
  // signatures
  H('Signatures',40);need(40);const sw=(W-2*M-8)/2;
- [['Technician',S.sig.sigTech,S.f.tech],['Customer',S.sig.sigCust,S.f.cname]].forEach(([lab,img,nm],j)=>{const x=M+j*(sw+8);doc.setDrawColor(...hex('#D6E2EE'));doc.setLineWidth(.3);doc.roundedRect(x,y,sw,26,2,2);if(img)doc.addImage(img,'PNG',x+2,y+1,sw-4,24);else if(j===1&&S.f.absent){doc.setFontSize(9);doc.setTextColor(...MUT);doc.text('Customer not present – photo record taken',x+4,y+14)}doc.setFontSize(8.5);doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');doc.text(`${lab}: ${nm||''}`,x,y+31)});
+ [['Technician',S.sig.sigTech,S.f.tech],['Customer',S.sig.sigCust,S.f.cname]].forEach(([lab,img,nm],j)=>{const x=M+j*(sw+8);doc.setDrawColor(...hex('#D6E2EE'));doc.setLineWidth(.3);doc.roundedRect(x,y,sw,26,2,2);if(img)doc.addImage(img,'PNG',x+2,y+1,sw-4,24,undefined,'FAST');else if(j===1&&S.f.absent){doc.setFontSize(9);doc.setTextColor(...MUT);doc.text('Customer not present – photo record taken',x+4,y+14)}doc.setFontSize(8.5);doc.setTextColor(...NAVY);doc.setFont('helvetica','bold');doc.text(`${lab}: ${nm||''}`,x,y+31)});
  y+=37;doc.setFont('helvetica','normal');doc.setFontSize(8);doc.setTextColor(...MUT);
  const leg=doc.splitTextToSize((S.f.agree?'Both parties agreed this is a true record of the vehicle condition before work started. ':'')+'This record shows damage and faults already on the vehicle before the partner began work. Damage not listed is not admitted as pre-existing. Warranty for work carried out is provided by the partner. The Motoring Central is not responsible for the work carried out.',W-2*M);need(leg.length*4);doc.text(leg,M,y);y+=leg.length*4;
  // photos
