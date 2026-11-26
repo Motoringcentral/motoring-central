@@ -264,6 +264,14 @@ RECOVERY FLEET AND EXTRAS (built 22 Nov 2026, tested end to end on preview)
 - Terms updated (customer "Extras on the day", partner "Recovery prices and extras").
 - Test partner TEST Recovery Dartford (vimen+recovery@). Delete before launch.
 
+CHECKED ON 26 NOV 2026 (7am), before carrying on. The website has not changed since the 23 Nov save: the code here, the
+code on GitHub and the live preview page are identical, and no other branch has newer work. No new partners, bookings,
+demo requests, messages or accounts since then (only automatic reminder emails went out). ONE THING WAS DONE ELSEWHERE:
+on 23 Nov (3.29pm) a "prospects" list was added to the database from another Claude conversation: 22,974 MOT stations
+from the DVSA list, with a do-not-email list and a contact log (staff only; not readable without a staff log-in, checked).
+It is now recorded in supabase/migrations/20261123e_partner_prospects.sql. Nothing on the website uses it yet: there is
+no admin screen for it, no emails have been found or sent, and every row is still "new". ASK THE OWNER what he wants
+done with it. The owner's own staff account now has two-step log-in set up.
 WHERE WE STOPPED (23 Nov 2026, about 3.15am). Owner went to bed; pick up when he is up. Everything is on GitHub and live
 on the preview site.
 DONE ON 22 TO 23 NOV (details under "Done"): the partner recruitment pack; the demo for each trade, which is now sent on
@@ -276,8 +284,7 @@ FOR THE OWNER TO DECIDE OR DO:
   the links he emails. Each demo is sent by hand from the admin page; it could send itself the moment they ask.
 - Two TEST demo requests (DEM-00001 valet, DEM-00003 dealer) are in the admin list. No delete button: they go with the
   other test data before launch.
-- Still waiting from before: two-step log-in on his own staff account; leaked password protection in Supabase
-  (Authentication > Passwords); VDG_API_KEY; the DVLA key; the RAC decision; company registration; Stripe.
+- Still waiting from before: leaked password protection in Supabase (Authentication > Passwords); VDG_API_KEY; the DVLA key; the RAC decision; company registration; Stripe.
 NEXT FOR CLAUDE: test the untested dealer features with a real dealer account (list under DEALER SALES INVOICING below:
 spreadsheet upload, stock feed, showroom page and website embed, trade listings, PDI, changing plan). The solicitor and
 accountant briefs do not yet mention: the EV price per kWh, the EV refund sentence in [square brackets], and the privacy
