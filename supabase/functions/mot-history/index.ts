@@ -4,6 +4,8 @@
 // - {mode:"vehicle"}: the make and model only (no history), for a logged-in person typing their own registration
 //   when they list a vehicle. At most 20 a day per person.
 // - {probe:true}: whether the DVSA details are in place and accepted (true/false only, never the details).
+// - {sweep:true} with the private x-cron-key (from the database, see migration 20261126j): adverts waiting for automatic
+//   approval are checked against their MOT record. Clean -> live; a warning -> they wait for our team with the reason.
 // Answers are kept for a day in mot_cache.
 // Secrets (Supabase > Edge Functions > Secrets), from the DVSA email with your credentials:
 //   DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY, DVSA_TOKEN_URL (optional: DVSA_SCOPE)
@@ -64,6 +66,37 @@ function shapeOf(j: any) {
   };
 }
 
+// the MOT record for one registration: from the day's copy, or the DVSA ({ok:false} if the DVSA could not answer)
+async function getMot(db: any, reg: string): Promise<{ ok: boolean; mot?: any; error?: string }> {
+  const { data: c } = await db.from("mot_cache").select("data,fetched_at").eq("reg", reg).maybeSingle();
+  if (c && Date.now() - Date.parse(c.fetched_at) < 864e5) return { ok: true, mot: c.data };
+  if (!configured()) return { ok: false, error: "not_configured" };
+  try {
+    const r = await ask(reg);
+    if (r.status === 404) { const mot = { first: null, due: null, recall: "unknown", make: "", model: "", tests: [] }; await db.from("mot_cache").upsert({ reg, data: mot, fetched_at: new Date().toISOString() }); return { ok: true, mot }; }
+    if (r.status !== 200 || !r.body) return { ok: false, error: r.status === 401 || r.status === 403 ? "dvsa_refused" : "upstream_" + r.status };
+    const mot = shapeOf(Array.isArray(r.body) ? r.body[0] || {} : r.body);
+    await db.from("mot_cache").upsert({ reg, data: mot, fetched_at: new Date().toISOString() });
+    return { ok: true, mot };
+  } catch (_e) {
+    return { ok: false, error: "unavailable" };
+  }
+}
+// the same warnings the page shows (a recall alone does not stop an advert: buyers are told about it on the advert)
+const brand = (x: unknown) => { const s = String(x || "").toLowerCase().replace(/[^a-z]/g, ""); return ({ vw: "volkswagen", merc: "mercedesbenz", mercedes: "mercedesbenz", chevy: "chevrolet", rangerover: "landrover" } as any)[s] || s; };
+const n0 = (v: number) => Math.round(v).toLocaleString("en-GB");
+function warnings(mot: any, d: any): string[] {
+  const W: string[] = [];
+  const T = ((mot && mot.tests) || []).slice().sort((a: any, b: any) => ((b.at || b.date) > (a.at || a.date) ? 1 : (b.at || b.date) < (a.at || a.date) ? -1 : 0));
+  if (!T.length && !(mot && mot.make)) { W.push("MOT: the DVSA has no record of this registration"); return W; }
+  for (let i = 0; i < T.length - 1; i++) if (T[i].miles && T[i + 1].miles && T[i].miles < T[i + 1].miles - 50) { W.push("MOT: the recorded mileage went down between tests"); break; }
+  const last = T.find((t: any) => t.miles), am = Number(d && d.miles);
+  if (last && am > 0 && am < last.miles - 100) W.push("MOT: the advert says " + n0(am) + " miles, the last MOT recorded " + n0(last.miles));
+  const a = brand(d && d.make), b = brand(mot && mot.make);
+  if (a && b && !a.startsWith(b.slice(0, 4)) && !b.startsWith(a.slice(0, 4))) W.push("MOT: the registration belongs to a " + [mot.make, mot.model].filter(Boolean).join(" "));
+  return W;
+}
+
 let probeAt = 0, probeAns: any = null;
 
 Deno.serve(async (req) => {
@@ -73,6 +106,38 @@ Deno.serve(async (req) => {
   if (req.method !== "POST") return out({ ok: false, error: "method" }, 405);
   let b: any = {}; try { b = await req.json(); } catch (_e) { /* empty */ }
   const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
+
+  // adverts waiting for automatic approval: check each against its MOT record
+  if (b.sweep) {
+    const { data: keyOk } = await db.rpc("notify_cron_ok", { p_key: req.headers.get("x-cron-key") || "" });
+    if (keyOk !== true) return out({ ok: false, error: "key" }, 401);
+    const { data: st } = await db.from("app_settings").select("value").eq("key", "auto_approve_adverts").maybeSingle();
+    const autoOn = !!(st && st.value === true);
+    const { data: rows } = await db.from("adverts").select("id,data,flags,created_at").eq("status", "pending").eq("mot_wait", true).order("created_at").limit(20);
+    const done: any[] = [];
+    for (const a of rows || []) {
+      const { data: mine } = await db.rpc("mot_claim", { p_id: a.id });
+      if (mine !== true) continue;
+      const d = a.data || {}, old = Date.now() - Date.parse(a.created_at) > 30 * 60000;
+      if (!autoOn) { await db.from("adverts").update({ mot_wait: false }).eq("id", a.id); done.push({ id: a.id, to: "staff (automatic approval is off)" }); continue; }
+      const reg = String(d.reg || "").toUpperCase().replace(/[^A-Z0-9]/g, "");
+      const m = reg ? await getMot(db, reg) : { ok: true, mot: null };
+      let W: string[];
+      if (!m.ok && m.error === "not_configured") W = [];
+      else if (!m.ok) {
+        if (!old) { await db.from("adverts").update({ mot_claim: null }).eq("id", a.id); done.push({ id: a.id, to: "try again" }); continue; }
+        W = ["MOT check not available"];
+      } else W = reg ? warnings(m.mot, d) : ["MOT: no registration to check"];
+      if (W.length) {
+        await db.from("adverts").update({ mot_wait: false, flags: [...(a.flags || []), ...W] }).eq("id", a.id);
+        done.push({ id: a.id, to: "staff", why: W });
+      } else {
+        await db.from("adverts").update({ status: "live", mot_wait: false, review_note: m.ok ? "Approved automatically after the MOT check" : "Approved automatically" }).eq("id", a.id);
+        done.push({ id: a.id, to: "live" });
+      }
+    }
+    return out({ ok: true, done });
+  }
 
   // is it connected? Checked against the DVSA at most every 10 minutes
   if (b.probe) {
@@ -119,19 +184,12 @@ Deno.serve(async (req) => {
     if (!allowed) return out({ ok: false, error: "not_listed" }, 404);
   }
 
-  const send = (mot: any) => out(vehicleOnly ? { ok: true, vehicle: mot ? { make: mot.make || "", model: mot.model || "", fuel: mot.fuel || "", col: mot.col || "" } : null } : { ok: true, mot });
-  const { data: c } = await db.from("mot_cache").select("data,fetched_at").eq("reg", reg).maybeSingle();
-  if (c && Date.now() - Date.parse(c.fetched_at) < 864e5) return send(c.data);
-  if (!configured()) return out({ ok: false, error: "not_configured" });
-  try {
-    if (vehicleOnly) await db.from("mot_lookups").insert({ user_id: uid, reg });
-    const r = await ask(reg);
-    if (r.status === 404) { const mot = { first: null, due: null, recall: "unknown", make: "", model: "", tests: [] }; await db.from("mot_cache").upsert({ reg, data: mot, fetched_at: new Date().toISOString() }); return send(vehicleOnly ? null : mot); }
-    if (r.status !== 200 || !r.body) return out({ ok: false, error: r.status === 401 || r.status === 403 ? "dvsa_refused" : "upstream_" + r.status }, 502);
-    const mot = shapeOf(Array.isArray(r.body) ? r.body[0] || {} : r.body);
-    await db.from("mot_cache").upsert({ reg, data: mot, fetched_at: new Date().toISOString() });
-    return send(mot);
-  } catch (_e) {
-    return out({ ok: false, error: "unavailable" }, 502);
+  const send = (mot: any) => out(vehicleOnly ? { ok: true, vehicle: mot && mot.make ? { make: mot.make || "", model: mot.model || "", fuel: mot.fuel || "", col: mot.col || "" } : null } : { ok: true, mot });
+  if (vehicleOnly) {
+    const { data: c } = await db.from("mot_cache").select("fetched_at").eq("reg", reg).maybeSingle();
+    if (!(c && Date.now() - Date.parse(c.fetched_at) < 864e5) && configured()) await db.from("mot_lookups").insert({ user_id: uid, reg });
   }
+  const m = await getMot(db, reg);
+  if (!m.ok) return m.error === "not_configured" ? out({ ok: false, error: "not_configured" }) : out({ ok: false, error: m.error }, 502);
+  return send(m.mot);
 });

@@ -9138,7 +9138,7 @@ var ADQ=null,ADQsig='',autoOn=false,ADQt=0;
 var WHY=['Photos missing or unsuitable','Price looks wrong','Description breaks our advert rules','Details do not match the vehicle','Contact details or links in the description','Suspected scam','Other'];
 function isStaff(){var u=window.GGuser;return !!(sb&&u&&u.sbid&&u.role==='admin')}
 function pullQueue(){if(!isStaff())return;ADQt=Date.now();
- Promise.all([sb.from('adverts').select('id,owner_id,kind,data,status,flags,created_at,vehicle_checks(status,summary)').eq('status','pending').order('created_at',{ascending:true}).limit(100),sb.from('app_settings').select('value').eq('key','auto_approve_adverts').maybeSingle()]).then(function(r){
+ Promise.all([sb.from('adverts').select('id,owner_id,kind,data,status,flags,created_at,mot_wait,vehicle_checks(status,summary)').eq('status','pending').order('created_at',{ascending:true}).limit(100),sb.from('app_settings').select('value').eq('key','auto_approve_adverts').maybeSingle()]).then(function(r){
   if(r[0].error)return;ADQ=r[0].data||[];autoOn=!!(r[1].data&&r[1].data.value===true);var s=JSON.stringify(ADQ.map(function(x){return x.id}))+autoOn;if(s!==ADQsig){ADQsig=s;drawQueue(true)}})}
 function chkLine(v){if(Array.isArray(v))v=v[0];var s=v&&v.summary||{},a=[];if(!v)return 'No history check found';
  if(s.writeoff&&s.writeoff.found)a.push('Write-off'+(s.writeoff.cat?' Category '+s.writeoff.cat:''));if(s.finance&&s.finance.found)a.push('Finance recorded');if(s.mileage_issue)a.push('Mileage problem');if(s.imported)a.push('Imported');if(s.keepers!=null)a.push(s.keepers+' previous keeper'+(s.keepers===1?'':'s'));
@@ -9158,7 +9158,7 @@ function adqMot(){[].forEach.call(document.querySelectorAll('[data-adqmot]:not([
    [].forEach.call(document.querySelectorAll('[data-adqmot^="'+reg+'|"]'),function(x){var q2=x.getAttribute('data-adqmot').split('|');x.innerHTML=adqMotLine(reg,+q2[1]||0,q2[2]||'')})},function(){ADQM[reg]={ok:false}})})}
 function queueHtml(){var me=window.GGuser,L=ADQ||[];
  var h='<div class="card" id="mc-adq"><h2>Adverts waiting for approval'+(L.length?' <span class="mx-n">'+L.length+'</span>':'')+'</h2>';
- if(me.level==='owner')h+='<label style="display:flex;gap:8px;align-items:flex-start;margin:0 0 6px"><input type="checkbox" data-adauto style="width:20px;height:20px;flex:none"'+(autoOn?' checked':'')+'><span><b>Approve adverts automatically</b> when our checks find nothing wrong.<br><span class="note">Adverts with any warning below still come here for a person to check.</span></span></label>';
+ if(me.level==='owner')h+='<label style="display:flex;gap:8px;align-items:flex-start;margin:0 0 6px"><input type="checkbox" data-adauto style="width:20px;height:20px;flex:none"'+(autoOn?' checked':'')+'><span><b>Approve adverts automatically</b> when our checks find nothing wrong, including the vehicle&rsquo;s MOT record (mileage and make).<br><span class="note">Adverts with any warning still come here for a person to check. The MOT check usually takes under a minute.</span></span></label>';
  else h+='<p class="note" style="margin:0 0 6px">Automatic approval is '+(autoOn?'on: only adverts with a warning come here.':'off: every advert comes here.')+'</p>';
  if(ADQ===null)return h+'<p class="note">Loading…</p></div>';
  if(!L.length)return h+'<p class="note" style="margin:0">Nothing waiting. New car and van adverts appear here before they go live.</p></div>';
@@ -9170,6 +9170,7 @@ function queueHtml(){var me=window.GGuser,L=ADQ||[];
    '<div class="note" style="margin:2px 0">'+(d.private?'Private seller':'Dealer: '+E(d.dealer||''))+(d.phone?' · '+E(d.phone):'')+(d.town?' · '+E(d.town):'')+' · sent '+E(dt(x.created_at))+'</div>'+
    '<div class="note" style="margin:2px 0">'+E(chkLine(x.vehicle_checks))+'</div>'+
    '<div class="note adq-mot" style="margin:2px 0" data-adqmot="'+E(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''))+'|'+(+d.miles||0)+'|'+E(d.make||'')+'">'+adqMotLine(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''),+d.miles||0,d.make||'')+'</div>'+
+   (x.mot_wait?'<div class="note" style="margin:2px 0"><b>Waiting for the MOT check</b> (usually under a minute). It goes live by itself if the MOT record matches, or stays here with the reason.</div>':'')+
    '<div style="margin:6px 0">'+(F.length?F.map(function(f){return '<span class="badge" style="position:static;display:inline-block;margin:0 4px 4px 0;background:#c0392b">&#9888; '+E(f)+'</span>'}).join(''):'<span class="badge" style="position:static;display:inline-block;background:#2e7d32">&#10003; Our checks found nothing wrong</span>')+'</div>'+
    '<details><summary>Description</summary><p style="white-space:pre-wrap;margin:6px 0">'+E(d.desc||'(none)')+'</p></details>'+
    '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px"><button type="button" class="btn sm" data-adok="'+x.id+'">&#10003; Approve</button>'+
