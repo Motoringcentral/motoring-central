@@ -14,6 +14,9 @@ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:en
 .acats{display:flex;gap:8px;flex-wrap:wrap}.acats button{all:unset;box-sizing:border-box;cursor:pointer;padding:12px 16px;border-radius:12px;font-weight:800;border:2px solid var(--line);background:var(--surface);color:var(--ink);display:inline-flex;gap:8px;align-items:center}.acats button.on{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}.acats button:focus-visible,.adm-todo button:focus-visible{outline:3px solid #FFD43B;outline-offset:2px}
 .acats i,.atabs i{font-style:normal;background:#DC2626;color:#fff;border-radius:999px;min-width:22px;height:22px;line-height:22px;text-align:center;font-size:.78rem;font-weight:800;padding:0 6px;box-sizing:border-box;display:inline-block;margin-left:6px}.acats i[hidden],.atabs i[hidden]{display:none}.acats i{margin-left:0}
 .adm-help{margin:12px 0 0;padding:10px 12px;border-radius:10px;background:var(--soft);border-left:4px solid var(--brand);font-size:.95rem}
+#admin-body .dtools{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+#mc-atr .btn.ghost{background:transparent;color:var(--ink);border:2px solid var(--line)}
+#mc-atr input[type=search]{width:100%;max-width:440px;box-sizing:border-box;font:inherit;color:var(--ink);background:var(--bg);border:2px solid var(--line);border-radius:10px;padding:10px 12px}
 #admin-body .sst{display:inline-block;font-weight:700;font-size:.72rem;border-radius:20px;padding:2px 8px;background:#BAE6FD;color:#0B1C35;margin-right:4px}
 .adm-look{display:flex;gap:8px;flex-wrap:wrap}.adm-look button{all:unset;box-sizing:border-box;cursor:pointer;padding:10px 14px;border-radius:999px;font-weight:700;border:2px solid var(--line);background:var(--surface);color:var(--ink)}.adm-look button:hover{border-color:var(--brand)}.adm-look button:focus-visible{outline:3px solid #FFD43B;outline-offset:2px}[data-alate]{color:#F87171;font-weight:700}
 .stbf{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.stbf button{all:unset;cursor:pointer;padding:7px 12px;border-radius:999px;border:2px solid var(--line);font-weight:700;font-size:.85rem}.stbf button[aria-pressed="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}.stbf button:focus-visible{outline:3px solid #FFD43B;outline-offset:2px}
@@ -1102,6 +1105,9 @@ div[id^="v-"] > section.hero{max-width:1040px;margin:14px auto 0;border-radius:1
 .offer{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.otile{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:12px;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;color:var(--ink);text-decoration:none;min-width:0}.otile:hover{border-color:#38BDF8}.otile:active{transform:scale(.98)}.otile:focus-visible{outline:3px solid #FFD43B;outline-offset:2px}.otile .oi{flex:none;width:46px;height:46px;border-radius:12px;background:#38BDF8;display:flex;align-items:center;justify-content:center}.otile .oi svg{width:25px;height:25px;fill:none;stroke:#0B1C35;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.otile .ot{flex:1}.otile b{display:block;font-size:1.08rem;line-height:1.25;overflow-wrap:break-word}.otile small{display:block;color:var(--muted);font-size:.92rem;line-height:1.5;margin-top:6px}.otile .octa{font-weight:700;font-size:.92rem;color:var(--ink);text-decoration:underline;text-decoration-color:#38BDF8;text-decoration-thickness:2px;text-underline-offset:4px}@media (max-width:520px){.otile{padding:14px;gap:10px}.otile b{font-size:1rem}.otile small{font-size:.84rem;line-height:1.45}.otile .octa{font-size:.86rem}.otile .oi{width:40px;height:40px}.otile .oi svg{width:22px;height:22px}}@media (prefers-reduced-motion:reduce){.otile:active{transform:none}}.svchint{margin:8px 0 0;font-weight:700;color:var(--ink)}#evc select,#evc input{width:100%}.heroimg{width:100%;height:auto;display:block;margin-top:14px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.35)}</style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Outfit:wght@500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<script>/* a picture or link address from saved data, made safe to put in the page: only web, picture data and blob addresses or paths on this site, and nothing that can break out of the attribute */
+window.SRC=function(u){u=String(u==null?'':u).trim();if(/^[a-z][a-z0-9+.-]*:/i.test(u)&&!/^(https?:|data:image\/|blob:)/i.test(u))return '';return u.replace(/["'<>`\s\\]/g,function(c){return encodeURIComponent(c)}).replace(/&/g,'&amp;')};
+</script>
 <script>window.DPLANS=[{n:'Starter',range:'1 to 10 cars',max:10,price:169,free:0,checks:5},{n:'Standard',range:'11 to 20 cars',max:20,price:229,free:1,checks:10},{n:'Plus',range:'21 to 30 cars',max:30,price:299,free:3,checks:15},{n:'Pro',range:'31 to 50 cars',max:50,price:379,free:4,checks:25},{n:'Premier',range:'51 or more cars',max:Infinity,price:449,free:5,checks:25}];
 window.DCHECK=3.5;window.DCHECKTXT=function(P){return 'Includes '+P.checks+' vehicle history checks a month (finance, write-off and stolen). Extra checks are £3.50 + VAT each. Your 30-day free trial includes 3 history checks.'};
 window.DEXTRA=5;window.DPLAN=function(i){var n=parseInt(i,10);return DPLANS[n]||DPLANS[0]};window.DPLANFOR=function(n){for(var i=0;i<DPLANS.length;i++)if(n<=DPLANS[i].max)return i;return DPLANS.length-1};
@@ -1149,7 +1155,7 @@ html.embed .embed-by{display:block!important}
    paid (private sellers) or within a dealer's plan, and the result is kept by the server so a seller cannot change it.
    Preview: results are samples. Try a registration containing WO (Category S), CATN (Category N), FIN (finance) or STO (stolen). */
 (function(){
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function day(t){var d=new Date(t);return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}
 var EXTRA=3.5;
 var CAT={A:'Category A: scrap only. It must never return to the road.',B:'Category B: break for parts only. The body must be crushed.',
@@ -2979,7 +2985,7 @@ html.mc-demo-on #mc-mine{display:none!important}
     L.push({id:'diag',n:'Diagnostics',d:'Warning light scan and report',lab:49,hrs:1,parts:function(){return[]}});
     return L}
 
-  function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
+  function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
   function cu(){var u=window.GGuser;if(!u||u.role!=='customer')return null;u.det=u.det||{regs:[],left:2};return u}
   function det(r){var u=cu();return !!(u&&u.det.regs.indexOf(r)>-1)}
   function fromPrice(s){if(s.mot)return s.from||25;var p=0;s.parts(car).forEach(function(x){p+=x[2][0]*x[3]});return Math.floor(p+s.hrs*38)}
@@ -3156,7 +3162,7 @@ var C=[
 var HINT={"Interim service": "A basic check-up with an oil change, every 6 months or 6,000 miles", "Full service": "The yearly service most cars need", "Major service": "The most thorough service, about every 2 years", "Vehicle health check": "A full look over the car, with a report", "Pre-MOT check": "Find and fix problems before the MOT test", "Cabin (pollen) filter replacement": "Cleans the air coming through the vents", "Spark plug replacement": "Petrol cars. Helps the engine start and run smoothly", "Automatic or DSG gearbox fluid service": "For automatic gearboxes", "Engine warning light diagnosis": "A light is on the dashboard and you want to know why", "Full fault code scan (all systems)": "Plugs into the car’s computer to read any faults", "Car won’t start": "It clicks, turns over slowly or does nothing", "Noise or vibration investigation": "Knocking, squeaking, rattling or shaking", "Leak investigation": "Puddles or drips under the car", "Pre-purchase inspection": "Check a used car before you buy it", "Front brake pads": "Squealing or grinding when you brake", "Brake calipers": "The part that squeezes the pads. Car pulls to one side when braking", "Brake servo": "Makes the brake pedal light to press", "Electronic parking brake service": "For cars with a handbrake button instead of a lever", "ABS sensor replacement": "ABS warning light is on", "Clutch replacement": "Slipping, juddering or a high biting point (manual cars)", "Clutch and dual-mass flywheel": "Clutch plus the heavy wheel behind it. Rattle when idling", "Clutch master or slave cylinder": "Clutch pedal feels soft or sticks to the floor", "Gear linkage or cable": "Gears are hard to select", "Timing belt (cambelt) and water pump": "The belt that keeps the engine in time. Must be changed on schedule", "Timing chain replacement": "Rattling from the engine when cold", "Auxiliary (drive) belt": "The belt that runs the alternator and air con. Squealing noise", "Engine mounts": "Engine rocks or knocks when pulling away", "Head gasket replacement": "Overheating, white smoke or losing coolant", "Turbocharger replacement": "Loss of power, whistling or blue smoke", "Thermostat replacement": "Engine overheats or the heater stays cold", "Glow plugs": "Diesel cars. Hard to start when cold", "Ignition coils": "Petrol cars. Engine misfires or shakes", "Fuel injectors": "Misfiring, poor fuel economy or rough running", "Throttle body clean or replacement": "Uneven idle or the engine stalls", "Mass air flow (MAF) sensor": "Measures air going into the engine. Loss of power", "Wrong fuel drain": "Put petrol in a diesel, or diesel in a petrol", "Catalytic converter": "Cleans the exhaust gases. Rattling or a warning light", "DPF clean and forced regeneration": "Diesel soot filter. DPF warning light on", "DPF replacement": "Diesel soot filter that is blocked or damaged", "EGR valve": "Loss of power or engine warning light", "Lambda (oxygen) sensor": "Engine warning light and poor fuel economy", "AdBlue system repair": "Diesel cars with an AdBlue warning light", "Shock absorbers": "Bouncy, floaty or uncomfortable ride", "Coil springs": "Car sits low on one corner, or a clunk over bumps", "Track rod ends": "Steering feels loose or the tyres wear unevenly", "Ball joints": "Knocking from the front over bumps", "Wishbones or control arms": "Clunking from the suspension", "Suspension bushes": "Rubber mounts. Knocking or vague steering", "Anti-roll bar links": "Knocking over bumps", "Power steering pump or rack": "Steering is heavy or whines", "Wheel alignment (tracking)": "Car pulls to one side or tyres wear on the edges", "Wheel bearings": "Humming or droning that gets louder with speed", "CV joints and boots": "Clicking when turning on full lock", "Differential oil change": "Mainly 4x4s and rear-wheel-drive cars", "Alternator": "Charges the battery. Battery light on, or the battery keeps going flat", "Starter motor": "The car clicks but the engine does not turn", "Tyre pressure (TPMS) sensors": "Tyre pressure warning light stays on", "ECU coding and programming": "Setting up the car’s computer after a new part", "ADAS camera and radar calibration": "Lane assist and auto-braking sensors, after a new windscreen or repair", "Air con regas": "Air con blows warm. Refills the cooling gas", "Heater blower motor or resistor": "Fan does not work, or only works on some speeds", "Heater matrix": "No heat inside the car, or a sweet smell and misty windows", "Locking wheel nut removal": "Lost the key for your wheel nuts", "MOT failure repairs": "Fix the faults listed on your MOT fail sheet"};
 /* normalise: [name, hint?, flags?] */
 C.forEach(function(g){g[1]=g[1].map(function(x){var o={n:x[0],h:'',w:0,c:0};for(var i=1;i<x.length;i++){if(typeof x[i]==='string')o.h=x[i];else{o.w=x[i].w?1:0;o.c=x[i].c?1:0}}if(!o.h&&HINT[o.n])o.h=HINT[o.n];return o})});
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function list(kind){var out=[];C.forEach(function(g){var it=g[1].filter(function(x){return kind==='garage'||!x.w});if(it.length)out.push([g[0],it])});return out}
 function names(kind){var a=[];list(kind).forEach(function(g){g[1].forEach(function(x){a.push(x.n)})});return a}
 function common(kind){var a=[];list(kind).forEach(function(g){g[1].forEach(function(x){if(x.c)a.push(x.n)})});return a}
@@ -3262,7 +3268,7 @@ function hash2(s){var h=7;for(var i=0;i<s.length;i++)h=(h*131+s.charCodeAt(i))%1
 function dk(d){return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
 function dayLab(k){return new Date(k+'T12:00:00').toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})}
 function tm(x){var h=Math.floor(x/60),mm=x%60,ap=h>=12?'pm':'am';h=h%12||12;return h+':'+(mm<10?'0':'')+mm+ap}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function store(){try{return JSON.parse(localStorage.getItem(LS)||'{}')||{}}catch(e){return{}}}
 function put(S){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
 function workDays(){var r=[],d=new Date();for(var i=0;i<14;i++){var x=new Date(d.getFullYear(),d.getMonth(),d.getDate()+i,12);r.push(dk(x))}return r}
@@ -3721,7 +3727,7 @@ var cx=cur();if(cx&&cx.real&&window.MCbookPriced){var tx=$('vdone').textContent;
 })();</script>
 <script>(function(){function $(i){return document.getElementById(i)}if(!$('bdy'))return;
 function money(n){return '£'+n.toFixed(2)}
-function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
+function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function hash(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))%97;return h}
 var BOOKING=9.99,total=0,car=null,pay='self',picked=[];
 var REP=[{n:'Smart Fix Mobile',mob:1,ins:0,rt:'4.9',from:95,acc:'Mobile scratch and scuff repair'},{n:'Dent Doctor PDR',mob:1,ins:0,rt:'4.8',from:70,acc:'Dents removed without repainting'},{n:'Kirkstall Body Centre',mob:0,ins:1,rt:'4.8',from:180,acc:'BS 10125 Kitemark (the UK body repair standard)'},{n:'Northside Accident Repair',mob:0,ins:1,rt:'4.7',from:220,acc:'Manufacturer approved'},{n:'Park Lane Paint and Panel',mob:0,ins:0,rt:'4.9',from:150,acc:'Independent body shop'}];window.MCdir.reg('rep',REP);
@@ -3855,7 +3861,7 @@ function vex(){var p=+$('va-p1').value||0;$('va-ex').textContent='Example: a med
 })();</script>
 <script>(function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
 function price(c){return gbp(c.price)+(c.vat?'<span class="vat">+ VAT</span>':'')}
 function incv(c){return c.vat?'<div class="incv">'+gbp(c.price*1.2)+' including VAT</div>':''}
@@ -3869,7 +3875,7 @@ Estate:{b:'M0 30c0-8 3-13 10-14l12-11c3-3 6-4 10-4h46c4 0 6 2 8 5l6 10c8 1 12 4 
 var n0=0;
 function art(c){var b=BODY[c.body]||BODY.Hatchback,col=COL[c.col]||'#7b868c',id='ca'+(n0++);
 return '<svg viewBox="0 0 240 150" role="img" aria-label="'+esc(c.make+' '+c.model)+'"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe6f3"/><stop offset="1" stop-color="#f0f6f8"/></linearGradient></defs><rect width="240" height="150" fill="url(#'+id+')"/><rect y="112" width="240" height="38" fill="#c6d0d6"/><rect y="112" width="240" height="3" fill="#aab6bd"/><g fill="#fff" opacity=".7"><rect x="20" y="132" width="26" height="3" rx="1"/><rect x="100" y="132" width="26" height="3" rx="1"/><rect x="180" y="132" width="26" height="3" rx="1"/></g><g transform="translate(58 62) scale(1.15)"><path d="'+b.b+'" fill="'+col+'"/><path d="'+b.w+'" fill="#e6f4fb"/><circle cx="20" cy="33" r="10" fill="#111"/><circle cx="20" cy="33" r="4" fill="#cfd8dc"/><circle cx="84" cy="33" r="10" fill="#111"/><circle cx="84" cy="33" r="4" fill="#cfd8dc"/></g></svg>'}
-function pic(c,k){var ph=c.photos&&c.photos[k||0];return ph?'<img src="'+ph+'" alt="'+esc(c.make+' '+c.model)+'">':art(c)}
+function pic(c,k){var ph=c.photos&&c.photos[k||0];return ph?'<img src="'+SRC(ph)+'" alt="'+esc(c.make+' '+c.model)+'">':art(c)}
 
 var CARS=[
 {id:1,make:'Ford',model:'Fiesta',variant:'1.0 EcoBoost Zetec',year:2019,price:9495,miles:32400,fuel:'Petrol',gear:'Manual',body:'Hatchback',col:'Blue',town:'Leeds',dealer:'Northside Motors',phone:'0113 000 0101',badge:'Great price',desc:'One owner from new. Full service history. Two keys. Apple CarPlay, parking sensors and air conditioning.'},
@@ -3927,7 +3933,7 @@ function showList(on){$('cars-filters').hidden=!on;$('cars-list').hidden=!on;doc
 function openCar(id){cur=byId(id);ph=0;showList(false);drawDetail();scrollTo(0,0)}
 function drawDetail(){
 var c=cur,d=$('cars-detail'),th='';
-if(c.photos&&c.photos.length>1){th='<div class="thumbs">';c.photos.forEach(function(p,k){th+='<button type="button" data-ph="'+k+'" aria-pressed="'+(k===ph?'true':'false')+'" aria-label="Photo '+(k+1)+'"><img src="'+p+'" alt=""></button>'});th+='</div>'}
+if(c.photos&&c.photos.length>1){th='<div class="thumbs">';c.photos.forEach(function(p,k){th+='<button type="button" data-ph="'+k+'" aria-pressed="'+(k===ph?'true':'false')+'" aria-label="Photo '+(k+1)+'"><img src="'+SRC(p)+'" alt=""></button>'});th+='</div>'}
 d.innerHTML='<button type="button" class="btn ghost sm" id="cd-back" style="margin-bottom:10px">&larr; Back to results</button>'
 +'<div class="card" style="padding:0;overflow:hidden"><div class="dimg">'+pic(c,ph)+pills(c)+(c.photos&&c.photos.length>1?'<button type="button" class="gnav gp" data-phd="-1" aria-label="Previous photo">&lsaquo;</button><button type="button" class="gnav gn" data-phd="1" aria-label="Next photo">&rsaquo;</button><span class="pcount">'+(ph+1)+' of '+c.photos.length+'</span>':'')+'</div>'+th
 +'<div style="padding:14px 16px 16px"><div class="lprice">'+price(c)+'</div>'+incv(c)+'<div class="ltitle">'+esc(c.make+' '+c.model)+'</div><div class="lvar">'+esc(c.variant)+'</div>'+(window.MChist?window.MChist.woBox(c):'')
@@ -3965,7 +3971,7 @@ if(!window.GGdealer){$('cars-join').hidden=!$('cars-join').hidden;f.hidden=true;
 $('cars-join').hidden=true;f.hidden=!f.hidden;
 if(!f.hidden){prefill();f.scrollIntoView({behavior:'smooth',block:'start'});$('cd-dealer').focus({preventScroll:true})}});
 function readFiles(files){return window.MCphotos.read(files,window.MCphotos.MAX)}
-$('cd-photos').addEventListener('change',function(){var n=this.files.length;readFiles(this.files).then(function(a){$('cd-prev').innerHTML=a.map(function(s){return '<img src="'+s+'" alt="">'}).join('');$('cd-phnote').textContent=a.length+' of 30 photos added.'+(n>a.length?' '+(n-a.length)+' left out: over the 30 photo limit, or not an image.':'')+' The first photo is the main one.'})});
+$('cd-photos').addEventListener('change',function(){var n=this.files.length;readFiles(this.files).then(function(a){$('cd-prev').innerHTML=a.map(function(s){return '<img src="'+SRC(s)+'" alt="">'}).join('');$('cd-phnote').textContent=a.length+' of 30 photos added.'+(n>a.length?' '+(n-a.length)+' left out: over the 30 photo limit, or not an image.':'')+' The first photo is the main one.'})});
 $('cars-form').addEventListener('submit',function(e){
 e.preventDefault();
 function v(i){return $(i).value.trim()}
@@ -4046,7 +4052,7 @@ $('cars-join-btn').addEventListener('click',function(){location.hash='dealers'})
 })();</script>
 <script>(function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
 function owns(c){var u=window.GGuser;if(u&&u.sbid&&c.ownerId&&c.ownerId===u.sbid)return true;if(c.dbid)return false;if(c.private)return !!(u&&u.role==='customer'&&u.email===c.owner);return !!(u&&u.role==='dealer'&&(c.mine||c.dealer===u.name))}
 var COL={White:'#f4f6f7',Silver:'#b8c2c8',Blue:'#3b78c4',Red:'#c8362c',Black:'#2a2f33',Grey:'#7b868c',Yellow:'#ffcf3f',Green:'#3f8a5a'};
@@ -4060,7 +4066,7 @@ var n0=0;
 function wheels(){return '<circle cx="20" cy="36" r="10" fill="#111"/><circle cx="20" cy="36" r="4" fill="#cfd8dc"/><circle cx="84" cy="36" r="10" fill="#111"/><circle cx="84" cy="36" r="4" fill="#cfd8dc"/>'}
 function art(c){var b=BODY[c.body]||BODY['Medium van'],col=COL[c.col]||'#7b868c',id='va'+(n0++);
 return '<svg viewBox="0 0 240 150" role="img" aria-label="'+esc(c.make+' '+c.model)+'"><defs><linearGradient id="'+id+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfe6f3"/><stop offset="1" stop-color="#f0f6f8"/></linearGradient></defs><rect width="240" height="150" fill="url(#'+id+')"/><rect y="112" width="240" height="38" fill="#c6d0d6"/><rect y="112" width="240" height="3" fill="#aab6bd"/><g fill="#fff" opacity=".7"><rect x="20" y="132" width="26" height="3" rx="1"/><rect x="100" y="132" width="26" height="3" rx="1"/><rect x="180" y="132" width="26" height="3" rx="1"/></g><g transform="translate(58 58) scale(1.15)"><path d="'+b.b+'" fill="'+col+'"/><path d="'+b.w+'" fill="#e6f4fb"/>'+wheels()+'</g></svg>'}
-function pic(c,k){var ph=c.photos&&c.photos[k||0];return ph?'<img src="'+ph+'" alt="'+esc(c.make+' '+c.model)+'">':art(c)}
+function pic(c,k){var ph=c.photos&&c.photos[k||0];return ph?'<img src="'+SRC(ph)+'" alt="'+esc(c.make+' '+c.model)+'">':art(c)}
 function price(c){return gbp(c.price)+(c.vat?'<span class="vat">+ VAT</span>':'')}
 function incv(c){return c.vat?'<div class="incv">'+gbp(c.price*1.2)+' including VAT</div>':''}
 
@@ -4106,7 +4112,7 @@ function showList(on){$('vans-filters').hidden=!on;$('vans-list').hidden=!on;doc
 function openVan(id){cur=byId(id);ph=0;showList(false);drawDetail();scrollTo(0,0)}
 function drawDetail(){
 var c=cur,d=$('vans-detail'),th='';
-if(c.photos&&c.photos.length>1){th='<div class="thumbs">';c.photos.forEach(function(p,k){th+='<button type="button" data-ph="'+k+'" aria-pressed="'+(k===ph?'true':'false')+'" aria-label="Photo '+(k+1)+'"><img src="'+p+'" alt=""></button>'});th+='</div>'}
+if(c.photos&&c.photos.length>1){th='<div class="thumbs">';c.photos.forEach(function(p,k){th+='<button type="button" data-ph="'+k+'" aria-pressed="'+(k===ph?'true':'false')+'" aria-label="Photo '+(k+1)+'"><img src="'+SRC(p)+'" alt=""></button>'});th+='</div>'}
 d.innerHTML='<button type="button" class="btn ghost sm" id="vd-back" style="margin-bottom:10px">&larr; Back to results</button>'
 +'<div class="card" style="padding:0;overflow:hidden"><div class="dimg">'+pic(c,ph)+pills(c)+(c.photos&&c.photos.length>1?'<button type="button" class="gnav gp" data-phd="-1" aria-label="Previous photo">&lsaquo;</button><button type="button" class="gnav gn" data-phd="1" aria-label="Next photo">&rsaquo;</button><span class="pcount">'+(ph+1)+' of '+c.photos.length+'</span>':'')+'</div>'+th
 +'<div style="padding:14px 16px 16px"><div class="lprice">'+price(c)+'</div>'+incv(c)+'<div class="ltitle">'+esc(c.make+' '+c.model)+'</div><div class="lvar">'+esc(c.variant)+'</div>'+(window.MChist?window.MChist.woBox(c):'')
@@ -4142,7 +4148,7 @@ $('vans-join').hidden=true;f.hidden=!f.hidden;
 if(!f.hidden){prefill();f.scrollIntoView({behavior:'smooth',block:'start'});$('vd-dealer').focus({preventScroll:true})}});
 $('vans-join-btn').addEventListener('click',function(){location.hash='dealers'});
 function readFiles(files){return window.MCphotos.read(files,window.MCphotos.MAX)}
-$('vd-photos').addEventListener('change',function(){var n=this.files.length;readFiles(this.files).then(function(a){$('vd-prev').innerHTML=a.map(function(s){return '<img src="'+s+'" alt="">'}).join('');$('vd-phnote').textContent=a.length+' of 30 photos added.'+(n>a.length?' '+(n-a.length)+' left out: over the 30 photo limit, or not an image.':'')+' The first photo is the main one.'})});
+$('vd-photos').addEventListener('change',function(){var n=this.files.length;readFiles(this.files).then(function(a){$('vd-prev').innerHTML=a.map(function(s){return '<img src="'+SRC(s)+'" alt="">'}).join('');$('vd-phnote').textContent=a.length+' of 30 photos added.'+(n>a.length?' '+(n-a.length)+' left out: over the 30 photo limit, or not an image.':'')+' The first photo is the main one.'})});
 $('vans-form').addEventListener('submit',function(e){
 e.preventDefault();
 function v(i){return $(i).value.trim()}
@@ -4168,7 +4174,7 @@ if(window.GGbanner)window.GGbanner();
 })();</script>
 <script>(function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function m(n){return '£'+(+n).toFixed(2)}
 var ROLES={mechanic:'Mechanic, garage, auto electrician or locksmith',recovery:'Recovery company',evcharge:'Mobile EV charging',body:'Body shop or alloy wheel specialist',tyres:'Tyre fitter',valet:'Valeter',dealer:'Car or van dealer',instructor:'Driving instructor',admin:'Staff admin'};
 var USERS=[
@@ -4432,7 +4438,7 @@ if(d.path&&!d.data&&window.MCdb&&window.MCdb.docUrl){body.innerHTML='<p class="n
 window.MCdb.docUrl(d.path).then(function(url){var lk='<p style="margin-top:10px"><a class="btn sm ghost" href="'+esc(url)+'" target="_blank" rel="noopener">Open in a new tab</a></p><p class="note">'+esc(d.file||'')+(d.size?' ('+sz(d.size)+')':'')+'. This private link stops working after 10 minutes.</p>';
 body.innerHTML=(/^image\//.test(d.type||'')?'<img src="'+esc(url)+'" alt="'+esc(d.name)+'" style="max-width:100%;border-radius:8px">':'<object data="'+esc(url)+'" type="application/pdf" style="width:100%;height:60vh"><p>The PDF cannot be shown here. Use the button below.</p></object>')+lk},
 function(){body.innerHTML='<p><b>The document could not be opened.</b></p><p class="note">Check your connection and try again.</p>'});return}
-if(d.data&&/^data:image\//.test(d.data))body.innerHTML='<img src="'+d.data+'" alt="'+esc(d.name)+'" style="max-width:100%;border-radius:8px">';
+if(d.data&&/^data:image\//.test(d.data))body.innerHTML='<img src="'+SRC(d.data)+'" alt="'+esc(d.name)+'" style="max-width:100%;border-radius:8px">';
 else if(d.data)body.innerHTML='<object data="'+d.data+'" type="application/pdf" style="width:100%;height:60vh"><p>The PDF cannot be previewed in this preview. File: '+esc(d.file)+' ('+sz(d.size||0)+').</p></object>';
 else if(d.nofile)body.innerHTML='<p><b>'+esc(d.file||d.name)+'</b></p><p class="note">This application was restored from the saved inbox. Uploaded files are not kept in this preview, so the document itself cannot be shown. Ask the applicant to send it again if you need to check it.</p>';
 else body.innerHTML=certSvg(u,d);
@@ -4446,8 +4452,8 @@ var exp=appr.filter(function(u){return (u.docs||[]).some(function(d){return dlef
 /* Admin page in categories (22 Nov 2026): one row of sections, the pages inside the chosen section, and a plain "what to
    do here" line on every page, so a new member of staff can be trained on it. The boxes other parts of the code add to
    this page (adverts, reports, recovery bookings, payouts, reviews) are shown only on their own page: see #admin-body[data-at]. */
-var CATS=[['home','To do',['home']],['partners','Partners',['pending','approved','declined','started','demo']],['adverts','Adverts',['adq','reps','fb']],['bookings','Bookings',['mot','rss','les','oth']],['money','Money',['spo','ref']],['care','Customers',['cmp','cust','rev','urv']],['reports','Reports',['stats','prep','log']]].concat(owner()?[['team','Team and settings',['staff']]]:[]);
-var TABN={home:'To do',pending:'Applications to check ('+pend.length+')',approved:'Approved ('+appr.length+')',declined:'Declined or suspended ('+rej.length+')',started:'Started, not finished ('+strt.length+')',demo:'Demo requests',adq:'Adverts to approve',reps:'Reported adverts',fb:'Facebook feed',mot:'MOT bookings',rss:'Recovery and EV charging',les:'Driving lessons',oth:'Valet, bodywork and others',spo:'Weekly payouts',ref:'Refunds due',cmp:'Messages and complaints',cust:'Customer list',rev:'Review requests',urv:'Hide an unfair review',stats:'Views and clicks',prep:'Partner reports',log:'Activity log',staff:'Staff'};
+var CATS=[['home','To do',['home']],['partners','Partners',['pending','approved','declined','started','demo']],['adverts','Adverts',['adq','reps','trd','fb']],['bookings','Bookings',['mot','rss','les','oth']],['money','Money',['spo','ref']],['care','Customers',['cmp','cust','rev','urv']],['reports','Reports',['stats','prep','log']]].concat(owner()?[['team','Team and settings',['staff']]]:[]);
+var TABN={home:'To do',pending:'Applications to check ('+pend.length+')',approved:'Approved ('+appr.length+')',declined:'Declined or suspended ('+rej.length+')',started:'Started, not finished ('+strt.length+')',demo:'Demo requests',adq:'Adverts to approve',reps:'Reported adverts',trd:'Trade listings',fb:'Facebook feed',mot:'MOT bookings',rss:'Recovery and EV charging',les:'Driving lessons',oth:'Valet, bodywork and others',spo:'Weekly payouts',ref:'Refunds due',cmp:'Messages and complaints',cust:'Customer list',rev:'Review requests',urv:'Hide an unfair review',stats:'Views and clicks',prep:'Partner reports',log:'Activity log',staff:'Staff'};
 var HELP={home:'Start here every day. Work down the list. A number means something is waiting for you. Tap a line to open it.',
  pending:'A business has applied to join. Open each document, tick the five checks, then '+(owner()?'approve or reject.':'save your recommendation. An owner makes the final decision.')+' For a driving instructor, also check the badge number on the DVSA register. For an MOT station, check the test station number.',
  approved:'Partners who are live on the site. Use this to chase documents that are about to run out, or to suspend a partner.',
@@ -4455,6 +4461,7 @@ var HELP={home:'Start here every day. Work down the list. A number means somethi
  started:'Businesses that registered but have not sent their application. We email them once after a day. A phone call or a personal email usually finishes it.',
  demo:'A business has asked to try the dashboard before joining. Tap “Send the demo” and they are emailed their own link for their trade. Follow up with a call once they have opened it.',
  adq:'Cars and vans that dealers and private sellers have asked to advertise. Check the photos and details look genuine, then approve or reject each one.',
+ trd:'Vehicles businesses have listed for each other in the Trade section (customers never see these). Look one up when a partner gets in touch. Take a listing down if it breaks the rules: give the reason, and the seller is emailed it.',
  reps:'Adverts a customer has reported. Read the reason, look at the advert, then remove it or mark the report as dealt with.',
  fb:'The link Facebook uses to show our cars and vans. Nothing to do here day to day.',
  mot:'Every MOT booked through the site. Use it to answer a customer or a test station asking about a booking.',
@@ -4756,7 +4763,7 @@ var l=u.stock.filter(function(v){return(u.sfilter==='all'||v.status===u.sfilter)
 l.sort(function(a,b){return u.ssort==='new'?daysIn(a)-daysIn(b):u.ssort==='price'?(b.price-a.price):u.ssort==='margin'?margin(b)-margin(a):daysIn(b)-daysIn(a)});
 if(!l.length)return '<p class="note">No vehicles match.</p>';
 return l.map(function(v){var d=daysIn(v),st=STATUSES.filter(function(x){return x[0]===v.status})[0][1],mg=margin(v);
-return '<div class="job">'+((v.photos||[]).length?'<img class="sthumb" src="'+v.photos[0]+'" alt="">':'')+'<div><span class="sreg">'+esc(v.reg||'NO REG')+'</span><b>'+esc(v.year+' '+v.make+' '+v.model)+'</b><small>'+esc(v.variant)+(v.variant?' &middot; ':'')+Number(v.miles||0).toLocaleString('en-GB')+' miles &middot; '+esc(v.kind)+(v.loc?' &middot; '+esc(v.loc):'')+'</small><small><span class="sst s-'+v.status+'">'+st+'</span> '+(v.status==='sold'?'Sold '+fmtD(v.sold.date):d+' day'+(d===1?'':'s')+' in stock'+(d>=60?' <b class="aged">Aged</b>':''))+(v.ad?' &middot; Advertised':'')+(v.trade?' &middot; Listed to the trade':'')+' &middot; '+((v.photos||[]).length?(v.photos.length+' photo'+(v.photos.length===1?'':'s')):'<b class="aged">No photos</b>')+'</small></div><div class="jp">'+gbp0(v.sold?v.sold.price:v.price)+'<small>'+(mg>=0?'':'loss ')+gbp0(mg)+(mg>=0?' profit':'')+'</small></div><div class="jb"><button class="btn sm ghost" type="button" data-sopen="'+v.id+'">Manage</button>'+(window.MCpdiBtn?window.MCpdiBtn('stock:'+v.id):'')+'</div></div>'}).join('')}
+return '<div class="job">'+((v.photos||[]).length?'<img class="sthumb" src="'+SRC(v.photos[0])+'" alt="">':'')+'<div><span class="sreg">'+esc(v.reg||'NO REG')+'</span><b>'+esc(v.year+' '+v.make+' '+v.model)+'</b><small>'+esc(v.variant)+(v.variant?' &middot; ':'')+Number(v.miles||0).toLocaleString('en-GB')+' miles &middot; '+esc(v.kind)+(v.loc?' &middot; '+esc(v.loc):'')+'</small><small><span class="sst s-'+v.status+'">'+st+'</span> '+(v.status==='sold'?'Sold '+fmtD(v.sold.date):d+' day'+(d===1?'':'s')+' in stock'+(d>=60?' <b class="aged">Aged</b>':''))+(v.ad?' &middot; Advertised':'')+(v.trade?' &middot; Listed to the trade':'')+' &middot; '+((v.photos||[]).length?(v.photos.length+' photo'+(v.photos.length===1?'':'s')):'<b class="aged">No photos</b>')+'</small></div><div class="jp">'+gbp0(v.sold?v.sold.price:v.price)+'<small>'+(mg>=0?'':'loss ')+gbp0(mg)+(mg>=0?' profit':'')+'</small></div><div class="jb"><button class="btn sm ghost" type="button" data-sopen="'+v.id+'">Manage</button>'+(window.MCpdiBtn?window.MCpdiBtn('stock:'+v.id):'')+'</div></div>'}).join('')}
 function opt(list,val){return list.map(function(o){var v=Array.isArray(o)?o[0]:o,l=Array.isArray(o)?o[1]:o;return '<option value="'+esc(v)+'"'+(String(v)===String(val)?' selected':'')+'>'+esc(l)+'</option>'}).join('')}
 function fld(id,label,html){return '<div><label class="f" for="'+id+'">'+label+'</label>'+html+'</div>'}
 function inp(id,type,val,extra){return '<input type="'+type+'" id="'+id+'" value="'+esc(val==null?'':val)+'"'+(extra||'')+'>'}
@@ -4917,7 +4924,7 @@ addEventListener('hashchange',openSec);
 })();</script>
 <script>(function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var CUST=window.GGcustomers=[{email:'customer@demo.com',pass:'demo1234',role:'customer',name:'Sarah M.',phone:'07700 900200',post:'LS6 2AB',joined:Date.now()-40*864e5,tcAt:Date.now()-40*864e5,news:true,
 bookings:[{kind:'MOT',text:'Booked: MOT at Hillside Garage, Leeds. Total £54.85.',t:Date.now()-21*864e5,tc:true,veh:{reg:'AB12 CDE',make:'Ford',model:'Focus',variant:'1.0 EcoBoost Zetec',fuel:'Petrol',gear:'Manual',col:'Blue',year:2012}}],enquiries:[]}];
 var dlg=$('cust-dlg'),pending=null;
@@ -4984,7 +4991,7 @@ addEventListener('hashchange',function(){if(location.hash==='#account')window.GG
 })();</script>
 <script>(function(){
 function $(i){return document.getElementById(i)}
-function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
+function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function gbp(n){return '£'+Math.round(+n||0).toLocaleString('en-GB')}
 function day(n){var d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}
 function fmtD(k){return new Date(k+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
@@ -5005,7 +5012,7 @@ function me(){var u=window.GGuser;return u&&u.role!=='customer'?u:null}
 var RT={loaded:0,at:0,used:0,err:'',busy:0,who:''};
 function real(){var u=window.GGuser;return !!(u&&u.sbid&&!u.demo&&u.role!=='customer'&&u.role!=='admin'&&window.MCdb&&window.MCdb.rpc)}
 function errText(m){m=String(m||'');return /trade_only/.test(m)?'Trade opens once your account has been approved.':/below_min/.test(m)?'Sorry, that is below the seller\u2019s minimum. Try a higher offer.':/not_available/.test(m)?'Sorry, this vehicle is no longer available.':/own_listing/.test(m)?'This is your own listing.':/fee_due/.test(m)?'The listing fee has not been paid.':/not_open/.test(m)?'That offer has already been answered.':/too_many/.test(m)?'Too many in a short time. Please wait a few minutes.':'That did not work. Check your connection and try again.'}
-function toItem(x){return{id:+x.id,kind:x.kind,make:x.make,model:x.model,variant:x.variant||'',year:+x.year,miles:+x.miles,fuel:x.fuel,gear:x.gear,body:x.body,col:x.col,town:x.town,mot:x.mot||'',v5:x.v5,hist:x.hist,faults:x.faults,desc:x.desc||'',mode:x.mode,price:x.price==null?null:+x.price,photos:x.photos||[],status:x.status,listed:String(x.listed||'').slice(0,10),mine:!!x.mine,seller:x.seller,stype:x.stype,phone:x.phone||'',email:x.email||'',fee:x.fee==='free'?'free':x.fee==='paid'?'\u00A39.99 + VAT paid':'',stockId:x.stockId||null,reg:x.reg||'',
+function toItem(x){return{id:+x.id,kind:x.kind,make:x.make,model:x.model,variant:x.variant||'',year:+x.year,miles:+x.miles,fuel:x.fuel,gear:x.gear,body:x.body,col:x.col,town:x.town,mot:x.mot||'',v5:x.v5,hist:x.hist,faults:x.faults,desc:x.desc||'',mode:x.mode,price:x.price==null?null:+x.price,photos:x.photos||[],status:x.status,listed:String(x.listed||'').slice(0,10),mine:!!x.mine,seller:x.seller,stype:x.stype,phone:x.phone||'',email:x.email||'',fee:x.fee==='free'?'free':x.fee==='paid'?'\u00A39.99 + VAT paid':'',stockId:x.stockId||null,reg:x.reg||'',removed:x.removed||'',
  buyer:x.buyer?{name:x.buyer.name,amount:+x.buyer.amount,phone:x.buyer.phone||'',email:x.buyer.email||'',me:!!x.buyer.me}:null,
  offers:(x.offers||[]).map(function(o){return{id:+o.id,from:o.from,amount:+o.amount,note:o.note||'',status:o.status,t:Date.parse(o.t),mine:!!o.mine}})}}
 function load(force){if(!real()||RT.busy)return Promise.resolve();var u=window.GGuser;if(RT.who!==u.sbid){RT.who=u.sbid;RT.loaded=0;TL.length=0}
@@ -5016,7 +5023,7 @@ function load(force){if(!real()||RT.busy)return Promise.resolve();var u=window.G
 function call(fn,a){return window.MCdb.rpc(fn,a).then(function(r){if(r.error)throw new Error(r.error.message);return load(true).then(function(){return r.data})})}
 function mine(x){var u=me();if(real())return !!x.mine;return !!(u&&x.seller===u.name)}
 function myOffer(o){var u=me();if(real())return !!o.mine;return !!(u&&o.from===u.name)}
-function pic(x){if(x.photos&&x.photos.length)return '<img src="'+x.photos[0]+'" alt="">';var api=x.kind==='Van'?window.GGvans:window.GGcars;try{return api&&api.pic?api.pic({make:x.make,model:x.model,body:x.body,col:x.col,id:x.id}):''}catch(e){return ''}}
+function pic(x){if(x.photos&&x.photos.length)return '<img src="'+SRC(x.photos[0])+'" alt="">';var api=x.kind==='Van'?window.GGvans:window.GGcars;try{return api&&api.pic?api.pic({make:x.make,model:x.model,body:x.body,col:x.col,id:x.id}):''}catch(e){return ''}}
 function usedThisMonth(u){if(real())return RT.used;var m=day(0).slice(0,7);return TL.filter(function(x){return x.seller===u.name&&x.listed.slice(0,7)===m&&!x.demo}).length}
 function freeLeft(u){return u.role==='dealer'?Math.max(0,FREE-usedThisMonth(u)):0}
 function priceBlock(x){return x.mode==='min'?'<div class="trp">'+gbp(x.price)+'</div><div class="trpm">Minimum price</div>':'<div class="trp">Make an offer</div><div class="trpm">Offers invited</div>'}
@@ -5053,7 +5060,7 @@ var s='<div class="card"><div class="trdh"><h2>My trade listings</h2><button cla
 if(st.form)s+=formView(u);
 if(!l.length)s+='<div class="card"><p class="note">You have no trade listings yet.</p></div>';
 l.forEach(function(x){var pend=x.offers.filter(function(o){return o.status==='pending'});
-s+='<div class="card"><div class="trmine"><div class="trpic sm">'+pic(x)+'</div><div><b>'+H(x.year+' '+x.make+' '+x.model)+'</b><div class="trs">'+H(x.variant)+' &middot; '+Number(x.miles).toLocaleString('en-GB')+' miles</div><div class="trs">'+(x.mode==='min'?'Minimum price '+gbp(x.price):'Offers invited, your hidden minimum '+gbp(x.price))+'</div><div class="trs"><span class="trst s-'+x.status+'">'+({live:'Live',sold:'Sold',withdrawn:'Withdrawn'})[x.status]+'</span> Listed '+fmtD(x.listed)+(x.fee?' &middot; Fee '+x.fee:'')+(x.stockId?' &middot; From your stock':'')+'</div></div></div>';
+s+='<div class="card"><div class="trmine"><div class="trpic sm">'+pic(x)+'</div><div><b>'+H(x.year+' '+x.make+' '+x.model)+'</b><div class="trs">'+H(x.variant)+' &middot; '+Number(x.miles).toLocaleString('en-GB')+' miles</div><div class="trs">'+(x.mode==='min'?'Minimum price '+gbp(x.price):'Offers invited, your hidden minimum '+gbp(x.price))+'</div><div class="trs"><span class="trst s-'+x.status+'">'+(x.removed?'Taken down':({live:'Live',sold:'Sold',withdrawn:'Withdrawn'})[x.status])+'</span> Listed '+fmtD(x.listed)+(x.fee?' &middot; Fee '+x.fee:'')+(x.stockId?' &middot; From your stock':'')+'</div></div></div>'+(x.removed?'<p class="note" style="margin:8px 0 0"><b>We took this listing down.</b> The reason: '+H(x.removed)+' Reply to our email if you have a question.</p>':'');
 if(x.buyer)s+='<p class="trok"><b>Sold to '+H(x.buyer.name)+' for '+gbp(x.buyer.amount)+'.</b> Arrange payment and collection with them directly'+(x.buyer.phone||x.buyer.email?': '+H([x.buyer.phone,x.buyer.email].filter(Boolean).join(', ')):'')+'.</p>';
 if(x.offers.length){s+='<h3 class="trh3">Offers</h3>';x.offers.slice().sort(function(a,b){return b.amount-a.amount}).forEach(function(o){s+='<div class="trofr"><div><b>'+gbp(o.amount)+'</b> from '+H(o.from)+(o.note?'<small>&ldquo;'+H(o.note)+'&rdquo;</small>':'')+'</div><div>'+(o.status==='pending'&&x.status==='live'?'<button class="btn sm" type="button" data-tacc="'+x.id+':'+o.id+'">Accept</button><button class="btn sm ghost" type="button" data-tdec="'+x.id+':'+o.id+'">Decline</button>':'<span class="trst s-'+o.status+'">'+o.status+'</span>')+'</div></div>'})}
 else if(x.status==='live')s+='<p class="note">No offers yet.</p>';
@@ -5124,7 +5131,7 @@ if(a.tow){var q=a.tow.split(':'),x5=find(q[0]);x5.offers=x5.offers.filter(functi
 })();</script>
 <script>(function(){
 function $(i){return document.getElementById(i)}
-function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
+function H(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function m2(n){return '£'+(Math.round(n*100)/100).toFixed(2)}
 var PART=[{n:'Swift Recovery',b:65,m:2.4,r:'4.8'},{n:'Highway Rescue 24h',b:75,m:2.2,r:'4.9'},{n:'Metro Tow and Transport',b:60,m:3.1,r:'4.6'},{n:'Beacon Vehicle Recovery',b:85,m:2.0,r:'4.9'}];window.MCdir.reg('part',PART);
 var FEE=9.99,ST={};
@@ -5292,7 +5299,7 @@ paint()})();
 /* motor trade jobs board */
 (function(){function $(i){return document.getElementById(i)}
 if(!$('v-jobs'))return;
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var DAY=864e5,PRICE=9.99,RUN=90;
 var CATS=['Workshop and technical','MOT testing','Auto electrical and locksmith','Bodyshop and paint','Alloy wheels','Tyres','Recovery and driving','EV and hybrid','Valeting and detailing','Vehicle sales','Parts and stores','Service desk and customer care','Office, accounts and admin','Management','Apprenticeships and trainees'];
 var ROLES=['Vehicle technician','Mobile mechanic','Master technician','MOT tester','Auto electrician','Diagnostic technician','Vehicle locksmith','Panel beater','Paint sprayer','Prepper','Smart repairer','Alloy wheel technician','Tyre fitter','Mobile tyre fitter','Recovery driver','Transporter driver','Delivery and collection driver','EV technician','Valeter','Detailer','Sales executive','Sales manager','Vehicle buyer','Parts adviser','Stores person','Service adviser','Receptionist','Bookkeeper','Accounts assistant','Administrator','Workshop controller','Workshop manager','Branch manager','Apprentice technician','Trainee'];
@@ -5408,7 +5415,7 @@ fill();draw();drawPost();window.GGjobs={refresh:function(){draw();drawPost()},co
    so how the trade side works is only seen after registering. The recovery page is written out by hand; this builds the others. */
 (function(){function $(i){return document.getElementById(i)}
 function el(h){var d=document.createElement('div');d.innerHTML=h;return d.firstElementChild}
-function E(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function E(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var FEE='<b>One flat fee: 10% + VAT.</b> No monthly fee, no membership, no joining fee.',UP='<b>Every job is paid up front.</b> The customer pays when they book. No chasing, no bad debts.',WK='<b>Paid every week,</b> straight to your bank.',LEADS='<b>No paying for leads.</b> You only pay our fee on work you actually do.';
 var MECH={h1:'Mechanics and garages: booked jobs, paid up front.',sub:'Join as a mobile mechanic, a garage, an MOT test station or an auto electrician. We bring you the work.',
   pts:['<b>You set your own rates.</b> Customers see your price before they choose you.',UP,FEE,WK,'<b>Work when you want.</b> Open or close your diary whenever you like.','<b>Parts sorted.</b> The right parts for the car, ready to collect.']};
@@ -5507,7 +5514,7 @@ window.MCmap=(function(){var P=null,KEEP={};
    section at a time. Each card on the dashboard belongs to one tab (tagOf); the big cards are split inside with data-pcs.
    Mechanics and dealers still draw part of the page from u.dtab, so a tab can ask for the dtab it needs (dt). */
 (function(){function $(i){return document.getElementById(i)}
-function E(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function E(x){return String(x==null?'':x).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 var ST={tab:'',sub:''},last='',who='';
 function on(u){return !!u&&['recovery','evcharge','body','tyres','valet','mechanic','dealer','instructor'].indexOf(u.role)>-1}
 var S_BRAND=['brand','Logo and website','Shown to customers next to your prices'],S_BILL=['billing','Self-billing agreement','Needed before we can pay you. Your VAT number'],S_DOCS=['docs','Documents','Insurance certificates and photo ID'],S_DET=['details','Your details','Business name, phone and email'];
@@ -5683,7 +5690,7 @@ function captureAdmin(){var U=window.GGusers;if(!U||!mineDoc||!db||!uid)return;v
   mineDoc.decisions[u.email]=x;allDec[u.email]=x;u._decT=x.t;changed=true});
  if(changed)write('subs/'+uid,mineBody()).then(function(){toast('Decision saved.')},fail)}
 /* admin console: everything that has been saved */
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function when(t){return new Date(t).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
 function drawInbox(){var host=$('admin-body');if(!host||!db)return;var old=$('mc-inbox');if(old)old.remove();
  if(!(window.GGuser&&window.GGuser.role==='admin'))return;
@@ -5730,13 +5737,13 @@ function one(f){return new Promise(function(res){if(!/^image\//.test(f.type)||f.
  im.onerror=function(){URL.revokeObjectURL(url);res(null)};im.src=url})}
 function read(files,room){var list=[].slice.call(files||[],0,Math.max(0,room));var out=[];
  return list.reduce(function(p,f){return p.then(function(){return one(f)}).then(function(d){if(d)out.push(d)})},Promise.resolve()).then(function(){return out})}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var msg='';
 function stockHtml(e){var p=e.photos||[],n=p.length,h='<div class="stph" id="st-ph"><h3 class="sh">Photos</h3>';
  h+='<div class="phdrop" id="st-phdrop"><span class="phcount'+(n>=MAX?' full':'')+'">'+n+' of '+MAX+' photos</span><label class="btn sm'+(n>=MAX?' ghost':'')+'" for="st-ph-in" tabindex="0" role="button" id="st-ph-lab"'+(n>=MAX?' aria-disabled="true"':'')+'>'+(n?'Add more photos':'Add photos')+'</label><input type="file" id="st-ph-in" accept="image/*" multiple'+(n>=MAX?' disabled':'')+'>';
  h+='<span class="note" style="margin:0;flex:1 1 220px">'+(n>=MAX?'You have reached the limit of 30 photos for this vehicle. Remove one to add another.':'Up to 30 photos per vehicle. Choose several at once, or drag them here. Photos are resized automatically.')+'</span></div>';
  h+='<p class="note" id="st-ph-msg" role="status">'+esc(msg)+'</p>';
- if(n){h+='<ul class="phgrid">';p.forEach(function(src,i){h+='<li'+(i===0?' class="main"':'')+'><img src="'+src+'" alt="Photo '+(i+1)+'">'+(i===0?'<span class="phtag">Main photo</span>':'')+'<span class="phnum">'+(i+1)+'</span><div class="phbtns"><button type="button" data-phmv="'+i+':-1"'+(i===0?' disabled':'')+' aria-label="Move photo '+(i+1)+' earlier">&larr;</button><button type="button" data-phmain="'+i+'"'+(i===0?' disabled':'')+' aria-label="Make photo '+(i+1)+' the main photo">Main</button><button type="button" data-phmv="'+i+':1"'+(i===n-1?' disabled':'')+' aria-label="Move photo '+(i+1)+' later">&rarr;</button><button type="button" data-phrm="'+i+'" aria-label="Remove photo '+(i+1)+'">Remove</button></div></li>'});h+='</ul>'}
+ if(n){h+='<ul class="phgrid">';p.forEach(function(src,i){h+='<li'+(i===0?' class="main"':'')+'><img src="'+SRC(src)+'" alt="Photo '+(i+1)+'">'+(i===0?'<span class="phtag">Main photo</span>':'')+'<span class="phnum">'+(i+1)+'</span><div class="phbtns"><button type="button" data-phmv="'+i+':-1"'+(i===0?' disabled':'')+' aria-label="Move photo '+(i+1)+' earlier">&larr;</button><button type="button" data-phmain="'+i+'"'+(i===0?' disabled':'')+' aria-label="Make photo '+(i+1)+' the main photo">Main</button><button type="button" data-phmv="'+i+':1"'+(i===n-1?' disabled':'')+' aria-label="Move photo '+(i+1)+' later">&rarr;</button><button type="button" data-phrm="'+i+'" aria-label="Remove photo '+(i+1)+'">Remove</button></div></li>'});h+='</ul>'}
  else h+='<p class="note">No photos yet. Adverts with photos get far more enquiries.</p>';
  msg='';return h+'</div>'}
 function cur(){var u=window.GGuser;return u&&u.sedit?u.sedit:null}
@@ -5858,7 +5865,7 @@ function money(n){return '£'+(+n).toFixed(2)}
 /* we pay test centres the official maximum less a flat £5 booking fee (incl. VAT) for every class. Car (class 4): £49.85 */
 var FEE=5;function payout(k){var t=BY[k];return t?Math.max(0,Math.round((t.max-FEE)*100)/100):0}
 function cur(){var s=$('mclass');return BY[s&&s.value]||BY['4-car']}
-function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function rows(p,have){var h='';T.forEach(function(t){var on=have?have[t.k]!=null:t.k==='4-car',fee=payout(t.k);
  if(t.g)h+='<div class="motgrp">'+esc(t.g)+'</div>';
  h+='<div class="motrow'+(on?'':' off')+'"><input type="checkbox" id="'+p+'-c-'+t.k+'" data-motc="'+t.k+'"'+(on?' checked':'')+'><label for="'+p+'-c-'+t.k+'">'+esc(t.n)+'<small>'+(t.h?esc(t.h)+'. ':'')+'Class '+t.c+'. Customer pays '+money(t.max)+'</small></label>'
@@ -5892,7 +5899,7 @@ window.MCMOT={table:T,payout:payout,
 <script>
 /* DVSA test station number (VTS): checked against the DVSA list of active MOT test stations (loaded by 'vts-sync') */
 (function(){function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function norm(v){return String(v||'').toUpperCase().replace(/\s/g,'')}
 function fmt(r){return esc(r.name)+(r.postcode?', '+esc(r.postcode):'')+(r.classes&&r.classes.length?' (classes '+esc(r.classes.join(', '))+')':'')}
 function ask(n){return window.MCmotDb&&window.MCmotDb.checkVts?window.MCmotDb.checkVts(n).then(function(r){if(!r||r.error)throw r&&r.error;return r.data}):Promise.reject()}
@@ -5916,7 +5923,7 @@ window.MCvtsFill=function(){[].forEach.call(document.querySelectorAll('[data-vts
    the demo admin sees the demo garage's online bookings kept in this browser. Only the owner can cancel. */
 (function(){
 var ST={rows:null,err:'',open:null,busy:false},LS='mc-motdiary';
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function m(n){return '£'+(+n||0).toFixed(2)}
 function tm(x){var h=Math.floor(x/60),mm=x%60,ap=h>=12?'pm':'am';h=h%12||12;return h+':'+(mm<10?'0':'')+mm+ap}
 function dl(k){return new Date(k+'T12:00:00').toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
@@ -5991,7 +5998,7 @@ addEventListener('hashchange',function(){setTimeout(sync,80)});form.addEventList
 <script>
 /* picture tiles for repair, electrical and locksmith jobs */
 (function(){var ICON={"svc": "<path d='M8 22h20l6-8h6l-3 8M8 22v-6l5-2 3-5h8l2 5M14 9l-3-3M38 6c0 3-2 4-2 6a2 2 0 0 0 4 0c0-2-2-3-2-6z'/><circle cx='19' cy='17' r='2.5'/>", "brk": "<circle cx='24' cy='16' r='12'/><circle cx='24' cy='16' r='4'/><path d='M24 6v3M24 23v3M14 16h3M31 16h3M17 9l2 2M29 21l2 2M31 9l-2 2M17 23l2-2'/><path d='M36 8a14 14 0 0 1 0 16'/>", "bat": "<rect x='7' y='10' width='34' height='17' rx='2'/><path d='M13 10V6h6v4M29 10V6h6v4M13 18h6M16 15v6M29 18h6'/>", "diag": "<path d='M6 25a18 18 0 1 1 36 0'/><path d='M24 25l8-11'/><circle cx='24' cy='25' r='2.5'/><path d='M10 25h3M35 25h3M24 9v3M13 14l2 2'/>", "efault": "<path d='M24 4L5 28h38z'/><path d='M26 11l-6 8h6l-4 7'/>", "alt": "<circle cx='22' cy='16' r='11'/><circle cx='22' cy='16' r='4'/><path d='M22 5v4M22 23v4M11 16h4M29 16h4M33 12h7v8h-7M40 16h4'/>", "start": "<circle cx='24' cy='16' r='12'/><path d='M24 8v8M18 11a8 8 0 1 0 12 0'/>", "lock": "<path d='M5 27V12c0-3 3-6 7-6h17l10 10v11z'/><path d='M29 6v10h10M12 6v21'/><rect x='17' y='18' width='7' height='5' rx='1'/><path d='M20 18v-2'/>", "dash": "<rect x='8' y='9' width='22' height='14' rx='3'/><circle cx='19' cy='16' r='4'/><path d='M30 13l10-4v14l-10-4M14 5h10M19 5v4'/>", "psens": "<path d='M4 24v-4l4-2 4-6h12l5 6 4 2v4z'/><circle cx='11' cy='25' r='3'/><circle cx='25' cy='25' r='3'/><path d='M37 12a8 8 0 0 1 0 12M41 8a13 13 0 0 1 0 20'/>", "kspare": "<circle cx='12' cy='16' r='7'/><circle cx='12' cy='16' r='2'/><path d='M19 16h17M30 16v5M35 16v4M40 6v8M36 10h8'/>", "klost": "<circle cx='12' cy='18' r='7'/><circle cx='12' cy='18' r='2'/><path d='M19 18h13M27 18v5M36 9c0-3 2-5 4.5-5S45 6 45 8.5c0 3-4 3-4 6M41 19v.5'/>", "kout": "<path d='M4 24v-4l4-2 5-7h14l6 7 5 2v4z'/><circle cx='12' cy='25' r='3.5'/><circle cx='31' cy='25' r='3.5'/><rect x='34' y='8' width='10' height='8' rx='1.5'/><path d='M36.5 8V6a2.5 2.5 0 0 1 5 0v2'/>", "kfob": "<rect x='15' y='6' width='18' height='22' rx='6'/><circle cx='24' cy='13' r='2.5'/><path d='M20 20h8M20 24h8M24 6V3M8 12a8 8 0 0 0 0 10M40 12a8 8 0 0 1 0 10'/>", "klock": "<circle cx='24' cy='16' r='12'/><circle cx='24' cy='13' r='3'/><path d='M24 16v7M21 23h6'/>"},SHORT={"efault": "Electrical fault", "alt": "Alternator", "start": "Starter motor", "bat": "Battery", "lock": "Central locking or windows", "dash": "Dash cam fitted", "psens": "Parking sensors", "kspare": "Spare key", "klost": "Lost keys", "kout": "Locked out", "kfob": "Key fob repair", "klock": "Lock repair", "svc": "Full service", "brk": "Front brakes", "diag": "Diagnostics"};
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 window.MCJOB={tile:function(s,from){var ic=ICON[s.id]||ICON.diag,d=String(s.d||'').replace(/^Locksmith: /,'');d=d.charAt(0).toUpperCase()+d.slice(1);
  return '<svg class="motic" viewBox="0 0 48 32" aria-hidden="true">'+ic+'</svg><span class="mott"><b>'+esc(SHORT[s.id]||s.n)+'</b><small>'+esc(d)+'</small></span>'+(from!=null?'<span class="motp"><b>From \u00A3'+from+'</b></span>':'')}};
 if(window.GGrerender)window.GGrerender();
@@ -6000,7 +6007,7 @@ if(window.GGrerender)window.GGrerender();
 <script>
 /* activity: counts page views and button presses (only with "Accept all cookies"), and shows them in the admin console */
 (function(){function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var LS='mc-activity',consent=false,base=blank(),ses=blank(),others=[],dirty=false,timer=null,find='',open={};
 function blank(){return{days:{},pages:{},clicks:{},who:{},pm:{}}}
 try{consent=localStorage.getItem('mc-cookies')==='all'}catch(e){}
@@ -6236,7 +6243,7 @@ window.MCdl={save:save,csv:csv};window.MCreports={deals:deals,partners:function(
 <script>
 /* partner logo and website: optional at sign-up, editable on the dashboard */
 (function(){function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var cache={};
 function site(v){v=String(v||'').trim();if(!v)return '';if(!/^https?:\/\//i.test(v))v='https://'+v;
  return /^https?:\/\/([a-z0-9-]+\.)+[a-z]{2,}(:\d+)?(\/[^\s<>"']*)?$/i.test(v)&&v.length<=200?v:null}
@@ -6247,12 +6254,12 @@ function fields(p){return '<fieldset class="brandbox"><legend>'+($(p+'-web')?'Yo
  +'<label class="up">Company logo (PNG or JPG)<input type="file" id="'+p+'-logo" accept="image/png,image/jpeg,image/webp"></label><div class="bprev" id="'+p+'-logoprev"></div>'
  +($(p+'-web')?'':'<label class="f" for="'+p+'-web" style="margin-top:10px">Website</label><input type="text" id="'+p+'-web" inputmode="url" autocomplete="url" placeholder="www.yourbusiness.co.uk">')+'<p class="branderr" id="'+p+'-brerr" role="alert"></p></fieldset>'}
 function wire(p,onLogo){var f=$(p+'-logo');if(!f)return;f.addEventListener('change',function(){var er=$(p+'-brerr'),pv=$(p+'-logoprev');er.textContent='';if(!f.files[0]){delete cache[p];pv.innerHTML='';return}
-  shrink(f.files[0]).then(function(d){cache[p]=d;pv.innerHTML='<img class="brandlogo" alt="Your logo" src="'+d+'"><span class="note">This is how your logo will look.</span>';if(onLogo)onLogo(d)},function(m){delete cache[p];f.value='';pv.innerHTML='';er.textContent=m})})}
+  shrink(f.files[0]).then(function(d){cache[p]=d;pv.innerHTML='<img class="brandlogo" alt="Your logo" src="'+SRC(d)+'"><span class="note">This is how your logo will look.</span>';if(onLogo)onLogo(d)},function(m){delete cache[p];f.value='';pv.innerHTML='';er.textContent=m})})}
 [].forEach.call(document.querySelectorAll('input[type=file][id$="-doc1"]'),function(inp){var p=inp.id.slice(0,-5),fs=inp.closest('fieldset');if(!fs||$(p+'-logo'))return;fs.insertAdjacentHTML('beforebegin',fields(p));wire(p);
  var form=inp.closest('form');if(form)form.addEventListener('submit',function(e){var w=$(p+'-web');if(w&&w.offsetParent&&site(w.value)===null){e.preventDefault();e.stopImmediatePropagation();$(p+'-brerr').textContent='Enter a full website address, like www.yourbusiness.co.uk, or leave it empty.';w.focus()}},true)});
 window.MCbrand={
  read:function(p,d){var w=$(p+'-web');d.website=w?site(w.value)||'':'';if(cache[p])d.logo=cache[p]},
- logo:function(u){var src=u&&u.logo&&/^data:image\/png;base64,/.test(u.logo)?u.logo:u&&u.logoUrl&&/^https:\/\//.test(u.logoUrl)?u.logoUrl:'';return src?'<img class="brandlogo" alt="'+esc(u.name)+' logo" src="'+esc(src)+'">':''},
+ logo:function(u){var src=u&&u.logo&&/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(u.logo)?u.logo:u&&u.logoUrl&&/^https:\/\//.test(u.logoUrl)?u.logoUrl:'';return src?'<img class="brandlogo" alt="'+esc(u.name)+' logo" src="'+esc(src)+'">':''},
  link:function(u){var v=u&&site(u.website);return v?'<a class="brandlink" href="'+esc(v)+'" target="_blank" rel="noopener noreferrer nofollow">'+esc(v.replace(/^https?:\/\//i,'').replace(/\/$/,''))+'</a>':''},
  admin:function(u){var l=this.logo(u),k=this.link(u);return (l||k)?'<div style="display:flex;gap:12px;align-items:center;margin-top:10px"><span class="note">Logo and website:</span>'+(l?l.replace('brandlogo','brandlogo sm'):'<span class="note">no logo</span>')+(k||'<span class="note">no website</span>')+'</div>':(u.website===undefined&&!u.logo?'':'')},
  card:function(u){if(!u||u.role==='admin'||u.role==='customer')return '';
@@ -6269,7 +6276,7 @@ window.MCbrand={
 <script>
 /* partner profiles and logos for customers, customer reviews of bookings, and the Trustpilot hand-off */
 (function(){function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 /* Set this to your Trustpilot review link once your Trustpilot Business account is open, for example https://uk.trustpilot.com/evaluate/yourdomain.co.uk */
 var TRUSTPILOT_URL='';
 var REV=[],sent={},sel=null,draft=null,done=null,loadedInbox=0;
@@ -6294,7 +6301,7 @@ function sample(name){var h=hash(name),out=[],n=3;for(var i=0;i<n;i++)out.push({
 function realOf(name){sync();var k=pname(name).toLowerCase();return REV.filter(function(r){return r.partner.toLowerCase()===k}).sort(function(a,b){return b.t-a.t})}
 function summary(name){var real=!!(window.MCisRealPartner&&window.MCisRealPartner(pname(name))),r=realOf(name),all=real?r:r.concat(sample(pname(name))),t=0;all.forEach(function(x){t+=x.stars});var h=hash(pname(name));return{avg:all.length?t/all.length:0,n:all.length,count:real?r.length:r.length+18+h%140,list:all,isNew:real&&!r.length}} /* real partners never get sample reviews */
 function userOf(name){var k=pname(name).toLowerCase();return (window.GGusers||[]).filter(function(u){return u.role!=='admin'&&String(u.name||'').toLowerCase()===k})[0]}
-function av(name,cls){var u=userOf(name),nm=pname(name);if(u&&u.logo&&/^data:image\/png;base64,/.test(u.logo))return '<span class="pav '+(cls||'')+'"><img alt="" src="'+u.logo+'"></span>';
+function av(name,cls){var u=userOf(name),nm=pname(name);if(u&&u.logo&&/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(u.logo))return '<span class="pav '+(cls||'')+'"><img alt="" src="'+SRC(u.logo)+'"></span>';
  var ini=nm.split(/\s+/).filter(function(w){return /[A-Za-z]/.test(w)}).slice(0,2).map(function(w){return w.charAt(0).toUpperCase()}).join(''),c=['#38BDF8','#FFD43B','#7ee2b8','#f9a8d4','#c4b5fd'][hash(nm)%5];
  return '<span class="pav '+(cls||'')+'" style="background:'+c+'" aria-hidden="true">'+esc(ini)+'</span>'}
 var TYPES={mobile:'Mobile mechanic',garage:'Garage',mot:'MOT test station',autoelec:'Auto electrician or locksmith',recovery:'Recovery',evcharge:'Mobile EV charging',tyres:'Mobile tyre fitter',valet:'Valeter',body:'Body shop'},ROLE={mechanic:'Mechanic or garage',recovery:'Recovery',evcharge:'Mobile EV charging',body:'Body shop',tyres:'Mobile tyre fitter',valet:'Valeter',dealer:'Dealer'};
@@ -6403,7 +6410,7 @@ var wasCust=isCust();setInterval(function(){if(isCust()!==wasCust){wasCust=isCus
 <script>
 /* booking updates (email, text and in-app), partner job status, and chat between customer, partner and our team */
 (function(){function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var LS='mc-hub',S={B:{},T:{},R:{}},view={open:false,tab:'chats',th:null};
 try{var raw=localStorage.getItem(LS);if(raw){var o=JSON.parse(raw);if(o&&o.B&&o.T)S={B:o.B,T:o.T,R:o.R||{}}}}catch(e){}
 function keep(){try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){}}
@@ -6529,7 +6536,7 @@ badge();
 <script>
 /* page titles and share details, skip link, postcode-first home page, and My garage */
 (function(){function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 /* ---- titles, description, icon ---- */
 var T={drivers:'Everything your car needs, in one place',cars:'Used cars for sale from local dealers',vans:'Used vans for sale from local dealers',breakdown:'Breakdown cover',jobs:'Work in the motor trade',about:'About us',contact:'Contact us',complaints:'Complaints procedure',faq:'Help and FAQs',privacy:'Privacy policy',cookies:'Cookie notice',terms:'Terms and conditions',network:'Join the network: for motor traders',mechanics:'Join as a mechanic, garage or MOT station',recovery:'Join as a recovery operator',evcharging:'Join as a mobile EV charging partner',bodyshop:'Join as a body shop',tyres:'Join as a mobile tyre fitter',valets:'Join as a valeter',dealers:'Join as a dealer',login:'Partner log in',dashboard:'Partner dashboard',account:'My account',review:'Review your booking',trade:'Trade cars and vans',staff:'Staff sign in',admin:'Admin console'};
 function title(){var h=location.hash.replace(/^#/,'').split(/[?\/]/)[0]||'drivers';document.title=(T[h]||'The Motoring Central')+' | The Motoring Central'}
@@ -6709,7 +6716,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 <script>
 /* partner dashboard: today's booked jobs with one-tap inspection */
 (function(){
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function jobNo(t){return 'TMC-'+String(t).slice(-6)}
 function done(){try{return JSON.parse(localStorage.getItem('tmc-inspections')||'{}')||{}}catch(e){return {}}}
 function sheets(){try{return JSON.parse(localStorage.getItem('tmc-service-sheets')||'{}')||{}}catch(e){return {}}}
@@ -6758,7 +6765,7 @@ window.MCjobs=function(u){if(!u||u.role==='customer'||u.role==='admin'||u.role==
 <script>
 /* dealers: pre-delivery inspection from stock and adverts */
 (function(){
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function done(){try{return JSON.parse(localStorage.getItem('tmc-pdis')||'{}')||{}}catch(e){return {}}}
 function stockList(u){var out=[],linked={};
  (u.stock||[]).forEach(function(v){var k='stock:'+v.id;if(v.ad)linked[v.ad.k+':'+v.ad.id]=k;
@@ -6819,7 +6826,7 @@ document.addEventListener('click',function(e){var b=e.target.closest&&e.target.c
 (function(){
 if(!window.MCSVC)return;
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var SKIP={'Vehicles you work on':1};
 var PRICED={'Full service':'svc','Brake discs and pads':'brk','Front brake pads':'brk','Battery test and replacement':'bat','Engine warning light diagnosis':'diag','Full fault code scan (all systems)':'diag'};
 var ICO='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>';
@@ -6909,7 +6916,7 @@ watch();mount();
 (function(){
 var LS='mc-quote-req';
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function all(){try{return JSON.parse(localStorage.getItem(LS)||'[]')||[]}catch(e){return []}}
 function put(L){try{localStorage.setItem(LS,JSON.stringify(L))}catch(e){}}
 function low(s){return String(s||'').trim().toLowerCase()}
@@ -7057,7 +7064,7 @@ function build(f){if(f.querySelector('.pf-step'))return;var id=f.id,kids=[].slic
  f.setAttribute('data-pfstep','0');show(f,0,true)}
 var NAMES2={};
 function names(id){return NAMES2[id]||NAMES}
-function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function show(f,n,quiet){var st=f.querySelectorAll('.pf-step');[].forEach.call(st,function(d,i){d.hidden=i!==n});f.setAttribute('data-pfstep',n);
  var h=f.querySelector('.pf-head'),nm=names(f.id);
  h.innerHTML='<div class="pf-dots">'+nm.map(function(x,i){return '<span class="'+(i<n?'done':i===n?'on':'')+'"><i>'+(i<n?'✓':i+1)+'</i><em>'+esc(x)+'</em></span>'}).join('')+'</div><p class="pf-now"><b>Step '+(n+1)+' of 4:</b> '+esc(nm[n])+'</p>';
@@ -7137,7 +7144,7 @@ window.addEventListener('hashchange',function(){Object.keys(FORMS).forEach(funct
    Every private advert is clearly marked "Private sale". Preview: adverts last until the page is closed. */
 (function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var FEE=29.99,PREM=14.99,DAYS=30,PDAYS=14,MAXLIVE=3,DAY=864e5,MSGS={},pend=false;
 function user(){var u=window.GGuser;return u&&u.role==='customer'?u:null}
 function api(k){return k==='vans'?window.GGvans:window.GGcars}
@@ -7207,7 +7214,7 @@ function build(){if(!card||card.firstChild)return;
  $('ps-vat').addEventListener('change',function(){$('ps-vatn').hidden=this.value!=='1'});
  $('ps-prem').addEventListener('change',total);total();
  card.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-pscancel]'))card.hidden=true});
- $('ps-photos').addEventListener('change',function(){var n=this.files.length;window.MCphotos.read(this.files,20).then(function(a){$('ps-prev').innerHTML=a.map(function(s){return '<img src="'+s+'" alt="">'}).join('');$('ps-phnote').textContent=a.length+' of 20 photos added.'+(n>a.length?' '+(n-a.length)+' left out: over the limit, or not an image.':'')+' The first photo is the main one.'})});
+ $('ps-photos').addEventListener('change',function(){var n=this.files.length;window.MCphotos.read(this.files,20).then(function(a){$('ps-prev').innerHTML=a.map(function(s){return '<img src="'+SRC(s)+'" alt="">'}).join('');$('ps-phnote').textContent=a.length+' of 20 photos added.'+(n>a.length?' '+(n-a.length)+' left out: over the limit, or not an image.':'')+' The first photo is the main one.'})});
  /* step 1 and 2: choose, see the price, pay */
  $('ps-pay').addEventListener('click',function(){var u=user();if(!u)return;var er=$('ps-errA');
   if(mine().filter(function(x){return live(x.c)}).length>=MAXLIVE){er.textContent='You already have '+MAXLIVE+' private adverts running. Dealers and traders need a dealer account.';return}
@@ -7322,7 +7329,7 @@ window.MCpriv={notice:notice,premium:premium,open:start,account:account,fee:FEE}
    To switch finance off everywhere, set on:false below. */
 (function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
 function gbp2(n){return '£'+(Math.round(n*100)/100).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}
 var FIN={on:false,sample:true,apr:11.9,depPct:10,term:48,terms:[24,36,48,60],minPrice:3000,minCredit:1000};
@@ -7414,7 +7421,7 @@ window.MCfin={on:FIN.on,cfg:FIN,can:can,from:from,card:card,rep:rep,mount:mount,
    If that look-up cannot be reached, it falls back to the postcode area (the letters at the start), which is rougher. */
 (function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function gbp(n){return '£'+Math.round(n).toLocaleString('en-GB')}
 /* postcode areas: [latitude, longitude, main town] */
 var AREA={AB:[57.15,-2.10,'Aberdeen'],AL:[51.75,-0.34,'St Albans'],B:[52.48,-1.90,'Birmingham'],BA:[51.38,-2.36,'Bath'],BB:[53.75,-2.48,'Blackburn'],BD:[53.79,-1.75,'Bradford'],BH:[50.72,-1.88,'Bournemouth'],BL:[53.58,-2.43,'Bolton'],BN:[50.83,-0.14,'Brighton'],BR:[51.40,0.02,'Bromley'],BS:[51.45,-2.59,'Bristol'],BT:[54.60,-5.93,'Belfast'],CA:[54.89,-2.94,'Carlisle'],CB:[52.20,0.12,'Cambridge'],CF:[51.48,-3.18,'Cardiff'],CH:[53.19,-2.89,'Chester'],CM:[51.73,0.47,'Chelmsford'],CO:[51.89,0.90,'Colchester'],CR:[51.37,-0.10,'Croydon'],CT:[51.28,1.08,'Canterbury'],CV:[52.41,-1.51,'Coventry'],CW:[53.10,-2.44,'Crewe'],DA:[51.44,0.22,'Dartford'],DD:[56.46,-2.97,'Dundee'],DE:[52.92,-1.48,'Derby'],DG:[55.07,-3.61,'Dumfries'],DH:[54.78,-1.58,'Durham'],DL:[54.52,-1.55,'Darlington'],DN:[53.52,-1.13,'Doncaster'],DT:[50.71,-2.44,'Dorchester'],DY:[52.51,-2.08,'Dudley'],E:[51.54,-0.03,'East London'],EC:[51.52,-0.09,'London'],EH:[55.95,-3.19,'Edinburgh'],EN:[51.65,-0.08,'Enfield'],EX:[50.72,-3.53,'Exeter'],FK:[56.00,-3.78,'Falkirk'],FY:[53.82,-3.05,'Blackpool'],G:[55.86,-4.25,'Glasgow'],GL:[51.86,-2.24,'Gloucester'],GU:[51.24,-0.57,'Guildford'],HA:[51.58,-0.34,'Harrow'],HD:[53.65,-1.78,'Huddersfield'],HG:[53.99,-1.54,'Harrogate'],HP:[51.75,-0.47,'Hemel Hempstead'],HR:[52.06,-2.72,'Hereford'],HS:[58.21,-6.39,'Stornoway'],HU:[53.74,-0.34,'Hull'],HX:[53.72,-1.86,'Halifax'],IG:[51.56,0.07,'Ilford'],IP:[52.06,1.16,'Ipswich'],IV:[57.48,-4.22,'Inverness'],KA:[55.61,-4.50,'Kilmarnock'],KT:[51.41,-0.30,'Kingston upon Thames'],KW:[58.98,-2.96,'Kirkwall'],KY:[56.11,-3.16,'Kirkcaldy'],L:[53.41,-2.98,'Liverpool'],LA:[54.05,-2.80,'Lancaster'],LD:[52.24,-3.38,'Llandrindod Wells'],LE:[52.63,-1.13,'Leicester'],LL:[53.32,-3.83,'Llandudno'],LN:[53.23,-0.54,'Lincoln'],LS:[53.80,-1.55,'Leeds'],LU:[51.88,-0.42,'Luton'],M:[53.48,-2.24,'Manchester'],ME:[51.39,0.54,'Medway'],MK:[52.04,-0.76,'Milton Keynes'],ML:[55.79,-3.99,'Motherwell'],N:[51.57,-0.10,'North London'],NE:[54.98,-1.61,'Newcastle'],NG:[52.95,-1.15,'Nottingham'],NN:[52.24,-0.90,'Northampton'],NP:[51.58,-3.00,'Newport'],NR:[52.63,1.30,'Norwich'],NW:[51.55,-0.19,'North West London'],OL:[53.54,-2.11,'Oldham'],OX:[51.75,-1.26,'Oxford'],PA:[55.85,-4.42,'Paisley'],PE:[52.57,-0.24,'Peterborough'],PH:[56.40,-3.43,'Perth'],PL:[50.38,-4.14,'Plymouth'],PO:[50.82,-1.09,'Portsmouth'],PR:[53.76,-2.70,'Preston'],RG:[51.45,-0.97,'Reading'],RH:[51.24,-0.17,'Redhill'],RM:[51.58,0.18,'Romford'],S:[53.38,-1.47,'Sheffield'],SA:[51.62,-3.94,'Swansea'],SE:[51.47,-0.06,'South East London'],SG:[51.90,-0.20,'Stevenage'],SK:[53.41,-2.16,'Stockport'],SL:[51.51,-0.59,'Slough'],SM:[51.36,-0.19,'Sutton'],SN:[51.56,-1.78,'Swindon'],SO:[50.90,-1.40,'Southampton'],SP:[51.07,-1.79,'Salisbury'],SR:[54.91,-1.38,'Sunderland'],SS:[51.54,0.71,'Southend'],ST:[53.00,-2.18,'Stoke-on-Trent'],SW:[51.47,-0.17,'South West London'],SY:[52.71,-2.75,'Shrewsbury'],TA:[51.02,-3.10,'Taunton'],TD:[55.62,-2.81,'Galashiels'],TF:[52.68,-2.45,'Telford'],TN:[51.19,0.27,'Tonbridge'],TQ:[50.46,-3.53,'Torquay'],TR:[50.26,-5.05,'Truro'],TS:[54.57,-1.23,'Middlesbrough'],TW:[51.45,-0.34,'Twickenham'],UB:[51.51,-0.38,'Southall'],W:[51.51,-0.19,'West London'],WA:[53.39,-2.60,'Warrington'],WC:[51.52,-0.12,'Central London'],WD:[51.66,-0.40,'Watford'],WF:[53.68,-1.50,'Wakefield'],WN:[53.55,-2.63,'Wigan'],WR:[52.19,-2.22,'Worcester'],WS:[52.59,-1.98,'Walsall'],WV:[52.59,-2.13,'Wolverhampton'],YO:[53.96,-1.08,'York'],ZE:[60.15,-1.14,'Lerwick']};
@@ -7639,7 +7646,7 @@ if(ST.cars.pc)geo(ST.cars.pc,function(){changed('cars');sync('vans')});
 (function(){
 var NS='Not sure: please check and advise';
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var nav=document.querySelector('.qkwrap');if(!nav)return;var grid=nav.querySelector('.qkgrid');if(!grid)return;
 
 /* ---------- what the search knows ---------- */
@@ -7972,7 +7979,7 @@ try{var qp=new URLSearchParams(location.search).get('q');if(qp&&onHome()){H.I.va
    To change the questions, edit T below. Every job name must match a job in the services list (MCSVC). */
 (function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var NS='Not sure: please check and advise';
 /* dashboard warning light symbols (drawn for the site, in the colour they show on the dashboard) */
 var WL={"engine": ["#F5A524", "<path d='M10 19h4v-4h6v-3h9v3h4l3 4h3v-3h4v15h-4v-3h-3l-3 4H17l-3-4h-4z'/><path d='M5 18v11M5 23.5h5M20 12h9'/>"], "battery": ["#EF4444", "<rect x='6' y='15' width='36' height='22' rx='3'/><path d='M12 15v-4h6v4M30 15v-4h6v4M11 26h7M30 26h7M33.5 22.5v7'/>"], "oil": ["#EF4444", "<path d='M15 19h15l4 4 9-5-10 14H15z'/><path d='M15 22H9l-4 4 4 3h6M20 19v-4h6v4'/><path d='M42 31c0 2.5-2 3.5-2 5.5a2 2 0 0 0 4 0c0-2-2-3-2-5.5z'/>"], "temp": ["#EF4444", "<path d='M21 27V9a3 3 0 0 1 6 0v18'/><circle cx='24' cy='31' r='5'/><path d='M27 12h5M27 17h5M27 22h5M5 41c3-2.5 6-2.5 9 0s6 2.5 9 0 6-2.5 9 0 6 2.5 9 0'/>"], "brake": ["#EF4444", "<circle cx='24' cy='24' r='12'/><path d='M24 17v9M10 12a17 17 0 0 0 0 24M38 12a17 17 0 0 1 0 24'/><circle cx='24' cy='30.5' r='1.3' fill='currentColor'/>"], "abs": ["#F5A524", "<circle cx='24' cy='24' r='12'/><path d='M10 12a17 17 0 0 0 0 24M38 12a17 17 0 0 1 0 24'/><text x='24' y='27.5' text-anchor='middle' font-size='9.5' font-weight='800' font-family='Arial,sans-serif' fill='currentColor' stroke='none'>ABS</text>"], "traction": ["#F5A524", "<path d='M13 24l3-9h16l3 9v7H13z'/><path d='M13 31v3M35 31v3M17 20h14'/><path d='M17 37c-3 3 3 5 0 8M31 37c-3 3 3 5 0 8'/>"], "airbag": ["#EF4444", "<circle cx='16' cy='9' r='3.5'/><path d='M15 15l-3 13h10l5 11M14 20l8 4M9 15v19h10'/><circle cx='35' cy='21' r='7'/>"], "steer": ["#F5A524", "<circle cx='20' cy='24' r='13'/><circle cx='20' cy='24' r='3.5'/><path d='M7.5 21h9M23.5 21h9M20 27.5V37M41 13v13'/><circle cx='41' cy='31.5' r='1.4' fill='currentColor'/>"], "tyre": ["#F5A524", "<path d='M11 35c-5-6-5-17 0-23M37 35c5-6 5-17 0-23M11 12h26M11 35h4M33 35h4M12 40l1.5-5M18 40l1.5-5M28.5 40l1.5-5M34.5 40l1.5-5M24 17v10'/><circle cx='24' cy='31.5' r='1.4' fill='currentColor'/>"], "glow": ["#F5A524", "<path d='M3 29h4c0-11 8-11 8 0 0-11 8-11 8 0 0-11 8-11 8 0 0-11 8-11 8 0h6'/><path d='M7 35h34'/>"], "dpf": ["#F5A524", "<rect x='9' y='13' width='30' height='22' rx='3'/><path d='M3 24h6M39 24h6'/><g fill='currentColor' stroke='none'><circle cx='17' cy='20' r='1.8'/><circle cx='24' cy='20' r='1.8'/><circle cx='31' cy='20' r='1.8'/><circle cx='17' cy='28' r='1.8'/><circle cx='24' cy='28' r='1.8'/><circle cx='31' cy='28' r='1.8'/></g>"], "adblue": ["#F5A524", "<path d='M24 7c6 8 10 13 10 19a10 10 0 0 1-20 0c0-6 4-11 10-19z'/><path d='M18 28c2 1.5 4 1.5 6 0s4-1.5 6 0'/>"], "service": ["#F5A524", "<path d='M31 7a8 8 0 0 0-8 11L9 32a3 3 0 0 0 4.2 4.2L27 22a8 8 0 0 0 11-8l-5 5-4.5-1L27.5 13.5z'/>"], "fuel": ["#F5A524", "<rect x='9' y='9' width='17' height='29' rx='2'/><path d='M13 13h9v8h-9zM26 18h4l4 4v12a2.2 2.2 0 0 0 4.4 0V18l-4-5M6 38h23'/>"], "unsure": ["#E5EEF8", "<circle cx='24' cy='24' r='15'/><path d='M19 19a5 5 0 1 1 7 4.6c-1.5.8-2 1.8-2 3.6'/><circle cx='24' cy='32.5' r='1.5' fill='currentColor'/>"]};
@@ -8716,7 +8723,7 @@ window.MCmotDb={garages:function(){return DIR.filter(function(p){return p.role==
  staffRefunded:function(id){return ready.then(function(){return sb.rpc('staff_mark_refunded',{p_booking:id})})},
  notify:function(id){return ready.then(function(){return sb.functions.invoke('notify',{body:{booking_id:id}})}).catch(function(){})}};
 /* ---------- your details: customers and partners change their own name, phone and email ---------- */
-function dE(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML}
+function dE(x){var d=document.createElement('div');d.textContent=x==null?'':String(x);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function detHtml(u){var p=u.role!=='customer',biz=p&&u.role!=='mechanic'||(p&&u.sub==='garage'),pend=u.emailPending;
  return '<div class="card mc-form" id="mc-mydet"><h2>Your details</h2><p class="note" style="margin:0 0 6px">Keep these up to date so '+(p?'customers and our team':'your partners and our team')+' can reach you.</p>'
   +'<label class="f" for="md-name">'+(p?(biz?'Business name':'Your name or trading name'):'Your name')+'</label><input type="text" id="md-name" autocomplete="'+(p?'organization':'name')+'" maxlength="120" value="'+dE(u.name)+'">'
@@ -8829,7 +8836,7 @@ setInterval(function(){var u=window.GGuser,who=u&&u.sbid?u.sbid+u.role:'';ticks+
  if(who!==lastWho){lastWho=who;adOwner();if(!who){qPut([]);return}bkSt={};pullBookings();pullQuotes();if(u.role==='dealer')bookLoad(u);return}
  if(!who||document.hidden)return;pushStatuses();syncSettings();adSync();bookTick();if(ticks%8===0){pullBookings();pullQuotes()}},3000);
 /* ---------- car and van sales: buyer messages, viewings, MOT history, showroom, bulk upload, sample switch ---------- */
-function E(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function E(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 function gbp(n){return '£'+(+n).toFixed(2)}
 function dd(t){var d=new Date(t);return isNaN(d)?'':d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}
 function dt(t){var d=new Date(t);return isNaN(d)?'':d.toLocaleString('en-GB',{weekday:'short',day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
@@ -9131,7 +9138,7 @@ function queueHtml(){var me=window.GGuser,L=ADQ||[];
  if(!L.length)return h+'<p class="note" style="margin:0">Nothing waiting. New car and van adverts appear here before they go live.</p></div>';
  L.forEach(function(x){var d=x.data||{},F=x.flags||[],P=Array.isArray(d.photos)?d.photos:[];
   h+='<div class="adq" style="border-top:1px solid #e3e7ec;padding:12px 0" data-adq="'+x.id+'">'+
-   (P.length?'<div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:8px">'+P.slice(0,8).map(function(p){return '<a href="'+E(p)+'" target="_blank" rel="noopener"><img src="'+E(p)+'" alt="" style="height:70px;width:95px;object-fit:cover;border-radius:6px"></a>'}).join('')+'</div>':'')+
+   (P.length?'<div style="display:flex;gap:6px;overflow-x:auto;margin-bottom:8px">'+P.slice(0,8).map(function(p){return '<a href="'+SRC(p)+'" target="_blank" rel="noopener"><img src="'+SRC(p)+'" alt="" style="height:70px;width:95px;object-fit:cover;border-radius:6px"></a>'}).join('')+'</div>':'')+
    '<b>'+E([d.year,d.make,d.model,d.variant].filter(Boolean).join(' '))+'</b> <span class="note">('+(x.kind==='vans'?'van':'car')+')</span>'+
    '<div class="note" style="margin:2px 0">'+E(d.reg||'')+' · '+(d.price?'£'+Number(d.price).toLocaleString('en-GB'):'no price')+' · '+(d.miles!=null?Number(d.miles).toLocaleString('en-GB')+' miles':'')+' · '+E([d.fuel,d.gear,d.col].filter(Boolean).join(', '))+'</div>'+
    '<div class="note" style="margin:2px 0">'+(d.private?'Private seller':'Dealer: '+E(d.dealer||''))+(d.phone?' · '+E(d.phone):'')+(d.town?' · '+E(d.town):'')+' · sent '+E(dt(x.created_at))+'</div>'+
@@ -9475,7 +9482,7 @@ function wsCard(k,c,q,col,s){var van=k==='vans',z=ULZ[ulezOf(k,c)],red=reduced(c
  if(van&&c.pay)rows.push(['Payload',Number(c.pay).toLocaleString('en-GB')+' kg']);else if(c.seats)rows.push(['Seats',c.seats]);else if(c.doors)rows.push(['Doors',c.doors]);
  rows=rows.filter(function(r){return r[1]!==''&&r[1]!=null&&r[1]!==0}).slice(0,6);
  var badges=[];if(c.chk&&c.chk.status==='clear')badges.push('✓ History checked: no write-off, finance or theft found');if(z&&z[0]==='ok')badges.push('✓ ULEZ and Clean Air Zone ready');if(c.vat)badges.push('VAT qualifying');
- var head='<div class="ws-hd">'+(s.logo?'<div class="ws-logo"><img src="'+s.logo+'" alt=""></div>':'')+'<div><div class="ws-hn">'+E(s.name)+'</div><div class="ws-hs">'+E([s.town,s.post].filter(Boolean).join(' '))+(s.site?(s.town?' · ':'')+E(s.site):'')+'</div>'
+ var head='<div class="ws-hd">'+(s.logo?'<div class="ws-logo"><img src="'+SRC(s.logo)+'" alt=""></div>':'')+'<div><div class="ws-hn">'+E(s.name)+'</div><div class="ws-hs">'+E([s.town,s.post].filter(Boolean).join(' '))+(s.site?(s.town?' · ':'')+E(s.site):'')+'</div>'
   +(s.rating?'<div class="ws-rate">★ '+s.rating.av.toFixed(1)+' from '+s.rating.n+' customer review'+(s.rating.n===1?'':'s')+'</div>':'')+'</div></div>';
  return '<section class="ws'+(photo?'':' ws-np')+'" style="--bg:'+col.bg+';--fg:'+col.fg+';--acc:'+col.acc+';--soft:'+col.soft+';--ft:'+col.ft+'">'+head+'<div class="ws-body"><div><span class="ws-tag">'+(s.priv?'For sale':'For sale · '+(van?'Van':'Car'))+'</span></div>'
   +'<h1>'+E([c.year,c.make,c.model].filter(Boolean).join(' '))+'</h1><div class="ws-var">'+E(c.variant||'')+'</div>'
@@ -10527,6 +10534,51 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  if(a.dmrset){q=a.dmrset.split(':');if(q[1]==='stop'&&!confirm('Stop this link? The business will not be able to open the demo with it.'))return;t.disabled=true;ready.then(function(){return sb.rpc('staff_demo_set',{p_id:+q[0],p_action:q[1],p_note:''})}).then(function(r){if(r.error){t.disabled=false;toast('Not saved: '+r.error.message,true);return}toast('Saved.');dmrPull()})}});
 setInterval(function(){try{dmrDraw(false)}catch(e){}},1500);
 
+/* ---------- staff: trade listings. Every vehicle listed between businesses; staff can take one down, with a reason ---------- */
+var ATR={rows:null,at:0,show:'live',q:'',rm:null,why:'',err:''};
+var ATRO={pending:'waiting',accepted:'accepted',declined:'declined',withdrawn:'withdrawn by the buyer'};
+function atrPull(){ATR.at=Date.now();ready.then(function(){return sb.rpc('staff_trade_listings')}).then(function(r){ATR.err=r.error?r.error.message:'';ATR.rows=r.error?[]:(r.data||[]);atrDraw(true)})}
+function atrGbp(n){return '£'+Math.round(+n||0).toLocaleString('en-GB')}
+function atrGroup(x){return x.status==='live'?'live':x.status==='sold'?'sold':'down'}
+function atrMatch(x){var q=ATR.q.trim().toLowerCase();if(!q)return true;var S=x.seller||{},B=x.buyer||{},hay=[x.reg,x.year,x.make,x.model,x.variant,x.town,S.name,S.email,B.name,B.email].join(' ').toLowerCase();
+ return hay.indexOf(q)>-1||hay.replace(/\s/g,'').indexOf(q.replace(/\s/g,''))>-1}
+function atrItem(x){var t=x.year+' '+x.make+' '+x.model,S=x.seller||{},B=x.buyer,O=x.offers||[],W=O.filter(function(o){return o.status==='pending'}),
+  st=x.status==='live'?'Live':x.status==='sold'?'Sold':x.removed?'Taken down by staff':'Withdrawn by the seller';
+ var h='<div class="job" style="display:block'+(x.status==='live'&&W.length?';border-left:5px solid #F5B400;padding-left:10px':'')+'"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+E(t)+(x.variant?' '+E(x.variant):'')+(x.reg?' · '+E(x.reg):'')+'</b><span class="sst">'+E(st)+'</span></div>'
+  +'<small>'+E(x.kind)+' · '+Number(x.miles).toLocaleString('en-GB')+' miles · '+E(x.town)+' · listed '+E(dt2(x.listed))+(x.from_stock?' · from their stock book':'')+'</small>'
+  +'<small>'+(x.mode==='min'?'Buy now at '+atrGbp(x.price):'Open to offers, hidden minimum '+atrGbp(x.price))+' · listing fee: '+(x.fee==='free'?'free (one of the 5 a month)':'£9.99 + VAT (not charged until card payments are set up)')+'</small>'
+  +'<small><b>Seller:</b> '+E(S.name)+' ('+(S.role==='dealer'?'dealer':'trade partner')+') · '+E(S.email)+(S.phone?' · '+E(S.phone):'')+'</small>'
+  +(B?'<small><b>Buyer:</b> '+E(B.name)+' · '+E(B.email)+(B.phone?' · '+E(B.phone):'')+' · <b>'+atrGbp(x.sold_price)+'</b> on '+E(dt2(x.sold_at))+'</small>':'')
+  +(x.removed?'<small><b>Taken down</b> by '+E(x.removed.by||'Staff')+' on '+E(dt2(x.removed.at))+'. Reason: '+E(x.removed.reason||'')+'</small>':'')
+  +'<p style="margin:6px 0;white-space:pre-wrap"><b>Faults:</b> '+E(x.faults)+(x.desc?'\n'+E(x.desc):'')+'</p>'
+  +(x.photos&&x.photos.length?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0">'+x.photos.slice(0,6).map(function(u){var a=SRC(u);return a?'<a href="'+a+'" target="_blank" rel="noopener"><img src="'+a+'" alt="" loading="lazy" style="width:72px;height:54px;object-fit:cover;border-radius:6px"></a>':''}).join('')+(x.photos.length>6?'<small>and '+(x.photos.length-6)+' more</small>':'')+'</div>':'<small>No photos.</small>')
+  +(O.length?'<details><summary>Offers ('+O.length+(W.length?', '+W.length+' waiting':'')+')</summary>'+O.map(function(o){return '<small>'+atrGbp(o.amount)+' from '+E(o.from)+' · '+E(dt2(o.t))+' · '+E(ATRO[o.status]||o.status)+(o.note?' · “'+E(o.note)+'”':'')+'</small>'}).join('')+'</details>':'<small>No offers.</small>');
+ if(x.status==='live')h+=ATR.rm===x.id?'<label class="f" for="atr-why">Why are you taking it down? The seller is emailed this.</label><textarea id="atr-why" rows="2" maxlength="500">'+E(ATR.why)+'</textarea><div class="dtools"><button class="btn sm" type="button" data-atrgo="'+x.id+'">Take it down</button><button class="btn sm ghost" type="button" data-atrno="1">Cancel</button></div>'
+  :'<div class="dtools"><a class="btn sm ghost" href="mailto:'+encodeURIComponent(S.email||'')+'?subject='+encodeURIComponent('Your trade listing: '+t)+'">Email the seller</a><button class="btn sm ghost" type="button" data-atrrm="'+x.id+'">Take it down</button></div>';
+ return h+'</div>'}
+function atrList(){var R=(ATR.rows||[]).filter(function(x){return (ATR.show==='all'||ATR.show===atrGroup(x))&&atrMatch(x)});
+ return R.length?R.slice(0,200).map(atrItem).join('')+(R.length>200?'<p class="note">Showing the newest 200. Search to find older ones.</p>':''):'<p class="note">'+(ATR.q.trim()?'Nothing matches that.':'None.')+'</p>'}
+function atrHtml(){var R=ATR.rows,h='<div class="card mc-form" id="mc-atr"><h2>Trade listings</h2><p class="note" style="margin:0 0 6px">Vehicles businesses have listed for each other. Customers never see these. You can see the hidden minimum price, every offer, and both businesses’ details.</p>';
+ if(R===null)return h+'<p class="note">Loading…</p></div>';
+ if(ATR.err)return h+'<p class="err">The listings did not load. Try again in a minute.</p><div class="dtools"><button class="btn sm ghost" type="button" data-atrre="1">Try again</button></div></div>';
+ var m0=new Date();m0=new Date(m0.getFullYear(),m0.getMonth(),1);var M=R.filter(function(x){return new Date(x.listed)>=m0}),MS=R.filter(function(x){return x.sold_at&&new Date(x.sold_at)>=m0}),val=MS.reduce(function(a,x){return a+(+x.sold_price||0)},0),C={live:0,sold:0,down:0};
+ R.forEach(function(x){C[atrGroup(x)]++});
+ h+='<p style="margin:6px 0"><b>This month:</b> '+M.length+' listed ('+M.filter(function(x){return x.fee==='free'}).length+' free, '+M.filter(function(x){return x.fee==='paid'}).length+' with a fee) · '+MS.length+' sold, '+atrGbp(val)+' in all</p>';
+ h+='<div class="dtools">'+[['live','Live ('+C.live+')'],['sold','Sold ('+C.sold+')'],['down','Taken down or withdrawn ('+C.down+')'],['all','All ('+R.length+')']].map(function(b){return '<button class="btn sm'+(ATR.show===b[0]?'':' ghost')+'" type="button" data-atrshow="'+b[0]+'" aria-pressed="'+(ATR.show===b[0])+'">'+b[1]+'</button>'}).join('')+'<button class="btn sm ghost" type="button" data-atrre="1">Refresh</button></div>';
+ h+='<label class="f" for="atr-q">Find a listing</label><input type="search" id="atr-q" placeholder="Registration, make, model or business" value="'+E(ATR.q)+'">';
+ return h+'<div id="atr-list">'+atrList()+'</div></div>'}
+function atrDraw(force){if(!isStaff()||location.hash!=='#admin')return;var b=$('admin-body');if(!b||!b.querySelector('[data-tab="trd"][aria-pressed="true"]'))return;var old=$('mc-atr');if(old&&!force&&b.contains(old))return;if(ATR.rows===null&&Date.now()-ATR.at>5000)atrPull();
+ var d=document.createElement('div');d.innerHTML=atrHtml();var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else b.appendChild(c)}
+document.addEventListener('input',function(e){var t=e.target;if(!t)return;if(t.id==='atr-q'){ATR.q=t.value;var l=$('atr-list');if(l)l.innerHTML=atrList()}else if(t.id==='atr-why')ATR.why=t.value});
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-atr button');if(!t||!isStaff())return;var a=t.dataset;
+ if(a.atrshow){ATR.show=a.atrshow;atrDraw(true);return}if(a.atrre){ATR.rows=null;ATR.err='';atrPull();atrDraw(true);return}
+ if(a.atrrm){ATR.rm=+a.atrrm;ATR.why='';atrDraw(true);var w=$('atr-why');if(w)w.focus();return}if(a.atrno){ATR.rm=null;ATR.why='';atrDraw(true);return}
+ if(a.atrgo){var why=(($('atr-why')||{}).value||'').trim();if(why.length<3){toast('Give the reason. The seller is emailed it.',true);return}t.disabled=true;
+  ready.then(function(){return sb.rpc('staff_trade_remove',{p_listing:+a.atrgo,p_reason:why})}).then(function(r){
+   if(r.error){t.disabled=false;var gone=/not_live/.test(r.error.message);toast(gone?'That listing is no longer live.':'Not done. Try again.',true);if(gone){ATR.rm=null;atrPull()}return}
+   var d=r.data||{},n=+d.offers_closed||0;ATR.rm=null;ATR.why='';toast('Taken down. The seller has been emailed'+(n?', and '+n+' business'+(n===1?'':'es')+' with an offer waiting':'')+'.');atrPull()})}});
+setInterval(function(){try{atrDraw(false)}catch(e){}},1500);
+
 /* ---------- quotes on the website: bodywork, alloy damage, auto electricians and locksmiths ---------- */
 window.MCquoteJob=function(q){var u=window.GGuser;if(!sb||!u||!u.sbid)return Promise.resolve({ok:false});var ids=(q.partners||[]).map(partnerId).filter(Boolean),paths=[];
  if(!ids.length)return Promise.resolve({ok:false,why:'sample'});
@@ -10869,7 +10921,7 @@ setInterval(add,700);if(document.readyState!=='loading')add();else document.addE
    (the registration look-up fills most of it) plus a few taps, so it never claims anything the seller did not say. */
 (function(){
 function $(i){return document.getElementById(i)}
-function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 var CAR=['Sat nav','Bluetooth','Air conditioning','Parking sensors','Reversing camera','Cruise control','Heated seats','Alloy wheels','Apple CarPlay or Android Auto','Panoramic roof','Leather seats','Tow bar'];
 var VAN=['Ply lined','Racking','Roof rack or bars','Tow bar','Bulkhead','Side loading door','Twin side doors','Air conditioning','Bluetooth','Parking sensors','Reversing camera','Cruise control'];
 var COND=[['ex','Excellent'],['good','Good'],['marks','Good, with a few marks'],['work','Needs some work']];

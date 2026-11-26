@@ -377,8 +377,20 @@ DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
     from the stock book to trade (the stock car is marked sold when it sells), 5 free listings a month then the fee.
     On a sale both sides get each other's phone and email and are emailed. The page refreshes every 30 seconds.
     The demo still shows sample trade cards and never touches the database. Tested with two test dealers.
-    Not yet: the 9.99 + VAT fee is not charged (comes with Stripe; the page's word is trusted until then); no staff
-    screen for trade listings; test listings on TEST Trial Motors / TEST Second Try Cars to delete before launch.
+    Not yet: the 9.99 + VAT fee is not charged (comes with Stripe; the page's word is trusted until then); test
+    listings on TEST Trial Motors / TEST Second Try Cars to delete before launch.
+  - STAFF SCREEN FOR TRADE LISTINGS (26 Nov): Admin > Adverts > Trade listings. Every listing (live, sold, taken down),
+    with the hidden minimum, the fee, every offer, and both businesses' details; this month's totals; search by
+    registration, make, model or business. "Take it down" needs a reason: the seller is emailed it and sees it on their
+    trade page, anyone with an offer waiting is told it closed, and who did it and when is kept. Migration 20261126g.
+    Tested (a dealer cannot use the staff functions).
+  - SECURITY FIX (26 Nov): picture addresses. Advert photos were not checked by the database, and trade photos only by
+    how they started, while the page put them into the page as they were. Someone sending their own request could have
+    saved an address that ran code in the browser of staff approving adverts or of other dealers. Fixed three ways: every
+    text-escaping helper in the page now also escapes quote marks; picture and photo-link addresses from saved data go
+    through one safe-address check (window.SRC); and the database keeps only our own storage addresses for advert and
+    trade photos (migration 20261126h). Partner logos must now be a complete picture. Checked: main pages, dashboards,
+    stock book, trade and the demo all show as before.
   - Still to check by eye: the logo on a printed invoice (the file loads; the print window now waits for it).
   - Also: dealers can now delete files in their own photo folder (needed to remove photos of removed adverts).
 - To decide / later: a separate "Recently sold" page; the server does not limit premium ads to the allowance (the
