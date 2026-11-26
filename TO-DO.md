@@ -353,8 +353,26 @@ DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
   boost cards and made-up view counts shown to real dealers; compare cars broken by the complaints tab (name clash);
   log-in error messages (e.g. "tap the link in the email") never shown.
 - Tested: premium ads counter for a founding dealer (5 of 5 -> 4 of 5).
-- STILL TO TEST with a real dealer: spreadsheet upload, stock feed, showroom page and website embed, trade listings,
-  PDI, changing plan; the logo on a printed invoice by eye (the file loads; the print window now waits for it).
+- TESTED WITH A REAL DEALER on the live preview, 26 Nov 2026 (TEST Trial Motors Gravesend):
+  - Showroom page and website embed: work. Fixed: the embed showed the strapline over the search box, a postcode box and
+    saved searches, and its "Seller" filter could be removed (now hidden on showroom pages and in the embed).
+  - PDI: works (picks the car from stock, PDF, saved to the account, stock shows "PDI ✓"). Fixed: PDI and inspection PDFs
+    were about 3 MB (pictures not compressed; now about 50 times smaller), and the message said "Saved to the booking".
+  - Spreadsheet upload: works (real look-ups and history checks, adverts sent for approval, bad rows skipped clearly).
+  - Automatic stock feed: works (price updated, a vehicle left out of the file taken down, feed stopped). Still to fix:
+    a web page given instead of a CSV says "The file is over 1 MB" rather than "that is a web page".
+  - Plans: WERE BROKEN, FIXED. Since the two-step sign-up (22 Nov) the plan picked on the join form was never saved, so
+    every dealer was Starter, and there was no way to change plan. Now the application saves the plan, existing dealers
+    are stored as Starter ('0'), and Set-up > Plan and billing has "Change plan": straight away for the number of
+    adverts, new price from the next bill (or after the trial); a smaller plan needs the adverts to fit; yearly payers
+    move down only at renewal. The dealer and the owners are emailed. The admin application card shows the plan.
+    Database: supabase/migrations/20261126b_dealer_plans.sql and 20261126c_dealer_plan_name_fix.sql.
+  - TRADE LISTINGS ARE NOT BUILT. "Sell a trade car or van", "Browse trade stock" and trade offers only exist in the
+    visitor's browser: nothing is saved and other dealers cannot see a listing. The listings shown are samples. Trade
+    sales are in the launch line-up, so they need building in the database (listings, offers, minimum price, 5 free a
+    month then 9.99 + VAT, photos, sold). Owner to agree before Claude starts.
+  - Still to check by eye: the logo on a printed invoice (the file loads; the print window now waits for it).
+  - Also: dealers can now delete files in their own photo folder (needed to remove photos of removed adverts).
 - To decide / later: a separate "Recently sold" page; the server does not limit premium ads to the allowance (the
   dashboard counts them; charging extras comes with Stripe); ask the accountant to check the invoice VAT wording.
 
