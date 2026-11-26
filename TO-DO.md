@@ -561,7 +561,8 @@ garage payout statement, and an unsubscribe link for marketing emails (only serv
      "Automatic stock feed" (needs a CSV file at a web address; the spreadsheet template works if it is online).
    - Tell Claude anything that looks wrong.
 3. When real stock is listed: admin page > "Sample cars and vans" > Hide.
-4. DVSA MOT history API: APPLIED FOR by the owner on 26 Nov 2026 (as The Motoring Central). The site is READY for it.
+4. DVSA MOT history API: DONE. Applied for and CONNECTED on 26 Nov 2026 (the owner added the four secrets; checked by
+   Claude: real MOT histories on live adverts, warnings, staff MOT line, private sellers' model). Kept here for reference:
    When the DVSA emails the credentials, add DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY and DVSA_TOKEN_URL in
    Supabase > Edge Functions > Secrets (never in chat), then open the admin page: "Connected services" on the To do page
    should say MOT history "Connected" (tap "Check again"; it re-checks at most every 10 minutes). Tell Claude to test it.
@@ -669,7 +670,10 @@ To switch real history checks on (needs real card payments first, or private sel
   - Dealer showroom page: ?dealer=<id>#cars, with a Share button; link shown on the dealer dashboard.
   - MOT history on adverts (Supabase function "mot-history", London; kept for a day). Live adverts for anyone; adverts
     waiting for approval for staff and the seller only. Sample MOT history shows on sample cars. Waiting for the DVSA
-    key (applied for 26 Nov; see item 4 of the owner's list). DVSA revokes an API key that is not used for 90 days.
+    key: CONNECTED 26 Nov 2026 and tested with real data (FV16WDY Ford Fiesta, 6 tests, recall; PX15OLD is really a
+    Piaggio Vespa, so the "different make" warning shows on that test advert). DVSA revokes a key unused for 90 days.
+    Also 26 Nov: buyers and staff are warned when the registration belongs to a different make from the advert; a
+    registration the DVSA has no record of says so; same-day retests are listed in the right order (time kept).
     Made ready on 26 Nov: recalls read correctly ("Yes"/"No"/"Unknown"; before, every vehicle would have shown a recall);
     first MOT due date for new vehicles; buyers warned when the mileage went down between tests, when the advert's
     mileage is below the last MOT reading, and about an outstanding safety recall; an "MOT check" line on each advert
