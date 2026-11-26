@@ -311,8 +311,24 @@ Delete all TEST accounts, adverts and trial records before launch.
   Data Global it gave Fiesta Zetec TDCi, manual, hatchback. The dealer "Add a vehicle" form filled in from it. Made-up
   plates are "not found". Answers in under a second.
   What the DVLA adds that we did not have: road tax status and due date, the official MOT status, gross weight, Euro
-  status, the date of the latest logbook (V5C). These are in the look-up answer but NOT SHOWN anywhere on the site yet.
-  To save money: pages that do not need the model could ask the DVLA only (?basic=1, free). Owner to decide.
+  status, the date of the latest logbook (V5C).
+  26 Nov (owner: "do both"):
+  - FREE LOOK-UPS (DVLA only, ?basic=1) for MOT bookings, the customer's "My garage" and the MOT reminder "Find it for
+    me". They show the make, year, fuel, colour, engine size and MOT, but no model or gearbox ("Not known" on an MOT
+    booking). Garage, mobile mechanic, auto electrician and locksmith bookings, dealers and sellers still use the paid
+    source too, because the mechanic needs the model for parts. If the DVLA fails, the paid source answers instead.
+  - MY GARAGE: each saved vehicle shows its MOT (overdue, due soon, first MOT) and vehicle tax (taxed with due date, due
+    soon, untaxed with a GOV.UK link, SORN), read again from the DVLA once a day. The home page line warns too.
+  - The "remind me" box in My garage was only saved in the browser, so no reminders were ever sent from it. It now sets
+    up real email reminders for each vehicle, for the MOT AND the vehicle tax (a month and a week before). Unticking it
+    or removing a vehicle stops them. A reminder stopped from an email is never restarted by the page.
+  - Tested: live look-ups for both vehicles, warnings, reminders made, unticked, re-ticked and removed, a stopped
+    reminder kept stopped, a real tax reminder email queued once (to the test customer), MOT booking on the free look-up.
+  - NOT DONE, on purpose: "Taxed until" on adverts. Vehicle tax does not pass to a buyer (since Oct 2014 the seller gets
+    a refund and the buyer must tax it), so it would mislead. Adverts already carry the official MOT date from the look-up.
+  - Code: api/vrm.js (basic), index.html (search "vehicle tax, from the DVLA" and "MCrem"),
+    supabase/migrations/20261126a_tax_reminders.sql (tax_due, add_mot_reminder with p_tax_due and p_auto,
+    private.queue_tax_due_reminders in the 'mot-reminders' job at 5pm).
   Was: after company registration, apply for the DVLA Vehicle Enquiry Service API (free; make, colour, fuel, year, engine,
   tax and MOT status, NO model/variant/gearbox/body) and the DVSA MOT History API (free; adds model for cars that have
   had an MOT). Plan: DVLA + DVSA first, Vehicle Data Global only when those come back incomplete (new cars, variant).
