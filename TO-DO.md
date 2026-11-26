@@ -359,8 +359,8 @@ DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
   - PDI: works (picks the car from stock, PDF, saved to the account, stock shows "PDI ✓"). Fixed: PDI and inspection PDFs
     were about 3 MB (pictures not compressed; now about 50 times smaller), and the message said "Saved to the booking".
   - Spreadsheet upload: works (real look-ups and history checks, adverts sent for approval, bad rows skipped clearly).
-  - Automatic stock feed: works (price updated, a vehicle left out of the file taken down, feed stopped). Still to fix:
-    a web page given instead of a CSV says "The file is over 1 MB" rather than "that is a web page".
+  - Automatic stock feed: works (price updated, a vehicle left out of the file taken down, feed stopped). Fixed 26 Nov:
+    a web page given instead of a CSV now says "That address returns a web page, not a CSV file" (was "over 1 MB").
   - Plans: WERE BROKEN, FIXED. Since the two-step sign-up (22 Nov) the plan picked on the join form was never saved, so
     every dealer was Starter, and there was no way to change plan. Now the application saves the plan, existing dealers
     are stored as Starter ('0'), and Set-up > Plan and billing has "Change plan": straight away for the number of
@@ -370,10 +370,15 @@ DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
   - ADVERT LIMIT ENFORCED (26 Nov): a dealer can have only as many adverts (live or waiting for approval) as their plan
     allows. "List a car/van" says so and offers Change plan; the database refuses the extra advert too (trigger
     adverts_a_plan_limit, migration 20261126e). Sold cars still showing count until taken down. Tested.
-  - TRADE LISTINGS ARE NOT BUILT. "Sell a trade car or van", "Browse trade stock" and trade offers only exist in the
-    visitor's browser: nothing is saved and other dealers cannot see a listing. The listings shown are samples. Trade
-    sales are in the launch line-up, so they need building in the database (listings, offers, minimum price, 5 free a
-    month then 9.99 + VAT, photos, sold). Owner to agree before Claude starts.
+  - TRADE LISTINGS BUILT (26 Nov), migration 20261126f_trade_listings.sql. Listings and offers are now saved in the
+    database and every approved trade partner sees them (customers are refused). Fixed price ("buy now"), "or nearest
+    offer" with a hidden minimum (the minimum never reaches the buyer's browser; offers below it are refused), offers
+    accepted or declined by the seller, offers withdrawn by the buyer, listings withdrawn by the seller, moving a car
+    from the stock book to trade (the stock car is marked sold when it sells), 5 free listings a month then the fee.
+    On a sale both sides get each other's phone and email and are emailed. The page refreshes every 30 seconds.
+    The demo still shows sample trade cards and never touches the database. Tested with two test dealers.
+    Not yet: the 9.99 + VAT fee is not charged (comes with Stripe; the page's word is trusted until then); no staff
+    screen for trade listings; test listings on TEST Trial Motors / TEST Second Try Cars to delete before launch.
   - Still to check by eye: the logo on a printed invoice (the file loads; the print window now waits for it).
   - Also: dealers can now delete files in their own photo folder (needed to remove photos of removed adverts).
 - To decide / later: a separate "Recently sold" page; the server does not limit premium ads to the allowance (the

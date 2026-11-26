@@ -45,6 +45,10 @@ Deno.serve(async (req) => {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
+      // a web page (not a CSV file) is spotted from its first bytes, before its size can matter
+      if (n === 0 && /^\s*</.test(new TextDecoder().decode(value.slice(0, 200)))) {
+        clearTimeout(t); try { await reader.cancel(); } catch (_) { /* ignore */ } return json({ ok: false, error: "not_csv" }, 400);
+      }
       n += value.length;
       if (n > 1_000_000) { clearTimeout(t); try { await reader.cancel(); } catch (_) { /* ignore */ } return json({ ok: false, error: "too_big" }, 413); }
       parts.push(value);
