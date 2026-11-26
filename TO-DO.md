@@ -303,8 +303,9 @@ Delete all TEST accounts, adverts and trial records before launch.
 
 - Registration look-ups are FREE to dealers (owner, 22 Nov; 10p charge removed everywhere). Our cost until the free
   sources are connected: a few pence per Vehicle Data Global look-up (each reg cached so it is not paid for twice).
-  DVLA VES API: APPLIED FOR by the owner on 22 Nov 2026, waiting for the key by email. When it arrives, save it with the
-  secure credential form (never in chat), then connect and test (DVLA gives a test key and a live key).
+  DVLA VES API: KEY RECEIVED and added by the owner on 26 Nov 2026, in Vercel > Settings > Environment Variables as
+  DVLA_API_KEY (all environments). The look-up (api/vrm.js) asks the DVLA and Vehicle Data Global at once and joins the
+  answers. A new key, or a changed one, only works after the site is published again.
   Was: after company registration, apply for the DVLA Vehicle Enquiry Service API (free; make, colour, fuel, year, engine,
   tax and MOT status, NO model/variant/gearbox/body) and the DVSA MOT History API (free; adds model for cars that have
   had an MOT). Plan: DVLA + DVSA first, Vehicle Data Global only when those come back incomplete (new cars, variant).
