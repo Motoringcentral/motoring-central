@@ -9007,17 +9007,26 @@ var MOTC={};
 function motSample(c){var yr=+c.year||2018,first=yr+3,now=new Date().getFullYear(),mi=+c.miles||40000,T=[],per=Math.max(3000,Math.round(mi/Math.max(1,now-yr)));
  for(var y=first;y<=now&&T.length<12;y++){var m=Math.min(mi,per*(y-yr)),f=(y*7+(c.id||1))%5===0;T.unshift({date:y+'-0'+(3+(y%6))+'-1'+(y%9),result:f?'fail':'pass',miles:m,expiry:f?null:(y+1)+'-0'+(3+(y%6))+'-1'+(y%9),fail:f?['Nearside front tyre tread depth below requirements']:[],minor:[],adv:y%2?['Front brake discs worn, pitted or scored, but not seriously weakened']:[]});if(f)T.unshift({date:y+'-0'+(3+(y%6))+'-2'+(y%9),result:'pass',miles:m+12,expiry:(y+1)+'-0'+(3+(y%6))+'-1'+(y%9),fail:[],minor:[],adv:[]})}
  return {sample:true,tests:T}}
-function motHtml(M){var T=(M.tests||[]).slice().sort(function(a,b){return a.date<b.date?1:-1});if(!T.length)return '<div class="card mot"><b>MOT history</b><p class="note" style="margin:6px 0 0">No MOT tests on record. Vehicles do not need an MOT until they are 3 years old.</p></div>';
- var lastPass=T.filter(function(t){return t.result==='pass'&&t.expiry})[0],drop=false;for(var i=0;i<T.length-1;i++){if(T[i].miles&&T[i+1].miles&&T[i].miles<T[i+1].miles-50)drop=true}
+/* warnings from an MOT history: mileage that went down between tests, an advertised mileage below the last MOT
+   reading (both signs of clocking), and an outstanding safety recall */
+function motCheck(M,adMiles){var T=((M&&M.tests)||[]).slice().sort(function(a,b){return a.date<b.date?1:-1}),o={tests:T,drop:null,below:null,recall:!!(M&&M.recall==='yes')};
+ for(var i=0;i<T.length-1;i++){if(T[i].miles&&T[i+1].miles&&T[i].miles<T[i+1].miles-50){o.drop={from:T[i+1],to:T[i]};break}}
+ var lastM=T.filter(function(t){return t.miles})[0],am=+adMiles;if(lastM&&am>0&&am<lastM.miles-100)o.below={ad:am,mot:lastM.miles,date:lastM.date};
+ o.last=lastM||null;return o}
+window.MCmotCheck=motCheck;
+function motHtml(M,c){var K=motCheck(M,c&&c.miles),T=K.tests,rc=K.recall?'<p class="mot-warn">The DVSA records an outstanding safety recall on this vehicle. Ask the seller whether the recall work has been done, or check with the manufacturer.</p>':'';
+ if(!T.length)return '<div class="card mot"><b>MOT history</b><p class="note" style="margin:6px 0 0">No MOT tests on record. '+(M.due?'Its first MOT is due by '+dd(M.due)+'.':'Vehicles do not need an MOT until they are 3 years old.')+'</p>'+rc+(M.sample?'':'<p class="note" style="margin:6px 0 0">From the DVSA MOT history service. Contains public sector information licensed under the Open Government Licence v3.0.</p>')+'</div>';
+ var lastPass=T.filter(function(t){return t.result==='pass'&&t.expiry})[0],drop=!!K.drop;
  var h='<div class="card mot"><b>MOT history</b>'+(lastPass?'<p class="note" style="margin:4px 0 0">'+(new Date(lastPass.expiry)>new Date()?'MOT valid until '+dd(lastPass.expiry):'MOT expired on '+dd(lastPass.expiry))+' · '+T.length+' test'+(T.length>1?'s':'')+' on record</p>':'')+
-  (drop?'<p class="mot-warn">The recorded mileage went down between two tests. Ask the seller about it before you buy.</p>':'')+'<ul class="mot-l">';
+  (drop?'<p class="mot-warn">The recorded mileage went down between two tests. Ask the seller about it before you buy.</p>':'')+
+  (K.below?'<p class="mot-warn">This advert says '+Number(K.below.ad).toLocaleString('en-GB')+' miles, but '+Number(K.below.mot).toLocaleString('en-GB')+' miles were recorded at the MOT on '+E(dd(K.below.date))+'. Ask the seller about it before you buy.</p>':'')+rc+'<ul class="mot-l">';
  T.slice(0,15).forEach(function(t){var n=(t.fail||[]).length+(t.minor||[]).length+(t.adv||[]).length;
   h+='<li><div class="mot-r"><span class="mot-b '+(t.result==='pass'?'p':'f')+'">'+(t.result==='pass'?'Pass':'Fail')+'</span><span>'+E(dd(t.date))+'</span><span>'+(t.miles?Number(t.miles).toLocaleString('en-GB')+' miles':'')+'</span></div>'+
    (n?'<details><summary>'+n+' item'+(n>1?'s':'')+' noted</summary><ul>'+(t.fail||[]).map(function(x){return '<li class="f">'+E(x)+'</li>'}).join('')+(t.minor||[]).map(function(x){return '<li>Minor: '+E(x)+'</li>'}).join('')+(t.adv||[]).map(function(x){return '<li>Advisory: '+E(x)+'</li>'}).join('')+'</ul></details>':'')+'</li>'});
  return h+'</ul><p class="note" style="margin:6px 0 0">'+(M.sample?'Sample MOT history for the preview.':'From the DVSA MOT history service. Contains public sector information licensed under the Open Government Licence v3.0.')+'</p></div>'}
 function fillMot(){[].forEach.call(document.querySelectorAll('.mot-box:not([data-done])'),function(box){box.setAttribute('data-done','1');var a=box.getAttribute('data-mot').split(':'),c=advBy(a[0],a[1]);if(!c)return;
- if(!c.dbid){box.innerHTML=motHtml(motSample(c));return}var reg=String(c.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(!reg||!sb)return;
- (MOTC[reg]?Promise.resolve(MOTC[reg]):sb.functions.invoke('mot-history',{body:{reg:reg},region:'eu-west-2'}).then(function(r){return r.data||null})).then(function(r){if(!r||!r.ok)return;MOTC[reg]=r;if(document.body.contains(box))box.innerHTML=motHtml(r.mot)}).catch(function(){})})}
+ if(!c.dbid){box.innerHTML=motHtml(motSample(c),c);return}var reg=String(c.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(!reg||!sb)return;
+ (MOTC[reg]?Promise.resolve(MOTC[reg]):sb.functions.invoke('mot-history',{body:{reg:reg},region:'eu-west-2'}).then(function(r){return r.data||null})).then(function(r){if(!r||!r.ok)return;MOTC[reg]=r;if(document.body.contains(box))box.innerHTML=motHtml(r.mot,c)}).catch(function(){})})}
 /* adding photos to an advert that is already listed */
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-addph]');if(!b)return;var f=document.querySelector('[data-addphf="'+b.getAttribute('data-addph')+'"]');if(f)f.click()});
 document.addEventListener('change',function(e){var f=e.target;if(!f.getAttribute||!f.getAttribute('data-addphf'))return;var a=f.getAttribute('data-addphf').split(':'),c=advBy(a[0],a[1]),api=adApi(a[0]);if(!c||!window.MCphotos)return;
@@ -9131,6 +9140,18 @@ function pullQueue(){if(!isStaff())return;ADQt=Date.now();
 function chkLine(v){if(Array.isArray(v))v=v[0];var s=v&&v.summary||{},a=[];if(!v)return 'No history check found';
  if(s.writeoff&&s.writeoff.found)a.push('Write-off'+(s.writeoff.cat?' Category '+s.writeoff.cat:''));if(s.finance&&s.finance.found)a.push('Finance recorded');if(s.mileage_issue)a.push('Mileage problem');if(s.imported)a.push('Imported');if(s.keepers!=null)a.push(s.keepers+' previous keeper'+(s.keepers===1?'':'s'));
  return 'History check: '+(a.length?a.join(', '):'clear')}
+/* MOT check on each advert waiting for approval (needs the DVSA key; until then it says so) */
+var ADQM={};
+function adqMotLine(reg,mi){var r=ADQM[reg];if(!reg)return 'MOT check: no registration';if(!r)return 'MOT check: looking it up…';
+ if(r.error==='not_configured')return 'MOT check: not connected yet (waiting for the DVSA key).';if(!r.ok)return 'MOT check: not available just now.';
+ var K=window.MCmotCheck?window.MCmotCheck(r.mot,mi):{tests:[]},W=[];if(!K.tests.length)return 'MOT check: no MOT tests on record'+(r.mot&&r.mot.recall==='yes'?'. <b style="color:#c0392b">&#9888; Outstanding safety recall</b>':'')+'.';
+ if(K.drop)W.push('Mileage went down between the MOTs on '+E(dd(K.drop.from.date))+' and '+E(dd(K.drop.to.date)));
+ if(K.below)W.push('Advert says '+Number(K.below.ad).toLocaleString('en-GB')+' miles, the MOT on '+E(dd(K.below.date))+' recorded '+Number(K.below.mot).toLocaleString('en-GB'));
+ if(K.recall)W.push('Outstanding safety recall');
+ return 'MOT check: '+K.tests.length+' test'+(K.tests.length===1?'':'s')+(K.last?', last reading '+Number(K.last.miles).toLocaleString('en-GB')+' miles on '+E(dd(K.last.date)):'')+'. '+(W.length?W.map(function(w){return '<b style="color:#c0392b">&#9888; '+w+'.</b>'}).join(' '):'Mileage looks consistent.')}
+function adqMot(){[].forEach.call(document.querySelectorAll('[data-adqmot]:not([data-asked])'),function(el){el.setAttribute('data-asked','1');var q=el.getAttribute('data-adqmot').split('|'),reg=q[0],mi=+q[1]||0;if(!reg||ADQM[reg])return;
+  ready.then(function(){return sb.functions.invoke('mot-history',{body:{reg:reg},region:'eu-west-2'})}).then(function(r){var d=r&&r.data;if(!d&&r&&r.error&&r.error.context&&r.error.context.json)return r.error.context.json().catch(function(){return null});return d}).then(function(d){ADQM[reg]=d||{ok:false};
+   [].forEach.call(document.querySelectorAll('[data-adqmot^="'+reg+'|"]'),function(x){x.innerHTML=adqMotLine(reg,+x.getAttribute('data-adqmot').split('|')[1]||0)})},function(){ADQM[reg]={ok:false}})})}
 function queueHtml(){var me=window.GGuser,L=ADQ||[];
  var h='<div class="card" id="mc-adq"><h2>Adverts waiting for approval'+(L.length?' <span class="mx-n">'+L.length+'</span>':'')+'</h2>';
  if(me.level==='owner')h+='<label style="display:flex;gap:8px;align-items:flex-start;margin:0 0 6px"><input type="checkbox" data-adauto style="width:20px;height:20px;flex:none"'+(autoOn?' checked':'')+'><span><b>Approve adverts automatically</b> when our checks find nothing wrong.<br><span class="note">Adverts with any warning below still come here for a person to check.</span></span></label>';
@@ -9144,6 +9165,7 @@ function queueHtml(){var me=window.GGuser,L=ADQ||[];
    '<div class="note" style="margin:2px 0">'+E(d.reg||'')+' · '+(d.price?'£'+Number(d.price).toLocaleString('en-GB'):'no price')+' · '+(d.miles!=null?Number(d.miles).toLocaleString('en-GB')+' miles':'')+' · '+E([d.fuel,d.gear,d.col].filter(Boolean).join(', '))+'</div>'+
    '<div class="note" style="margin:2px 0">'+(d.private?'Private seller':'Dealer: '+E(d.dealer||''))+(d.phone?' · '+E(d.phone):'')+(d.town?' · '+E(d.town):'')+' · sent '+E(dt(x.created_at))+'</div>'+
    '<div class="note" style="margin:2px 0">'+E(chkLine(x.vehicle_checks))+'</div>'+
+   '<div class="note adq-mot" style="margin:2px 0" data-adqmot="'+E(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''))+'|'+(+d.miles||0)+'">'+adqMotLine(String(d.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''),+d.miles||0)+'</div>'+
    '<div style="margin:6px 0">'+(F.length?F.map(function(f){return '<span class="badge" style="position:static;display:inline-block;margin:0 4px 4px 0;background:#c0392b">&#9888; '+E(f)+'</span>'}).join(''):'<span class="badge" style="position:static;display:inline-block;background:#2e7d32">&#10003; Our checks found nothing wrong</span>')+'</div>'+
    '<details><summary>Description</summary><p style="white-space:pre-wrap;margin:6px 0">'+E(d.desc||'(none)')+'</p></details>'+
    '<div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px"><button type="button" class="btn sm" data-adok="'+x.id+'">&#10003; Approve</button>'+
@@ -9151,7 +9173,7 @@ function queueHtml(){var me=window.GGuser,L=ADQ||[];
    '<input type="text" maxlength="300" data-adnote="'+x.id+'" placeholder="Message to the seller (optional)" style="flex:1;min-width:180px"><button type="button" class="btn sm ghost" data-adno="'+x.id+'">&#10007; Decline</button></div><p class="err" data-ader="'+x.id+'" role="alert"></p></div>'});
  return h+'</div>'}
 function drawQueue(force){if(!isStaff()||location.hash!=='#admin')return;var b=$('admin-body');if(!b)return;var old=$('mc-adq');if(old&&!force)return;if(old&&old.contains(document.activeElement))return;
- if(ADQ===null&&Date.now()-ADQt>5000)pullQueue();var d=document.createElement('div');d.innerHTML=queueHtml();var card=d.firstChild;if(old)old.parentNode.replaceChild(card,old);else b.insertBefore(card,b.firstChild)}
+ if(ADQ===null&&Date.now()-ADQt>5000)pullQueue();var d=document.createElement('div');d.innerHTML=queueHtml();var card=d.firstChild;if(old)old.parentNode.replaceChild(card,old);else b.insertBefore(card,b.firstChild);try{adqMot()}catch(e){}}
 document.addEventListener('click',function(e){var t=e.target;if(!t.closest||!isStaff())return;
  var ok=t.closest('[data-adok]'),no=t.closest('[data-adno]');if(!ok&&!no)return;var id=+(ok||no).getAttribute(ok?'data-adok':'data-adno'),er=document.querySelector('[data-ader="'+id+'"]'),row;
  if(ok)row={status:'live'};else{var why=document.querySelector('[data-adwhy="'+id+'"]').value,nt=document.querySelector('[data-adnote="'+id+'"]').value.trim();if(!why&&!nt){er.textContent='Choose a reason so the seller knows what to fix.';return}row={status:'declined',review_note:(why&&nt?why+': '+nt:why||nt).slice(0,500)}}
@@ -10580,6 +10602,31 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
    var d=r.data||{},n=+d.offers_closed||0;ATR.rm=null;ATR.why='';toast('Taken down. The seller has been emailed'+(n?', and '+n+' business'+(n===1?'':'es')+' with an offer waiting':'')+'.');atrPull()})}});
 setInterval(function(){try{atrDraw(false)}catch(e){}},1500);
 
+/* ---------- staff: which outside services are connected (on the admin "To do" page) ---------- */
+var CONN={at:0,v:null};
+function connPull(){CONN.at=Date.now();
+ Promise.all([fetch('/api/vrm?probe=1',{headers:{Accept:'application/json'}}).then(function(r){return r.ok?r.json():{}}).catch(function(){return {}}),
+  ready.then(function(){return sb.functions.invoke('mot-history',{body:{probe:true},region:'eu-west-2'})}).then(function(r){return (r&&r.data)||{}}).catch(function(){return {}})])
+ .then(function(a){CONN.v={vrm:a[0]||{},mot:a[1]||{}};connDraw(true)})}
+function connRow(name,what,on,note){return '<div class="job" style="display:block"><div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>'+name+'</b><span class="sst" style="'+(on?'background:#C7F0D8':'background:#FDE2E1')+'">'+(on?'&#10003; Connected':'Not connected')+'</span></div><small>'+what+'</small>'+(note?'<small>'+note+'</small>':'')+'</div>'}
+function connHtml(){var h='<div class="card mc-form" id="mc-conn"><h2>Connected services</h2><p class="note" style="margin:0 0 6px">The outside services the site uses for vehicle details. Keys are added in Vercel or Supabase, never on this page.</p>';
+ if(!CONN.v)return h+'<p class="note">Checking…</p></div>';
+ var V=CONN.v.vrm,M=CONN.v.mot,mn='';
+ if(!M.configured)mn='Waiting for the DVSA key. When the DVSA emails you, add DVSA_CLIENT_ID, DVSA_CLIENT_SECRET, DVSA_API_KEY and DVSA_TOKEN_URL in Supabase, Edge Functions, Secrets. Then tap “Check again”.';
+ else if(!M.connected)mn=M.error==='token_refused'?'The DVSA did not accept the client ID, client secret or token address. Check they were copied exactly, with no spaces.':M.error==='dvsa_refused'?'The DVSA did not accept the API key. Check it was copied exactly, with no spaces.':'The DVSA did not answer just now. Try again in a few minutes.';
+ h+=connRow('Registration look-ups (DVLA, free)','Make, colour, fuel, year, tax and MOT due date for any registration.',!!V.dvla,V.dvla?'':'Add DVLA_API_KEY in Vercel, then publish the site again.');
+ h+=connRow('Model, gearbox and body (Vehicle Data Global, paid)','The full details dealers and garages need.',!!V.vdg,V.vdg?'':'Add VDG_API_KEY in Vercel, then publish the site again.');
+ h+=connRow('MOT history (DVSA, free)','MOT history and mileage checks on adverts, and the model when sellers type their registration.',!!M.connected,mn);
+ return h+'<div class="dtools"><button class="btn sm ghost" type="button" data-connre="1">Check again</button></div><p class="note" style="margin:6px 0 0">The MOT history check is repeated at most every 10 minutes.</p></div>'}
+function connDraw(force){if(!isStaff()||location.hash!=='#admin')return;var b=$('admin-body');if(!b||b.getAttribute('data-at')!=='home')return;var old=$('mc-conn');if(old&&!force&&b.contains(old))return;if(!CONN.v&&Date.now()-CONN.at>10000)connPull();
+ var d=document.createElement('div');d.innerHTML=connHtml();var c=d.firstChild;if(old&&b.contains(old))old.parentNode.replaceChild(c,old);else b.appendChild(c)}
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#mc-conn [data-connre]');if(!t||!isStaff())return;CONN.v=null;CONN.at=0;connDraw(true);connPull()});
+setInterval(function(){try{connDraw(false)}catch(e){}},1500);
+/* the make and model from the DVSA MOT record, for a logged-in person listing their own vehicle (null until the DVSA
+   key is in place, or when the vehicle has no MOT record) */
+if(window.MCdb)window.MCdb.motVehicle=function(reg){var u=window.GGuser;if(!sb||!u||!u.sbid)return Promise.resolve(null);
+ return ready.then(function(){return sb.functions.invoke('mot-history',{body:{reg:String(reg||'').toUpperCase().replace(/[^A-Z0-9]/g,''),mode:'vehicle'},region:'eu-west-2'})}).then(function(r){return r&&r.data&&r.data.ok?r.data.vehicle:null},function(){return null})};
+
 /* ---------- quotes on the website: bodywork, alloy damage, auto electricians and locksmiths ---------- */
 window.MCquoteJob=function(q){var u=window.GGuser;if(!sb||!u||!u.sbid)return Promise.resolve({ok:false});var ids=(q.partners||[]).map(partnerId).filter(Boolean),paths=[];
  if(!ids.length)return Promise.resolve({ok:false,why:'sample'});
@@ -10909,9 +10956,14 @@ function find(p){var inp=$(p+'-reg'),M=window.MCvrm,n=note(p),b=$(p+'-regfind'),
   var f=F[p],miss=[];['make','model','variant','year','fuel','gear','body','col'].forEach(function(k){if(!put(f[k],d[k])&&(k==='fuel'||k==='gear')){blank(f[k],k==='fuel'?'Choose the fuel type':'Choose the gearbox');miss.push(k==='fuel'?'fuel type':'gearbox')}});
   var live=M.isLive&&M.isLive();
   if(basic&&live){if(!d.body)blank(f.body,'Choose the body type');
-   var left=[[d.model,'model'],[d.variant,'version'],[d.gear,'gearbox'],[d.body,'body type']].filter(function(x){return !x[0]}).map(function(x){return x[1]});
-   n.textContent='Found: '+[d.year,d.make].filter(Boolean).join(' ')+[d.col,d.fuel].filter(Boolean).map(function(x){return ', '+String(x).toLowerCase()}).join('')+'. If this is your vehicle, tap Continue.'
-    +(left.length?' On the next step you add the '+(left.length<2?left[0]:left.slice(0,-1).join(', ')+' and '+left[left.length-1])+'. They are on your V5C log book.':'');return}
+   var say=function(){var left=[[d.model,'model'],[d.variant,'version'],[d.gear,'gearbox'],[d.body,'body type']].filter(function(x){return !x[0]}).map(function(x){return x[1]});
+    n.textContent='Found: '+[d.year,d.make,d.model].filter(Boolean).join(' ')+[d.col,d.fuel].filter(Boolean).map(function(x){return ', '+String(x).toLowerCase()}).join('')+'. If this is your vehicle, tap Continue.'
+     +(left.length?' On the next step you add the '+(left.length<2?left[0]:left.slice(0,-1).join(', ')+' and '+left[left.length-1])+'. They are on your V5C log book.':'')};
+   say();
+   /* the DVLA does not hold the model; the DVSA MOT record does, for vehicles that have had an MOT */
+   if(!d.model&&window.MCdb&&window.MCdb.motVehicle)window.MCdb.motVehicle(r).then(function(v){if(!v||!v.model||String(($(f.make)||{}).value||'').toLowerCase()!==String(d.make||'').toLowerCase())return;
+    var m=$(f.model);if(m&&!m.value){put(f.model,v.model);d.model=v.model;say()}}).catch(function(){});
+   return}
   n.textContent=(live?'Found: ':'Sample details for the preview: ')+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+(p==='ps'?'. If this is your vehicle, tap Continue.':'. Check everything below and add the mileage and price.')+(miss.length?' We could not read the '+miss.join(' or ')+', so please choose it below.':'')},
  function(){b.disabled=false;n.textContent='Our registration look-up is not working right now. Please fill in the details yourself.'})}
 function add(){['ps','cd','vd'].forEach(function(p){var inp=$(p+'-reg');if(!inp||$(p+'-regfind'))return;
