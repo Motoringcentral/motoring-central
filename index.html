@@ -7245,6 +7245,7 @@ function build(){if(!card||card.firstChild)return;
   if(!v('ps-col'))return bad('ps-col','Enter the colour.');
   if(!$('ps-fuel').value)return bad('ps-fuel','Choose the fuel type.');
   if(!$('ps-gear').value)return bad('ps-gear','Choose the gearbox.');
+  if(!$('ps-body').value)return bad('ps-body','Choose the '+(K==='vans'?'type of van':'body type')+'.');
   if(window.MChist){var we=window.MChist.woErr($('ps-wo').value);if(we)return bad('ps-wo',we)}
   if(!v('ps-town'))return bad('ps-town','Enter your town or city.');
   if(v('ps-desc').length<20)return bad('ps-desc','Describe your '+W+' in a sentence or two. Tap “Write it for me” if you would like help.');
@@ -10883,8 +10884,10 @@ var o=window.MCsave;window.MCsave=function(type,summary,data){var u=window.GGuse
 })();
 </script>
 <script>
-/* Selling a car or van: type the registration, tap Find, and the make, model, year, fuel, gearbox, body and colour
-   are filled in from the live registration look-up (the same free look-up used for repairs, not the paid history check). */
+/* Selling a car or van: type the registration, tap Find, and the details are filled in from the registration look-up.
+   Private sellers (ps) get the free DVLA look-up: make, year, fuel, colour and car or van. The DVLA does not hold the
+   model, version, gearbox or body type, so the seller adds those (they are on the V5C log book); the gearbox and body
+   are left unchosen so a wrong default cannot slip through. Dealer forms (cd, vd) use the full look-up. */
 (function(){
 function $(i){return document.getElementById(i)}
 var F={ps:{make:'ps-make',model:'ps-model',variant:'ps-variant',year:'ps-year',fuel:'ps-fuel',gear:'ps-gear',body:'ps-body',col:'ps-col'},
@@ -10895,16 +10898,20 @@ function put(id,v){var e=$(id);if(!e||v==null||v==='')return false;v=String(v);
  e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));return true}
 function blank(id,label){var e=$(id);if(!e||e.tagName!=='SELECT')return;var o=e.querySelector('option[value=""]');if(!o){o=document.createElement('option');o.value='';o.textContent=label;e.insertBefore(o,e.firstChild)}e.value='';e.dispatchEvent(new Event('change',{bubbles:true}))}
 function note(p){var n=$(p+'-regnote');if(!n){var b=$(p+'-regfind');if(!b)return null;n=document.createElement('p');n.id=p+'-regnote';n.className='note';n.setAttribute('role','status');n.style.margin='4px 0 0';b.parentNode.parentNode.insertBefore(n,b.parentNode.nextSibling)}return n}
-function find(p){var inp=$(p+'-reg'),M=window.MCvrm,n=note(p),b=$(p+'-regfind');if(!inp||!M)return;var r=inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
+function find(p){var inp=$(p+'-reg'),M=window.MCvrm,n=note(p),b=$(p+'-regfind'),basic=p==='ps';if(!inp||!M)return;var r=inp.value.toUpperCase().replace(/[^A-Z0-9]/g,'');
  if(r.length<2){n.textContent='Enter the registration first, for example AB12 CDE.';inp.focus();return}
  n.textContent='Looking up '+r+'…';b.disabled=true;
- (M.checkLive?M.checkLive():Promise.resolve(false)).then(function(){return M.ready?M.ready(r):'off'}).then(function(st){b.disabled=false;
+ (M.checkLive?M.checkLive():Promise.resolve(false)).then(function(){return M.ready?M.ready(r,basic?{basic:true}:undefined):'off'}).then(function(st){b.disabled=false;
   if(st==='error'){n.textContent='Our registration look-up is not working right now. Please fill in the details yourself.';return}
   if(st==='none'){n.textContent='We could not find that registration. Check it, or fill in the details yourself.';return}
   var d=M.lookup(r);if(!d){n.textContent='We could not find that registration. Check it, or fill in the details yourself.';return}
   if(p==='ps'&&d.kind){var want=d.kind==='Van'?'vans':'cars',rad=document.querySelector('[name=ps-type][value="'+want+'"]');if(rad&&!rad.checked){rad.checked=true;rad.dispatchEvent(new Event('change',{bubbles:true}))}}
   var f=F[p],miss=[];['make','model','variant','year','fuel','gear','body','col'].forEach(function(k){if(!put(f[k],d[k])&&(k==='fuel'||k==='gear')){blank(f[k],k==='fuel'?'Choose the fuel type':'Choose the gearbox');miss.push(k==='fuel'?'fuel type':'gearbox')}});
   var live=M.isLive&&M.isLive();
+  if(basic&&live){if(!d.body)blank(f.body,'Choose the body type');
+   var left=[[d.model,'model'],[d.variant,'version'],[d.gear,'gearbox'],[d.body,'body type']].filter(function(x){return !x[0]}).map(function(x){return x[1]});
+   n.textContent='Found: '+[d.year,d.make].filter(Boolean).join(' ')+[d.col,d.fuel].filter(Boolean).map(function(x){return ', '+String(x).toLowerCase()}).join('')+'. If this is your vehicle, tap Continue.'
+    +(left.length?' On the next step you add the '+(left.length<2?left[0]:left.slice(0,-1).join(', ')+' and '+left[left.length-1])+'. They are on your V5C log book.':'');return}
   n.textContent=(live?'Found: ':'Sample details for the preview: ')+[d.year,d.make,d.model,d.variant].filter(Boolean).join(' ')+(p==='ps'?'. If this is your vehicle, tap Continue.':'. Check everything below and add the mileage and price.')+(miss.length?' We could not read the '+miss.join(' or ')+', so please choose it below.':'')},
  function(){b.disabled=false;n.textContent='Our registration look-up is not working right now. Please fill in the details yourself.'})}
 function add(){['ps','cd','vd'].forEach(function(p){var inp=$(p+'-reg');if(!inp||$(p+'-regfind'))return;
