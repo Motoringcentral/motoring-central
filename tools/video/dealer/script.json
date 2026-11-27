@@ -1,91 +1,101 @@
 [
-{
-"say": "Car and van dealers, welcome to The Motoring Central. This is how it works, and what's in it for you.",
-"cap": "Car and van dealers, welcome to The Motoring Central. This is how it works, and what's in it for you.",
-"b": [
-0.12
-]
-},
-{
-"say": "Listing a car takes minutes. Type the registration, and the details fill in for you. Add your photos and your price, or bring in your whole stock from a spreadsheet or a stock feed.",
-"cap": "Listing a car takes minutes. Type the registration, and the details fill in for you. Add your photos and your price, or bring in your whole stock from a spreadsheet or a stock feed.",
-"b": [
-0.22,
-0.5,
-0.72
-]
-},
-{
-"say": "Buyers search by make, price, mileage and more, and they see your cars with your dealership's name on every advert. A car that has passed a history check is marked on its advert, so buyers can trust what they see.",
-"cap": "Buyers search by make, price, mileage and more, and they see your cars with your dealership's name on every advert. A car that has passed a history check is marked on its advert, so buyers can trust what they see.",
-"b": [
-0.25,
-0.55
-]
-},
-{
-"say": "Buyers message you directly, and every enquiry is saved for you as a lead. And we never take commission on the cars you sell.",
-"cap": "Buyers message you directly, and every enquiry is saved for you as a lead. And we never take commission on the cars you sell.",
-"b": [
-0.2,
-0.45,
-0.7
-]
-},
-{
-"say": "Your dashboard is more than adverts. There's a stock book, with your costs and your profit on every car, and there are sales invoices, with deposits and part exchange, ready to print.",
-"cap": "Your dashboard is more than adverts. There's a stock book, with your costs and your profit on every car, and there are sales invoices, with deposits and part exchange, ready to print.",
-"b": [
-0.25,
-0.58
-]
-},
-{
-"say": "You can see how every advert is doing, with the views, the saves and the enquiries. You also get your own showroom page to share, and windscreen cards to print.",
-"cap": "You can see how every advert is doing, with the views, the saves and the enquiries. You also get your own showroom page to share, and windscreen cards to print.",
-"b": [
-0.2,
-0.58,
-0.8
-]
-},
-{
-"say": "Plans start at one hundred and sixty-nine pounds plus VAT a month, depending on how many cars you list, and every plan includes vehicle history checks. Pay yearly, and you pay for nine months and get twelve.",
-"cap": "Plans start at £169 plus VAT a month, depending on how many cars you list, and every plan includes vehicle history checks. Pay yearly, and you pay for 9 months and get 12.",
-"b": [
-0.05,
-0.12,
-0.19,
-0.26,
-0.33,
-0.75
-]
-},
-{
-"say": "Every plan starts with thirty days free. Cancel in that time, and you pay nothing.",
-"cap": "Every plan starts with 30 days free. Cancel in that time, and you pay nothing.",
-"b": [
-0.2,
-0.6
-]
-},
-{
-"say": "Joining takes about five minutes. Tell us about your dealership, and upload your trade insurance, your public liability insurance and a photo ID. We check your documents, and you can start listing.",
-"cap": "Joining takes about five minutes. Tell us about your dealership, and upload your trade insurance, your public liability insurance and a photo ID. We check your documents, and you can start listing.",
-"b": [
-0.2,
-0.4,
-0.62,
-0.82
-]
-},
-{
-"say": "Your stock, your buyers, and no commission. Join the dealer network today, at motoring central dot co dot uk.",
-"cap": "Your stock, your buyers, and no commission. Join the dealer network today, at motoringcentral.co.uk.",
-"b": [
-0.14,
-0.28,
-0.5
-]
-}
+ {
+  "say": "Car and van dealers, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+  "cap": "Car and van dealers, welcome to The Motoring Central. This is how it works, and what's in it for you.",
+  "b": [
+   0.12
+  ]
+ },
+ {
+  "say": "Listing a car takes minutes. Type the registration, and the details fill in for you. Add your photos and your price, or bring in your whole stock from a spreadsheet, or from a stock feed that updates every night.",
+  "cap": "Listing a car takes minutes. Type the registration, and the details fill in for you. Add your photos and your price, or bring in your whole stock from a spreadsheet, or from a stock feed that updates every night.",
+  "b": [
+   0.22,
+   0.5,
+   0.72
+  ]
+ },
+ {
+  "say": "Buyers search by make, price, mileage and more. Every advert shows the car's full MOT history from the DVSA, with the mileage at each test, and cars that have passed a history check are marked, so buyers can trust what they see.",
+  "cap": "Buyers search by make, price, mileage and more. Every advert shows the car's full MOT history from the DVSA, with the mileage at each test, and cars that have passed a history check are marked, so buyers can trust what they see.",
+  "b": [
+   0.1,
+   0.3,
+   0.66
+  ]
+ },
+ {
+  "say": "Buyers message you directly, and every enquiry is saved for you as a lead. And we never take commission on the cars you sell.",
+  "cap": "Buyers message you directly, and every enquiry is saved for you as a lead. And we never take commission on the cars you sell.",
+  "b": [
+   0.2,
+   0.45,
+   0.7
+  ]
+ },
+ {
+  "say": "Your dashboard is more than adverts. There's a stock book, with your costs and your profit on every car, and there are sales invoices, with deposits and part exchange, ready to print.",
+  "cap": "Your dashboard is more than adverts. There's a stock book, with your costs and your profit on every car, and there are sales invoices, with deposits and part exchange, ready to print.",
+  "b": [
+   0.25,
+   0.58
+  ]
+ },
+ {
+  "say": "Got a part exchange you don't want to retail? Sell it to other dealers in our trade section, at a fixed price or open to offers, with five free listings every month.",
+  "cap": "Got a part exchange you don't want to retail? Sell it to other dealers in our trade section, at a fixed price or open to offers, with 5 free listings every month.",
+  "b": [
+   0.42,
+   0.66,
+   0.84
+  ]
+ },
+ {
+  "say": "You can see how every advert is doing, with the views, the saves and the enquiries. You also get your own showroom page to share, and windscreen cards to print.",
+  "cap": "You can see how every advert is doing, with the views, the saves and the enquiries. You also get your own showroom page to share, and windscreen cards to print.",
+  "b": [
+   0.2,
+   0.58,
+   0.8
+  ]
+ },
+ {
+  "say": "Plans start at one hundred and sixty-nine pounds plus VAT a month, depending on how many cars you list, and every plan includes vehicle history checks. Pay yearly, and you pay for nine months and get twelve.",
+  "cap": "Plans start at £169 plus VAT a month, depending on how many cars you list, and every plan includes vehicle history checks. Pay yearly, and you pay for 9 months and get 12.",
+  "b": [
+   0.05,
+   0.12,
+   0.19,
+   0.26,
+   0.33,
+   0.75
+  ]
+ },
+ {
+  "say": "Every plan starts with thirty days free. Cancel in that time, and you pay nothing.",
+  "cap": "Every plan starts with 30 days free. Cancel in that time, and you pay nothing.",
+  "b": [
+   0.2,
+   0.6
+  ]
+ },
+ {
+  "say": "Joining takes about five minutes. Tell us about your dealership, and upload your trade insurance, your public liability insurance and a photo ID. We check your documents, and you can start listing.",
+  "cap": "Joining takes about five minutes. Tell us about your dealership, and upload your trade insurance, your public liability insurance and a photo ID. We check your documents, and you can start listing.",
+  "b": [
+   0.2,
+   0.4,
+   0.62,
+   0.82
+  ]
+ },
+ {
+  "say": "Your stock, your buyers, and no commission. Join the dealer network today, at motoring central dot co dot uk.",
+  "cap": "Your stock, your buyers, and no commission. Join the dealer network today, at motoringcentral.co.uk.",
+  "b": [
+   0.14,
+   0.28,
+   0.5
+  ]
+ }
 ]

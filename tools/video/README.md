@@ -30,3 +30,6 @@ Facts every video must match: partners pay 10% + VAT per job and nothing monthly
 (not on MOTs or driving lessons); MOT stations are paid the official fee less a flat 5 pounds (49.85 for a car);
 dealers pay a monthly plan from 169 + VAT with 30 days free and no commission; payouts are weekly; an EV charging job is the
 company's call-out + its price per kWh x the kWh the customer chooses + its price per mile outside its area.
+Dealer video re-made 27 Nov 2026: the stock feed updates every night, every advert shows the full MOT history from the
+DVSA (picture d9: an advert's MOT box), and a new slide on the trade section (picture d10: the dealer demo's trade page;
+5 free trade listings a month). 11 lines, 1 minute 53.
