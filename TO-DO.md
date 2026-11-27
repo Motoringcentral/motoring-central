@@ -293,7 +293,9 @@ per kWh, reminders, demo requests) with new questions (solicitor B8, D6, D7, E7,
 The site's terms (sections 9 and 11) and privacy policy were updated to match first. Ask whether he wants a separate "Recently sold" page, and to check a printed invoice for the logo.
 PRIVATE FILES ARE NOT ON GITHUB (the repository is public): the recruitment guide, links sheet, contact list, adviser
 briefs, RAC paper and the working files they are made from. The owner was sent them on 23 Nov as one zip,
-"The-Motoring-Central-Private-Working-Files-23-Nov-2026.zip". If this session's working space is empty, ask him for it.
+"The-Motoring-Central-Private-Working-Files-23-Nov-2026.zip", replaced on 27 Nov by
+"The-Motoring-Central-Private-Working-Files-27-Nov-2026.zip" (adds the updated briefs, The Forecourt video and story,
+the EV story and the video screen pictures). If this session's working space is empty, ask for the newest one.
 The demo kit lives in the database (see tools/demo-kit.js); a copy is in that zip.
 TESTS: scripts are in tools/e2e. Nothing secret is stored there: give the test password in MC_TEST_PW, the test staff
 two-step secret in MC_STAFF_TOTP and a staff demo link in MC_DEMO_LINK. If those are lost, reset the test accounts'
