@@ -2947,8 +2947,13 @@ html.mc-demo-on #mc-mine{display:none!important}
   function liveCar(v){var b=CARS[v.fuel==='Electric'?2:v.fuel==='Diesel'?1:0],o={};for(var k in b)o[k]=b[k];
     o.make=v.make||'';o.model=[v.model,v.variant].filter(Boolean).join(' ');o.year=v.year||'';o.fuel=v.fuel||b.fuel;o.cc=v.cc||(v.fuel==='Electric'?0:b.cc);
     o.tr=v.gear||'Not known';o.col=v.col||'Not known';o.mot=v.motText||'Not available';o.tyre=v.tyre||'Checked at booking';o.live=true;return o}
+  /* the free DVLA look-up has no model; the DVSA MOT record has it (asked once per registration, for a logged-in customer) */
+  var MREQ={};
+  function wantModel(r,L){var D=window.MCdb;if(!L.make||L.model||MREQ[r]||!D||!D.motVehicle)return;MREQ[r]=1;
+    D.motVehicle(r).then(function(x){var k=function(s){return String(s||'').toLowerCase().replace(/[^a-z]/g,'').slice(0,4)};
+      if(x&&x.model&&!L.model&&k(x.make)===k(L.make)){L.model=x.model;if(window.GGrerender)window.GGrerender()}else if(!(window.GGuser&&window.GGuser.sbid))MREQ[r]=0})}
   function pick(r){
-    var L=window.MCvrm&&window.MCvrm.live?window.MCvrm.live(r):null;if(L)return liveCar(L);
+    var L=window.MCvrm&&window.MCvrm.live?window.MCvrm.live(r):null;if(L){wantModel(r,L);return liveCar(L)}
     if(PRESET[r]!==undefined)return CARS[PRESET[r]];
     var h=0;for(var i=0;i<r.length;i++)h=(h*31+r.charCodeAt(i))%997;
     return CARS[h%2]}
@@ -3011,11 +3016,7 @@ html.mc-demo-on #mc-mine{display:none!important}
     (M&&M.ready?M.ready(r,{basic:window.GGmode==='mot'}):Promise.resolve('off')).then(function(st){if(go)go.disabled=false;
       if(st==='error'){e.textContent='Our vehicle check is not working right now. Please try again in a minute.';f.focus();return}
       if(st==='none'){e.textContent='We could not find that registration. Please check it and try again.';f.focus();return}
-      e.textContent='';lastReg=r;unlock();
-      /* the free DVLA look-up has no model; the DVSA MOT record has it (for a logged-in customer) */
-      var L0=M&&M.live?M.live(r):null,D=window.MCdb;
-      if(L0&&L0.make&&!L0.model&&D&&D.motVehicle)D.motVehicle(r).then(function(x){var L1=M.live(r),k=function(s){return String(s||'').toLowerCase().replace(/[^a-z]/g,'').slice(0,4)};
-        if(L1&&!L1.model&&x&&x.model&&k(x.make)===k(L1.make)){L1.model=x.model;if(window.GGrerender)window.GGrerender()}})})}
+      e.textContent='';lastReg=r;unlock()})}
   window.GGrerender=function(){if(!$('flow').hidden)reselect()};
   $('unlock').addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
     if(t.id==='unl-reg')window.GGcustOpen('Register free to see exact prices.','new',afterAuth);
