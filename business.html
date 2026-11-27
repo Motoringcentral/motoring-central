@@ -475,7 +475,7 @@ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.c
  if(a==='sadj'){var amt2=prompt('Amount in £. Positive adds to the balance; negative takes off (for example money paid back to their bank):','');if(amt2===null||!(+amt2))return;var n2=prompt('Reason (at least 10 characters; the business sees it):','');if(n2===null)return;call('staff_biz_adjust',{p_account:id,p_amount:+amt2,p_note:n2}).then(function(){toast('Adjusted.');staffStart()},function(x){toast(why(x),true)});return}
  if(a==='schk'){call('staff_biz_check').then(function(r){var bad=(r||[]).filter(function(x){return !x.ok});$('schk-out').innerHTML=bad.length?'<span class="err">Problem found in: '+E(bad.map(function(x){return x.ref+' '+x.name}).join(', '))+'. Do not change anything; tell Claude.</span>':'<span class="ok">All '+(r||[]).length+' money records are complete and unchanged.</span>'},function(x){toast(why(x),true)});return}
 });
-window.addEventListener('hashchange',function(){if(location.hash==='#staff'||location.hash===''){start()}});
+window.addEventListener('hashchange',function(){if(/^#join-[0-9a-f]{48}$/.test(location.hash)){location.reload();return}if(location.hash==='#staff'||location.hash===''){start()}});
 hashMsg();
 
 })();
