@@ -3,6 +3,13 @@
 This is the running list of work still to do before launch. When the owner asks
 "what is left to do?", answer from this file, and tick items off here as they are finished.
 
+## COMPANY REGISTERED (27 Nov 2026)
+THE MOTORING CENTRAL LTD, company number 17606100, private company limited by shares, incorporated 27 Nov 2026
+(certificate emailed by Companies House to the vimen@ mailbox). Companies House email reminders are on, and the
+registered email address is set. HMRC writes separately about Corporation Tax (the UTR comes by post). The
+authentication code for WebFiling is posted to the registered office. Next for the site: the owner enters the name,
+number and registered office in Staff page > Team and settings > Company details (the registered office is not in the
+emails; it is on the Companies House record). Business bank account: not opened yet (27 Nov); Stripe follows it.
 ## BUSINESS ACCOUNTS (built 27 Nov 2026, tested on the database; card payments wait for Stripe)
 Owner's decision: business accounts pay with a PREPAID BALANCE or a CARD ON FILE. No credit line for now (later, once
 there is cash in reserve: approved firms only, credit check, limit, 14 days). Every business job is paid before the
