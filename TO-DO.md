@@ -287,8 +287,10 @@ FOR THE OWNER TO DECIDE OR DO:
 - Still waiting from before: leaked password protection in Supabase (Authentication > Passwords); VDG_API_KEY; the DVLA key; the RAC decision; company registration; Stripe.
 NEXT FOR CLAUDE: test the untested dealer features with a real dealer account (list under DEALER SALES INVOICING below:
 spreadsheet upload, stock feed, showroom page and website embed, trade listings, PDI, changing plan). The solicitor and
-accountant briefs do not yet mention: the EV price per kWh, the EV refund sentence in [square brackets], and the privacy
-line about demo requests. Ask whether he wants a separate "Recently sold" page, and to check a printed invoice for the logo.
+accountant briefs were UPDATED on 27 Nov (sent to the owner as PDFs; private, not in the repo): each opens with "What
+has changed since 22 November" (DVLA and DVSA data, MOT warnings, trade sales, dealer plan limits and stock feeds, EV
+per kWh, reminders, demo requests) with new questions (solicitor B8, D6, D7, E7, E8, F6, F7; accountant 14 to 16).
+The site's terms (sections 9 and 11) and privacy policy were updated to match first. Ask whether he wants a separate "Recently sold" page, and to check a printed invoice for the logo.
 PRIVATE FILES ARE NOT ON GITHUB (the repository is public): the recruitment guide, links sheet, contact list, adviser
 briefs, RAC paper and the working files they are made from. The owner was sent them on 23 Nov as one zip,
 "The-Motoring-Central-Private-Working-Files-23-Nov-2026.zip". If this session's working space is empty, ask him for it.
