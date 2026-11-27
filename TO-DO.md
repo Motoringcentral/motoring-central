@@ -8,10 +8,12 @@ THE MOTORING CENTRAL LTD, company number 17606100, private company limited by sh
 (certificate emailed by Companies House to the vimen@ mailbox). Companies House email reminders are on, and the
 registered email address is set. HMRC writes separately about Corporation Tax (the UTR comes by post). The
 authentication code for WebFiling is posted to the registered office. Business bank account: not opened yet
-(27 Nov); Stripe follows it. The registered office is the accountant's address for now and may change, so the owner
-asked to leave the company details off the site until it is settled. Before launch, the owner enters the name, number
-and registered office in Staff page > Team and settings > Company details, and they show everywhere on the site, on
-self-billing invoices and in emails. The combined Companies House and HMRC service was used, so Corporation Tax
+(27 Nov); Stripe follows it. The registered office is the accountant's address, and the accountant agreed it can go on the
+site. 27 Nov: the name (The Motoring Central Ltd) and number (17606100) are on the site (footer, terms, privacy, About
+us, Contact us, complaints, self-billing invoices, email footers). STILL TO ADD: the registered office address (the
+owner sends it, or enters it in Staff page > Team and settings > Company details), then the ICO number. VAT: the
+company will register for VAT before launch, so the "+ VAT" prices stay as they are; add the VAT number in Company
+details when it arrives. The combined Companies House and HMRC service was used, so Corporation Tax
 registration may already be under way: check HMRC's letter (with the UTR) before registering again. Deadlines: Corporation Tax registration within 3 months
 of starting to trade; ICO fee before taking customer details; no VAT can be charged until there is a VAT number; first
 confirmation statement within 12 months; first accounts about 21 months after incorporation.
