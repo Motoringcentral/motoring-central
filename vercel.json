@@ -3,7 +3,16 @@
   "headers": [
     {
       "source": "/(.*)",
+      "missing": [
+        { "type": "host", "value": "motoringcentral.co.uk" },
+        { "type": "host", "value": "www.motoringcentral.co.uk" }
+      ],
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow" }]
     }
+  ],
+  "rewrites": [
+    { "source": "/robots.txt", "has": [{ "type": "host", "value": "motoringcentral.co.uk" }], "destination": "/robots-live.txt" },
+    { "source": "/robots.txt", "has": [{ "type": "host", "value": "www.motoringcentral.co.uk" }], "destination": "/robots-live.txt" },
+    { "source": "/robots.txt", "destination": "/robots-preview.txt" }
   ]
 }

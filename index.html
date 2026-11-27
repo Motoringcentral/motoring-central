@@ -2,7 +2,21 @@
 <html lang="en" class="mcnight">
 <head>
 <meta charset="utf-8">
-<meta name="robots" content="noindex, nofollow">
+<script>/* THE LAUNCH SWITCH. The live site is the main address, motoringcentral.co.uk (with or without www). Every other
+   address (preview.motoringcentral.co.uk, Vercel's own addresses, a computer) is the preview, with the sample data, demo
+   log-ins, draft notes and "Preview" banner. So pointing motoringcentral.co.uk at this site is the launch: nothing else
+   needs changing. On the live site (html class mc-live): anything marked pv-only, the draft notes, the sample cars, vans,
+   partners, reviews and vacancies, and the demo log-ins are gone; the jobs board and the RAC breakdown cover page are
+   hidden until they are ready; and Google may list the pages. Staff can see the live version on the preview by adding
+   ?live=1 to the address (and ?live=0 to go back). */
+(function(){var h=location.hostname,main=/^(www\.)?motoringcentral\.co\.uk$/.test(h),live=main,k='mc-live';
+ try{var q=new URLSearchParams(location.search).get('live');if(q==='1')sessionStorage.setItem(k,'1');else if(q==='0')sessionStorage.removeItem(k);if(sessionStorage.getItem(k)==='1')live=true}catch(e){}
+ window.MC_LIVE=live;window.MC_MAIN=main;document.documentElement.classList.add(live?'mc-live':'mc-pv');
+ if(!main){var m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.appendChild(m)}
+ /* pages that are not ready for the live site */
+ window.MC_OFF=live?{jobs:1,breakdown:1}:{};
+ function guard(){var x=(location.hash||'').replace(/^#/,'').split(/[?&\/]/)[0];if(window.MC_OFF[x])location.replace('#drivers')}
+ guard();window.addEventListener('hashchange',guard,true)})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -501,6 +515,9 @@ section.why h2{font-size:clamp(1.7rem,5vw,2.4rem)!important;line-height:1.12!imp
 .pg th{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .pg .foot{max-width:760px;margin:0 auto;padding:16px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted);text-align:center}
 .foot-co{display:block;margin-top:6px;font-size:.74rem;line-height:1.45}
+/* the launch switch: preview-only things go on the live site, live-only things show only there */
+html.mc-live .pv-only,html.mc-live .card.draft,html.mc-live .ab-draft,html.mc-live a[href="#jobs"],html.mc-live a[href="#breakdown"],html.mc-live li:has(>a[href="#jobs"]),html.mc-live li:has(>a[href="#breakdown"]),html.mc-live .jobpromo,html.mc-live .bdcover,html.mc-live [data-qa="job"],html.mc-live [data-qa="jobs"]{display:none!important}
+html:not(.mc-live) .live-only{display:none!important}
 .pg .foot a{font-weight:400}
 @media (max-width:540px){.pg .pg-two,.pg .pg-row{grid-template-columns:1fr}}
 .ckbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:#0B1C35;color:#fff;padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));box-shadow:0 -6px 24px rgba(0,0,0,.3)}
@@ -1164,7 +1181,7 @@ html.embed .embed-by{display:block!important}
 <script>document.documentElement.classList.add("mcnight");window.MCland=location.hash||""</script>
 <canvas id="bg" aria-hidden="true"></canvas>
 <a href="#drivers" class="skip" id="skip">Skip to main content</a>
-<script>window.MCdir={L:{},reg:function(k,a){this.L[k]=a;return a}};</script>
+<script>window.MCdir={L:{},reg:function(k,a){if(window.MC_LIVE)a.length=0;this.L[k]=a;return a}};</script>
 <script>
 /* Cars and vans for sale: the paid vehicle history check (finance, insurance write-off, stolen) and write-off labels.
    This is separate from the free repair look-up. The check runs on our server in London, only after the seller has
@@ -1255,7 +1272,7 @@ function fill(){['cd','vd'].forEach(function(p){var b=document.getElementById(p+
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',fill);else fill();
 })();
 </script>
-<div class="banner">Preview site with sample data. Customer accounts are real and are saved. No real payments or texts are made.</div>
+<div class="banner pv-only">Preview site with sample data. Customer accounts are real and are saved. No real payments or texts are made.</div>
 <header><div class="in2"><a href="#drivers" class="logo" aria-label="The Motoring Central, home" style="display:inline-flex;align-items:center;gap:10px;text-decoration:none"><svg width="42" height="42" viewBox="0 0 120 120" aria-hidden="true" style="flex:none"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="7" stroke-linecap="round"/><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="8" fill="#FFD43B"/></svg><span style="display:flex;flex-direction:column;line-height:1;gap:3px;color:#0B1C35" aria-hidden="true"><span style="font-size:.55rem;font-weight:700;letter-spacing:.5em">THE</span><span style="font-size:1.2rem;font-weight:800;letter-spacing:-.02em;white-space:nowrap">MOTORING</span><span style="align-self:flex-start;font-size:.6rem;font-weight:700;letter-spacing:.38em;padding:3px 3px 3px 7px;border-radius:5px;background:#0B1C35;color:#fff;white-space:nowrap">CENTRAL</span><small style="color:#0B1C35;font-weight:500;opacity:.9;font-size:.64rem;letter-spacing:.04em">Buy. Fix. Clean. Rescue.</small></span></a><button type="button" class="menubtn" id="menubtn" aria-expanded="false" aria-controls="tabs-public tabs-net acct"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button><nav class="tabs" id="tabs-public" aria-label="Browse"><a href="#drivers">Home</a><a href="#cars">Cars for sale</a><a href="#vans">Vans for sale</a><a href="#about">About us</a><a href="#network">For partners</a><a href="#breakdown">Breakdown cover</a><a href="#jobs">Motor trade jobs</a><a href="#cars" class="mob" data-sellcar="1">Sell a car or van</a><a href="#contact" class="mob">Help and contact</a></nav><nav class="tabs" id="tabs-net" aria-label="Partner area" hidden><a href="#network">Join the network</a><a href="#demo">Request a demo</a><a href="#trade">Trade</a><a href="#jobs">Motor trade jobs</a><a href="#login" id="t-login">Log in</a><a href="#dashboard" id="t-dash" hidden>My dashboard</a><a href="#drivers">Back to customer site</a></nav><div class="acct" id="acct"></div></div></header>
 <div class="launch" id="launch">&#127881; Compare fixed prices from local partners for free. You only pay when you book.</div>
 <div class="sidemap" aria-hidden="true"></div>
@@ -1270,7 +1287,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <p id="near-car" hidden></p>
 </div></section>
 <div class="proof" id="proof">
-<div><b>&#9733; 4.8 out of 5</b><span>from customer reviews <i>sample</i></span></div>
+<div class="pv-only"><b>&#9733; 4.8 out of 5</b><span>from customer reviews <i>sample</i></span></div><div class="live-only"><b>&#9733; Real reviews only</b><span>From customers with a completed booking</span></div>
 <div><b>&#10003; Vetted partners</b><span>Insurance and ID checked</span></div>
 <div><b>&#10003; Fixed price first</b><span>Know the cost before you book</span></div>
 <div><b>&#10003; Updates and chat</b><span>Alerts at every step of the job</span></div>
@@ -1413,7 +1430,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <p class="err" id="tyr-err" role="alert"></p>
 <div class="tc"><input type="checkbox" id="tc-tgo"><label for="tc-tgo">I understand my booking is with the tyre fitter I have chosen. They are responsible for the tyres and fitting, including the warranty. <a href="#terms" data-tsec="tc-tyres">Read the terms</a></label></div><p class="tcerr" id="tc-tgo-err" role="alert"></p><button class="btn block" id="tgo" type="button">Book tyre fitter</button>
 <p class="okmsg" id="tdone" hidden></p>
-<p class="sample">Sample prices shown for the preview.</p>
+<p class="sample pv-only">Sample prices shown for the preview.</p>
 </div>
 
 <div class="card" id="rec" hidden></div>
@@ -1435,7 +1452,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div class="tc"><input type="checkbox" id="tc-mgo"><label for="tc-mgo">I understand my MOT is with the test centre I have chosen. The test centre is responsible for the test and any repairs, including their warranty. <a href="#terms" data-tsec="tc-mot">Read the terms</a></label></div><p class="tcerr" id="tc-mgo-err" role="alert"></p><button class="btn block" id="mgo" type="button">Book MOT</button>
 </div>
 <p class="okmsg" id="mdone" hidden></p>
-<p class="sample">Sample garages shown. Your own partner list loads here.</p>
+<p class="sample pv-only">Sample garages shown. Your own partner list loads here.</p>
 </div>
 
 <div class="card" id="job" hidden>
@@ -1547,18 +1564,18 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 </section>
 
 
-<h2 class="sec">What drivers say</h2>
-<div class="revs">
+<h2 class="sec pv-only">What drivers say</h2>
+<div class="revs pv-only">
 <div class="card"><span class="stars">★★★★★</span><p>Brake pads done on my driveway while I worked from home. Price matched the quote exactly.</p><small>Sarah, Leeds (sample review)</small></div>
 <div class="card"><span class="stars">★★★★★</span><p>Typed my reg, saw the exact parts, booked in two minutes. Dan was brilliant.</p><small>James, Bristol (sample review)</small></div>
 <div class="card"><span class="stars">★★★★☆</span><p>Battery swapped at my office in under an hour. Would use again.</p><small>Priya, Manchester (sample review)</small></div>
 </div>
 
 <div class="card bdpromo" id="mr-promo"><div><b>Free MOT reminders</b><p>We email you a month and a week before your MOT is due.</p></div><button class="btn" type="button" data-mrhome>Set one up</button></div>
-<div class="card bdpromo"><div><b>Need breakdown cover?</b><p>Find the right RAC cover level for you.</p></div><a class="btn" href="#breakdown">Compare cover</a></div>
+<div class="card bdpromo bdcover"><div><b>Need breakdown cover?</b><p>Find the right RAC cover level for you.</p></div><a class="btn" href="#breakdown">Compare cover</a></div>
 <div class="card bdpromo jobpromo"><div><b>Work in the motor trade?</b><p>Mechanics, painters, drivers, sales and office roles from our partners.</p></div><a class="btn" href="#jobs">See vacancies</a></div>
 
-<footer class="foot">© The Motoring Central. Preview with sample data. Prices, reviews and statistics are placeholders. <a href="#breakdown" style="color:inherit">Breakdown cover</a> <a href="#network" style="color:inherit">Join the network</a> <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">© The Motoring Central. <span class="pv-only">Preview with sample data. Prices, reviews and statistics are placeholders. </span><a href="#breakdown" style="color:inherit">Breakdown cover</a> <a href="#network" style="color:inherit">Join the network</a> <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main>
 
 
@@ -1704,7 +1721,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <fieldset><legend>Documents</legend>
 
 
-<p class="note">Upload is shown for the preview only. The live site would store these securely.</p></fieldset>
+<p class="note">Your documents are stored securely. Only our checking team can see them.</p></fieldset>
 
 <fieldset>
 <label class="chk one"><input type="checkbox" id="ins"><span>I confirm both insurance documents are valid and in date.</span></label>
@@ -1725,7 +1742,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <p class="note">We will be in touch by email once we have checked your documents.</p>
 </div>
 
-<footer class="foot">© The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">© The Motoring Central. Earnings figures and timings are examples only. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main>
 
 
@@ -1796,7 +1813,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <fieldset><legend>Documents</legend>
 <label class="up">Goods in transit and public liability insurance<input type="file" accept="image/*,.pdf"></label>
 <label class="up">Company registration or operator licence<input type="file" accept="image/*,.pdf"></label>
-<p class="note">Upload is shown for the preview only.</p></fieldset>
+<p class="note">Your documents are stored securely. Only our checking team can see them.</p></fieldset>
 <fieldset>
 <label class="chk one"><input type="checkbox" id="r-ins"><span>I confirm both insurance documents are valid, in date and cover the vehicles I recover and the people I carry.</span></label>
 <label class="chk one"><input type="checkbox" id="r-chk"><span>I agree to the checks and the <a href="#terms" data-tsec="tc-contractor">partner terms</a>. I am responsible for my work, the parts I supply and the warranty I give customers.</span></label></fieldset>
@@ -1811,7 +1828,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to agree your coverage area</li><li>Insurance and licence checks</li><li>Go live and receive your first recovery</li></ol>
 <p class="note">We will be in touch by email once we have checked your documents.</p></div>
 </div>
-<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are examples only. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-lessons" hidden>
 <section class="hero"><div class="in">
@@ -1932,7 +1949,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <fieldset><legend>Documents</legend>
 <label class="up">Inspection or test certificate for your charging equipment<input type="file" accept="image/*,.pdf"></label>
 <label class="up">Company registration (if a limited company)<input type="file" accept="image/*,.pdf"></label>
-<p class="note">Upload is shown for the preview only.</p></fieldset>
+<p class="note">Your documents are stored securely. Only our checking team can see them.</p></fieldset>
 <fieldset>
 <label class="chk one"><input type="checkbox" id="ev-ins"><span>I confirm both insurance documents are valid, in date and cover roadside charging work. My charging equipment is safety-tested and maintained.</span></label>
 <label class="chk one"><input type="checkbox" id="ev-chk"><span>I agree to the checks and the <a href="#terms" data-tsec="tc-contractor">partner terms</a>. I am responsible for my work, the parts I supply and the warranty I give customers.</span></label></fieldset>
@@ -1946,7 +1963,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="ev-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to agree your coverage area and equipment</li><li>Insurance and equipment checks</li><li>Go live and receive your first charging job</li></ol>
 <p class="note">We will be in touch by email once we have checked your documents.</p></div>
-<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are examples only. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-body" hidden>
 <section class="hero"><div class="in">
@@ -2022,7 +2039,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <label class="up">Photos of your recent work (before and after)<input type="file" accept="image/*" multiple></label>
 <label class="up">Local authority permit for vehicle spraying (if you need one)<input type="file" accept="image/*,.pdf"></label>
 <label class="up">Company registration (if a limited company)<input type="file" accept="image/*,.pdf"></label>
-<p class="note">Upload is shown for the preview only.</p></fieldset>
+<p class="note">Your documents are stored securely. Only our checking team can see them.</p></fieldset>
 <fieldset>
 <label class="chk one"><input type="checkbox" id="bs-ins"><span>I confirm both insurance documents are valid, in date and cover the work I do, including customers&rsquo; vehicles in my care.</span></label>
 <label class="chk one"><input type="checkbox" id="bs-hse"><span>If I spray 2K (isocyanate) paints, I use a suitable spray booth or extraction and protective equipment, follow HSE guidance, and hold any permit my local authority needs. I dispose of paint, solvent and other waste legally.</span></label>
@@ -2037,7 +2054,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="bs-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to go through your services and work photos</li><li>Insurance, ID and approval checks</li><li>Go live and receive your first quote requests</li></ol>
 <p class="note">We will be in touch by email once we have checked your documents.</p></div>
-<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are examples only. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-tyre" hidden>
 <section class="hero"><div class="in">
@@ -2085,7 +2102,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <fieldset><legend>Documents</legend>
 
 
-<p class="note">Upload is shown for the preview only.</p></fieldset>
+<p class="note">Your documents are stored securely. Only our checking team can see them.</p></fieldset>
 <fieldset>
 <label class="chk one"><input type="checkbox" id="t-ins"><span>I confirm both insurance documents are valid and in date.</span></label>
 <label class="chk one"><input type="checkbox" id="t-chk"><span>I agree to the checks and the <a href="#terms" data-tsec="tc-contractor">partner terms</a>. I am responsible for my work, the parts I supply and the warranty I give customers.</span></label></fieldset>
@@ -2099,7 +2116,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="t-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to meet you</li><li>Insurance and background checks</li><li>Go live and take your first job</li></ol>
 <p class="note">We will be in touch by email once we have checked your documents.</p></div>
-<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are examples only. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-valet" hidden>
 <section class="hero"><div class="in">
@@ -2148,7 +2165,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <fieldset><legend>Documents</legend>
 
 
-<p class="note">Upload is shown for the preview only.</p></fieldset>
+<p class="note">Your documents are stored securely. Only our checking team can see them.</p></fieldset>
 <fieldset>
 <label class="chk one"><input type="checkbox" id="va-ins"><span>I confirm both insurance documents are valid and in date.</span></label>
 <label class="chk one"><input type="checkbox" id="va-chk"><span>I agree to the checks and the <a href="#terms" data-tsec="tc-contractor">partner terms</a>. I am responsible for my work, the parts I supply and the warranty I give customers.</span></label></fieldset>
@@ -2162,7 +2179,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="va-ref" style="margin:0 0 8px"></p>
 <ol class="steps"><li>We review your documents within 2 working days</li><li>Quick call to meet you</li><li>Insurance and background checks</li><li>Go live and take your first valet</li></ol>
 <p class="note">We will be in touch by email once we have checked your documents.</p></div>
-<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are illustrative placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. Earnings figures and timings are examples only. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-cars" hidden>
 <section class="hero"><div class="in">
@@ -2202,10 +2219,10 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <label id="cd-waitrow" hidden style="display:flex;gap:8px;align-items:flex-start;margin-top:10px"><input type="checkbox" id="cd-wait" style="width:20px;height:20px;flex:none;margin-top:2px"><span><b>Join the banner waiting list</b><br><span class="note">The banner is full. First come, first served. Any charge is only taken when your car goes live.</span></span></label>
 <p class="err" id="cd-err" role="alert"></p>
 <button class="btn block" type="submit">Publish listing</button>
-<p class="note">Preview only. Listings last until you close this page.</p>
+<p class="note">We check every advert before it goes live, usually within a few hours.</p>
 </form>
 </div>
-<footer class="foot">&copy; The Motoring Central. Sample cars and dealers for the preview. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Sample cars and dealers for the preview. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-dealers" hidden>
 <section class="hero"><div class="in dvhero">
@@ -2250,7 +2267,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <label class="f" for="dl-web">Website (optional)</label><input type="text" id="dl-web">
 <fieldset><legend>Required: proof of trading</legend><p class="note" style="margin:0 0 6px">Upload both documents. They must be valid and in date.</p><label class="up">Trade insurance certificate<input type="file" id="dl-doc1" accept="image/*,.pdf"></label><label class="f" for="dl-exp1" style="margin-top:8px">Trade insurance expiry date</label><input type="date" id="dl-exp1"><label class="up" style="margin-top:12px">Public liability insurance certificate<input type="file" id="dl-doc2" accept="image/*,.pdf"></label><label class="f" for="dl-exp2" style="margin-top:8px">Public liability expiry date</label><input type="date" id="dl-exp2"></fieldset>
 <fieldset><legend>Required: identity check</legend><p class="note" style="margin:0 0 6px">Upload a clear photo of your ID. It must show your name and photo and be in date. It is used to check your identity.</p><label class="f" for="dl-idtype" style="margin-top:0">ID type</label><select id="dl-idtype"><option>Passport</option><option>UK driving licence</option><option>National ID card</option></select><label class="up" style="margin-top:8px">Photo ID<input type="file" id="dl-doc3" accept="image/*,.pdf"></label><label class="f" for="dl-exp3" style="margin-top:8px">ID expiry date</label><input type="date" id="dl-exp3"></fieldset>
-<fieldset><legend>Documents</legend><label class="up">Business registration<input type="file" accept="image/*,.pdf"></label><p class="note">Upload is shown for the preview only.</p></fieldset>
+<fieldset><legend>Documents</legend><label class="up">Business registration<input type="file" accept="image/*,.pdf"></label><p class="note">Your documents are stored securely. Only our checking team can see them.</p></fieldset>
 <fieldset><div class="card" style="background:var(--soft);border:0;margin:0"><b>Your plan</b><div class="note" id="dl-plannote"></div><div class="note" style="margin-top:4px">Payment is taken securely by card in the live version, nothing is charged here.</div></div>
 <label class="chk one"><input type="checkbox" id="dl-chk"><span>I agree to the <a href="#terms" data-tsec="tc-dealer">dealer terms</a> and the monthly fee for my chosen plan after my 30-day free trial, and to one month&rsquo;s notice to cancel after the trial. I am responsible for the vehicles I sell, my adverts and any warranty I give.</span></label></fieldset>
 <p class="err" id="dl-err" role="alert"></p>
@@ -2258,9 +2275,9 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 </form>
 <div class="card done" id="dl-ok" hidden>
 <div class="tick" aria-hidden="true">&#10003;</div><h2>Application received</h2><p id="dl-ref" style="margin:0 0 8px"></p>
-<p class="note" id="dl-oknote">We are checking your documents, usually within 2 working days. We will email you as soon as you are approved. You can then log in and list your cars and vans. Preview only, nobody was charged.</p>
+<p class="note" id="dl-oknote">We are checking your documents, usually within 2 working days. We will email you as soon as you are approved. You can then log in and list your cars and vans.<span class="pv-only"> Preview only, nobody was charged.</span></p>
 <button class="btn" id="dl-list" type="button" hidden>List a car now</button></div>
-<footer class="foot">&copy; The Motoring Central. Prices are for the preview and can be changed. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Prices are for the preview and can be changed. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-vans" hidden>
 <section class="hero"><div class="in">
@@ -2295,10 +2312,10 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <label style="display:flex;gap:8px;align-items:flex-start;margin-top:12px"><input type="checkbox" id="vd-feat" style="width:20px;height:20px;flex:none;margin-top:2px"><span><b>Premium ad on the front-page banner</b><br><span class="note">Shown for 2 weeks or until sold.</span></span></label>
 <p class="err" id="vd-err" role="alert"></p>
 <button class="btn block" type="submit">Publish listing</button>
-<p class="note">Preview only. Listings last until you close this page. Adverts are included in your dealer plan, up to your plan limit.</p>
+<p class="note">We check every advert before it goes live, usually within a few hours. Adverts are included in your dealer plan, up to your plan limit.</p>
 </form>
 </div>
-<footer class="foot">&copy; The Motoring Central. Sample vans and dealers for the preview. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Sample vans and dealers for the preview. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </main></div>
 <div id="v-network" hidden>
 <section class="hero"><div class="in">
@@ -2341,7 +2358,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <p class="note" style="margin-top:10px"><a href="/reset.html" style="color:var(--brand);font-weight:700">Forgotten your password?</a></p>
 <p class="note" style="margin-top:12px">New here? <a href="#network" style="color:var(--brand);font-weight:700">Join the network</a></p>
 </form>
-<div class="card"><b>Demo logins</b><p class="note" style="margin:4px 0 0">Preview only. Tap one to fill it in, then log in. The password for all of them is demo1234.</p><div class="demo" id="lg-demo"></div></div>
+<div class="card pv-only"><b>Demo logins</b><p class="note" style="margin:4px 0 0">Preview only. Tap one to fill it in, then log in. The password for all of them is demo1234.</p><div class="demo" id="lg-demo"></div></div>
 </main></div>
 <div id="v-dash" hidden>
 <section class="hero"><div class="in"><h1>Your dashboard</h1><p>Everything here is for the service you joined as.</p></div></section>
@@ -2471,20 +2488,20 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 </div></details>
 
 </main>
-<footer class="foot">&copy; The Motoring Central. Draft terms for review. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Draft terms for review. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </div>
 
 <div id="v-review" hidden>
 <section class="hero"><div class="in"><h1>Review your booking</h1><p>Tell other drivers how it went. It takes less than a minute and helps good local businesses get found.</p></div></section>
 <main><div id="rev-body"></div></main>
-<footer class="foot">&copy; The Motoring Central. Preview with sample data. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Preview with sample data. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a></span></footer>
 </div>
 <dialog id="prof-dlg" aria-labelledby="prof-name"><div id="prof-body"></div></dialog>
 
 <div id="v-account" hidden>
 <section class="hero"><div class="in"><h1>My account</h1><p>Your bookings, your messages to dealers and the terms you have accepted.</p></div></section>
 <main><div id="acc-body"></div><div id="ps-acct"></div></main>
-<footer class="foot">&copy; The Motoring Central. Preview with sample data. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Preview with sample data. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </div>
 <dialog id="cust-dlg" aria-labelledby="cu-title">
 <div class="cuh"><b id="cu-title">Create your free account</b><button type="button" id="cu-x">Close</button></div>
@@ -2507,7 +2524,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 <p class="cu-err" id="ci-err" role="alert"></p>
 <button class="cu-btn" type="submit">Log in</button>
 <p class="cu-hint" style="margin-top:8px"><a href="/reset.html" style="font-weight:700;color:inherit">Forgotten your password?</a></p>
-<p class="cu-hint">Demo account: <button type="button" class="cu-link" id="ci-demo">fill in customer@demo.com</button></p>
+<p class="cu-hint pv-only">Demo account: <button type="button" class="cu-link" id="ci-demo">fill in customer@demo.com</button></p>
 </form>
 </dialog>
 
@@ -2619,6 +2636,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 </div>
 <div class="card ab-cb"><h2>Prefer a call back?</h2><p class="note" style="margin:0 0 6px">Leave your number and someone from our team will call you.</p>
 <form id="cb-form" novalidate><div class="ab-two"><div><label class="f" for="cb-n">Your name</label><input type="text" id="cb-n" autocomplete="name"></div><div><label class="f" for="cb-p">Phone number</label><input type="tel" id="cb-p" autocomplete="tel"></div></div>
+<label class="f" for="cb-e">Email address</label><input type="email" id="cb-e" autocomplete="email"><p class="note" style="margin:2px 0 0">So we can confirm, and reply by email if we cannot reach you.</p>
 <label class="f" for="cb-t">Best time to call</label><select id="cb-t"><option>As soon as possible</option><option>Morning</option><option>Afternoon</option><option>Evening</option></select>
 <label class="f" for="cb-m">What is it about? (optional)</label><input type="text" id="cb-m" placeholder="e.g. a question about a booking">
 <p class="err" id="cb-err" role="alert"></p><button class="ab-btn" type="submit">Request a call back</button></form>
@@ -2837,7 +2855,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 <details><summary>9. Children</summary><div class="tb"><p>Motoring Central is for people aged 18 or over, with one exception: driving lessons can be booked for a learner who is old enough to hold a provisional licence (17, or 16 in some cases). [For a learner under 18, a parent or guardian must make the booking.] We do not knowingly collect information from younger children.</p></div></details>
 <details><summary>10. Changes to this policy</summary><div class="tb"><p>We will update this page when what we do changes, and show the date at the top. If a change is significant, we will tell you by email or on the site.</p></div></details>
 </main>
-<footer class="foot">&copy; The Motoring Central. Draft policy for review. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Draft policy for review. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </div>
 
 <div id="v-cookies" class="pg" hidden>
@@ -2865,7 +2883,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 <div class="card"><h2>Advertising</h2><p>We do not use advertising or tracking cookies that follow you to other websites. If that ever changes, we will update this notice and ask for your consent first.</p></div>
 <div class="card"><h2>Other ways to control cookies</h2><p>You can also block or delete cookies in your browser settings. If you block essential cookies, parts of the site such as logging in and booking will not work.</p><p>For more about how we use personal information, see our <a href="#privacy">privacy policy</a>.</p></div>
 </main>
-<footer class="foot">&copy; The Motoring Central. Draft notice for review. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">Draft notice for review. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </div>
 
 <div id="v-jobs" class="pg" hidden>
@@ -2890,7 +2908,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 
 <h2 class="sec">Every role in the trade</h2>
 <div class="jb-roles" id="jb-roles"></div>
-<p class="note">Sample vacancies shown for the preview. Motoring Central advertises jobs on behalf of its partners. Each employer is responsible for its own advert, recruitment and employment. <a href="#terms" data-tsec="tc-jobs">Read the terms</a></p>
+<p class="note"><span class="pv-only">Sample vacancies shown for the preview. </span>Motoring Central advertises jobs on behalf of its partners. Each employer is responsible for its own advert, recruitment and employment. <a href="#terms" data-tsec="tc-jobs">Read the terms</a></p>
 </main>
 <footer class="foot">&copy; The Motoring Central. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a></footer>
 </div>
@@ -2931,7 +2949,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 <div class="card bdhow"><b>How this works</b><p>Breakdown cover is sold and provided by the RAC, not by The Motoring Central. You buy on the RAC website and the RAC’s terms apply. [We may receive a commission from the RAC. This does not change the price you pay.]</p></div>
 <div class="card bdpromo"><div><b>Broken down now, with no cover?</b><p>Book one of our local recovery partners and pay only for this job.</p></div><a class="btn" href="#drivers">Book recovery</a></div>
 </main>
-<footer class="foot">&copy; The Motoring Central. RAC prices are placeholders. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <span class="pv-only">RAC prices are placeholders. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </div>
 
 <dialog id="docview" aria-labelledby="dv-title"><div class="dvh"><b id="dv-title">Document</b><button type="button" id="dv-close">Close</button></div><div id="dv-body"></div></dialog>
@@ -2945,7 +2963,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 <p class="err" id="st-err" role="alert"></p>
 <button class="btn" type="submit" id="st-go">Continue</button>
 </form>
-<div class="card"><b>Preview only</b><p class="note" style="margin:4px 0 8px">Demo staff accounts. The password is demo1234 and the code is 123456. Remove this box on the live site.</p><div class="demo" id="st-demo" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
+<div class="card pv-only"><b>Preview only</b><p class="note" style="margin:4px 0 8px">Demo staff accounts. The password is demo1234 and the code is 123456. Remove this box on the live site.</p><div class="demo" id="st-demo" style="display:flex;gap:8px;flex-wrap:wrap"></div></div>
 </main></div>
 <script>
 (function(){
@@ -3338,7 +3356,7 @@ var p=$('mpost').value.replace(/\s/g,'');
 if(p.length<5){$('mot-err').textContent='Enter your postcode to see garages near you.';return}
 $('mot-err').textContent='';pick=null;$('mbook').hidden=true;$('mdone').hidden=true;
 var off=(hash(p)%7)/10,box=$('garages');box.innerHTML='';
-var GL=G.filter(function(g,i){if(!window.MCMOT)return !g.demo;if(g.demo)return !!(info&&info.mot)&&/^4/.test(cls().c);return info&&info.mot?window.MCMOT.tests(i):!window.MCMOT.motOnly(i)});
+var GL=window.MC_LIVE?[]:G.filter(function(g,i){if(!window.MCMOT)return !g.demo;if(g.demo)return !!(info&&info.mot)&&/^4/.test(cls().c);return info&&info.mot?window.MCMOT.tests(i):!window.MCMOT.motOnly(i)});
 var RL=info&&info.mot?realList():info&&window.MCrepairGarages?window.MCrepairGarages():[];
 if(window.MCnear)RL=RL.filter(function(g){var q=window.MCnear.get(g.n,p,'site');g.mi=q.miles;return q.ok}).sort(function(a,b){return (b.ftop||0)-(a.ftop||0)||(a.mi||0)-(b.mi||0)});
 GL=RL.concat(GL);
@@ -4232,7 +4250,7 @@ document.addEventListener('click',function(e){var g=e.target.closest('[data-go]'
 /* login */
 $('lg-form').addEventListener('submit',function(e){e.preventDefault();
 var em=$('lg-mail').value.trim().toLowerCase(),pw=$('lg-pass').value;
-var u=USERS.filter(function(x){return x.pass&&x.role!=='admin'&&x.email===em&&x.pass===pw})[0];
+var u=USERS.filter(function(x){return !window.MC_LIVE&&x.pass&&x.role!=='admin'&&x.email===em&&x.pass===pw})[0];
 if(!u&&em&&pw&&window.MCdb&&window.MCdb.on){var lb=$('lg-form').querySelector('[type=submit]');if(lb)lb.disabled=true;$('lg-err').textContent='';
 window.MCdb.partnerSignIn(em,pw).then(function(x){if(lb)lb.disabled=false;$('lg-form').reset();setUser(x);location.hash='dashboard'},function(e2){if(lb)lb.disabled=false;$('lg-err').textContent=e2.message});return}
 if(!u){$('lg-err').textContent='Email or password not recognised.';return}
@@ -4561,7 +4579,7 @@ else er.textContent=st.stage===1?'Email or password not recognised.':'That code 
 $('st-form').addEventListener('submit',function(e){e.preventDefault();var er=$('st-err');
 if(Date.now()<st.lockUntil){er.textContent='Too many attempts. Try again in '+Math.ceil((st.lockUntil-Date.now())/1000)+' seconds.';return}
 if(st.stage===1){var em=$('st-mail').value.trim().toLowerCase(),pw=$('st-pass').value;
-var u=USERS.filter(function(x){return x.pass&&x.role==='admin'&&x.email===em&&x.pass===pw})[0];
+var u=USERS.filter(function(x){return !window.MC_LIVE&&x.pass&&x.role==='admin'&&x.email===em&&x.pass===pw})[0];
 if(!u&&em&&pw&&window.MCdb&&window.MCdb.on){var sg=$('st-go');sg.disabled=true;er.textContent='';
 window.MCdb.staffSignIn(em,pw).then(function(x){sg.disabled=false;st.user=x;finishStaff()},function(){sg.disabled=false;failStaff('Failed staff sign-in for '+em)});return}
 if(!u){failStaff('Failed staff sign-in for '+(em||'(blank email)'),USERS.filter(function(x){return x.role==='admin'&&x.email===em})[0]);return}
@@ -4977,7 +4995,7 @@ mode('in');$('ci-mail').value=m;var w=$('cu-why');w.hidden=false;w.textContent='
 function(e){sbtn.disabled=false;sbtn.textContent='Create account';$('cu-err').textContent=e.message});return}
 var u={email:m,pass:pw,role:'customer',name:n,phone:t,post:pc,joined:Date.now(),tcAt:Date.now(),news:$('cu-news').checked,bookings:[],enquiries:[]};CUST.push(u);$('cu-new').reset();done(u)});
 $('cu-in').addEventListener('submit',function(e){e.preventDefault();var m=$('ci-mail').value.trim().toLowerCase(),pw=$('ci-pass').value;
-var u=CUST.filter(function(c){return c.pass&&c.email===m&&c.pass===pw})[0];
+var u=CUST.filter(function(c){return !window.MC_LIVE&&c.pass&&c.email===m&&c.pass===pw})[0];
 if(!u&&m&&pw&&window.MCdb&&window.MCdb.on){var ibtn=$('cu-in').querySelector('[type=submit]');ibtn.disabled=true;ibtn.textContent='Logging in…';$('ci-err').textContent='';
 window.MCdb.signIn(m,pw).then(function(x){ibtn.disabled=false;ibtn.textContent='Log in';$('cu-in').reset();done(x)},function(e){ibtn.disabled=false;ibtn.textContent='Log in';$('ci-err').textContent=e.message});return}
 if(!u){$('ci-err').textContent='Email or password not recognised.';return}$('cu-in').reset();done(u)});
@@ -5211,7 +5229,13 @@ function m2(n){return '£'+(+n).toFixed(2)}
 var dlg=$('paydlg'),cur=null,PASS={};
 window.GGpayPass=PASS;
 function luhn(n){var s=0,a=false;for(var i=n.length-1;i>=0;i--){var d=+n[i];if(a){d*=2;if(d>9)d-=9}s+=d;a=!a}return s%10===0}
-window.GGpay=function(o){if(o.incvat&&o.amount>0&&!o._iv){o._iv=1;o.sub=String(o.sub||'').replace(/\s*Price includes VAT\.?$/,'')+' Price includes VAT of '+m2(Math.round(o.amount/6*100)/100)+'.'}if(o.vat&&!o.net&&o.amount>0){o.net=o.amount;o.amount=Math.round(o.amount*120)/100;o.sub=(o.sub?o.sub+' ':'')+m2(o.net)+' plus VAT of '+m2(o.amount-o.net)+'.'}cur=o;$('py-desc').textContent=o.desc;$('py-amt').textContent=m2(o.amount)+(o.per?' '+o.per:'');$('py-sub').textContent=o.sub||'';$('py-go').textContent=o.btn||('Pay '+m2(o.amount));
+/* On the live site the practice card form is never shown: until real card payments (Stripe) are connected, a payment
+   explains that card payments are not switched on yet, and nothing is booked or charged. */
+function payOff(){var d=document.getElementById('mc-payoff');if(d)d.remove();d=document.createElement('div');d.id='mc-payoff';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-labelledby','payoff-h');
+ d.style.cssText='position:fixed;inset:0;z-index:9999;background:rgba(6,20,36,.85);display:flex;align-items:center;justify-content:center;padding:16px';
+ d.innerHTML='<div class="card" style="max-width:420px;width:100%;background:var(--surface);color:var(--ink)"><h2 id="payoff-h" style="margin-top:0">Card payments are not switched on yet</h2><p>Nothing has been booked or charged. Call us on <a href="tel:02081914290">020 8191 4290</a> or WhatsApp us on <a href="https://wa.me/447364144974" target="_blank" rel="noopener">07364 144974</a> and we will help.</p><button type="button" class="btn" data-payoffx="1">Close</button></div>';
+ document.body.appendChild(d);var b=d.querySelector('[data-payoffx]');b.onclick=function(){d.remove()};b.focus()}
+window.GGpay=function(o){if(window.MC_LIVE&&!window.MC_PAY_ON){payOff();return}if(o.incvat&&o.amount>0&&!o._iv){o._iv=1;o.sub=String(o.sub||'').replace(/\s*Price includes VAT\.?$/,'')+' Price includes VAT of '+m2(Math.round(o.amount/6*100)/100)+'.'}if(o.vat&&!o.net&&o.amount>0){o.net=o.amount;o.amount=Math.round(o.amount*120)/100;o.sub=(o.sub?o.sub+' ':'')+m2(o.net)+' plus VAT of '+m2(o.amount-o.net)+'.'}cur=o;$('py-desc').textContent=o.desc;$('py-amt').textContent=m2(o.amount)+(o.per?' '+o.per:'');$('py-sub').textContent=o.sub||'';$('py-go').textContent=o.btn||('Pay '+m2(o.amount));
 $('py-form').hidden=false;$('py-done').hidden=true;$('py-3ds').hidden=true;$('py-err').textContent='';$('py-go').disabled=false;
 var u=window.GGuser;if(u){if(!$('py-name').value)$('py-name').value=u.name||'';if(!$('py-pc').value&&u.post)$('py-pc').value=u.post}
 if(!dlg.open)dlg.showModal();setTimeout(function(){$('py-card').focus()},30)};
@@ -5256,7 +5280,13 @@ var DP=DPLAN(DPLANSEL());window.GGpay({amount:0,per:'today',desc:'Dealer '+DP.n+
 <script>(function(){var f=document.getElementById('cb-form');if(!f)return;function $(i){return document.getElementById(i)}
 f.addEventListener('submit',function(e){e.preventDefault();var n=$('cb-n').value.trim(),p=$('cb-p').value.replace(/\D/g,'');
 if(!n){$('cb-err').textContent='Enter your name.';$('cb-n').focus();return}if(p.length<10){$('cb-err').textContent='Enter a phone number we can call.';$('cb-p').focus();return}
-$('cb-err').textContent='';if(window.MCsave)window.MCsave('call-back request',n+' asked for a call back',{name:n,phone:$('cb-p').value.trim(),when:$('cb-t').value,about:$('cb-m').value.trim()});f.hidden=true;var ok=$('cb-ok');ok.hidden=false;ok.textContent='Thanks, '+n+'. A member of our team will call you ('+$('cb-t').value.toLowerCase()+'). Preview only: no call will be made from this demo.'});
+var em=$('cb-e').value.trim();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){$('cb-err').textContent='Enter your email address.';$('cb-e').focus();return}
+$('cb-err').textContent='';var when=$('cb-t').value,about=$('cb-m').value.trim(),btn=f.querySelector('button[type=submit]');
+/* sent like the contact form: saved for staff, who are emailed straight away */
+if(!window.MCdb||!window.MCdb.contact){$('cb-err').textContent='This did not send. Call us on 020 8191 4290 instead.';return}btn.disabled=true;
+window.MCdb.contact({name:n,email:em,phone:$('cb-p').value.trim(),topic:'Call back request',message:'Please call me back on '+$('cb-p').value.trim()+'. Best time: '+when.toLowerCase()+'.'+(about?' About: '+about:'')}).then(function(r){btn.disabled=false;
+ if(!r||r.error){var m=(r&&r.error&&r.error.message)||'';$('cb-err').textContent=/too_many/.test(m)?'You have sent several requests already. We will be in touch.':/bad_email/.test(m)?'Check your email address.':'This did not send. Try again, or call us on 020 8191 4290.';return}
+ f.hidden=true;var ok=$('cb-ok');ok.hidden=false;ok.textContent='Thanks, '+n+'. A member of our team will call you ('+when.toLowerCase()+'). Your reference is '+((r.data&&r.data.ref)||'on its way by email')+'.'},function(){btn.disabled=false;$('cb-err').textContent='This did not send. Check your connection and try again.'})});
 var u=window.GGuser;})();</script>
 <script>(function(){var root=document.getElementById('v-breakdown');if(!root)return;function $(i){return document.getElementById(i)}
 function upd(){var who=(root.querySelector('input[name=bd-who]:checked')||{}).value||'vehicle';var on={};[].forEach.call(root.querySelectorAll('.bdopts input[data-lvl]'),function(c){on[c.getAttribute('data-lvl')]=c.checked});
@@ -5282,7 +5312,7 @@ show(0);start()})();
 </script>
 <footer class="sitefoot" id="sitefoot"><div class="sfin">
 <div class="sfbrand"><b>The Motoring Central</b><span>Buy. Fix. Clean. Rescue.</span><p>A growing UK network of independent motor traders. Everything your vehicle needs, in one place.</p><a class="sfcta" href="#drivers" data-top="1">Book a service</a></div>
-<nav class="sfcols" aria-label="Site map"><div><h3>Book a service</h3><ul><li><a href="#drivers" data-svc="mobile">Mobile mechanic</a></li><li><a href="#drivers" data-svc="garage">Garage repairs</a></li><li><a href="#drivers" data-svc="mot">MOT</a></li><li><a href="#drivers" data-svc="autoelec">Auto electrician and locksmith</a></li><li><a href="#drivers" data-svc="tyres">Mobile tyres</a></li><li><a href="#drivers" data-svc="valet">Full valet</a></li><li><a href="#drivers" data-svc="body">Bodywork and alloy wheels</a></li><li><a href="#drivers" data-svc="recovery">Recovery</a></li><li><a href="#drivers" data-svc="evcharge">Mobile EV charging</a></li><li><a href="#lessons">Driving lessons</a></li></ul></div><div><h3>Buy and cover</h3><ul><li><a href="#cars">Cars for sale</a></li><li><a href="#cars" data-sellcar="1">Sell a car or van</a></li><li><a href="#vans">Vans for sale</a></li><li><a href="#breakdown">Breakdown cover</a></li><li><a href="#account">My account</a></li></ul></div><div><h3>For the trade</h3><ul><li><a href="#network">Join the network</a></li><li><a href="#demo">Request a demo</a></li><li><a href="#login">Partner log in</a></li><li><a href="#dashboard">Partner dashboard</a></li><li><a href="#trade">Trade cars and vans</a></li><li><a href="#jobs">Motor trade jobs</a></li><li><a href="#jobs" data-jobpost="1">Advertise a vacancy</a></li></ul></div><div><h3>Help and company</h3><ul><li><a href="#about">About us</a></li><li><a href="#contact">Contact us</a></li><li><a href="#faq">FAQs</a></li><li><a href="#terms">Terms and conditions</a></li><li><a href="#privacy">Privacy policy</a></li><li><a href="#cookies">Cookie notice</a></li></ul></div></nav></div><p class="sfcopy">&copy; The Motoring Central. Preview with sample data.</p></footer>
+<nav class="sfcols" aria-label="Site map"><div><h3>Book a service</h3><ul><li><a href="#drivers" data-svc="mobile">Mobile mechanic</a></li><li><a href="#drivers" data-svc="garage">Garage repairs</a></li><li><a href="#drivers" data-svc="mot">MOT</a></li><li><a href="#drivers" data-svc="autoelec">Auto electrician and locksmith</a></li><li><a href="#drivers" data-svc="tyres">Mobile tyres</a></li><li><a href="#drivers" data-svc="valet">Full valet</a></li><li><a href="#drivers" data-svc="body">Bodywork and alloy wheels</a></li><li><a href="#drivers" data-svc="recovery">Recovery</a></li><li><a href="#drivers" data-svc="evcharge">Mobile EV charging</a></li><li><a href="#lessons">Driving lessons</a></li></ul></div><div><h3>Buy and cover</h3><ul><li><a href="#cars">Cars for sale</a></li><li><a href="#cars" data-sellcar="1">Sell a car or van</a></li><li><a href="#vans">Vans for sale</a></li><li><a href="#breakdown">Breakdown cover</a></li><li><a href="#account">My account</a></li></ul></div><div><h3>For the trade</h3><ul><li><a href="#network">Join the network</a></li><li><a href="#demo">Request a demo</a></li><li><a href="#login">Partner log in</a></li><li><a href="#dashboard">Partner dashboard</a></li><li><a href="#trade">Trade cars and vans</a></li><li><a href="#jobs">Motor trade jobs</a></li><li><a href="#jobs" data-jobpost="1">Advertise a vacancy</a></li></ul></div><div><h3>Help and company</h3><ul><li><a href="#about">About us</a></li><li><a href="#contact">Contact us</a></li><li><a href="#faq">FAQs</a></li><li><a href="#terms">Terms and conditions</a></li><li><a href="#privacy">Privacy policy</a></li><li><a href="#cookies">Cookie notice</a></li></ul></div></nav></div><p class="sfcopy">&copy; The Motoring Central.<span class="pv-only"> Preview with sample data.</span></p></footer>
 <button type="button" class="totop" id="totop" aria-label="Back to top" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 14l6-6 6 6"/></svg></button>
 <div class="ckbar" id="ckbar" role="region" aria-label="Cookie choice" hidden><div class="in"><p>We use essential cookies to make this site work. With your OK, we would also use analytics cookies to improve it. <a href="#cookies">Read our cookie notice</a></p><div class="bt"><button type="button" data-ck="essential">Essential only</button><button type="button" data-ck="all">Accept all</button></div></div></div>
 <script>
@@ -5325,7 +5355,7 @@ var DAY=864e5,PRICE=9.99,RUN=90;
 var CATS=['Workshop and technical','MOT testing','Auto electrical and locksmith','Bodyshop and paint','Alloy wheels','Tyres','Recovery and driving','EV and hybrid','Valeting and detailing','Vehicle sales','Parts and stores','Service desk and customer care','Office, accounts and admin','Management','Apprenticeships and trainees'];
 var ROLES=['Vehicle technician','Mobile mechanic','Master technician','MOT tester','Auto electrician','Diagnostic technician','Vehicle locksmith','Panel beater','Paint sprayer','Prepper','Smart repairer','Alloy wheel technician','Tyre fitter','Mobile tyre fitter','Recovery driver','Transporter driver','Delivery and collection driver','EV technician','Valeter','Detailer','Sales executive','Sales manager','Vehicle buyer','Parts adviser','Stores person','Service adviser','Receptionist','Bookkeeper','Accounts assistant','Administrator','Workshop controller','Workshop manager','Branch manager','Apprentice technician','Trainee'];
 function J(o){o.id=++seq;return o}
-var seq=0,LIST=[
+var seq=0,LIVEJ=!!window.MC_LIVE,LIST=[
 J({t:'Vehicle technician',c:'Workshop and technical',e:'Kirkstall Road Garage',town:'Leeds',h:'Full time',lo:32000,hi:38000,per:'year',age:1,d:'Busy independent garage needs a time-served technician for servicing, repairs and diagnostics on all makes.',need:['Level 3 in light vehicle maintenance or equivalent','Full UK driving licence','Own tools'],perks:['Monday to Friday, no weekends','Bonus scheme','Training paid for']}),
 J({t:'MOT tester',c:'MOT testing',e:'Hillside Autocentre',town:'Bradford',h:'Full time',lo:34000,hi:40000,per:'year',age:2,d:'Class 4 and 7 tester for a two-lane test station. Mix of testing and light repairs.',need:['Current MOT tester licence, classes 4 and 7','Up to date with annual training'],perks:['Overtime available','28 days holiday']}),
 J({t:'Mobile mechanic',c:'Workshop and technical',e:'Dan K. Mobile Mechanics',town:'Leeds',h:'Self-employed',lo:180,hi:240,per:'day',age:4,d:'Experienced mechanic to cover overflow bookings across West Yorkshire. Choose your own days.',need:['Own van and tools','Public liability insurance'],perks:['Paid weekly','Jobs booked for you']}),
@@ -5426,7 +5456,7 @@ var done=function(){ad.id=++seq;ad.sid='j'+Date.now().toString(36)+Math.random()
 if(window.GGpay)window.GGpay({vat:1,amount:PRICE,desc:'Job advert: '+t+' ('+RUN+' days)',sub:'Paid to The Motoring Central. One payment, no renewal.',onPaid:done});else done()}});
 function refresh(){if((location.hash||'')==='#jobs'){mineMsg='';draw();drawPost()}}
 window.addEventListener('hashchange',refresh);
-fill();draw();drawPost();window.GGjobs={refresh:function(){draw();drawPost()},count:function(){return LIST.length},sync:function(ads,my){var keep={};ads.forEach(function(a){if(!a||!a.sid||!a.t||(a.posted||0)+RUN*DAY<Date.now())return;keep[a.sid]=1;var ex=LIST.filter(function(j){return j.sid===a.sid})[0];if(ex){ex.mine=a.owner===my;ex.owner=a.owner;ex.unsaved=false;return}var c={sid:a.sid,owner:a.owner,t:String(a.t),c:String(a.c||''),e:String(a.e||''),town:String(a.town||''),h:String(a.h||''),lo:+a.lo||0,hi:+a.hi||0,per:String(a.per||'year'),d:String(a.d||''),need:Array.isArray(a.need)?a.need.map(String):[],perks:Array.isArray(a.perks)?a.perks.map(String):[],posted:+a.posted||Date.now(),mine:a.owner===my};c.id=++seq;LIST.unshift(c)});LIST=LIST.filter(function(j){return !j.sid||keep[j.sid]||j.unsaved});if(appId===null)draw()},applied:function(m){LIST.forEach(function(j){var k=j.sid||('sample-'+j.id);if(m[k]&&!applied[j.id])applied[j.id]=m[k]});if(appId===null)draw()}};
+if(LIVEJ)LIST=[];fill();draw();drawPost();window.GGjobs={refresh:function(){draw();drawPost()},count:function(){return LIST.length},sync:function(ads,my){var keep={};ads.forEach(function(a){if(!a||!a.sid||!a.t||(a.posted||0)+RUN*DAY<Date.now())return;keep[a.sid]=1;var ex=LIST.filter(function(j){return j.sid===a.sid})[0];if(ex){ex.mine=a.owner===my;ex.owner=a.owner;ex.unsaved=false;return}var c={sid:a.sid,owner:a.owner,t:String(a.t),c:String(a.c||''),e:String(a.e||''),town:String(a.town||''),h:String(a.h||''),lo:+a.lo||0,hi:+a.hi||0,per:String(a.per||'year'),d:String(a.d||''),need:Array.isArray(a.need)?a.need.map(String):[],perks:Array.isArray(a.perks)?a.perks.map(String):[],posted:+a.posted||Date.now(),mine:a.owner===my};c.id=++seq;LIST.unshift(c)});LIST=LIST.filter(function(j){return !j.sid||keep[j.sid]||j.unsaved});if(appId===null)draw()},applied:function(m){LIST.forEach(function(j){var k=j.sid||('sample-'+j.id);if(m[k]&&!applied[j.id])applied[j.id]=m[k]});if(appId===null)draw()}};
 })();
 </script>
 <script>
@@ -6318,9 +6348,9 @@ function sync(){var I=window.MCinbox?window.MCinbox():[];if(I.length===loadedInb
  I.forEach(function(it){if(it.type!=='review')return;var d=it.data||{};if(!d.partner||REV.some(function(r){return r.t===(d.t||it.t)&&r.partner===d.partner}))return;
   REV.push({partner:String(d.partner),stars:Math.max(1,Math.min(5,+d.stars||5)),text:String(d.text||''),rec:d.rec!==false,name:String(d.name||'Customer'),t:d.t||it.t,bt:d.bt,service:String(d.service||''),acct:d.acct||''})})}
 var SAMPLE_T=['Turned up on time and explained everything clearly. Fair price.','Really easy to book and the work was done properly. Would use again.','Friendly, tidy and quick. Kept me updated throughout.','Great service from start to finish. No surprises on the bill.','Sorted the problem first time. Very happy.','Good communication and a fair price. Recommended.'],SAMPLE_N=['Alex P.','Jordan T.','Priya K.','Sam R.','Chris W.','Mo A.','Emma L.','Dave H.'];
-function sample(name){var h=hash(name),out=[],n=3;for(var i=0;i<n;i++)out.push({partner:name,stars:(h+i)%7===0?4:5,text:SAMPLE_T[(h+i*3)%SAMPLE_T.length],name:SAMPLE_N[(h+i*5)%SAMPLE_N.length],t:Date.now()-((h%20)+6+i*17)*864e5,sample:true});return out}
+function sample(name){if(window.MC_LIVE)return [];var h=hash(name),out=[],n=3;for(var i=0;i<n;i++)out.push({partner:name,stars:(h+i)%7===0?4:5,text:SAMPLE_T[(h+i*3)%SAMPLE_T.length],name:SAMPLE_N[(h+i*5)%SAMPLE_N.length],t:Date.now()-((h%20)+6+i*17)*864e5,sample:true});return out}
 function realOf(name){sync();var k=pname(name).toLowerCase();return REV.filter(function(r){return r.partner.toLowerCase()===k}).sort(function(a,b){return b.t-a.t})}
-function summary(name){var real=!!(window.MCisRealPartner&&window.MCisRealPartner(pname(name))),r=realOf(name),all=real?r:r.concat(sample(pname(name))),t=0;all.forEach(function(x){t+=x.stars});var h=hash(pname(name));return{avg:all.length?t/all.length:0,n:all.length,count:real?r.length:r.length+18+h%140,list:all,isNew:real&&!r.length}} /* real partners never get sample reviews */
+function summary(name){var real=!!(window.MCisRealPartner&&window.MCisRealPartner(pname(name))),r=realOf(name),all=real?r:r.concat(sample(pname(name))),t=0;all.forEach(function(x){t+=x.stars});var h=hash(pname(name));return{avg:all.length?t/all.length:0,n:all.length,count:real||window.MC_LIVE?r.length:r.length+18+h%140,list:all,isNew:real&&!r.length}} /* real partners never get sample reviews */
 function userOf(name){var k=pname(name).toLowerCase();return (window.GGusers||[]).filter(function(u){return u.role!=='admin'&&String(u.name||'').toLowerCase()===k})[0]}
 function av(name,cls){var u=userOf(name),nm=pname(name);if(u&&u.logo&&/^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(u.logo))return '<span class="pav '+(cls||'')+'"><img alt="" src="'+SRC(u.logo)+'"></span>';
  var ini=nm.split(/\s+/).filter(function(w){return /[A-Za-z]/.test(w)}).slice(0,2).map(function(w){return w.charAt(0).toUpperCase()}).join(''),c=['#38BDF8','#FFD43B','#7ee2b8','#f9a8d4','#c4b5fd'][hash(nm)%5];
@@ -6333,7 +6363,7 @@ function openProfile(name,ctx){name=pname(name);if(!name)return;var u=userOf(nam
  +'<p class="pmeta" style="margin:0">Every partner sends us their trade insurance, public liability insurance and photo ID before they can take a booking. The partner is responsible for the work and its warranty.</p>'
  +'<h3>What customers say</h3>';
  S.list.slice(0,6).forEach(function(r){h+='<div class="prev">'+stars(r.stars)+'<span class="tag">'+(r.sample?'Sample review':'Verified booking')+'</span>'+(r.text?'<div style="margin-top:4px">'+esc(r.text)+'</div>':'')+'<small>'+esc(r.name)+', '+dateOnly(r.t)+'</small></div>'});
- h+='<p class="pmeta" style="font-size:.78rem;margin:10px 0 0">Preview: sample reviews and review counts are placeholders. Only customers with a completed booking can leave a review.</p><div class="pf"><button type="button" class="btn" id="prof-close">Close</button></div>';
+ h+='<p class="pmeta pv-only" style="font-size:.78rem;margin:10px 0 0">Preview: sample reviews and review counts are placeholders. Only customers with a completed booking can leave a review.</p><div class="pf"><button type="button" class="btn" id="prof-close">Close</button></div>';
  $('prof-body').innerHTML=h;var d=$('prof-dlg');if(!d.open)d.showModal();$('prof-close').focus()}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('[data-prof],#prof-close');if(!t)return;
  if(t.id==='prof-close'){$('prof-dlg').close();return}e.preventDefault();e.stopPropagation();
@@ -6575,7 +6605,7 @@ function valid(v){return /^[A-Z]{1,2}\d[A-Z\d]? ?(\d[A-Z]{2})?$/.test(v)}
 function area(v){return v.split(' ')[0].length>4?v.slice(0,-3).trim():v.split(' ')[0]}
 function nearCount(v){var h=0,a=area(v);for(var i=0;i<a.length;i++)h=(h*31+a.charCodeAt(i))%997;return 18+h%60}
 function paintNear(){var out=$('near-out'),inp=$('near-pc'),sub=document.querySelector('.qksub');if(!out)return;
- if(post){inp.value=post;out.className='nearok';out.innerHTML='<span class="tk" aria-hidden="true">\u2713</span><span class="nt"><b>'+nearCount(post)+' vetted partners near '+esc(area(post))+'</b><small>Within 10 miles of '+esc(post)+'. Choose a service below to see their prices. <em>Sample figure</em></small></span><button type="button" id="near-clear">Change postcode</button>';}
+ if(post){inp.value=post;out.className='nearok';out.innerHTML='<span class="tk" aria-hidden="true">\u2713</span><span class="nt">'+(window.MC_LIVE?'<b>Showing partners near '+esc(area(post))+'</b><small>Choose a service below to see the vetted partners who cover '+esc(post)+' and their prices.</small>':'<b>'+nearCount(post)+' vetted partners near '+esc(area(post))+'</b><small>Within 10 miles of '+esc(post)+'. Choose a service below to see their prices. <em>Sample figure</em></small>')+'</span><button type="button" id="near-clear">Change postcode</button>';}
  else{out.className='';out.textContent='';}
  window.GGpost=post;fillPost()}
 function fillPost(){if(!post)return;[].forEach.call(document.querySelectorAll('#v-cust input[id$="post"]'),function(el){if(el.id==='near-pc'||el.getAttribute('data-pf')||el.value)return;el.setAttribute('data-pf','1');el.value=post;el.dispatchEvent(new Event('input',{bubbles:true}))})}
@@ -7775,7 +7805,7 @@ function index(){if(IDX)return IDX;IDX={p:[],s:[],j:[],l:[],f:[]};
  P.forEach(function(x){IDX.p.push({x:x,hw:hay(x[0]+' '+x[4])})});
  [].forEach.call(grid.querySelectorAll('button.qk[data-svc]'),function(t){var b=t.querySelector('b').textContent,sm=t.querySelector('small');IDX.s.push({x:[b,sm?sm.textContent:'',t],hw:hay(b+' '+(sm?sm.textContent:'')+' '+(SVK[b.toLowerCase()]||''))})});
  if(window.MCSVC)window.MCSVC.list('garage').forEach(function(g){if(g[0]==='Vehicles you work on')return;g[1].forEach(function(x){IDX.j.push({x:{n:x.n,h:x.h,w:x.w,g:g[0]},hw:hay(x.n),xw:hay((x.h||'')+' '+g[0])})})});
- LINKS.forEach(function(x){IDX.l.push({x:x,hw:hay(x[0]+' '+x[3])})});
+ LINKS.forEach(function(x){if(window.MC_LIVE&&(/^#(jobs|breakdown)$/.test(x[2])||/vacanc/i.test(x[0])))return;IDX.l.push({x:x,hw:hay(x[0]+' '+x[3])})});
  var fr=$('v-faq');if(fr)[].forEach.call(fr.querySelectorAll('details'),function(d){var sm=d.querySelector('summary');if(!sm)return;var body=d.textContent.replace(sm.textContent,'');IDX.f.push({x:{q:sm.textContent,a:body.trim().slice(0,90),el:d},hw:hay(sm.textContent),bw:hay(body)})});
  ['p','s','j','l','f'].forEach(function(k){IDX[k].forEach(function(e){e.hw.forEach(function(w){VOC[w]=1})})});
  return IDX}
@@ -9125,10 +9155,10 @@ document.addEventListener('click',function(e){var t=e.target;if(!t.closest)retur
  if(t.closest('[data-csvt]')){e.preventDefault();var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([CSVT],{type:'text/csv'}));a.download='motoring-central-stock.csv';document.body.appendChild(a);a.click();a.remove();return}
  if(t.closest('#mc-bulkgo'))bulkRun()});
 /* sample cars and vans: staff can hide them once real stock is listed */
-var SAMPLES={cars:[],vans:[]},hideS=false;['cars','vans'].forEach(function(k){var a=adApi(k);if(a)SAMPLES[k]=a.list().filter(function(c){return !c.dbid}).map(function(c){return c.id})});
+var SAMPLES={cars:[],vans:[]},hideS=!!window.MC_LIVE;['cars','vans'].forEach(function(k){var a=adApi(k);if(a)SAMPLES[k]=a.list().filter(function(c){return !c.dbid}).map(function(c){return c.id})});
 function applySamples(){if(!hideS)return;['cars','vans'].forEach(function(k){var a=adApi(k);if(!a)return;SAMPLES[k].forEach(function(id){if(a.list().some(function(c){return c.id===id&&!c.dbid}))a.act(id,'remove')})});if(window.GGbanner)window.GGbanner()}
 ready.then(function(){return sb.from('app_settings').select('key,value').eq('key','company').maybeSingle()}).then(function(r){if(r&&!r.error&&r.data&&window.MCco)MCco.set(r.data.value||{})}).catch(function(){});
-ready.then(function(){return sb.from('app_settings').select('key,value').eq('key','hide_samples').maybeSingle()}).then(function(r){hideS=!!(r&&r.data&&r.data.value===true);applySamples()}).catch(function(){});
+ready.then(function(){return sb.from('app_settings').select('key,value').eq('key','hide_samples').maybeSingle()}).then(function(r){hideS=!!window.MC_LIVE||!!(r&&r.data&&r.data.value===true);applySamples()}).catch(function(){});
 function adminCard(){var me=window.GGuser;if(!me||me.role!=='admin'||!me.sbid||me.level!=='owner')return;var b=$('admin-body');if(!b||$('mc-samples'))return;
  var d=document.createElement('div');d.className='card';d.id='mc-samples';d.innerHTML='<h2>Sample cars and vans</h2><p class="note" style="margin:0 0 8px">'+(hideS?'Hidden. Only real adverts are shown.':'Showing. The made-up cars and vans are shown next to real adverts.')+'</p><button type="button" class="btn sm" data-samples="'+(hideS?'show':'hide')+'">'+(hideS?'Show the sample cars and vans':'Hide the sample cars and vans')+'</button>';b.insertBefore(d,b.firstChild)}
 document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-samples]');if(!b)return;var hide=b.getAttribute('data-samples')==='hide';b.disabled=true;
@@ -9775,7 +9805,7 @@ function rsReq(p){var rec=p==='rs',err=$(rec?'rec-err':'evc-err'),from=GPS[p]?{l
  else{b.opt.need=$('evc-need').value;b.opt.plug=$('evc-plug').value;b.opt.kwh=+$('evc-kwh').value||10}
  err.textContent='';return b}
 function rsList(p,res){var rec=p==='rs',box=$(rec?'rprov':'evc-prov'),k=rec?'rec':'evc',S=RS[k];box.innerHTML='';
- var sum=$(p+'-sum'),L=(res.list||[]).map(function(x,i){x.real=1;var f=window.MCfounder?window.MCfounder(x.name):{};x.fnd=f.fnd||0;x.ftop=f.ftop||0;x._i=i;return x}).sort(function(a,b){return (b.ftop||0)-(a.ftop||0)||a._i-b._i}),smp=!L.length&&(res.samples||[]).length;
+ var sum=$(p+'-sum'),L=(res.list||[]).map(function(x,i){x.real=1;var f=window.MCfounder?window.MCfounder(x.name):{};x.fnd=f.fnd||0;x.ftop=f.ftop||0;x._i=i;return x}).sort(function(a,b){return (b.ftop||0)-(a.ftop||0)||a._i-b._i}),smp=!window.MC_LIVE&&!L.length&&(res.samples||[]).length;
  sum.innerHTML=(rec?'Collect from <b>'+E(res.from.label)+'</b>'+(res.from.area?', '+E(res.from.area):'')+', take to <b>'+E(res.to.label)+'</b>'+(res.to.area?', '+E(res.to.area):'')+': about '+res.loaded+' miles.'+(res.weight?' Vehicle weight: about <b>'+Number(res.weight.kg).toLocaleString('en-GB')+' kg</b> ('+(res.weight.src==='record'?'from its registration':'typical for this type of vehicle; add the registration for its real weight')+'). Only trucks that can carry it are shown.':''):'Charging at <b>'+E(res.from.label)+'</b>'+(res.from.area?', '+E(res.from.area):'')+'.');
  if(!L.length&&!smp){var NXT=res.next||[];
   if(res.heavy){box.innerHTML='<p class="note"><b>No recovery company near you has a truck that can carry this vehicle'+(res.weight?' (about '+Number(res.weight.kg).toLocaleString('en-GB')+' kg)':'')+' '+(S.when==='now'?'right now':'at that time')+'.</b> Check the vehicle type you chose. If you are in danger, call 999. Your breakdown cover provider can also help.</p>';return}
