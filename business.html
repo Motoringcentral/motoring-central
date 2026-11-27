@@ -22,7 +22,8 @@ header{background:var(--sky);padding:14px 16px 0}
 .wm .t1{font:700 10px Sora,Inter;letter-spacing:.55em}
 .wm .t2{font:800 26px/0.95 Sora,Inter;letter-spacing:-.03em}
 .wm .t3{display:inline-block;font:700 12px Sora,Inter;letter-spacing:.42em;background:var(--navy);color:#fff;padding:3px 2px 3px 8px;border-radius:5px;margin-top:3px}
-.brand .who{margin-left:auto;font-size:13px;font-weight:600;text-align:right}
+.brand .who{margin-left:auto;font-size:13px;font-weight:600;text-align:right;min-width:0;max-width:48%;overflow-wrap:anywhere}
+@media(max-width:520px){.brand .who .em{display:none}}
 .brand .who button{margin-top:4px}
 .title{max-width:980px;margin:12px auto 0;padding-bottom:14px}
 .title h1{font:800 24px Sora,Inter;margin:0}
@@ -116,6 +117,7 @@ var SB_URL='https://hctboldpuyztugpwexdy.supabase.co',SB_KEY='sb_publishable_Rbx
 var sb=window.supabase.createClient(SB_URL,SB_KEY);
 var $=function(i){return document.getElementById(i)};
 function E(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function poLabel(v){return (/^po\b/i.test(String(v))?'':'PO ')+E(v)}
 function money(n){n=Number(n)||0;return (n<0?'-':'')+'£'+Math.abs(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function dlong(d){if(!d)return '';var x=new Date(String(d).slice(0,10)+'T12:00:00');return x.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
 function dtime(t){if(!t)return '';var x=new Date(t);return x.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' '+x.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
@@ -140,7 +142,7 @@ var S={user:null,accounts:[],acct:null,st:null,tab:'overview',book:null,staff:nu
 try{S.acct=localStorage.getItem('mc-biz-acct')||null}catch(e){}
 
 /* ---------- sign-in state ---------- */
-function who(){var w=$('who');if(!S.user){w.innerHTML='';return}w.innerHTML=E(S.user.email)+'<br><button class="btn sm ghost" type="button" data-act="signout">Log out</button>'}
+function who(){var w=$('who');if(!S.user){w.innerHTML='';return}w.innerHTML='<span class="em">'+E(S.user.email)+'<br></span><button class="btn sm ghost" type="button" data-act="signout">Log out</button>'}
 var idleT;function idle(){clearTimeout(idleT);if(S.user)idleT=setTimeout(function(){sb.auth.signOut().then(function(){toast('Logged out after an hour without activity, to keep your account safe.')})},60*60*1000)}
 ['click','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,idle,{passive:true})});
 sb.auth.onAuthStateChange(function(ev,session){var u=session&&session.user||null;var changed=(u&&u.id)!==(S.user&&S.user.id);S.user=u;who();idle();if(changed||!S.started){S.started=true;setTimeout(start,0)}});
@@ -228,7 +230,7 @@ function jobRow(j){var s=STATUS[j.status]||[j.status,''];var bs=j.status==='book
  if(j.status==='awaiting_card'&&(j.mine||rank(r)>=3))acts+='<button class="btn sm sky" type="button" data-act="payjob" data-id="'+E(j.id)+'">Pay '+money(j.total)+' by card</button>';
  if((j.status==='awaiting_approval'||j.status==='awaiting_card')&&(j.mine||rank(r)>=3))acts+='<button class="btn sm ghost" type="button" data-act="cancel" data-id="'+E(j.id)+'">Withdraw</button>';
  if(j.status==='booked'&&j.booking_status==='confirmed'&&(j.mine||rank(r)>=3)&&j.day>addDays(0))acts+='<button class="btn sm ghost" type="button" data-act="cancel" data-id="'+E(j.id)+'">Cancel</button>';
- return '<div class="it"><div><b>'+E(j.kind)+' · '+E(j.reg)+' · '+money(j.total)+'</b><small>'+E(dlong(j.day))+(j.slot?' ('+E(j.slot)+')':'')+(j.partner?' · '+E(j.partner):'')+(j.po?' · PO '+E(j.po):'')+(j.by?' · booked by '+E(j.by):'')+(j.schedule?' · repeat valet':'')+'</small><small><span class="pill '+s[1]+'">'+E(bs||s[0])+'</span> '+E(j.ref)+(j.booking?' · booking '+E(j.booking):'')+(j.pay==='card'?' · card':' · balance')+'</small>'+(j.decline_reason?'<small>Reason: '+E(j.decline_reason)+'</small>':'')+(j.status==='failed'&&j.fail_reason?'<small>'+E(why(j.fail_reason))+'</small>':'')+'</div><div class="acts">'+acts+'</div></div>'}
+ return '<div class="it"><div><b>'+E(j.kind)+' · '+E(j.reg)+' · '+money(j.total)+'</b><small>'+E(dlong(j.day))+(j.slot?' ('+E(j.slot)+')':'')+(j.partner?' · '+E(j.partner):'')+(j.po?' · '+poLabel(j.po):'')+(j.by?' · booked by '+E(j.by):'')+(j.schedule?' · repeat valet':'')+'</small><small><span class="pill '+s[1]+'">'+E(bs||s[0])+'</span> '+E(j.ref)+(j.booking?' · booking '+E(j.booking):'')+(j.pay==='card'?' · card':' · balance')+'</small>'+(j.decline_reason?'<small>Reason: '+E(j.decline_reason)+'</small>':'')+(j.status==='failed'&&j.fail_reason?'<small>'+E(why(j.fail_reason))+'</small>':'')+'</div><div class="acts">'+acts+'</div></div>'}
 
 function jobsHtml(){var J=S.st.jobs,f=S.jf||'all';var F={all:function(){return true},open:function(j){return j.status==='awaiting_approval'||j.status==='awaiting_card'||(j.status==='booked'&&j.booking_status!=='done'&&j.booking_status!=='cancelled')},done:function(j){return j.booking_status==='done'},other:function(j){return ['declined','cancelled','failed','expired'].indexOf(j.status)>-1}};
  var L=J.filter(F[f]);
@@ -294,7 +296,7 @@ function cardHtml(on){var c=S.st.card,adm=rank(me())>=3;if(!adm)return '';
 
 /* repeat valets */
 function repHtml(){var R=S.st.schedules||[],V=S.st.vehicles;
- var h='<div class="card"><h2>Repeat valets</h2><p class="note">Booked automatically 7 days before each visit, from your balance. If there is not enough money, or the valeter is closed that day, we email you so you can sort it out.</p>'+(R.length?'<div class="list">'+R.map(function(s){return '<div class="it"><div><b>Every '+(s.every_weeks===1?'week':s.every_weeks+' weeks')+' · '+E(s.partner)+'</b><small>'+E((s.regs||[]).join(', '))+' · '+E(s.time)+' · '+(s.place==='mobile'?E(s.address)+', '+E(s.postcode):'at the valeter\'s premises')+(s.po?' · PO '+E(s.po):'')+'</small><small>Next visit '+E(dlong(s.next_day))+(s.last_result?' · last run: '+E(s.last_result):'')+'</small></div><div class="acts"><button class="btn sm ghost" type="button" data-act="rstop" data-id="'+E(s.id)+'">Stop</button></div></div>'}).join('')+'</div>':'<p class="note">None set up yet.</p>')+'</div>';
+ var h='<div class="card"><h2>Repeat valets</h2><p class="note">Booked automatically 7 days before each visit, from your balance. If there is not enough money, or the valeter is closed that day, we email you so you can sort it out.</p>'+(R.length?'<div class="list">'+R.map(function(s){return '<div class="it"><div><b>Every '+(s.every_weeks===1?'week':s.every_weeks+' weeks')+' · '+E(s.partner)+'</b><small>'+E((s.regs||[]).join(', '))+' · '+E(s.time)+' · '+(s.place==='mobile'?E(s.address)+', '+E(s.postcode):'at the valeter\'s premises')+(s.po?' · '+poLabel(s.po):'')+'</small><small>Next visit '+E(dlong(s.next_day))+(s.last_result?' · last run: '+E(s.last_result):'')+'</small></div><div class="acts"><button class="btn sm ghost" type="button" data-act="rstop" data-id="'+E(s.id)+'">Stop</button></div></div>'}).join('')+'</div>':'<p class="note">None set up yet.</p>')+'</div>';
  if(!V.length)return h+'<div class="card"><p class="note">Add your vehicles first (Vehicles).</p></div>';
  h+='<div class="card"><h2>Set up a repeat valet</h2><form id="f-rep"><label class="f">Vehicles</label><div class="pick">'+V.map(function(v){return '<label><input type="checkbox" data-rv="'+E(v.id)+'"><span><b>'+E(v.reg)+'</b> '+E(v.nickname||'')+'<br><small>'+E(SIZES[v.size])+'</small></span></label>'}).join('')+'</div>'
  +'<div class="grid"><div><label class="f" for="r-where">Where</label><select id="r-where"><option value="mobile">At our address (mobile valeter)</option><option value="shop">At the valeter\'s premises</option></select></div><div><label class="f" for="r-pc">Postcode of the vehicles</label><input type="text" id="r-pc" maxlength="9" style="text-transform:uppercase" value="'+E(S.st.account.postcode||'')+'"></div></div>'
@@ -378,7 +380,7 @@ function stmt(csv){var mon=$('m-mon').value;if(!/^\d{4}-\d\d$/.test(mon))return;
  +'<p>From: '+E(co.name||'The Motoring Central')+(co.number?' · Company '+E(co.number):'')+(co.vat?' · VAT '+E(co.vat):'')+'</p>'
  +'<table class="st"><tr><th>Opening balance</th><td class="n">'+money(s.opening)+'</td><th>Closing balance</th><td class="n">'+money(s.closing)+'</td><th>Set aside at month end</th><td class="n">'+money(s.held_at_end)+'</td></tr></table>'
  +'<h2 style="font:700 15px Sora,Inter">Jobs booked this month</h2><table class="st"><tr><th>Ref</th><th>Service</th><th>Reg</th><th>Day</th><th>Partner</th><th>PO</th><th>Status</th><th class="n">Price</th><th class="n">Fee</th><th class="n">Total</th></tr>'+s.jobs.map(function(j){return '<tr><td>'+E(j.ref)+'</td><td>'+E(j.kind)+'</td><td>'+E(j.reg)+'</td><td>'+E(dlong(j.day))+'</td><td>'+E(j.partner||'')+'</td><td>'+E(j.po||'')+'</td><td>'+E(BST[j.status]||j.status)+'</td><td class="n">'+money(j.price)+'</td><td class="n">'+money(j.fee)+'</td><td class="n">'+money(j.total)+'</td></tr>'}).join('')+'</table>'
- +'<h2 style="font:700 15px Sora,Inter">Balance movements</h2><table class="st"><tr><th>When</th><th>What</th><th>Job</th><th class="n">Available</th><th class="n">Set aside</th></tr>'+s.ledger.map(function(l){return '<tr><td>'+E(dtime(l.at))+'</td><td>'+E(K[l.kind]||l.kind)+(l.note?'<br><small>'+E(l.note)+'</small>':'')+'</td><td>'+E(l.job||'')+(l.po?' (PO '+E(l.po)+')':'')+'</td><td class="n">'+money(l.available)+'</td><td class="n">'+money(l.held)+'</td></tr>'}).join('')+'</table>'
+ +'<h2 style="font:700 15px Sora,Inter">Balance movements</h2><table class="st"><tr><th>When</th><th>What</th><th>Job</th><th class="n">Available</th><th class="n">Set aside</th></tr>'+s.ledger.map(function(l){return '<tr><td>'+E(dtime(l.at))+'</td><td>'+E(K[l.kind]||l.kind)+(l.note?'<br><small>'+E(l.note)+'</small>':'')+'</td><td>'+E(l.job||'')+(l.po?' ('+poLabel(l.po)+')':'')+'</td><td class="n">'+money(l.available)+'</td><td class="n">'+money(l.held)+'</td></tr>'}).join('')+'</table>'
  +'<p style="font-size:11px;margin-top:14px">Prices include VAT where it applies. MOT test fees are outside the scope of VAT. Partners give any warranty on their own work. '+(s.chain_ok?'Money record checked: complete and unchanged.':'<b>Warning: the money record check failed. Contact us.</b>')+'</p>';
  setTimeout(function(){window.print()},50)},function(e){toast(why(e),true)})}
 
