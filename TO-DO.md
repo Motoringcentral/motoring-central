@@ -532,6 +532,13 @@ Until then the site no longer promises texts (27 Nov): "by email and text" shows
 change window.MCSMS=false to true near the top of index.html and the wording comes back in all four places (texts
 queued meanwhile stay queued; the terms still show "[and by text message]" for the solicitor).
 
+DEALER PITCH REFRESHED (27 Nov): the join-page dealer video re-made (stock feed nightly, MOT history from the DVSA on
+every advert, a trade section slide); the "dealer pitch" deck in the owner's Claude artifacts brought up to date (it
+still said "first 3 months free", 10p look-ups, MOT data "before launch", and services not open at launch: now 30 days
+free with 3 checks, founding dealers, free look-ups, MOT history live, trade with 5 free listings, launch services only);
+"The Forecourt" 60-second story video made (sent to the owner; hold it back like the other adverts until the company is
+registered). Sources: tools/video/dealer and tools/video/forecourt.
+
 LAUNCH REHEARSAL (27 Nov 2026, live preview, test accounts): ALL PASSED.
 - MOT: customer booked Class 4 at TEST MOT Station (£54.85, test card); the station's diary showed it.
 - Recovery: quote (call-out, mileage, out of hours, extras list), paid £105.99; the driver saw it (paid £84.48), on my

@@ -1,0 +1,69 @@
+[
+ {
+  "say": "This is an illustrative story. Meet Sam. He runs a small forecourt in Kent, with eighteen cars, too many bills, and an office full of paper.",
+  "cap": "This is an illustrative story. Meet Sam. He runs a small forecourt in Kent, with 18 cars, too many bills, and an office full of paper.",
+  "b": [
+   0.12
+  ]
+ },
+ {
+  "say": "Sam joins The Motoring Central in about five minutes. His first thirty days are free, and he never pays commission on a sale.",
+  "cap": "Sam joins The Motoring Central in about five minutes. His first 30 days are free, and he never pays commission on a sale.",
+  "b": [
+   0.4,
+   0.7
+  ]
+ },
+ {
+  "say": "He types each registration, and the details fill in for free. His whole stock goes online from a spreadsheet, and his stock feed keeps it up to date every night.",
+  "cap": "He types each registration, and the details fill in for free. His whole stock goes online from a spreadsheet, and his stock feed keeps it up to date every night.",
+  "b": [
+   0.12,
+   0.45,
+   0.75
+  ]
+ },
+ {
+  "say": "Every advert shows the car's MOT history from the DVSA, so buyers trust what they see. And his best cars go on the front-page banner.",
+  "cap": "Every advert shows the car's MOT history from the DVSA, so buyers trust what they see. And his best cars go on the front-page banner.",
+  "b": [
+   0.1,
+   0.66
+  ]
+ },
+ {
+  "say": "Leah finds a Focus she likes. She asks for a test drive, and offers her old Astra in part exchange, all in one message.",
+  "cap": "Leah finds a Focus she likes. She asks for a test drive, and offers her old Astra in part exchange, all in one message.",
+  "b": [
+   0.4,
+   0.62,
+   0.85
+  ]
+ },
+ {
+  "say": "Sam takes her deposit, and later prints a proper sales invoice, with his own logo, in two minutes.",
+  "cap": "Sam takes her deposit, and later prints a proper sales invoice, with his own logo, in two minutes.",
+  "b": [
+   0.15,
+   0.5
+  ]
+ },
+ {
+  "say": "The Astra isn't worth retailing, so he lists it in the trade section, and another dealer buys it the next morning.",
+  "cap": "The Astra isn't worth retailing, so he lists it in the trade section, and another dealer buys it the next morning.",
+  "b": [
+   0.3,
+   0.62,
+   0.9
+  ]
+ },
+ {
+  "say": "Adverts, stock, enquiries, invoices and trade, all in one place, for one monthly price. Join the dealer network at motoring central dot co dot uk.",
+  "cap": "Adverts, stock, enquiries, invoices and trade, all in one place, for one monthly price. Join the dealer network at motoringcentral.co.uk.",
+  "b": [
+   0.2,
+   0.4,
+   0.62
+  ]
+ }
+]

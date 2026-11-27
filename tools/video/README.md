@@ -11,6 +11,7 @@ site, the same British female voice (Kokoro `bf_emma`, en-gb), captions from the
 | Mobile EV charging | `video/ev-charging.mp4` | step 2 of the EV join page | `ev-charging/` |
 | Recovery | `video/recovery.mp4` | step 2 of the recovery join page | `recovery/` (its own older copies of the scripts) |
 | Driving instructors | `video/instructors.mp4` | step 2 of the instructor join page | `instructors/` |
+| The Forecourt (dealer story, 60 s) | not on the site (sent to the owner 27 Nov) | marketing, after the company is registered | `forecourt/` |
 
 Each folder has `script.json` (what is said, the caption, and `b`: the points in each line where the next part of
 the slide appears) and `slides.html`. The shared tools are in `common/`:
@@ -33,3 +34,6 @@ company's call-out + its price per kWh x the kWh the customer chooses + its pric
 Dealer video re-made 27 Nov 2026: the stock feed updates every night, every advert shows the full MOT history from the
 DVSA (picture d9: an advert's MOT box), and a new slide on the trade section (picture d10: the dealer demo's trade page;
 5 free trade listings a month). 11 lines, 1 minute 53.
+The Forecourt (27 Nov): the 60-second cut of the dealer story, told by the same voice in the third person, labelled
+"An illustrative story" at the start and "Illustrative story. Not a real dealer. Results vary." at the end. Picture d11 is
+the test dealer's message card with the test names swapped for the story's (picture only).
