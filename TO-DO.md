@@ -10,6 +10,7 @@ registered email address is set. HMRC writes separately about Corporation Tax (t
 authentication code for WebFiling is posted to the registered office. Next for the site: the owner enters the name,
 number and registered office in Staff page > Team and settings > Company details (the registered office is not in the
 emails; it is on the Companies House record). Business bank account: not opened yet (27 Nov); Stripe follows it.
+
 ## BUSINESS ACCOUNTS (built 27 Nov 2026, tested on the database; card payments wait for Stripe)
 Owner's decision: business accounts pay with a PREPAID BALANCE or a CARD ON FILE. No credit line for now (later, once
 there is cash in reserve: approved firms only, credit check, limit, 14 days). Every business job is paid before the
