@@ -3,6 +3,62 @@
 This is the running list of work still to do before launch. When the owner asks
 "what is left to do?", answer from this file, and tick items off here as they are finished.
 
+## BUSINESS ACCOUNTS (built 27 Nov 2026, tested on the database; card payments wait for Stripe)
+Owner's decision: business accounts pay with a PREPAID BALANCE or a CARD ON FILE. No credit line for now (later, once
+there is cash in reserve: approved firms only, credit check, limit, 14 days). Every business job is paid before the
+partner is paid in the weekly payout.
+- Page: business.html (linked from the site footer "Business accounts" and Staff > Money > Business accounts).
+  Separate page on purpose: smaller, its own security headers (vercel.json) and no shared code with the big page.
+- Services on the account: full valets, alloy wheel repairs, MOTs. (Recovery, EV charging, bodywork quotes, auto
+  electrician and locksmith jobs are not on business accounts yet.)
+- How the money works: top up by bank transfer with a unique reference (TMC-XXXXXXXX). An OWNER confirms the money
+  arrived on the staff part of the page and it is added. A booking SETS ASIDE the price at once, it is TAKEN when the
+  partner marks the job done and GIVEN BACK if cancelled (free cancellation up to the day before). Card on file: charged
+  when the booking is made, refunded automatically if the booking cannot be made.
+- Team: owner / admin / booker / viewer roles, a monthly limit per person, "bookers need approval over £X", a monthly
+  cap for the whole account, fleet list (only listed vehicles can be booked, on by default), services allowed.
+- Repeat valets: weekly, every 2 or 4 weeks, several vans in one visit, booked automatically at 06:15 for 7 days ahead
+  from the balance (cron business-repeat-valets). If money is short or the valeter is closed, the admins are emailed.
+- Security built in: every business table is locked (row level security on, no direct access: everything goes
+  through checked functions); prices worked out on the server from the partner's own rates; one booking per tap
+  (idempotency key) and the account row is locked while money moves; the money record (business_ledger) can only be
+  added to, each line carries a hash of the one before, and "Check every money record" on the staff page proves
+  nothing was changed; invitation links work once, only for the email they were sent to, and run out after 7 days
+  (the token is stored hashed); admins cannot change owners or admins; the last owner cannot leave; nobody approves
+  their own booking (except an owner); a pause button for admins (only an owner restarts); automatic pause and an email
+  to the owners if one person makes 15 bookings in an hour or the account 60 in a day; owners and admins are emailed
+  when someone joins, a role changes, the billing email or the card changes, a top up lands, bookings are paused or
+  the balance is low; activity log of everything; only an owner on our side (with the second login step) can add
+  money or adjust a balance, always with a reason; the page logs out after an hour without activity.
+- Tested 27 Nov on the live database inside transactions that were rolled back (nothing left behind): roles,
+  invitations (wrong person, used twice), outsiders, direct table access, the money (holds, double taps, not enough
+  balance, approval, cancel, partner marks done, monthly and personal limits), MOT through the account (slot taken,
+  class not tested), repeat valets (booked once, not twice), the automatic pause, the ledger lock and a forged line
+  being caught. Every screen of business.html drawn on a computer and a phone with no errors.
+- Migrations: 20261127d (tables and ledger), 20261127e (pricing and booking), 20261127f (functions), 20261127g
+  (business emails), 20261127h (fixes). Server function: business-pay (Stripe, switched off until the keys are set).
+
+STILL TO DO for business accounts:
+- Bank details: once the business bank account is open, put them in Supabase > app_settings, key "business":
+  "bank": {"name": "The Motoring Central Ltd", "sort_code": "..", "account_no": ".."}. Until then the page tells
+  businesses NOT to pay yet.
+- Stripe (with the rest of Stripe): set STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET in Supabase > Edge Functions >
+  Secrets, and add the webhook https://hctboldpuyztugpwexdy.supabase.co/functions/v1/business-pay?hook=1 for
+  checkout.session.completed and payment_intent.succeeded. Then test a card top up, adding a card and a card booking
+  with Stripe test cards before going live. Card refunds after a cancellation are still "Mark refunded" by hand.
+- ASK THE SOLICITOR AND ACCOUNTANT before taking real top ups: (1) holding customers' money in a prepaid balance that
+  is then paid on to partners may count as e-money or a payment service; check whether the "commercial agent" or
+  "limited network" exclusions cover us, or whether the money must be kept in a separate client account; (2) the
+  business account terms (top ups, what happens to an unused balance and how it is paid back, cancellations, closing an
+  account); (3) VAT on top ups (normally VAT is due on each job, not on the top up) and the wording on statements.
+- Supabase > Authentication > URL configuration: add https://preview.motoringcentral.co.uk/business.html and
+  https://motoringcentral.co.uk/business.html to the redirect URLs, so the "confirm your email" link brings a new
+  business user back to the business page.
+- Decide: the booking fee for business jobs (now the same £9.99 as everyone; change "fee" in app_settings
+  "business"), and whether to add a multi-van discount.
+- Later: recovery and EV charging on the account, a VAT invoice per job once VAT registered, a business accounts
+  section in the FAQ, and a short video for the business page.
+
 ## COMPANY REGISTRATION FILED (27 Nov 2026)
 The owner filed the company with Companies House online on 27 Nov 2026 (private company limited by shares; SIC codes
 63120 Web portals, 82990 Other business support service activities, and 73110 or 73120 for advertising). Waiting for

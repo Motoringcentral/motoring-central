@@ -7,6 +7,7 @@ This branch holds the preview of The Motoring Central as a plain static site.
 - `pdi.html` is the dealers' pre-delivery inspection, opened from the PDI buttons on stock and adverts.
 - `service-sheet.html` is the Interim, Full or Major vehicle service sheet for mobile mechanics and garages, opened from "Start service sheet" on a service job or from Quick actions (update pack TMC-UPD-20261117-A).
 - `reset.html` is the forgotten-password page (request a link, then choose a new password).
+- `business.html` is business accounts: a business tops up a prepaid balance (or uses a card on file once Stripe is on), adds its team and vehicles, and books valets, alloy repairs and MOTs. `#staff` on it is the staff side (approve businesses, match bank transfers).
 - `img/` holds the photos.
 - `robots.txt` and `vercel.json` tell search engines not to list the preview.
 

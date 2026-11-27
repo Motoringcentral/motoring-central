@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://hctboldpuyztugpwexdy.supabase.co wss://hctboldpuyztugpwexdy.supabase.co https://api.postcodes.io; form-action 'self'; base-uri 'none'; object-src 'none'">
+<meta name="referrer" content="same-origin">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Business accounts – The Motoring Central</title>
+<meta name="description" content="One account for every van: book valets, alloy wheel repairs and MOTs for your fleet, pay from a prepaid balance or a company card, and get one monthly statement.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<script src="vendor/supabase.js"></script>
+<style>
+:root{--sky:#38BDF8;--navy:#0B1C35;--yellow:#FFD43B;--bg:#F1F6FB;--line:#D6E2EE;--muted:#5A6B82;--red:#E5484D;--green:#1F9D55;--amber:#B7791F}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Inter,Arial,sans-serif;color:var(--navy);font-size:16px;-webkit-text-size-adjust:100%}
+a{color:#0369A1}
+header{background:var(--sky);padding:14px 16px 0}
+.brand{display:flex;align-items:center;gap:12px;max-width:980px;margin:0 auto}
+.brand a{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none}
+.wm .t1{font:700 10px Sora,Inter;letter-spacing:.55em}
+.wm .t2{font:800 26px/0.95 Sora,Inter;letter-spacing:-.03em}
+.wm .t3{display:inline-block;font:700 12px Sora,Inter;letter-spacing:.42em;background:var(--navy);color:#fff;padding:3px 2px 3px 8px;border-radius:5px;margin-top:3px}
+.brand .who{margin-left:auto;font-size:13px;font-weight:600;text-align:right}
+.brand .who button{margin-top:4px}
+.title{max-width:980px;margin:12px auto 0;padding-bottom:14px}
+.title h1{font:800 24px Sora,Inter;margin:0}
+.title h1 span{background:var(--yellow);padding:0 6px;border-radius:5px}
+.title p{margin:6px 0 0;font-size:14px;font-weight:500}
+header .bar{height:6px;background:var(--navy)}
+main{max-width:980px;margin:0 auto;padding:14px 12px 80px}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.card h2{font:700 18px Sora,Inter;margin:0 0 10px}
+.card h3{font:700 15px Sora,Inter;margin:14px 0 8px}
+.note{font-size:13px;color:var(--muted);margin:4px 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:640px){.grid,.grid3{grid-template-columns:1fr}}
+label.f{display:block;font-size:13px;font-weight:600;margin:10px 0 5px}
+input[type=text],input[type=email],input[type=tel],input[type=number],input[type=password],input[type=date],input[type=month],textarea,select{width:100%;font:inherit;font-size:16px;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--navy)}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--sky);box-shadow:0 0 0 3px rgba(56,189,248,.25)}
+textarea{min-height:70px;resize:vertical}
+.vrm{font:800 18px Sora,Inter!important;letter-spacing:.08em;text-transform:uppercase;background:var(--yellow)!important;border-color:#E6BC20!important}
+.check{display:flex;gap:10px;align-items:flex-start;margin:10px 0;font-size:14px}
+.check input{width:20px;height:20px;margin-top:1px;flex:none}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;font:700 15px Inter;padding:12px 16px;border-radius:12px;border:0;cursor:pointer;background:var(--navy);color:#fff;text-decoration:none}
+.btn.sm{padding:8px 12px;font-size:13px;border-radius:10px}
+.btn.sky{background:var(--sky);color:var(--navy)}
+.btn.yellow{background:var(--yellow);color:var(--navy)}
+.btn.ghost{background:#fff;color:var(--navy);border:1.5px solid var(--line)}
+.btn.red{background:var(--red)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.err{color:var(--red);font-weight:600;font-size:14px;min-height:1em;margin:8px 0 0}
+.ok{color:var(--green);font-weight:600;font-size:14px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding:2px 0 10px;-webkit-overflow-scrolling:touch}
+.tabs button{flex:none;font:600 14px Inter;padding:9px 13px;border-radius:999px;border:1.5px solid var(--line);background:#fff;color:var(--navy);cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--navy);border-color:var(--navy);color:#fff}
+.tabs button i{font-style:normal;background:var(--red);color:#fff;border-radius:999px;padding:0 6px;margin-left:5px;font-size:12px}
+.stat{background:#F7FBFF;border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat small{display:block;font-size:12px;color:var(--muted);font-weight:600}
+.stat b{display:block;font:800 24px Sora,Inter;margin-top:4px}
+.pill{display:inline-block;font:700 12px Inter;padding:3px 8px;border-radius:999px;background:#E8F1FA;color:var(--navy)}
+.pill.g{background:#E3F5EA;color:#14733D}.pill.a{background:#FFF4D6;color:#8A5A00}.pill.r{background:#FDE7E7;color:#B42318}
+.list .it{display:flex;justify-content:space-between;gap:10px;padding:11px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.list .it:first-child{border-top:0}
+.list .it b{display:block}
+.list .it small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+.list .it .acts{display:flex;gap:6px;flex-wrap:wrap;align-items:flex-start}
+.banner{border-radius:12px;padding:12px 14px;margin-bottom:12px;font-size:14px;font-weight:500}
+.banner.a{background:#FFF4D6;border:1px solid #F3D27A}.banner.r{background:#FDE7E7;border:1px solid #F4B4B4}.banner.g{background:#E3F5EA;border:1px solid #A9DDBE}.banner.b{background:#E8F4FD;border:1px solid #B9DDF6}
+.pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:8px}
+.pick label{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;font-size:14px}
+.pick label:has(input:checked){border-color:var(--navy);background:#F4F8FC}
+.pick input{margin-top:2px}
+.ptn{border:1.5px solid var(--line);border-radius:12px;padding:12px;margin:8px 0;cursor:pointer}
+.ptn[aria-pressed=true]{border-color:var(--navy);background:#F4F8FC}
+.ptn b{font-size:15px}.ptn small{display:block;color:var(--muted);font-size:13px}
+.price{font:800 18px Sora,Inter}
+.feat{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.feat div{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}
+.feat b{display:block;font:700 15px Sora,Inter;margin-bottom:4px}
+.feat p{margin:0;font-size:14px;color:#33465F}
+.slots{display:flex;flex-wrap:wrap;gap:6px}
+.slots button{font:600 14px Inter;padding:8px 12px;border-radius:10px;border:1.5px solid var(--line);background:#fff;cursor:pointer}
+.slots button[aria-pressed=true]{background:var(--navy);color:#fff;border-color:var(--navy)}
+table.st{width:100%;border-collapse:collapse;font-size:13px}
+table.st th,table.st td{border-bottom:1px solid var(--line);padding:6px 4px;text-align:left;vertical-align:top}
+table.st td.n,table.st th.n{text-align:right;white-space:nowrap}
+#toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--navy);color:#fff;padding:12px 16px;border-radius:12px;font-weight:600;font-size:14px;max-width:92vw;z-index:50;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+#toast.bad{background:var(--red)}
+#printable{display:none}
+footer{max-width:980px;margin:0 auto;padding:0 12px 30px;font-size:13px;color:var(--muted)}
+@media print{header,main,footer,#toast{display:none!important}#printable{display:block!important;padding:0 6mm;font-size:12px;color:#000}body{background:#fff}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <a href="index.html" aria-label="The Motoring Central home"><svg width="48" height="48" viewBox="0 0 120 120" aria-hidden="true"><rect width="120" height="120" rx="30" fill="#0B1C35"/><path d="M30.3 89.7 A42 42 0 1 1 89.7 89.7" fill="none" stroke="#38BDF8" stroke-width="6" stroke-linecap="round"/><g stroke="#38BDF8" stroke-width="3" stroke-linecap="round" opacity=".55"><line x1="60" y1="24" x2="60" y2="30"/><line x1="34.5" y1="34.5" x2="38.8" y2="38.8"/><line x1="85.5" y1="34.5" x2="81.2" y2="38.8"/></g><polyline points="38,82 38,46 60,68 82,46 82,82" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/><circle cx="60" cy="68" r="7.5" fill="#FFD43B"/></svg>
+    <div class="wm"><div class="t1">THE</div><div class="t2">MOTORING</div><div class="t3">CENTRAL</div></div></a>
+    <div class="who" id="who"></div>
+  </div>
+  <div class="title"><h1>Business <span>accounts</span></h1><p id="subtitle">One account for every van. Pay before the work, never on credit.</p></div>
+  <div class="bar"></div>
+</header>
+<main id="app"><div class="card">Loading…</div></main>
+<footer>&copy; The Motoring Central. <a href="index.html#terms">Terms and conditions</a> · <a href="index.html#privacy">Privacy</a> · <a href="index.html#contact">Contact us</a></footer>
+<div id="printable"></div>
+<div id="toast" role="status" hidden></div>
+<script>
+(function(){
+'use strict';
+var SB_URL='https://hctboldpuyztugpwexdy.supabase.co',SB_KEY='sb_publishable_RbxYYgru3tOZZuwC5w6OcA_4alE1zBf';
+var sb=window.supabase.createClient(SB_URL,SB_KEY);
+var $=function(i){return document.getElementById(i)};
+function E(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function money(n){n=Number(n)||0;return (n<0?'-':'')+'£'+Math.abs(n).toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function dlong(d){if(!d)return '';var x=new Date(String(d).slice(0,10)+'T12:00:00');return x.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})}
+function dtime(t){if(!t)return '';var x=new Date(t);return x.toLocaleDateString('en-GB',{day:'numeric',month:'short'})+' '+x.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'})}
+function iso(d){var z=new Date(d.getTime()-d.getTimezoneOffset()*60000);return z.toISOString().slice(0,10)}
+function addDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+function uuid(){if(crypto.randomUUID)return crypto.randomUUID();var a=new Uint8Array(16);crypto.getRandomValues(a);return Array.from(a).map(function(b){return b.toString(16).padStart(2,'0')}).join('')}
+var tt;function toast(m,bad){var t=$('toast');t.textContent=m;t.className=bad?'bad':'';t.hidden=false;clearTimeout(tt);tt=setTimeout(function(){t.hidden=true},bad?6500:4000)}
+var SIZES=['Small car','Medium car','Large car or 4x4','Extra large or van'];
+var SLOTS=['8:00am','10:00am','12:00pm','2:00pm'];
+var SLOTMIN={'8:00am':480,'10:00am':600,'12:00pm':720,'2:00pm':840};
+var FIN=['Standard refurb','Diamond cut','Colour change','Kerb damage repair'],FINKEY=['wheel','dcut','col','kerb'];
+var MOTC=[['4-car','Car (class 4)'],['4-goods','Van up to 3,000kg (class 4)'],['4-9','9 to 12 seats (class 4)'],['7','Van 3,000 to 3,500kg (class 7)'],['4-camper','Motor caravan (class 4)'],['4-taxi','Taxi (class 4)'],['4-dual','Dual purpose (class 4)'],['5-13','13 to 16 seats (class 5)'],['5-17','17+ seats (class 5)'],['1','Motorcycle up to 200cc (class 1)'],['2','Motorcycle over 200cc (class 2)']];
+var ROLES={owner:'Owner',admin:'Admin',booker:'Booker',viewer:'Viewer (accounts)'};
+var ROLEHELP={owner:'Everything, including other owners and admins and restarting bookings after a pause.',admin:'Team, vehicles, settings, top ups, approving bookings, repeat valets.',booker:'Books and cancels their own bookings, within the limits you set.',viewer:'Sees bookings and statements. Cannot book. Good for your accounts office.'};
+var STATUS={awaiting_approval:['Waiting for approval','a'],awaiting_card:['Waiting for card payment','a'],booked:['Booked','g'],declined:['Not approved','r'],cancelled:['Cancelled','r'],failed:['Could not be booked','r'],expired:['Card payment ran out','r']};
+var BST={confirmed:'Confirmed',onway:'On the way',started:'Started',done:'Done',cancelled:'Cancelled'};
+var ERR={not_logged_in:'Please log in again.',not_allowed:'Your role on this account does not allow that.',owner_only:'Only an owner can do that.',account_not_approved:'Your business account is still being checked. You can book once it is approved.',account_frozen:'Bookings are paused on this account. An owner can restart them on the Overview page.',not_enough_balance:'There is not enough money in the balance. Top up first.',fleet_only:'Only vehicles on your fleet list can be booked. Add the vehicle first, or turn this off in Settings.',over_monthly_cap:'This would go over the account\'s monthly spending cap.',over_your_limit:'This would go over your monthly spending limit. Ask an owner or admin.',service_not_allowed:'This account does not book that service. An admin can turn it on in Settings.',partner_unavailable:'That partner is not taking bookings right now. Choose another.',partner_closed:'That partner does not work that day or at that time. Choose another day or time.',not_offered:'That partner does not offer this. Choose another.',bad_time:'That time is too soon or not available. Choose another.',bad_day:'Choose a day within the next 60 days.',slot_taken:'Someone has just booked that MOT time. Choose another.',class_not_tested:'That MOT station does not test this class of vehicle.',bad_address:'Enter the address and a full postcode where the vehicle will be.',bad_reg:'Check the registration.',reg_already_on_fleet:'That registration is already on your fleet list.',bad_company_no:'Enter your 8-character Companies House number.',company_has_account:'That company already has a business account. Ask its owner to invite you.',already_pending:'You already have an application waiting to be checked.',too_many_accounts:'You already own 3 business accounts.',try_later:'Too many tries. Please try again tomorrow.',bad_invite:'This invitation link has been used, has run out or was cancelled. Ask for a new one.',wrong_email:'This invitation was sent to a different email address. Log in with that email to accept it.',email_not_confirmed:'Confirm your email address first (check your inbox), then open the link again.',not_customer:'This login is a partner or staff login. Use a separate email address for a business account.',already_member:'That person is already on the team.',last_owner:'An account must always have at least one owner. Make someone else an owner first.',not_yourself:'You cannot do that to your own login. Ask another owner.',bad_amount:'Enter an amount between the minimum and maximum top up.',too_many_pending:'You already have 3 top ups waiting. Pay or cancel one first.',too_late:'It is too late to cancel online (free cancellation is up to the day before). Contact us and we will help.',job_started:'The partner has already started this job.',already_decided:'Someone has already decided this booking.',card_payments_off:'Card payments are not switched on yet. Use the prepaid balance for now.',no_card:'Add a company card first (Money).',card_declined:'The card was declined. Nothing was booked.',card_needs_check:'The bank wants to check this payment, which cannot be done for a saved card. Nothing was taken. Use the balance or add the card again.',could_not_book:'The card was charged but the booking could not be made, so we refunded it straight away.',bad_vehicle:'Choose a vehicle from the fleet list.',reason_needed:'Give a reason.',note_needed:'Write a note of at least 10 characters.',balance_not_zero:'The balance must be zero before the account can be closed.',not_pending:'This is no longer waiting.',not_staff:'Open the Staff page and log in there first (with your code if you use one), then come back here.'};
+function why(e){var m=String(e&&(e.message||e.error||e)||'');var k=Object.keys(ERR).filter(function(x){return m.indexOf(x)>-1})[0];return k?ERR[k]:'That did not work. Check your connection and try again.'}
+function call(fn,args){return sb.rpc(fn,args||{}).then(function(r){if(r.error)throw r.error;return r.data})}
+
+var S={user:null,accounts:[],acct:null,st:null,tab:'overview',book:null,staff:null,cardOn:null,started:false};
+try{S.acct=localStorage.getItem('mc-biz-acct')||null}catch(e){}
+
+/* ---------- sign-in state ---------- */
+function who(){var w=$('who');if(!S.user){w.innerHTML='';return}w.innerHTML=E(S.user.email)+'<br><button class="btn sm ghost" type="button" data-act="signout">Log out</button>'}
+var idleT;function idle(){clearTimeout(idleT);if(S.user)idleT=setTimeout(function(){sb.auth.signOut().then(function(){toast('Logged out after an hour without activity, to keep your account safe.')})},60*60*1000)}
+['click','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,idle,{passive:true})});
+sb.auth.onAuthStateChange(function(ev,session){var u=session&&session.user||null;var changed=(u&&u.id)!==(S.user&&S.user.id);S.user=u;who();idle();if(changed||!S.started){S.started=true;setTimeout(start,0)}});
+
+/* invitation links: keep the token out of the address bar and history */
+var JOIN=null;(function(){var m=/^#join-([0-9a-f]{48})$/.exec(location.hash);if(m){JOIN=m[1];try{sessionStorage.setItem('mc-biz-join',JOIN)}catch(e){}history.replaceState(null,'',location.pathname+'#join')}else{try{JOIN=sessionStorage.getItem('mc-biz-join')}catch(e){}if(location.hash!=='#join')JOIN=null}})();
+function hashMsg(){var h=location.hash;var M={'#card-added':['Card saved. It shows here once Stripe confirms it (usually a few seconds).'],'#card-cancelled':['No card was added.'],'#topup-paid':['Payment received. Your balance goes up as soon as Stripe confirms it (usually a few seconds).'],'#topup-cancelled':['The top up was cancelled. Nothing was taken.']};if(M[h]){toast(M[h][0]);history.replaceState(null,'',location.pathname)}}
+
+function start(){
+ var app=$('app');
+ if(location.hash==='#staff')return staffStart();
+ if(!S.user){app.innerHTML=JOIN?joinOutHtml():pitchHtml();return}
+ if(JOIN)return joinIn();
+ call('biz_my_accounts').then(function(a){S.accounts=a||[];if(!S.accounts.length){app.innerHTML=applyHtml();return}
+  if(!S.accounts.some(function(x){return x.id===S.acct}))S.acct=S.accounts[0].id;load()},function(e){app.innerHTML='<div class="card"><p class="err">'+E(why(e))+'</p></div>'})}
+function load(keepTab){if(!S.acct)return;call('biz_state',{p_account:S.acct}).then(function(st){S.st=st;try{localStorage.setItem('mc-biz-acct',S.acct)}catch(e){}if(!keepTab&&!allowed(S.tab))S.tab='overview';draw()},function(e){$('app').innerHTML='<div class="card"><p class="err">'+E(why(e))+'</p><button class="btn ghost" data-act="reload">Try again</button></div>'})}
+function rank(r){return {owner:4,admin:3,booker:2,viewer:1}[r]||0}
+function me(){return S.st&&S.st.me.role}
+function allowed(t){var r=rank(me());return ({overview:1,book:2,bookings:1,vehicles:1,repeat:3,money:1,team:3,settings:3,activity:3})[t]<=r}
+function cardStatus(){if(S.cardOn!==null)return Promise.resolve(S.cardOn);return sb.functions.invoke('business-pay',{body:{action:'status'}}).then(function(r){S.cardOn=!!(r.data&&r.data.on);return S.cardOn},function(){S.cardOn=false;return false})}
+
+/* ---------- signed out ---------- */
+function pitchHtml(){
+ return '<div class="card"><h2>Book and pay for your whole fleet in one place</h2><p>For plumbers, builders, couriers, cleaners, hire firms and anyone running vans or cars for work. Book full valets, alloy wheel repairs and MOTs with checked local partners, and pay from your business account.</p>'
+ +'<div class="feat">'
+ +'<div><b>Pay first, never on credit</b><p>Top up a prepaid balance by bank transfer (or by card once card payments are on). When you book, the price is set aside. It is only taken when the partner marks the job done, and comes straight back if you cancel.</p></div>'
+ +'<div><b>Company card on file</b><p>Prefer a card? Save a company card with Stripe and each booking is charged when you make it. We never see or store the card number. (Coming soon.)</p></div>'
+ +'<div><b>Your team, your rules</b><p>Give drivers and office staff their own logins: owner, admin, booker or viewer. Set a monthly limit per person, and make bookings over an amount wait for approval.</p></div>'
+ +'<div><b>Your fleet list</b><p>Add your vehicles once (or paste a list of regs). Only vehicles on the list can be booked on the account, so company money is only spent on company vehicles.</p></div>'
+ +'<div><b>Repeat valets</b><p>Weekly, fortnightly or monthly valets at your yard, booked automatically a week ahead from your balance. Several vans in one visit.</p></div>'
+ +'<div><b>One statement a month</b><p>Every job with its registration, date, partner and your PO number. Print it or download it for your accounts.</p></div>'
+ +'<div><b>Pause button</b><p>Lost a phone or a driver left? Any owner or admin can pause all new bookings in one tap. If someone books an unusual number of jobs in a short time, we pause the account and tell you.</p></div>'
+ +'<div><b>Everything is recorded</b><p>Every booking, top up, team change and setting change is logged with who did it. The money record can only be added to, never changed, and is checked for tampering.</p></div>'
+ +'</div></div>'
+ +'<div class="grid"><div class="card"><h2>Log in</h2><form id="f-in" autocomplete="on"><label class="f" for="in-em">Email</label><input type="email" id="in-em" autocomplete="username" required><label class="f" for="in-pw">Password</label><input type="password" id="in-pw" autocomplete="current-password" required><p class="err" id="in-err" role="alert"></p><button class="btn" type="submit">Log in</button> <a href="reset.html" style="font-size:14px;margin-left:8px">Forgotten password?</a></form></div>'
+ +signupHtml('')+'</div>'}
+function signupHtml(em){return '<div class="card"><h2>New here? Create a login</h2><p class="note">Use your own work email. You can then open a business account and invite your team.</p><form id="f-up"><label class="f" for="up-nm">Your name</label><input type="text" id="up-nm" autocomplete="name" required maxlength="120"><label class="f" for="up-ph">Mobile</label><input type="tel" id="up-ph" autocomplete="tel" maxlength="30"><label class="f" for="up-em">Email</label><input type="email" id="up-em" autocomplete="email" required value="'+E(em)+'"><label class="f" for="up-pw">Password (at least 10 characters)</label><input type="password" id="up-pw" autocomplete="new-password" required minlength="10"><label class="check"><input type="checkbox" id="up-terms" required><span>I agree to the <a href="index.html#terms" target="_blank" rel="noopener">terms and conditions</a> and have read the <a href="index.html#privacy" target="_blank" rel="noopener">privacy policy</a>.</span></label><p class="err" id="up-err" role="alert"></p><button class="btn sky" type="submit">Create login</button></form></div>'}
+function joinOutHtml(){var h='<div class="card" id="join-info"><h2>You have been invited to a business account</h2><p class="note">Checking the invitation…</p></div><div class="grid"><div class="card"><h2>Log in to accept</h2><form id="f-in"><label class="f" for="in-em">Email</label><input type="email" id="in-em" autocomplete="username" required><label class="f" for="in-pw">Password</label><input type="password" id="in-pw" autocomplete="current-password" required><p class="err" id="in-err" role="alert"></p><button class="btn" type="submit">Log in</button></form></div>'+signupHtml('')+'</div>';
+ setTimeout(function(){call('biz_invite_info',{p_token:JOIN}).then(function(i){var b=$('join-info');if(!b)return;if(!i){b.innerHTML='<h2>This invitation cannot be used</h2><p>'+E(ERR.bad_invite)+'</p>';return}b.innerHTML='<h2>Join '+E(i.account)+'</h2><p>You have been invited as <b>'+E(ROLES[i.role]||i.role)+'</b>. '+E(ROLEHELP[i.role]||'')+'</p><p class="note">Log in, or create a login, with the email the invitation was sent to ('+E(i.email)+').</p>'})},0);return h}
+function joinIn(){call('biz_accept_invite',{p_token:JOIN}).then(function(r){JOIN=null;try{sessionStorage.removeItem('mc-biz-join')}catch(e){}history.replaceState(null,'',location.pathname);S.acct=r.account;toast('Welcome to '+r.name+'.');start()},function(e){var m=why(e);JOIN=null;try{sessionStorage.removeItem('mc-biz-join')}catch(x){}history.replaceState(null,'',location.pathname);$('app').innerHTML='<div class="card"><h2>The invitation could not be accepted</h2><p class="err">'+E(m)+'</p><button class="btn ghost" data-act="reload">Continue</button></div>'})}
+
+/* ---------- applying ---------- */
+function applyHtml(){return '<div class="card"><h2>Open a business account</h2><p class="note">We check every business before it can book, usually within one working day. Meanwhile you can add your vehicles and invite your team.</p><form id="f-apply">'
+ +'<label class="f" for="ap-nm">Business name</label><input type="text" id="ap-nm" required maxlength="160">'
+ +'<div class="grid"><div><label class="f" for="ap-kind">Type of business</label><select id="ap-kind"><option value="company">Limited company</option><option value="sole_trader">Sole trader</option><option value="partnership">Partnership</option><option value="charity">Charity</option><option value="other">Other</option></select></div>'
+ +'<div id="ap-cno-w"><label class="f" for="ap-cno">Companies House number</label><input type="text" id="ap-cno" maxlength="10" placeholder="e.g. 12345678" style="text-transform:uppercase"></div></div>'
+ +'<div class="grid"><div><label class="f" for="ap-vat">VAT number (if registered)</label><input type="text" id="ap-vat" maxlength="16"></div><div><label class="f" for="ap-fleet">How many vehicles?</label><input type="number" id="ap-fleet" min="1" max="5000"></div></div>'
+ +'<div class="grid"><div><label class="f" for="ap-bill">Email for statements and receipts</label><input type="email" id="ap-bill" placeholder="'+E(S.user.email)+'"></div><div><label class="f" for="ap-ph">Business phone</label><input type="tel" id="ap-ph" maxlength="30"></div></div>'
+ +'<label class="f" for="ap-ad">Business address</label><input type="text" id="ap-ad" maxlength="300"><label class="f" for="ap-pc">Postcode</label><input type="text" id="ap-pc" maxlength="9" style="max-width:180px;text-transform:uppercase">'
+ +'<label class="check"><input type="checkbox" id="ap-ok" required><span>I am allowed to open this account for the business, and the business agrees to the <a href="index.html#terms" target="_blank" rel="noopener">terms and conditions</a>.</span></label>'
+ +'<p class="err" id="ap-err" role="alert"></p><button class="btn" type="submit">Send application</button></form></div>'}
+
+/* ---------- the dashboard ---------- */
+function draw(){var st=S.st,a=st.account,r=me(),app=$('app');
+ $('subtitle').textContent=a.name+' · '+a.ref;
+ var pend=st.jobs.filter(function(j){return j.status==='awaiting_approval'}).length;
+ var T=[['overview','Overview'],['book','Book'],['bookings','Bookings'],['vehicles','Vehicles'],['repeat','Repeat valets'],['money','Money'],['team','Team'],['settings','Settings'],['activity','Activity']].filter(function(t){return allowed(t[0])});
+ var h='';
+ if(S.accounts.length>1)h+='<div class="card" style="padding:10px 14px"><label class="f" for="acct-sw" style="margin-top:0">Business account</label><select id="acct-sw">'+S.accounts.map(function(x){return '<option value="'+E(x.id)+'"'+(x.id===S.acct?' selected':'')+'>'+E(x.name)+' ('+E(ROLES[x.role])+')</option>'}).join('')+'</select></div>';
+ h+='<div class="tabs" role="group" aria-label="Pages">'+T.map(function(t){return '<button type="button" data-tab="'+t[0]+'" aria-pressed="'+(S.tab===t[0])+'">'+t[1]+(t[0]==='bookings'&&pend&&rank(r)>=3?'<i>'+pend+'</i>':'')+'</button>'}).join('')+'</div>';
+ if(a.status==='pending')h+='<div class="banner a"><b>We are checking your business.</b> You can add vehicles and invite your team now. Top ups and bookings open once you are approved (usually within one working day).</div>';
+ if(a.status==='declined'||a.status==='suspended')h+='<div class="banner r"><b>'+(a.status==='declined'?'We could not open this account.':'This account is on hold.')+'</b> '+E(a.review_note||'')+' Contact us if you have a question.</div>';
+ if(a.frozen)h+='<div class="banner r"><b>Bookings are paused.</b> '+E(a.frozen_reason||'')+(r==='owner'?' <button class="btn sm" data-act="unfreeze" type="button">Restart bookings</button>':' Only an owner can restart them.')+'</div>';
+ h+=({overview:ovHtml,book:bookHtml,bookings:jobsHtml,vehicles:vehHtml,repeat:repHtml,money:moneyHtml,team:teamHtml,settings:setHtml,activity:actHtml})[S.tab]();
+ app.innerHTML=h;
+ if(S.tab==='money')cardStatus().then(function(on){var c=$('card-box');if(c)c.innerHTML=cardHtml(on)})}
+
+function ovHtml(){var st=S.st,m=st.money,r=me(),a=st.account;
+ var h='<div class="grid3"><div class="stat"><small>Available to spend</small><b>'+money(m.available)+'</b></div><div class="stat"><small>Set aside for booked jobs</small><b>'+money(m.held)+'</b></div><div class="stat"><small>Booked this month</small><b>'+money(m.month_spend)+'</b>'+(a.monthly_cap?'<small>Cap '+money(a.monthly_cap)+'</small>':'')+'</div></div>';
+ if(st.me.limit)h+='<p class="note">Your own monthly limit: '+money(st.me.limit)+' (you have booked '+money(st.me.spent)+' this month).</p>';
+ if(a.status==='approved'&&Number(m.available)<Number(a.low_balance)&&rank(r)>=3)h+='<div class="banner a" style="margin-top:12px">Your balance is below your warning level of '+money(a.low_balance)+'. <button class="btn sm yellow" type="button" data-tab="money">Top up</button></div>';
+ var pend=st.jobs.filter(function(j){return j.status==='awaiting_approval'});
+ if(pend.length&&rank(r)>=3)h+='<div class="banner b" style="margin-top:12px"><b>'+pend.length+' booking'+(pend.length>1?'s':'')+' waiting for your approval.</b> <button class="btn sm" type="button" data-tab="bookings">Review</button></div>';
+ var soon=st.vehicles.filter(function(v){return v.mot_due&&v.mot_due<=addDays(30)});
+ if(soon.length)h+='<div class="banner a" style="margin-top:12px"><b>MOT due within 30 days:</b> '+soon.map(function(v){return E(v.reg)+' ('+dlong(v.mot_due)+')'}).join(', ')+(allowed('book')?' <button class="btn sm" type="button" data-act="book-mot">Book MOTs</button>':'')+'</div>';
+ h+='<div class="card" style="margin-top:14px"><h2>Coming up</h2>';var up=st.jobs.filter(function(j){return (j.status==='booked'&&j.booking_status!=='done'&&j.booking_status!=='cancelled')||j.status==='awaiting_approval'||j.status==='awaiting_card'}).sort(function(x,y){return String(x.day).localeCompare(String(y.day))}).slice(0,8);
+ h+=up.length?'<div class="list">'+up.map(jobRow).join('')+'</div>':'<p class="note">Nothing booked yet.'+(allowed('book')&&a.status==='approved'?' <button class="btn sm" type="button" data-tab="book">Book now</button>':'')+'</p>';
+ h+='</div>';
+ if(rank(r)>=3&&!a.frozen)h+='<div class="card"><h2>Pause all bookings</h2><p class="note">If a phone or login is lost, or someone has left, pause the account straight away. Bookings already made still go ahead. Only an owner can restart.</p><button class="btn red" type="button" data-act="freeze">Pause bookings now</button></div>';
+ return h}
+
+function jobRow(j){var s=STATUS[j.status]||[j.status,''];var bs=j.status==='booked'&&j.booking_status?BST[j.booking_status]||j.booking_status:null;var r=me();
+ var acts='';
+ if(j.status==='awaiting_approval'&&rank(r)>=3&&(!j.mine||r==='owner'))acts+='<button class="btn sm" type="button" data-act="approve" data-id="'+E(j.id)+'">Approve</button><button class="btn sm ghost" type="button" data-act="decline" data-id="'+E(j.id)+'">Decline</button>';
+ if(j.status==='awaiting_card'&&(j.mine||rank(r)>=3))acts+='<button class="btn sm sky" type="button" data-act="payjob" data-id="'+E(j.id)+'">Pay '+money(j.total)+' by card</button>';
+ if((j.status==='awaiting_approval'||j.status==='awaiting_card')&&(j.mine||rank(r)>=3))acts+='<button class="btn sm ghost" type="button" data-act="cancel" data-id="'+E(j.id)+'">Withdraw</button>';
+ if(j.status==='booked'&&j.booking_status==='confirmed'&&(j.mine||rank(r)>=3)&&j.day>addDays(0))acts+='<button class="btn sm ghost" type="button" data-act="cancel" data-id="'+E(j.id)+'">Cancel</button>';
+ return '<div class="it"><div><b>'+E(j.kind)+' · '+E(j.reg)+' · '+money(j.total)+'</b><small>'+E(dlong(j.day))+(j.slot?' ('+E(j.slot)+')':'')+(j.partner?' · '+E(j.partner):'')+(j.po?' · PO '+E(j.po):'')+(j.by?' · booked by '+E(j.by):'')+(j.schedule?' · repeat valet':'')+'</small><small><span class="pill '+s[1]+'">'+E(bs||s[0])+'</span> '+E(j.ref)+(j.booking?' · booking '+E(j.booking):'')+(j.pay==='card'?' · card':' · balance')+'</small>'+(j.decline_reason?'<small>Reason: '+E(j.decline_reason)+'</small>':'')+(j.status==='failed'&&j.fail_reason?'<small>'+E(why(j.fail_reason))+'</small>':'')+'</div><div class="acts">'+acts+'</div></div>'}
+
+function jobsHtml(){var J=S.st.jobs,f=S.jf||'all';var F={all:function(){return true},open:function(j){return j.status==='awaiting_approval'||j.status==='awaiting_card'||(j.status==='booked'&&j.booking_status!=='done'&&j.booking_status!=='cancelled')},done:function(j){return j.booking_status==='done'},other:function(j){return ['declined','cancelled','failed','expired'].indexOf(j.status)>-1}};
+ var L=J.filter(F[f]);
+ return '<div class="card"><h2>Bookings</h2>'+(me()==='booker'?'<p class="note">You see the bookings you made.</p>':'')+'<div class="tabs" role="group" aria-label="Show">'+[['all','All'],['open','Coming up'],['done','Done'],['other','Cancelled or not booked']].map(function(x){return '<button type="button" data-jf="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>'}).join('')+'</div>'
+ +(L.length?'<div class="list">'+L.map(jobRow).join('')+'</div>':'<p class="note">Nothing here.</p>')
+ +'<p class="note" style="margin-top:12px">Free cancellation up to the day before. The money comes straight back to your balance (or your card is refunded). For anything else, contact us with the booking reference.</p></div>'}
+
+/* vehicles */
+function vehHtml(){var V=S.st.vehicles,adm=rank(me())>=3,ed=S.vedit;
+ var h='<div class="card"><h2>Fleet list ('+V.length+')</h2>'+(S.st.account.fleet_only?'<p class="note">Only these vehicles can be booked on the account.</p>':'');
+ h+=V.length?'<div class="list">'+V.map(function(v){return '<div class="it"><div><b><span class="pill" style="background:var(--yellow);font:800 13px Sora,Inter;letter-spacing:.06em">'+E(v.reg)+'</span> '+E(v.nickname||'')+'</b><small>'+E([v.make,v.model,v.colour].filter(Boolean).join(' '))+' · valet size: '+E(SIZES[v.size])+' · MOT: '+E((MOTC.filter(function(c){return c[0]===v.mot_class})[0]||[0,v.mot_class])[1])+'</small><small>'+(v.mot_due?'MOT due '+E(dlong(v.mot_due))+' · ':'')+(v.tax_due?'Tax due '+E(dlong(v.tax_due))+' · ':'')+(v.driver?'Driver: '+E(v.driver):'')+'</small></div>'+(adm?'<div class="acts"><button class="btn sm ghost" type="button" data-act="vedit" data-id="'+E(v.id)+'">Change</button><button class="btn sm ghost" type="button" data-act="vdel" data-id="'+E(v.id)+'">Remove</button></div>':'')+'</div>'}).join('')+'</div>':'<p class="note">No vehicles yet.</p>';
+ h+='</div>';
+ if(adm){var v=ed&&V.filter(function(x){return x.id===ed})[0]||{};
+  h+='<div class="card"><h2>'+(v.id?'Change '+E(v.reg):'Add a vehicle')+'</h2><form id="f-veh"><div class="grid"><div><label class="f" for="v-reg">Registration</label><input type="text" id="v-reg" class="vrm" maxlength="10" required value="'+E(v.reg||'')+'"></div><div><label class="f" for="v-nick">Name (optional)</label><input type="text" id="v-nick" maxlength="60" placeholder="e.g. Van 3" value="'+E(v.nickname||'')+'"></div></div>'
+  +'<div class="grid3"><div><label class="f" for="v-make">Make</label><input type="text" id="v-make" maxlength="40" value="'+E(v.make||'')+'"></div><div><label class="f" for="v-model">Model</label><input type="text" id="v-model" maxlength="60" value="'+E(v.model||'')+'"></div><div><label class="f" for="v-col">Colour</label><input type="text" id="v-col" maxlength="30" value="'+E(v.colour||'')+'"></div></div>'
+  +'<div class="grid"><div><label class="f" for="v-size">Valet size</label><select id="v-size">'+SIZES.map(function(s,i){return '<option value="'+i+'"'+((v.size!=null?v.size:3)===i?' selected':'')+'>'+s+'</option>'}).join('')+'</select></div><div><label class="f" for="v-cls">MOT class</label><select id="v-cls">'+MOTC.map(function(c){return '<option value="'+c[0]+'"'+((v.mot_class||'4-goods')===c[0]?' selected':'')+'>'+c[1]+'</option>'}).join('')+'</select></div></div>'
+  +'<div class="grid3"><div><label class="f" for="v-mot">MOT due</label><input type="date" id="v-mot" value="'+E(v.mot_due||'')+'"></div><div><label class="f" for="v-tax">Tax due</label><input type="date" id="v-tax" value="'+E(v.tax_due||'')+'"></div><div><label class="f" for="v-drv">Usual driver</label><input type="text" id="v-drv" maxlength="80" value="'+E(v.driver||'')+'"></div></div>'
+  +'<input type="hidden" id="v-id" value="'+E(v.id||'')+'"><p class="err" id="v-err" role="alert"></p><div class="row"><button class="btn" type="submit">'+(v.id?'Save':'Add vehicle')+'</button>'+(v.id?'<button class="btn ghost" type="button" data-act="vcancel">Cancel</button>':'')+'</div></form></div>'
+  +'<div class="card"><h2>Add many at once</h2><p class="note">Paste registrations, one per line (or separated by commas). They are added as extra large or van; change any afterwards.</p><textarea id="v-bulk" placeholder="AB12 CDE&#10;XY65 ZZZ"></textarea><div class="row" style="margin-top:8px"><button class="btn ghost" type="button" data-act="vbulk">Add these</button><span id="v-bulk-msg" class="note"></span></div></div>'}
+ return h}
+
+/* team */
+function teamHtml(){var M=S.st.members||[],r=me();
+ var h='<div class="card"><h2>Team</h2><div class="list">'+M.map(function(m){var can=!m.me&&(r==='owner'||rank(m.role)<3);
+  return '<div class="it"><div><b>'+E(m.name||m.email)+(m.me?' (you)':'')+'</b><small>'+E(m.email)+'</small><small><span class="pill">'+E(ROLES[m.role])+'</span> '+(m.status==='invited'?'<span class="pill a">Invited, not joined yet</span>':'')+(m.limit?' · limit '+money(m.limit)+' a month':'')+(m.spent!=null?' · '+money(m.spent)+' this month':'')+'</small></div><div class="acts">'
+  +(can&&m.status==='active'?'<select data-role="'+E(m.id)+'" aria-label="Role for '+E(m.email)+'">'+Object.keys(ROLES).filter(function(k){return r==='owner'||rank(k)<3}).map(function(k){return '<option value="'+k+'"'+(k===m.role?' selected':'')+'>'+ROLES[k]+'</option>'}).join('')+'</select><button class="btn sm ghost" type="button" data-act="mlimit" data-id="'+E(m.id)+'">Limit</button>':'')
+  +(can?'<button class="btn sm ghost" type="button" data-act="mremove" data-id="'+E(m.id)+'">'+(m.status==='invited'?'Cancel invite':'Remove')+'</button>':'')
+  +(m.me?'<button class="btn sm ghost" type="button" data-act="leave" data-id="'+E(m.id)+'">Leave this account</button>':'')+'</div></div>'}).join('')+'</div></div>';
+ h+='<div class="card"><h2>Invite someone</h2><p class="note">They get an email with a link that works once, only for that email address, and runs out after 7 days.</p><form id="f-inv"><div class="grid"><div><label class="f" for="i-em">Their email</label><input type="email" id="i-em" required></div><div><label class="f" for="i-nm">Their name</label><input type="text" id="i-nm" maxlength="120"></div></div><div class="grid"><div><label class="f" for="i-role">Role</label><select id="i-role">'+Object.keys(ROLES).filter(function(k){return r==='owner'||rank(k)<3}).map(function(k){return '<option value="'+k+'"'+(k==='booker'?' selected':'')+'>'+ROLES[k]+'</option>'}).join('')+'</select><p class="note" id="i-help">'+E(ROLEHELP.booker)+'</p></div><div><label class="f" for="i-lim">Monthly spending limit (optional, £)</label><input type="number" id="i-lim" min="1" step="1"></div></div><p class="err" id="i-err" role="alert"></p><button class="btn" type="submit">Send invitation</button></form></div>';
+ return h}
+
+/* settings */
+function setHtml(){var a=S.st.account,r=me();
+ return '<div class="card"><h2>Spending controls</h2><form id="f-set"><div class="grid"><div><label class="f" for="s-appr">Bookers need approval for bookings over (£)</label><input type="number" id="s-appr" min="0" step="1" value="'+E(a.approval_over==null?'':a.approval_over)+'" placeholder="No approval needed"></div><div><label class="f" for="s-cap">Monthly cap for the whole account (£)</label><input type="number" id="s-cap" min="1" step="1" value="'+E(a.monthly_cap==null?'':a.monthly_cap)+'" placeholder="No cap"></div></div>'
+ +'<div class="grid"><div><label class="f" for="s-low">Email us a warning when the balance drops below (£)</label><input type="number" id="s-low" min="0" step="1" value="'+E(a.low_balance)+'"></div><div><label class="f">Services the team can book</label>'+['Valet','Alloy wheels','MOT'].map(function(x){return '<label class="check" style="margin:4px 0"><input type="checkbox" data-svc="'+x+'"'+(a.services.indexOf(x)>-1?' checked':'')+'><span>'+({Valet:'Full valets','Alloy wheels':'Alloy wheel repairs',MOT:'MOTs'})[x]+'</span></label>'}).join('')+'</div></div>'
+ +'<label class="check"><input type="checkbox" id="s-fleet"'+(a.fleet_only?' checked':'')+'><span><b>Fleet vehicles only</b> (recommended): only vehicles on your fleet list can be booked.</span></label>'
+ +'<h3>Business details</h3><div class="grid"><div><label class="f" for="s-ph">Phone</label><input type="tel" id="s-ph" maxlength="30" value="'+E(a.phone||'')+'"></div><div><label class="f" for="s-vat">VAT number</label><input type="text" id="s-vat" maxlength="16" value="'+E(a.vat_no||'')+'"></div></div><label class="f" for="s-ad">Address</label><input type="text" id="s-ad" maxlength="300" value="'+E(a.address||'')+'"><label class="f" for="s-pc">Postcode</label><input type="text" id="s-pc" maxlength="9" style="max-width:180px;text-transform:uppercase" value="'+E(a.postcode||'')+'">'
+ +'<label class="f" for="s-bill">Email for statements and receipts'+(r!=='owner'?' (only an owner can change it)':'')+'</label><input type="email" id="s-bill" value="'+E(a.billing_email)+'"'+(r!=='owner'?' disabled':'')+'>'
+ +(a.company_no?'<p class="note">Companies House number '+E(a.company_no)+'. To change it, contact us.</p>':'')
+ +'<p class="err" id="s-err" role="alert"></p><button class="btn" type="submit">Save settings</button></form></div>'}
+
+/* activity */
+var ACT={applied:'Applied for the account',invited:'Invited someone',joined:'Joined the team',member_removed:'Removed from the team',member_changed:'Team role or limit changed',vehicle_added:'Vehicle added',vehicle_changed:'Vehicle changed',vehicle_removed:'Vehicle removed',settings_changed:'Settings changed',booked:'Booked',booking_needs_approval:'Asked for approval',booking_awaiting_card:'Booked, waiting for card payment',booking_approved:'Approved a booking',booking_declined:'Declined a booking',booking_failed:'A booking could not be made',booking_cancelled:'Booking cancelled',request_withdrawn:'Request withdrawn',job_done:'Job done: money taken',paused:'Paused bookings',restarted:'Restarted bookings',auto_frozen:'Bookings paused automatically (unusual activity)',topup_requested:'Top up started',topup_cancelled:'Top up cancelled',topup_credited:'Top up received',card_added:'Company card added',card_removed:'Company card removed',repeat_valet_set:'Repeat valet set up',repeat_valet_stopped:'Repeat valet stopped',staff_approve:'Approved by The Motoring Central',staff_decline:'Declined by The Motoring Central',staff_suspend:'Put on hold by The Motoring Central',staff_reinstate:'Reopened by The Motoring Central',staff_close:'Closed by The Motoring Central',staff_adjustment:'Balance adjusted by The Motoring Central'};
+function actHtml(){var A=S.st.audit||[];return '<div class="card"><h2>Activity</h2><p class="note">Everything done on this account, newest first (last 100).</p>'+(A.length?'<div class="list">'+A.map(function(x){var d=x.detail||{};var bits=['job','reg','kind','email','role','ref','amount','received','total','partner','reason'].filter(function(k){return d[k]!=null&&d[k]!==''}).map(function(k){return k==='amount'||k==='received'||k==='total'?money(d[k]):d[k]});return '<div class="it"><div><b>'+E(ACT[x.action]||x.action)+'</b><small>'+E(bits.join(' · '))+'</small></div><div><small>'+E(dtime(x.at))+'<br>'+E(x.by||'system')+'</small></div></div>'}).join('')+'</div>':'<p class="note">Nothing yet.</p>')+'</div>'}
+
+/* money */
+function moneyHtml(){var st=S.st,a=st.account,r=me(),adm=rank(r)>=3;var h='';
+ h+='<div class="grid3"><div class="stat"><small>Available to spend</small><b>'+money(st.money.available)+'</b></div><div class="stat"><small>Set aside for booked jobs</small><b>'+money(st.money.held)+'</b></div><div class="stat"><small>Booked this month</small><b>'+money(st.money.month_spend)+'</b></div></div>';
+ if(adm){
+  h+='<div class="card" style="margin-top:14px"><h2>Top up by bank transfer</h2><p class="note">No card fees. Your balance goes up as soon as we see the money arrive (usually the same working day). Always use the reference we give you.</p>'
+  +(a.status!=='approved'?'<p class="note">Available once your account is approved.</p>':'<form id="f-top"><label class="f" for="t-amt">Amount (£'+E(st.settings.min_topup)+' to £'+Number(st.settings.max_topup).toLocaleString('en-GB')+')</label><div class="row"><input type="number" id="t-amt" min="'+E(st.settings.min_topup)+'" max="'+E(st.settings.max_topup)+'" step="0.01" required style="max-width:200px"><button class="btn" type="submit">Get bank details</button></div><p class="err" id="t-err" role="alert"></p></form><div id="t-out"></div>')+'</div>';
+  h+='<div class="card" id="card-box"><p class="note">Checking card payments…</p></div>';
+ }
+ var T=st.topups||[];
+ if(T.length)h+='<div class="card"><h2>Top ups</h2><div class="list">'+T.map(function(t){var p={pending:['Waiting for the money','a'],credited:['Added to the balance','g'],cancelled:['Cancelled','r'],expired:['Ran out (30 days)','r']}[t.status]||[t.status,''];return '<div class="it"><div><b>'+money(t.received||t.amount)+' · '+(t.method==='bank'?'bank transfer':'card')+'</b><small>Reference '+E(t.ref)+' · '+E(dtime(t.created_at))+'</small><small><span class="pill '+p[1]+'">'+p[0]+'</span></small></div>'+(adm&&t.status==='pending'&&t.method==='bank'?'<div class="acts"><button class="btn sm ghost" type="button" data-act="tshow" data-ref="'+E(t.ref)+'" data-amt="'+E(t.amount)+'">Bank details</button><button class="btn sm ghost" type="button" data-act="tcancel" data-id="'+E(t.id)+'">Cancel</button></div>':'')+'</div>'}).join('')+'</div></div>';
+ if(r!=='booker'){var mo=new Date().toISOString().slice(0,7);h+='<div class="card"><h2>Monthly statement</h2><p class="note">Every job, top up and refund in the month, with registrations and PO numbers. Print it, save it as a PDF, or download it for your spreadsheet.</p><div class="row"><input type="month" id="m-mon" value="'+mo+'" style="max-width:200px"><button class="btn" type="button" data-act="stmt">Print or save as PDF</button><button class="btn ghost" type="button" data-act="csv">Download (CSV)</button></div></div>'}
+ return h}
+function bankHtml(ref,amt){var b=(S.st.bank)||{};var ok=b.sort_code&&b.account_no;return '<div class="banner b" style="margin-top:12px"><b>Pay '+money(amt)+' by bank transfer</b><br>'+(ok?'Account name: '+E(b.name||'The Motoring Central Ltd')+'<br>Sort code: '+E(b.sort_code)+'<br>Account number: '+E(b.account_no)+'<br>':'<span class="err">Our business bank details are not on the site yet. Please wait before paying.</span><br>')+'Reference: <b style="font-size:18px;letter-spacing:.05em">'+E(ref)+'</b><br><small>Use this reference exactly, so we can match your payment. Check the bank details shown by your bank before you pay. We will never email you different bank details.</small></div>'}
+function cardHtml(on){var c=S.st.card,adm=rank(me())>=3;if(!adm)return '';
+ if(!on)return '<h2>Company card</h2><p class="note">Card payments are being switched on soon. Until then, please use the prepaid balance.</p>';
+ return '<h2>Company card</h2>'+(c?'<p>'+E(String(c.brand||'Card').toUpperCase())+' ending <b>'+E(c.last4)+'</b> (expires '+E(c.exp)+'). Bookings paid by card are charged when they are made.</p><div class="row"><button class="btn ghost" type="button" data-act="card-add">Change card</button><button class="btn ghost" type="button" data-act="card-del">Remove card</button></div>':'<p class="note">Save a company card with Stripe. We never see the card number.</p><button class="btn" type="button" data-act="card-add">Add a company card</button>')
+ +'<h3>Top up by card</h3><div class="row"><input type="number" id="c-amt" min="'+E(S.st.settings.min_topup)+'" max="'+E(S.st.settings.max_topup)+'" step="0.01" style="max-width:200px" placeholder="Amount £"><button class="btn sky" type="button" data-act="ctop">Pay by card</button></div><p class="err" id="c-err" role="alert"></p>'}
+
+/* repeat valets */
+function repHtml(){var R=S.st.schedules||[],V=S.st.vehicles;
+ var h='<div class="card"><h2>Repeat valets</h2><p class="note">Booked automatically 7 days before each visit, from your balance. If there is not enough money, or the valeter is closed that day, we email you so you can sort it out.</p>'+(R.length?'<div class="list">'+R.map(function(s){return '<div class="it"><div><b>Every '+(s.every_weeks===1?'week':s.every_weeks+' weeks')+' · '+E(s.partner)+'</b><small>'+E((s.regs||[]).join(', '))+' · '+E(s.time)+' · '+(s.place==='mobile'?E(s.address)+', '+E(s.postcode):'at the valeter\'s premises')+(s.po?' · PO '+E(s.po):'')+'</small><small>Next visit '+E(dlong(s.next_day))+(s.last_result?' · last run: '+E(s.last_result):'')+'</small></div><div class="acts"><button class="btn sm ghost" type="button" data-act="rstop" data-id="'+E(s.id)+'">Stop</button></div></div>'}).join('')+'</div>':'<p class="note">None set up yet.</p>')+'</div>';
+ if(!V.length)return h+'<div class="card"><p class="note">Add your vehicles first (Vehicles).</p></div>';
+ h+='<div class="card"><h2>Set up a repeat valet</h2><form id="f-rep"><label class="f">Vehicles</label><div class="pick">'+V.map(function(v){return '<label><input type="checkbox" data-rv="'+E(v.id)+'"><span><b>'+E(v.reg)+'</b> '+E(v.nickname||'')+'<br><small>'+E(SIZES[v.size])+'</small></span></label>'}).join('')+'</div>'
+ +'<div class="grid"><div><label class="f" for="r-where">Where</label><select id="r-where"><option value="mobile">At our address (mobile valeter)</option><option value="shop">At the valeter\'s premises</option></select></div><div><label class="f" for="r-pc">Postcode of the vehicles</label><input type="text" id="r-pc" maxlength="9" style="text-transform:uppercase" value="'+E(S.st.account.postcode||'')+'"></div></div>'
+ +'<label class="f" for="r-ad">Address (for mobile)</label><input type="text" id="r-ad" maxlength="200" value="'+E(S.st.account.address||'')+'">'
+ +'<div class="grid3"><div><label class="f" for="r-every">How often</label><select id="r-every"><option value="1">Every week</option><option value="2" selected>Every 2 weeks</option><option value="4">Every 4 weeks</option></select></div><div><label class="f" for="r-first">First visit</label><input type="date" id="r-first" min="'+addDays(1)+'" max="'+addDays(90)+'" value="'+addDays(7)+'"></div><div><label class="f" for="r-slot">Time</label><select id="r-slot">'+SLOTS.map(function(s){return '<option'+(s==='10:00am'?' selected':'')+'>'+s+'</option>'}).join('')+'</select></div></div>'
+ +'<label class="f" for="r-po">PO number (optional)</label><input type="text" id="r-po" maxlength="40" style="max-width:260px">'
+ +'<div class="row" style="margin-top:12px"><button class="btn ghost" type="button" data-act="rfind">Find valeters</button></div><div id="r-list"></div><p class="err" id="r-err" role="alert"></p></form></div>';
+ return h}
+
+/* ---------- booking ---------- */
+function bookHtml(){var st=S.st,a=st.account,V=st.vehicles;S.book=S.book||{kind:a.services[0]||'Valet',where:'mobile',sel:{},partner:null,opts:null};var B=S.book;
+ if(a.status!=='approved')return '<div class="card"><p class="note">You can book once your account is approved.</p></div>';
+ var h='<div class="card"><h2>Book</h2><label class="f">What do you need?</label><div class="tabs" role="group" aria-label="Service">'+a.services.map(function(s){return '<button type="button" data-kind="'+E(s)+'" aria-pressed="'+(B.kind===s)+'">'+({Valet:'Full valet','Alloy wheels':'Alloy wheel repair',MOT:'MOT'})[s]+'</button>'}).join('')+'</div>';
+ h+='<label class="f">Which vehicle'+(B.kind==='MOT'?'':'s')+'?</label>';
+ if(V.length)h+='<div class="pick">'+V.map(function(v){return '<label><input type="'+(B.kind==='MOT'?'radio':'checkbox')+'" name="bv" data-bv="'+E(v.id)+'"'+(B.sel[v.id]?' checked':'')+'><span><b>'+E(v.reg)+'</b> '+E(v.nickname||'')+'<br><small>'+E(B.kind==='MOT'?(MOTC.filter(function(c){return c[0]===v.mot_class})[0]||[0,v.mot_class])[1]:SIZES[v.size])+'</small></span></label>'}).join('')+'</div>';
+ else h+='<p class="note">No vehicles on your fleet list yet. '+(rank(me())>=3?'<button class="btn sm" type="button" data-tab="vehicles">Add vehicles</button>':'Ask an admin to add them.')+'</p>';
+ if(!a.fleet_only)h+='<label class="f" for="b-reg">Or a vehicle not on the list (registration)</label><input type="text" id="b-reg" class="vrm" maxlength="10" style="max-width:220px">';
+ if(B.kind!=='MOT')h+='<div class="grid"><div><label class="f" for="b-where">Where</label><select id="b-where"><option value="mobile"'+(B.where==='mobile'?' selected':'')+'>At our address (they come to us)</option><option value="shop"'+(B.where==='shop'?' selected':'')+'>At the partner\'s premises</option></select></div><div><label class="f" for="b-pc">Postcode'+(B.where==='mobile'?' of the vehicles':' to search near')+'</label><input type="text" id="b-pc" maxlength="9" style="text-transform:uppercase" value="'+E(B.post||a.postcode||'')+'"></div></div>'
+  +(B.where==='mobile'?'<label class="f" for="b-ad">Address where the vehicles will be</label><input type="text" id="b-ad" maxlength="200" value="'+E(B.address||a.address||'')+'">':'');
+ else h+='<label class="f" for="b-pc">Postcode to search near</label><input type="text" id="b-pc" maxlength="9" style="text-transform:uppercase;max-width:200px" value="'+E(B.post||a.postcode||'')+'">';
+ if(B.kind==='Alloy wheels')h+='<div class="grid"><div><label class="f" for="b-wh">Wheels per vehicle</label><select id="b-wh">'+[1,2,3,4,5].map(function(n){return '<option'+((B.wheels||4)===n?' selected':'')+'>'+n+'</option>'}).join('')+'</select></div><div><label class="f" for="b-fin">Finish</label><select id="b-fin">'+FIN.map(function(f,i){return '<option value="'+i+'"'+((B.finish||0)===i?' selected':'')+'>'+f+'</option>'}).join('')+'</select></div></div>';
+ h+='<div class="grid"><div><label class="f" for="b-day">Day</label><input type="date" id="b-day" min="'+addDays(B.kind==='MOT'?0:1)+'" max="'+addDays(60)+'" value="'+E(B.day||addDays(B.kind==='MOT'?2:1))+'"></div>'+(B.kind!=='MOT'?'<div><label class="f" for="b-slot">Time</label><select id="b-slot">'+SLOTS.map(function(s){return '<option'+((B.slot||'10:00am')===s?' selected':'')+'>'+s+'</option>'}).join('')+'</select></div>':'')+'</div>';
+ h+='<div class="row" style="margin-top:12px"><button class="btn sky" type="button" data-act="bfind">Find partners and prices</button></div><p class="err" id="b-err" role="alert"></p><div id="b-list"></div></div>';
+ return h}
+function bookRead(){var B=S.book;B.sel={};[].forEach.call(document.querySelectorAll('[data-bv]'),function(i){if(i.checked)B.sel[i.getAttribute('data-bv')]=1});
+ var w=$('b-where');if(w)B.where=w.value;var pc=$('b-pc');if(pc)B.post=pc.value.trim().toUpperCase();var ad=$('b-ad');if(ad)B.address=ad.value.trim();var d=$('b-day');if(d)B.day=d.value;var sl=$('b-slot');if(sl)B.slot=sl.value;var wh=$('b-wh');if(wh)B.wheels=+wh.value;var fi=$('b-fin');if(fi)B.finish=+fi.value;var rg=$('b-reg');B.reg=rg?rg.value.trim().toUpperCase():''}
+function geo(pc){pc=String(pc||'').replace(/\s+/g,'');if(!/^[A-Za-z]{1,2}\d[A-Za-z\d]?\d[A-Za-z]{2}$/.test(pc))return Promise.reject(new Error('bad_address'));return fetch('https://api.postcodes.io/postcodes/'+encodeURIComponent(pc)).then(function(r){return r.ok?r.json():null}).then(function(j){if(!j||!j.result)throw new Error('bad_address');return j.result})}
+function vehList(){var B=S.book;return S.st.vehicles.filter(function(v){return B.sel[v.id]})}
+function priceFor(p,v){var B=S.book,r=p.rates||{};if(B.kind==='Valet'){var x=r.p&&r.p[v?v.size:3];return x>0?Number(x):null}if(B.kind==='Alloy wheels'){var k=FINKEY[B.finish||0];if(k==='dcut'&&B.where==='mobile')return null;var y=Number(r[k]);return y>0?y*(B.wheels||4):null}return null}
+function worksOn(p,day,slot){var w=p.week;if(!Array.isArray(w))return true;var d=w[new Date(day+'T12:00:00').getDay()];if(!Array.isArray(d))return false;if(!slot)return true;var m=SLOTMIN[slot],a=d[0].split(':'),b=d[1].split(':');return m>=(+a[0])*60+(+a[1])&&m<(+b[0])*60+(+b[1])}
+function placeOk(p){var vs=String(p.sub||'').toLowerCase();if(S.book.kind==='Valet')return S.book.where==='mobile'?(!vs||/mobile/.test(vs)):/premises|centre/.test(vs);return true}
+function bfind(){bookRead();var B=S.book,er=$('b-err'),L=$('b-list');er.textContent='';L.innerHTML='';
+ var vs=vehList();if(!vs.length&&!B.reg){er.textContent='Choose at least one vehicle.';return}
+ if(!B.day){er.textContent='Choose a day.';return}
+ if(B.kind!=='MOT'&&B.where==='mobile'&&(B.address||'').length<4){er.textContent='Enter the address where the vehicles will be.';return}
+ L.innerHTML='<p class="note">Searching…</p>';
+ geo(B.post).then(function(g){B.post=g.postcode;return call('biz_options',{p_account:S.acct,p_kind:B.kind,p_lat:g.latitude,p_lng:g.longitude})}).then(function(P){
+  B.partners=P||[];
+  if(B.kind==='MOT')return motList();
+  var ok=B.partners.filter(function(p){return placeOk(p)&&(B.where!=='mobile'||p.miles<=p.radius)});
+  if(!ok.length){L.innerHTML='<p class="note">No partners cover that postcode for this yet. Try "at the partner\'s premises" or another postcode, or contact us and we will find one.</p>';return}
+  var fee=Number(S.st.settings.fee)||0,vlist=vs.length?vs:[{id:null,reg:B.reg,size:3}];
+  L.innerHTML='<h3>Choose a partner</h3>'+ok.map(function(p){var works=worksOn(p,B.day,B.slot),tot=0,bad=false;vlist.forEach(function(v){var x=priceFor(p,v);if(x==null)bad=true;else tot+=x+fee});
+   return '<div class="ptn" role="button" tabindex="0" data-ptn="'+E(p.id)+'" aria-pressed="false"'+(!works||bad?' style="opacity:.55"':'')+'><div class="row" style="justify-content:space-between"><div><b>'+E(p.name)+'</b><small>'+E(p.town||'')+' · '+E(p.miles)+' miles'+(works?'':' · does not work that day or time')+(bad?' · does not offer this':'')+'</small></div><div class="price">'+(bad?'':money(tot))+'</div></div>'+(bad?'':'<small>'+vlist.map(function(v){return E(v.reg)+' '+money(priceFor(p,v))}).join(' · ')+' · plus '+money(fee)+' booking fee per vehicle</small>')+'</div>'}).join('')+'<div id="b-confirm"></div>'
+ }).catch(function(e){L.innerHTML='';er.textContent=why(e)})}
+function motList(){var B=S.book,L=$('b-list'),v=vehList()[0];if(!v){L.innerHTML='<p class="err">Choose the vehicle from the list for an MOT.</p>';return}
+ var ok=B.partners.filter(function(p){return !p.motc||typeof p.motc!=='object'||p.motc[v.mot_class]!=null});
+ if(!ok.length){L.innerHTML='<p class="note">No MOT station near that postcode tests this class of vehicle yet.</p>';return}
+ L.innerHTML='<h3>Choose an MOT station</h3><p class="note">Price: '+money(({'1':29.65,'2':29.65,'4-car':54.85,'4-goods':54.85,'4-camper':54.85,'4-taxi':54.85,'4-dual':54.85,'4-9':57.30,'7':58.60,'5-13':59.55,'5-17':80.65})[v.mot_class]||0)+', the official maximum, with no booking fee.</p>'+ok.map(function(p){return '<div class="ptn" role="button" tabindex="0" data-mot="'+E(p.id)+'" aria-pressed="false"><b>'+E(p.name)+'</b><small>'+E(p.town||'')+' · '+E(p.miles)+' miles</small><div class="slots" id="ms-'+E(p.id)+'"></div></div>'}).join('')+'<div id="b-confirm"></div>'}
+function motSlots(pid){var B=S.book,box=$('ms-'+pid);box.innerHTML='<small>Checking times…</small>';
+ call('garage_busy',{p_partner:pid,p_from:B.day,p_to:B.day}).then(function(rows){var cfg=null,busy=[];(rows||[]).forEach(function(r){if(r.mot_set)cfg=r.mot_set;else if(r.day)busy.push(r)});
+  var dow=new Date(B.day+'T12:00:00').getDay(),now=new Date(),free={};
+  Object.keys(cfg||{}).forEach(function(bay){var c=cfg[bay];if((c.days||[]).indexOf(dow)<0)return;for(var t=c.open;t+c.step<=c.close;t+=c.step){var at=new Date(B.day+'T00:00:00');at.setMinutes(t);if(at-now<3600000)continue;if(!busy.some(function(s){return s.bay_name===bay&&t<s.start_min+s.dur_min&&s.start_min<t+c.step}))free[t]=1}});
+  var T=Object.keys(free).map(Number).sort(function(a,b){return a-b});
+  box.innerHTML=T.length?T.map(function(t){return '<button type="button" data-mslot="'+t+'" data-mp="'+E(pid)+'" aria-pressed="false">'+String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0')+'</button>'}).join(''):'<small>No free times that day. Try another day.</small>'
+ },function(e){box.innerHTML='<small class="err">'+E(why(e))+'</small>'})}
+function confirmHtml(){var B=S.book,card=S.st.card&&S.cardOn;
+ return '<h3>Confirm</h3><div class="grid"><div><label class="f" for="b-po">PO number (optional)</label><input type="text" id="b-po" maxlength="40"></div><div><label class="f" for="b-note">Note for the partner (optional)</label><input type="text" id="b-note" maxlength="300" placeholder="e.g. keys in the office"></div></div>'
+ +'<label class="f">Pay with</label><div class="tabs" role="group" aria-label="Pay with"><button type="button" data-pay="wallet" aria-pressed="'+(B.pay!=='card')+'">Balance ('+money(S.st.money.available)+')</button>'+(card?'<button type="button" data-pay="card" aria-pressed="'+(B.pay==='card')+'">Company card ending '+E(S.st.card.last4)+'</button>':'')+'</div>'
+ +'<p class="note">'+(B.pay==='card'?'Your card is charged when you book.':'The price is set aside from your balance now and only taken when the job is done. Cancel up to the day before and it comes straight back.')+(S.st.account.approval_over!=null&&me()==='booker'?' Bookings over '+money(S.st.account.approval_over)+' wait for approval.':'')+'</p>'
+ +'<button class="btn" type="button" data-act="bgo">Book now</button>'}
+function bgo(btn){var B=S.book,er=$('b-err');er.textContent='';var po=$('b-po').value.trim(),note=$('b-note').value.trim();var vs=vehList();if(!vs.length)vs=[{id:null,reg:B.reg}];
+ if(!B.idem)B.idem=uuid();btn.disabled=true;btn.textContent='Booking…';var res=[];
+ var seq=vs.reduce(function(p,v){return p.then(function(){var body={kind:B.kind,partner:B.partner,day:B.day,po:po,note:note,pay:B.pay||'wallet',idem:B.idem+':'+(v.id||v.reg)};
+  if(v.id)body.vehicle_id=v.id;else body.reg=v.reg;
+  if(B.kind==='MOT'){body.start=B.mstart;body.class=v.mot_class}else{body.where=B.where;body.slot=B.slot;body.post=B.post;body.address=B.address;if(B.kind==='Valet')body.size=v.size;else{body.wheels=B.wheels||4;body.finish=B.finish||0}}
+  return call('biz_book',{p_account:S.acct,p:body}).then(function(j){if(j&&j.error)throw new Error(j.error);res.push([v.reg,j]);if(j.status==='awaiting_card'&&B.pay==='card')return payJob(j.id).then(function(x){res[res.length-1][2]=x})},function(e){res.push([v.reg,null,why(e)])})})},Promise.resolve());
+ seq.then(function(){S.book.idem=null;var okc=res.filter(function(r){return r[1]&&r[1].status!=='failed'&&!(r[2]&&r[2].error)}).length;
+  var msg=res.map(function(r){var j=r[1];return r[0]+': '+(r[2]&&typeof r[2]==='string'?r[2]:!j?'not booked':j.status==='booked'?'booked':j.status==='awaiting_approval'?'waiting for approval':j.status==='awaiting_card'?(r[2]&&r[2].error?why(r[2].error):'waiting for card payment'):j.status)}).join(' · ');
+  toast(msg,okc<res.length);S.tab='bookings';S.book=null;load(true)})}
+function payJob(id){return sb.functions.invoke('business-pay',{body:{action:'pay_job',job:id}}).then(function(r){var d=r.data||{};if(r.error)d={error:'server_error'};if(d.error)toast(why(d.error),true);else toast('Paid by card and booked.');return d})}
+
+/* ---------- statement ---------- */
+function stmt(csv){var mon=$('m-mon').value;if(!/^\d{4}-\d\d$/.test(mon))return;call('biz_statement',{p_account:S.acct,p_month:mon+'-01'}).then(function(s){
+ var K={topup:'Top up',hold:'Set aside for a booking',release:'Given back',take:'Paid for a completed job',adjust:'Adjustment'};
+ if(csv){var rows=[['Reference','Service','Registration','Day','Partner','Price','Booking fee','Total','Paid with','Status','PO','Booked by','Booking ref']].concat(s.jobs.map(function(j){return [j.ref,j.kind,j.reg,j.day,j.partner||'',j.price,j.fee,j.total,j.pay==='card'?'Card':'Balance',j.status,j.po||'',j.by||'',j.booking||'']}));
+  var t=rows.map(function(r){return r.map(function(c){c=String(c==null?'':c);if(/^[=+\-@\t\r]/.test(c))c="'"+c;return '"'+c.replace(/"/g,'""')+'"'}).join(',')}).join('\r\n');
+  var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+t],{type:'text/csv'}));a.download='motoring-central-'+s.account.ref+'-'+s.month+'.csv';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);return}
+ var co=s.company||{},m=new Date(s.month+'-01T12:00:00').toLocaleDateString('en-GB',{month:'long',year:'numeric'});
+ $('printable').innerHTML='<h1 style="font:800 20px Sora,Inter;margin:0">Statement: '+E(m)+'</h1><p>'+E(s.account.name)+' · '+E(s.account.ref)+(s.account.company_no?' · Company '+E(s.account.company_no):'')+(s.account.vat_no?' · VAT '+E(s.account.vat_no):'')+'<br>'+E([s.account.address,s.account.postcode].filter(Boolean).join(', '))+'</p>'
+ +'<p>From: '+E(co.name||'The Motoring Central')+(co.number?' · Company '+E(co.number):'')+(co.vat?' · VAT '+E(co.vat):'')+'</p>'
+ +'<table class="st"><tr><th>Opening balance</th><td class="n">'+money(s.opening)+'</td><th>Closing balance</th><td class="n">'+money(s.closing)+'</td><th>Set aside at month end</th><td class="n">'+money(s.held_at_end)+'</td></tr></table>'
+ +'<h2 style="font:700 15px Sora,Inter">Jobs booked this month</h2><table class="st"><tr><th>Ref</th><th>Service</th><th>Reg</th><th>Day</th><th>Partner</th><th>PO</th><th>Status</th><th class="n">Price</th><th class="n">Fee</th><th class="n">Total</th></tr>'+s.jobs.map(function(j){return '<tr><td>'+E(j.ref)+'</td><td>'+E(j.kind)+'</td><td>'+E(j.reg)+'</td><td>'+E(dlong(j.day))+'</td><td>'+E(j.partner||'')+'</td><td>'+E(j.po||'')+'</td><td>'+E(BST[j.status]||j.status)+'</td><td class="n">'+money(j.price)+'</td><td class="n">'+money(j.fee)+'</td><td class="n">'+money(j.total)+'</td></tr>'}).join('')+'</table>'
+ +'<h2 style="font:700 15px Sora,Inter">Balance movements</h2><table class="st"><tr><th>When</th><th>What</th><th>Job</th><th class="n">Available</th><th class="n">Set aside</th></tr>'+s.ledger.map(function(l){return '<tr><td>'+E(dtime(l.at))+'</td><td>'+E(K[l.kind]||l.kind)+(l.note?'<br><small>'+E(l.note)+'</small>':'')+'</td><td>'+E(l.job||'')+(l.po?' (PO '+E(l.po)+')':'')+'</td><td class="n">'+money(l.available)+'</td><td class="n">'+money(l.held)+'</td></tr>'}).join('')+'</table>'
+ +'<p style="font-size:11px;margin-top:14px">Prices include VAT where it applies. MOT test fees are outside the scope of VAT. Partners give any warranty on their own work. '+(s.chain_ok?'Money record checked: complete and unchanged.':'<b>Warning: the money record check failed. Contact us.</b>')+'</p>';
+ setTimeout(function(){window.print()},50)},function(e){toast(why(e),true)})}
+
+/* ---------- staff ---------- */
+function staffStart(){var app=$('app');$('subtitle').textContent='Staff: business accounts';if(!S.user){app.innerHTML='<div class="card"><p>Log in on the <a href="index.html#staff">Staff page</a> first, then come back here.</p></div>';return}
+ call('staff_biz_accounts').then(function(d){S.staff=d;staffDraw()},function(e){app.innerHTML='<div class="card"><p class="err">'+E(why(e))+'</p><a class="btn ghost" href="index.html#staff">Open the Staff page</a></div>'})}
+function staffDraw(){var d=S.staff,A=d.accounts||[],T=d.topups||[],own=d.owner;var f=S.sf||'pending';
+ var h='<div class="card"><h2>Business accounts</h2><p class="note">Check each new business before it can book: the company number on Companies House, the address and that the person applying works there. '+(own?'As an owner you approve businesses, credit bank transfers and make adjustments.':'You can look. An owner approves businesses and credits bank transfers.')+'</p><div class="row"><a class="btn sm ghost" href="index.html#staff">Back to the Staff page</a>'+(own?'<button class="btn sm ghost" type="button" data-act="schk">Check every money record</button>':'')+'</div><p id="schk-out" class="note"></p></div>';
+ h+='<div class="card"><h2>Bank transfers to match ('+T.length+')</h2><p class="note">Match the reference on our bank statement, then enter the amount that actually arrived.</p>'+(T.length?'<div class="list">'+T.map(function(t){return '<div class="it"><div><b>'+E(t.ref)+' · '+money(t.amount)+'</b><small>'+E(t.account)+' ('+E(t.account_ref)+') · asked '+E(dtime(t.created_at))+'</small></div>'+(own?'<div class="acts"><input type="number" step="0.01" min="0.01" id="cr-'+E(t.id)+'" value="'+E(t.amount)+'" style="width:120px" aria-label="Amount received"><button class="btn sm" type="button" data-act="scredit" data-id="'+E(t.id)+'">Money arrived</button></div>':'')+'</div>'}).join('')+'</div>':'<p class="note">Nothing waiting.</p>')+'</div>';
+ var L=A.filter(function(a){return f==='all'||a.status===f});
+ h+='<div class="card"><div class="tabs" role="group">'+[['pending','To check'],['approved','Open'],['suspended','On hold'],['declined','Declined'],['all','All']].map(function(x){return '<button type="button" data-sf="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+' ('+A.filter(function(a){return x[0]==='all'||a.status===x[0]}).length+')</button>'}).join('')+'</div>'
+ +(L.length?'<div class="list">'+L.map(function(a){return '<div class="it"><div><b>'+E(a.name)+' · '+E(a.ref)+'</b><small>'+E(String(a.kind).replace('_',' '))+(a.company_no?' · <a href="https://find-and-update.company-information.service.gov.uk/company/'+encodeURIComponent(a.company_no)+'" target="_blank" rel="noopener noreferrer">Companies House '+E(a.company_no)+'</a>':'')+(a.vat_no?' · VAT '+E(a.vat_no):'')+'</small><small>'+E([a.address,a.postcode].filter(Boolean).join(', '))+' · '+E(a.phone||'')+' · applied by '+E(a.applied_by)+' · '+E(dtime(a.created_at))+'</small><small>Balance '+money(a.available)+' · set aside '+money(a.held)+' · '+a.members+' people · '+a.vehicles+' vehicles · '+a.jobs+' bookings'+(a.frozen?' · <span class="pill r">paused</span>':'')+(a.review_note?' · note: '+E(a.review_note):'')+'</small></div><div class="acts">'
+  +(own&&a.status==='pending'?'<button class="btn sm" type="button" data-act="srev" data-a="approve" data-id="'+E(a.id)+'">Approve</button><button class="btn sm ghost" type="button" data-act="srev" data-a="decline" data-id="'+E(a.id)+'">Decline</button>':'')
+  +(own&&a.status==='approved'?'<button class="btn sm ghost" type="button" data-act="srev" data-a="suspend" data-id="'+E(a.id)+'">Put on hold</button>':'')
+  +(own&&a.status==='suspended'?'<button class="btn sm" type="button" data-act="srev" data-a="reinstate" data-id="'+E(a.id)+'">Reopen</button>':'')
+  +(own&&a.status!=='closed'?'<button class="btn sm ghost" type="button" data-act="sadj" data-id="'+E(a.id)+'">Adjust balance</button>':'')
+  +(own&&(a.status==='suspended'||a.status==='declined')&&Number(a.available)===0&&Number(a.held)===0?'<button class="btn sm ghost" type="button" data-act="srev" data-a="close" data-id="'+E(a.id)+'">Close</button>':'')
+  +'</div></div>'}).join('')+'</div>':'<p class="note">None.</p>')+'</div>';
+ var s=d.settings||{},bk=s.bank||{};
+ h+='<div class="card"><h2>Settings</h2><p class="note">Booking fee per valet or alloy job '+money(s.fee)+' · top ups '+money(s.min_topup)+' to '+money(s.max_topup)+' · pause after '+E(s.max_per_hour)+' bookings by one person in an hour or '+E(s.max_per_day)+' by one account in a day.<br>Bank details shown to businesses: '+(bk.sort_code&&bk.account_no?E(bk.name)+', '+E(bk.sort_code)+', '+E(bk.account_no):'<b>not set yet</b> (add them in Supabase: app_settings, key "business", once the business bank account is open)')+'.</p></div>';
+ $('app').innerHTML=h}
+
+/* ---------- events ---------- */
+document.addEventListener('submit',function(e){var f=e.target;e.preventDefault();
+ if(f.id==='f-in'){var er=$('in-err');er.textContent='';sb.auth.signInWithPassword({email:$('in-em').value.trim(),password:$('in-pw').value}).then(function(r){if(r.error)er.textContent=/confirm/i.test(r.error.message)?'Confirm your email address first: check your inbox.':'That email and password do not match.'})}
+ if(f.id==='f-up'){var eu=$('up-err');eu.textContent='';if(!$('up-terms').checked){eu.textContent='Please agree to the terms.';return}var pw=$('up-pw').value;if(pw.length<10){eu.textContent='Use at least 10 characters for the password.';return}
+  sb.auth.signUp({email:$('up-em').value.trim(),password:pw,options:{emailRedirectTo:location.origin+'/business.html'+(JOIN?'#join':''),data:{name:$('up-nm').value.trim(),phone:$('up-ph').value.trim()}}}).then(function(r){if(r.error){eu.textContent=/registered|exists/i.test(r.error.message)?'That email already has a login. Log in instead.':/password/i.test(r.error.message)?r.error.message:'The login could not be created. Try again.';return}
+   f.innerHTML='<p class="ok">Nearly there. We have sent you an email: tap the link in it to confirm your address, then log in here.</p>'})}
+ if(f.id==='f-apply'){var ea=$('ap-err');ea.textContent='';var k=$('ap-kind').value;
+  call('biz_apply',{p:{name:$('ap-nm').value.trim(),kind:k,company_no:k==='company'?$('ap-cno').value:'',vat_no:$('ap-vat').value,billing_email:$('ap-bill').value,phone:$('ap-ph').value,address:$('ap-ad').value,postcode:$('ap-pc').value,fleet_size:$('ap-fleet').value}}).then(function(r){S.acct=r.id;toast('Application sent. We will email you when it is checked.');start()},function(x){ea.textContent=why(x)})}
+ if(f.id==='f-veh'){var ev=$('v-err');ev.textContent='';call('biz_vehicle_save',{p_account:S.acct,p:{id:$('v-id').value||null,reg:$('v-reg').value,nickname:$('v-nick').value,make:$('v-make').value,model:$('v-model').value,colour:$('v-col').value,size:+$('v-size').value,mot_class:$('v-cls').value,mot_due:$('v-mot').value,tax_due:$('v-tax').value,driver:$('v-drv').value}}).then(function(){S.vedit=null;toast('Saved.');load(true)},function(x){ev.textContent=why(x)})}
+ if(f.id==='f-inv'){var ei=$('i-err');ei.textContent='';call('biz_invite',{p_account:S.acct,p_email:$('i-em').value,p_role:$('i-role').value,p_limit:$('i-lim').value?+$('i-lim').value:null,p_name:$('i-nm').value}).then(function(){toast('Invitation sent.');load(true)},function(x){ei.textContent=why(x)})}
+ if(f.id==='f-set'){var es=$('s-err');es.textContent='';var sv=[].filter.call(document.querySelectorAll('[data-svc]'),function(i){return i.checked}).map(function(i){return i.getAttribute('data-svc')});
+  var p={approval_over:$('s-appr').value,monthly_cap:$('s-cap').value,low_balance:$('s-low').value,fleet_only:$('s-fleet').checked,services:sv,phone:$('s-ph').value,vat_no:$('s-vat').value,address:$('s-ad').value,postcode:$('s-pc').value};if(me()==='owner')p.billing_email=$('s-bill').value;
+  call('biz_settings_save',{p_account:S.acct,p:p}).then(function(){toast('Settings saved.');load(true)},function(x){es.textContent=why(x)})}
+ if(f.id==='f-top'){var et=$('t-err');et.textContent='';var amt=+$('t-amt').value;call('biz_topup_request',{p_account:S.acct,p_amount:Math.round(amt*100)/100}).then(function(r){S.st.bank=r.bank||S.st.bank;load(true);setTimeout(function(){var o=$('t-out');if(o)o.innerHTML=bankHtml(r.ref,r.amount)},400)},function(x){et.textContent=why(x)})}
+});
+document.addEventListener('change',function(e){var t=e.target;
+ if(t.id==='acct-sw'){S.acct=t.value;S.tab='overview';S.book=null;load()}
+ if(t.id==='ap-kind'){$('ap-cno-w').hidden=t.value!=='company'}
+ if(t.id==='i-role'){$('i-help').textContent=ROLEHELP[t.value]||''}
+ if(t.id==='b-where'){bookRead();S.book.where=t.value;draw()}
+ if(t.getAttribute&&t.getAttribute('data-role')){var id=t.getAttribute('data-role');call('biz_member_set',{p_account:S.acct,p_member:id,p:{role:t.value}}).then(function(){toast('Role changed.');load(true)},function(x){toast(why(x),true);load(true)})}
+});
+document.addEventListener('keydown',function(e){if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('.ptn')){e.preventDefault();e.target.click()}});
+document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('button,[data-ptn],[data-mot]');if(!t)return;var a=t.getAttribute('data-act'),id=t.getAttribute('data-id');
+ if(t.hasAttribute('data-tab')){S.tab=t.getAttribute('data-tab');if(S.tab!=='book')S.book=null;draw();window.scrollTo(0,0);return}
+ if(t.hasAttribute('data-jf')){S.jf=t.getAttribute('data-jf');draw();return}
+ if(t.hasAttribute('data-sf')){S.sf=t.getAttribute('data-sf');staffDraw();return}
+ if(t.hasAttribute('data-kind')){bookRead();S.book.kind=t.getAttribute('data-kind');S.book.partner=null;S.book.sel={};draw();return}
+ if(t.hasAttribute('data-pay')){S.book.pay=t.getAttribute('data-pay');$('b-confirm').innerHTML=confirmHtml();return}
+ if(t.hasAttribute('data-ptn')){if(t.style.opacity)return;[].forEach.call(document.querySelectorAll('[data-ptn]'),function(x){x.setAttribute('aria-pressed',x===t)});S.book.partner=t.getAttribute('data-ptn');cardStatus().then(function(){$('b-confirm').innerHTML=confirmHtml()});return}
+ if(t.hasAttribute('data-mot')&&!e.target.closest('[data-mslot]')){[].forEach.call(document.querySelectorAll('[data-mot]'),function(x){x.setAttribute('aria-pressed',x===t)});S.book.partner=t.getAttribute('data-mot');S.book.mstart=null;$('b-confirm').innerHTML='';motSlots(S.book.partner);return}
+ if(t.hasAttribute('data-mslot')){[].forEach.call(document.querySelectorAll('[data-mslot]'),function(x){x.setAttribute('aria-pressed',x===t)});S.book.partner=t.getAttribute('data-mp');S.book.mstart=+t.getAttribute('data-mslot');cardStatus().then(function(){$('b-confirm').innerHTML=confirmHtml()});return}
+ if(t.hasAttribute('data-rp')){[].forEach.call(document.querySelectorAll('[data-rp]'),function(x){x.setAttribute('aria-pressed',x===t)});return}
+ if(!a)return;
+ if(a==='signout'){sb.auth.signOut();return}
+ if(a==='reload'){start();return}
+ if(a==='bfind'){bfind();return}
+ if(a==='bgo'){bgo(t);return}
+ if(a==='book-mot'){S.tab='book';S.book={kind:'MOT',where:'shop',sel:{}};draw();return}
+ if(a==='freeze'){var rs=prompt('Pause all new bookings? Bookings already made still go ahead. Reason (optional):','');if(rs===null)return;call('biz_freeze',{p_account:S.acct,p_on:true,p_reason:rs}).then(function(){toast('Bookings paused. The owners have been emailed.');load(true)},function(x){toast(why(x),true)});return}
+ if(a==='unfreeze'){if(!confirm('Restart bookings on this account?'))return;call('biz_freeze',{p_account:S.acct,p_on:false}).then(function(){toast('Bookings restarted.');load(true)},function(x){toast(why(x),true)});return}
+ if(a==='approve'||a==='decline'){var reason=null;if(a==='decline'){reason=prompt('Why is it not approved? (the booker sees this)','');if(reason===null)return}
+  t.disabled=true;call('biz_decide',{p_account:S.acct,p_job:id,p_ok:a==='approve',p_reason:reason}).then(function(r){if(r.status==='awaiting_card')return payJob(id);toast(r.status==='booked'?'Approved and booked.':r.status==='declined'?'Declined. The money is back in the balance.':'It could not be booked: '+why(r.why)+' The money is back in the balance.',r.status==='failed')}).then(function(){load(true)},function(x){toast(why(x),true);load(true)});return}
+ if(a==='payjob'){t.disabled=true;payJob(id).then(function(){load(true)});return}
+ if(a==='cancel'){var cr=prompt('Cancel this booking? Reason (optional, the partner sees it):','');if(cr===null)return;t.disabled=true;call('biz_cancel',{p_account:S.acct,p_job:id,p_reason:cr}).then(function(){toast('Cancelled. Any money is back in your balance (card payments are refunded).');load(true)},function(x){toast(why(x),true);t.disabled=false});return}
+ if(a==='vedit'){S.vedit=id;draw();var r=$('v-reg');if(r)r.scrollIntoView({behavior:'smooth',block:'center'});return}
+ if(a==='vcancel'){S.vedit=null;draw();return}
+ if(a==='vdel'){if(!confirm('Remove this vehicle from the fleet list? Its past bookings are kept.'))return;call('biz_vehicle_remove',{p_account:S.acct,p_vehicle:id}).then(function(){toast('Removed.');load(true)},function(x){toast(why(x),true)});return}
+ if(a==='vbulk'){var regs=$('v-bulk').value.split(/[\n,;]+/).map(function(x){return x.replace(/[^A-Za-z0-9]/g,'').toUpperCase()}).filter(function(x){return /^[A-Z0-9]{2,8}$/.test(x)});regs=regs.filter(function(x,i){return regs.indexOf(x)===i}).slice(0,200);if(!regs.length){$('v-bulk-msg').textContent='No registrations found.';return}
+  t.disabled=true;var okn=0,bad=[];regs.reduce(function(p,rg){return p.then(function(){return call('biz_vehicle_save',{p_account:S.acct,p:{reg:rg,size:3}}).then(function(){okn++},function(x){bad.push(rg+' ('+why(x)+')')})})},Promise.resolve()).then(function(){toast(okn+' added.'+(bad.length?' Not added: '+bad.join(', '):''),!!bad.length);load(true)});return}
+ if(a==='mlimit'){var v=prompt('Monthly spending limit for this person in £ (leave empty for no limit):','');if(v===null)return;if(v!==''&&!(+v>=1)){toast('Enter an amount of at least £1, or leave it empty.',true);return}call('biz_member_set',{p_account:S.acct,p_member:id,p:{limit:v}}).then(function(){toast('Limit saved.');load(true)},function(x){toast(why(x),true)});return}
+ if(a==='mremove'){if(!confirm('Remove this person from the business account?'))return;call('biz_member_set',{p_account:S.acct,p_member:id,p:{remove:true}}).then(function(){toast('Removed.');load(true)},function(x){toast(why(x),true)});return}
+ if(a==='leave'){if(!confirm('Leave this business account? You will need a new invitation to come back.'))return;call('biz_member_set',{p_account:S.acct,p_member:id,p:{remove:true}}).then(function(){toast('You have left the account.');S.acct=null;start()},function(x){toast(why(x),true)});return}
+ if(a==='tshow'){$('t-out').innerHTML=bankHtml(t.getAttribute('data-ref'),t.getAttribute('data-amt'));$('t-out').scrollIntoView({behavior:'smooth',block:'center'});return}
+ if(a==='tcancel'){if(!confirm('Cancel this top up? Do not cancel if you have already sent the money.'))return;call('biz_topup_cancel',{p_account:S.acct,p_topup:id}).then(function(){toast('Cancelled.');load(true)},function(x){toast(why(x),true)});return}
+ if(a==='card-add'||a==='ctop'){var body={action:a==='card-add'?'card_setup':'topup_card',account:S.acct};if(a==='ctop'){body.amount=+$('c-amt').value}t.disabled=true;
+  sb.functions.invoke('business-pay',{body:body}).then(function(r){var d=r.data||{};if(d.url&&/^https:\/\/checkout\.stripe\.com\//.test(d.url)){location.href=d.url;return}t.disabled=false;var m=why(d.error||'x');if(a==='ctop')$('c-err').textContent=m;else toast(m,true)});return}
+ if(a==='card-del'){if(!confirm('Remove the company card? Card bookings stop until a new card is added.'))return;sb.functions.invoke('business-pay',{body:{action:'card_remove',account:S.acct}}).then(function(r){if(r.data&&r.data.ok){toast('Card removed.');load(true)}else toast(why((r.data||{}).error),true)});return}
+ if(a==='stmt'){stmt(false);return}
+ if(a==='csv'){stmt(true);return}
+ if(a==='rfind'){var R=S.rep={vehicles:[].filter.call(document.querySelectorAll('[data-rv]'),function(i){return i.checked}).map(function(i){return i.getAttribute('data-rv')}),place:$('r-where').value,post:$('r-pc').value,address:$('r-ad').value.trim(),every:+$('r-every').value,first:$('r-first').value,slot:$('r-slot').value,po:$('r-po').value.trim()};var re=$('r-err');re.textContent='';
+  if(!R.vehicles.length){re.textContent='Choose at least one vehicle.';return}
+  geo(R.post).then(function(g){R.post=g.postcode;return call('biz_options',{p_account:S.acct,p_kind:'Valet',p_lat:g.latitude,p_lng:g.longitude})}).then(function(P){
+   var ok=(P||[]).filter(function(p){var vs=String(p.sub||'').toLowerCase();return (R.place==='mobile'?(!vs||/mobile/.test(vs))&&p.miles<=p.radius:/premises|centre/.test(vs))&&worksOn(p,R.first,R.slot)});
+   $('r-list').innerHTML=ok.length?'<h3>Choose the valeter</h3>'+ok.map(function(p){return '<div class="ptn" role="button" tabindex="0" aria-pressed="false" data-rp="'+E(p.id)+'"><b>'+E(p.name)+'</b><small>'+E(p.town||'')+' · '+E(p.miles)+' miles · from '+money(Math.min.apply(null,(p.rates&&p.rates.p||[0]).map(Number)))+' a vehicle plus '+money(S.st.settings.fee)+' booking fee</small></div>'}).join('')+'<button class="btn" type="button" data-act="rsave" style="margin-top:8px">Set up repeat valet</button>':'<p class="note">No valeter covers that postcode on that day and time. Try another day or time.</p>'},function(x){re.textContent=why(x)});return}
+ if(a==='rsave'){var sel=document.querySelector('[data-rp][aria-pressed="true"]');if(!sel){$('r-err').textContent='Choose the valeter.';return}var R2=S.rep;
+  call('biz_schedule_save',{p_account:S.acct,p:{partner:sel.getAttribute('data-rp'),vehicles:R2.vehicles,every_weeks:R2.every,slot:R2.slot,place:R2.place,address:R2.address,post:R2.post,next_day:R2.first,po:R2.po}}).then(function(){toast('Repeat valet set up. Each visit is booked 7 days before.');load(true)},function(x){$('r-err').textContent=why(x)});return}
+ if(a==='rstop'){if(!confirm('Stop this repeat valet? Visits already booked still go ahead (cancel them in Bookings if you need to).'))return;call('biz_schedule_stop',{p_account:S.acct,p_schedule:id}).then(function(){toast('Stopped.');load(true)},function(x){toast(why(x),true)});return}
+ if(a==='srev'){var act=t.getAttribute('data-a'),note=null;if(act!=='approve'&&act!=='reinstate'){note=prompt('Reason (the business is emailed this):','');if(note===null)return}else if(!confirm(act==='approve'?'Approve this business? Check Companies House first.':'Reopen this account?'))return;
+  call('staff_biz_review',{p_account:id,p_action:act,p_note:note}).then(function(){toast('Done. The business has been emailed.');staffStart()},function(x){toast(why(x),true)});return}
+ if(a==='scredit'){var v2=+$('cr-'+id).value;if(!(v2>0))return;if(!confirm('Add '+money(v2)+' to this business\'s balance? Only do this once the money is in our bank account.'))return;call('staff_biz_credit',{p_topup:id,p_received:v2,p_note:null}).then(function(){toast('Credited. The business has been emailed.');staffStart()},function(x){toast(why(x),true)});return}
+ if(a==='sadj'){var amt2=prompt('Amount in £. Positive adds to the balance; negative takes off (for example money paid back to their bank):','');if(amt2===null||!(+amt2))return;var n2=prompt('Reason (at least 10 characters; the business sees it):','');if(n2===null)return;call('staff_biz_adjust',{p_account:id,p_amount:+amt2,p_note:n2}).then(function(){toast('Adjusted.');staffStart()},function(x){toast(why(x),true)});return}
+ if(a==='schk'){call('staff_biz_check').then(function(r){var bad=(r||[]).filter(function(x){return !x.ok});$('schk-out').innerHTML=bad.length?'<span class="err">Problem found in: '+E(bad.map(function(x){return x.ref+' '+x.name}).join(', '))+'. Do not change anything; tell Claude.</span>':'<span class="ok">All '+(r||[]).length+' money records are complete and unchanged.</span>'},function(x){toast(why(x),true)});return}
+});
+window.addEventListener('hashchange',function(){if(location.hash==='#staff'||location.hash===''){start()}});
+hashMsg();
+
+})();
+</script>
+</body>
+</html>
