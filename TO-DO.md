@@ -7,13 +7,20 @@ This is the running list of work still to do before launch. When the owner asks
 THE MOTORING CENTRAL LTD, company number 17606100, private company limited by shares, incorporated 27 Nov 2026
 (certificate emailed by Companies House to the vimen@ mailbox). Companies House email reminders are on, and the
 registered email address is set. HMRC writes separately about Corporation Tax (the UTR comes by post). The
-authentication code for WebFiling is posted to the registered office. Next for the site: the owner enters the name,
-number and registered office in Staff page > Team and settings > Company details (the registered office is not in the
-emails; it is on the Companies House record). Business bank account: not opened yet (27 Nov); Stripe follows it.
-The registered office is the accountant's address for now and may change, so the owner asked to leave the company
-details off the site until it is settled (do it before launch). Deadlines: Corporation Tax registration within 3 months
+authentication code for WebFiling is posted to the registered office. Business bank account: not opened yet
+(27 Nov); Stripe follows it. The registered office is the accountant's address for now and may change, so the owner
+asked to leave the company details off the site until it is settled. Before launch, the owner enters the name, number
+and registered office in Staff page > Team and settings > Company details, and they show everywhere on the site, on
+self-billing invoices and in emails. The combined Companies House and HMRC service was used, so Corporation Tax
+registration may already be under way: check HMRC's letter (with the UTR) before registering again. Deadlines: Corporation Tax registration within 3 months
 of starting to trade; ICO fee before taking customer details; no VAT can be charged until there is a VAT number; first
 confirmation statement within 12 months; first accounts about 21 months after incorporation.
+
+## FUTURE PROJECTS (saved 27 Nov 2026, not built)
+- Remote diagnostics subscription: a plug-in OBD device posted to customers that watches for faults and alerts them
+  (and can turn a fault into a quote). Supplier in China, once the business is earning.
+- Growth ideas: turning MOT advisories into quotes; a page for each town and service (for Google); partner QR stickers
+  for their vans and premises; refer a friend. Already built: free MOT and tax reminders, business accounts.
 
 ## BUSINESS ACCOUNTS (built 27 Nov 2026, tested on the database; card payments wait for Stripe)
 Owner's decision: business accounts pay with a PREPAID BALANCE or a CARD ON FILE. No credit line for now (later, once
