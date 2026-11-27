@@ -30,8 +30,15 @@ function buttonText(link: string) {
   if (/#(cars|vans)/.test(link)) return "See it on the site";
   return "Open The Motoring Central";
 }
+// The company's legal details (app_settings "company", filled in by the owner on the Staff page), printed at the foot
+// of every email once they are there. Read once per run.
+type Co = { name?: string; number?: string; office?: string; vat?: string };
+function coLine(c: Co) {
+  if (!c || !c.name || !c.number) return "";
+  return `${c.name} is a company registered in England and Wales, number ${c.number}.` + (c.office ? ` Registered office: ${c.office}.` : "") + (c.vat ? ` VAT number ${c.vat}.` : "");
+}
 // Branded email: navy header with the wordmark, white card, yellow button, plain footer.
-function html(subject: string, body: string, link: string | null) {
+function html(subject: string, body: string, link: string | null, co = "") {
   let site = ORIGINS[0];
   try { if (link) site = new URL(link).origin; } catch { /* keep the default */ }
   const btn = link && /^https:\/\//.test(link)
@@ -51,22 +58,22 @@ function html(subject: string, body: string, link: string | null) {
 ${btn}
 <tr><td style="background:#F7FAFD;border-top:1px solid #E3ECF5;padding:14px 24px;font-size:12px;line-height:1.5;color:#5A6B82">
 You are getting this email because of your account, booking or request with The Motoring Central. Questions? Just reply to this email.<br>
-<a href="${esc(site)}" style="color:#0B1C35">${esc(site.replace(/^https:\/\//, ""))}</a></td></tr>
+<a href="${esc(site)}" style="color:#0B1C35">${esc(site.replace(/^https:\/\//, ""))}</a>${co ? `<br><span style="font-size:11px;color:#7A8BA2">${esc(co)}</span>` : ""}</td></tr>
 </table></td></tr></table></body></html>`;
 }
 
 class Limited extends Error {}
-async function sendEmail(n: { to_addr: string; subject: string | null; body: string; link: string | null; id: number }) {
+async function sendEmail(n: { to_addr: string; subject: string | null; body: string; link: string | null; id: number }, co = "") {
   const key = Deno.env.get("RESEND_API_KEY");
   if (!key) return "not_set_up";
   const from = Deno.env.get("NOTIFY_FROM") || "The Motoring Central <bookings@motoringcentral.co.uk>";
   const replyTo = Deno.env.get("NOTIFY_REPLY_TO") || "support@motoringcentral.co.uk";
   const subject = n.subject || "The Motoring Central";
-  const text = n.body + (n.link ? `\n\n${n.link}` : "");
+  const text = n.body + (n.link ? `\n\n${n.link}` : "") + (co ? `\n\n--\n${co}` : "");
   const r = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json", "Idempotency-Key": `tmc-notification-${n.id}` },
-    body: JSON.stringify({ from, to: [n.to_addr], reply_to: replyTo, subject, text, html: html(subject, n.body, n.link) }),
+    body: JSON.stringify({ from, to: [n.to_addr], reply_to: replyTo, subject, text, html: html(subject, n.body, n.link, co) }),
   });
   if (r.status === 429) throw new Limited("email rate limit");
   if (!r.ok) throw new Error("email " + r.status + " " + (await r.text()).slice(0, 200));
@@ -122,6 +129,11 @@ Deno.serve(async (req) => {
   }
 
   const { data: list } = await q;
+  let co = "";
+  if ((list || []).some((n) => n.channel === "email")) {
+    const { data: cs } = await admin.from("app_settings").select("value").eq("key", "company").maybeSingle();
+    co = coLine((cs?.value || {}) as Co);
+  }
   let sent = 0, waiting = 0, failed = 0, limited = false;
   for (const n of list || []) {
     if (Date.now() - new Date(n.created_at).getTime() > MAX_AGE_MS) {
@@ -130,7 +142,7 @@ Deno.serve(async (req) => {
     }
     if (limited && n.channel === "email") { waiting++; continue; }
     try {
-      const r = n.channel === "email" ? await sendEmail(n) : await sendSms(n.to_addr, n.body);
+      const r = n.channel === "email" ? await sendEmail(n, co) : await sendSms(n.to_addr, n.body);
       if (r === "sent") {
         sent++; await admin.from("notifications").update({ status: "sent", sent_at: new Date().toISOString(), error: null }).eq("id", n.id);
         await new Promise((res) => setTimeout(res, 550)); // Resend allows 2 emails a second
