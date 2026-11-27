@@ -13,6 +13,23 @@ Then, in order: business bank account; Stripe in the company name; ICO registrat
 solicitor and accountant; HMRC (Corporation Tax; VAT decision from the accountant); Vehicle Data Global contract;
 Supabase Pro; point motoringcentral.co.uk at the site at launch.
 
+## RAC BREAKDOWN COVER (affiliate, set up 27 Nov 2026)
+- The owner has an Awin publisher account ("content creator"): main site motoringcentral.co.uk, sectors Automotive and
+  Insurance, promotion types Content, Content Creators & Influencers (main) and Editorial Content. No email promotion
+  (the RAC bans emailing its offers without written consent). Still for the owner: VAT status (not registered), the
+  registered office as the address, and the company bank details once the account is open.
+- RAC only: the owner works for the RAC and will not promote the AA. Conflict of interest approved by the manager.
+- Rates (Awin, 27 Nov): UK cover £5 to £20 a new policy by price; European cover 10%; 30-day cookie; new customers
+  only, nothing on renewals or 14-day cancellations; paid about 88 days after the sale. Rules: no bidding on RAC
+  brand terms; do not change RAC-supplied content; no emailing links without consent.
+- The breakdown cover page is rebuilt for this: plain links to the RAC (UK and European), "We don't give advice",
+  the commission notice, no picker, no table, no prices in our words, none of our phone numbers, no recovery promo.
+  FAQ, privacy policy and cookie notice explain the Awin links. Hidden on the live site until the tracking links are set.
+- Join the RAC programmes on Awin once motoringcentral.co.uk shows the site and the bank details are in. When the RAC
+  approves: the owner makes the tracking links in Awin (Link builder: https://www.rac.co.uk/breakdown-cover and
+  https://www.rac.co.uk/breakdown-cover/european-breakdown-cover) and, if wanted, picks an RAC banner; Claude puts them
+  in window.MC_RAC at the top of index.html, and the page appears on the live site by itself.
+
 ## LAUNCH DAY IS READY (27 Nov 2026)
 1. Company details in one place. The owner fills them in once: Staff page > Team and settings > Company details
    (name, number, registered office, address for letters if different, ICO number, VAT number). They are saved in the
@@ -943,7 +960,8 @@ Owner (business and legal):
   which still say finance is agreed between the buyer and the dealer.
 - Register The Motoring Central Ltd at Companies House (until then, do not say "Ltd" on the site)
 - Pay the ICO data protection fee
-- RAC conflict of interest form approved in writing, and an agreement with the RAC before selling their breakdown cover
+- DONE 27 Nov: RAC conflict of interest approved by the owner's manager (keep the written approval). The owner promotes
+  the RAC only, never the AA. Next: the RAC's approval on Awin (see RAC BREAKDOWN COVER at the top)
 - Sign up 3 to 5 real local partners for launch day
 - Business email; business bank account and Stripe (needs the company); solicitor to check terms and privacy; business insurance
 
