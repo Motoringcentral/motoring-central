@@ -31,9 +31,12 @@ Follow-ups from the testing:
 - Google Admin > Apps > Gmail > Authenticate email: check it says "Authenticating email with DKIM". If not, press
   "Start authentication" again (the DNS record is correct).
 - Decide: history checks free during a dealer's free months, or keep £3.50 + VAT each (as the terms say now).
-- Phone 020 8191 4290 (virtual number, diverts to the owner's mobile; ordered 21 Nov, takes about 24 hours to go
-  live) is on the site for calls and WhatsApp. Once it is live: set up WhatsApp Business on it (verify with "Call me")
-  and test the WhatsApp link. Opening hours agreed 21 Nov: Mon to Fri 8am to 6pm, Sat 9am to 1pm.
+- Phone 020 8191 4290 (virtual number, diverts to the owner's mobile) is on the site for calls. Opening hours agreed
+  21 Nov: Mon to Fri 8am to 6pm, Sat 9am to 1pm.
+- DONE 27 Nov: the company mobile 07364 144974 has WhatsApp Business. It is on the site (Contact us, About us,
+  complaints, the "Who you will work with" note for partners) as the mobile and the WhatsApp number
+  (wa.me/447364144974), on the four partner proposals, the eight leaflets, the Facebook set-up notes and the
+  recruitment guide's email signature. The 020 number stays as the main number for calls.
 - At launch: change the Supabase Site URL to https://motoringcentral.co.uk, and forward motoringcentral.com to it.
 Test accounts (real accounts, kept for testing until launch, then remove with their bookings):
 - Owner and staff log-in (Staff page, /#staff): the owner's Gmail address.

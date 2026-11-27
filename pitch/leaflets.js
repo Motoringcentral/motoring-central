@@ -63,7 +63,7 @@ function leaflet(t) {
  <div class="card yel"><h3>${t.fndh || 'Founding partner offer'}</h3><p>${t.fnd}</p></div></div>
  <div class="contact"><div><h2>${t.join || 'Join the network'} in about five minutes</h2><ol><li>Scan the code, or go to <b>motoringcentral.co.uk</b> and choose <b>Join the network</b>.</li><li>Create your account with an email address and a password.</li><li>Tell us about your business and upload your insurance and photo ID.</li><li>We check your documents, and you are ready to go.</li></ol></div>
  <div><div class="qr">${B.qr(url)}</div><div class="scan">Scan to join</div></div></div>
- <div class="ft"><span>The Motoring Central &nbsp;&middot;&nbsp; motoringcentral.co.uk &nbsp;&middot;&nbsp; hello@motoringcentral.co.uk &nbsp;&middot;&nbsp; 020 8191 4290</span><span>You stay an independent business.</span></div></section>`;
+ <div class="ft"><span>motoringcentral.co.uk &nbsp;&middot;&nbsp; hello@motoringcentral.co.uk &nbsp;&middot;&nbsp; <span style="white-space:nowrap">020 8191 4290</span> &nbsp;&middot;&nbsp; <span style="white-space:nowrap">WhatsApp 07364 144974</span></span><span>You stay an independent business.</span></div></section>`;
 }
 function links() {
   return `<section class="page links">${`<div class="hd"><div class="brand"><div class="lg">${B.LOGO}</div><div><b>The Motoring Central</b><small>Buy. Fix. Clean. Rescue.</small></div></div><div class="tag">Sign-up links for conversations</div></div>`}

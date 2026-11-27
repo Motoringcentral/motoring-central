@@ -52,7 +52,7 @@ const p4=`<section class="page t3 t4">${K.head(tag)}
  <div class="two"><div><p class="kick">What you need to join</p><ul class="tick">${o.need.map(x=>'<li>'+x+'</li>').join('')}</ul></div>
  <div class="qa"><p class="kick">Common questions</p>${o.qa.map(q=>'<b>'+q[0]+'</b><p>'+q[1]+'</p>').join('')}</div></div>
  <div class="contact"><div><h2>Join the network</h2><p>Scan the code or go to <b>preview.motoringcentral.co.uk</b> and choose For partners, then ${o.pick}.</p>
- <p>Call <b>020 8191 4290</b> &nbsp;·&nbsp; Monday to Friday 8am to 6pm, Saturday 9am to 1pm</p><p>Email <b>partners@motoringcentral.co.uk</b></p></div><div class="qr">${K.qr(o.url)}</div></div>
+ <p>Call <b>020 8191 4290</b> &nbsp;·&nbsp; WhatsApp <b>07364 144974</b></p><p>Monday to Friday 8am to 6pm, Saturday 9am to 1pm</p><p>Email <b>partners@motoringcentral.co.uk</b></p></div><div class="qr">${K.qr(o.url)}</div></div>
  <div class="sign"><div>Your contact at The Motoring Central</div><div>Date</div></div>
  ${K.foot('Prices and terms are correct at 22 November 2026 and may change. Our fee is plus VAT.',7,T)}</section>`;
 return K.doc('The Motoring Central: for '+o.aud,[p1,p2,p3,pS,pG,pP,p4])};
