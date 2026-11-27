@@ -13,6 +13,22 @@ Then, in order: business bank account; Stripe in the company name; ICO registrat
 solicitor and accountant; HMRC (Corporation Tax; VAT decision from the accountant); Vehicle Data Global contract;
 Supabase Pro; point motoringcentral.co.uk at the site at launch.
 
+## NAVIGATION REVIEW (27 Nov 2026)
+Every page checked as a visitor on the live version (?live=1), on a phone and a computer: all 30 addresses open the
+right page (jobs and breakdown cover go to the home page while hidden; My account and the dashboard ask to log in),
+nothing is wider than a phone screen, no errors, and every link goes where it says. Fixed:
+- The phone's Back button: after choosing a service (the booking form opens further down the home page) or opening a
+  car or van advert, Back now stays on the site (back to where you were, or back to the results) instead of leaving
+  it. window.MCback in index.html.
+- "Choose how you join" on Join the network scrolled nowhere and went to the home page: it now scrolls to the trades.
+- One footer: each page's short footer now keeps only its own note (for example "Earnings figures and timings are
+  examples only"); the copyright, links and company line are once, in the site footer. Complaints added to it, and
+  "Buy and cover" renamed "Cars, vans and more".
+- Wording that promised services not open at launch: How it works (step 2 and 3), "Everything in one place" (home and
+  About us) and the Join the network intro now name the launch services and say mechanics and tyres are coming soon.
+Left as it is (owner's choice): the quick tour video opens by itself once for a first-time visitor, about 2 seconds
+after the cookie choice, on the customer pages.
+
 ## RAC BREAKDOWN COVER (affiliate, set up 27 Nov 2026)
 - The owner has an Awin publisher account ("content creator"): main site motoringcentral.co.uk, sectors Automotive and
   Insurance, promotion types Content, Content Creators & Influencers (main) and Editorial Content. No email promotion
