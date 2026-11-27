@@ -13,6 +13,35 @@ Then, in order: business bank account; Stripe in the company name; ICO registrat
 solicitor and accountant; HMRC (Corporation Tax; VAT decision from the accountant); Vehicle Data Global contract;
 Supabase Pro; point motoringcentral.co.uk at the site at launch.
 
+## LAUNCH DAY IS READY (27 Nov 2026)
+1. Company details in one place. The owner fills them in once: Staff page > Team and settings > Company details
+   (name, number, registered office, address for letters if different, ICO number, VAT number). They are saved in the
+   database (app_settings "company", only an owner can change them, the format is checked) and then show by themselves
+   in every footer, the terms, privacy policy, About us, Contact us, complaints, self-billing invoices and the foot of
+   every email. Tested 27 Nov (pages, invoice wording, a test email; a reviewer is refused). Still to do by hand at
+   launch: add the same company line to the four Supabase log-in email templates (Authentication > Emails).
+2. The launch switch. The main address IS the switch: motoringcentral.co.uk (and www) shows the live site, every
+   other address shows the preview. On the live site the preview banner, sample cars, vans, partners, reviews and
+   vacancies, the made-up "partners near you" count, demo log-ins (refused), draft notes and the "4.8 out of 5"
+   go; Google may list it (vercel.json sends the no-Google header and robots-preview.txt only on other addresses).
+   Staff see the live version on the preview with ?live=1 (?live=0 to go back). Tested 27 Nov page by page and for
+   MOT, valet, recovery, EV charging, bodywork and auto electrician (only real partners listed).
+   Hidden on the live site until ready: the jobs board (it still saves to the old preview store, so adverts and
+   applications go nowhere: needs building on the database, with Stripe for the £9.99 advert) and the RAC breakdown
+   cover page (needs an agreement with the RAC). Card payments: the live site shows "Card payments are not switched
+   on yet" instead of the practice card form until Stripe is connected (window.MC_PAY_ON). STRIPE IS NEEDED BEFORE
+   LAUNCH. The owner's "Launch check" card (Team and settings) shows what is ready.
+   On launch day also: Supabase Site URL and app_settings site_url to https://motoringcentral.co.uk; check
+   https://motoringcentral.co.uk/robots.txt says "Allow" and the page has no X-Robots-Tag header.
+3. Test data clean-up: private.test_cleanup (migration 20261127c), prepared and dry-run, NOT run. It counts first,
+   removes only when told to, refuses to remove an owner, lists the stored files to delete in Supabase > Storage,
+   and restarts reference numbers once tables are empty. The list of test accounts is kept privately by Claude (not
+   in this public repository). Owner to confirm first: the Sky test customer, and "VIMS CARS" on hello@ (dealer)
+   and social@ (recovery, nationwide) are test accounts.
+Also fixed 27 Nov: the About us call-back form now really reaches staff (it went to the old preview store): it asks
+for an email address and is saved and emailed like the contact form. The join forms no longer say uploads are
+"for the preview only" (they are stored), and the dealer listing note no longer says listings vanish.
+
 ## Emails are ON (set up and tested 21 Nov 2026)
 
 How it is set up (do not redo):
