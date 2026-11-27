@@ -364,6 +364,12 @@ DEALER SALES INVOICING (22 Nov 2026), BUILT AND TESTED ON THE LIVE PREVIEW:
   - PDI: works (picks the car from stock, PDF, saved to the account, stock shows "PDI ✓"). Fixed: PDI and inspection PDFs
     were about 3 MB (pictures not compressed; now about 50 times smaller), and the message said "Saved to the booking".
   - Spreadsheet upload: works (real look-ups and history checks, adverts sent for approval, bad rows skipped clearly).
+  - STOCK FEEDS UPDATE OVERNIGHT (27 Nov, migration 20261126l): the feed address is kept in dealer_feeds and checked
+    every night at 2:40am (second pass 3:40am, job "stock-feeds-night"): price, mileage and description changes,
+    vehicles no longer in the feed taken down, email to the dealer about new vehicles to list (listing still happens on
+    the dashboard because it uses a paid history check). A feed that cannot be read, looks empty or would take down
+    more than half the feed's vehicles changes nothing; the dealer is told. Dashboard shows "Checked overnight on ...".
+    Tested on the live preview (price changed, van taken down, new vehicle emailed, web page refused safely).
   - Automatic stock feed: works (price updated, a vehicle left out of the file taken down, feed stopped). Fixed 26 Nov:
     a web page given instead of a CSV now says "That address returns a web page, not a CSV file" (was "over 1 MB").
   - Plans: WERE BROKEN, FIXED. Since the two-step sign-up (22 Nov) the plan picked on the join form was never saved, so
@@ -680,8 +686,16 @@ To switch real history checks on (needs real card payments first, or private sel
     waiting for approval (staff); a "Connected services" panel on the admin To do page (DVLA, Vehicle Data Global,
     DVSA); private sellers' Find fills the MODEL from the MOT record (mode "vehicle", logged in, 20 a day each, counted
     in mot_lookups, migration 20261126i). Tested without the key: all show "waiting for the DVSA key" and nothing breaks.
-    Note: automatic advert approval cannot wait for the MOT check (it happens when the advert is saved), so a clocked
-    car could go live automatically; buyers still see the warning on the advert.
+    AUTOMATIC APPROVAL NOW WAITS FOR THE MOT CHECK (27 Nov, migrations 20261126j and k): with "Approve adverts
+    automatically" on, a clean advert waits (mot_wait) while mot-history checks its MOT record (straight away, then
+    every minute, job "mot-auto-approve"): clean -> live ("Approved automatically after the MOT check"); mileage
+    drop, advert mileage below the last MOT, different make, or no DVSA record -> it stays for staff with the reason in
+    its flags (recalls do not stop it). DVSA down for 30 minutes -> staff; no DVSA key -> approved as before. Waiting
+    emails only when it waits for a person. Sellers can no longer change flags directly. Tested with test adverts
+    (automatic approval switched on for the test and back OFF afterwards; it is OFF now).
+  - MODEL FROM THE MOT RECORD (27 Nov): MOT bookings (the booking page's vehicle step) and My garage (new and already
+    saved vehicles) now get the model from the DVSA record for a logged-in customer. Tested (YD19KXF -> Transit
+    Custom; FV16WDY in My garage -> Ford Fiesta).
 
 Owner to do in the Supabase dashboard:
 - Authentication > URL Configuration: set "Site URL" to https://preview.motoringcentral.co.uk (the live address at launch).
