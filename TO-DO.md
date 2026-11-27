@@ -10,8 +10,9 @@ registered email address is set. HMRC writes separately about Corporation Tax (t
 authentication code for WebFiling is posted to the registered office. Business bank account: not opened yet
 (27 Nov); Stripe follows it. The registered office is the accountant's address, and the accountant agreed it can go on the
 site. 27 Nov: the name (The Motoring Central Ltd) and number (17606100) are on the site (footer, terms, privacy, About
-us, Contact us, complaints, self-billing invoices, email footers). STILL TO ADD: the registered office address (the
-owner sends it, or enters it in Staff page > Team and settings > Company details), then the ICO number. VAT: the
+us, Contact us, complaints, self-billing invoices, email footers). 27 Nov: the registered office (7 Sun Marsh Way, Gravesend, DA12 2FE)
+is on too, and is also used as the address for letters and complaints. STILL TO ADD in Staff page > Team and settings
+> Company details: the ICO number once registered. VAT: the
 company will register for VAT before launch, so the "+ VAT" prices stay as they are; add the VAT number in Company
 details when it arrives. The combined Companies House and HMRC service was used, so Corporation Tax
 registration may already be under way: check HMRC's letter (with the UTR) before registering again. Deadlines: Corporation Tax registration within 3 months
