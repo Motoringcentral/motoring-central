@@ -3011,7 +3011,11 @@ html.mc-demo-on #mc-mine{display:none!important}
     (M&&M.ready?M.ready(r,{basic:window.GGmode==='mot'}):Promise.resolve('off')).then(function(st){if(go)go.disabled=false;
       if(st==='error'){e.textContent='Our vehicle check is not working right now. Please try again in a minute.';f.focus();return}
       if(st==='none'){e.textContent='We could not find that registration. Please check it and try again.';f.focus();return}
-      e.textContent='';lastReg=r;unlock()})}
+      e.textContent='';lastReg=r;unlock();
+      /* the free DVLA look-up has no model; the DVSA MOT record has it (for a logged-in customer) */
+      var L0=M&&M.live?M.live(r):null,D=window.MCdb;
+      if(L0&&L0.make&&!L0.model&&D&&D.motVehicle)D.motVehicle(r).then(function(x){var L1=M.live(r),k=function(s){return String(s||'').toLowerCase().replace(/[^a-z]/g,'').slice(0,4)};
+        if(L1&&!L1.model&&x&&x.model&&k(x.make)===k(L1.make)){L1.model=x.model;if(window.GGrerender)window.GGrerender()}})})}
   window.GGrerender=function(){if(!$('flow').hidden)reselect()};
   $('unlock').addEventListener('click',function(e){var t=e.target.closest('button');if(!t)return;
     if(t.id==='unl-reg')window.GGcustOpen('Register free to see exact prices.','new',afterAuth);
@@ -6597,10 +6601,15 @@ function remSave(v,asked){var g=mine();if(!g||!g.rem||!window.MCrem)return;if(!a
  window.MCrem.save(v,!!v.remOn).then(function(x){if(x==='ok'&&!v.remOn){v.remOn=1;gsave()}})}
 function refreshGarage(){var g=mine(),M=window.MCvrm;if(GR||!g||!g.v.length||!M||!M.ready||!(M.isLive&&M.isLive()))return;var now=Date.now();
  var todo=g.v.filter(function(v){return (!v.at||now-v.at>20*36e5)&&!(TRIED[v.reg]&&now-TRIED[v.reg]<36e5)});
- g.v.forEach(function(v){if(!v.remOn&&todo.indexOf(v)<0)remSave(v)});if(!todo.length)return;GR=1;
+ g.v.forEach(function(v){if(!v.remOn&&todo.indexOf(v)<0)remSave(v)});if(!todo.length){fillModels();return}GR=1;
  todo.reduce(function(p,v){return p.then(function(){var r=v.reg.replace(/\s/g,'');TRIED[v.reg]=Date.now();return M.ready(r,{basic:true}).then(function(st){var d=st==='live'?M.lookup(r):null;if(d){keepFacts(v,d);remSave(v)}})})},Promise.resolve())
-  .then(function(){GR=0;gsave();drawGarage();paintCar()},function(){GR=0})}
+  .then(function(){GR=0;gsave();drawGarage();paintCar();fillModels()},function(){GR=0})}
 if($('acc-body'))new MutationObserver(function(){if(!$('mc-garage'))try{drawGarage()}catch(e){}}).observe($('acc-body'),{childList:true});
+/* the model from the DVSA MOT record, for vehicles the free DVLA look-up gave no model for */
+function fillModels(){var g=mine(),D=window.MCdb;if(!g||!D||!D.motVehicle)return;var k=function(s){return String(s||'').toLowerCase().replace(/[^a-z]/g,'').slice(0,4)};
+ var L=g.v.filter(function(v){return v.make&&!v.model&&!v.mTried});if(!L.length)return;
+ L.reduce(function(p,v){v.mTried=1;return p.then(function(){return D.motVehicle(v.reg).then(function(x){if(x&&x.model&&k(x.make)===k(v.make))v.model=x.model})})},Promise.resolve())
+  .then(function(){gsave();drawGarage();paintCar()},function(){})}
 function addVeh(){var raw0=String(($('g-reg')||{}).value||'').toUpperCase().replace(/[^A-Z0-9]/g,''),M=window.MCvrm;
  if(raw0.length>=5&&M&&M.ready){var ab=$('g-add');if(ab)ab.disabled=true;M.ready(raw0,{basic:true}).then(function(st){if(ab)ab.disabled=false;
   if(st==='error'){gerr='Our vehicle check is not working right now. Please try again in a minute.';drawGarage();var i=$('g-reg');if(i)i.focus();return}addVeh2()});return}
@@ -6609,7 +6618,7 @@ function addVeh2(){var inp=$('g-reg'),raw=String(inp.value||'').toUpperCase().re
  if(!o){gerr='Enter a full UK registration, for example LM19 XYZ.';drawGarage();$('g-reg').focus();return}
  if(g.v.some(function(v){return v.reg.replace(/\s/g,'')===raw})){gerr='That vehicle is already in your garage.';drawGarage();$('g-reg').focus();return}
  if(g.v.length>=6){gerr='You can save up to 6 vehicles.';drawGarage();return}
- var nv={reg:plate(raw),make:o.make||'',model:o.model||'',year:o.year||'',fuel:o.fuel||'',col:o.col||o.colour||'',mot:o.mot};if(o.live)keepFacts(nv,o);g.v.push(nv);gsave();remSave(nv,true);drawGarage();paintCar();var b=document.querySelector('#mc-garage .veh:last-of-type .btn');if(b)b.focus()}
+ var nv={reg:plate(raw),make:o.make||'',model:o.model||'',year:o.year||'',fuel:o.fuel||'',col:o.col||o.colour||'',mot:o.mot};if(o.live)keepFacts(nv,o);g.v.push(nv);gsave();remSave(nv,true);drawGarage();paintCar();fillModels();var b=document.querySelector('#mc-garage .veh:last-of-type .btn');if(b)b.focus()}
 function book(mode,v){window.GGgarageReg=v.reg;if(location.hash!=='#drivers')location.hash='drivers';setTimeout(function(){var t=document.querySelector('.qk[data-svc="'+mode+'"]');if(t)t.click()},250)}
 document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#g-add,[data-gdel],[data-gbook],#near-carbook');if(!t)return;var g=mine();if(!g)return;
  if(t.id==='g-add'){addVeh();return}
