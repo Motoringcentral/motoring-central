@@ -6,15 +6,20 @@
    address (preview.motoringcentral.co.uk, Vercel's own addresses, a computer) is the preview, with the sample data, demo
    log-ins, draft notes and "Preview" banner. So pointing motoringcentral.co.uk at this site is the launch: nothing else
    needs changing. On the live site (html class mc-live): anything marked pv-only, the draft notes, the sample cars, vans,
-   partners, reviews and vacancies, and the demo log-ins are gone; the jobs board and the RAC breakdown cover page are
-   hidden until they are ready; and Google may list the pages. Staff can see the live version on the preview by adding
+   partners, reviews and vacancies, and the demo log-ins are gone; the jobs board is hidden until it is ready, and the
+   RAC breakdown cover page until its Awin tracking link is set below; and Google may list the pages. Staff can see the live version on the preview by adding
    ?live=1 to the address (and ?live=0 to go back). */
 (function(){var h=location.hostname,main=/^(www\.)?motoringcentral\.co\.uk$/.test(h),live=main,k='mc-live';
  try{var q=new URLSearchParams(location.search).get('live');if(q==='1')sessionStorage.setItem(k,'1');else if(q==='0')sessionStorage.removeItem(k);if(sessionStorage.getItem(k)==='1')live=true}catch(e){}
  window.MC_LIVE=live;window.MC_MAIN=main;document.documentElement.classList.add(live?'mc-live':'mc-pv');
  if(!main){var m=document.createElement('meta');m.name='robots';m.content='noindex, nofollow';document.head.appendChild(m)}
+ /* RAC breakdown cover, an Awin affiliate programme. When the RAC approves us, put the Awin tracking links here
+    (uk: UK breakdown cover, eu: European breakdown cover; they start https://www.awin1.com/), and, if wanted, an
+    RAC-supplied banner (banner: its picture address, bannerLink: its tracking link, bannerAlt: its description).
+    Use the RAC's own banners and wording only: the RAC does not allow its content to be changed. */
+ window.MC_RAC={uk:'',eu:'',banner:'',bannerLink:'',bannerAlt:''};
  /* pages that are not ready for the live site */
- window.MC_OFF=live?{jobs:1,breakdown:1}:{};
+ window.MC_OFF=live?{jobs:1}:{};if(live&&!window.MC_RAC.uk){window.MC_OFF.breakdown=1;document.documentElement.classList.add('mc-nobd')}
  function guard(){var x=(location.hash||'').replace(/^#/,'').split(/[?&\/]/)[0];if(window.MC_OFF[x])location.replace('#drivers')}
  guard();window.addEventListener('hashchange',guard,true)})();</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -416,34 +421,19 @@ section.why h2{font-size:clamp(1.7rem,5vw,2.4rem)!important;line-height:1.12!imp
 #v-breakdown main{max-width:860px;margin:-30px auto 0;padding:0 16px 40px;position:relative}
 #v-breakdown .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;line-height:1.5;margin-bottom:14px}
 #v-breakdown h2.sec{margin:26px 0 12px}
-#v-breakdown .bdpick h2{margin:0 0 4px;font-size:1.25rem}
-#v-breakdown fieldset{border:0;padding:0;margin:14px 0 0}
-#v-breakdown legend{font-weight:700;font-size:.92rem;margin-bottom:8px}
-.bdseg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.bdopts{display:grid;gap:8px}
-.bdseg label,.bdopts label{display:flex;gap:10px;align-items:flex-start;border:2px solid var(--line);border-radius:12px;padding:10px 12px;cursor:pointer;background:var(--bg)}
-.bdseg label:has(input:checked),.bdopts label:has(input:checked){border-color:#38BDF8;background:var(--soft)}
-.bdseg input,.bdopts input{width:18px;height:18px;margin-top:2px;accent-color:#0B1C35;flex:none}
-.bdseg span,.bdopts span{display:flex;flex-direction:column;gap:2px}
-.bdseg small,.bdopts small{color:var(--muted);font-size:.85rem}
-.bdres{margin-top:16px;background:#0B1C35;color:#fff;border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:3px}
-.bdres span{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:#FFD43B;font-weight:800}
-.bdres b{font-size:1.1rem}.bdres small{color:#C9D1DC}
-.bdgo{display:grid;grid-template-columns:1fr;gap:10px;margin-top:12px}
+#v-breakdown .bdmain h2{margin:0 0 6px;font-size:1.25rem}
+#v-breakdown .bdmain p{margin:0 0 4px}
+.bdban{margin:14px 0 0;text-align:center}.bdban img{max-width:100%;height:auto;display:inline-block;border-radius:8px}
+.bdgo{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
 .bdq{display:block;text-align:center;font-weight:800;border-radius:10px;padding:13px;text-decoration:none}
-.bdq.aa{background:#FFD43B;color:#0B1C35}.bdq.rac{background:#38BDF8;color:#0B1C35}
+.bdq span{display:block;font-weight:600;font-size:.82rem;margin-top:2px}
+.bdq.rac{background:#38BDF8;color:#0B1C35}.bdq.rac2{background:var(--soft);color:var(--ink);border:2px solid #38BDF8}
 .bdq:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-#v-breakdown .okmsg{background:#DCFCE7;color:#14532d;border-radius:10px;padding:12px;font-weight:600;margin:12px 0 0}
-.bdscroll{overflow-x:auto}
-.bdtbl table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:420px}
-.bdtbl th,.bdtbl td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}
-.bdtbl thead th{font-size:.8rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.bdtbl tbody th{font-weight:600}
 #v-breakdown .note{font-size:.85rem;color:var(--muted);margin:10px 0 0}
 .bdhow p{margin:6px 0 0;color:var(--muted)}
 .bdpromo{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-left:4px solid #FFD43B!important}
 .bdpromo p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
-@media (max-width:600px){.bdseg,.bdgo{grid-template-columns:1fr}}
+@media (max-width:600px){.bdgo{grid-template-columns:1fr}}
 
 .dplans{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:12px}
 .dplan{position:relative;display:flex;flex-direction:column}.dplan .drange{color:var(--muted);font-size:.88rem;margin-top:2px}
@@ -516,7 +506,7 @@ section.why h2{font-size:clamp(1.7rem,5vw,2.4rem)!important;line-height:1.12!imp
 .pg .foot{max-width:760px;margin:0 auto;padding:16px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted);text-align:center}
 .foot-co{display:block;margin-top:6px;font-size:.74rem;line-height:1.45}
 /* the launch switch: preview-only things go on the live site, live-only things show only there */
-html.mc-live .pv-only,html.mc-live .card.draft,html.mc-live .ab-draft,html.mc-live a[href="#jobs"],html.mc-live a[href="#breakdown"],html.mc-live li:has(>a[href="#jobs"]),html.mc-live li:has(>a[href="#breakdown"]),html.mc-live .jobpromo,html.mc-live .bdcover,html.mc-live [data-qa="job"],html.mc-live [data-qa="jobs"]{display:none!important}
+html.mc-live .pv-only,html.mc-live .card.draft,html.mc-live .ab-draft,html.mc-live a[href="#jobs"],html.mc-nobd a[href="#breakdown"],html.mc-live li:has(>a[href="#jobs"]),html.mc-nobd li:has(>a[href="#breakdown"]),html.mc-live .jobpromo,html.mc-nobd .bdcover,html.mc-live [data-qa="job"],html.mc-live [data-qa="jobs"]{display:none!important}
 html:not(.mc-live) .live-only{display:none!important}
 .pg .foot a{font-weight:400}
 @media (max-width:540px){.pg .pg-two,.pg .pg-row{grid-template-columns:1fr}}
@@ -1304,7 +1294,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   <p class="err" id="err" role="alert"></p>
   <p class="freenote">Free check, no sign-up needed. See prices from local partners, then register free for your exact price.</p>
 </div>
-<style>.qk .qkt{display:flex;flex-direction:column;gap:2px;min-width:0}.qk small{font-size:.72rem;line-height:1.2;color:#A9BCD6;font-weight:500}@media (max-width:700px){.qk{height:auto!important;min-height:66px;align-items:center}}@media (min-width:701px){.qk{height:auto!important;min-height:112px}}</style><nav class="qkwrap" aria-label="What do you need?"><h2 class="qkh">What do you need today?</h2><p class="qksub">Type it in your own words: a problem, a service, a car to buy or a question. No sign-up needed to look.</p><div class="qkgrid"><button type="button" class="qk" data-svc="mobile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5 5L3 18l3 3 6.5-6.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg><span class="qkt"><b>Mobile mechanic</b><small>Comes to your home or work</small></span></button><button type="button" class="qk" data-svc="garage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12M7 21v-7h10v7M7 17h10"/></svg><span class="qkt"><b>Garage repair</b><small>Take your car to a local garage</small></span></button><button type="button" class="qk" data-svc="mot"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></svg><span class="qkt"><b>MOT</b><small>The yearly road safety test</small></span></button><button type="button" class="qk" data-svc="tyres"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></svg><span class="qkt"><b>Tyres</b><small>New tyres fitted at your door</small></span></button><button type="button" class="qk" data-svc="autoelec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L5 14h6l-1 8 8-12h-6z"/></svg><span class="qkt"><b>Auto electrician</b><small>Electrical faults and warning lights</small></span></button><button type="button" class="qk" data-svc="autoelec"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></svg><span class="qkt"><b>Locksmith</b><small>Locked out or lost keys</small></span></button><button type="button" class="qk" data-svc="body"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l2-6h14l2 6v3H3z"/><circle cx="7.5" cy="18" r="2"/><circle cx="16.5" cy="18" r="2"/><path d="M14 3l3 3M17 2v2M20 5h-2"/></svg><span class="qkt"><b>Bodywork and alloys</b><small>Dents, scratches and wheels</small></span></button><button type="button" class="qk" data-svc="valet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg><span class="qkt"><b>Valet</b><small>Cleaned inside and out</small></span></button><button type="button" class="qk" data-svc="recovery"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span class="qkt"><b>Recovery</b><small>Tow or move your vehicle</small></span></button><button type="button" class="qk" data-svc="evcharge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0zM12 17v5"/></svg><span class="qkt"><b>EV charging</b><small>Electric car out of charge</small></span></button><a class="qk" href="#cars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15v-3l2-5h14l2 5v3M5 15h14M7 18v-3M17 18v-3"/></svg><span class="qkt"><b>Buy a car</b><small>From local dealers</small></span></a><a class="qk" href="#vans"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 17V7h12v10M14 10h4l4 4v3H2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span class="qkt"><b>Buy a van</b><small>From local dealers</small></span></a><a class="qk" href="#breakdown"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg><span class="qkt"><b>Breakdown cover</b><small>RAC cover, so help is a call away</small></span></a><a class="qk" href="#jobs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16v11H4zM9 8V5h6v3M4 13h16"/></svg><span class="qkt"><b>Find a job</b><small>Work in the motor trade</small></span></a></div></nav>
+<style>.qk .qkt{display:flex;flex-direction:column;gap:2px;min-width:0}.qk small{font-size:.72rem;line-height:1.2;color:#A9BCD6;font-weight:500}@media (max-width:700px){.qk{height:auto!important;min-height:66px;align-items:center}}@media (min-width:701px){.qk{height:auto!important;min-height:112px}}</style><nav class="qkwrap" aria-label="What do you need?"><h2 class="qkh">What do you need today?</h2><p class="qksub">Type it in your own words: a problem, a service, a car to buy or a question. No sign-up needed to look.</p><div class="qkgrid"><button type="button" class="qk" data-svc="mobile"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 6.5a4 4 0 0 0-5 5L3 18l3 3 6.5-6.5a4 4 0 0 0 5-5l-2.5 2.5-2.5-.5-.5-2.5z"/></svg><span class="qkt"><b>Mobile mechanic</b><small>Comes to your home or work</small></span></button><button type="button" class="qk" data-svc="garage"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21V9l9-6 9 6v12M7 21v-7h10v7M7 17h10"/></svg><span class="qkt"><b>Garage repair</b><small>Take your car to a local garage</small></span></button><button type="button" class="qk" data-svc="mot"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4h6v3H9zM9 14l2 2 4-4"/></svg><span class="qkt"><b>MOT</b><small>The yearly road safety test</small></span></button><button type="button" class="qk" data-svc="tyres"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="M12 3v5M12 16v5M3 12h5M16 12h5"/></svg><span class="qkt"><b>Tyres</b><small>New tyres fitted at your door</small></span></button><button type="button" class="qk" data-svc="autoelec"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2L5 14h6l-1 8 8-12h-6z"/></svg><span class="qkt"><b>Auto electrician</b><small>Electrical faults and warning lights</small></span></button><button type="button" class="qk" data-svc="autoelec"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></svg><span class="qkt"><b>Locksmith</b><small>Locked out or lost keys</small></span></button><button type="button" class="qk" data-svc="body"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l2-6h14l2 6v3H3z"/><circle cx="7.5" cy="18" r="2"/><circle cx="16.5" cy="18" r="2"/><path d="M14 3l3 3M17 2v2M20 5h-2"/></svg><span class="qkt"><b>Bodywork and alloys</b><small>Dents, scratches and wheels</small></span></button><button type="button" class="qk" data-svc="valet"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg><span class="qkt"><b>Valet</b><small>Cleaned inside and out</small></span></button><button type="button" class="qk" data-svc="recovery"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 16V8h11v8M13 11h5l3 3v2H2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span class="qkt"><b>Recovery</b><small>Tow or move your vehicle</small></span></button><button type="button" class="qk" data-svc="evcharge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0zM12 17v5"/></svg><span class="qkt"><b>EV charging</b><small>Electric car out of charge</small></span></button><a class="qk" href="#cars"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15v-3l2-5h14l2 5v3M5 15h14M7 18v-3M17 18v-3"/></svg><span class="qkt"><b>Buy a car</b><small>From local dealers</small></span></a><a class="qk" href="#vans"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 17V7h12v10M14 10h4l4 4v3H2"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/></svg><span class="qkt"><b>Buy a van</b><small>From local dealers</small></span></a><a class="qk" href="#breakdown"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/></svg><span class="qkt"><b>Breakdown cover</b><small>Cover direct from the RAC</small></span></a><a class="qk" href="#jobs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16v11H4zM9 8V5h6v3M4 13h16"/></svg><span class="qkt"><b>Find a job</b><small>Work in the motor trade</small></span></a></div></nav>
 
 
 
@@ -1572,7 +1562,7 @@ window.MCLAUNCH={LIVE:['mot','valet','recovery','evcharge','body','autoelec'],LA
 </div>
 
 <div class="card bdpromo" id="mr-promo"><div><b>Free MOT reminders</b><p>We email you a month and a week before your MOT is due.</p></div><button class="btn" type="button" data-mrhome>Set one up</button></div>
-<div class="card bdpromo bdcover"><div><b>Need breakdown cover?</b><p>Find the right RAC cover level for you.</p></div><a class="btn" href="#breakdown">Compare cover</a></div>
+<div class="card bdpromo bdcover"><div><b>Need breakdown cover?</b><p>See the RAC&rsquo;s cover and prices, and buy direct from the RAC.</p></div><a class="btn" href="#breakdown">See RAC cover</a></div>
 <div class="card bdpromo jobpromo"><div><b>Work in the motor trade?</b><p>Mechanics, painters, drivers, sales and office roles from our partners.</p></div><a class="btn" href="#jobs">See vacancies</a></div>
 
 <footer class="foot">© The Motoring Central. <span class="pv-only">Preview with sample data. Prices, reviews and statistics are placeholders. </span><a href="#breakdown" style="color:inherit">Breakdown cover</a> <a href="#network" style="color:inherit">Join the network</a> <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
@@ -2779,8 +2769,8 @@ html.mc-demo-on #mc-mine{display:none!important}
 <details><summary>I have lost my car keys or locked them in the car. Can you help?</summary><div class="tb"><p>Yes. Choose <b>Auto electrician and locksmith</b>. A vehicle locksmith can open the car without damage, cut and program a new key or fob, and wipe lost keys from the car&rsquo;s memory. They will ask for proof that the vehicle is yours.</p></div></details>
 <details><summary>My electric car has run out of charge. What can you do?</summary><div class="tb"><p>Choose <b>Mobile EV charging</b>. A charging van comes to you and gives you enough charge to reach a charger or get home. If the car cannot be charged where it is, choose <b>Recovery</b> instead.</p></div></details>
 <details><summary>Do you repair vans as well as cars?</summary><div class="tb"><p>Yes. Enter the van&rsquo;s registration and we show partners who work on light commercial vehicles.</p></div></details>
-<details><summary>I have broken down. What should I do?</summary><div class="tb"><p>Get yourself and any passengers somewhere safe first. If you are in danger on a motorway or a fast road, call 999. Then choose <b>Recovery</b> on the home page to see the price and arrival time before you book.</p><p>For cover before you break down, see <a href="#breakdown">breakdown cover</a>.</p></div></details>
-<details><summary>Do you sell breakdown cover?</summary><div class="tb"><p>We help you compare RAC cover levels. You then buy the policy direct from the RAC, and your cover is with them.</p></div></details>
+<details><summary>I have broken down. What should I do?</summary><div class="tb"><p>Get yourself and any passengers somewhere safe first. If you are in danger on a motorway or a fast road, call 999. Then choose <b>Recovery</b> on the home page to see the price and arrival time before you book.</p><p class="bdcover">For cover before you break down, see <a href="#breakdown">breakdown cover</a>.</p></div></details>
+<details class="bdcover"><summary>Do you sell breakdown cover?</summary><div class="tb"><p>No. Our <a href="#breakdown">breakdown cover</a> page links to the RAC&rsquo;s website, where you can see the RAC&rsquo;s cover and prices and buy direct from the RAC. Your cover is with the RAC, and the RAC&rsquo;s terms apply. We don&rsquo;t give advice on which cover is right for you.</p><p>We are an affiliate of the RAC: if you buy after following our link, the RAC pays us a commission. It does not change the price you pay.</p></div></details>
 
 <h2 class="sec">Cars and vans for sale</h2>
 <details><summary>Who am I buying from?</summary><div class="tb"><p>Cars and vans are advertised and sold by independent dealers. Any sale, deposit, part exchange, finance or delivery is agreed between you and the dealer. Motoring Central does not own, inspect or sell the vehicles.</p></div></details>
@@ -2834,7 +2824,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 <p><b>The dealer you contact.</b> When you send an enquiry about a car or van, we pass your name, contact details and message to that dealer.</p>
 <p><b>Suppliers who help us run the service</b>, under contract and only for that purpose: [payment provider], [vehicle data provider], [parts supplier], [email and text message provider], [website hosting provider] and [analytics provider].</p>
 <p><b>Reviews.</b> A review you write about a partner, dealer or instructor is shown on the site with your first name.</p><p><b>Maps and postcodes.</b> When you ask for recovery or mobile EV charging, we look up the postcode or location you give with postcodes.io and show it on a map from OpenStreetMap. We also use postcodes.io to turn the postcode you type into a place, so we can show you the MOT stations, valeters, repairers, auto electricians and driving instructors who cover you. Those services see the postcode or the area of the map being shown, and your device's internet address, but not your name or booking. Your location is only read from your device if you tap Use my location and allow it.</p>
-<p><b>The RAC.</b> If you follow a link to buy breakdown cover, you buy direct from the RAC and their privacy policy applies to what you give them.</p>
+<p><b>The RAC and Awin.</b> If you follow a link on our breakdown cover page, you go to the RAC&rsquo;s website through Awin, the affiliate network the RAC uses, so the RAC can see that you came from us and pay us a commission if you buy. We do not send them your name, email or any account details. You buy direct from the RAC, and the RAC&rsquo;s and Awin&rsquo;s own privacy policies apply to what they collect.</p>
 <p><b>Where your account is kept.</b> Your account details, bookings and messages are stored in a secure database run for us by Supabase, on servers in London. Your password is stored in a scrambled form that we cannot read. Partners' and dealers' insurance certificates and photo ID are kept in private storage there, and can only be opened by that partner and by our staff who check applications.</p>
 <p><b>Postcode look-up.</b> When you type a postcode to see how far away a car or van is, or to find partners near you, that postcode is sent to Postcodes.io, a look-up service run by Ideal Postcodes, to find where it is. Nothing else about you is sent with it.</p>
 <p><b>Voice search.</b> If you tap the microphone in the search box, your own browser (for example Google Chrome or Apple Safari) turns your speech into text using its speech service. We do not record or keep the sound of your voice.</p>
@@ -2880,7 +2870,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 <tr><td>mc-activity</td><td>Our own count of the pages you view and the buttons you press on this site. If you are logged in, it is linked to your account so we can help you and improve the service. We never record what you type</td><td>[Up to 13 months]</td></tr>
 <tr><td>[analytics]</td><td>Counts visits and pages viewed, set by [analytics provider]</td><td>[Up to 13 months]</td></tr>
 </tbody></table></div></div>
-<div class="card"><h2>Advertising</h2><p>We do not use advertising or tracking cookies that follow you to other websites. If that ever changes, we will update this notice and ask for your consent first.</p></div>
+<div class="card"><h2>Advertising</h2><p>We do not use advertising or tracking cookies that follow you to other websites. If that ever changes, we will update this notice and ask for your consent first.</p><p class="bdcover"><b>Links to the RAC.</b> The links on our breakdown cover page go through Awin, an affiliate network, to the RAC&rsquo;s website. Our site sets no cookie for this. Once you follow one of those links, Awin and the RAC may set their own cookies on their websites, so the RAC can tell that you came from us. Their own cookie notices apply.</p></div>
 <div class="card"><h2>Other ways to control cookies</h2><p>You can also block or delete cookies in your browser settings. If you block essential cookies, parts of the site such as logging in and booking will not work.</p><p>For more about how we use personal information, see our <a href="#privacy">privacy policy</a>.</p></div>
 </main>
 <footer class="foot">&copy; The Motoring Central. <span class="pv-only">Draft notice for review. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
@@ -2914,42 +2904,18 @@ html.mc-demo-on #mc-mine{display:none!important}
 </div>
 
 <div id="v-breakdown" hidden>
-<section class="hero"><div class="in"><span class="bdbadge">Breakdown cover</span><h1>RAC breakdown cover.</h1><p>Tell us what you need, see which cover level fits, then get a quote from the RAC.</p></div></section>
+<section class="hero"><div class="in"><span class="bdbadge">Breakdown cover</span><h1>Breakdown cover from the RAC</h1><p>See the RAC&rsquo;s breakdown cover and prices, and buy direct from the RAC.</p></div></section>
 <main>
-<div class="card bdpick">
-<h2>Which cover do I need?</h2>
-<fieldset><legend>Who should the cover follow?</legend><div class="bdseg">
-<label><input type="radio" name="bd-who" value="vehicle" checked><span><b>My vehicle</b><small>Covers one car, whoever is driving</small></span></label>
-<label><input type="radio" name="bd-who" value="personal"><span><b>Me</b><small>Covers you in any car, even as a passenger</small></span></label>
-</div></fieldset>
-<fieldset><legend>What do you want covered?</legend><div class="bdopts">
-<label class="on"><input type="checkbox" checked disabled data-lvl="roadside"><span><b>Roadside help</b><small>A patrol fixes you at the roadside, or tows you to a nearby garage. Always included.</small></span></label>
-<label><input type="checkbox" data-lvl="recovery"><span><b>Tow anywhere in the UK</b><small>Take you, your passengers and the vehicle to any UK address.</small></span></label>
-<label><input type="checkbox" data-lvl="home"><span><b>Help at home</b><small>When the car won’t start on your drive or outside your house.</small></span></label>
-<label><input type="checkbox" data-lvl="onward"><span><b>Onward travel</b><small>A hire car, train fare or hotel if it can’t be fixed the same day.</small></span></label>
-<label><input type="checkbox" data-lvl="europe"><span><b>Driving in Europe</b><small>Help while you drive abroad. Often sold as a separate policy.</small></span></label>
-</div></fieldset>
-<div class="bdres" role="status" aria-live="polite"><span>Your cover level</span><b id="bd-sum">Roadside, vehicle cover</b><small id="bd-note">The most basic level. Fine if you mostly drive locally.</small></div>
-<div class="bdgo"><a class="bdq rac" href="https://www.rac.co.uk/breakdown-cover" target="_blank" rel="noopener" data-p="RAC">Get an RAC quote <span style="font-weight:600">(opens the RAC website)</span></a></div>
-<p class="okmsg" id="bd-ok" role="status" hidden></p>
+<div class="card bdmain">
+<h2>Get breakdown cover direct from the RAC</h2>
+<p>We don&rsquo;t sell breakdown cover ourselves. These links take you to the RAC&rsquo;s website, where you can see the cover the RAC offers, get a price and buy direct from the RAC.</p>
+<div class="bdban" id="bd-ban" hidden></div>
+<div class="bdgo"><a class="bdq rac" id="bd-uk" href="https://www.rac.co.uk/breakdown-cover" target="_blank" rel="sponsored noopener">UK breakdown cover<span>on the RAC website</span></a><a class="bdq rac2" id="bd-eu" href="https://www.rac.co.uk/breakdown-cover/european-breakdown-cover" target="_blank" rel="sponsored noopener">European breakdown cover<span>on the RAC website</span></a></div>
 </div>
-<h2 class="sec">What RAC cover includes</h2>
-<div class="card bdtbl"><div class="bdscroll"><table>
-<thead><tr><th scope="col">Cover</th><th scope="col">RAC</th></tr></thead>
-<tbody>
-<tr><th scope="row">Roadside help</th><td>✓</td></tr>
-<tr><th scope="row">Tow anywhere in the UK</th><td>✓ add-on</td></tr>
-<tr><th scope="row">Help at home</th><td>✓ add-on</td></tr>
-<tr><th scope="row">Onward travel</th><td>✓ add-on</td></tr>
-<tr><th scope="row">European cover</th><td>✓ separate</td></tr>
-<tr><th scope="row">Vehicle or personal cover</th><td>Both</td></tr>
-<tr><th scope="row">Price from</th><td>[£00 a year]</td></tr>
-</tbody></table></div>
-<p class="note">Cover names, limits and prices change. Always check the RAC’s policy documents before you buy.</p></div>
-<div class="card bdhow"><b>How this works</b><p>Breakdown cover is sold and provided by the RAC, not by The Motoring Central. You buy on the RAC website and the RAC’s terms apply. [We may receive a commission from the RAC. This does not change the price you pay.]</p></div>
-<div class="card bdpromo"><div><b>Broken down now, with no cover?</b><p>Book one of our local recovery partners and pay only for this job.</p></div><a class="btn" href="#drivers">Book recovery</a></div>
+<div class="card bdhow"><b>How this works</b><p>Breakdown cover is provided by the RAC, not by The Motoring Central. You buy on the RAC&rsquo;s website, and the RAC&rsquo;s terms and policy documents apply. Read them before you buy.</p><p>We don&rsquo;t give advice on which cover is right for you.</p><p><b>We may receive a commission.</b> The Motoring Central is an affiliate of the RAC. If you buy cover after following a link on this page, the RAC pays us a commission. It does not change the price you pay.</p></div>
+<div class="card draft pv-only" id="bd-pvnote"><b>Preview note:</b> until the RAC approves our Awin application, these links go to the RAC website without our tracking, so no commission is recorded. The page is hidden on the live site until the tracking links are added.</div>
 </main>
-<footer class="foot">&copy; The Motoring Central. <span class="pv-only">RAC prices are placeholders. </span><a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
+<footer class="foot">&copy; The Motoring Central. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </div>
 
 <dialog id="docview" aria-labelledby="dv-title"><div class="dvh"><b id="dv-title">Document</b><button type="button" id="dv-close">Close</button></div><div id="dv-body"></div></dialog>
@@ -5288,15 +5254,13 @@ window.MCdb.contact({name:n,email:em,phone:$('cb-p').value.trim(),topic:'Call ba
  if(!r||r.error){var m=(r&&r.error&&r.error.message)||'';$('cb-err').textContent=/too_many/.test(m)?'You have sent several requests already. We will be in touch.':/bad_email/.test(m)?'Check your email address.':'This did not send. Try again, or call us on 020 8191 4290.';return}
  f.hidden=true;var ok=$('cb-ok');ok.hidden=false;ok.textContent='Thanks, '+n+'. A member of our team will call you ('+when.toLowerCase()+'). Your reference is '+((r.data&&r.data.ref)||'on its way by email')+'.'},function(){btn.disabled=false;$('cb-err').textContent='This did not send. Check your connection and try again.'})});
 var u=window.GGuser;})();</script>
-<script>(function(){var root=document.getElementById('v-breakdown');if(!root)return;function $(i){return document.getElementById(i)}
-function upd(){var who=(root.querySelector('input[name=bd-who]:checked')||{}).value||'vehicle';var on={};[].forEach.call(root.querySelectorAll('.bdopts input[data-lvl]'),function(c){on[c.getAttribute('data-lvl')]=c.checked});
-var parts=['Roadside'];if(on.recovery)parts.push('UK-wide recovery');if(on.home)parts.push('at home');if(on.onward)parts.push('onward travel');if(on.europe)parts.push('European cover');
-var txt=parts.length>1?parts.slice(0,-1).join(', ')+' and '+parts[parts.length-1]:parts[0];$('bd-sum').textContent=txt+', '+(who==='personal'?'personal cover':'vehicle cover');
-var n=parts.length,note=n===1?'The most basic level. Fine if you mostly drive locally.':n<=3?'A popular middle level for everyday driving.':'Close to full cover. Good for long trips and peace of mind.';
-if(on.europe)note+=' European cover is often bought as a separate policy.';$('bd-note').textContent=note;$('bd-ok').hidden=true}
-root.addEventListener('change',upd);
-[].forEach.call(root.querySelectorAll('.bdq'),function(a){a.addEventListener('click',function(e){e.preventDefault();var ok=$('bd-ok');ok.hidden=false;ok.textContent='Preview only: this button will open the '+a.getAttribute('data-p')+' website through our referral link, with your chosen cover ('+$('bd-sum').textContent.toLowerCase()+') noted where possible.'})});
-upd()})();</script>
+<script>/* the RAC breakdown cover page: the Awin tracking links and banner from window.MC_RAC (set at the top of the page) */
+(function(){var R=window.MC_RAC||{};function $(i){return document.getElementById(i)}
+ var ok=function(u){return /^https:\/\/(www\.awin1\.com|www\.rac\.co\.uk)\//.test(String(u||''))};
+ if(ok(R.uk)&&$('bd-uk'))$('bd-uk').href=R.uk;if(ok(R.eu)&&$('bd-eu'))$('bd-eu').href=R.eu;
+ if(R.uk&&$('bd-pvnote'))$('bd-pvnote').remove();
+ var b=$('bd-ban');if(b&&ok(R.banner)&&ok(R.bannerLink)){var a=document.createElement('a');a.href=R.bannerLink;a.target='_blank';a.rel='sponsored noopener';
+  var im=document.createElement('img');im.src=R.banner;im.alt=R.bannerAlt||'RAC breakdown cover';im.loading='lazy';a.appendChild(im);b.appendChild(a);b.hidden=false}})();</script>
 
 <script>
 /* front page service slideshow: one picture, changes every 3 seconds */
@@ -7758,7 +7722,7 @@ var LINKS=[
 ['Driving lessons','Find an instructor near you: single lessons, block bookings and intensive courses','#lessons','driving lessons lesson instructor instructors learn learner learning drive driver school tuition adi provisional pass test theory intensive crash course block manual automatic female male teach'],
 ['Teach driving? Join as an instructor','Driving instructors and schools: fill your diary with online bookings','#instructors','driving instructor instructors adi pdi school join teach tuition partner'],
 ['Request a partner demo','Ask to see the dashboard for your trade with sample jobs','#demo','demo try trial test preview dashboard tool software sample partner tour guide request'],
-['Breakdown cover','See which RAC cover level fits you','#breakdown','breakdown cover rac roadside insurance policy membership'],
+['Breakdown cover','See the RAC’s breakdown cover and prices','#breakdown','breakdown cover rac roadside insurance policy membership'],
 ['My bookings and quotes','See, change or cancel what you have booked',custLogin('in'),'my booking bookings booked quote quotes account history appointment cancel change reschedule track order receipt invoice service history','My account'],
 ['Log in','Customers: log in to your account',custLogin('in'),'log login sign signin password account'],
 ['Create a free account','Register to get fixed prices and book',custLogin('new'),'register registration sign signup create account join new customer'],
@@ -7805,7 +7769,7 @@ function index(){if(IDX)return IDX;IDX={p:[],s:[],j:[],l:[],f:[]};
  P.forEach(function(x){IDX.p.push({x:x,hw:hay(x[0]+' '+x[4])})});
  [].forEach.call(grid.querySelectorAll('button.qk[data-svc]'),function(t){var b=t.querySelector('b').textContent,sm=t.querySelector('small');IDX.s.push({x:[b,sm?sm.textContent:'',t],hw:hay(b+' '+(sm?sm.textContent:'')+' '+(SVK[b.toLowerCase()]||''))})});
  if(window.MCSVC)window.MCSVC.list('garage').forEach(function(g){if(g[0]==='Vehicles you work on')return;g[1].forEach(function(x){IDX.j.push({x:{n:x.n,h:x.h,w:x.w,g:g[0]},hw:hay(x.n),xw:hay((x.h||'')+' '+g[0])})})});
- LINKS.forEach(function(x){if(window.MC_LIVE&&(/^#(jobs|breakdown)$/.test(x[2])||/vacanc/i.test(x[0])))return;IDX.l.push({x:x,hw:hay(x[0]+' '+x[3])})});
+ LINKS.forEach(function(x){if(window.MC_LIVE&&((typeof x[2]==='string'&&window.MC_OFF[x[2].replace(/^#/,'')])||(window.MC_OFF.jobs&&/vacanc/i.test(x[0]))))return;IDX.l.push({x:x,hw:hay(x[0]+' '+x[3])})});
  var fr=$('v-faq');if(fr)[].forEach.call(fr.querySelectorAll('details'),function(d){var sm=d.querySelector('summary');if(!sm)return;var body=d.textContent.replace(sm.textContent,'');IDX.f.push({x:{q:sm.textContent,a:body.trim().slice(0,90),el:d},hw:hay(sm.textContent),bw:hay(body)})});
  ['p','s','j','l','f'].forEach(function(k){IDX[k].forEach(function(e){e.hw.forEach(function(w){VOC[w]=1})})});
  return IDX}
@@ -9192,7 +9156,8 @@ function launchCard(force){var me=window.GGuser;if(!me||me.role!=='admin'||!me.s
   +ok(!!c.ico,'ICO registration number','Register with the ICO, then add the number in Company details.')
   +ok(!!window.MC_PAY_ON,'Card payments (Stripe)','Until Stripe is connected, the live site says card payments are not switched on yet, and nothing can be booked or paid for online.')
   +ok(LCH.url==='https://motoringcentral.co.uk','Links in emails go to the main address',LCH.url==null?'Checking…':'Now: '+E(LCH.url||'not set')+'. Claude changes this on launch day, with the Supabase Site URL.')
-  +ok(false,'Jobs board and RAC breakdown cover','Hidden on the live site: the jobs board is not yet connected to the real database, and the RAC page needs an agreement with the RAC.')
+  +ok(!!(window.MC_RAC&&MC_RAC.uk),'RAC breakdown cover page',window.MC_RAC&&MC_RAC.uk?'The RAC tracking links are in. The page shows on the live site.':'Ready, and hidden on the live site until the RAC approves our Awin application and Claude adds the tracking links.')
+  +ok(false,'Jobs board','Hidden on the live site: it is not yet connected to the real database.')
   +'<p class="note" style="margin:6px 0 0">Also before launch: the solicitor checks the terms and privacy policy, and the test accounts and bookings are removed (Claude has the clean-up ready).</p>';
  var d=document.createElement('div');d.className='card mc-form';d.id='mc-launch';d.innerHTML=h;if(old&&b.contains(old))old.parentNode.replaceChild(d,old);else{var cf=$('mc-coform');if(cf&&b.contains(cf))b.insertBefore(d,cf);else b.appendChild(d)}}
 /* advert approval: every real advert waits for our team (or the automatic checks) before other people see it */
