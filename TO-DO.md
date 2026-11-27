@@ -3,6 +3,16 @@
 This is the running list of work still to do before launch. When the owner asks
 "what is left to do?", answer from this file, and tick items off here as they are finished.
 
+## COMPANY REGISTRATION FILED (27 Nov 2026)
+The owner filed the company with Companies House online on 27 Nov 2026 (private company limited by shares; SIC codes
+63120 Web portals, 82990 Other business support service activities, and 73110 or 73120 for advertising). Waiting for
+the certificate of incorporation (usually within 24 hours, by email). When it arrives, the owner sends Claude the exact
+company name, company number and registered office address (all public on Companies House), and Claude puts them on
+the site: footer, terms ([The Motoring Central Ltd] and other brackets), privacy policy, invoices and emails.
+Then, in order: business bank account; Stripe in the company name; ICO registration; send the two briefs to the
+solicitor and accountant; HMRC (Corporation Tax; VAT decision from the accountant); Vehicle Data Global contract;
+Supabase Pro; point motoringcentral.co.uk at the site at launch.
+
 ## Emails are ON (set up and tested 21 Nov 2026)
 
 How it is set up (do not redo):
