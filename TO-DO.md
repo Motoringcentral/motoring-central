@@ -526,6 +526,28 @@ SITE 100% READY PLAN (owner, 21 Nov evening: no advertising until the site is fu
 4. Launch day: remove demo log-ins, sample partners, sample reviews and the Preview banner; let Google list the site.
 
 Texts (SMS) are built too but need a Twilio account (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM). Not chosen yet.
+Until then the site no longer promises texts (27 Nov): "by email and text" shows as "by email". When texts are set up,
+change window.MCSMS=false to true near the top of index.html and the wording comes back in all four places (texts
+queued meanwhile stay queued; the terms still show "[and by text message]" for the solicitor).
+
+LAUNCH REHEARSAL (27 Nov 2026, live preview, test accounts): ALL PASSED.
+- MOT: customer booked Class 4 at TEST MOT Station (£54.85, test card); the station's diary showed it.
+- Recovery: quote (call-out, mileage, out of hours, extras list), paid £105.99; the driver saw it (paid £84.48), on my
+  way, arrived, job done; the customer was emailed at each step and asked for a review.
+- Mobile EV charging: £150 call-out + 10 kWh at 85p + £9.99 = £168.49; charger paid £139.48; on my way, arrived, done.
+- Valeting: TEST Valeting, £99 + £9.99, Monday 10am; the valeter's jobs list showed it.
+- Bodywork and alloys: quote request, £180 quote, accepted and paid £189.99. Auto electrician/locksmith: new key
+  request, £165 quote, accepted and paid £174.99.
+- Car sales: dealer listed a real car (FD16WDY); staff approval card showed "MOT check: 9 tests ... mileage looks
+  consistent"; approved; buyer saw the real MOT history, sent a message (the dealer-sale box and phone number are
+  required) and a viewing request with a part exchange; the dealer's Messages tab and leads showed both.
+- Private seller: paid £29.99, Find filled "2016 Ford Fiesta" free, history check, details, sent for approval.
+- 32 emails sent, none failed. Found and fixed: the "application needs attention" and "account paused" emails showed
+  the reason as raw code (migration 20261127a); the site promised texts that are not switched on (above).
+- Test bookings made (to delete before launch with the other test data): MOT D8DE1B1E, recovery D30499CE, EV
+  B3B5FAA0, valet TMC-097030, bodywork and key bookings on the test customer. Rehearsal adverts taken down.
+- The old test scripts' "available" and day choices needed updating (the recovery/EV dashboards now use tabs; the
+  test MOT station is closed on Sundays): test-script changes only, not site faults.
 
 ### What the emails cover (built 19 Nov 2026)
 - Partners and dealers: application received; approved (welcome and next steps); needs attention (with the reason);
