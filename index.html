@@ -1126,6 +1126,7 @@ window.SRC=function(u){u=String(u==null?'':u).trim();if(/^[a-z][a-z0-9+.-]*:/i.t
  function line(){if(!C.name||!C.number)return '';return C.name+' is a company registered in England and Wales, number '+C.number+(C.office?'. Registered office: '+C.office:'')+'.'+(C.vat?' VAT number '+C.vat+'.':'')}
  function apply(){[].forEach.call(document.querySelectorAll('[data-co]'),function(el){if(!('coPh' in el.dataset))el.dataset.coPh=el.textContent;el.textContent=v(el.getAttribute('data-co'))||el.dataset.coPh});
   [].forEach.call(document.querySelectorAll('[data-co-opt]'),function(el){el.hidden=!!C.name&&!v(el.getAttribute('data-co-opt'))});
+  [].forEach.call(document.querySelectorAll('.ab-draft'),function(el){el.hidden=!!(C.name&&C.number&&C.office)});
   var L=line(),FT=document.querySelectorAll('footer .sfcopy');if(!FT.length)FT=document.querySelectorAll('footer.foot');[].forEach.call(FT,function(f){var s=f.querySelector('.foot-co');if(!s){if(!L)return;s=document.createElement('span');s.className='foot-co';f.appendChild(s)}s.textContent=L;s.hidden=!L})}
  window.MCco={get:function(){var o={};for(var k in C)o[k]=C[k];return o},val:v,line:line,apply:apply,
   set:function(c){C=c&&typeof c==='object'&&!Array.isArray(c)?c:{};try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}apply()}};
@@ -2663,7 +2664,7 @@ html.mc-demo-on #mc-mine{display:none!important}
 <li><b>Your rights stay in place.</b> Nothing we do affects your rights under UK consumer law.</li>
 </ol><p class="note" style="margin:8px 0 0">Read the full <a href="#terms">terms and conditions</a>.</p></div>
 <h2 class="sec">Company details</h2>
-<div class="card ab-co"><p><b data-co="name">[The Motoring Central Ltd]</b><br>Registered in England and Wales, company number <span data-co="number">[00000000]</span><br>Registered office: <span data-co="office">[address]</span><br>ICO data protection registration: <span data-co="ico">[ZA000000]</span><span data-co-opt="vat"><br>VAT number: <span data-co="vat">[if registered]</span></span></p></div>
+<div class="card ab-co"><p><b data-co="name">[The Motoring Central Ltd]</b><br>Registered in England and Wales, company number <span data-co="number">[00000000]</span><br>Registered office: <span data-co="office">[address]</span><span data-co-opt="ico"><br>ICO data protection registration: <span data-co="ico">[ZA000000]</span></span><span data-co-opt="vat"><br>VAT number: <span data-co="vat">[if registered]</span></span></p></div>
 </main>
 <footer class="foot">&copy; The Motoring Central. <a href="#about" style="color:inherit">About us</a> <a href="#terms" style="color:inherit">Terms and conditions</a> <span class="footx"><a href="#jobs">Motor trade jobs</a> <a href="#contact">Contact</a> <a href="#complaints">Complaints</a> <a href="#faq">FAQs</a> <a href="#privacy">Privacy</a> <a href="#cookies">Cookies</a></span></footer>
 </div>

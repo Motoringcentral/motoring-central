@@ -25,6 +25,15 @@ confirmation statement within 12 months; first accounts about 21 months after in
 - Growth ideas: turning MOT advisories into quotes; a page for each town and service (for Google); partner QR stickers
   for their vans and premises; refer a friend. Already built: free MOT and tax reminders, business accounts.
 
+## SITE CHECK (28 Nov 2026, before the Q2U EV demo)
+Fixed: About us "On this page" buttons were blank (link text was the light page-link colour on a pale button); the
+"Read the terms" link on the jobs page was too pale; browser tab titles for Request a demo, Driving lessons and the
+instructor join page; on About us the empty ICO line and the owner's "placeholders" note now hide once the company
+name, number and registered office are filled in (the ICO line comes back when the ICO number is entered).
+Checked on a computer and a phone: all 32 public pages open, no script errors, nothing wider than the screen, no
+blank buttons, no broken pictures; every link in the phone menu opens its page and closes the menu.
+Still showing [square brackets] on purpose: the terms and privacy wording waiting for the solicitor, and the ICO number.
+
 ## BUSINESS ACCOUNTS (built 27 Nov 2026, tested on the database; card payments wait for Stripe)
 Owner's decision: business accounts pay with a PREPAID BALANCE or a CARD ON FILE. No credit line for now (later, once
 there is cash in reserve: approved firms only, credit check, limit, 14 days). Every business job is paid before the
