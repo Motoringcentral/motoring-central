@@ -8,7 +8,7 @@ const p1=`<section class="page"><div class="cover">
  <div class="stats"><div class="stat"><b>£49.85</b><span>paid to you for every car MOT: the full fee less a flat £5 booking fee</span></div><div class="stat"><b>£0</b><span>monthly fee and £0 joining fee, for as long as you are with us</span></div><div class="stat"><b>24/7</b><span>online booking, even when your garage is closed</span></div></div>
  <div class="two"><div><p class="kick">Who we are</p><h2>One place for everything a car needs</h2>
  <p>The Motoring Central is a new UK website where drivers buy, fix, clean and rescue their vehicles in one place: MOTs, servicing and repairs, tyres, valeting, bodywork, recovery, electric car charging, and cars and vans for sale.</p>
- <p>Drivers type what they need in their own words, see a clear price, choose a checked local business and pay online. We are run by real people in the UK, and we answer the phone.</p></div>
+ <p>Drivers type what they need in their own words, see a clear price, choose a checked local business and pay online. We are a UK company, here to help when you need us.</p></div>
  <div><p class="kick">Our vision</p><h2>Fair for drivers. Fair for the trade.</h2>
  <p>Finding a garage you can trust should not be guesswork. And good local businesses deserve a fair way to find customers without giving away a big slice of every job.</p>
  <p>So we built one place where drivers see the price first and choose who they want, and where independent motor traders keep more of what they earn. We want to be the UK's network of trusted, independent motor traders.</p></div></div>

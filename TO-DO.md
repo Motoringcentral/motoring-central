@@ -25,6 +25,24 @@ confirmation statement within 12 months; first accounts about 21 months after in
 - Growth ideas: turning MOT advisories into quotes; a page for each town and service (for Google); partner QR stickers
   for their vans and premises; refer a friend. Already built: free MOT and tax reminders, business accounts.
 
+## "REAL PEOPLE" CLAIM REMOVED (28 Nov 2026)
+Owner's decision: he cannot staff support alone and will bring in AI, especially for phone calls. So the site no longer
+promises real people. DO NOT put back "real people", "not robots", "a person answers", "talk to a person" or "we answer
+the phone" anywhere (site, PDFs, adverts, videos, emails).
+- Site: home page trust line and "Why choose us" tile, About us (hero, story, the section now called "Here to help",
+  the "UK-based support" card), Contact us, the search entry (now "Contact us") and the search fallback row.
+  About us now says: "Some calls and messages may be answered by our automated assistant, and our team steps in when
+  it is needed." Keep that sentence true: change it if the set-up changes.
+- MOT proposal: "We are a UK company, here to help when you need us." All four proposals and the combined PDF rebuilt.
+- Videos: intro.mp4 (the words "because you're always dealing with real people" and the slide line "Real people,
+  every time") and recovery.mp4 ("And a UK team you can actually talk to" and its card) were CUT OUT of the finished
+  videos with ffmpeg (no re-voicing; the slide holds still for the cut). Captions, script.json and slides.html match.
+  A full re-render from the sources will give the same result.
+- Checked clean: leaflets, advert pack, short adverts, the demo kit, email wording in the database.
+- STILL TO DO when AI answering is switched on: say so in the privacy policy (calls and messages handled by an automated
+  assistant, any recording or transcripts, who the provider is) and ask the solicitor; tell callers at the start of a
+  call that they are speaking to an automated assistant; keep a clear way to reach a person for complaints.
+
 ## SITE CHECK (28 Nov 2026, before the Q2U EV demo)
 Fixed: About us "On this page" buttons were blank (link text was the light page-link colour on a pale button); the
 "Read the terms" link on the jobs page was too pale; browser tab titles for Request a demo, Driving lessons and the
