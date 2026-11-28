@@ -213,6 +213,9 @@ Follow-ups from the testing:
   the site for calls. It replaced the first number, 020 8191 4290 (Voipfone), which is no longer used anywhere: the
   site, the proposals, the leaflets and the Facebook notes all carry the new one. Opening hours agreed 21 Nov: Mon to
   Fri 8am to 6pm, Sat 9am to 1pm.
+  28 Nov: the phone, mobile, WhatsApp and email links are now BUTTONS to tap (style .cbtn in index.html) on Contact us,
+  About us, the complaints page and the "card payments are not switched on yet" message. The numbers in the partner
+  page sentence can be tapped too.
 - DONE 27 Nov: the company mobile 07364 144974 has WhatsApp Business. It is on the site (Contact us, About us,
   complaints, the "Who you will work with" note for partners) as the mobile and the WhatsApp number
   (wa.me/447364144974), on the four partner proposals, the eight leaflets, the Facebook set-up notes and the
