@@ -50,6 +50,18 @@ the phone" anywhere (site, PDFs, adverts, videos, emails).
   assistant, any recording or transcripts, who the provider is) and ask the solicitor; tell callers at the start of a
   call that they are speaking to an automated assistant; keep a clear way to reach a person for complaints.
 
+## VERCEL STORAGE (28 Nov 2026)
+Vercel emailed: the free plan's 10 GB of "Deployment Storage" is used up. It is NOT junk on the site: Vercel keeps a
+full copy of the site for every publish (every push), and each copy is about 50 MB, 42 MB of it the six videos. There
+were 273 publishes in ten days. Vercel deletes the old copies by itself; the current one is never deleted.
+- Done: vercel.json "ignoreCommand" skips the publish when a push changes only files that are not on the site
+  (TO-DO.md, README.md, pitch, tools, supabase, social: the same list as .vercelignore). 73 of the 273 were like that.
+  If it cannot tell, it publishes. KEEP THE TWO LISTS THE SAME.
+- To do if it becomes a problem: move the six videos out of the publish (to file storage), which makes each copy
+  about 8 MB instead of 50 MB.
+- Both Claude sessions: push less often. Save up small changes instead of publishing each one.
+- The free plan is for non-commercial use only. The company needs Vercel Pro (about $20 a month) before launch.
+
 ## TIMES ON THE SITE DECIDED (owner, 28 Nov 2026)
 - Replies to emails and messages: "We aim to reply within 2 working days" (was [1 working day]) on Contact us, the
   on-screen thank-you and the contact form's confirmation email (send_contact, migration 20261128b, applied).

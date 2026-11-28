@@ -1,2 +1,3 @@
 User-agent: *
 Disallow: /
+# Preview address: kept out of search engines. Checked 28 Nov 2026.
