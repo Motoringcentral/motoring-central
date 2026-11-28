@@ -60,6 +60,13 @@ partner is paid in the weekly payout.
 - Migrations: 20261127d (tables and ledger), 20261127e (pricing and booking), 20261127f (functions), 20261127g
   (business emails), 20261127h (fixes). Server function: business-pay (Stripe, switched off until the keys are set).
 
+DEMO (28 Nov): https://preview.motoringcentral.co.uk/business.html?demo=1 runs the real page on a made-up firm
+(Sample Fleet Services Ltd: 4 vehicles, a team of 4, a balance, past and upcoming jobs, a repeat valet, a driver's
+booking waiting for approval, a pending bank top up). Everything is answered in the browser: nothing is saved, sent or
+charged and nothing is written to the money record. A yellow bar switches between Owner, Admin, Booker and Accounts
+office, and plays the steps that happen elsewhere (the partner finishes a job, our team receives the transfer).
+Good for showing businesses before they apply. Code: the DEMO section near the top of business.html's script.
+
 STILL TO DO for business accounts:
 - Bank details: once the business bank account is open, put them in Supabase > app_settings, key "business":
   "bank": {"name": "The Motoring Central Ltd", "sort_code": "..", "account_no": ".."}. Until then the page tells

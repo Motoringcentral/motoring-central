@@ -136,16 +136,151 @@ var STATUS={awaiting_approval:['Waiting for approval','a'],awaiting_card:['Waiti
 var BST={confirmed:'Confirmed',onway:'On the way',started:'Started',done:'Done',cancelled:'Cancelled'};
 var ERR={not_logged_in:'Please log in again.',not_allowed:'Your role on this account does not allow that.',owner_only:'Only an owner can do that.',account_not_approved:'Your business account is still being checked. You can book once it is approved.',account_frozen:'Bookings are paused on this account. An owner can restart them on the Overview page.',not_enough_balance:'There is not enough money in the balance. Top up first.',fleet_only:'Only vehicles on your fleet list can be booked. Add the vehicle first, or turn this off in Settings.',over_monthly_cap:'This would go over the account\'s monthly spending cap.',over_your_limit:'This would go over your monthly spending limit. Ask an owner or admin.',service_not_allowed:'This account does not book that service. An admin can turn it on in Settings.',partner_unavailable:'That partner is not taking bookings right now. Choose another.',partner_closed:'That partner does not work that day or at that time. Choose another day or time.',not_offered:'That partner does not offer this. Choose another.',bad_time:'That time is too soon or not available. Choose another.',bad_day:'Choose a day within the next 60 days.',slot_taken:'Someone has just booked that MOT time. Choose another.',class_not_tested:'That MOT station does not test this class of vehicle.',bad_address:'Enter the address and a full postcode where the vehicle will be.',bad_reg:'Check the registration.',reg_already_on_fleet:'That registration is already on your fleet list.',bad_company_no:'Enter your 8-character Companies House number.',company_has_account:'That company already has a business account. Ask its owner to invite you.',already_pending:'You already have an application waiting to be checked.',too_many_accounts:'You already own 3 business accounts.',try_later:'Too many tries. Please try again tomorrow.',bad_invite:'This invitation link has been used, has run out or was cancelled. Ask for a new one.',wrong_email:'This invitation was sent to a different email address. Log in with that email to accept it.',email_not_confirmed:'Confirm your email address first (check your inbox), then open the link again.',not_customer:'This login is a partner or staff login. Use a separate email address for a business account.',already_member:'That person is already on the team.',last_owner:'An account must always have at least one owner. Make someone else an owner first.',not_yourself:'You cannot do that to your own login. Ask another owner.',bad_amount:'Enter an amount between the minimum and maximum top up.',too_many_pending:'You already have 3 top ups waiting. Pay or cancel one first.',too_late:'It is too late to cancel online (free cancellation is up to the day before). Contact us and we will help.',job_started:'The partner has already started this job.',already_decided:'Someone has already decided this booking.',card_payments_off:'Card payments are not switched on yet. Use the prepaid balance for now.',no_card:'Add a company card first (Money).',card_declined:'The card was declined. Nothing was booked.',card_needs_check:'The bank wants to check this payment, which cannot be done for a saved card. Nothing was taken. Use the balance or add the card again.',could_not_book:'The card was charged but the booking could not be made, so we refunded it straight away.',bad_vehicle:'Choose a vehicle from the fleet list.',reason_needed:'Give a reason.',note_needed:'Write a note of at least 10 characters.',balance_not_zero:'The balance must be zero before the account can be closed.',not_pending:'This is no longer waiting.',not_staff:'Open the Staff page and log in there first (with your code if you use one), then come back here.'};
 function why(e){var m=String(e&&(e.message||e.error||e)||'');var k=Object.keys(ERR).filter(function(x){return m.indexOf(x)>-1})[0];return k?ERR[k]:'That did not work. Check your connection and try again.'}
-function call(fn,args){return sb.rpc(fn,args||{}).then(function(r){if(r.error)throw r.error;return r.data})}
+function call(fn,args){if(DEMO)return demoCall(fn,args||{});return sb.rpc(fn,args||{}).then(function(r){if(r.error)throw r.error;return r.data})}
+
+/* ---------- DEMO: business.html?demo=1 runs this same page on a made-up firm held only in this browser tab.
+   Nothing is saved, sent or charged and no money record is written: every database call is answered here.
+   The bar at the top switches between the four roles and plays the steps that happen elsewhere (a partner
+   finishing a job, our team receiving a bank transfer). ---------- */
+var DEMO=/[?&]demo=1(&|$)/.test(location.search),DM=null;
+if(DEMO){ERR.demo_card='Card payments open Stripe’s secure page in the real account. They are not part of the demo.';
+ sb.auth.signOut=function(){location.href='business.html';return Promise.resolve({error:null})};
+ Object.defineProperty(sb,'functions',{configurable:true,value:{invoke:function(n,o){var a=o&&o.body&&o.body.action;return Promise.resolve({data:a==='status'?{on:true}:{error:'demo_card'}})}}})}
+function dErr(c){var e=new Error(c);return Promise.reject(e)}
+function dId(){return 'd'+Math.random().toString(36).slice(2,10)}
+function dAgo(days,h){var d=new Date();d.setDate(d.getDate()-days);d.setHours(h||10,0,0,0);return d.toISOString()}
+function dDay(n){return addDays(n)}
+var DROLE={owner:'m1',admin:'m2',booker:'m3',viewer:'m4'};
+function dMe(){return DM.members.filter(function(m){return m.id===DROLE[DM.role]})[0]}
+function dBal(){var a=0,h=0;DM.ledger.forEach(function(l){a+=l.available;h+=l.held});return {available:Math.round(a*100)/100,held:Math.round(h*100)/100}}
+function dLed(kind,av,hd,note,job,at){DM.ledger.push({at:at||new Date().toISOString(),kind:kind,available:av,held:hd,note:note||null,job:job?job.ref:null,po:job?job.po:null})}
+function dLog(action,detail,by,at){DM.audit.unshift({at:at||new Date().toISOString(),action:action,detail:detail||{},by:by||dMe().name})}
+function dMonth(uid){var m0=new Date();m0.setDate(1);m0.setHours(0,0,0,0);var t=0;DM.jobs.forEach(function(j){if((j.status==='booked'||j.status==='awaiting_approval')&&new Date(j.created_at)>=m0&&(!uid||j.uid===uid))t+=j.total});return Math.round(t*100)/100}
+function dPrice(kind,p,b,v){var r=p.rates||{};if(kind==='Valet'){var x=r.p&&r.p[v.size];if(!(x>0))return null;return {price:Number(x),fee:9.99}}
+ if(kind==='Alloy wheels'){var k=FINKEY[b.finish||0];if(k==='dcut'&&b.where==='mobile')return null;var y=Number(r[k]);if(!(y>0))return null;return {price:y*(b.wheels||4),fee:9.99}}
+ var M={'1':29.65,'2':29.65,'4-car':54.85,'4-goods':54.85,'4-camper':54.85,'4-taxi':54.85,'4-dual':54.85,'4-9':57.30,'7':58.60,'5-13':59.55,'5-17':80.65};var t=M[b['class']||v.mot_class||'4-goods'];return t?{price:t,fee:0}:null}
+function dJob(o){var p=DM.partners.filter(function(x){return x.id===o.partner})[0],v=DM.vehicles.filter(function(x){return x.id===o.vehicle})[0]||{reg:o.reg,size:3,mot_class:'4-goods'};
+ var pr=dPrice(o.kind,p,o,v),m=DM.members.filter(function(x){return x.id===(o.by||DROLE[DM.role])})[0];
+ var j={id:dId(),ref:'BJ-'+String(++DM.seq).padStart(6,'0'),kind:o.kind,reg:v.reg,vehicle:v.id||null,price:pr.price,fee:pr.fee,total:Math.round((pr.price+pr.fee)*100)/100,status:o.status||'booked',pay:o.pay||'wallet',po:o.po||null,note:o.note||null,
+  day:o.day,slot:o.kind==='MOT'?(o.start!=null?(function(t){var h=Math.floor(t/60),mm=t%60;return (h%12||12)+':'+String(mm).padStart(2,'0')+(h<12?'am':'pm')})(+o.start):(o.slot||'9:00am')):(o.slot||'8:00am'),
+  partner:p.name,booking_status:o.status==='booked'||!o.status?'confirmed':null,booking:o.status==='booked'||!o.status?Math.random().toString(16).slice(2,10).toUpperCase():null,
+  uid:m.uid,by:m.name,decline_reason:null,fail_reason:null,card_until:null,schedule:!!o.schedule,created_at:o.at||new Date().toISOString(),idem:o.idem||null};
+ DM.jobs.unshift(j);return j}
+function dInit(){
+ DM={role:'owner',seq:1040,
+  acct:{id:'demo-acct',ref:'TMC-B-1042',name:'Sample Fleet Services Ltd',kind:'company',company_no:'12345678',vat_no:'',billing_email:'accounts@samplefleet.co.uk',phone:'01322 000000',address:'Unit 3, Sample Trade Park, Dartford',postcode:'DA1 1DR',status:'approved',approval_over:120,monthly_cap:2500,fleet_only:true,services:['Valet','Alloy wheels','MOT'],low_balance:200,frozen:false,frozen_reason:null,frozen_at:null},
+  card:{brand:'Visa',last4:'4242',exp:'08/28'},
+  members:[{id:'m1',uid:'demo-me',email:'you@samplefleet.co.uk',name:'You (owner)',role:'owner',status:'active',limit:null},{id:'m2',uid:'u2',email:'office@samplefleet.co.uk',name:'Priya, office manager',role:'admin',status:'active',limit:null},{id:'m3',uid:'u3',email:'dan@samplefleet.co.uk',name:'Dan, driver',role:'booker',status:'active',limit:1000},{id:'m4',uid:'u4',email:'books@samplefleet.co.uk',name:'Accounts office',role:'viewer',status:'active',limit:null}],
+  vehicles:[{id:'v1',reg:'SA70 MPL',nickname:'Van 1',make:'Ford',model:'Transit Custom',colour:'White',size:3,mot_class:'4-goods',mot_due:dDay(40),tax_due:dDay(95),driver:'Dan'},{id:'v2',reg:'DE69 MOS',nickname:'Van 2',make:'Vauxhall',model:'Vivaro',colour:'Silver',size:3,mot_class:'4-goods',mot_due:dDay(12),tax_due:dDay(60),driver:'Sam'},{id:'v3',reg:'FL21 EET',nickname:'Van 3',make:'Mercedes-Benz',model:'Sprinter',colour:'White',size:3,mot_class:'7',mot_due:dDay(150),tax_due:dDay(20),driver:'Lee'},{id:'v4',reg:'CA19 RRS',nickname:'Pool car',make:'Toyota',model:'Corolla',colour:'Blue',size:1,mot_class:'4-car',mot_due:dDay(210),tax_due:dDay(130),driver:''}],
+  partners:[{id:'p1',name:'Shine Bright Valeting (sample)',town:'Dartford',sub:'mobile and premises',miles:1.2,radius:15,week:[null,['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','18:00'],['08:00','14:00']],rates:{p:[79,99,129,149]}},
+   {id:'p2',name:'Gleam Mobile Valets (sample)',town:'Gravesend',sub:'mobile',miles:6.4,radius:20,week:[null,['07:00','17:00'],['07:00','17:00'],['07:00','17:00'],['07:00','17:00'],['07:00','17:00'],null],rates:{p:[69,89,115,139]}},
+   {id:'p3',name:'Kerbside Alloy Repairs (sample)',town:'Bexleyheath',sub:'mobile and workshop',miles:4.8,radius:20,week:[null,['08:00','17:00'],['08:00','17:00'],['08:00','17:00'],['08:00','17:00'],['08:00','17:00'],null],rates:{wheel:85,dcut:120,col:95,kerb:55}},
+   {id:'p4',name:'Dartford Test Centre (sample)',town:'Dartford',sub:'garage',miles:2.1,radius:10,week:null,rates:{},mot_bays:['Bay 1'],motc:null}],
+  jobs:[],ledger:[],topups:[],schedules:[],audit:[]};
+ var me='m1',T=function(o){o.by=o.by||me;return dJob(o)};
+ DM.topups.push({id:'t1',ref:'TMC-K7Q2M9',method:'bank',amount:2000,received:2000,status:'credited',created_at:dAgo(21,9)});
+ dLed('topup',2000,0,'Bank transfer TMC-K7Q2M9',null,dAgo(20,11));dLog('topup_credited',{ref:'TMC-K7Q2M9',amount:2000},'The Motoring Central',dAgo(20,11));
+ function done(o,at,at2){var j=T(o);j.created_at=at;j.booking_status='done';dLed('hold',-j.total,j.total,null,j,at);dLed('take',0,-j.total,null,j,at2);dLog('booked',{job:j.ref,kind:j.kind,reg:j.reg,total:j.total,partner:j.partner},j.by,at);dLog('job_done',{job:j.ref,total:j.total},'The Motoring Central',at2);return j}
+ done({kind:'Valet',partner:'p1',vehicle:'v1',day:dDay(-14),slot:'8:00am',where:'mobile',po:'PO-4410'},dAgo(17,10),dAgo(14,15));
+ done({kind:'Alloy wheels',partner:'p3',vehicle:'v2',day:dDay(-12),slot:'10:00am',where:'mobile',wheels:2,finish:3,by:'m3'},dAgo(15,8),dAgo(12,13));
+ done({kind:'Valet',partner:'p1',vehicle:'v1',day:dDay(-7),slot:'8:00am',where:'mobile',schedule:true},dAgo(14,6),dAgo(7,12));
+ done({kind:'Valet',partner:'p1',vehicle:'v2',day:dDay(-7),slot:'8:00am',where:'mobile',schedule:true},dAgo(14,6),dAgo(7,12));
+ done({kind:'MOT',partner:'p4',vehicle:'v4',day:dDay(-5),start:600,'class':'4-car',by:'m2'},dAgo(9,14),dAgo(5,11));
+ var up=T({kind:'Valet',partner:'p2',vehicle:'v3',day:dDay(3),slot:'10:00am',where:'mobile',po:'PO-4471',by:'m2'});up.created_at=dAgo(2,16);dLed('hold',-up.total,up.total,null,up,up.created_at);dLog('booked',{job:up.ref,kind:up.kind,reg:up.reg,total:up.total,partner:up.partner},up.by,up.created_at);
+ var wait=T({kind:'Alloy wheels',partner:'p3',vehicle:'v1',day:dDay(4),slot:'12:00pm',where:'shop',wheels:4,finish:1,by:'m3',status:'awaiting_approval',note:'Kerbed all four on a car park ramp'});wait.created_at=dAgo(0,8);dLed('hold',-wait.total,wait.total,'Waiting for approval',wait,wait.created_at);dLog('booking_needs_approval',{job:wait.ref,kind:wait.kind,reg:wait.reg,total:wait.total},wait.by,wait.created_at);
+ DM.schedules.push({id:'s1',partner:'Shine Bright Valeting (sample)',partner_id:'p1',every_weeks:2,time:'8:00am',place:'mobile',address:'Unit 3, Sample Trade Park, Dartford',postcode:'DA1 1DR',next_day:dDay(7),po:null,last_result:'Booked 2 valets for '+dlong(dDay(-7)),regs:['DE69 MOS','SA70 MPL']});
+ DM.topups.unshift({id:'t2',ref:'TMC-P3X8L4',method:'bank',amount:500,received:null,status:'pending',created_at:dAgo(1,17)});dLog('topup_requested',{ref:'TMC-P3X8L4',amount:500,method:'bank'},'Priya, office manager',dAgo(1,17));
+ dLog('vehicle_added',{reg:'CA19 RRS'},'You (owner)',dAgo(19,9));dLog('invited',{email:'dan@samplefleet.co.uk',role:'booker'},'You (owner)',dAgo(19,10));dLog('joined',{email:'dan@samplefleet.co.uk'},'Dan, driver',dAgo(19,12));
+ DM.audit.sort(function(a,b){return a.at<b.at?1:-1});DM.ledger.sort(function(a,b){return a.at<b.at?-1:1})}
+function dState(){var r=DM.role,me=dMe(),b=dBal(),a=DM.acct;
+ var st={account:JSON.parse(JSON.stringify(a)),me:{role:r,user:me.uid,limit:me.limit,spent:dMonth(me.uid)},money:{available:b.available,held:b.held,month_spend:dMonth()},card:DM.card,
+  settings:{fee:9.99,min_topup:50,max_topup:10000},vehicles:DM.vehicles.slice().sort(function(x,y){return x.reg<y.reg?-1:1}),
+  jobs:DM.jobs.filter(function(j){return r!=='booker'||j.uid===me.uid}).map(function(j){var c=JSON.parse(JSON.stringify(j));c.mine=j.uid===me.uid;return c}),
+  schedules:DM.schedules,topups:DM.topups};
+ if(rank(r)>=3){st.members=DM.members.filter(function(m){return m.status!=='removed'}).map(function(m){return {id:m.id,email:m.email,name:m.name,role:m.role,status:m.status,limit:m.limit,spent:m.status==='active'?dMonth(m.uid):null,me:m.id===me.id,expires:m.expires||null}});
+  st.audit=DM.audit.slice(0,100);st.bank={name:'The Motoring Central Ltd',sort_code:'00-00-00',account_no:'00000000'}}
+ return st}
+function dNeed(min){if(rank(DM.role)<rank(min))throw new Error(min==='owner'?'owner_only':'not_allowed')}
+function demoCall(fn,a){try{var r=demoDo(fn,a);return new Promise(function(res){setTimeout(function(){res(r)},180)})}catch(e){return Promise.reject(e)}}
+function demoDo(fn,a){if(!DM)dInit();var me=dMe(),acct=DM.acct,j;
+ switch(fn){
+ case 'biz_my_accounts':return [{id:acct.id,ref:acct.ref,name:acct.name,status:acct.status,role:DM.role,frozen:acct.frozen}];
+ case 'biz_state':return dState();
+ case 'biz_options':dNeed('booker');return DM.partners.filter(function(p){return (a.p_kind==='Valet'&&/valet/i.test(p.name))||(a.p_kind==='Alloy wheels'&&p.id==='p3')||(a.p_kind==='MOT'&&p.id==='p4')}).map(function(p){return JSON.parse(JSON.stringify(p))});
+ case 'garage_busy':return [{mot_set:{'Bay 1':{days:[1,2,3,4,5,6],open:480,close:1020,step:60}}}];
+ case 'biz_book':dNeed('booker');var b=a.p||{};
+  if(acct.frozen)return {error:'account_frozen'};
+  var dup=DM.jobs.filter(function(x){return b.idem&&x.idem===b.idem})[0];if(dup)return dup;
+  var v=DM.vehicles.filter(function(x){return x.id===b.vehicle_id})[0];if(!v&&acct.fleet_only)throw new Error('fleet_only');
+  if(acct.services.indexOf(b.kind)<0)throw new Error('service_not_allowed');
+  var p=DM.partners.filter(function(x){return x.id===b.partner})[0];if(!p)throw new Error('partner_unavailable');
+  var pr=dPrice(b.kind,p,b,v||{size:3,mot_class:'4-goods'});if(!pr)throw new Error('not_offered');var tot=Math.round((pr.price+pr.fee)*100)/100;
+  if(me.limit!=null&&dMonth(me.uid)+tot>me.limit)throw new Error('over_your_limit');
+  if(acct.monthly_cap!=null&&dMonth()+tot>acct.monthly_cap)throw new Error('over_monthly_cap');
+  var card=b.pay==='card'&&DM.card;if(!card&&dBal().available<tot)throw new Error('not_enough_balance');
+  var needOk=DM.role==='booker'&&acct.approval_over!=null&&tot>acct.approval_over;
+  j=dJob({kind:b.kind,partner:b.partner,vehicle:v?v.id:null,reg:b.reg,day:b.day,slot:b.slot,start:b.start,'class':b['class'],where:b.where,wheels:b.wheels,finish:b.finish,po:b.po,note:b.note,pay:card?'card':'wallet',status:needOk?'awaiting_approval':'booked',idem:b.idem});
+  if(!card)dLed('hold',-j.total,j.total,needOk?'Waiting for approval':null,j);
+  dLog(needOk?'booking_needs_approval':'booked',{job:j.ref,kind:j.kind,reg:j.reg,total:j.total,partner:j.partner});
+  var out=JSON.parse(JSON.stringify(j));return out;
+ case 'biz_decide':dNeed('admin');j=DM.jobs.filter(function(x){return x.id===a.p_job})[0];if(!j||j.status!=='awaiting_approval')throw new Error('already_decided');
+  if(a.p_ok){j.status='booked';j.booking_status='confirmed';j.booking=Math.random().toString(16).slice(2,10).toUpperCase();dLog('booking_approved',{job:j.ref});return {status:'booked'}}
+  j.status='declined';j.decline_reason=a.p_reason||null;if(j.pay==='wallet')dLed('release',j.total,-j.total,'Not approved',j);dLog('booking_declined',{job:j.ref,reason:a.p_reason||''});return {status:'declined'};
+ case 'biz_cancel':j=DM.jobs.filter(function(x){return x.id===a.p_job})[0];if(!j)throw new Error('not_allowed');if(DM.role==='booker'&&j.uid!==me.uid)throw new Error('not_allowed');if(rank(DM.role)<2)throw new Error('not_allowed');
+  if(j.booking_status==='done')throw new Error('job_started');var was=j.status;j.status=was==='awaiting_approval'?'cancelled':'cancelled';j.booking_status=j.booking?'cancelled':null;if(j.pay==='wallet')dLed('release',j.total,-j.total,'Cancelled',j);dLog(was==='awaiting_approval'?'request_withdrawn':'booking_cancelled',{job:j.ref,reason:a.p_reason||''});return null;
+ case 'biz_vehicle_save':dNeed('admin');var q=a.p||{};var reg=String(q.reg||'').toUpperCase().replace(/[^A-Z0-9]/g,'');if(reg.length<2)throw new Error('bad_reg');
+  var nice=reg.length>4?reg.slice(0,reg.length-3)+' '+reg.slice(-3):reg;var ex=DM.vehicles.filter(function(x){return x.id===q.id})[0];
+  if(!ex&&DM.vehicles.some(function(x){return x.reg.replace(/\s/g,'')===reg}))throw new Error('reg_already_on_fleet');
+  var o={reg:nice,nickname:q.nickname||'',make:q.make||'',model:q.model||'',colour:q.colour||'',size:q.size==null?3:+q.size,mot_class:q.mot_class||'4-goods',mot_due:q.mot_due||null,tax_due:q.tax_due||null,driver:q.driver||''};
+  if(ex){Object.keys(o).forEach(function(k){ex[k]=o[k]});dLog('vehicle_changed',{reg:nice});return ex.id}o.id=dId();DM.vehicles.push(o);dLog('vehicle_added',{reg:nice});return o.id;
+ case 'biz_vehicle_remove':dNeed('admin');DM.vehicles=DM.vehicles.filter(function(x){if(x.id===a.p_vehicle){dLog('vehicle_removed',{reg:x.reg});return false}return true});return null;
+ case 'biz_invite':dNeed('admin');var em=String(a.p_email||'').trim().toLowerCase();if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em))throw new Error('wrong_email');if(DM.members.some(function(m){return m.email===em&&m.status!=='removed'}))throw new Error('already_member');
+  if(DM.role==='admin'&&(a.p_role==='owner'||a.p_role==='admin'))throw new Error('owner_only');
+  DM.members.push({id:dId(),uid:dId(),email:em,name:a.p_name||'',role:a.p_role||'booker',status:'invited',limit:a.p_limit,expires:new Date(Date.now()+7*864e5).toISOString()});dLog('invited',{email:em,role:a.p_role});return null;
+ case 'biz_member_set':dNeed('admin');var mm=DM.members.filter(function(x){return x.id===a.p_member})[0];if(!mm)throw new Error('not_allowed');var q2=a.p||{};
+  if(DM.role==='admin'&&(mm.role==='owner'||mm.role==='admin'||q2.role==='owner'||q2.role==='admin')&&mm.id!==me.id)throw new Error('owner_only');
+  if(q2.remove){if(mm.role==='owner'&&DM.members.filter(function(x){return x.role==='owner'&&x.status==='active'}).length<2)throw new Error('last_owner');mm.status='removed';dLog('member_removed',{email:mm.email});return null}
+  if(q2.role){if(mm.id===me.id)throw new Error('not_yourself');mm.role=q2.role}if('limit' in q2)mm.limit=q2.limit===''||q2.limit==null?null:+q2.limit;dLog('member_changed',{email:mm.email,role:mm.role,limit:mm.limit});return null;
+ case 'biz_settings_save':dNeed('admin');var q3=a.p||{};['approval_over','monthly_cap','low_balance'].forEach(function(k){if(k in q3)acct[k]=q3[k]===''||q3[k]==null?null:+q3[k]});['fleet_only'].forEach(function(k){if(k in q3)acct[k]=!!q3[k]});['services','billing_email','phone','address','postcode','vat_no'].forEach(function(k){if(k in q3)acct[k]=q3[k]});dLog('settings_changed',{});return null;
+ case 'biz_freeze':if(a.p_on){dNeed('admin');acct.frozen=true;acct.frozen_reason=a.p_reason||null;acct.frozen_at=new Date().toISOString();dLog('paused',{reason:a.p_reason||''})}else{dNeed('owner');acct.frozen=false;acct.frozen_reason=null;dLog('restarted',{})}return null;
+ case 'biz_schedule_save':dNeed('admin');var q4=a.p||{},pp=DM.partners.filter(function(x){return x.id===q4.partner})[0];if(!pp)throw new Error('partner_unavailable');
+  var s1={id:dId(),partner:pp.name,partner_id:pp.id,every_weeks:+q4.every_weeks||1,time:q4.slot||'8:00am',place:q4.place||'mobile',address:q4.address||'',postcode:q4.post||'',next_day:q4.next_day,po:q4.po||null,last_result:null,regs:DM.vehicles.filter(function(x){return (q4.vehicles||[]).indexOf(x.id)>-1}).map(function(x){return x.reg})};DM.schedules.push(s1);dLog('repeat_valet_set',{partner:pp.name,regs:s1.regs});return s1.id;
+ case 'biz_schedule_stop':dNeed('admin');DM.schedules=DM.schedules.filter(function(x){return x.id!==a.p_schedule});dLog('repeat_valet_stopped',{});return null;
+ case 'biz_topup_request':dNeed('admin');var am=+a.p_amount;if(!(am>=50&&am<=10000))throw new Error('bad_amount');if(DM.topups.filter(function(t){return t.status==='pending'}).length>=3)throw new Error('too_many_pending');
+  var ref='TMC-'+Math.random().toString(36).slice(2,10).toUpperCase().replace(/[^A-Z0-9]/g,'X').slice(0,8);DM.topups.unshift({id:dId(),ref:ref,method:'bank',amount:am,received:null,status:'pending',created_at:new Date().toISOString()});dLog('topup_requested',{ref:ref,amount:am,method:'bank'});
+  return {ref:ref,amount:am,bank:{name:'The Motoring Central Ltd',sort_code:'00-00-00',account_no:'00000000'}};
+ case 'biz_topup_cancel':dNeed('admin');var tp=DM.topups.filter(function(t){return t.id===a.p_topup&&t.status==='pending'})[0];if(!tp)throw new Error('not_pending');tp.status='cancelled';dLog('topup_cancelled',{ref:tp.ref});return null;
+ case 'biz_statement':if(DM.role==='booker')throw new Error('not_allowed');var m0=new Date(a.p_month+'T00:00:00'),m1=new Date(m0);m1.setMonth(m1.getMonth()+1);
+  var inM=function(t){var d=new Date(t);return d>=m0&&d<m1},before=function(t,e){return new Date(t)<e},sum=function(f){return Math.round(DM.ledger.filter(f).reduce(function(x,l){return x+l.available},0)*100)/100};
+  return {account:{name:acct.name,ref:acct.ref,company_no:acct.company_no,vat_no:acct.vat_no,address:acct.address,postcode:acct.postcode,billing_email:acct.billing_email},company:(window.__mcco||{name:'The Motoring Central Ltd',number:'17606100'}),month:a.p_month.slice(0,7),
+   opening:sum(function(l){return before(l.at,m0)}),closing:sum(function(l){return before(l.at,m1)}),held_at_end:Math.round(DM.ledger.filter(function(l){return before(l.at,m1)}).reduce(function(x,l){return x+l.held},0)*100)/100,chain_ok:true,
+   ledger:DM.ledger.filter(function(l){return inM(l.at)}),
+   jobs:DM.jobs.filter(function(j){return (j.status==='booked'||j.status==='cancelled')&&inM(j.created_at)}).slice().reverse().map(function(j){return {ref:j.ref,kind:j.kind,reg:j.reg,day:j.day,partner:j.partner,price:j.price,fee:j.fee,total:j.total,pay:j.pay,status:j.booking_status||j.status,po:j.po,booking:j.booking,by:j.by}})};
+ default:throw new Error('demo_card')}}
+/* the bar at the top of the demo */
+function demoBar(){var b=document.getElementById('demobar');if(!b){b=document.createElement('div');b.id='demobar';var m=document.getElementById('app');m.parentNode.insertBefore(b,m)}
+ var R=['owner','admin','booker','viewer'],L={owner:'Owner (you)',admin:'Admin (Priya)',booker:'Booker (Dan)',viewer:'Accounts office'};
+ var pend=DM.topups.filter(function(t){return t.status==='pending'})[0],next=DM.jobs.filter(function(j){return j.status==='booked'&&j.booking_status!=='done'&&j.booking_status!=='cancelled'}).sort(function(x,y){return x.day<y.day?-1:x.day>y.day?1:(x.created_at<y.created_at?-1:1)})[0];
+ b.innerHTML='<div class="dbin"><p><b>Demo.</b> Sample Fleet Services Ltd is a made-up firm. Nothing here is saved, sent or charged.</p>'
+  +'<div class="dbrow"><span>See it as:</span>'+R.map(function(r){return '<button type="button" data-drole="'+r+'" aria-pressed="'+(DM.role===r)+'">'+L[r]+'</button>'}).join('')+'</div>'
+  +'<div class="dbrow"><span>Play the next step:</span><button type="button" data-dstep="done"'+(next?'':' disabled')+'>'+(next?'The partner finishes '+E(next.reg)+'’s '+E(next.kind.toLowerCase()):'No job to finish')+'</button><button type="button" data-dstep="topup"'+(pend?'':' disabled')+'>'+(pend?'Our team receives the '+money(pend.amount)+' bank transfer':'No top up waiting')+'</button><button type="button" data-dstep="reset">Start again</button></div></div>'}
+if(DEMO){var dcss=document.createElement('style');dcss.textContent='#demobar{background:#FFD43B;color:#0B1C35;border-bottom:3px solid #0B1C35}#demobar .dbin{max-width:1100px;margin:0 auto;padding:10px 16px}#demobar p{margin:0 0 6px;font-size:.95rem}#demobar .dbrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}#demobar .dbrow span{font-weight:700;font-size:.85rem;margin-right:2px}#demobar button{all:unset;cursor:pointer;background:#fff;border:2px solid #0B1C35;border-radius:999px;padding:5px 11px;font-weight:700;font-size:.82rem}#demobar button[aria-pressed=true]{background:#0B1C35;color:#fff}#demobar button[disabled]{opacity:.45;cursor:default}#demobar button:focus-visible{outline:3px solid #0369A1;outline-offset:2px}';document.head.appendChild(dcss);
+ document.addEventListener('click',function(e){var t=e.target.closest&&e.target.closest('#demobar button');if(!t||t.disabled)return;var r=t.getAttribute('data-drole'),st=t.getAttribute('data-dstep');
+  if(r){DM.role=r;if(!allowed(S.tab))S.tab='overview';toast('You are now seeing the account as '+t.textContent+'.');load(true)}
+  if(st==='reset'){dInit();S.tab='overview';S.book=null;toast('The demo has started again.');load()}
+  if(st==='topup'){var tp=DM.topups.filter(function(x){return x.status==='pending'})[0];if(tp){tp.status='credited';tp.received=tp.amount;dLed('topup',tp.amount,0,'Bank transfer '+tp.ref);dLog('topup_credited',{ref:tp.ref,amount:tp.amount},'The Motoring Central');toast(money(tp.amount)+' received and added to the balance. The admins are emailed.');load(true)}}
+  if(st==='done'){var nx=DM.jobs.filter(function(j){return j.status==='booked'&&j.booking_status!=='done'&&j.booking_status!=='cancelled'}).sort(function(x,y){return x.day<y.day?-1:x.day>y.day?1:(x.created_at<y.created_at?-1:1)})[0];if(nx){nx.booking_status='done';if(nx.pay==='wallet')dLed('take',0,-nx.total,null,nx);dLog('job_done',{job:nx.ref,total:nx.total},'The Motoring Central');toast(nx.reg+': the partner marked the job done, so the '+money(nx.total)+' set aside has now been taken.');load(true)}}});
+ var _load=load;load=function(k){_load(k);setTimeout(demoBar,260)}}
 
 var S={user:null,accounts:[],acct:null,st:null,tab:'overview',book:null,staff:null,cardOn:null,started:false};
 try{S.acct=localStorage.getItem('mc-biz-acct')||null}catch(e){}
 
 /* ---------- sign-in state ---------- */
-function who(){var w=$('who');if(!S.user){w.innerHTML='';return}w.innerHTML='<span class="em">'+E(S.user.email)+'<br></span><button class="btn sm ghost" type="button" data-act="signout">Log out</button>'}
+function who(){var w=$('who');if(DEMO){w.innerHTML='<span class="em">Demo account<br></span><button class="btn sm ghost" type="button" data-act="signout">Leave the demo</button>';return}if(!S.user){w.innerHTML='';return}w.innerHTML='<span class="em">'+E(S.user.email)+'<br></span><button class="btn sm ghost" type="button" data-act="signout">Log out</button>'}
 var idleT;function idle(){clearTimeout(idleT);if(S.user)idleT=setTimeout(function(){sb.auth.signOut().then(function(){toast('Logged out after an hour without activity, to keep your account safe.')})},60*60*1000)}
 ['click','keydown','touchstart'].forEach(function(ev){document.addEventListener(ev,idle,{passive:true})});
-sb.auth.onAuthStateChange(function(ev,session){var u=session&&session.user||null;var changed=(u&&u.id)!==(S.user&&S.user.id);S.user=u;who();idle();if(changed||!S.started){S.started=true;setTimeout(start,0)}});
+if(DEMO){dInit();S.user={id:'demo-me',email:'you@samplefleet.co.uk'};S.acct='demo-acct';S.started=true;setTimeout(function(){who();start()},0)}
+else sb.auth.onAuthStateChange(function(ev,session){var u=session&&session.user||null;var changed=(u&&u.id)!==(S.user&&S.user.id);S.user=u;who();idle();if(changed||!S.started){S.started=true;setTimeout(start,0)}});
 
 /* invitation links: keep the token out of the address bar and history */
 var JOIN=null;(function(){var m=/^#join-([0-9a-f]{48})$/.exec(location.hash);if(m){JOIN=m[1];try{sessionStorage.setItem('mc-biz-join',JOIN)}catch(e){}history.replaceState(null,'',location.pathname+'#join')}else{try{JOIN=sessionStorage.getItem('mc-biz-join')}catch(e){}if(location.hash!=='#join')JOIN=null}})();
@@ -158,7 +293,7 @@ function start(){
  if(JOIN)return joinIn();
  call('biz_my_accounts').then(function(a){S.accounts=a||[];if(!S.accounts.length){app.innerHTML=applyHtml();return}
   if(!S.accounts.some(function(x){return x.id===S.acct}))S.acct=S.accounts[0].id;load()},function(e){app.innerHTML='<div class="card"><p class="err">'+E(why(e))+'</p></div>'})}
-function load(keepTab){if(!S.acct)return;call('biz_state',{p_account:S.acct}).then(function(st){S.st=st;try{localStorage.setItem('mc-biz-acct',S.acct)}catch(e){}if(!keepTab&&!allowed(S.tab))S.tab='overview';draw()},function(e){$('app').innerHTML='<div class="card"><p class="err">'+E(why(e))+'</p><button class="btn ghost" data-act="reload">Try again</button></div>'})}
+function load(keepTab){if(!S.acct)return;call('biz_state',{p_account:S.acct}).then(function(st){S.st=st;try{if(!DEMO)localStorage.setItem('mc-biz-acct',S.acct)}catch(e){}if(!keepTab&&!allowed(S.tab))S.tab='overview';draw()},function(e){$('app').innerHTML='<div class="card"><p class="err">'+E(why(e))+'</p><button class="btn ghost" data-act="reload">Try again</button></div>'})}
 function rank(r){return {owner:4,admin:3,booker:2,viewer:1}[r]||0}
 function me(){return S.st&&S.st.me.role}
 function allowed(t){var r=rank(me());return ({overview:1,book:2,bookings:1,vehicles:1,repeat:3,money:1,team:3,settings:3,activity:3})[t]<=r}
