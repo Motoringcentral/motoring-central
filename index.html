@@ -611,7 +611,8 @@ h2.sec,#jb-post-h{scroll-margin-top:112px}
 .qk:focus-visible{outline:3px solid #FFD43B;outline-offset:2px}
 .jump{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:18px 0 0;font-size:.84rem;color:#34506e}
 .jump span{font-weight:700;color:#0B1C35}
-.jump a{color:#0B1C35;text-decoration:none;font-weight:600;border:1px solid #c9d8e8;background:#f1f6fb;border-radius:20px;padding:5px 12px}
+.pg main>p.note a{color:#0369A1}
+.jump a,main nav.jump a{color:#0B1C35!important;text-decoration:none;font-weight:600!important;border:1px solid #c9d8e8;background:#f1f6fb;border-radius:20px;padding:5px 12px}
 .jump a:hover{background:#dde8f3}
 .jump a:focus-visible{outline:3px solid #38BDF8;outline-offset:2px}
 .sitefoot{position:relative;z-index:1;background:#0B1C35;color:#c9d8ea;margin-top:36px;padding:34px 16px 18px;border-top:4px solid #FFD43B}
@@ -6579,7 +6580,7 @@ badge();
 (function(){function $(i){return document.getElementById(i)}
 function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
 /* ---- titles, description, icon ---- */
-var T={drivers:'Everything your car needs, in one place',cars:'Used cars for sale from local dealers',vans:'Used vans for sale from local dealers',breakdown:'Breakdown cover',jobs:'Work in the motor trade',about:'About us',contact:'Contact us',complaints:'Complaints procedure',faq:'Help and FAQs',privacy:'Privacy policy',cookies:'Cookie notice',terms:'Terms and conditions',network:'Join the network: for motor traders',mechanics:'Join as a mechanic, garage or MOT station',recovery:'Join as a recovery operator',evcharging:'Join as a mobile EV charging partner',bodyshop:'Join as a body shop',tyres:'Join as a mobile tyre fitter',valets:'Join as a valeter',dealers:'Join as a dealer',login:'Partner log in',dashboard:'Partner dashboard',account:'My account',review:'Review your booking',trade:'Trade cars and vans',staff:'Staff sign in',admin:'Admin console'};
+var T={drivers:'Everything your car needs, in one place',cars:'Used cars for sale from local dealers',vans:'Used vans for sale from local dealers',breakdown:'Breakdown cover',jobs:'Work in the motor trade',about:'About us',contact:'Contact us',complaints:'Complaints procedure',faq:'Help and FAQs',privacy:'Privacy policy',cookies:'Cookie notice',terms:'Terms and conditions',network:'Join the network: for motor traders',mechanics:'Join as a mechanic, garage or MOT station',recovery:'Join as a recovery operator',evcharging:'Join as a mobile EV charging partner',bodyshop:'Join as a body shop',tyres:'Join as a mobile tyre fitter',valets:'Join as a valeter',dealers:'Join as a dealer',login:'Partner log in',dashboard:'Partner dashboard',account:'My account',review:'Review your booking',trade:'Trade cars and vans',staff:'Staff sign in',admin:'Admin console',demo:'Request a demo',lessons:'Driving lessons',instructors:'Join as a driving instructor'};
 function title(){var h=location.hash.replace(/^#/,'').split(/[?\/]/)[0]||'drivers';document.title=(T[h]||'The Motoring Central')+' | The Motoring Central'}
 window.addEventListener('hashchange',title);title();
 function meta(k,v,prop){var m=document.createElement('meta');m.setAttribute(prop?'property':'name',k);m.content=v;document.head.appendChild(m)}
