@@ -42,6 +42,9 @@ the phone" anywhere (site, PDFs, adverts, videos, emails).
   "a person / a member of our team contacts you" (complaints steps and the two on-screen thank-you messages) to plain
   "we will reply / call / contact you". The complaint confirmation EMAIL in the database (send_contact) was changed the
   same way: migration 20261128a, already applied to the live database.
+- Third pass (28 Nov, later): the Join the network page still said "A real partner team", "not a faceless app" and
+  "a dedicated partner manager on a direct line". Now "Help when you need it" and a "Help for partners" card with the
+  phone and WhatsApp numbers and the same automated assistant sentence as About us.
 - Checked clean: leaflets, advert pack, short adverts, the demo kit, email wording in the database.
 - STILL TO DO when AI answering is switched on: say so in the privacy policy (calls and messages handled by an automated
   assistant, any recording or transcripts, who the provider is) and ask the solicitor; tell callers at the start of a
