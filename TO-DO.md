@@ -38,6 +38,10 @@ the phone" anywhere (site, PDFs, adverts, videos, emails).
   every time") and recovery.mp4 ("And a UK team you can actually talk to" and its card) were CUT OUT of the finished
   videos with ffmpeg (no re-voicing; the slide holds still for the cut). Captions, script.json and slides.html match.
   A full re-render from the sources will give the same result.
+- Second pass: also changed "a person replies" (WhatsApp card), "someone from our team will call you" (call back),
+  "a person / a member of our team contacts you" (complaints steps and the two on-screen thank-you messages) to plain
+  "we will reply / call / contact you". The complaint confirmation EMAIL in the database (send_contact) was changed the
+  same way: migration 20261128a, already applied to the live database.
 - Checked clean: leaflets, advert pack, short adverts, the demo kit, email wording in the database.
 - STILL TO DO when AI answering is switched on: say so in the privacy policy (calls and messages handled by an automated
   assistant, any recording or transcripts, who the provider is) and ask the solicitor; tell callers at the start of a
