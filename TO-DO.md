@@ -209,8 +209,10 @@ Follow-ups from the testing:
 - Google Admin > Apps > Gmail > Authenticate email: check it says "Authenticating email with DKIM". If not, press
   "Start authentication" again (the DNS record is correct).
 - Decide: history checks free during a dealer's free months, or keep £3.50 + VAT each (as the terms say now).
-- Phone 020 8191 4290 (virtual number, diverts to the owner's mobile) is on the site for calls. Opening hours agreed
-  21 Nov: Mon to Fri 8am to 6pm, Sat 9am to 1pm.
+- Phone 020 4542 3325 (bOnline, from 28 Nov 2026; works through an app, so it can ring on more than one phone) is on
+  the site for calls. It replaced the first number, 020 8191 4290 (Voipfone), which is no longer used anywhere: the
+  site, the proposals, the leaflets and the Facebook notes all carry the new one. Opening hours agreed 21 Nov: Mon to
+  Fri 8am to 6pm, Sat 9am to 1pm.
 - DONE 27 Nov: the company mobile 07364 144974 has WhatsApp Business. It is on the site (Contact us, About us,
   complaints, the "Who you will work with" note for partners) as the mobile and the WhatsApp number
   (wa.me/447364144974), on the four partner proposals, the eight leaflets, the Facebook set-up notes and the
@@ -666,9 +668,8 @@ be set by Stripe's confirmation instead (MOT, EV, recovery, quotes, valet, alloy
 WHERE WE STOPPED (21 Nov, late morning). Open questions for the owner:
 - Launch offer for dealers: DECIDED 22 Nov (see DEALER LAUNCH OFFER above). Partners: SUPERSEDED, now flat 10% + VAT and no Pro (see PARTNER FEES CHANGED). Was: 5% (not 10%) and Pro £74.50
   (not £149) unchanged.
-- Phone (Voipfone, 020 8191 4290): line works and diverts to the owner's mobile. Left for later: how business calls
-  show on the mobile (Line Presentation in Services > My Numbers > Phone, or the Voipfone Mobile app), calling credit
-  for the divert, and out-of-hours voicemail. WhatsApp Business on the number not set up yet.
+- Phone: CHANGED 28 Nov to bOnline, 020 4542 3325 (see the note above). The Voipfone line (020 8191 4290) is the
+  old one. Still for the owner to set up at bOnline: opening hours and an out-of-hours voicemail message.
 - Social media (21 Nov): login email social@motoringcentral.co.uk (alias). Instagram @themotoringcentral CLAIMED (business
   account, Automotive Service, two-step login on, backup codes saved, picture and bio added, connected to the Facebook
   Page on 21 Nov evening). Old Facebook Pages deleted: only the owner's personal profile and The Motoring Central remain.

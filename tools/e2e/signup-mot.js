@@ -1,5 +1,5 @@
 const L=require('./lib');(async()=>{const {b,p}=await L.open();const em='vimen+mot@motoringcentral.co.uk';await p.go('mot-station');await p.waitForTimeout(1500);
- await p.fill('#name','Test Tester');await p.fill('#tel','020 8191 4290');await p.fill('#mail',em);await p.fill('#m-pass',L.PW);
+ await p.fill('#name','Test Tester');await p.fill('#tel','020 4542 3325');await p.fill('#mail',em);await p.fill('#m-pass',L.PW);
  await p.click('#form [data-pf="1"]');await p.waitForTimeout(800);
  console.log('step2 first look: gmot checked=',await p.isChecked('#gmot'),'| gvts visible=',await p.vis('#gvts'),'| workshop bays visible=',await p.vis('#gbays'));
  await p.fill('#post','DA1 1LN');await p.fill('#gname','TEST MOT Station Dartford');await p.fill('#gaddr','1 Test Street, Dartford');if(!(await p.isChecked('#gmot')))await p.check('#gmot');await p.waitForTimeout(500);

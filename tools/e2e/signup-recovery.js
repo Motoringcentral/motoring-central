@@ -1,6 +1,6 @@
 const L=require('./lib');(async()=>{const {b,p}=await L.open();const F='r-form',em='vimen+recovery@motoringcentral.co.uk';
  await p.go('recovery');
- await p.fill('#r-co','TEST Recovery Dartford');await p.fill('#r-name','Test Driver');await p.fill('#r-tel','020 8191 4290');await p.fill('#r-mail',em);await p.fill('#r-pass',L.PW);
+ await p.fill('#r-co','TEST Recovery Dartford');await p.fill('#r-name','Test Driver');await p.fill('#r-tel','020 4542 3325');await p.fill('#r-mail',em);await p.fill('#r-pass',L.PW);
  await p.next(F,'Next: Your work');console.log('err after step1:',await p.txt('#r-err'));
  await p.fill('#r-post','DA1 1DE');await p.selectOption('#r-rad',{index:1});
  for(const t of ['Flatbed','Truck with winch','Breakdown recovery','Vehicle transport']){await p.locator('#'+F+' label:visible',{hasText:t}).first().click()}

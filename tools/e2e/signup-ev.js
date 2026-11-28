@@ -1,6 +1,6 @@
 const L=require('./lib');(async()=>{const {b,p}=await L.open();const F='ev-form',em='vimen+ev@motoringcentral.co.uk';
  await p.go('evcharging');
- await p.fill('#ev-co','TEST EV Charging Dartford');await p.fill('#ev-name','Test Charger');await p.fill('#ev-tel','020 8191 4290');await p.fill('#ev-mail',em);await p.fill('#ev-pass',L.PW);
+ await p.fill('#ev-co','TEST EV Charging Dartford');await p.fill('#ev-name','Test Charger');await p.fill('#ev-tel','020 4542 3325');await p.fill('#ev-mail',em);await p.fill('#ev-pass',L.PW);
  await p.next(F,'Next: Your work');console.log('err1:',await p.txt('#ev-err'));
  await p.fill('#ev-post','DA1 1DR');await p.selectOption('#ev-rad',{index:1});
  const cbs=p.locator('#'+F+' input[type=checkbox]:visible');const n=await cbs.count();for(let i=0;i<n;i++)await cbs.nth(i).check().catch(()=>{});console.log('ticked',n);
