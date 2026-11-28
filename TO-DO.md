@@ -50,6 +50,20 @@ the phone" anywhere (site, PDFs, adverts, videos, emails).
   assistant, any recording or transcripts, who the provider is) and ask the solicitor; tell callers at the start of a
   call that they are speaking to an automated assistant; keep a clear way to reach a person for complaints.
 
+## TIMES ON THE SITE DECIDED (owner, 28 Nov 2026)
+- Replies to emails and messages: "We aim to reply within 2 working days" (was [1 working day]) on Contact us, the
+  on-screen thank-you and the contact form's confirmation email (send_contact, migration 20261128b, applied).
+- Complaints, kept as drafted and no longer in brackets: we contact the customer within 2 working days, full reply
+  within 14 days, final answer within 8 weeks, partners and dealers answer us within 5 working days.
+- Cancelling, kept as drafted and no longer in brackets: free up to 24 hours before a booking, 48 hours before a
+  driving lesson.
+- The draft note on Contact us is gone (nothing left to fill in there).
+- STILL in [square brackets], not decided: premium advert fault claims [14 days] and the featured time [2 weeks];
+  telling the valeter about damage within [48 hours]; how long records are kept ([12 months], [6 years], [3 years],
+  [Up to 13 months]) and the supplier names in the privacy policy and cookie notice; [and by text message] on MOT
+  confirmations (texts are not switched on). These wait for the owner or the solicitor.
+- Not changed: "usually within one working day" for sending a demo link and for checking a business account.
+
 ## SITE CHECK (28 Nov 2026, before the Q2U EV demo)
 Fixed: About us "On this page" buttons were blank (link text was the light page-link colour on a pale button); the
 "Read the terms" link on the jobs page was too pale; browser tab titles for Request a demo, Driving lessons and the
@@ -188,8 +202,9 @@ after the cookie choice, on the customer pages.
 3. Test data clean-up: private.test_cleanup (migration 20261127c), prepared and dry-run, NOT run. It counts first,
    removes only when told to, refuses to remove an owner, lists the stored files to delete in Supabase > Storage,
    and restarts reference numbers once tables are empty. The list of test accounts is kept privately by Claude (not
-   in this public repository). Owner to confirm first: the Sky test customer, and "VIMS CARS" on hello@ (dealer)
-   and social@ (recovery, nationwide) are test accounts.
+   in this public repository). CONFIRMED by the owner on 28 Nov: the Sky test customer, and "VIMS CARS" on hello@
+   (dealer) and social@ (recovery, nationwide) ARE test accounts and go with the rest. Still NOT run: it runs on
+   launch day, when the owner says so, after the last test.
 Also fixed 27 Nov: the About us call-back form now really reaches staff (it went to the old preview store): it asks
 for an email address and is saved and emailed like the contact form. The join forms no longer say uploads are
 "for the preview only" (they are stored), and the dealer listing note no longer says listings vanish.
